@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+    <Type Name="String">
+        <DisplayString>{((capacity &lt;= sizeof(embeddedBuffer)) ? (char*)embeddedBuffer : buffer),s}</DisplayString>
+        <Expand>
+            <Item Name="size">size</Item>
+            <Item Name="capacity">capacity</Item>
+
+            <!-- Where the data lives -->
+            <Item Name="data (embedded)" Condition="capacity &lt;= sizeof(embeddedBuffer)">
+                (void*)embeddedBuffer
+            </Item>
+            <Item Name="data (heap)" Condition="capacity &gt; sizeof(embeddedBuffer)">
+                (void*)buffer
+            </Item>
+
+            <!-- Best-effort: prints as C-string if NUL-terminated -->
+            <Item Name="text (nul-terminated only)">
+                ((capacity &lt;= sizeof(embeddedBuffer)) ? (char*)embeddedBuffer : buffer),s
+            </Item>
+        </Expand>
+    </Type>
+
+    <Type Name="DynamicArray_String">
+        <AlternativeType Name="DynamicArray_STI_TypeDef"/>
+        <AlternativeType Name="DynamicArray_STI_StructMember"/>
+        <AlternativeType Name="DynamicArray_STI_EnumMember"/>
+        <AlternativeType Name="DynamicArray_STI_Type"/>
+        <AlternativeType Name="DynamicArray_DM_Key"/>
+        <DisplayString>{{size={count}, cap={capacity}}}</DisplayString>
+        <Expand>
+            <Item Name="size">count</Item>
+            <Item Name="capacity">capacity</Item>
+            <Item Name="item_size">item_size</Item>
+
+            <ArrayItems Condition="items != 0 &amp;&amp; count > 0">
+                <Size>count</Size>
+                <ValuePointer>items</ValuePointer>
+            </ArrayItems>
+
+            <Item Name="[empty]" Condition="count == 0">"∅"</Item>
+            <Item Name="[null]" Condition="items == 0">"items == NULL"</Item>
+        </Expand>
+    </Type>
+
+</AutoVisualizer>
