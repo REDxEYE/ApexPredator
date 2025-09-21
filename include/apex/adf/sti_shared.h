@@ -42,4 +42,20 @@ bool read_STI_float64(Buffer *buffer, STI_float64 *out);
 
 bool read_STI_String(Buffer *buffer, STI_String *out);
 
+typedef enum {
+    None = 0,
+    zlib = 1,
+    lz4f = 2,
+    zstd = 3
+}CompType;
+
+typedef struct {
+    char ident[4];
+    uint8 a;
+    uint8 comp_type;
+    uint8 c;
+    uint8 d;
+    uint64 decomp_size;
+}CompressedHeader;
+
 #endif //APEXPREDATOR_STI_SHARED_H
