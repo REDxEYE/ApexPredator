@@ -30,7 +30,7 @@ static BufferError MemoryBuffer__set_position(MemoryBuffer *fb, int64 position, 
     return BUFFER_SUCCESS;
 }
 
-static BufferError MemoryBuffer__get_position(MemoryBuffer *fb, uint64 *position) {
+static BufferError MemoryBuffer__get_position(MemoryBuffer *fb, int64 *position) {
     *position = fb->position;
     return BUFFER_SUCCESS;
 }

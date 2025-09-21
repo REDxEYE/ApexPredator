@@ -55,7 +55,7 @@ static BufferError FileBuffer__set_position(FileBuffer *fb, int64 position, Buff
     return BUFFER_SUCCESS;
 }
 
-static BufferError FileBuffer__get_position(FileBuffer *fb, uint64 *position) {
+static BufferError FileBuffer__get_position(FileBuffer *fb, int64 *position) {
 #ifdef WIN32
     if (!fb->hFile) return BUFFER_FAILED;
     LARGE_INTEGER zero = {0};

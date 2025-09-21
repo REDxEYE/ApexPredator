@@ -20,10 +20,11 @@ typedef enum { // Below zero - error, above zero - non-critical, zero = success
     BUFFER_UNDERFLOW,
 } BufferError;
 
+
 // Define standard read/write function types:
 typedef BufferError (*BufferSetPositionFn)(void *buffer, int64 position, BufferPositionOrigin origin);
 
-typedef BufferError (*BufferGetPositionFn)(void *buffer, uint64 *position);
+typedef BufferError (*BufferGetPositionFn)(void *buffer, int64 *position);
 
 typedef BufferError (*BufferReadFn)(void *buffer, void *dest, uint32 size, uint32 *read);
 
@@ -33,25 +34,25 @@ typedef BufferError (*BufferGetSizeFn)(void *buffer, uint64 *size);
 
 typedef BufferError (*BufferCloseFn)(void *buffer);
 
-typedef uint8 (*ReadUInt8Fn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadUInt8Fn)(void *buffer, uint8* data);
 
-typedef uint16 (*ReadUInt16Fn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadUInt16Fn)(void *buffer, uint16* data);
 
-typedef uint32 (*ReadUInt32Fn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadUInt32Fn)(void *buffer, uint32* data);
 
-typedef uint64 (*ReadUInt64Fn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadUInt64Fn)(void *buffer, uint64* data);
 
-typedef int8 (*ReadInt8Fn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadInt8Fn)(void *buffer, int8* data);
 
-typedef int16 (*ReadInt16Fn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadInt16Fn)(void *buffer, int16* data);
 
-typedef int32 (*ReadInt32Fn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadInt32Fn)(void *buffer, int32* data);
 
-typedef int64 (*ReadInt64Fn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadInt64Fn)(void *buffer, int64* data);
 
-typedef float (*ReadFloatFn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadFloatFn)(void *buffer, float32* data);
 
-typedef double (*ReadDoubleFn)(void *buffer, BufferError* error);
+typedef BufferError (*ReadDoubleFn)(void *buffer, float64* data);
 
 typedef BufferError (*ReadCStringFn)(void *buffer, String* string);
 typedef BufferError (*ReadStringFn)(void *buffer, uint32 size, String* string);

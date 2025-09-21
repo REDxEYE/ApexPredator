@@ -8,6 +8,7 @@
 #include "utils/string.h"
 #include "utils/dynamic_array.h"
 #include "utils/dynamic_insert_only_map.h"
+#include "utils/buffer/buffer.h"
 
 typedef enum {
     STI_Primitive = 0,
@@ -101,11 +102,19 @@ DYNAMIC_ARRAY_STRUCT(uint32, STI_exportedHashes);
 
 DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(STI_Type, STI_Type);
 
+typedef bool (*read_type_fn)(Buffer* buffer, void* out);
+
+DYNAMIC_ARRAY_STRUCT(read_type_fn, read_type_fn);
+
+DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(read_type_fn, read_type_fn);
+
 typedef DynamicInsertOnlyIntMap_STI_Type STI_TypeDict;
+typedef DynamicInsertOnlyIntMap_read_type_fn STI_FunctionDict;
 
 typedef struct {
     STI_TypeDict types;
     DynamicArray_STI_exportedHashes exported_hashes;
+    STI_FunctionDict read_functions;
 } STI_TypeLibrary;
 
 void STI_TypeLibrary_init(STI_TypeLibrary *lib);
@@ -116,5 +125,6 @@ void STI_start_type_dump(STI_TypeLibrary* lib);
 void STI_dump_type(STI_TypeLibrary* lib, STI_Type* type, FILE* output);
 void STI_dump_primitives(STI_TypeLibrary* lib, FILE* output);
 void STI_generate_reader_function(STI_TypeLibrary* lib, STI_Type* type, FILE* output, bool prototype_only);
+void STI_generate_register_function(STI_TypeLibrary* lib, String* namespace, FILE* output);
 
 #endif //APEXPREDATOR_STI_H

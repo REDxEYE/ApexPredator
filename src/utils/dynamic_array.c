@@ -89,6 +89,7 @@ void DA_free_(DynamicArray__Base *da) {
     if (da->items == NULL)return;
     free(da->items);
     da->items = 0;
+    da->count = 0;
     da->capacity = 0;
     da->item_size = 0;
 }

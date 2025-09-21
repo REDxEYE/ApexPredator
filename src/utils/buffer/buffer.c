@@ -15,121 +15,51 @@ if ((err_ptr) && *(err_ptr) < BUFFER_SUCCESS) { \
 _ret; \
 })
 
-uint8 Buffer__read_uint8(Buffer *buffer, BufferError *error) {
-    uint8 value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(uint8), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_uint8(Buffer *buffer, uint8 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
-uint16 Buffer__read_uint16(Buffer *buffer, BufferError *error) {
-    uint16 value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(uint16), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_uint16(Buffer *buffer, uint16 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
-uint32 Buffer__read_uint32(Buffer *buffer, BufferError *error) {
-    uint32 value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(uint32), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_uint32(Buffer *buffer, uint32 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
-uint64 Buffer__read_uint64(Buffer *buffer, BufferError *error) {
-    uint64 value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(uint64), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_uint64(Buffer *buffer, uint64 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
-int8 Buffer__read_int8(Buffer *buffer, BufferError *error) {
-    int8 value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(int8), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_int8(Buffer *buffer, int8 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
-int16 Buffer__read_int16(Buffer *buffer, BufferError *error) {
-    int16 value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(int16), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_int16(Buffer *buffer, int16 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
-int32 Buffer__read_int32(Buffer *buffer, BufferError *error) {
-    int32 value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(int32), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_int32(Buffer *buffer, int32 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
-int64 Buffer__read_int64(Buffer *buffer, BufferError *error) {
-    int64 value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(int64), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_int64(Buffer *buffer, int64 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
-float Buffer__read_float(Buffer *buffer, BufferError *error) {
-    float value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(float), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_float(Buffer *buffer, float32 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
-double Buffer__read_double(Buffer *buffer, BufferError *error) {
-    double value = 0;
-    BufferError tmpError;
-    if ((tmpError = buffer->read(buffer, &value, sizeof(double), NULL)) < BUFFER_SUCCESS) {
-        if (error) *error = tmpError;
-        return 0;
-    }
-    if (error) *error = tmpError;
-    return value;
+static BufferError Buffer__read_double(Buffer *buffer, float64 *value) {
+    return buffer->read(buffer, value, sizeof(*value), NULL);
 }
 
 BufferError Buffer__read_cstring(Buffer *buffer, String *string) {
     assert(buffer!=NULL && "buffer is null");
     String_init(string, STRING_EMBEDDED_SIZE);
     while (1) {
-        char buff[32]={0};
+        char buff[32] = {0};
         uint32 readResult;
         BufferError error = buffer->read(buffer, buff, sizeof(buff), &readResult);
         if (error < BUFFER_SUCCESS) {
@@ -143,9 +73,9 @@ BufferError Buffer__read_cstring(Buffer *buffer, String *string) {
                 break;
             }
         }
-        if (hasZero && zeroPos!=0) {
+        if (hasZero && zeroPos != 0) {
             String_append_cstr(string, buff, zeroPos);
-            buffer->set_position(buffer, (zeroPos+1) - 32, BUFFER_ORIGIN_CURRENT);
+            buffer->set_position(buffer, (zeroPos + 1) - 32, BUFFER_ORIGIN_CURRENT);
             break; // Null terminator found
         }
         String_append_cstr(string, buff, 32);
@@ -191,18 +121,18 @@ uint64 Buffer_remaining(Buffer *buffer, BufferError *error) {
     uint64 size;
     uint64 position;
     BufferError tmp_error = buffer->getsize(buffer, &size);
-    if (error!=NULL) {
+    if (error != NULL) {
         *error = tmp_error;
     }
-    if (tmp_error<=BUFFER_FAILED) {
+    if (tmp_error <= BUFFER_FAILED) {
         return 0;
     }
 
     tmp_error = buffer->get_position(buffer, &position);
-    if (error!=NULL) {
+    if (error != NULL) {
         *error = tmp_error;
     }
-    if (tmp_error<=BUFFER_FAILED) {
+    if (tmp_error <= BUFFER_FAILED) {
         return 0;
     }
     return size - position;

@@ -33,16 +33,29 @@ typedef struct {
     uint32 unk[5];
 } ADFHeader;
 
+typedef struct {
+    uint32 name_hash;
+    uint32 type_hash;
+    uint32 offset;
+    uint32 size;
+    uint64 name_id;
+}ADFInstance;
+
 #pragma pack(pop)
+
+DYNAMIC_ARRAY_STRUCT(ADFInstance, ADFInstance);
 
 typedef struct {
     ADFHeader header;
     String comment;
     DynamicArray_String strings;
+    DynamicArray_ADFInstance instances;
     DynamicArray_STI_TypeDef type_defs;
     STI_TypeLibrary type_library;
 } ADF;
 
 bool ADF_from_buffer(ADF *adf, Buffer *buffer);
+
+void ADF_generate_readers(ADF* adf, String* namespace, FILE* output);
 
 #endif //APEXPREDATOR_ADF_H

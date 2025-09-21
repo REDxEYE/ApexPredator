@@ -1,10 +1,12 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "apex/package/tab.h"
 #include "utils/dynamic_array.h"
 #include "apex/adf/adf.h"
+#include "apex/adf/adf_types.h"
 #include "apex/package/archive.h"
 #include "utils/string.h"
 #include "utils/buffer/buffer.h"
@@ -58,14 +60,15 @@ void find_tab_files(const char *dir, DynamicArray_String *tab_files) {
 #include <stdio.h>
 
 static int is_dir_path(const char *fullpath, const struct dirent *ent) {
-    // Use d_type if available and reliable; otherwise lstat
+
+// Use d_type if available and reliable; otherwise lstat
 #ifdef DT_DIR
-    if (ent && ent->d_type != DT_UNKNOWN) {
+if (ent&& ent->d_type!= DT_UNKNOWN) {
         return ent->d_type == DT_DIR;
     }
 #endif
-    struct stat st;
-    if (lstat(fullpath, &st) == 0) {
+struct stat st;
+    if (lstat(fullpath, &st)== 0) {
         return S_ISDIR(st.st_mode);
     }
     return 0;
@@ -85,7 +88,7 @@ void find_tab_files(const char *dir, DynamicArray_String *tab_files) {
             continue;
 
         int n = snprintf(full_path, sizeof full_path, "%s/%s", dir, name);
-        if (n < 0 || (size_t)n >= sizeof full_path)
+        if (n < 0 || (size_t) n >= sizeof full_path)
             continue; // path too long, skip
 
         if (is_dir_path(full_path, ent)) {
@@ -218,24 +221,24 @@ bool collect_hashes(DynamicArray_String all_tabs) {
 #endif
 
 #ifdef WIN32
-    void String_convert_to_wsl(String* out, String* in) {
-        String_copy_from(out, in);
+void String_convert_to_wsl(String *out, String *in) {
+    String_copy_from(out, in);
 }
 #else
-    void String_convert_to_wsl(String* out, String* in) {
-        String_init(out, in->size + 10);
-        char* buffer=  String_data(out);
+void String_convert_to_wsl(String *out, String *in) {
+    String_init(out, in->size + 10);
+    char *buffer = String_data(out);
 
-        char drive = in->buffer[0];
-        snprintf(buffer, out->capacity, "/mnt/%c%s", (drive>'A'?drive+' ':drive), in->buffer + 2);
-        // Fix slashes
-        for (int i = 0; i < out->capacity; ++i) {
-            if (buffer[i] == '\\') {
-                buffer[i] = '/';
-            }
+    char drive = in->buffer[0];
+    snprintf(buffer, out->capacity, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in->buffer + 2);
+    // Fix slashes
+    for (int i = 0; i < out->capacity; ++i) {
+        if (buffer[i] == '\\') {
+            buffer[i] = '/';
         }
-        out->size = strlen(String_data(out));
     }
+    out->size = strlen(String_data(out));
+}
 #endif
 
 int main(int argc, const char *argv[]) {
@@ -264,31 +267,48 @@ int main(int argc, const char *argv[]) {
         return 1;
     }
 
+    // FILE *tmpf = fopen("test.bin", "wb");
+    // fwrite(mb.data, 1, mb.size, tmpf);
+    // fclose(tmpf);
+
     ADF adf = {};
     ADF_from_buffer(&adf, (Buffer *) &mb);
-    STI_start_type_dump(&adf.type_library);
-    // STI_dump_primitives(&adf.type_library, stdout);
-    for (uint32 i = adf.type_defs.count - 1; i > 0; --i) {
-        STI_TypeDef *type_def = DA_at(&adf.type_defs, i);
-        STI_Type *type = DM_get(&adf.type_library.types, type_def->type_hash);
-        STI_dump_type(&adf.type_library, type, stdout);
-        fflush(stdout);
-    }
+    STI_ADF_register_functions(&adf.type_library);
 
-    for (uint32 i = adf.type_defs.count - 1; i > 0; --i) {
-        STI_TypeDef *type_def = DA_at(&adf.type_defs, i);
-        STI_Type *type = DM_get(&adf.type_library.types, type_def->type_hash);
-        STI_generate_reader_function(&adf.type_library, type, stdout, true);
-    }
-    fprintf(stdout, "\n\n");
-    for (uint32 i = adf.type_defs.count - 1; i > 0; --i) {
-        STI_TypeDef *type_def = DA_at(&adf.type_defs, i);
-        STI_Type *type = DM_get(&adf.type_library.types, type_def->type_hash);
-        STI_generate_reader_function(&adf.type_library, type, stdout, false);
-    }
-
+    String namespace = {0};
+    String_from_cstr(&namespace, "ADF");
+    ADF_generate_readers(&adf, &namespace, stdout);
     for (int i = 0; i < all_tabs.count; ++i) {
         // Archive
+    }
+
+
+    MemoryBuffer instance_memory = {};
+    for (int i = 0; i < adf.header.instance_count; ++i) {
+        ADFInstance *instance = DA_at(&adf.instances, i);
+        MemoryBuffer_allocate(&instance_memory, instance->size);
+        memcpy(instance_memory.data, mb.data+instance->offset, instance->size);
+        STI_Type *type = DM_get(&adf.type_library.types, instance->type_hash);
+        if (type == NULL) {
+            printf("Unknown type hash %08X for instance %s\n", instance->type_hash,
+                   String_data(&adf.strings.items[instance->name_id]));
+            return false;
+        }
+        // assert(instance->size==type->type_info.size && "Size mismatch");
+        void *instance_data = malloc(instance->size);
+        read_type_fn read_function = *(read_type_fn *) DM_get(&adf.type_library.read_functions, instance->type_hash);
+        if (read_function == NULL) {
+            printf("No read function for type hash %08X (%s)\n", instance->type_hash, String_data(&type->name));
+            free(instance_data);
+            return false;
+        }
+        if (!read_function((Buffer*)&instance_memory, instance_data)) {
+            printf("Failed to read instance %s of type %s\n", String_data(&adf.strings.items[instance->name_id]),
+                   String_data(&type->name));
+            free(instance_data);
+            return false;
+        }
+        free(instance_data);
     }
 
     // if (!collect_hashes(all_tabs)) {
