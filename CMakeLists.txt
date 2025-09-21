@@ -3,6 +3,8 @@ project(ApexPredator C)
 
 set(CMAKE_C_STANDARD 17)
 
+add_subdirectory(external/zstd/build/cmake)
+
 add_executable(ApexPredator
         src/main.c
         src/utils/string.c
@@ -22,3 +24,4 @@ if(UNIX)
     target_compile_options(ApexPredator PRIVATE -fms-extensions)
 endif()
 target_include_directories(ApexPredator PUBLIC include)
+target_link_libraries(ApexPredator PUBLIC libzstd)
