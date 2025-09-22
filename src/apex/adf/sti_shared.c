@@ -45,3 +45,44 @@ bool read_STI_float64(Buffer *buffer, STI_float64 *out) {
 bool read_STI_String(Buffer *buffer, STI_String *out) {
     return buffer->read_cstring(buffer, out) == BUFFER_SUCCESS;
 }
+
+void free_STI_String(String *obj) {
+    String_free(obj);
+}
+
+void print_STI_int8(STI_int8 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%i", *obj);
+}
+
+void print_STI_uint8(STI_uint8 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%u", *obj);
+}
+void print_STI_int16(STI_int16 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%i", *obj);
+}
+void print_STI_uint16(STI_uint16 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%u", *obj);
+}
+void print_STI_int32(STI_int32 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%i", *obj);
+}
+void print_STI_uint32(STI_uint32 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%u", *obj);
+}
+void print_STI_int64(STI_int64 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%lli", (long long)*obj);
+}
+void print_STI_uint64(STI_uint64 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%llu", (unsigned long long)*obj);
+}
+
+void print_STI_float32(STI_float32 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%f", *obj);
+}
+void print_STI_float64(STI_float64 *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "%lf", *obj);
+}
+
+void print_STI_String(STI_String *obj, FILE *handle, uint32 indent) {
+    fprintf(handle, "\"%s\"", String_data(obj));
+}

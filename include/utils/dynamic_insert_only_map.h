@@ -32,6 +32,7 @@ void* DM_insert_(DynamicInsertOnlyIntMap__Base* dm, uint32 key);
 void* DM_get_(const DynamicInsertOnlyIntMap__Base* dm, uint32 key);
 void* DM_get_value_(const DynamicInsertOnlyIntMap__Base* dm, uint32 index);
 uint32 DM_count_(const DynamicInsertOnlyIntMap__Base* dm);
+void DM_free_(DynamicInsertOnlyIntMap__Base* dm);
 
 #define DM_init(dm, value_type, initial_capacity)                             \
     (DM_ASSERT_PTR_COMPAT(dm),                                               \
@@ -53,5 +54,9 @@ uint32 DM_count_(const DynamicInsertOnlyIntMap__Base* dm);
 #define DM_get_value(dm, index)                                               \
     (DM_ASSERT_PTR_COMPAT(dm),                                               \
     (void*)DM_get_value_((DynamicInsertOnlyIntMap__Base*)(dm), index))
+
+#define DM_free(dm)                                                           \
+    (DM_ASSERT_PTR_COMPAT(dm),                                               \
+    DM_free_((DynamicInsertOnlyIntMap__Base*)(dm)))
 
 #endif //APEXPREDATOR_DYNAMIC_INSERT_ONLY_MAP_H

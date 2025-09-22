@@ -14,8 +14,12 @@ void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity)
     da->capacity = initial_capacity;
     da->count = 0;
     da->item_size = item_size;
-    da->items = malloc(initial_capacity * da->item_size);
-    memset(da->items, 0, initial_capacity * da->item_size);
+    if (initial_capacity > 0) {
+        da->items = malloc(initial_capacity * da->item_size);
+        memset(da->items, 0, initial_capacity * da->item_size);
+    } else {
+        da->items = NULL;
+    }
 }
 
 // Does copy element data to internal array
@@ -34,10 +38,10 @@ void DA_append_(DynamicArray__Base *da, void *element) {
 void *DA_append_get_(DynamicArray__Base *da) {
     NULL_ITEM_CHECK;
     uint32 index = da->count;
-    if (da->count+1 >= da->capacity) {
+    if (da->count + 1 >= da->capacity) {
         DA_grow(da);
     }
-    da->count+=1;
+    da->count += 1;
     void *slot = DA_at(da, index);
     return slot;
 }
@@ -97,7 +101,7 @@ void DA_free_(DynamicArray__Base *da) {
 bool DA_contains_(DynamicArray__Base *da, void *element, DA_compare_fn compare_fn) {
     NULL_ITEM_CHECK;
     for (int i = 0; i < da->count; ++i) {
-        void* item = DA_at(da, i);
+        void *item = DA_at(da, i);
         if (compare_fn(item, element)) {
             return true;
         }

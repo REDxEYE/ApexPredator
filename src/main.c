@@ -13,6 +13,8 @@
 #include "utils/buffer/file_buffer.h"
 #include "utils/lookup3.h"
 
+#include "apex/adf/adf_types.h"
+
 typedef struct {
     uint32 hash;
     String archive_name;
@@ -257,8 +259,10 @@ int main(int argc, const char *argv[]) {
         &tmp,
         "C:\\Program Files (x86)\\Steam\\steamapps\\common\\GenerationZero\\archives_win64\\initial\\game0.tab");
     String_convert_to_wsl(&ar_path, &tmp);
+    String_free(&tmp);
 
     Archive_open(&ar, &ar_path);
+    String_free(&ar_path);
 
 
     MemoryBuffer mb = {0};
@@ -277,10 +281,12 @@ int main(int argc, const char *argv[]) {
 
     String namespace = {0};
     String_from_cstr(&namespace, "ADF");
-    ADF_generate_readers(&adf, &namespace, stdout);
+    // ADF_generate_readers(&adf, &namespace, stdout);
+    String_free(&namespace);
     for (int i = 0; i < all_tabs.count; ++i) {
         // Archive
     }
+
 
 
     MemoryBuffer instance_memory = {};
@@ -294,26 +300,33 @@ int main(int argc, const char *argv[]) {
                    String_data(&adf.strings.items[instance->name_id]));
             return false;
         }
-        // assert(instance->size==type->type_info.size && "Size mismatch");
+
         void *instance_data = malloc(instance->size);
-        read_type_fn read_function = *(read_type_fn *) DM_get(&adf.type_library.read_functions, instance->type_hash);
-        if (read_function == NULL) {
+        STI_ObjectMethods object_methods = *(STI_ObjectMethods *) DM_get(&adf.type_library.object_functions, instance->type_hash);
+        if (object_methods.read == NULL) {
             printf("No read function for type hash %08X (%s)\n", instance->type_hash, String_data(&type->name));
             free(instance_data);
             return false;
         }
-        if (!read_function((Buffer*)&instance_memory, instance_data)) {
+        if (!object_methods.read((Buffer*)&instance_memory, instance_data)) {
             printf("Failed to read instance %s of type %s\n", String_data(&adf.strings.items[instance->name_id]),
                    String_data(&type->name));
             free(instance_data);
             return false;
         }
+        object_methods.print(instance_data, stdout, 0);
+        object_methods.free(instance_data);
+        instance_memory.close(&instance_memory);
         free(instance_data);
+        // if (i>4)break;
     }
 
     // if (!collect_hashes(all_tabs)) {
     //     return 1;
     // }
+    mb.close(&mb);
+    ADF_free(&adf);
+    Archive_free(&ar);
     DA_free(&all_tabs);
 
     return 0;

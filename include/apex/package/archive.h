@@ -21,6 +21,6 @@ typedef struct {
 
 void Archive_open(Archive* ar, String* path);
 bool Archive_get_data(Archive* ar, uint32 key, MemoryBuffer* mb);
-
+void Archive_free(Archive* ar);
 
 #endif //APEXPREDATOR_ARCHIVE_H

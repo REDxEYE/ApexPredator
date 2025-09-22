@@ -31,6 +31,7 @@ void Archive_open(Archive *ar, String *path) {
         }
         DA_append(&ar->entries, &entry);
     }
+    tab_buffer.close(&tab_buffer);
 }
 
 TabEntry *Archive__find_entry(Archive *ar, uint32 hash) {
@@ -60,5 +61,12 @@ bool Archive_get_data(Archive *ar, uint32 key, MemoryBuffer *mb) {
     if (read_bytes != entry->size) {
         return false;
     }
+    arc_file.close(&arc_file);
     return true;
+}
+
+void Archive_free(Archive *ar) {
+    String_free(&ar->tab_path);
+    String_free(&ar->arc_path);
+    DA_free(&ar->entries);
 }

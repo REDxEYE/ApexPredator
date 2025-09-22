@@ -11,12 +11,14 @@ static int String__is_heap(const String *s) {
 }
 
 void String_free(String *string) {
-    if (string->capacity > STRING_EMBEDDED_CAPACITY)
+    if (string->capacity > STRING_EMBEDDED_CAPACITY) {
         free(string->buffer);
-    string->buffer = NULL;
+        string->buffer = NULL;
+    } else
+        string->embeddedBuffer[0] = '\0';
+
     string->size = 0;
     string->capacity = 0;
-    if (STRING_EMBEDDED_CAPACITY) string->embeddedBuffer[0] = '\0';
 }
 
 void String_init(String *string, uint32 size) {
@@ -36,6 +38,7 @@ void String_init(String *string, uint32 size) {
     }
     string->size = 0;
     if (size + 1 >= STRING_EMBEDDED_CAPACITY) {
+        String_free(string);
         string->buffer = (char *) malloc(size + 1);
         string->capacity = size + 1;
         memset(string->buffer, 0, string->capacity);
@@ -89,8 +92,11 @@ void String_resize(String *s, uint32_t size) {
         if (new_capacity <= STRING_EMBEDDED_CAPACITY) {
             if (String__is_heap(s)) {
                 size_t to_copy = size < s->size ? size : s->size;
-                if (to_copy) memcpy(s->embeddedBuffer, s->buffer, to_copy);
-                free(s->buffer);
+                if (to_copy) {
+                    char *src = s->buffer;
+                    memcpy(s->embeddedBuffer, src, to_copy);
+                    free(src);
+                }
                 s->capacity = STRING_EMBEDDED_CAPACITY;
             }
         } else {

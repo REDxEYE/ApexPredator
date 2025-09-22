@@ -161,6 +161,7 @@ BufferError FileBuffer__close(FileBuffer *fb) {
         fb->file = NULL;
     }
 #endif
+    String_free(&fb->path);
     return BUFFER_SUCCESS;
 }
 

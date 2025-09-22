@@ -94,6 +94,11 @@ static BufferError Buffer__read_string(Buffer *fb, uint32 size, String *string) 
     return readErr;
 }
 
+void Buffer__skip(Buffer* buffer, uint32 size) {
+    assert(buffer != NULL);
+    buffer->set_position(buffer, size, BUFFER_ORIGIN_CURRENT);
+}
+
 void Buffer_init(Buffer *buffer) {
     assert(buffer != NULL);
 
@@ -103,6 +108,7 @@ void Buffer_init(Buffer *buffer) {
     buffer->write = NULL;
     buffer->getsize = NULL;
     buffer->close = NULL;
+    buffer->skip = (BufferSkipFn) Buffer__skip;
     buffer->read_uint8 = (ReadUInt8Fn) Buffer__read_uint8;
     buffer->read_uint16 = (ReadUInt16Fn) Buffer__read_uint16;
     buffer->read_uint32 = (ReadUInt32Fn) Buffer__read_uint32;

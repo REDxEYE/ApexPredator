@@ -89,3 +89,9 @@ void * DM_get_value_(const DynamicInsertOnlyIntMap__Base *dm, uint32 index) {
 uint32 DM_count_(const DynamicInsertOnlyIntMap__Base *dm) {
     return dm->keys.count;
 }
+
+void DM_free_(DynamicInsertOnlyIntMap__Base *dm) {
+    DA_free(&dm->keys);
+    DA_free(&dm->values);
+}
+

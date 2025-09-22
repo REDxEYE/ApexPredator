@@ -112,12 +112,27 @@ void ADF_generate_readers(ADF *adf, String* namespace, FILE *output) {
         STI_TypeDef *type_def = DA_at(&adf->type_defs, i);
         STI_Type *type = DM_get(&adf->type_library.types, type_def->type_hash);
         STI_generate_reader_function(&adf->type_library, type, output, true);
+        STI_generate_free_function(&adf->type_library, type, output, true);
+        STI_generate_print_function(&adf->type_library, type, output, true);
     }
     fprintf(output, "\n\n");
     for (int32 i = (int32)adf->type_defs.count - 1; i >= 0; --i) {
         STI_TypeDef *type_def = DA_at(&adf->type_defs, i);
         STI_Type *type = DM_get(&adf->type_library.types, type_def->type_hash);
         STI_generate_reader_function(&adf->type_library, type, output, false);
+        STI_generate_free_function(&adf->type_library, type, output, false);
+        STI_generate_print_function(&adf->type_library, type, output, false);
     }
     STI_generate_register_function(&adf->type_library, namespace, output);
+}
+
+void ADF_free(ADF *adf) {
+    String_free(&adf->comment);
+    for (int i = 0; i < adf->strings.count; ++i) {
+        String_free(&adf->strings.items[i]);
+    }
+    STI_TypeLibrary_free(&adf->type_library);
+    DA_free(&adf->strings);
+    DA_free(&adf->type_defs);
+    DA_free(&adf->instances);
 }

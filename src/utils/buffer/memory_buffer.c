@@ -97,7 +97,7 @@ BufferError MemoryBuffer__init(MemoryBuffer* mb) {
     return BUFFER_SUCCESS;
 }
 
-BufferError MemoryBuffer_allocate(MemoryBuffer *mb, uint64 size) {
+BufferError MemoryBuffer_allocate(MemoryBuffer *mb, int64 size) {
     if (mb->data) {
         free(mb->data);
     }

@@ -28,6 +28,8 @@
         <AlternativeType Name="DynamicArray_STI_EnumMember"/>
         <AlternativeType Name="DynamicArray_STI_Type"/>
         <AlternativeType Name="DynamicArray_DM_Key"/>
+        <AlternativeType Name="DynamicArray_TerrainPrimitive"/>
+        <AlternativeType Name="DynamicArray_ADFInstance"/>
         <DisplayString>{{size={count}, cap={capacity}}}</DisplayString>
         <Expand>
             <Item Name="size">count</Item>

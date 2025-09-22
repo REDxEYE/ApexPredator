@@ -58,4 +58,6 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer);
 
 void ADF_generate_readers(ADF* adf, String* namespace, FILE* output);
 
+void ADF_free(ADF *adf);
+
 #endif //APEXPREDATOR_ADF_H

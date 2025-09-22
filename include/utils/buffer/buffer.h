@@ -14,7 +14,8 @@ typedef enum {
     BUFFER_ORIGIN_END = 2
 } BufferPositionOrigin;
 
-typedef enum { // Below zero - error, above zero - non-critical, zero = success
+typedef enum {
+    // Below zero - error, above zero - non-critical, zero = success
     BUFFER_FAILED = -1,
     BUFFER_SUCCESS = 0,
     BUFFER_UNDERFLOW,
@@ -34,28 +35,31 @@ typedef BufferError (*BufferGetSizeFn)(void *buffer, uint64 *size);
 
 typedef BufferError (*BufferCloseFn)(void *buffer);
 
-typedef BufferError (*ReadUInt8Fn)(void *buffer, uint8* data);
+typedef BufferError (*BufferSkipFn)(void *buffer, uint32 size);
 
-typedef BufferError (*ReadUInt16Fn)(void *buffer, uint16* data);
+typedef BufferError (*ReadUInt8Fn)(void *buffer, uint8 *data);
 
-typedef BufferError (*ReadUInt32Fn)(void *buffer, uint32* data);
+typedef BufferError (*ReadUInt16Fn)(void *buffer, uint16 *data);
 
-typedef BufferError (*ReadUInt64Fn)(void *buffer, uint64* data);
+typedef BufferError (*ReadUInt32Fn)(void *buffer, uint32 *data);
 
-typedef BufferError (*ReadInt8Fn)(void *buffer, int8* data);
+typedef BufferError (*ReadUInt64Fn)(void *buffer, uint64 *data);
 
-typedef BufferError (*ReadInt16Fn)(void *buffer, int16* data);
+typedef BufferError (*ReadInt8Fn)(void *buffer, int8 *data);
 
-typedef BufferError (*ReadInt32Fn)(void *buffer, int32* data);
+typedef BufferError (*ReadInt16Fn)(void *buffer, int16 *data);
 
-typedef BufferError (*ReadInt64Fn)(void *buffer, int64* data);
+typedef BufferError (*ReadInt32Fn)(void *buffer, int32 *data);
 
-typedef BufferError (*ReadFloatFn)(void *buffer, float32* data);
+typedef BufferError (*ReadInt64Fn)(void *buffer, int64 *data);
 
-typedef BufferError (*ReadDoubleFn)(void *buffer, float64* data);
+typedef BufferError (*ReadFloatFn)(void *buffer, float32 *data);
 
-typedef BufferError (*ReadCStringFn)(void *buffer, String* string);
-typedef BufferError (*ReadStringFn)(void *buffer, uint32 size, String* string);
+typedef BufferError (*ReadDoubleFn)(void *buffer, float64 *data);
+
+typedef BufferError (*ReadCStringFn)(void *buffer, String *string);
+
+typedef BufferError (*ReadStringFn)(void *buffer, uint32 size, String *string);
 
 
 typedef struct BufferInterface_s {
@@ -65,6 +69,7 @@ typedef struct BufferInterface_s {
     BufferWriteFn write;
     BufferGetSizeFn getsize;
     BufferCloseFn close;
+    BufferSkipFn skip;
     ReadUInt8Fn read_uint8;
     ReadUInt16Fn read_uint16;
     ReadUInt32Fn read_uint32;
@@ -83,8 +88,11 @@ typedef struct Buffer_s {
     struct BufferInterface_s;
 } Buffer;
 
-void Buffer_init(Buffer* buffer);
+void Buffer_init(Buffer *buffer);
 
-uint64 Buffer_remaining(Buffer* buffer, BufferError *error);
+uint64 Buffer_remaining(Buffer *buffer, BufferError *error);
+
+#define IS_SUCCESS(expr)  (expr)==BUFFER_SUCCESS
+#define IS_FAILED(expr)   (expr)<=BUFFER_FAILED
 
 #endif //APEXPREDATOR_BUFFER_H
