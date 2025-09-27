@@ -51,13 +51,13 @@ typedef struct {
     DynamicArray_String strings;
     DynamicArray_ADFInstance instances;
     DynamicArray_STI_TypeDef type_defs;
-    STI_TypeLibrary type_library;
 } ADF;
 
-bool ADF_from_buffer(ADF *adf, Buffer *buffer);
-
-void ADF_generate_readers(ADF* adf, String* namespace, FILE* output);
+bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib);
 
 void ADF_free(ADF *adf);
+
+void ADF_load_builtin_adf(STI_TypeLibrary* lib, const uint8* data, int64 size);
+
 
 #endif //APEXPREDATOR_ADF_H

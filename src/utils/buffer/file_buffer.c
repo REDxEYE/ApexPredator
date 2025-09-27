@@ -49,7 +49,11 @@ static BufferError FileBuffer__set_position(FileBuffer *fb, int64 position, Buff
         default:
             return 0; // Invalid seek direction
     }
-
+    uint64 total_size;
+    if (fb->getsize(fb, &total_size)!=BUFFER_SUCCESS)return BUFFER_FAILED;
+    if (position>total_size) {
+        return BUFFER_FAILED;
+    }
     fseek(fb->file, position, moveMethod);
 #endif
     return BUFFER_SUCCESS;
@@ -82,7 +86,7 @@ static BufferError FileBuffer__get_size(FileBuffer *fb, uint64 *size) {
 #else
     if (!fb->file)return BUFFER_FAILED;
     int64 o = ftell(fb->file);
-    fseek(fb->file, 0,SEEK_END);
+    fseek(fb->file, 0, SEEK_END);
     *size = ftell(fb->file);
     fseek(fb->file, o, SEEK_SET);
 #endif
@@ -175,7 +179,7 @@ void FileBuffer_init(FileBuffer *fb) {
     fb->close = (BufferCloseFn) FileBuffer__close;
 }
 
-BufferError FileBuffer_open(FileBuffer *fb, const char *path) {
+BufferError FileBuffer_open_read(FileBuffer *fb, const char *path) {
     FileBuffer_init(fb);
 #ifdef WIN32
     if (fb->hFile != INVALID_HANDLE_VALUE) {
@@ -197,6 +201,32 @@ BufferError FileBuffer_open(FileBuffer *fb, const char *path) {
 
     String_from_cstr(&fb->path, path);
     fb->file = fopen(path, "rb");
+    if (!fb->file) {
+        return BUFFER_FAILED;
+    }
+#endif
+    return BUFFER_SUCCESS;
+}
+
+BufferError FileBuffer_open_write(FileBuffer *fb, const char *path) {
+    FileBuffer_init(fb);
+#ifdef WIN32
+    if (fb->hFile != INVALID_HANDLE_VALUE) {
+        fb->close(fb);
+    }
+    String_from_cstr(&fb->path, path);
+    fb->hFile = CreateFileA(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (fb->hFile == INVALID_HANDLE_VALUE) {
+        // Handle error
+        fb->hFile = NULL;
+        return BUFFER_FAILED;
+    }
+#else
+    if (fb->file) {
+        fb->close(fb);
+    }
+    String_from_cstr(&fb->path, path);
+    fb->file = fopen(path, "wb");
     if (!fb->file) {
         return BUFFER_FAILED;
     }

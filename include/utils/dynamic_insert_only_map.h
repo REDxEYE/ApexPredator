@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include "utils/dynamic_array.h"
 
-DYNAMIC_ARRAY_STRUCT(uint32, DM_Key);
+DYNAMIC_ARRAY_STRUCT(uint64, DM_Key);
 
 typedef struct {
     DynamicArray_DM_Key keys;
@@ -28,8 +28,8 @@ typedef struct {
     )
 
 void DM_init_(DynamicInsertOnlyIntMap__Base* dm, uint32 item_size, uint32 initial_capacity);
-void* DM_insert_(DynamicInsertOnlyIntMap__Base* dm, uint32 key);
-void* DM_get_(const DynamicInsertOnlyIntMap__Base* dm, uint32 key);
+void* DM_insert_(DynamicInsertOnlyIntMap__Base* dm, uint64 key);
+void* DM_get_(const DynamicInsertOnlyIntMap__Base* dm, uint64 key);
 void* DM_get_value_(const DynamicInsertOnlyIntMap__Base* dm, uint32 index);
 uint32 DM_count_(const DynamicInsertOnlyIntMap__Base* dm);
 void DM_free_(DynamicInsertOnlyIntMap__Base* dm);

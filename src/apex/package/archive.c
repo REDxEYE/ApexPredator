@@ -11,10 +11,13 @@ void Archive_open(Archive *ar, String *path) {
     int32 dot_pos = String_find_chr(path, '.');
     assert(dot_pos>0 && "Invalid .tab file path");
     String_sub_string(&ar->tab_path, 0, dot_pos, &ar->arc_path);
-    String_append_cstr(&ar->arc_path, ".arc", 4);
+    String_append_cstr2(&ar->arc_path, ".arc", 4);
 
     FileBuffer tab_buffer={0};
-    assert(FileBuffer_open(&tab_buffer, String_data(path))==BUFFER_SUCCESS);
+    if(FileBuffer_open_read(&tab_buffer, String_data(path))!=BUFFER_SUCCESS) {
+        printf("Failed to open tab file %s\n", String_data(path));
+        return;
+    }
     DA_init(&ar->entries, TabEntry, 128);
 
     TabHeader header;
@@ -46,7 +49,7 @@ TabEntry *Archive__find_entry(Archive *ar, uint32 hash) {
 
 bool Archive_get_data(Archive *ar, uint32 key, MemoryBuffer *mb) {
     FileBuffer arc_file = {0};
-    FileBuffer_open(&arc_file, String_data(&ar->arc_path));
+    FileBuffer_open_read(&arc_file, String_data(&ar->arc_path));
     TabEntry *entry = Archive__find_entry(ar, key);
     if (entry == NULL)return false;
 

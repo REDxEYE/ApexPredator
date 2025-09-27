@@ -5,6 +5,7 @@
 #include "utils/buffer/buffer.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 #define CALL_AND_CHECK_ERROR(func, buffer, err_ptr) \
 ({ \
@@ -57,7 +58,7 @@ static BufferError Buffer__read_double(Buffer *buffer, float64 *value) {
 
 BufferError Buffer__read_cstring(Buffer *buffer, String *string) {
     assert(buffer!=NULL && "buffer is null");
-    String_init(string, STRING_EMBEDDED_SIZE);
+    String_init(string, 0);
     while (1) {
         char buff[32] = {0};
         uint32 readResult;
@@ -65,20 +66,23 @@ BufferError Buffer__read_cstring(Buffer *buffer, String *string) {
         if (error < BUFFER_SUCCESS) {
             return error;
         }
+        if (readResult==0) {
+            break;
+        }
         bool hasZero = false;
         int zeroPos;
-        for (zeroPos = 0; zeroPos < 32; ++zeroPos) {
+        for (zeroPos = 0; zeroPos < readResult; ++zeroPos) {
             if (buff[zeroPos] == 0) {
                 hasZero = true;
                 break;
             }
         }
-        if (hasZero && zeroPos != 0) {
-            String_append_cstr(string, buff, zeroPos);
-            buffer->set_position(buffer, (zeroPos + 1) - 32, BUFFER_ORIGIN_CURRENT);
+        if (hasZero) {
+            String_append_cstr2(string, buff, zeroPos);
+            buffer->set_position(buffer, (zeroPos + 1) - (int32)readResult, BUFFER_ORIGIN_CURRENT);
             break; // Null terminator found
         }
-        String_append_cstr(string, buff, 32);
+        String_append_cstr2(string, buff, readResult);
     }
     return BUFFER_SUCCESS;
 }
@@ -97,6 +101,69 @@ static BufferError Buffer__read_string(Buffer *fb, uint32 size, String *string) 
 void Buffer__skip(Buffer* buffer, uint32 size) {
     assert(buffer != NULL);
     buffer->set_position(buffer, size, BUFFER_ORIGIN_CURRENT);
+}
+
+
+static BufferError Buffer__write_int8(Buffer* fb, int8 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_uint8(Buffer* fb, uint8 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_int16(Buffer* fb, int16 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_uint16(Buffer* fb, uint16 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_int32(Buffer* fb, int32 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_uint32(Buffer* fb, uint32 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_int64(Buffer* fb, int64 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_uint64(Buffer* fb, uint64 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_float32(Buffer* fb, float32 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_float64(Buffer* fb, float64 value) {
+    return fb->write(fb, &value, sizeof(value), NULL);
+}
+static BufferError Buffer__write_cstring(Buffer* fb, String* string) {
+    BufferError err = fb->write(fb, String_data(string), string->size, NULL);
+    if (err < BUFFER_SUCCESS) {
+        return err;
+    }
+    char zero = 0;
+    return fb->write(fb, &zero, 1, NULL);
+}
+
+static BufferError Buffer__write_string(Buffer* fb, uint32 size, String* string) {
+    if (string->size > size) {
+        return BUFFER_FAILED;
+    }
+    BufferError err = fb->write(fb, String_data(string), string->size, NULL);
+    if (err < BUFFER_SUCCESS) {
+        return err;
+    }
+    if (string->size < size) {
+        uint32 to_write = size - string->size;
+        char *zeros = calloc(to_write, 1);
+        if (!zeros) {
+            return BUFFER_FAILED;
+        }
+        err = fb->write(fb, zeros, to_write, NULL);
+        free(zeros);
+        if (err < BUFFER_SUCCESS) {
+            return err;
+        }
+    }
+    return BUFFER_SUCCESS;
 }
 
 void Buffer_init(Buffer *buffer) {
@@ -121,6 +188,19 @@ void Buffer_init(Buffer *buffer) {
     buffer->read_double = (ReadDoubleFn) Buffer__read_double;
     buffer->read_cstring = (ReadCStringFn) Buffer__read_cstring;
     buffer->read_string = (ReadStringFn) Buffer__read_string;
+    buffer->write_uint8 = (WriteUInt8Fn) Buffer__write_uint8;
+    buffer->write_uint16 = (WriteUInt16Fn) Buffer__write_uint16;
+    buffer->write_uint32 = (WriteUInt32Fn) Buffer__write_uint32;
+    buffer->write_uint64 = (WriteUInt64Fn) Buffer__write_uint64;
+    buffer->write_int8 = (WriteInt8Fn) Buffer__write_int8;
+    buffer->write_int16 = (WriteInt16Fn) Buffer__write_int16;
+    buffer->write_int32 = (WriteInt32Fn) Buffer__write_int32;
+    buffer->write_int64 = (WriteInt64Fn) Buffer__write_int64;
+    buffer->write_float = (WriteFloatFn) Buffer__write_float32;
+    buffer->write_double = (WriteDoubleFn) Buffer__write_float64;
+    buffer->write_cstring = (WriteCStringFn) Buffer__write_cstring;
+    buffer->write_string = (WriteStringFn) Buffer__write_string;
+
 }
 
 uint64 Buffer_remaining(Buffer *buffer, BufferError *error) {

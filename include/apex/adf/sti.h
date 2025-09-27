@@ -18,10 +18,11 @@ typedef enum {
     STI_Array = 3,
     STI_InlineArray = 4,
     STI_StringType = 5,
-    STI_MetaType6 = 6,
+    STI_Recursive = 6,
     STI_Bitfield = 7,
     STI_Enumeration = 8,
     STI_StringHash = 9,
+    STI_DeferredType = 10,
     STI_Force_i32 = 0x7FFFFFFF,
 } STI_MetaType;
 
@@ -30,9 +31,10 @@ typedef struct {
     STI_MetaType type;
     uint32 size;
     uint32 alignment;
-    uint32 type_hash;
+    uint32 hash;
     uint64 name_id;
-    uint32 flags;
+    uint16 flags;
+    uint16 scalar_type;
     uint32 element_type_hash;
     uint32 element_len;
 } STI_TypeDef;
@@ -94,59 +96,67 @@ typedef union {
 
 typedef struct {
     STI_MetaType type;
-    STI_TypeDef type_info;
+    STI_TypeDef info;
     String name;
     STI_TypeData type_data;
 } STI_Type;
 
 void STI_Type_free(STI_Type* type);
+void STI_Type_init(STI_Type* type, STI_MetaType meta_type);
 
 DYNAMIC_ARRAY_STRUCT(STI_Type, STI_Type);
+DYNAMIC_ARRAY_STRUCT(STI_Type*, STI_TypePtr);
 DYNAMIC_ARRAY_STRUCT(uint32, STI_exportedHashes);
-
+DYNAMIC_ARRAY_STRUCT(uint32, TypeHash);
 DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(STI_Type, STI_Type);
+DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(TypeHash, TypeHash);
 
 typedef bool (*read_type_fn)(Buffer* buffer, void* out);
 
 DYNAMIC_ARRAY_STRUCT(STI_ObjectMethods, STI_ObjectMethods);
+DYNAMIC_ARRAY_STRUCT(String, HashString);
 
 DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(STI_ObjectMethods, STI_ObjectMethods);
+DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(HashString, HashString);
 
 typedef DynamicInsertOnlyIntMap_STI_Type STI_TypeDict;
+typedef DynamicInsertOnlyIntMap_TypeHash STI_NameHasToTypeHash;
 typedef DynamicInsertOnlyIntMap_STI_ObjectMethods STI_FunctionDict;
 
-typedef struct {
+typedef struct STI_TypeLibrary{
     STI_TypeDict types;
+    STI_NameHasToTypeHash name_hash_to_type;
     DynamicArray_STI_exportedHashes exported_hashes;
     STI_FunctionDict object_functions;
+
+    DynamicInsertOnlyIntMap_HashString hash_strings;
 } STI_TypeLibrary;
 
 void STI_TypeLibrary_init(STI_TypeLibrary *lib);
-STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType type, uint32 type_hash);
-uint32 STI_TypeLibrary_types_count(const STI_TypeLibrary* lib);
+STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType type, uint32 type_hash, String* name);
+int32 STI_TypeLibrary_types_count(const STI_TypeLibrary *lib);
+void STI_TypeLibrary_free(STI_TypeLibrary *lib);
+void STI_TypeLibrary_generate_types(STI_TypeLibrary* lib, String* namespace, FILE *header_output, String* relative_header_path, FILE* impl_output);
 
 void STI_start_type_dump(STI_TypeLibrary* lib);
 void STI_dump_type(STI_TypeLibrary* lib, STI_Type* type, FILE* output);
-void STI_dump_primitives(STI_TypeLibrary* lib, FILE* output);
 void STI_generate_reader_function(STI_TypeLibrary* lib, STI_Type* type, FILE* output, bool prototype_only);
 void STI_generate_free_function(STI_TypeLibrary* lib, STI_Type* type, FILE* output, bool prototype_only);
 void STI_generate_print_function(STI_TypeLibrary* lib, STI_Type* type, FILE* output, bool prototype_only);
-
 void STI_generate_register_function(STI_TypeLibrary* lib, String* namespace, FILE* output);
-void STI_TypeLibrary_free(STI_TypeLibrary *lib);
 
-typedef enum {
-    STI_TYPE_HASH_INT8 = 0x580D0A62,
-    STI_TYPE_HASH_UINT8 = 0x0CA2821D,
-    STI_TYPE_HASH_INT16 = 0xD13FCF93,
-    STI_TYPE_HASH_UINT16 = 0x86D152BD,
-    STI_TYPE_HASH_INT32 = 0x192FE633,
-    STI_TYPE_HASH_UINT32 = 0x075E4E4F,
-    STI_TYPE_HASH_INT64 = 0xAF41354F,
-    STI_TYPE_HASH_UINT64 = 0xA139E01F,
-    STI_TYPE_HASH_FLOAT32 = 0x7515A207,
-    STI_TYPE_HASH_FLOAT64 = 0xC609F663,
-    STI_TYPE_HASH_STRING = 0x8955583E,
-}STI_BuiltInTypes;
+
+#define STI_TYPE_HASH_INT8  0x580D0A62
+#define STI_TYPE_HASH_UINT8  0x0CA2821D
+#define STI_TYPE_HASH_INT16  0xD13FCF93
+#define STI_TYPE_HASH_UINT16  0x86D152BD
+#define STI_TYPE_HASH_INT32  0x192FE633
+#define STI_TYPE_HASH_UINT32  0x075E4E4F
+#define STI_TYPE_HASH_INT64  0xAF41354F
+#define STI_TYPE_HASH_UINT64  0xA139E01F
+#define STI_TYPE_HASH_FLOAT32  0x7515A207
+#define STI_TYPE_HASH_FLOAT64  0xC609F663
+#define STI_TYPE_HASH_STRING  0x8955583E
+#define STI_TYPE_HASH_UNK  0xDEFE88ED
 
 #endif //APEXPREDATOR_STI_H

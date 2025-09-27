@@ -27,6 +27,6 @@ typedef struct {
 
 #endif
 
-BufferError FileBuffer_open(FileBuffer *fb, const char *path);
-
+BufferError FileBuffer_open_read(FileBuffer *fb, const char *path);
+BufferError FileBuffer_open_write(FileBuffer *fb, const char *path);
 #endif //APEXPREDATOR_FILE_BUFFER_H

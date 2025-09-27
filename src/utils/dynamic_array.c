@@ -8,8 +8,6 @@
 
 #define NULL_ITEM_CHECK  assert(da->items!=NULL && "Uninitialized dynamic array")
 
-void DA_grow(DynamicArray__Base *da);
-
 void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity) {
     da->capacity = initial_capacity;
     da->count = 0;
@@ -26,7 +24,7 @@ void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity)
 void DA_append_(DynamicArray__Base *da, void *element) {
     NULL_ITEM_CHECK;
     if (da->count >= da->capacity) {
-        DA_grow(da);
+        DA_reserve_(da, da->count + 1);
     }
     if (!element)return;
     void *slot = DA_at(da, da->count++);
@@ -39,42 +37,26 @@ void *DA_append_get_(DynamicArray__Base *da) {
     NULL_ITEM_CHECK;
     uint32 index = da->count;
     if (da->count + 1 >= da->capacity) {
-        DA_grow(da);
+        DA_reserve_(da, da->count + 1);
     }
     da->count += 1;
     void *slot = DA_at(da, index);
     return slot;
 }
 
-void DA_resize_(DynamicArray__Base *da, uint32 new_size) {
+void DA_reserve_(DynamicArray__Base *da, uint32 needed_capacity) {
     NULL_ITEM_CHECK;
-    if (new_size > da->capacity) {
+    if (needed_capacity > da->capacity) {
         uint32 new_capacity = da->capacity;
-        while (new_capacity < new_size) {
+        while (new_capacity < needed_capacity) {
             new_capacity *= DA_GROW_MULT;
         }
         void *new_items = realloc(da->items, new_capacity * da->item_size);
-        if (new_items) {
-            memset((char *) new_items + da->count * da->item_size, 0,
-                   (new_capacity - da->count) * da->item_size);
-            da->items = new_items;
-            da->capacity = new_capacity;
+        if (!new_items) {
+            exit(1);
         }
-    }
-    if (new_size > da->count) {
-        memset((char *) da->items + da->count * da->item_size, 0,
-               (new_size - da->count) * da->item_size);
-    }
-    da->count = new_size;
-}
-
-void DA_grow(DynamicArray__Base *da) {
-    NULL_ITEM_CHECK;
-    uint32 new_capacity = da->capacity * DA_GROW_MULT;
-    void *new_items = realloc(da->items, new_capacity * da->item_size);
-
-    if (new_items) {
-        memset((char *) new_items + da->count * da->item_size, 0, (new_capacity - da->count) * da->item_size);
+        memset((char *) new_items + da->count * da->item_size, 0,
+               (new_capacity - da->count) * da->item_size);
         da->items = new_items;
         da->capacity = new_capacity;
     }

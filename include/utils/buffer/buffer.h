@@ -61,6 +61,30 @@ typedef BufferError (*ReadCStringFn)(void *buffer, String *string);
 
 typedef BufferError (*ReadStringFn)(void *buffer, uint32 size, String *string);
 
+typedef BufferError (*WriteUInt8Fn)(void *buffer, uint8 data);
+
+typedef BufferError (*WriteUInt16Fn)(void *buffer, uint16 data);
+
+typedef BufferError (*WriteUInt32Fn)(void *buffer, uint32 data);
+
+typedef BufferError (*WriteUInt64Fn)(void *buffer, uint64 data);
+
+typedef BufferError (*WriteInt8Fn)(void *buffer, int8 data);
+
+typedef BufferError (*WriteInt16Fn)(void *buffer, int16 data);
+
+typedef BufferError (*WriteInt32Fn)(void *buffer, int32 data);
+
+typedef BufferError (*WriteInt64Fn)(void *buffer, int64 data);
+
+typedef BufferError (*WriteFloatFn)(void *buffer, float32 data);
+
+typedef BufferError (*WriteDoubleFn)(void *buffer, float64 data);
+
+typedef BufferError (*WriteCStringFn)(void *buffer, String *string);
+
+typedef BufferError (*WriteStringFn)(void *buffer, uint32 size, String *string);
+
 
 typedef struct BufferInterface_s {
     BufferSetPositionFn set_position;
@@ -82,6 +106,18 @@ typedef struct BufferInterface_s {
     ReadDoubleFn read_double;
     ReadCStringFn read_cstring;
     ReadStringFn read_string;
+    WriteUInt8Fn write_uint8;
+    WriteUInt16Fn write_uint16;
+    WriteUInt32Fn write_uint32;
+    WriteUInt64Fn write_uint64;
+    WriteInt8Fn write_int8;
+    WriteInt16Fn write_int16;
+    WriteInt32Fn write_int32;
+    WriteInt64Fn write_int64;
+    WriteFloatFn write_float;
+    WriteDoubleFn write_double;
+    WriteCStringFn write_cstring;
+    WriteStringFn write_string;
 } BufferInterface;
 
 typedef struct Buffer_s {

@@ -2,32 +2,30 @@
 
 #ifndef APEXPREDATOR_STRING_H
 #define APEXPREDATOR_STRING_H
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "int_def.h"
 
-enum {
-    STRING_EMBEDDED_SIZE = 32 - 8 - 2,
-    STRING_EMBEDDED_CAPACITY = 32 - 8,
-};
-
 typedef struct String {
-    union {
-        char *buffer;
-        char embeddedBuffer[STRING_EMBEDDED_CAPACITY];
-    };
-
-    uint32_t size;
-    uint32_t capacity;
+    char *buffer;
+    uint32 size;
+    uint32 capacity;
+    uint32 can_be_moved: 1;
 } String;
 
 void String_free(String *string);
 
 void String_init(String *string, uint32 size);
 
-void String_from_cstr(String *string, const char *str);
+String *String_from_cstr(String *string, const char *str);
 
-char *String_data(String *string);
+char *String_data(const String *string);
 
-void String_append_cstr(String *string, char *str, uint32 size);
+void String_append_cstr(String *string, char *str);
+
+void String_append_cstr2(String *string, char *str, uint32 size);
 
 void String_append_str(String *string, String *other);
 
@@ -40,4 +38,39 @@ void String_sub_string(String *string, uint32 start, int32 size, String *out);
 int32 String_find_chr(String *string, char chr);
 
 void String_copy_from(String *string, String *other);
+
+void String_format(String *string, const char *fmt, ...);
+
+void String_append_format(String *string, const char *fmt, ...);
+
+bool String_equals(String *string, String *other);
+
+inline String *String_move(String *string) {
+    string->can_be_moved = 1;
+    return string;
+}
+
+inline String *String_steal(String* string, String* other) {
+    if (!other->can_be_moved) {
+        printf("Error: trying to steal from string that is not marked movable\n");
+        exit(1);
+    }
+    if (string->can_be_moved) {
+        printf("Error: trying to steal into string that is marked movable\n");
+        exit(1);
+    }
+
+    char* buffer = other->buffer;
+    other->buffer = NULL;
+    if (string->buffer!=NULL) {
+        free(string->buffer);
+    }
+    string->buffer = buffer;
+    string->size = other->size;
+    string->capacity = other->capacity;
+    other->size = 0;
+    other->capacity = 0;
+    return string;
+}
+
 #endif //APEXPREDATOR_STRING_H

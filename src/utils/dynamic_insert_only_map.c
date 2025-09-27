@@ -8,17 +8,17 @@
 #include <string.h>
 
 void DM_init_(DynamicInsertOnlyIntMap__Base *dm, uint32 item_size, uint32 initial_capacity) {
-    DA_init(&dm->keys, uint32, initial_capacity);
+    DA_init(&dm->keys, uint64, initial_capacity);
     DA_init_(&dm->values, item_size, initial_capacity);
 }
 
 // Binary search for exact point, or insertion point
-uint32 DM__find_slot(const DynamicInsertOnlyIntMap__Base *dm, uint32 key) {
+uint32 DM__find_slot(const DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
     uint32 left = 0;
     uint32 right = dm->keys.count;
     while (left < right) {
         uint32 mid = left + (right - left) / 2;
-        uint32 mid_key = dm->keys.items[mid];
+        uint64 mid_key = dm->keys.items[mid];
         if (mid_key == key) {
             return mid; // Key found
         }
@@ -32,47 +32,55 @@ uint32 DM__find_slot(const DynamicInsertOnlyIntMap__Base *dm, uint32 key) {
 }
 
 
-// Keys are guarantied to be unique. Keys and data - flat sorted array
-void *DM__sorted_insert(DynamicInsertOnlyIntMap__Base *dm, uint32 key) {
+static inline void DA_ensure_capacity(DynamicArray__Base* a, uint32 need) {
+    if (a->capacity >= need) return;
+    uint32 new_cap = a->capacity ? (a->capacity * 2) : 8;
+    if (new_cap < need) new_cap = need;
+    DA_reserve(a, new_cap); /* must not change count */
+}
+
+void **DM__sorted_insert(DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
     uint32 target_slot = DM__find_slot(dm, key);
 
     if (target_slot >= dm->keys.count) {
-        uint32 *new_key = DA_append_get(&dm->keys);
-        if (new_key) {
-            *new_key = key;
-        }
-        return DA_append_get(&dm->values);
+        uint64 *k = DA_append_get(&dm->keys);
+        assert(k);
+        *k = key;
+        void **v = DA_append_get(&dm->values);
+        assert(v);
+        memset(v, 0, dm->values.item_size);
+        return v;
     }
-    // Shift keys
-    if (dm->keys.count + 1 >= dm->keys.capacity) {
-        DA_resize(&dm->keys, dm->keys.capacity + 1);
-    }
-    if (dm->values.count + 1 >= dm->values.capacity) {
-        DA_resize(&dm->values, dm->values.capacity + 1);
-    }
-    memmove((char *) dm->keys.items + (target_slot + 1) * sizeof(uint32),
-            (char *) dm->keys.items + target_slot * sizeof(uint32),
-            (dm->keys.count - target_slot) * sizeof(uint32));
-    dm->keys.count += 1;
-    uint32 *slot = dm->keys.items + target_slot;
-    *slot = key;
 
-    // Shift values
-    memmove((char *) dm->values.items + (target_slot + 1) * dm->values.item_size,
-            (char *) dm->values.items + target_slot * dm->values.item_size,
-            (dm->values.count - target_slot) * dm->values.item_size);
+    DA_ensure_capacity((DynamicArray__Base*)&dm->keys, dm->keys.count + 1);
+    DA_ensure_capacity(&dm->values, dm->values.count + 1);
+
+    memmove(
+        (char*)dm->keys.items + (target_slot + 1) * sizeof(uint64),
+        (char*)dm->keys.items +  target_slot      * sizeof(uint64),
+        (dm->keys.count - target_slot) * sizeof(uint64)
+    );
+    dm->keys.count += 1;
+    dm->keys.items[target_slot] = key;
+
+    memmove(
+        (char*)dm->values.items + (target_slot + 1) * dm->values.item_size,
+        (char*)dm->values.items +  target_slot      * dm->values.item_size,
+        (dm->values.count - target_slot) * dm->values.item_size
+    );
     dm->values.count += 1;
-    char *value_slot = ((char *) dm->values.items) + target_slot * dm->values.item_size;
+
+    void *value_slot = (char*)dm->values.items + target_slot * dm->values.item_size;
     memset(value_slot, 0, dm->values.item_size);
     return value_slot;
 }
 
-void *DM_insert_(DynamicInsertOnlyIntMap__Base *dm, uint32 key) {
+void *DM_insert_(DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
     return DM__sorted_insert(dm, key);
 }
 
-void *DM_get_(const DynamicInsertOnlyIntMap__Base *dm, uint32 key) {
-    uint32 slot = DM__find_slot(dm, key);
+void *DM_get_(const DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
+    const uint32 slot = DM__find_slot(dm, key);
     if (slot < dm->keys.count && dm->keys.items[slot] == key) {
         return (char *) dm->values.items + slot * dm->values.item_size;
     }

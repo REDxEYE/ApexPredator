@@ -7,24 +7,38 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "apex/adf/adf_types.h"
+#include "utils/common.h"
+#include "utils/buffer/memory_buffer.h"
 
-bool _read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
+
+bool read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
     STI_TypeDef *typedef_ = DA_append_get(&adf->type_defs);
     buffer->read(buffer, typedef_, sizeof(STI_TypeDef),NULL);
-    STI_Type *type = STI_TypeLibrary_new_type(lib, typedef_->type, typedef_->type_hash);
-    memcpy(&type->type_info, typedef_, sizeof(STI_TypeDef));
+    STI_Type *type;
+    bool is_dummy = false;
+    if (DA_contains(&lib->types.keys, &typedef_->hash, compare_hashes)) {
+        STI_Type dummy = {0};
+        STI_Type_init(&dummy, typedef_->type);
+        type = &dummy;
+        String_copy_from(&type->name, &adf->strings.items[typedef_->name_id]);
+        is_dummy=true;
+    }else {
+        type = STI_TypeLibrary_new_type(lib, typedef_->type, typedef_->hash, &adf->strings.items[typedef_->name_id]);
+    }
 
-    String_copy_from(&type->name, &adf->strings.items[typedef_->name_id]);
+    memcpy(&type->info, typedef_, sizeof(STI_TypeDef));
+    // if (type->info.flags!=0x8000) {
+    // }
+
     switch (typedef_->type) {
         case STI_Structure: {
             uint32 member_count = 0;
             if (buffer->read_uint32(buffer, &member_count)){
                 return false;
             }
-            DA_resize(&type->type_data.struct_data.members, member_count);
+            DA_reserve(&type->type_data.struct_data.members, member_count);
             for (int j = 0; j < member_count; ++j) {
-                STI_StructMember *member = DA_at(&type->type_data.struct_data.members, j);
+                STI_StructMember *member = DA_append_get(&type->type_data.struct_data.members);
                 if (buffer->read(buffer, &member->info, sizeof(STI_StructMemberInfo), NULL) != BUFFER_SUCCESS) {
                     return false;
                 }
@@ -37,9 +51,9 @@ bool _read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
             if (buffer->read_uint32(buffer, &member_count)){
                 return false;
             }
-            DA_resize(&type->type_data.enum_data.members, member_count);
+            DA_reserve(&type->type_data.enum_data.members, member_count);
             for (int j = 0; j < member_count; ++j) {
-                STI_EnumMember *member = DA_at(&type->type_data.enum_data.members, j);
+                STI_EnumMember *member = DA_append_get(&type->type_data.enum_data.members);
                 if (buffer->read(buffer, &member->info, sizeof(STI_EnumMemberInfo), NULL) != BUFFER_SUCCESS) {
                     return false;
                 }
@@ -67,27 +81,41 @@ bool _read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
             assert(false && "Unknown type");
         };
     }
+    if (is_dummy) {
+        STI_Type_free(type);
+    }
     return true;
 }
 
-bool ADF_from_buffer(ADF *adf, Buffer *buffer) {
+bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
     ADFHeader *header = &adf->header;
     if (buffer->read(buffer, header, sizeof(ADFHeader),NULL) != BUFFER_SUCCESS) {
         return false;
     }
     buffer->read_cstring(buffer, &adf->comment);
 
+    buffer->set_position(buffer, header->stringhash_offset, BUFFER_ORIGIN_START);
+    String hash_tmp = {0};
+    for (int i = 0; i < header->stringhash_count; ++i) {
+        buffer->read_cstring(buffer,&hash_tmp);
+        uint64 string_hash = 0;
+        buffer->read_uint64(buffer, &string_hash);
+        if (DA_contains(&lib->hash_strings.keys, &string_hash, compare_hashes64)) {
+            continue;
+        }
+        String_copy_from(DM_insert(&lib->hash_strings, string_hash), &hash_tmp);
+    }
+    String_free(&hash_tmp);
+
     DA_init(&adf->strings, String, header->nametable_count);
     buffer->set_position(buffer, header->nametable_offset + header->nametable_count, BUFFER_ORIGIN_START);
     for (int i = 0; i < header->nametable_count; ++i) {
         buffer->read_cstring(buffer,DA_append_get(&adf->strings));
     }
-    STI_TypeLibrary *lib = &adf->type_library;
-    STI_TypeLibrary_init(lib);
     buffer->set_position(buffer, header->typedef_offset, BUFFER_ORIGIN_START);
     DA_init(&adf->type_defs, STI_TypeDef, header->typedef_count);
     for (int i = 0; i < header->typedef_count; ++i) {
-        if (!_read_typedef(adf, buffer, lib)) return false;
+        if (!read_typedef(adf, buffer, lib)) return false;
     }
     DA_init(&adf->instances, ADFInstance, header->instance_count);
     buffer->set_position(buffer, header->instance_offset, BUFFER_ORIGIN_START);
@@ -99,40 +127,20 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer) {
     return true;
 }
 
-void ADF_generate_readers(ADF *adf, String* namespace, FILE *output) {
-    STI_start_type_dump(&adf->type_library);
-    for (int32 i = (int32)adf->type_defs.count - 1; i >= 0; --i) {
-        STI_TypeDef *type_def = DA_at(&adf->type_defs, i);
-        STI_Type *type = DM_get(&adf->type_library.types, type_def->type_hash);
-        STI_dump_type(&adf->type_library, type, output);
-        fflush(output);
-    }
-
-    for (int32 i = (int32)adf->type_defs.count - 1; i >= 0; --i) {
-        STI_TypeDef *type_def = DA_at(&adf->type_defs, i);
-        STI_Type *type = DM_get(&adf->type_library.types, type_def->type_hash);
-        STI_generate_reader_function(&adf->type_library, type, output, true);
-        STI_generate_free_function(&adf->type_library, type, output, true);
-        STI_generate_print_function(&adf->type_library, type, output, true);
-    }
-    fprintf(output, "\n\n");
-    for (int32 i = (int32)adf->type_defs.count - 1; i >= 0; --i) {
-        STI_TypeDef *type_def = DA_at(&adf->type_defs, i);
-        STI_Type *type = DM_get(&adf->type_library.types, type_def->type_hash);
-        STI_generate_reader_function(&adf->type_library, type, output, false);
-        STI_generate_free_function(&adf->type_library, type, output, false);
-        STI_generate_print_function(&adf->type_library, type, output, false);
-    }
-    STI_generate_register_function(&adf->type_library, namespace, output);
-}
 
 void ADF_free(ADF *adf) {
     String_free(&adf->comment);
-    for (int i = 0; i < adf->strings.count; ++i) {
-        String_free(&adf->strings.items[i]);
-    }
-    STI_TypeLibrary_free(&adf->type_library);
-    DA_free(&adf->strings);
+    DA_free_with_inner(&adf->strings, {String_free(it);});
     DA_free(&adf->type_defs);
     DA_free(&adf->instances);
+}
+
+void ADF_load_builtin_adf(STI_TypeLibrary *lib, const uint8 *data, int64 size) {
+        ADF adf = {0};
+        MemoryBuffer emb = {0};
+        MemoryBuffer_allocate(&emb, size);
+        memcpy(emb.data, data, size);
+        ADF_from_buffer(&adf, (Buffer*)&emb, lib);
+        ADF_free(&adf);
+        emb.close(&emb);
 }

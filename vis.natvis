@@ -27,9 +27,14 @@
         <AlternativeType Name="DynamicArray_STI_StructMember"/>
         <AlternativeType Name="DynamicArray_STI_EnumMember"/>
         <AlternativeType Name="DynamicArray_STI_Type"/>
+        <AlternativeType Name="DynamicArray_TypeHash"/>
+        <AlternativeType Name="DynamicArray_HashString"/>
         <AlternativeType Name="DynamicArray_DM_Key"/>
         <AlternativeType Name="DynamicArray_TerrainPrimitive"/>
         <AlternativeType Name="DynamicArray_ADFInstance"/>
+        <AlternativeType Name="DynamicArray_InstanceDataLayer"/>
+        <AlternativeType Name="DynamicArray_StringHash_48c5294d_4"/>
+        <AlternativeType Name="DynamicArray_AmfMaterial"/>
         <DisplayString>{{size={count}, cap={capacity}}}</DisplayString>
         <Expand>
             <Item Name="size">count</Item>
