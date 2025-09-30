@@ -117,7 +117,7 @@ typedef bool (*readSTIObject)(Buffer *buffer, STI_TypeLibrary *lib, void *obj);
 
 typedef void (*freeSTIObject)(void *obj, STI_TypeLibrary *lib);
 
-typedef void (*printSTIObject)(void *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent);
+typedef void (*printSTIObject)(const void *obj, const STI_TypeLibrary *lib, FILE *handle, uint32 indent);
 
 typedef struct {
     readSTIObject read;

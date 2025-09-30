@@ -1668,12 +1668,12 @@ static void print_PersistentRoadSamples(const PersistentRoadSamples* obj, STI_Ty
     fprintf(handle, "PersistentRoadSamples {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Patches");
-    print_DynamicArray_PatchSampleList(&obj->Patches, lib, handle, indent+1);
+    print_DynamicArray_PatchSampleList(&obj->Patches, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SampleIndices");
-    print_DynamicArray_STI_uint16(&obj->SampleIndices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->SampleIndices, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ControlPointSaveData1(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ControlPointSaveData1* out) {
     uint32 count = 0;
@@ -1707,9 +1707,9 @@ static void print_DynamicArray_ControlPointSaveData1(const DynamicArray_ControlP
     fprintf(handle, "DynamicArray_ControlPointSaveData1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ControlPointSaveData1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ControlPointSaveData1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ControlPointSaveData1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -1750,12 +1750,12 @@ static void print_InstanceDataPatch(const InstanceDataPatch* obj, STI_TypeLibrar
     print_STI_int32(&obj->PatchLod, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "InstanceDataLayers");
-    print_DynamicArray_InstanceDataLayer(&obj->InstanceDataLayers, lib, handle, indent+1);
+    print_DynamicArray_InstanceDataLayer(&obj->InstanceDataLayers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TerrainPatchInfo");
-    print_DynamicArray_TerrainPatchInfo(&obj->TerrainPatchInfo, lib, handle, indent+1);
+    print_DynamicArray_TerrainPatchInfo(&obj->TerrainPatchInfo, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RivalTerminalOption(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RivalTerminalOption* out) {
     uint32 count = 0;
@@ -1789,9 +1789,9 @@ static void print_DynamicArray_RivalTerminalOption(const DynamicArray_RivalTermi
     fprintf(handle, "DynamicArray_RivalTerminalOption {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RivalTerminalOption(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RivalTerminalOption(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RivalTerminalOption(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -1844,7 +1844,7 @@ static void print_TerrainPatch(const TerrainPatch* obj, STI_TypeLibrary* lib, FI
     print_TerrainMesh(&obj->TerrainMesh, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TerrainPrimitive");
-    print_DynamicArray_TerrainPrimitive(&obj->TerrainPrimitive, lib, handle, indent+1);
+    print_DynamicArray_TerrainPrimitive(&obj->TerrainPrimitive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TerrainDisplacementTexture");
     print_TerrainTexture(&obj->TerrainDisplacementTexture, lib, handle, indent + 1);
@@ -1873,7 +1873,7 @@ static void print_TerrainPatch(const TerrainPatch* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "DisplacementDownsampled");
     fprintf(handle, "%i", obj->DisplacementDownsampled);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AmfSubMesh(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AmfSubMesh* out) {
     uint32 count = 0;
@@ -1907,9 +1907,9 @@ static void print_DynamicArray_AmfSubMesh(const DynamicArray_AmfSubMesh* obj, ST
     fprintf(handle, "DynamicArray_AmfSubMesh {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AmfSubMesh(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AmfSubMesh(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AmfSubMesh(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -1953,9 +1953,9 @@ static void print_DynamicArray_STI_int32(const DynamicArray_STI_int32* obj, STI_
     fprintf(handle, "DynamicArray_STI_int32 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_int32(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_int32(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_int32(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2002,9 +2002,9 @@ static void print_DynamicArray_NetworkedCollectible(const DynamicArray_Networked
     fprintf(handle, "DynamicArray_NetworkedCollectible {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_NetworkedCollectible(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_NetworkedCollectible(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_NetworkedCollectible(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2049,7 +2049,7 @@ static void print_SafehouseUtilities(const SafehouseUtilities* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "UtilityCount");
     print_STI_uint8(&obj->UtilityCount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CraftingItemOption(Buffer* buffer, STI_TypeLibrary* lib, CraftingItemOption* out) {
     if (!read_STI_uint32(buffer, lib, &out->EquipmentHash)) return false;
@@ -2072,16 +2072,15 @@ static void print_CraftingItemOption(const CraftingItemOption* obj, STI_TypeLibr
     print_STI_int32(&obj->Amount, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "StatsFile");
-    print_StringHash_48c5294d_4(&obj->StatsFile, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->StatsFile, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ChanceType");
-    fprintf(handle, "%s", "CraftingItemOption");
-    fprintf(handle, " (%i)", (int)obj->ChanceType);
+    print_CraftingOptionChance(&obj->ChanceType, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ChanceValue");
     print_STI_float32(&obj->ChanceValue, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_Compatibility(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_Compatibility* out) {
     uint32 count = 0;
@@ -2115,9 +2114,9 @@ static void print_DynamicArray_Compatibility(const DynamicArray_Compatibility* o
     fprintf(handle, "DynamicArray_Compatibility {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_Compatibility(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_Compatibility(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_Compatibility(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2155,7 +2154,7 @@ static void print_InstanceDataLayer(const InstanceDataLayer* obj, STI_TypeLibrar
     fprintf(handle, "InstanceDataLayer {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Name");
-    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BoundingMin");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -2178,15 +2177,15 @@ static void print_InstanceDataLayer(const InstanceDataLayer* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Instances");
-    print_DynamicArray_VegetationSystemInstance(&obj->Instances, lib, handle, indent+1);
+    print_DynamicArray_VegetationSystemInstance(&obj->Instances, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UsedTypes");
-    print_DynamicArray_STI_uint32(&obj->UsedTypes, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->UsedTypes, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationDebugData");
     print_VegetationDebugData(&obj->VegetationDebugData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WaveWorks(Buffer* buffer, STI_TypeLibrary* lib, WaveWorks* out) {
     if (!read_STI_float32(buffer, lib, &out->surface_speed_multiplier)) return false;
@@ -2200,7 +2199,7 @@ static void print_WaveWorks(const WaveWorks* obj, STI_TypeLibrary* lib, FILE* ha
     fprintf(handle, "%*s%s = ", indent * 4, "", "surface_speed_multiplier");
     print_STI_float32(&obj->surface_speed_multiplier, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldSaveData9(Buffer* buffer, STI_TypeLibrary* lib, WorldSaveData9* out) {
     if (!read_DynamicArray_RegionData(buffer, lib, &out->Regions)) return false;
@@ -2255,55 +2254,55 @@ static void print_WorldSaveData9(const WorldSaveData9* obj, STI_TypeLibrary* lib
     fprintf(handle, "WorldSaveData9 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData3(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Raids");
-    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent+1);
+    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Timers");
-    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent+1);
+    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerSpawnPoints");
-    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalRegions");
-    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent+1);
+    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalUsedNumbers");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -2322,12 +2321,12 @@ static void print_WorldSaveData9(const WorldSaveData9* obj, STI_TypeLibrary* lib
     print_STI_uint8(&obj->DifficultyScaleByPlayers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ControlPoints");
-    print_DynamicArray_ControlPointSaveData1(&obj->ControlPoints, lib, handle, indent+1);
+    print_DynamicArray_ControlPointSaveData1(&obj->ControlPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalMissionGroups");
-    print_DynamicArray_RivalMissionGroup1(&obj->RivalMissionGroups, lib, handle, indent+1);
+    print_DynamicArray_RivalMissionGroup1(&obj->RivalMissionGroups, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AmfModel(Buffer* buffer, STI_TypeLibrary* lib, AmfModel* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->Mesh)) return false;
@@ -2346,10 +2345,10 @@ static void print_AmfModel(const AmfModel* obj, STI_TypeLibrary* lib, FILE* hand
     fprintf(handle, "AmfModel {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Mesh");
-    print_StringHash_48c5294d_4(&obj->Mesh, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Mesh, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LodSlots");
-    print_DynamicArray_STI_uint8(&obj->LodSlots, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->LodSlots, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MemoryTag");
     print_STI_uint32(&obj->MemoryTag, lib, handle, indent + 1);
@@ -2358,9 +2357,9 @@ static void print_AmfModel(const AmfModel* obj, STI_TypeLibrary* lib, FILE* hand
     print_STI_float32(&obj->LodFactor, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Materials");
-    print_DynamicArray_AmfMaterial(&obj->Materials, lib, handle, indent+1);
+    print_DynamicArray_AmfMaterial(&obj->Materials, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_PlayerDecalData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_PlayerDecalData* out) {
     uint32 count = 0;
@@ -2394,9 +2393,9 @@ static void print_DynamicArray_PlayerDecalData(const DynamicArray_PlayerDecalDat
     fprintf(handle, "DynamicArray_PlayerDecalData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PlayerDecalData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PlayerDecalData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PlayerDecalData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2426,15 +2425,15 @@ static void print_AnimalPopulationsSaveData3(const AnimalPopulationsSaveData3* o
     fprintf(handle, "AnimalPopulationsSaveData3 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Populations");
-    print_DynamicArray_AnimalPopulationSaveData2(&obj->Populations, lib, handle, indent+1);
+    print_DynamicArray_AnimalPopulationSaveData2(&obj->Populations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Groups");
-    print_DynamicArray_AnimalGroupSaveData(&obj->Groups, lib, handle, indent+1);
+    print_DynamicArray_AnimalGroupSaveData(&obj->Groups, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Animals");
-    print_DynamicArray_AnimalSaveData2(&obj->Animals, lib, handle, indent+1);
+    print_DynamicArray_AnimalSaveData2(&obj->Animals, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_Currency(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_Currency* out) {
     uint32 count = 0;
@@ -2468,9 +2467,9 @@ static void print_DynamicArray_Currency(const DynamicArray_Currency* obj, STI_Ty
     fprintf(handle, "DynamicArray_Currency {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_Currency(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_Currency(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_Currency(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2514,13 +2513,13 @@ static void print_EffectRTEmitterTemplate(const EffectRTEmitterTemplate* obj, ST
     fprintf(handle, "EffectRTEmitterTemplate {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmitterParams");
-    print_DynamicArray_STI_uint16(&obj->EmitterParams, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->EmitterParams, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmitterTimelineConnections");
-    print_DynamicArray_STI_uint32(&obj->EmitterTimelineConnections, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmitterTimelineConnections, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ParticleModifiers");
-    print_DynamicArray_STI_uint8(&obj->ParticleModifiers, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->ParticleModifiers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmitterLifetimeIndex");
     print_STI_uint32(&obj->EmitterLifetimeIndex, lib, handle, indent + 1);
@@ -2529,10 +2528,10 @@ static void print_EffectRTEmitterTemplate(const EffectRTEmitterTemplate* obj, ST
     print_STI_uint32(&obj->StartTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AliveInstantiators");
-    print_DynamicArray_STI_uint8(&obj->AliveInstantiators, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->AliveInstantiators, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "OnDeathInstantiators");
-    print_DynamicArray_STI_uint8(&obj->OnDeathInstantiators, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->OnDeathInstantiators, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MaxParticles");
     print_STI_uint16(&obj->MaxParticles, lib, handle, indent + 1);
@@ -2547,9 +2546,9 @@ static void print_EffectRTEmitterTemplate(const EffectRTEmitterTemplate* obj, ST
     print_STI_uint32(&obj->LocalParamsSize, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocalParams");
-    print_DynamicArray_EffectRTLocalParam(&obj->LocalParams, lib, handle, indent+1);
+    print_DynamicArray_EffectRTLocalParam(&obj->LocalParams, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Spline20(Buffer* buffer, STI_TypeLibrary* lib, Spline20* out) {
     if (!read_STI_float32(buffer, lib, &out->x_min)) return false;
@@ -2600,7 +2599,7 @@ static void print_Spline20(const Spline20* obj, STI_TypeLibrary* lib, FILE* hand
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CurrencyCollection(Buffer* buffer, STI_TypeLibrary* lib, CurrencyCollection* out) {
     if (!read_DynamicArray_Currency(buffer, lib, &out->Currencies)) return false;
@@ -2613,9 +2612,9 @@ static void print_CurrencyCollection(const CurrencyCollection* obj, STI_TypeLibr
     fprintf(handle, "CurrencyCollection {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Currencies");
-    print_DynamicArray_Currency(&obj->Currencies, lib, handle, indent+1);
+    print_DynamicArray_Currency(&obj->Currencies, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_VariableBool(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_VariableBool* out) {
     uint32 count = 0;
@@ -2649,9 +2648,9 @@ static void print_DynamicArray_VariableBool(const DynamicArray_VariableBool* obj
     fprintf(handle, "DynamicArray_VariableBool {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VariableBool(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VariableBool(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VariableBool(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2698,9 +2697,9 @@ static void print_DynamicArray_RegionData(const DynamicArray_RegionData* obj, ST
     fprintf(handle, "DynamicArray_RegionData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RegionData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RegionData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RegionData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2747,9 +2746,9 @@ static void print_DynamicArray_AnimalSaveData(const DynamicArray_AnimalSaveData*
     fprintf(handle, "DynamicArray_AnimalSaveData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AnimalSaveData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AnimalSaveData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AnimalSaveData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2796,9 +2795,9 @@ static void print_DynamicArray_RivalLevel(const DynamicArray_RivalLevel* obj, ST
     fprintf(handle, "DynamicArray_RivalLevel {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RivalLevel(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RivalLevel(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RivalLevel(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2844,7 +2843,7 @@ static void print_BuildingSaveData3(const BuildingSaveData3* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "InventoryComponent");
     print_InventoryBuildingComponentSaveData1(&obj->InventoryComponent, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_EffectRTBatchDescriptor(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_EffectRTBatchDescriptor* out) {
     uint32 count = 0;
@@ -2878,9 +2877,9 @@ static void print_DynamicArray_EffectRTBatchDescriptor(const DynamicArray_Effect
     fprintf(handle, "DynamicArray_EffectRTBatchDescriptor {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTBatchDescriptor(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTBatchDescriptor(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTBatchDescriptor(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -2911,7 +2910,7 @@ static void print_LynxSettings(const LynxSettings* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "movement_speed_rate_engine_destroyed_all");
     print_STI_float32(&obj->movement_speed_rate_engine_destroyed_all, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ShaderLibrary(Buffer* buffer, STI_TypeLibrary* lib, ShaderLibrary* out) {
     if (!read_STI_String(buffer, lib, &out->Name)) return false;
@@ -2944,24 +2943,24 @@ static void print_ShaderLibrary(const ShaderLibrary* obj, STI_TypeLibrary* lib, 
     print_STI_String(&obj->BuildTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VertexShaders");
-    print_DynamicArray_Shader(&obj->VertexShaders, lib, handle, indent+1);
+    print_DynamicArray_Shader(&obj->VertexShaders, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FragmentShaders");
-    print_DynamicArray_Shader(&obj->FragmentShaders, lib, handle, indent+1);
+    print_DynamicArray_Shader(&obj->FragmentShaders, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ComputeShaders");
-    print_DynamicArray_Shader(&obj->ComputeShaders, lib, handle, indent+1);
+    print_DynamicArray_Shader(&obj->ComputeShaders, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GeometryShaders");
-    print_DynamicArray_Shader(&obj->GeometryShaders, lib, handle, indent+1);
+    print_DynamicArray_Shader(&obj->GeometryShaders, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "HullShaders");
-    print_DynamicArray_Shader(&obj->HullShaders, lib, handle, indent+1);
+    print_DynamicArray_Shader(&obj->HullShaders, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DomainShaders");
-    print_DynamicArray_Shader(&obj->DomainShaders, lib, handle, indent+1);
+    print_DynamicArray_Shader(&obj->DomainShaders, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_EffectRTTimeline(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_EffectRTTimeline* out) {
     uint32 count = 0;
@@ -2995,9 +2994,9 @@ static void print_DynamicArray_EffectRTTimeline(const DynamicArray_EffectRTTimel
     fprintf(handle, "DynamicArray_EffectRTTimeline {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTTimeline(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTTimeline(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTTimeline(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3056,27 +3055,27 @@ static void print_CharactersSaveData7(const CharactersSaveData7* obj, STI_TypeLi
     print_STI_uint32(&obj->EquipmentIDCounter, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemStash");
-    print_DynamicArray_OwnedEquipment2(&obj->ItemStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->ItemStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UnknownItemsStash");
-    print_DynamicArray_OwnedEquipment2(&obj->UnknownItemsStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->UnknownItemsStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "InaccessibleItems");
-    print_DynamicArray_OwnedEquipment2(&obj->InaccessibleItems, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->InaccessibleItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveCharacterIndex");
     print_STI_uint32(&obj->ActiveCharacterIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaigns");
-    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaignsReserveIds");
-    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_LocationSummarySaveData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_LocationSummarySaveData* out) {
     uint32 count = 0;
@@ -3110,9 +3109,9 @@ static void print_DynamicArray_LocationSummarySaveData(const DynamicArray_Locati
     fprintf(handle, "DynamicArray_LocationSummarySaveData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_LocationSummarySaveData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_LocationSummarySaveData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_LocationSummarySaveData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3194,7 +3193,7 @@ static void print_PlayerSettings(const PlayerSettings* obj, STI_TypeLibrary* lib
     fprintf(handle, "%*s%s = ", indent * 4, "", "SchematicCurrencySettings");
     print_SchematicCurrencySettings(&obj->SchematicCurrencySettings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EnvParam(Buffer* buffer, STI_TypeLibrary* lib, EnvParam* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->Name)) return false;
@@ -3216,13 +3215,13 @@ static void print_EnvParam(const EnvParam* obj, STI_TypeLibrary* lib, FILE* hand
     fprintf(handle, "EnvParam {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Name");
-    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Keys");
-    print_DynamicArray_STI_float32(&obj->Keys, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->Keys, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Values");
-    print_DynamicArray_STI_float32(&obj->Values, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->Values, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Type");
     print_STI_int8(&obj->Type, lib, handle, indent + 1);
@@ -3236,7 +3235,7 @@ static void print_EnvParam(const EnvParam* obj, STI_TypeLibrary* lib, FILE* hand
     fprintf(handle, "%*s%s = ", indent * 4, "", "Operation");
     print_STI_int8(&obj->Operation, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_CraftingItemOption(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_CraftingItemOption* out) {
     uint32 count = 0;
@@ -3270,9 +3269,9 @@ static void print_DynamicArray_CraftingItemOption(const DynamicArray_CraftingIte
     fprintf(handle, "DynamicArray_CraftingItemOption {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_CraftingItemOption(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_CraftingItemOption(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_CraftingItemOption(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3319,9 +3318,9 @@ static void print_DynamicArray_EffectRTRenderInfo(const DynamicArray_EffectRTRen
     fprintf(handle, "DynamicArray_EffectRTRenderInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTRenderInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTRenderInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTRenderInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3368,9 +3367,9 @@ static void print_DynamicArray_EffectRTModifier(const DynamicArray_EffectRTModif
     fprintf(handle, "DynamicArray_EffectRTModifier {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTModifier(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTModifier(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTModifier(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3401,9 +3400,9 @@ static void print_ProceduralMission(const ProceduralMission* obj, STI_TypeLibrar
     print_STI_int32(&obj->MissionTemplateId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Instances");
-    print_DynamicArray_ProceduralMissionInstance(&obj->Instances, lib, handle, indent+1);
+    print_DynamicArray_ProceduralMissionInstance(&obj->Instances, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_InsurrectionLevel(Buffer* buffer, STI_TypeLibrary* lib, InsurrectionLevel* out) {
     if (!read_STI_uint32(buffer, lib, &out->Score)) return false;
@@ -3438,18 +3437,18 @@ static void print_InsurrectionLevel(const InsurrectionLevel* obj, STI_TypeLibrar
     print_STI_float32(&obj->RegionMissionChance, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TypeChance");
-    print_DynamicArray_STI_float32(&obj->TypeChance, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->TypeChance, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TypeHash");
-    print_DynamicArray_STI_uint32(&obj->TypeHash, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->TypeHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionChance");
-    print_DynamicArray_STI_float32(&obj->MissionChance, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->MissionChance, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionId");
-    print_DynamicArray_STI_int32(&obj->MissionId, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionId, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_GlobalFilter(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_GlobalFilter* out) {
     uint32 count = 0;
@@ -3483,9 +3482,9 @@ static void print_DynamicArray_GlobalFilter(const DynamicArray_GlobalFilter* obj
     fprintf(handle, "DynamicArray_GlobalFilter {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_GlobalFilter(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_GlobalFilter(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_GlobalFilter(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3560,7 +3559,7 @@ static void print_SchematicTreeNode(const SchematicTreeNode* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "DisplayMode");
     print_STI_uint8(&obj->DisplayMode, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PfxDeactivationProperties(Buffer* buffer, STI_TypeLibrary* lib, PfxDeactivationProperties* out) {
     if (!read_STI_float32(buffer, lib, &out->max_dist_sqrd)) return false;
@@ -3606,7 +3605,7 @@ static void print_PfxDeactivationProperties(const PfxDeactivationProperties* obj
     fprintf(handle, "%*s%s = ", indent * 4, "", "minimum_spiking_velocity_scale_squared");
     print_STI_float32(&obj->minimum_spiking_velocity_scale_squared, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProceduralMissions(Buffer* buffer, STI_TypeLibrary* lib, ProceduralMissions* out) {
     if (!read_DynamicArray_ProceduralMission(buffer, lib, &out->Missions)) return false;
@@ -3619,9 +3618,9 @@ static void print_ProceduralMissions(const ProceduralMissions* obj, STI_TypeLibr
     fprintf(handle, "ProceduralMissions {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Missions");
-    print_DynamicArray_ProceduralMission(&obj->Missions, lib, handle, indent+1);
+    print_DynamicArray_ProceduralMission(&obj->Missions, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BlackboardVarList(Buffer* buffer, STI_TypeLibrary* lib, BlackboardVarList* out) {
     if (!read_DynamicArray_VariableInt(buffer, lib, &out->Ints)) return false;
@@ -3640,18 +3639,18 @@ static void print_BlackboardVarList(const BlackboardVarList* obj, STI_TypeLibrar
     fprintf(handle, "BlackboardVarList {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Ints");
-    print_DynamicArray_VariableInt(&obj->Ints, lib, handle, indent+1);
+    print_DynamicArray_VariableInt(&obj->Ints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Floats");
-    print_DynamicArray_VariableFloat(&obj->Floats, lib, handle, indent+1);
+    print_DynamicArray_VariableFloat(&obj->Floats, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Bools");
-    print_DynamicArray_VariableBool(&obj->Bools, lib, handle, indent+1);
+    print_DynamicArray_VariableBool(&obj->Bools, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Vec3s");
-    print_DynamicArray_VariableVec3(&obj->Vec3s, lib, handle, indent+1);
+    print_DynamicArray_VariableVec3(&obj->Vec3s, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AcceptedPolicyPair(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AcceptedPolicyPair* out) {
     uint32 count = 0;
@@ -3685,9 +3684,9 @@ static void print_DynamicArray_AcceptedPolicyPair(const DynamicArray_AcceptedPol
     fprintf(handle, "DynamicArray_AcceptedPolicyPair {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AcceptedPolicyPair(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AcceptedPolicyPair(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AcceptedPolicyPair(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3734,9 +3733,9 @@ static void print_DynamicArray_PfxStaticInstance(const DynamicArray_PfxStaticIns
     fprintf(handle, "DynamicArray_PfxStaticInstance {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PfxStaticInstance(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PfxStaticInstance(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PfxStaticInstance(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3774,12 +3773,12 @@ static void print_AmfMeshHeader(const AmfMeshHeader* obj, STI_TypeLibrary* lib, 
     print_STI_uint32(&obj->MemoryTag, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LodGroups");
-    print_DynamicArray_AmfLodGroup(&obj->LodGroups, lib, handle, indent+1);
+    print_DynamicArray_AmfLodGroup(&obj->LodGroups, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "HighLodPath");
-    print_StringHash_48c5294d_4(&obj->HighLodPath, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->HighLodPath, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WaterTuning(Buffer* buffer, STI_TypeLibrary* lib, WaterTuning* out) {
     if (!read_GerstnerWaves(buffer, lib, &out->gerstner_waves)) return false;
@@ -3799,7 +3798,7 @@ static void print_WaterTuning(const WaterTuning* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "wave_works");
     print_WaveWorks(&obj->wave_works, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_VegetationSystemInstance(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_VegetationSystemInstance* out) {
     uint32 count = 0;
@@ -3833,9 +3832,9 @@ static void print_DynamicArray_VegetationSystemInstance(const DynamicArray_Veget
     fprintf(handle, "DynamicArray_VegetationSystemInstance {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VegetationSystemInstance(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VegetationSystemInstance(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VegetationSystemInstance(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3882,9 +3881,9 @@ static void print_DynamicArray_RaidSaveData(const DynamicArray_RaidSaveData* obj
     fprintf(handle, "DynamicArray_RaidSaveData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RaidSaveData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RaidSaveData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RaidSaveData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -3920,9 +3919,9 @@ static void print_EnvironmentParameters(const EnvironmentParameters* obj, STI_Ty
     print_STI_uint32(&obj->RenderFeatures, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Parameters");
-    print_DynamicArray_EnvParam(&obj->Parameters, lib, handle, indent+1);
+    print_DynamicArray_EnvParam(&obj->Parameters, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProfileSaveData5(Buffer* buffer, STI_TypeLibrary* lib, ProfileSaveData5* out) {
     if (!read_DynamicArray_STI_uint64(buffer, lib, &out->Collectables)) return false;
@@ -3969,10 +3968,10 @@ static void print_ProfileSaveData5(const ProfileSaveData5* obj, STI_TypeLibrary*
     fprintf(handle, "ProfileSaveData5 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -3988,10 +3987,10 @@ static void print_ProfileSaveData5(const ProfileSaveData5* obj, STI_TypeLibrary*
     print_STI_uint64(&obj->TrackingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletedBounties");
-    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLogin");
     print_STI_int64(&obj->LastLogin, lib, handle, indent + 1);
@@ -4015,10 +4014,10 @@ static void print_ProfileSaveData5(const ProfileSaveData5* obj, STI_TypeLibrary*
     fprintf(handle, "%i", obj->ShownCrashReportingEnabledOptIn);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceStorage");
-    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent+1);
+    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorage");
-    print_DynamicArray_OwnedEquipment1(&obj->SafehouseStorage, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->SafehouseStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorageSizeColumns");
     print_STI_uint8(&obj->SafehouseStorageSizeColumns, lib, handle, indent + 1);
@@ -4029,7 +4028,7 @@ static void print_ProfileSaveData5(const ProfileSaveData5* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "FixVersion");
     print_STI_uint32(&obj->FixVersion, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_STI_uint32(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_STI_uint32* out) {
     uint32 count = 0;
@@ -4060,9 +4059,9 @@ static void print_DynamicArray_STI_uint32(const DynamicArray_STI_uint32* obj, ST
     fprintf(handle, "DynamicArray_STI_uint32 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_uint32(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_uint32(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_uint32(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -4111,7 +4110,7 @@ static void print_OccluderBox(const OccluderBox* obj, STI_TypeLibrary* lib, FILE
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_Type(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_Type* out) {
     uint32 count = 0;
@@ -4145,9 +4144,9 @@ static void print_DynamicArray_Type(const DynamicArray_Type* obj, STI_TypeLibrar
     fprintf(handle, "DynamicArray_Type {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_Type(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_Type(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_Type(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -4194,9 +4193,9 @@ static void print_DynamicArray_VegetationPhysicsLayer(const DynamicArray_Vegetat
     fprintf(handle, "DynamicArray_VegetationPhysicsLayer {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VegetationPhysicsLayer(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VegetationPhysicsLayer(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VegetationPhysicsLayer(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -4229,7 +4228,7 @@ static void print_DamageOverTimeEffectSettings(const DamageOverTimeEffectSetting
     fprintf(handle, "%*s%s = ", indent * 4, "", "ScreenEffectSettings");
     print_DamageOverTimeScreenEffectSettings(&obj->ScreenEffectSettings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RouteInput(Buffer* buffer, STI_TypeLibrary* lib, RouteInput* out) {
     if (!read_STI_uint64(buffer, lib, &out->GameObjectID)) return false;
@@ -4252,7 +4251,7 @@ static void print_RouteInput(const RouteInput* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "%*s%s = ", indent * 4, "", "IsReversed");
     print_STI_uint16(&obj->IsReversed, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Vec3(Buffer* buffer, STI_TypeLibrary* lib, Vec3* out) {
     if (!read_STI_float32(buffer, lib, &out->x)) return false;
@@ -4274,7 +4273,7 @@ static void print_Vec3(const Vec3* obj, STI_TypeLibrary* lib, FILE* handle, uint
     fprintf(handle, "%*s%s = ", indent * 4, "", "z");
     print_STI_float32(&obj->z, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PerceptionSettings_2(Buffer* buffer, STI_TypeLibrary* lib, PerceptionSettings_2* out) {
     if (!read_DataLifespans(buffer, lib, &out->Lifespans)) return false;
@@ -4299,7 +4298,7 @@ static void print_PerceptionSettings_2(const PerceptionSettings_2* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "EventThreats");
     print_AwarenessEventThreats(&obj->EventThreats, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ActionToken(Buffer* buffer, STI_TypeLibrary* lib, ActionToken* out) {
     if (!read_STI_String(buffer, lib, &out->DebugName)) return false;
@@ -4335,7 +4334,7 @@ static void print_ActionToken(const ActionToken* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "TokenCooldownMax");
     print_STI_float32(&obj->TokenCooldownMax, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTBatchDescriptor(Buffer* buffer, STI_TypeLibrary* lib, EffectRTBatchDescriptor* out) {
     if (!read_STI_uint32(buffer, lib, &out->OutputBufferOffset)) return false;
@@ -4370,7 +4369,7 @@ static void print_EffectRTBatchDescriptor(const EffectRTBatchDescriptor* obj, ST
     assert(false && "Pointers are not supported yet");
  // Unknown how pointers work
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_GSDataSet(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_GSDataSet* out) {
     uint32 count = 0;
@@ -4404,9 +4403,9 @@ static void print_DynamicArray_GSDataSet(const DynamicArray_GSDataSet* obj, STI_
     fprintf(handle, "DynamicArray_GSDataSet {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_GSDataSet(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_GSDataSet(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_GSDataSet(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -4443,10 +4442,10 @@ static void print_BuildData(const BuildData* obj, STI_TypeLibrary* lib, FILE* ha
     fprintf(handle, "BuildData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "BuildingHash");
-    print_StringHash_48c5294d_4(&obj->BuildingHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->BuildingHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemHash");
-    print_StringHash_48c5294d_4(&obj->ItemHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->ItemHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Faction");
     print_STI_uint32(&obj->Faction, lib, handle, indent + 1);
@@ -4477,9 +4476,9 @@ static void print_BuildData(const BuildData* obj, STI_TypeLibrary* lib, FILE* ha
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Resources");
-    print_DynamicArray_StrategicResource(&obj->Resources, lib, handle, indent+1);
+    print_DynamicArray_StrategicResource(&obj->Resources, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ImpostorMesh(Buffer* buffer, STI_TypeLibrary* lib, ImpostorMesh* out) {
     if (!read_DynamicArray_STI_uint16(buffer, lib, &out->Indices)) return false;
@@ -4502,10 +4501,10 @@ static void print_ImpostorMesh(const ImpostorMesh* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "ImpostorMesh {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Indices");
-    print_DynamicArray_STI_uint16(&obj->Indices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->Indices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Vertices");
-    print_DynamicArray_ImpostorVertex(&obj->Vertices, lib, handle, indent+1);
+    print_DynamicArray_ImpostorVertex(&obj->Vertices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Size");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -4530,7 +4529,7 @@ static void print_ImpostorMesh(const ImpostorMesh* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "Single");
     print_STI_uint8(&obj->Single, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_GDCFileEntry(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_GDCFileEntry* out) {
     uint32 count = 0;
@@ -4564,9 +4563,9 @@ static void print_DynamicArray_GDCFileEntry(const DynamicArray_GDCFileEntry* obj
     fprintf(handle, "DynamicArray_GDCFileEntry {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_GDCFileEntry(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_GDCFileEntry(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_GDCFileEntry(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -4602,24 +4601,24 @@ static void print_ValueOccurance(const ValueOccurance* obj, STI_TypeLibrary* lib
     fprintf(handle, "ValueOccurance {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Hashes");
-    print_DynamicArray_STI_uint32(&obj->Hashes, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->Hashes, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "HashAmounts");
-    print_DynamicArray_STI_uint32(&obj->HashAmounts, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->HashAmounts, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Ints");
-    print_DynamicArray_STI_uint32(&obj->Ints, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->Ints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "IntAmounts");
-    print_DynamicArray_STI_uint32(&obj->IntAmounts, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->IntAmounts, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Bools");
-    print_DynamicArray_STI_uint8(&obj->Bools, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->Bools, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BoolAmounts");
-    print_DynamicArray_STI_uint32(&obj->BoolAmounts, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->BoolAmounts, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HunterMissionEvent(Buffer* buffer, STI_TypeLibrary* lib, HunterMissionEvent* out) {
     if (!read_STI_int32(buffer, lib, &out->Id)) return false;
@@ -4646,7 +4645,7 @@ static void print_HunterMissionEvent(const HunterMissionEvent* obj, STI_TypeLibr
     print_STI_int32(&obj->Id, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameShort");
-    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Enabled");
     print_STI_uint8(&obj->Enabled, lib, handle, indent + 1);
@@ -4658,18 +4657,18 @@ static void print_HunterMissionEvent(const HunterMissionEvent* obj, STI_TypeLibr
     print_STI_uint8(&obj->Skippable, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Event");
-    print_StringHash_99cfa095_6(&obj->Event, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->Event, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Type");
-    print_StringHash_48c5294d_4(&obj->Type, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Type, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesRequired");
-    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesOptional");
-    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharactersSaveData1(Buffer* buffer, STI_TypeLibrary* lib, CharactersSaveData1* out) {
     for (uint32 i = 0; i < 4; ++i) {
@@ -4711,21 +4710,21 @@ static void print_CharactersSaveData1(const CharactersSaveData1* obj, STI_TypeLi
     print_STI_uint32(&obj->EquipmentIDCounter, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemStash");
-    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveCharacterIndex");
     print_STI_uint32(&obj->ActiveCharacterIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaigns");
-    print_DynamicArray_MissionSaveData(&obj->MissionCampaigns, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData(&obj->MissionCampaigns, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaignsReserveIds");
-    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_STI_Deferred(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_STI_Deferred* out) {
     uint32 count = 0;
@@ -4759,9 +4758,9 @@ static void print_DynamicArray_STI_Deferred(const DynamicArray_STI_Deferred* obj
     fprintf(handle, "DynamicArray_STI_Deferred {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_Deferred(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_Deferred(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_Deferred(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -4801,7 +4800,7 @@ static void print_DamageOverTimeScreenEffectSettings(const DamageOverTimeScreenE
     fprintf(handle, "%*s%s = ", indent * 4, "", "BlurPulseSpeed");
     print_STI_float32(&obj->BlurPulseSpeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AnimalPopulationsSaveData(Buffer* buffer, STI_TypeLibrary* lib, AnimalPopulationsSaveData* out) {
     if (!read_DynamicArray_AnimalPopulationSaveData(buffer, lib, &out->Populations)) return false;
@@ -4818,15 +4817,15 @@ static void print_AnimalPopulationsSaveData(const AnimalPopulationsSaveData* obj
     fprintf(handle, "AnimalPopulationsSaveData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Populations");
-    print_DynamicArray_AnimalPopulationSaveData(&obj->Populations, lib, handle, indent+1);
+    print_DynamicArray_AnimalPopulationSaveData(&obj->Populations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Groups");
-    print_DynamicArray_AnimalGroupSaveData(&obj->Groups, lib, handle, indent+1);
+    print_DynamicArray_AnimalGroupSaveData(&obj->Groups, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Animals");
-    print_DynamicArray_AnimalSaveData(&obj->Animals, lib, handle, indent+1);
+    print_DynamicArray_AnimalSaveData(&obj->Animals, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_SettingNameValuePair(Buffer* buffer, STI_TypeLibrary* lib, SettingNameValuePair* out) {
     if (!read_STI_uint32(buffer, lib, &out->Name)) return false;
@@ -4844,7 +4843,7 @@ static void print_SettingNameValuePair(const SettingNameValuePair* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "Value");
     print_STI_uint32(&obj->Value, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CraftingData(Buffer* buffer, STI_TypeLibrary* lib, CraftingData* out) {
     if (!read_STI_int32(buffer, lib, &out->EquipmentCraftingCategory)) return false;
@@ -4874,15 +4873,15 @@ static void print_CraftingData(const CraftingData* obj, STI_TypeLibrary* lib, FI
     print_STI_String(&obj->ImageFileString, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RequiredResources");
-    print_DynamicArray_CraftingResourceData(&obj->RequiredResources, lib, handle, indent+1);
+    print_DynamicArray_CraftingResourceData(&obj->RequiredResources, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RecyclingResources");
-    print_DynamicArray_CraftingResourceData(&obj->RecyclingResources, lib, handle, indent+1);
+    print_DynamicArray_CraftingResourceData(&obj->RecyclingResources, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemOptions");
-    print_DynamicArray_CraftingItemOption(&obj->ItemOptions, lib, handle, indent+1);
+    print_DynamicArray_CraftingItemOption(&obj->ItemOptions, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharacterProfile3(Buffer* buffer, STI_TypeLibrary* lib, CharacterProfile3* out) {
     if (!read_CharacterLooks(buffer, lib, &out->CharacterLooks)) return false;
@@ -4989,7 +4988,7 @@ static void print_CharacterProfile3(const CharacterProfile3* obj, STI_TypeLibrar
     print_STI_uint8(&obj->Created, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Inventory");
-    print_DynamicArray_OwnedEquipment1(&obj->Inventory, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->Inventory, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PPInventorySlot");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -5002,7 +5001,7 @@ static void print_CharacterProfile3(const CharacterProfile3* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehicleData");
-    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent+1);
+    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehiclePreferedCameraThirdPerson");
     print_STI_uint8(&obj->VehiclePreferedCameraThirdPerson, lib, handle, indent + 1);
@@ -5014,7 +5013,7 @@ static void print_CharacterProfile3(const CharacterProfile3* obj, STI_TypeLibrar
     print_STI_uint8(&obj->BackpackSizeRows, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -5027,7 +5026,7 @@ static void print_CharacterProfile3(const CharacterProfile3* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DistanceTravelled");
     print_STI_float32(&obj->DistanceTravelled, lib, handle, indent + 1);
@@ -5039,21 +5038,21 @@ static void print_CharacterProfile3(const CharacterProfile3* obj, STI_TypeLibrar
     print_STI_float32(&obj->WeatherTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerPositions");
-    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent+1);
+    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLevelUpTS");
     print_STI_uint64(&obj->LastLevelUpTS, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RaidLootAcquired");
-    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent+1);
+    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveTitle");
     print_STI_uint32(&obj->ActiveTitle, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_TimerSaveData1(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_TimerSaveData1* out) {
     uint32 count = 0;
@@ -5087,9 +5086,9 @@ static void print_DynamicArray_TimerSaveData1(const DynamicArray_TimerSaveData1*
     fprintf(handle, "DynamicArray_TimerSaveData1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_TimerSaveData1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_TimerSaveData1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_TimerSaveData1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -5137,7 +5136,7 @@ static void print_MaterialOverride(const MaterialOverride* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "AlignToNormal");
     print_STI_uint8(&obj->AlignToNormal, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StrategicResourceType(Buffer* buffer, STI_TypeLibrary* lib, StrategicResourceType* out) {
     uint32 value = 0;
@@ -5148,11 +5147,35 @@ static bool read_StrategicResourceType(Buffer* buffer, STI_TypeLibrary* lib, Str
 static void free_StrategicResourceType(StrategicResourceType* obj, STI_TypeLibrary* lib) {
 }
 static void print_StrategicResourceType(const StrategicResourceType* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "StrategicResourceType {\n");
+    fprintf(handle, "StrategicResourceType( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "StrategicResourceType");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(CONSTRUCTION_MATERIALS): {
+            fprintf(handle, "CONSTRUCTION_MATERIALS )");
+break;
+            break;
+        }
+        case(ENERGY): {
+            fprintf(handle, "ENERGY )");
+break;
+            break;
+        }
+        case(SYNTHETICS): {
+            fprintf(handle, "SYNTHETICS )");
+break;
+            break;
+        }
+        case(CRAFTING_MATERIAL): {
+            fprintf(handle, "CRAFTING_MATERIAL )");
+break;
+            break;
+        }
+        case(NUM_STRATEGIC_RESOURCES): {
+            fprintf(handle, "NUM_STRATEGIC_RESOURCES )");
+break;
+            break;
+        }
+    }
 }
 static bool read_ControlPointSaveData3(Buffer* buffer, STI_TypeLibrary* lib, ControlPointSaveData3* out) {
     if (!read_STI_uint64(buffer, lib, &out->Id)) return false;
@@ -5179,9 +5202,9 @@ static void print_ControlPointSaveData3(const ControlPointSaveData3* obj, STI_Ty
     print_BuildingGridSaveData1(&obj->Grid, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Buildings");
-    print_DynamicArray_BuildingSaveData3(&obj->Buildings, lib, handle, indent+1);
+    print_DynamicArray_BuildingSaveData3(&obj->Buildings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ResourceStorageItem(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ResourceStorageItem* out) {
     uint32 count = 0;
@@ -5215,9 +5238,9 @@ static void print_DynamicArray_ResourceStorageItem(const DynamicArray_ResourceSt
     fprintf(handle, "DynamicArray_ResourceStorageItem {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ResourceStorageItem(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ResourceStorageItem(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ResourceStorageItem(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -5251,21 +5274,21 @@ static void print_TerrainPatchTexelConnectivity(const TerrainPatchTexelConnectiv
     fprintf(handle, "TerrainPatchTexelConnectivity {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "TexelMap");
-    print_DynamicArray_STI_int32(&obj->TexelMap, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->TexelMap, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Neighborhoods");
-    print_DynamicArray_STI_uint64(&obj->Neighborhoods, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Neighborhoods, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NeighborhoodData");
-    print_DynamicArray_STI_uint32(&obj->NeighborhoodData, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->NeighborhoodData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AdjacentAtoms");
-    print_DynamicArray_STI_uint64(&obj->AdjacentAtoms, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->AdjacentAtoms, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AdjacentAtomData");
-    print_DynamicArray_STI_uint32(&obj->AdjacentAtomData, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->AdjacentAtomData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RaidLootSaveData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RaidLootSaveData* out) {
     uint32 count = 0;
@@ -5299,9 +5322,9 @@ static void print_DynamicArray_RaidLootSaveData(const DynamicArray_RaidLootSaveD
     fprintf(handle, "DynamicArray_RaidLootSaveData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RaidLootSaveData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RaidLootSaveData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RaidLootSaveData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -5336,7 +5359,7 @@ static void print_StringLookupHashProperties(const StringLookupHashProperties* o
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameOffset");
     print_STI_uint32(&obj->NameOffset, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ReseveIconInfo(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ReseveIconInfo* out) {
     uint32 count = 0;
@@ -5370,9 +5393,9 @@ static void print_DynamicArray_ReseveIconInfo(const DynamicArray_ReseveIconInfo*
     fprintf(handle, "DynamicArray_ReseveIconInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ReseveIconInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ReseveIconInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ReseveIconInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -5407,7 +5430,7 @@ static void print_VegetationBillboardLayer(const VegetationBillboardLayer* obj, 
     fprintf(handle, "VegetationBillboardLayer {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Channel");
     print_STI_int32(&obj->Channel, lib, handle, indent + 1);
@@ -5439,7 +5462,7 @@ static void print_VegetationBillboardLayer(const VegetationBillboardLayer* obj, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "SourceLayerHash");
     print_STI_uint32(&obj->SourceLayerHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldSettings(Buffer* buffer, STI_TypeLibrary* lib, WorldSettings* out) {
     for (uint32 i = 0; i < 3; ++i) {
@@ -5483,7 +5506,7 @@ static void print_WorldSettings(const WorldSettings* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "StaticPatchMemoryRequirements");
     print_STI_int32(&obj->StaticPatchMemoryRequirements, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ForestVertex(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ForestVertex* out) {
     uint32 count = 0;
@@ -5517,9 +5540,9 @@ static void print_DynamicArray_ForestVertex(const DynamicArray_ForestVertex* obj
     fprintf(handle, "DynamicArray_ForestVertex {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ForestVertex(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ForestVertex(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ForestVertex(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -5555,12 +5578,12 @@ static void print_XLSSheet(const XLSSheet* obj, STI_TypeLibrary* lib, FILE* hand
     print_STI_uint32(&obj->Rows, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CellIndex");
-    print_DynamicArray_STI_uint32(&obj->CellIndex, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CellIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Name");
     print_STI_String(&obj->Name, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BlockCompressionType(Buffer* buffer, STI_TypeLibrary* lib, BlockCompressionType* out) {
     uint32 value = 0;
@@ -5571,11 +5594,25 @@ static bool read_BlockCompressionType(Buffer* buffer, STI_TypeLibrary* lib, Bloc
 static void free_BlockCompressionType(BlockCompressionType* obj, STI_TypeLibrary* lib) {
 }
 static void print_BlockCompressionType(const BlockCompressionType* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "BlockCompressionType {\n");
+    fprintf(handle, "BlockCompressionType( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "BlockCompressionType");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(E_BLOCKCOMPRESSIONTYPE_NONE): {
+            fprintf(handle, "E_BLOCKCOMPRESSIONTYPE_NONE )");
+break;
+            break;
+        }
+        case(E_BLOCKCOMPRESSIONTYPE_BC3): {
+            fprintf(handle, "E_BLOCKCOMPRESSIONTYPE_BC3 )");
+break;
+            break;
+        }
+        case(E_BLOCKCOMPRESSIONTYPE_BC7): {
+            fprintf(handle, "E_BLOCKCOMPRESSIONTYPE_BC7 )");
+break;
+            break;
+        }
+    }
 }
 static bool read_DynamicArray_ShaderRules(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ShaderRules* out) {
     uint32 count = 0;
@@ -5609,9 +5646,9 @@ static void print_DynamicArray_ShaderRules(const DynamicArray_ShaderRules* obj, 
     fprintf(handle, "DynamicArray_ShaderRules {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ShaderRules(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ShaderRules(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ShaderRules(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -5643,12 +5680,12 @@ static void print_ProbabilityBuffer(const ProbabilityBuffer* obj, STI_TypeLibrar
     fprintf(handle, "ProbabilityBuffer {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Buffer");
-    print_DynamicArray_STI_int16(&obj->Buffer, lib, handle, indent+1);
+    print_DynamicArray_STI_int16(&obj->Buffer, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnyValidVariation");
     fprintf(handle, "%i", obj->AnyValidVariation);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AmfBuffer(Buffer* buffer, STI_TypeLibrary* lib, AmfBuffer* out) {
     if (!read_DynamicArray_STI_uint8(buffer, lib, &out->Data)) return false;
@@ -5667,12 +5704,12 @@ static void print_AmfBuffer(const AmfBuffer* obj, STI_TypeLibrary* lib, FILE* ha
     fprintf(handle, "AmfBuffer {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Data");
-    print_DynamicArray_STI_uint8(&obj->Data, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->Data, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CreateSRV");
     fprintf(handle, "%i", obj->CreateSRV);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldAudioPatchZoneData(Buffer* buffer, STI_TypeLibrary* lib, WorldAudioPatchZoneData* out) {
     if (!read_DynamicArray_WorldAudioVector4(buffer, lib, &out->Points)) return false;
@@ -5693,7 +5730,7 @@ static void print_WorldAudioPatchZoneData(const WorldAudioPatchZoneData* obj, ST
     fprintf(handle, "WorldAudioPatchZoneData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Points");
-    print_DynamicArray_WorldAudioVector4(&obj->Points, lib, handle, indent+1);
+    print_DynamicArray_WorldAudioVector4(&obj->Points, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ZoneIndex");
     print_STI_uint32(&obj->ZoneIndex, lib, handle, indent + 1);
@@ -5718,7 +5755,7 @@ static void print_WorldAudioPatchZoneData(const WorldAudioPatchZoneData* obj, ST
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AnimalRepopulateSaveData(Buffer* buffer, STI_TypeLibrary* lib, AnimalRepopulateSaveData* out) {
     if (!read_STI_uint8(buffer, lib, &out->Loadout)) return false;
@@ -5732,7 +5769,7 @@ static void print_AnimalRepopulateSaveData(const AnimalRepopulateSaveData* obj, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "Loadout");
     print_STI_uint8(&obj->Loadout, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BlobOfBytes(Buffer* buffer, STI_TypeLibrary* lib, BlobOfBytes* out) {
     if (!read_DynamicArray_STI_uint8(buffer, lib, &out->Bytes)) return false;
@@ -5745,9 +5782,9 @@ static void print_BlobOfBytes(const BlobOfBytes* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "BlobOfBytes {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Bytes");
-    print_DynamicArray_STI_uint8(&obj->Bytes, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->Bytes, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AdfModelCollectionInstance(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AdfModelCollectionInstance* out) {
     uint32 count = 0;
@@ -5781,9 +5818,9 @@ static void print_DynamicArray_AdfModelCollectionInstance(const DynamicArray_Adf
     fprintf(handle, "DynamicArray_AdfModelCollectionInstance {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AdfModelCollectionInstance(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AdfModelCollectionInstance(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AdfModelCollectionInstance(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -5816,7 +5853,7 @@ static void print_PfxBodyPropertiesEntry(const PfxBodyPropertiesEntry* obj, STI_
     fprintf(handle, "%*s%s = ", indent * 4, "", "body_properties");
     print_PfxBodyProperties(&obj->body_properties, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AcceptedPolicyPair(Buffer* buffer, STI_TypeLibrary* lib, AcceptedPolicyPair* out) {
     if (!read_STI_uint32(buffer, lib, &out->Name)) return false;
@@ -5843,7 +5880,7 @@ static void print_AcceptedPolicyPair(const AcceptedPolicyPair* obj, STI_TypeLibr
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationModel(Buffer* buffer, STI_TypeLibrary* lib, VegetationModel* out) {
     if (!read_STI_uint16(buffer, lib, &out->ModelIndex)) return false;
@@ -5932,10 +5969,10 @@ static void print_VegetationModel(const VegetationModel* obj, STI_TypeLibrary* l
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ModelFilenameHash");
-    print_StringHash_48c5294d_4(&obj->ModelFilenameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->ModelFilenameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ModelExtraLodsFilenameHash");
-    print_StringHash_48c5294d_4(&obj->ModelExtraLodsFilenameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->ModelExtraLodsFilenameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TerrainColoringFactor");
     print_STI_float32(&obj->TerrainColoringFactor, lib, handle, indent + 1);
@@ -6002,7 +6039,7 @@ static void print_VegetationModel(const VegetationModel* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "Flags");
     print_STI_uint32(&obj->Flags, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_WorldAudioZone(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_WorldAudioZone* out) {
     uint32 count = 0;
@@ -6036,9 +6073,9 @@ static void print_DynamicArray_WorldAudioZone(const DynamicArray_WorldAudioZone*
     fprintf(handle, "DynamicArray_WorldAudioZone {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_WorldAudioZone(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_WorldAudioZone(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_WorldAudioZone(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -6071,7 +6108,7 @@ static void print_VariableInt(const VariableInt* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "Val");
     print_STI_uint32(&obj->Val, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldSaveData6(Buffer* buffer, STI_TypeLibrary* lib, WorldSaveData6* out) {
     if (!read_DynamicArray_RegionData(buffer, lib, &out->Regions)) return false;
@@ -6114,54 +6151,54 @@ static void print_WorldSaveData6(const WorldSaveData6* obj, STI_TypeLibrary* lib
     fprintf(handle, "WorldSaveData6 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData2(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Raids");
-    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent+1);
+    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Timers");
-    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent+1);
+    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerSpawnPoints");
-    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PfxStaticInstance(Buffer* buffer, STI_TypeLibrary* lib, PfxStaticInstance* out) {
     for (uint32 i = 0; i < 16; ++i) {
@@ -6194,7 +6231,7 @@ static void print_PfxStaticInstance(const PfxStaticInstance* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "model_path");
     print_STI_String(&obj->model_path, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldSaveData3(Buffer* buffer, STI_TypeLibrary* lib, WorldSaveData3* out) {
     if (!read_DynamicArray_RegionData(buffer, lib, &out->Regions)) return false;
@@ -6233,48 +6270,48 @@ static void print_WorldSaveData3(const WorldSaveData3* obj, STI_TypeLibrary* lib
     fprintf(handle, "WorldSaveData3 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData2(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Raids");
-    print_DynamicArray_RaidSaveData(&obj->Raids, lib, handle, indent+1);
+    print_DynamicArray_RaidSaveData(&obj->Raids, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_InventoryBuildingComponentSaveData1(Buffer* buffer, STI_TypeLibrary* lib, InventoryBuildingComponentSaveData1* out) {
     if (!read_DynamicArray_ResourceStorageItem(buffer, lib, &out->Resources)) return false;
@@ -6287,9 +6324,9 @@ static void print_InventoryBuildingComponentSaveData1(const InventoryBuildingCom
     fprintf(handle, "InventoryBuildingComponentSaveData1 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Resources");
-    print_DynamicArray_ResourceStorageItem(&obj->Resources, lib, handle, indent+1);
+    print_DynamicArray_ResourceStorageItem(&obj->Resources, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ControlPointSaveData3(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ControlPointSaveData3* out) {
     uint32 count = 0;
@@ -6323,9 +6360,9 @@ static void print_DynamicArray_ControlPointSaveData3(const DynamicArray_ControlP
     fprintf(handle, "DynamicArray_ControlPointSaveData3 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ControlPointSaveData3(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ControlPointSaveData3(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ControlPointSaveData3(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -6372,9 +6409,9 @@ static void print_DynamicArray_AmfStreamAttribute(const DynamicArray_AmfStreamAt
     fprintf(handle, "DynamicArray_AmfStreamAttribute {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AmfStreamAttribute(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AmfStreamAttribute(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AmfStreamAttribute(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -6420,7 +6457,7 @@ static void print_TerrainPatchType(const TerrainPatchType* obj, STI_TypeLibrary*
     fprintf(handle, "TerrainPatchType {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "TerrainMesh");
-    print_DynamicArray_TerrainMesh(&obj->TerrainMesh, lib, handle, indent+1);
+    print_DynamicArray_TerrainMesh(&obj->TerrainMesh, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TerrainDisplacementTexture");
     print_TerrainTexture(&obj->TerrainDisplacementTexture, lib, handle, indent + 1);
@@ -6447,12 +6484,12 @@ static void print_TerrainPatchType(const TerrainPatchType* obj, STI_TypeLibrary*
     print_TerrainPatchTexelConnectivity(&obj->TexelConnectivity, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LegoVertices");
-    print_DynamicArray_STI_float32(&obj->LegoVertices, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->LegoVertices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VertexFlags");
-    print_DynamicArray_STI_uint8(&obj->VertexFlags, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->VertexFlags, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationPhysicsLayer(Buffer* buffer, STI_TypeLibrary* lib, VegetationPhysicsLayer* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->NameHash)) return false;
@@ -6469,7 +6506,7 @@ static void print_VegetationPhysicsLayer(const VegetationPhysicsLayer* obj, STI_
     fprintf(handle, "VegetationPhysicsLayer {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ConstructionPipelineWidth");
     print_STI_int32(&obj->ConstructionPipelineWidth, lib, handle, indent + 1);
@@ -6486,7 +6523,7 @@ static void print_VegetationPhysicsLayer(const VegetationPhysicsLayer* obj, STI_
     fprintf(handle, "%*s%s = ", indent * 4, "", "SourceLayerHash");
     print_STI_uint32(&obj->SourceLayerHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_NetworkStaticObjects(Buffer* buffer, STI_TypeLibrary* lib, NetworkStaticObjects* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->Name)) return false;
@@ -6501,12 +6538,12 @@ static void print_NetworkStaticObjects(const NetworkStaticObjects* obj, STI_Type
     fprintf(handle, "NetworkStaticObjects {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Name");
-    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BoolStates");
-    print_DynamicArray_AdfBool(&obj->BoolStates, lib, handle, indent+1);
+    print_DynamicArray_AdfBool(&obj->BoolStates, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ArcRenderSettings(Buffer* buffer, STI_TypeLibrary* lib, ArcRenderSettings* out) {
     if (!read_STI_float32(buffer, lib, &out->total_lifetime_min)) return false;
@@ -6672,7 +6709,7 @@ static void print_ArcRenderSettings(const ArcRenderSettings* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "emission_color_b");
     print_STI_float32(&obj->emission_color_b, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_StrategicResource(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_StrategicResource* out) {
     uint32 count = 0;
@@ -6706,9 +6743,9 @@ static void print_DynamicArray_StrategicResource(const DynamicArray_StrategicRes
     fprintf(handle, "DynamicArray_StrategicResource {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_StrategicResource(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_StrategicResource(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_StrategicResource(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -6755,9 +6792,9 @@ static void print_DynamicArray_MaterialOverride(const DynamicArray_MaterialOverr
     fprintf(handle, "DynamicArray_MaterialOverride {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_MaterialOverride(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_MaterialOverride(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_MaterialOverride(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -6786,7 +6823,7 @@ static void print_AmfSubMesh(const AmfSubMesh* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "AmfSubMesh {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "SubMeshId");
-    print_StringHash_48c5294d_4(&obj->SubMeshId, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->SubMeshId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "IndexCount");
     print_STI_uint32(&obj->IndexCount, lib, handle, indent + 1);
@@ -6797,7 +6834,7 @@ static void print_AmfSubMesh(const AmfSubMesh* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "%*s%s = ", indent * 4, "", "BoundingBox");
     print_AmfBoundingBox(&obj->BoundingBox, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationPhysics(Buffer* buffer, STI_TypeLibrary* lib, VegetationPhysics* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->PfxFile)) return false;
@@ -6839,22 +6876,22 @@ static void print_VegetationPhysics(const VegetationPhysics* obj, STI_TypeLibrar
     fprintf(handle, "VegetationPhysics {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "PfxFile");
-    print_StringHash_48c5294d_4(&obj->PfxFile, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->PfxFile, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NavmeshPfxFile");
-    print_StringHash_48c5294d_4(&obj->NavmeshPfxFile, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NavmeshPfxFile, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "StumpFile");
-    print_StringHash_48c5294d_4(&obj->StumpFile, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->StumpFile, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PfxStumpFile");
-    print_StringHash_48c5294d_4(&obj->PfxStumpFile, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->PfxStumpFile, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BrokenFile");
-    print_DynamicArray_StringHash_48c5294d_4(&obj->BrokenFile, lib, handle, indent+1);
+    print_DynamicArray_StringHash_48c5294d_4(&obj->BrokenFile, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BrokenPfxFile");
-    print_DynamicArray_StringHash_48c5294d_4(&obj->BrokenPfxFile, lib, handle, indent+1);
+    print_DynamicArray_StringHash_48c5294d_4(&obj->BrokenPfxFile, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PhysicsHandle");
     print_STI_uint16(&obj->PhysicsHandle, lib, handle, indent + 1);
@@ -6907,7 +6944,7 @@ static void print_VegetationPhysics(const VegetationPhysics* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "NavmeshUseHull2d");
     print_STI_uint8(&obj->NavmeshUseHull2d, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AnimalGroupSaveData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AnimalGroupSaveData* out) {
     uint32 count = 0;
@@ -6941,9 +6978,9 @@ static void print_DynamicArray_AnimalGroupSaveData(const DynamicArray_AnimalGrou
     fprintf(handle, "DynamicArray_AnimalGroupSaveData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AnimalGroupSaveData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AnimalGroupSaveData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AnimalGroupSaveData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -6978,7 +7015,7 @@ static void print_PlayerDecalData(const PlayerDecalData* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "DecalHash");
     print_STI_uint32(&obj->DecalHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_SpecificEvent(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_SpecificEvent* out) {
     uint32 count = 0;
@@ -7012,9 +7049,9 @@ static void print_DynamicArray_SpecificEvent(const DynamicArray_SpecificEvent* o
     fprintf(handle, "DynamicArray_SpecificEvent {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_SpecificEvent(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_SpecificEvent(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_SpecificEvent(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -7050,12 +7087,12 @@ static void print_GSData(const GSData* obj, STI_TypeLibrary* lib, FILE* handle, 
     print_STI_uint32(&obj->Type, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Value");
-    print_DynamicArray_STI_uint8(&obj->Value, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->Value, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Reference");
     print_STI_uint8(&obj->Reference, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharacterConstants(Buffer* buffer, STI_TypeLibrary* lib, CharacterConstants* out) {
     for (uint32 i = 0; i < 2; ++i) {
@@ -7147,7 +7184,7 @@ static void print_CharacterConstants(const CharacterConstants* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "CameraLightingEnable");
     fprintf(handle, "%i", obj->CameraLightingEnable);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AmfStreamAttribute(Buffer* buffer, STI_TypeLibrary* lib, AmfStreamAttribute* out) {
     if (!read_AmfUsage(buffer, lib, &out->Usage)) return false;
@@ -7169,12 +7206,10 @@ static void print_AmfStreamAttribute(const AmfStreamAttribute* obj, STI_TypeLibr
     fprintf(handle, "AmfStreamAttribute {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Usage");
-    fprintf(handle, "%s", "AmfStreamAttribute");
-    fprintf(handle, " (%i)", (int)obj->Usage);
+    print_AmfUsage(&obj->Usage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Format");
-    fprintf(handle, "%s", "AmfStreamAttribute");
-    fprintf(handle, " (%i)", (int)obj->Format);
+    print_AmfFormat(&obj->Format, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "StreamIndex");
     print_STI_uint8(&obj->StreamIndex, lib, handle, indent + 1);
@@ -7195,7 +7230,7 @@ static void print_AmfStreamAttribute(const AmfStreamAttribute* obj, STI_TypeLibr
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_LocationState(Buffer* buffer, STI_TypeLibrary* lib, LocationState* out) {
     if (!read_STI_uint32(buffer, lib, &out->NameHash)) return false;
@@ -7214,7 +7249,7 @@ static void print_LocationState(const LocationState* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "Enabled");
     print_STI_uint8(&obj->Enabled, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_SplineControlPoint(Buffer* buffer, STI_TypeLibrary* lib, SplineControlPoint* out) {
     if (!read_STI_float32(buffer, lib, &out->x)) return false;
@@ -7236,7 +7271,7 @@ static void print_SplineControlPoint(const SplineControlPoint* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "y2");
     print_STI_float32(&obj->y2, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_DifficultyLevel(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_DifficultyLevel* out) {
     uint32 count = 0;
@@ -7270,9 +7305,9 @@ static void print_DynamicArray_DifficultyLevel(const DynamicArray_DifficultyLeve
     fprintf(handle, "DynamicArray_DifficultyLevel {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_DifficultyLevel(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_DifficultyLevel(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_DifficultyLevel(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -7298,12 +7333,12 @@ static void print_CraftingResourceData(const CraftingResourceData* obj, STI_Type
     fprintf(handle, "CraftingResourceData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "EquipmentHash");
-    print_StringHash_48c5294d_4(&obj->EquipmentHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->EquipmentHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Amount");
     print_STI_uint32(&obj->Amount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_EffectRTSpecialEffectData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_EffectRTSpecialEffectData* out) {
     uint32 count = 0;
@@ -7337,9 +7372,9 @@ static void print_DynamicArray_EffectRTSpecialEffectData(const DynamicArray_Effe
     fprintf(handle, "DynamicArray_EffectRTSpecialEffectData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTSpecialEffectData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTSpecialEffectData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTSpecialEffectData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -7400,55 +7435,55 @@ static void print_WorldSaveData7(const WorldSaveData7* obj, STI_TypeLibrary* lib
     fprintf(handle, "WorldSaveData7 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData3(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Raids");
-    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent+1);
+    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Timers");
-    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent+1);
+    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerSpawnPoints");
-    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalRegions");
-    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent+1);
+    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalUsedNumbers");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -7460,7 +7495,7 @@ static void print_WorldSaveData7(const WorldSaveData7* obj, STI_TypeLibrary* lib
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectVertexArray(Buffer* buffer, STI_TypeLibrary* lib, EffectVertexArray* out) {
     if (!read_DynamicArray_STI_float32(buffer, lib, &out->Array)) return false;
@@ -7473,9 +7508,9 @@ static void print_EffectVertexArray(const EffectVertexArray* obj, STI_TypeLibrar
     fprintf(handle, "EffectVertexArray {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Array");
-    print_DynamicArray_STI_float32(&obj->Array, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->Array, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharacterProfile1(Buffer* buffer, STI_TypeLibrary* lib, CharacterProfile1* out) {
     if (!read_CharacterLooks(buffer, lib, &out->CharacterLooks)) return false;
@@ -7578,7 +7613,7 @@ static void print_CharacterProfile1(const CharacterProfile1* obj, STI_TypeLibrar
     print_STI_uint8(&obj->Created, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Inventory");
-    print_DynamicArray_OwnedEquipment1(&obj->Inventory, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->Inventory, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PPInventorySlot");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -7591,7 +7626,7 @@ static void print_CharacterProfile1(const CharacterProfile1* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehicleData");
-    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent+1);
+    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehiclePreferedCameraThirdPerson");
     print_STI_uint8(&obj->VehiclePreferedCameraThirdPerson, lib, handle, indent + 1);
@@ -7603,7 +7638,7 @@ static void print_CharacterProfile1(const CharacterProfile1* obj, STI_TypeLibrar
     print_STI_uint8(&obj->BackpackSizeRows, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -7616,7 +7651,7 @@ static void print_CharacterProfile1(const CharacterProfile1* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DistanceTravelled");
     print_STI_float32(&obj->DistanceTravelled, lib, handle, indent + 1);
@@ -7628,15 +7663,15 @@ static void print_CharacterProfile1(const CharacterProfile1* obj, STI_TypeLibrar
     print_STI_float32(&obj->WeatherTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerPositions");
-    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent+1);
+    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLevelUpTS");
     print_STI_uint64(&obj->LastLevelUpTS, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Spline10(Buffer* buffer, STI_TypeLibrary* lib, Spline10* out) {
     if (!read_STI_float32(buffer, lib, &out->x_min)) return false;
@@ -7687,7 +7722,7 @@ static void print_Spline10(const Spline10* obj, STI_TypeLibrary* lib, FILE* hand
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationObject(Buffer* buffer, STI_TypeLibrary* lib, VegetationObject* out) {
     if (!read_STI_uint8(buffer, lib, &out->Index)) return false;
@@ -7714,10 +7749,10 @@ static void print_VegetationObject(const VegetationObject* obj, STI_TypeLibrary*
     print_STI_uint8(&obj->Index, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LayerHash");
-    print_StringHash_48c5294d_4(&obj->LayerHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->LayerHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Model");
     print_VegetationModel(&obj->Model, lib, handle, indent + 1);
@@ -7731,7 +7766,7 @@ static void print_VegetationObject(const VegetationObject* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlacementSettings");
     print_VegetationPlacementSettings(&obj->PlacementSettings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ProceduralMission(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ProceduralMission* out) {
     uint32 count = 0;
@@ -7765,9 +7800,9 @@ static void print_DynamicArray_ProceduralMission(const DynamicArray_ProceduralMi
     fprintf(handle, "DynamicArray_ProceduralMission {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ProceduralMission(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ProceduralMission(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ProceduralMission(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -7797,15 +7832,15 @@ static void print_VegetationDebugData(const VegetationDebugData* obj, STI_TypeLi
     fprintf(handle, "VegetationDebugData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationIndices");
-    print_DynamicArray_STI_uint16(&obj->LocationIndices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->LocationIndices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationNames");
-    print_DynamicArray_STI_String(&obj->LocationNames, lib, handle, indent+1);
+    print_DynamicArray_STI_String(&obj->LocationNames, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Stats");
     print_VegetationBillboardLayerStats(&obj->Stats, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_VariableVec3(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_VariableVec3* out) {
     uint32 count = 0;
@@ -7839,9 +7874,9 @@ static void print_DynamicArray_VariableVec3(const DynamicArray_VariableVec3* obj
     fprintf(handle, "DynamicArray_VariableVec3 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VariableVec3(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VariableVec3(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VariableVec3(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -7888,9 +7923,9 @@ static void print_DynamicArray_VegetationObject(const DynamicArray_VegetationObj
     fprintf(handle, "DynamicArray_VegetationObject {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VegetationObject(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VegetationObject(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VegetationObject(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -7926,7 +7961,7 @@ static void print_MachinePersistentStatsEncounterData(const MachinePersistentSta
     fprintf(handle, "%*s%s = ", indent * 4, "", "UnitDamageReceived");
     print_STI_float32(&obj->UnitDamageReceived, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PhysicsStreamPatchType(Buffer* buffer, STI_TypeLibrary* lib, PhysicsStreamPatchType* out) {
     if (!read_DynamicArray_STI_uint8(buffer, lib, &out->ResourceContainer)) return false;
@@ -7941,12 +7976,12 @@ static void print_PhysicsStreamPatchType(const PhysicsStreamPatchType* obj, STI_
     fprintf(handle, "PhysicsStreamPatchType {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceContainer");
-    print_DynamicArray_STI_uint8(&obj->ResourceContainer, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->ResourceContainer, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceContainerSizeUnpacked");
     print_STI_uint32(&obj->ResourceContainerSizeUnpacked, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTRenderInfo(Buffer* buffer, STI_TypeLibrary* lib, EffectRTRenderInfo* out) {
     if (!read_STI_uint32(buffer, lib, &out->RenderBlockTypeHash)) return false;
@@ -7971,9 +8006,9 @@ static void print_EffectRTRenderInfo(const EffectRTRenderInfo* obj, STI_TypeLibr
     print_STI_uint16(&obj->ParticleVertexMemorySize, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RenderBlockData");
-    print_DynamicArray_STI_uint32(&obj->RenderBlockData, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->RenderBlockData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProfileSaveData3(Buffer* buffer, STI_TypeLibrary* lib, ProfileSaveData3* out) {
     if (!read_DynamicArray_STI_uint64(buffer, lib, &out->Collectables)) return false;
@@ -8019,10 +8054,10 @@ static void print_ProfileSaveData3(const ProfileSaveData3* obj, STI_TypeLibrary*
     fprintf(handle, "ProfileSaveData3 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -8038,10 +8073,10 @@ static void print_ProfileSaveData3(const ProfileSaveData3* obj, STI_TypeLibrary*
     print_STI_uint64(&obj->TrackingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_STI_int32(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletedBounties");
-    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLogin");
     print_STI_int64(&obj->LastLogin, lib, handle, indent + 1);
@@ -8065,10 +8100,10 @@ static void print_ProfileSaveData3(const ProfileSaveData3* obj, STI_TypeLibrary*
     fprintf(handle, "%i", obj->ShownCrashReportingEnabledOptIn);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceStorage");
-    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent+1);
+    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorage");
-    print_DynamicArray_OwnedEquipment1(&obj->SafehouseStorage, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->SafehouseStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorageSizeColumns");
     print_STI_uint8(&obj->SafehouseStorageSizeColumns, lib, handle, indent + 1);
@@ -8076,7 +8111,7 @@ static void print_ProfileSaveData3(const ProfileSaveData3* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorageSizeRows");
     print_STI_uint8(&obj->SafehouseStorageSizeRows, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_PfxSimplePartInstance(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_PfxSimplePartInstance* out) {
     uint32 count = 0;
@@ -8110,9 +8145,9 @@ static void print_DynamicArray_PfxSimplePartInstance(const DynamicArray_PfxSimpl
     fprintf(handle, "DynamicArray_PfxSimplePartInstance {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PfxSimplePartInstance(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PfxSimplePartInstance(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PfxSimplePartInstance(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -8191,7 +8226,7 @@ static void print_AnimalSaveData(const AnimalSaveData* obj, STI_TypeLibrary* lib
     fprintf(handle, "%*s%s = ", indent * 4, "", "PersistentStats");
     print_MachinePersistentStatsData(&obj->PersistentStats, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_TimerSaveData1(Buffer* buffer, STI_TypeLibrary* lib, TimerSaveData1* out) {
     if (!read_STI_uint64(buffer, lib, &out->Id)) return false;
@@ -8210,7 +8245,7 @@ static void print_TimerSaveData1(const TimerSaveData1* obj, STI_TypeLibrary* lib
     fprintf(handle, "%*s%s = ", indent * 4, "", "TimeLeft");
     print_STI_int32(&obj->TimeLeft, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HunterMissionData(Buffer* buffer, STI_TypeLibrary* lib, HunterMissionData* out) {
     if (!read_DynamicArray_HunterMission(buffer, lib, &out->Missions)) return false;
@@ -8223,9 +8258,9 @@ static void print_HunterMissionData(const HunterMissionData* obj, STI_TypeLibrar
     fprintf(handle, "HunterMissionData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Missions");
-    print_DynamicArray_HunterMission(&obj->Missions, lib, handle, indent+1);
+    print_DynamicArray_HunterMission(&obj->Missions, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ForestMesh(Buffer* buffer, STI_TypeLibrary* lib, ForestMesh* out) {
     if (!read_DynamicArray_ForestVertex(buffer, lib, &out->Vertices)) return false;
@@ -8244,7 +8279,7 @@ static void print_ForestMesh(const ForestMesh* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "ForestMesh {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Vertices");
-    print_DynamicArray_ForestVertex(&obj->Vertices, lib, handle, indent+1);
+    print_DynamicArray_ForestVertex(&obj->Vertices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BoundingMin");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -8266,7 +8301,7 @@ static void print_ForestMesh(const ForestMesh* obj, STI_TypeLibrary* lib, FILE* 
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Shader(Buffer* buffer, STI_TypeLibrary* lib, Shader* out) {
     if (!read_STI_uint32(buffer, lib, &out->NameHash)) return false;
@@ -8294,9 +8329,9 @@ static void print_Shader(const Shader* obj, STI_TypeLibrary* lib, FILE* handle, 
     print_STI_uint32(&obj->DataHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BinaryData");
-    print_DynamicArray_STI_uint8(&obj->BinaryData, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->BinaryData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProceduralMissionInstance(Buffer* buffer, STI_TypeLibrary* lib, ProceduralMissionInstance* out) {
     if (!read_STI_int32(buffer, lib, &out->MissionTemplateId)) return false;
@@ -8367,9 +8402,9 @@ static void print_ProceduralMissionInstance(const ProceduralMissionInstance* obj
     print_STI_uint32(&obj->Summary, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionMarkerConditions");
-    print_DynamicArray_STI_int32(&obj->MissionMarkerConditions, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionMarkerConditions, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Items(Buffer* buffer, STI_TypeLibrary* lib, Items* out) {
     if (!read_DynamicArray_Equipment(buffer, lib, &out->Items)) return false;
@@ -8384,12 +8419,12 @@ static void print_Items(const Items* obj, STI_TypeLibrary* lib, FILE* handle, ui
     fprintf(handle, "Items {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Items");
-    print_DynamicArray_Equipment(&obj->Items, lib, handle, indent+1);
+    print_DynamicArray_Equipment(&obj->Items, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Compatibility");
-    print_DynamicArray_Compatibility(&obj->Compatibility, lib, handle, indent+1);
+    print_DynamicArray_Compatibility(&obj->Compatibility, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AmfLodGroup(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AmfLodGroup* out) {
     uint32 count = 0;
@@ -8423,9 +8458,9 @@ static void print_DynamicArray_AmfLodGroup(const DynamicArray_AmfLodGroup* obj, 
     fprintf(handle, "DynamicArray_AmfLodGroup {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AmfLodGroup(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AmfLodGroup(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AmfLodGroup(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -8472,9 +8507,9 @@ static void print_DynamicArray_BitmapLayer(const DynamicArray_BitmapLayer* obj, 
     fprintf(handle, "DynamicArray_BitmapLayer {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_BitmapLayer(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_BitmapLayer(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_BitmapLayer(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -8521,9 +8556,9 @@ static void print_DynamicArray_STI_String(const DynamicArray_STI_String* obj, ST
     fprintf(handle, "DynamicArray_STI_String {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_String(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_String(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_String(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -8570,15 +8605,15 @@ static void print_SchematicTree(const SchematicTree* obj, STI_TypeLibrary* lib, 
     print_STI_uint32(&obj->ContentKey, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Nodes");
-    print_DynamicArray_SchematicTreeNode(&obj->Nodes, lib, handle, indent+1);
+    print_DynamicArray_SchematicTreeNode(&obj->Nodes, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RootNodes");
-    print_DynamicArray_STI_uint16(&obj->RootNodes, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->RootNodes, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ShowInSchematicsScreen");
     fprintf(handle, "%i", obj->ShowInSchematicsScreen);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_VegetationSet(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_VegetationSet* out) {
     uint32 count = 0;
@@ -8612,9 +8647,9 @@ static void print_DynamicArray_VegetationSet(const DynamicArray_VegetationSet* o
     fprintf(handle, "DynamicArray_VegetationSet {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VegetationSet(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VegetationSet(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VegetationSet(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -8642,12 +8677,12 @@ static void print_Collection(const Collection* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "Collection {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectibles");
-    print_DynamicArray_CollectibleInfo(&obj->Collectibles, lib, handle, indent+1);
+    print_DynamicArray_CollectibleInfo(&obj->Collectibles, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NetworkedCollectibles");
-    print_DynamicArray_NetworkedCollectible(&obj->NetworkedCollectibles, lib, handle, indent+1);
+    print_DynamicArray_NetworkedCollectible(&obj->NetworkedCollectibles, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_SchematicTree(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_SchematicTree* out) {
     uint32 count = 0;
@@ -8681,9 +8716,9 @@ static void print_DynamicArray_SchematicTree(const DynamicArray_SchematicTree* o
     fprintf(handle, "DynamicArray_SchematicTree {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_SchematicTree(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_SchematicTree(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_SchematicTree(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -8730,9 +8765,9 @@ static void print_DynamicArray_SafehouseUtilities(const DynamicArray_SafehouseUt
     fprintf(handle, "DynamicArray_SafehouseUtilities {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_SafehouseUtilities(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_SafehouseUtilities(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_SafehouseUtilities(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -8796,7 +8831,7 @@ static void print_Spline5(const Spline5* obj, STI_TypeLibrary* lib, FILE* handle
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Vector2(Buffer* buffer, STI_TypeLibrary* lib, Vector2* out) {
     if (!read_STI_float32(buffer, lib, &out->X)) return false;
@@ -8814,7 +8849,7 @@ static void print_Vector2(const Vector2* obj, STI_TypeLibrary* lib, FILE* handle
     fprintf(handle, "%*s%s = ", indent * 4, "", "Y");
     print_STI_float32(&obj->Y, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_PfxBreakableInstance(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_PfxBreakableInstance* out) {
     uint32 count = 0;
@@ -8848,9 +8883,9 @@ static void print_DynamicArray_PfxBreakableInstance(const DynamicArray_PfxBreaka
     fprintf(handle, "DynamicArray_PfxBreakableInstance {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PfxBreakableInstance(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PfxBreakableInstance(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PfxBreakableInstance(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -8880,7 +8915,7 @@ static void print_RoadGraphEdgeSamples(const RoadGraphEdgeSamples* obj, STI_Type
     fprintf(handle, "RoadGraphEdgeSamples {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Samples");
-    print_DynamicArray_RoadGraphEdgeSample(&obj->Samples, lib, handle, indent+1);
+    print_DynamicArray_RoadGraphEdgeSample(&obj->Samples, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PatchSize");
     print_STI_uint32(&obj->PatchSize, lib, handle, indent + 1);
@@ -8889,9 +8924,9 @@ static void print_RoadGraphEdgeSamples(const RoadGraphEdgeSamples* obj, STI_Type
     print_STI_uint32(&obj->PatchCount, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PatchOffsets");
-    print_DynamicArray_STI_uint32(&obj->PatchOffsets, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->PatchOffsets, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_TerrainPatchInfo(Buffer* buffer, STI_TypeLibrary* lib, TerrainPatchInfo* out) {
     if (!read_STI_int32(buffer, lib, &out->PatchX)) return false;
@@ -8919,12 +8954,12 @@ static void print_TerrainPatchInfo(const TerrainPatchInfo* obj, STI_TypeLibrary*
     print_STI_int32(&obj->PatchLod, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TriangleIndices");
-    print_DynamicArray_STI_uint32(&obj->TriangleIndices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->TriangleIndices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TriangleQuadTree");
-    print_DynamicArray_ArrayAABB(&obj->TriangleQuadTree, lib, handle, indent+1);
+    print_DynamicArray_ArrayAABB(&obj->TriangleQuadTree, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AnimalPopulationSaveData2(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AnimalPopulationSaveData2* out) {
     uint32 count = 0;
@@ -8958,9 +8993,9 @@ static void print_DynamicArray_AnimalPopulationSaveData2(const DynamicArray_Anim
     fprintf(handle, "DynamicArray_AnimalPopulationSaveData2 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AnimalPopulationSaveData2(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AnimalPopulationSaveData2(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AnimalPopulationSaveData2(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9007,9 +9042,9 @@ static void print_DynamicArray_PlayerRaidStatsSaveData(const DynamicArray_Player
     fprintf(handle, "DynamicArray_PlayerRaidStatsSaveData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PlayerRaidStatsSaveData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PlayerRaidStatsSaveData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PlayerRaidStatsSaveData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9056,9 +9091,9 @@ static void print_DynamicArray_StatisticInfo(const DynamicArray_StatisticInfo* o
     fprintf(handle, "DynamicArray_StatisticInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_StatisticInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_StatisticInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_StatisticInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9105,9 +9140,9 @@ static void print_DynamicArray_PlayerPosition(const DynamicArray_PlayerPosition*
     fprintf(handle, "DynamicArray_PlayerPosition {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PlayerPosition(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PlayerPosition(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PlayerPosition(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9157,7 +9192,7 @@ static void print_AmfMesh(const AmfMesh* obj, STI_TypeLibrary* lib, FILE* handle
     fprintf(handle, "AmfMesh {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "MeshTypeId");
-    print_StringHash_48c5294d_4(&obj->MeshTypeId, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->MeshTypeId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "IndexCount");
     print_STI_uint32(&obj->IndexCount, lib, handle, indent + 1);
@@ -9175,13 +9210,13 @@ static void print_AmfMesh(const AmfMesh* obj, STI_TypeLibrary* lib, FILE* handle
     print_STI_uint32(&obj->IndexBufferOffset, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VertexBufferIndices");
-    print_DynamicArray_STI_uint8(&obj->VertexBufferIndices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->VertexBufferIndices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VertexStreamStrides");
-    print_DynamicArray_STI_uint8(&obj->VertexStreamStrides, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->VertexStreamStrides, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VertexStreamOffsets");
-    print_DynamicArray_STI_uint32(&obj->VertexStreamOffsets, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->VertexStreamOffsets, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TextureDensities");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -9197,15 +9232,15 @@ static void print_AmfMesh(const AmfMesh* obj, STI_TypeLibrary* lib, FILE* handle
     print_STI_Deferred(&obj->MeshProperties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BoneIndexLookup");
-    print_DynamicArray_STI_int16(&obj->BoneIndexLookup, lib, handle, indent+1);
+    print_DynamicArray_STI_int16(&obj->BoneIndexLookup, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SubMeshes");
-    print_DynamicArray_AmfSubMesh(&obj->SubMeshes, lib, handle, indent+1);
+    print_DynamicArray_AmfSubMesh(&obj->SubMeshes, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "StreamAttributes");
-    print_DynamicArray_AmfStreamAttribute(&obj->StreamAttributes, lib, handle, indent+1);
+    print_DynamicArray_AmfStreamAttribute(&obj->StreamAttributes, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_CollisionSubSystemByName(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_CollisionSubSystemByName* out) {
     uint32 count = 0;
@@ -9239,9 +9274,9 @@ static void print_DynamicArray_CollisionSubSystemByName(const DynamicArray_Colli
     fprintf(handle, "DynamicArray_CollisionSubSystemByName {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_CollisionSubSystemByName(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_CollisionSubSystemByName(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_CollisionSubSystemByName(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9314,7 +9349,7 @@ static void print_MachineSettings(const MachineSettings* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "ranged_weapon_aim_prediction_multiplier");
     print_STI_float32(&obj->ranged_weapon_aim_prediction_multiplier, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HarvesterSettings(Buffer* buffer, STI_TypeLibrary* lib, HarvesterSettings* out) {
     for (uint32 i = 0; i < 2; ++i) {
@@ -9363,7 +9398,7 @@ static void print_HarvesterSettings(const HarvesterSettings* obj, STI_TypeLibrar
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_StringHash_48c5294d_4(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_StringHash_48c5294d_4* out) {
     uint32 count = 0;
@@ -9394,9 +9429,9 @@ static void print_DynamicArray_StringHash_48c5294d_4(const DynamicArray_StringHa
     fprintf(handle, "DynamicArray_StringHash_48c5294d_4 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_StringHash_48c5294d_4(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_StringHash_48c5294d_4(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_StringHash_48c5294d_4(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9429,7 +9464,7 @@ static void print_VariableBool(const VariableBool* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "Val");
     print_STI_uint8(&obj->Val, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AdfModelCollection(Buffer* buffer, STI_TypeLibrary* lib, AdfModelCollection* out) {
     if (!read_DynamicArray_AdfModelCollectionInstance(buffer, lib, &out->Instances)) return false;
@@ -9449,10 +9484,10 @@ static void print_AdfModelCollection(const AdfModelCollection* obj, STI_TypeLibr
     fprintf(handle, "AdfModelCollection {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Instances");
-    print_DynamicArray_AdfModelCollectionInstance(&obj->Instances, lib, handle, indent+1);
+    print_DynamicArray_AdfModelCollectionInstance(&obj->Instances, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Models");
-    print_DynamicArray_STI_uint32(&obj->Models, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->Models, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AABB");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -9467,7 +9502,7 @@ static void print_AdfModelCollection(const AdfModelCollection* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "FixedCount");
     print_STI_int32(&obj->FixedCount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StringLookup(Buffer* buffer, STI_TypeLibrary* lib, StringLookup* out) {
     if (!read_DynamicArray_StringLookupHashProperties(buffer, lib, &out->SortedPairs)) return false;
@@ -9484,15 +9519,15 @@ static void print_StringLookup(const StringLookup* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "StringLookup {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "SortedPairs");
-    print_DynamicArray_StringLookupHashProperties(&obj->SortedPairs, lib, handle, indent+1);
+    print_DynamicArray_StringLookupHashProperties(&obj->SortedPairs, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SortedDialogueLines");
-    print_DynamicArray_StringLookupDialogueLine(&obj->SortedDialogueLines, lib, handle, indent+1);
+    print_DynamicArray_StringLookupDialogueLine(&obj->SortedDialogueLines, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Text");
-    print_DynamicArray_STI_int8(&obj->Text, lib, handle, indent+1);
+    print_DynamicArray_STI_int8(&obj->Text, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EncumbranceSettings(Buffer* buffer, STI_TypeLibrary* lib, EncumbranceSettings* out) {
     if (!read_STI_float32(buffer, lib, &out->NoStaminaMoveSpeedMul)) return false;
@@ -9511,7 +9546,7 @@ static void print_EncumbranceSettings(const EncumbranceSettings* obj, STI_TypeLi
     fprintf(handle, "%*s%s = ", indent * 4, "", "MoveStaminaCost");
     print_Spline5(&obj->MoveStaminaCost, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BitmapArea(Buffer* buffer, STI_TypeLibrary* lib, BitmapArea* out) {
     if (!read_STI_int32(buffer, lib, &out->key)) return false;
@@ -9546,7 +9581,7 @@ static void print_BitmapArea(const BitmapArea* obj, STI_TypeLibrary* lib, FILE* 
     print_STI_int32(&obj->Size, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Tiles");
-    print_DynamicArray_STI_uint32(&obj->Tiles, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->Tiles, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AabbMin");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -9568,7 +9603,7 @@ static void print_BitmapArea(const BitmapArea* obj, STI_TypeLibrary* lib, FILE* 
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ForcePulseSettings(Buffer* buffer, STI_TypeLibrary* lib, ForcePulseSettings* out) {
     if (!read_STI_uint32(buffer, lib, &out->PlayerDamage)) return false;
@@ -9620,7 +9655,7 @@ static void print_ForcePulseSettings(const ForcePulseSettings* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "HitEntitySpawnTag");
     print_STI_String(&obj->HitEntitySpawnTag, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_BuildData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_BuildData* out) {
     uint32 count = 0;
@@ -9654,9 +9689,9 @@ static void print_DynamicArray_BuildData(const DynamicArray_BuildData* obj, STI_
     fprintf(handle, "DynamicArray_BuildData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_BuildData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_BuildData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_BuildData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9686,9 +9721,9 @@ static void print_LookoutList(const LookoutList* obj, STI_TypeLibrary* lib, FILE
     print_STI_uint64(&obj->Id, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "List");
-    print_DynamicArray_STI_uint64(&obj->List, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->List, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_UseMethod(Buffer* buffer, STI_TypeLibrary* lib, UseMethod* out) {
     uint32 value = 0;
@@ -9699,11 +9734,25 @@ static bool read_UseMethod(Buffer* buffer, STI_TypeLibrary* lib, UseMethod* out)
 static void free_UseMethod(UseMethod* obj, STI_TypeLibrary* lib) {
 }
 static void print_UseMethod(const UseMethod* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "UseMethod {\n");
+    fprintf(handle, "UseMethod( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "UseMethod");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(EUSE_METHOD_NONE): {
+            fprintf(handle, "EUSE_METHOD_NONE )");
+break;
+            break;
+        }
+        case(EUSE_METHOD_CONSUME): {
+            fprintf(handle, "EUSE_METHOD_CONSUME )");
+break;
+            break;
+        }
+        case(EUSE_METHOD_DEPLOY): {
+            fprintf(handle, "EUSE_METHOD_DEPLOY )");
+break;
+            break;
+        }
+    }
 }
 static bool read_TerrainOccluderMesh(Buffer* buffer, STI_TypeLibrary* lib, TerrainOccluderMesh* out) {
     for (uint32 i = 0; i < 6; ++i) {
@@ -9737,15 +9786,15 @@ static void print_TerrainOccluderMesh(const TerrainOccluderMesh* obj, STI_TypeLi
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Vertices");
-    print_DynamicArray_STI_uint16(&obj->Vertices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->Vertices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Indices");
-    print_DynamicArray_STI_uint16(&obj->Indices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->Indices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TriangleOmitted");
     fprintf(handle, "%i", obj->TriangleOmitted);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EquipmentEntity(Buffer* buffer, STI_TypeLibrary* lib, EquipmentEntity* out) {
     if (!read_STI_uint32(buffer, lib, &out->EquipmentHash)) return false;
@@ -9763,9 +9812,9 @@ static void print_EquipmentEntity(const EquipmentEntity* obj, STI_TypeLibrary* l
     print_STI_uint32(&obj->EquipmentHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DisplayStats");
-    print_DynamicArray_EntityDisplayStat(&obj->DisplayStats, lib, handle, indent+1);
+    print_DynamicArray_EntityDisplayStat(&obj->DisplayStats, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldAudioPatchData(Buffer* buffer, STI_TypeLibrary* lib, WorldAudioPatchData* out) {
     if (!read_DynamicArray_WorldAudioPatchZoneData(buffer, lib, &out->ZoneData)) return false;
@@ -9778,9 +9827,9 @@ static void print_WorldAudioPatchData(const WorldAudioPatchData* obj, STI_TypeLi
     fprintf(handle, "WorldAudioPatchData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "ZoneData");
-    print_DynamicArray_WorldAudioPatchZoneData(&obj->ZoneData, lib, handle, indent+1);
+    print_DynamicArray_WorldAudioPatchZoneData(&obj->ZoneData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RoadGraphNode(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RoadGraphNode* out) {
     uint32 count = 0;
@@ -9814,9 +9863,9 @@ static void print_DynamicArray_RoadGraphNode(const DynamicArray_RoadGraphNode* o
     fprintf(handle, "DynamicArray_RoadGraphNode {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RoadGraphNode(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RoadGraphNode(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RoadGraphNode(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9863,9 +9912,9 @@ static void print_DynamicArray_HunterMissionVariable(const DynamicArray_HunterMi
     fprintf(handle, "DynamicArray_HunterMissionVariable {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_HunterMissionVariable(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_HunterMissionVariable(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_HunterMissionVariable(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9909,7 +9958,7 @@ static void print_RoadGraphNode(const RoadGraphNode* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "EdgesCount");
     print_STI_uint16(&obj->EdgesCount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_OccluderBox(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_OccluderBox* out) {
     uint32 count = 0;
@@ -9943,9 +9992,9 @@ static void print_DynamicArray_OccluderBox(const DynamicArray_OccluderBox* obj, 
     fprintf(handle, "DynamicArray_OccluderBox {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_OccluderBox(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_OccluderBox(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_OccluderBox(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -9985,7 +10034,7 @@ static void print_FactionSaveData1(const FactionSaveData1* obj, STI_TypeLibrary*
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AwarenessEventRanges(Buffer* buffer, STI_TypeLibrary* lib, AwarenessEventRanges* out) {
     if (!read_STI_float32(buffer, lib, &out->ReactToAwareness)) return false;
@@ -10059,7 +10108,7 @@ static void print_AwarenessEventRanges(const AwarenessEventRanges* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "IncomingBullet");
     print_STI_float32(&obj->IncomingBullet, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_POIInfo(Buffer* buffer, STI_TypeLibrary* lib, POIInfo* out) {
     if (!read_STI_uint64(buffer, lib, &out->Id)) return false;
@@ -10094,7 +10143,7 @@ static void print_POIInfo(const POIInfo* obj, STI_TypeLibrary* lib, FILE* handle
     print_STI_int32(&obj->MissionId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaryLocationId");
-    print_StringHash_48c5294d_4(&obj->LocationSummaryLocationId, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->LocationSummaryLocationId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Type");
     print_STI_uint32(&obj->Type, lib, handle, indent + 1);
@@ -10112,10 +10161,10 @@ static void print_POIInfo(const POIInfo* obj, STI_TypeLibrary* lib, FILE* handle
     print_STI_uint32(&obj->ToolTipId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GlobalShowEvent");
-    print_DynamicArray_STI_uint64(&obj->GlobalShowEvent, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->GlobalShowEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GlobalHideEvent");
-    print_DynamicArray_STI_uint64(&obj->GlobalHideEvent, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->GlobalHideEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LabelKey");
     print_STI_String(&obj->LabelKey, lib, handle, indent + 1);
@@ -10123,7 +10172,7 @@ static void print_POIInfo(const POIInfo* obj, STI_TypeLibrary* lib, FILE* handle
     fprintf(handle, "%*s%s = ", indent * 4, "", "DescriptionKey");
     print_STI_String(&obj->DescriptionKey, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_EntityDisplayStat(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_EntityDisplayStat* out) {
     uint32 count = 0;
@@ -10157,9 +10206,9 @@ static void print_DynamicArray_EntityDisplayStat(const DynamicArray_EntityDispla
     fprintf(handle, "DynamicArray_EntityDisplayStat {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EntityDisplayStat(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EntityDisplayStat(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EntityDisplayStat(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -10277,7 +10326,7 @@ static void print_CharacterProfile2(const CharacterProfile2* obj, STI_TypeLibrar
     print_STI_uint8(&obj->Created, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Inventory");
-    print_DynamicArray_OwnedEquipment1(&obj->Inventory, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->Inventory, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PPInventorySlot");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -10290,7 +10339,7 @@ static void print_CharacterProfile2(const CharacterProfile2* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehicleData");
-    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent+1);
+    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehiclePreferedCameraThirdPerson");
     print_STI_uint8(&obj->VehiclePreferedCameraThirdPerson, lib, handle, indent + 1);
@@ -10302,7 +10351,7 @@ static void print_CharacterProfile2(const CharacterProfile2* obj, STI_TypeLibrar
     print_STI_uint8(&obj->BackpackSizeRows, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -10315,7 +10364,7 @@ static void print_CharacterProfile2(const CharacterProfile2* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DistanceTravelled");
     print_STI_float32(&obj->DistanceTravelled, lib, handle, indent + 1);
@@ -10327,18 +10376,18 @@ static void print_CharacterProfile2(const CharacterProfile2* obj, STI_TypeLibrar
     print_STI_float32(&obj->WeatherTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerPositions");
-    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent+1);
+    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLevelUpTS");
     print_STI_uint64(&obj->LastLevelUpTS, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RaidLootAcquired");
-    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent+1);
+    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ImpostorInfo(Buffer* buffer, STI_TypeLibrary* lib, ImpostorInfo* out) {
     if (!read_ImpostorMesh(buffer, lib, &out->ImpostorMesh)) return false;
@@ -10366,7 +10415,7 @@ static void print_ImpostorInfo(const ImpostorInfo* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "TreeId");
     print_STI_uint16(&obj->TreeId, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PatchSampleList(Buffer* buffer, STI_TypeLibrary* lib, PatchSampleList* out) {
     if (!read_STI_uint8(buffer, lib, &out->PatchX)) return false;
@@ -10388,7 +10437,7 @@ static void print_PatchSampleList(const PatchSampleList* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "NumSamples");
     print_STI_uint16(&obj->NumSamples, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ControlPointLevel(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ControlPointLevel* out) {
     uint32 count = 0;
@@ -10422,9 +10471,9 @@ static void print_DynamicArray_ControlPointLevel(const DynamicArray_ControlPoint
     fprintf(handle, "DynamicArray_ControlPointLevel {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ControlPointLevel(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ControlPointLevel(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ControlPointLevel(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -10448,11 +10497,40 @@ static bool read_LockMode(Buffer* buffer, STI_TypeLibrary* lib, LockMode* out) {
 static void free_LockMode(LockMode* obj, STI_TypeLibrary* lib) {
 }
 static void print_LockMode(const LockMode* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "LockMode {\n");
+    fprintf(handle, "LockMode( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "LockMode");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(LOCKED): {
+            fprintf(handle, "LOCKED )");
+break;
+            break;
+        }
+        case(UNLOCKED): {
+            fprintf(handle, "UNLOCKED )");
+break;
+            break;
+        }
+        case(LOCKED_DLC): {
+            fprintf(handle, "LOCKED_DLC )");
+break;
+            break;
+        }
+        case(UNLOCKED_DLC): {
+            fprintf(handle, "UNLOCKED_DLC )");
+break;
+            break;
+        }
+        case(UNLOCKED_STEAM_INVENTORY): {
+            fprintf(handle, "UNLOCKED_STEAM_INVENTORY )");
+break;
+            break;
+        }
+        case(INVISIBLE): {
+            fprintf(handle, "INVISIBLE )");
+break;
+            break;
+        }
+    }
 }
 static bool read_DynamicArray_SchematicTreeNode(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_SchematicTreeNode* out) {
     uint32 count = 0;
@@ -10486,9 +10564,9 @@ static void print_DynamicArray_SchematicTreeNode(const DynamicArray_SchematicTre
     fprintf(handle, "DynamicArray_SchematicTreeNode {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_SchematicTreeNode(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_SchematicTreeNode(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_SchematicTreeNode(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -10617,7 +10695,7 @@ static void print_Equipment(const Equipment* obj, STI_TypeLibrary* lib, FILE* ha
     print_STI_int32(&obj->Units, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SlotType");
-    print_StringHash_48c5294d_4(&obj->SlotType, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->SlotType, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Weight");
     print_STI_float32(&obj->Weight, lib, handle, indent + 1);
@@ -10626,12 +10704,10 @@ static void print_Equipment(const Equipment* obj, STI_TypeLibrary* lib, FILE* ha
     print_STI_int32(&obj->EquipmentCategory, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LockMode");
-    fprintf(handle, "%s", "Equipment");
-    fprintf(handle, " (%i)", (int)obj->LockMode);
+    print_LockMode(&obj->LockMode, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UnlockCondition");
-    fprintf(handle, "%s", "Equipment");
-    fprintf(handle, " (%i)", (int)obj->UnlockCondition);
+    print_UnlockCondition(&obj->UnlockCondition, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UnlockTarget");
     print_STI_uint32(&obj->UnlockTarget, lib, handle, indent + 1);
@@ -10677,15 +10753,13 @@ static void print_Equipment(const Equipment* obj, STI_TypeLibrary* lib, FILE* ha
     print_STI_uint32(&obj->AugmentCapacity, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UsableFromInventory");
-    fprintf(handle, "%s", "Equipment");
-    fprintf(handle, " (%i)", (int)obj->UsableFromInventory);
+    print_UseMethod(&obj->UsableFromInventory, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Crafting");
     print_CraftingData(&obj->Crafting, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ClothingGender");
-    fprintf(handle, "%s", "Equipment");
-    fprintf(handle, " (%i)", (int)obj->ClothingGender);
+    print_EquipmentGender(&obj->ClothingGender, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ClothingCategory");
     print_STI_uint32(&obj->ClothingCategory, lib, handle, indent + 1);
@@ -10723,7 +10797,7 @@ static void print_Equipment(const Equipment* obj, STI_TypeLibrary* lib, FILE* ha
     fprintf(handle, "%*s%s = ", indent * 4, "", "AttributeFile");
     print_STI_String(&obj->AttributeFile, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_GSData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_GSData* out) {
     uint32 count = 0;
@@ -10757,9 +10831,9 @@ static void print_DynamicArray_GSData(const DynamicArray_GSData* obj, STI_TypeLi
     fprintf(handle, "DynamicArray_GSData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_GSData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_GSData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_GSData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -10809,45 +10883,45 @@ static void print_WorldSaveData2(const WorldSaveData2* obj, STI_TypeLibrary* lib
     fprintf(handle, "WorldSaveData2 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData2(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharacterSkinConstants(Buffer* buffer, STI_TypeLibrary* lib, CharacterSkinConstants* out) {
     for (uint32 i = 0; i < 2; ++i) {
@@ -10935,7 +11009,7 @@ static void print_CharacterSkinConstants(const CharacterSkinConstants* obj, STI_
     fprintf(handle, "%*s%s = ", indent * 4, "", "UseFur");
     fprintf(handle, "%i", obj->UseFur);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PlayerHealthSettings(Buffer* buffer, STI_TypeLibrary* lib, PlayerHealthSettings* out) {
     if (!read_STI_float32(buffer, lib, &out->Health)) return false;
@@ -10975,7 +11049,7 @@ static void print_PlayerHealthSettings(const PlayerHealthSettings* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "DamageCurve");
     print_Spline5(&obj->DamageCurve, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AnimalPopulationSaveData(Buffer* buffer, STI_TypeLibrary* lib, AnimalPopulationSaveData* out) {
     if (!read_STI_uint32(buffer, lib, &out->NameHashId)) return false;
@@ -11009,7 +11083,7 @@ static void print_AnimalPopulationSaveData(const AnimalPopulationSaveData* obj, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "RepopulateCount");
     print_STI_uint32(&obj->RepopulateCount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationBillboardLayerStats(Buffer* buffer, STI_TypeLibrary* lib, VegetationBillboardLayerStats* out) {
     if (!read_STI_uint8(buffer, lib, &out->IsRidge)) return false;
@@ -11052,7 +11126,7 @@ static void print_VegetationBillboardLayerStats(const VegetationBillboardLayerSt
     fprintf(handle, "%*s%s = ", indent * 4, "", "NumCulledByThinout");
     print_STI_uint32(&obj->NumCulledByThinout, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_TerrainOccluderPackedMesh(Buffer* buffer, STI_TypeLibrary* lib, TerrainOccluderPackedMesh* out) {
     if (!read_DynamicArray_STI_uint8(buffer, lib, &out->Data)) return false;
@@ -11065,9 +11139,9 @@ static void print_TerrainOccluderPackedMesh(const TerrainOccluderPackedMesh* obj
     fprintf(handle, "TerrainOccluderPackedMesh {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Data");
-    print_DynamicArray_STI_uint8(&obj->Data, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->Data, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_OwnedEquipment3(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_OwnedEquipment3* out) {
     uint32 count = 0;
@@ -11101,9 +11175,9 @@ static void print_DynamicArray_OwnedEquipment3(const DynamicArray_OwnedEquipment
     fprintf(handle, "DynamicArray_OwnedEquipment3 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_OwnedEquipment3(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_OwnedEquipment3(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_OwnedEquipment3(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -11194,7 +11268,7 @@ static void print_DataLifespans(const DataLifespans* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "Awareness_IncomingBullet");
     print_STI_uint32(&obj->Awareness_IncomingBullet, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_BuildingSaveData1(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_BuildingSaveData1* out) {
     uint32 count = 0;
@@ -11228,9 +11302,9 @@ static void print_DynamicArray_BuildingSaveData1(const DynamicArray_BuildingSave
     fprintf(handle, "DynamicArray_BuildingSaveData1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_BuildingSaveData1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_BuildingSaveData1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_BuildingSaveData1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -11293,7 +11367,7 @@ static void print_AITuningSettings(const AITuningSettings* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "Machine_Settings");
     print_MachineSettings(&obj->Machine_Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTEmitter(Buffer* buffer, STI_TypeLibrary* lib, EffectRTEmitter* out) {
     if (!read_STI_uint16(buffer, lib, &out->EmitterTemplateIndex)) return false;
@@ -11317,12 +11391,12 @@ static void print_EffectRTEmitter(const EffectRTEmitter* obj, STI_TypeLibrary* l
     print_STI_uint8(&obj->Flags, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmitterModifiers");
-    print_DynamicArray_STI_uint8(&obj->EmitterModifiers, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->EmitterModifiers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "StartInOutputBuffer");
-    print_DynamicArray_STI_uint32(&obj->StartInOutputBuffer, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->StartInOutputBuffer, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ContextualHelpInfo(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ContextualHelpInfo* out) {
     uint32 count = 0;
@@ -11356,9 +11430,9 @@ static void print_DynamicArray_ContextualHelpInfo(const DynamicArray_ContextualH
     fprintf(handle, "DynamicArray_ContextualHelpInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ContextualHelpInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ContextualHelpInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ContextualHelpInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -11405,9 +11479,9 @@ static void print_DynamicArray_RivalHistory1(const DynamicArray_RivalHistory1* o
     fprintf(handle, "DynamicArray_RivalHistory1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RivalHistory1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RivalHistory1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RivalHistory1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -11446,7 +11520,7 @@ static void print_RoadGraphEdgeSample(const RoadGraphEdgeSample* obj, STI_TypeLi
     fprintf(handle, "%*s%s = ", indent * 4, "", "EdgeId");
     print_STI_uint16(&obj->EdgeId, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_Equipment(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_Equipment* out) {
     uint32 count = 0;
@@ -11480,9 +11554,9 @@ static void print_DynamicArray_Equipment(const DynamicArray_Equipment* obj, STI_
     fprintf(handle, "DynamicArray_Equipment {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_Equipment(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_Equipment(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_Equipment(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -11521,7 +11595,7 @@ static void print_SmallMachineSettings(const SmallMachineSettings* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "min_dist_has_no_ranged_weapon");
     print_STI_float32(&obj->min_dist_has_no_ranged_weapon, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_XLSCell(Buffer* buffer, STI_TypeLibrary* lib, XLSCell* out) {
     if (!read_STI_uint16(buffer, lib, &out->Type)) return false;
@@ -11544,7 +11618,7 @@ static void print_XLSCell(const XLSCell* obj, STI_TypeLibrary* lib, FILE* handle
     fprintf(handle, "%*s%s = ", indent * 4, "", "AttributeIndex");
     print_STI_uint32(&obj->AttributeIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharactersSaveData8(Buffer* buffer, STI_TypeLibrary* lib, CharactersSaveData8* out) {
     for (uint32 i = 0; i < 4; ++i) {
@@ -11590,27 +11664,27 @@ static void print_CharactersSaveData8(const CharactersSaveData8* obj, STI_TypeLi
     print_STI_uint32(&obj->EquipmentIDCounter, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemStash");
-    print_DynamicArray_OwnedEquipment3(&obj->ItemStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment3(&obj->ItemStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UnknownItemsStash");
-    print_DynamicArray_OwnedEquipment3(&obj->UnknownItemsStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment3(&obj->UnknownItemsStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "InaccessibleItems");
-    print_DynamicArray_OwnedEquipment3(&obj->InaccessibleItems, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment3(&obj->InaccessibleItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveCharacterIndex");
     print_STI_uint32(&obj->ActiveCharacterIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaigns");
-    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaignsReserveIds");
-    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RaidLootSaveData(Buffer* buffer, STI_TypeLibrary* lib, RaidLootSaveData* out) {
     if (!read_STI_uint32(buffer, lib, &out->RaidId)) return false;
@@ -11628,7 +11702,7 @@ static void print_RaidLootSaveData(const RaidLootSaveData* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "RaidSeed");
     print_STI_uint32(&obj->RaidSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_CodexInfo(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_CodexInfo* out) {
     uint32 count = 0;
@@ -11662,9 +11736,9 @@ static void print_DynamicArray_CodexInfo(const DynamicArray_CodexInfo* obj, STI_
     fprintf(handle, "DynamicArray_CodexInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_CodexInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_CodexInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_CodexInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -11711,9 +11785,9 @@ static void print_DynamicArray_TerrainMesh(const DynamicArray_TerrainMesh* obj, 
     fprintf(handle, "DynamicArray_TerrainMesh {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_TerrainMesh(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_TerrainMesh(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_TerrainMesh(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -11764,7 +11838,7 @@ static void print_LowHealthScreenEffectSettings(const LowHealthScreenEffectSetti
     fprintf(handle, "%*s%s = ", indent * 4, "", "VignetteColorBlue");
     print_STI_float32(&obj->VignetteColorBlue, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AnimalDamageablePartSaveData(Buffer* buffer, STI_TypeLibrary* lib, AnimalDamageablePartSaveData* out) {
     if (!read_STI_uint64(buffer, lib, &out->PartId)) return false;
@@ -11783,7 +11857,7 @@ static void print_AnimalDamageablePartSaveData(const AnimalDamageablePartSaveDat
     fprintf(handle, "%*s%s = ", indent * 4, "", "Health");
     print_STI_float32(&obj->Health, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_VegetationForestLayer(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_VegetationForestLayer* out) {
     uint32 count = 0;
@@ -11817,9 +11891,9 @@ static void print_DynamicArray_VegetationForestLayer(const DynamicArray_Vegetati
     fprintf(handle, "DynamicArray_VegetationForestLayer {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VegetationForestLayer(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VegetationForestLayer(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VegetationForestLayer(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -11862,7 +11936,7 @@ static void print_SightTuning(const SightTuning* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "zoom_multiplier_level_4");
     print_STI_float32(&obj->zoom_multiplier_level_4, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_HunterMissionAttachment(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_HunterMissionAttachment* out) {
     uint32 count = 0;
@@ -11896,9 +11970,9 @@ static void print_DynamicArray_HunterMissionAttachment(const DynamicArray_Hunter
     fprintf(handle, "DynamicArray_HunterMissionAttachment {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_HunterMissionAttachment(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_HunterMissionAttachment(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_HunterMissionAttachment(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -11934,13 +12008,13 @@ static void print_MissionSaveData2(const MissionSaveData2* obj, STI_TypeLibrary*
     fprintf(handle, "MissionSaveData2 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Children");
-    print_DynamicArray_MissionSaveData2(&obj->Children, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData2(&obj->Children, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ValueOccuranceIds");
-    print_DynamicArray_STI_uint32(&obj->ValueOccuranceIds, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->ValueOccuranceIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ValueOccurences");
-    print_DynamicArray_ValueOccurance(&obj->ValueOccurences, lib, handle, indent+1);
+    print_DynamicArray_ValueOccurance(&obj->ValueOccurences, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Id");
     print_STI_int32(&obj->Id, lib, handle, indent + 1);
@@ -11957,7 +12031,7 @@ static void print_MissionSaveData2(const MissionSaveData2* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletionState");
     print_STI_uint8(&obj->CompletionState, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_SettingNameValuePair(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_SettingNameValuePair* out) {
     uint32 count = 0;
@@ -11991,9 +12065,9 @@ static void print_DynamicArray_SettingNameValuePair(const DynamicArray_SettingNa
     fprintf(handle, "DynamicArray_SettingNameValuePair {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_SettingNameValuePair(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_SettingNameValuePair(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_SettingNameValuePair(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12064,7 +12138,7 @@ static void print_TerrainMesh(const TerrainMesh* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "GroupTriIndices");
     print_CompressedData(&obj->GroupTriIndices, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_LightInfo(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_LightInfo* out) {
     uint32 count = 0;
@@ -12098,9 +12172,9 @@ static void print_DynamicArray_LightInfo(const DynamicArray_LightInfo* obj, STI_
     fprintf(handle, "DynamicArray_LightInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_LightInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_LightInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_LightInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12126,9 +12200,9 @@ static void print_ActionTokenList(const ActionTokenList* obj, STI_TypeLibrary* l
     fprintf(handle, "ActionTokenList {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Tokens");
-    print_DynamicArray_ActionToken(&obj->Tokens, lib, handle, indent+1);
+    print_DynamicArray_ActionToken(&obj->Tokens, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HunterMissionRule(Buffer* buffer, STI_TypeLibrary* lib, HunterMissionRule* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->Field)) return false;
@@ -12153,30 +12227,30 @@ static void print_HunterMissionRule(const HunterMissionRule* obj, STI_TypeLibrar
     fprintf(handle, "HunterMissionRule {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Field");
-    print_StringHash_48c5294d_4(&obj->Field, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Field, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Operator");
-    print_StringHash_48c5294d_4(&obj->Operator, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Operator, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Type");
-    print_StringHash_48c5294d_4(&obj->Type, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Type, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FloatValues");
-    print_DynamicArray_STI_float32(&obj->FloatValues, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->FloatValues, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BoolValues");
-    print_DynamicArray_STI_uint8(&obj->BoolValues, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->BoolValues, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "HashValues");
-    print_DynamicArray_StringHash_48c5294d_4(&obj->HashValues, lib, handle, indent+1);
+    print_DynamicArray_StringHash_48c5294d_4(&obj->HashValues, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EventHashValues");
-    print_DynamicArray_StringHash_99cfa095_6(&obj->EventHashValues, lib, handle, indent+1);
+    print_DynamicArray_StringHash_99cfa095_6(&obj->EventHashValues, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "IntValues");
-    print_DynamicArray_STI_int32(&obj->IntValues, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->IntValues, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AllLights(Buffer* buffer, STI_TypeLibrary* lib, AllLights* out) {
     if (!read_DynamicArray_LightInfo(buffer, lib, &out->Lights)) return false;
@@ -12189,9 +12263,9 @@ static void print_AllLights(const AllLights* obj, STI_TypeLibrary* lib, FILE* ha
     fprintf(handle, "AllLights {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Lights");
-    print_DynamicArray_LightInfo(&obj->Lights, lib, handle, indent+1);
+    print_DynamicArray_LightInfo(&obj->Lights, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WindowConstants(Buffer* buffer, STI_TypeLibrary* lib, WindowConstants* out) {
     if (!read_STI_float32(buffer, lib, &out->SpecGloss)) return false;
@@ -12254,7 +12328,7 @@ static void print_WindowConstants(const WindowConstants* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "LensOcclusion");
     fprintf(handle, "%i", obj->LensOcclusion);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ImpostorVertex(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ImpostorVertex* out) {
     uint32 count = 0;
@@ -12288,9 +12362,9 @@ static void print_DynamicArray_ImpostorVertex(const DynamicArray_ImpostorVertex*
     fprintf(handle, "DynamicArray_ImpostorVertex {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ImpostorVertex(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ImpostorVertex(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ImpostorVertex(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12337,9 +12411,9 @@ static void print_DynamicArray_AnimalSaveData2(const DynamicArray_AnimalSaveData
     fprintf(handle, "DynamicArray_AnimalSaveData2 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AnimalSaveData2(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AnimalSaveData2(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AnimalSaveData2(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12386,9 +12460,9 @@ static void print_DynamicArray_VegetationModelLayer(const DynamicArray_Vegetatio
     fprintf(handle, "DynamicArray_VegetationModelLayer {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VegetationModelLayer(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VegetationModelLayer(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VegetationModelLayer(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12435,9 +12509,9 @@ static void print_DynamicArray_ActionToken(const DynamicArray_ActionToken* obj, 
     fprintf(handle, "DynamicArray_ActionToken {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ActionToken(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ActionToken(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ActionToken(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12477,9 +12551,9 @@ static void print_PfxStaticCompound(const PfxStaticCompound* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "static_instances");
-    print_DynamicArray_PfxStaticInstance(&obj->static_instances, lib, handle, indent+1);
+    print_DynamicArray_PfxStaticInstance(&obj->static_instances, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_VegetationIndex(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_VegetationIndex* out) {
     uint32 count = 0;
@@ -12513,9 +12587,9 @@ static void print_DynamicArray_VegetationIndex(const DynamicArray_VegetationInde
     fprintf(handle, "DynamicArray_VegetationIndex {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VegetationIndex(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VegetationIndex(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VegetationIndex(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12562,9 +12636,9 @@ static void print_DynamicArray_EffectRTEmitter(const DynamicArray_EffectRTEmitte
     fprintf(handle, "DynamicArray_EffectRTEmitter {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTEmitter(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTEmitter(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTEmitter(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12590,9 +12664,9 @@ static void print_VegetationDataBuffer(const VegetationDataBuffer* obj, STI_Type
     fprintf(handle, "VegetationDataBuffer {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Buffer");
-    print_DynamicArray_STI_uint8(&obj->Buffer, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->Buffer, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_XLSAttribute(Buffer* buffer, STI_TypeLibrary* lib, XLSAttribute* out) {
     if (!read_STI_uint8(buffer, lib, &out->FGColorIndex)) return false;
@@ -12610,7 +12684,7 @@ static void print_XLSAttribute(const XLSAttribute* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "BGColorIndex");
     print_STI_uint8(&obj->BGColorIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_OwnedEquipment1(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_OwnedEquipment1* out) {
     uint32 count = 0;
@@ -12644,9 +12718,9 @@ static void print_DynamicArray_OwnedEquipment1(const DynamicArray_OwnedEquipment
     fprintf(handle, "DynamicArray_OwnedEquipment1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_OwnedEquipment1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_OwnedEquipment1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_OwnedEquipment1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12693,9 +12767,9 @@ static void print_DynamicArray_StringLookupDialogueLine(const DynamicArray_Strin
     fprintf(handle, "DynamicArray_StringLookupDialogueLine {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_StringLookupDialogueLine(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_StringLookupDialogueLine(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_StringLookupDialogueLine(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12731,10 +12805,10 @@ static void print_DifficultyLevel(const DifficultyLevel* obj, STI_TypeLibrary* l
     print_STI_uint32(&obj->level, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "title_string_id");
-    print_StringHash_48c5294d_4(&obj->title_string_id, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->title_string_id, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "description_string_id");
-    print_StringHash_48c5294d_4(&obj->description_string_id, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->description_string_id, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "player_count_settings");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -12746,7 +12820,7 @@ static void print_DifficultyLevel(const DifficultyLevel* obj, STI_TypeLibrary* l
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RoadInfo(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RoadInfo* out) {
     uint32 count = 0;
@@ -12780,9 +12854,9 @@ static void print_DynamicArray_RoadInfo(const DynamicArray_RoadInfo* obj, STI_Ty
     fprintf(handle, "DynamicArray_RoadInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RoadInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RoadInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RoadInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -12817,7 +12891,7 @@ static void print_EffectRTLocalParam(const EffectRTLocalParam* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "NumParams");
     print_STI_uint16(&obj->NumParams, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HunterMissionRulesGroup(Buffer* buffer, STI_TypeLibrary* lib, HunterMissionRulesGroup* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->Condition)) return false;
@@ -12832,12 +12906,12 @@ static void print_HunterMissionRulesGroup(const HunterMissionRulesGroup* obj, ST
     fprintf(handle, "HunterMissionRulesGroup {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Condition");
-    print_StringHash_48c5294d_4(&obj->Condition, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Condition, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Rules");
-    print_DynamicArray_STI_Deferred(&obj->Rules, lib, handle, indent+1);
+    print_DynamicArray_STI_Deferred(&obj->Rules, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharactersSaveData2(Buffer* buffer, STI_TypeLibrary* lib, CharactersSaveData2* out) {
     for (uint32 i = 0; i < 4; ++i) {
@@ -12879,21 +12953,21 @@ static void print_CharactersSaveData2(const CharactersSaveData2* obj, STI_TypeLi
     print_STI_uint32(&obj->EquipmentIDCounter, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemStash");
-    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveCharacterIndex");
     print_STI_uint32(&obj->ActiveCharacterIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaigns");
-    print_DynamicArray_MissionSaveData(&obj->MissionCampaigns, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData(&obj->MissionCampaigns, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaignsReserveIds");
-    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_GeneralR2Constants(Buffer* buffer, STI_TypeLibrary* lib, GeneralR2Constants* out) {
     if (!read_STI_float32(buffer, lib, &out->DepthBias)) return false;
@@ -13015,7 +13089,7 @@ static void print_GeneralR2Constants(const GeneralR2Constants* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "UseColorMask");
     fprintf(handle, "%i", obj->UseColorMask);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_TerrainColor(Buffer* buffer, STI_TypeLibrary* lib, TerrainColor* out) {
     if (!read_STI_uint8(buffer, lib, &out->Red)) return false;
@@ -13037,7 +13111,7 @@ static void print_TerrainColor(const TerrainColor* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "Blue");
     print_STI_uint8(&obj->Blue, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_SaveVector3(Buffer* buffer, STI_TypeLibrary* lib, SaveVector3* out) {
     if (!read_STI_float32(buffer, lib, &out->X)) return false;
@@ -13059,7 +13133,7 @@ static void print_SaveVector3(const SaveVector3* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "Z");
     print_STI_float32(&obj->Z, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationSystemInstanceSrc(Buffer* buffer, STI_TypeLibrary* lib, VegetationSystemInstanceSrc* out) {
     if (!read_STI_float32(buffer, lib, &out->X)) return false;
@@ -13115,7 +13189,7 @@ static void print_VegetationSystemInstanceSrc(const VegetationSystemInstanceSrc*
     print_STI_float32(&obj->Color_B, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ZoneIndex");
     print_STI_uint8(&obj->ZoneIndex, lib, handle, indent + 1);
@@ -13123,7 +13197,7 @@ static void print_VegetationSystemInstanceSrc(const VegetationSystemInstanceSrc*
     fprintf(handle, "%*s%s = ", indent * 4, "", "IsPlanted");
     fprintf(handle, "%i", obj->IsPlanted);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProfileSaveData2(Buffer* buffer, STI_TypeLibrary* lib, ProfileSaveData2* out) {
     if (!read_DynamicArray_STI_uint64(buffer, lib, &out->Collectables)) return false;
@@ -13162,10 +13236,10 @@ static void print_ProfileSaveData2(const ProfileSaveData2* obj, STI_TypeLibrary*
     fprintf(handle, "ProfileSaveData2 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -13181,10 +13255,10 @@ static void print_ProfileSaveData2(const ProfileSaveData2* obj, STI_TypeLibrary*
     print_STI_uint64(&obj->TrackingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_STI_int32(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletedBounties");
-    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLogin");
     print_STI_int64(&obj->LastLogin, lib, handle, indent + 1);
@@ -13207,7 +13281,7 @@ static void print_ProfileSaveData2(const ProfileSaveData2* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "ShownCrashReportingEnabledOptIn");
     fprintf(handle, "%i", obj->ShownCrashReportingEnabledOptIn);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BuildContainer1(Buffer* buffer, STI_TypeLibrary* lib, BuildContainer1* out) {
     if (!read_STI_uint32(buffer, lib, &out->BuildingId)) return false;
@@ -13233,7 +13307,7 @@ static void print_BuildContainer1(const BuildContainer1* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "Col");
     print_STI_uint32(&obj->Col, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StatisticInfo(Buffer* buffer, STI_TypeLibrary* lib, StatisticInfo* out) {
     if (!read_STI_uint32(buffer, lib, &out->NameHash)) return false;
@@ -13251,7 +13325,7 @@ static void print_StatisticInfo(const StatisticInfo* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "Value");
     print_STI_uint32(&obj->Value, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AdfBool(Buffer* buffer, STI_TypeLibrary* lib, AdfBool* out) {
     if (!read_STI_uint64(buffer, lib, &out->ID)) return false;
@@ -13270,7 +13344,7 @@ static void print_AdfBool(const AdfBool* obj, STI_TypeLibrary* lib, FILE* handle
     fprintf(handle, "%*s%s = ", indent * 4, "", "On");
     print_STI_uint8(&obj->On, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_SaveGameData2(Buffer* buffer, STI_TypeLibrary* lib, SaveGameData2* out) {
     if (!read_STI_Deferred(buffer, lib, &out->Characters)) return false;
@@ -13300,7 +13374,7 @@ static void print_SaveGameData2(const SaveGameData2* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "War");
     print_STI_Deferred(&obj->War, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RepairBuildingComponentSaveData1(Buffer* buffer, STI_TypeLibrary* lib, RepairBuildingComponentSaveData1* out) {
     if (!read_STI_uint8(buffer, lib, &out->Repairing)) return false;
@@ -13314,7 +13388,7 @@ static void print_RepairBuildingComponentSaveData1(const RepairBuildingComponent
     fprintf(handle, "%*s%s = ", indent * 4, "", "Repairing");
     print_STI_uint8(&obj->Repairing, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AwarenessEventThreats(Buffer* buffer, STI_TypeLibrary* lib, AwarenessEventThreats* out) {
     if (!read_STI_float32(buffer, lib, &out->Death)) return false;
@@ -13368,7 +13442,7 @@ static void print_AwarenessEventThreats(const AwarenessEventThreats* obj, STI_Ty
     fprintf(handle, "%*s%s = ", indent * 4, "", "IncomingBullet");
     print_STI_float32(&obj->IncomingBullet, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharacterProfile5(Buffer* buffer, STI_TypeLibrary* lib, CharacterProfile5* out) {
     if (!read_CharacterLooks(buffer, lib, &out->CharacterLooks)) return false;
@@ -13476,7 +13550,7 @@ static void print_CharacterProfile5(const CharacterProfile5* obj, STI_TypeLibrar
     print_STI_uint8(&obj->Created, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Inventory");
-    print_DynamicArray_OwnedEquipment2(&obj->Inventory, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->Inventory, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PPInventorySlot");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -13499,13 +13573,13 @@ static void print_CharacterProfile5(const CharacterProfile5* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehicleData");
-    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent+1);
+    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehiclePreferedCameraThirdPerson");
     print_STI_uint8(&obj->VehiclePreferedCameraThirdPerson, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -13518,7 +13592,7 @@ static void print_CharacterProfile5(const CharacterProfile5* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DistanceTravelled");
     print_STI_float32(&obj->DistanceTravelled, lib, handle, indent + 1);
@@ -13530,21 +13604,21 @@ static void print_CharacterProfile5(const CharacterProfile5* obj, STI_TypeLibrar
     print_STI_float32(&obj->WeatherTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerPositions");
-    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent+1);
+    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLevelUpTS");
     print_STI_uint64(&obj->LastLevelUpTS, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RaidLootAcquired");
-    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent+1);
+    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveTitle");
     print_STI_uint32(&obj->ActiveTitle, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_SpecificEvent(Buffer* buffer, STI_TypeLibrary* lib, SpecificEvent* out) {
     if (!read_StringHash_99cfa095_6(buffer, lib, &out->EventName)) return false;
@@ -13558,12 +13632,12 @@ static void print_SpecificEvent(const SpecificEvent* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "SpecificEvent {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "EventName");
-    print_StringHash_99cfa095_6(&obj->EventName, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->EventName, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Reason");
-    print_StringHash_48c5294d_4(&obj->Reason, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Reason, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTSpecialEffectData(Buffer* buffer, STI_TypeLibrary* lib, EffectRTSpecialEffectData* out) {
     if (!read_DynamicArray_STI_uint32(buffer, lib, &out->ConstantData)) return false;
@@ -13578,12 +13652,12 @@ static void print_EffectRTSpecialEffectData(const EffectRTSpecialEffectData* obj
     fprintf(handle, "EffectRTSpecialEffectData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "ConstantData");
-    print_DynamicArray_STI_uint32(&obj->ConstantData, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->ConstantData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Hash");
     print_STI_uint32(&obj->Hash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_PatchSampleList(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_PatchSampleList* out) {
     uint32 count = 0;
@@ -13617,9 +13691,9 @@ static void print_DynamicArray_PatchSampleList(const DynamicArray_PatchSampleLis
     fprintf(handle, "DynamicArray_PatchSampleList {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PatchSampleList(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PatchSampleList(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PatchSampleList(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -13674,7 +13748,7 @@ static void print_DreaThermobaricSettings(const DreaThermobaricSettings* obj, ST
     fprintf(handle, "%*s%s = ", indent * 4, "", "thermobaric_explosion_warning_sound_interval");
     print_STI_float32(&obj->thermobaric_explosion_warning_sound_interval, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_XLSCell(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_XLSCell* out) {
     uint32 count = 0;
@@ -13708,9 +13782,9 @@ static void print_DynamicArray_XLSCell(const DynamicArray_XLSCell* obj, STI_Type
     fprintf(handle, "DynamicArray_XLSCell {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_XLSCell(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_XLSCell(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_XLSCell(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -13794,7 +13868,7 @@ static void print_AnimalSaveData2(const AnimalSaveData2* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalId");
     print_STI_uint32(&obj->RivalId, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StreamPatchFileHeader(Buffer* buffer, STI_TypeLibrary* lib, StreamPatchFileHeader* out) {
     if (!read_STI_uint32(buffer, lib, &out->Version)) return false;
@@ -13828,7 +13902,7 @@ static void print_StreamPatchFileHeader(const StreamPatchFileHeader* obj, STI_Ty
     fprintf(handle, "%*s%s = ", indent * 4, "", "PatchLod");
     print_STI_int32(&obj->PatchLod, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RoadGraphEdge(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RoadGraphEdge* out) {
     uint32 count = 0;
@@ -13862,9 +13936,9 @@ static void print_DynamicArray_RoadGraphEdge(const DynamicArray_RoadGraphEdge* o
     fprintf(handle, "DynamicArray_RoadGraphEdge {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RoadGraphEdge(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RoadGraphEdge(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RoadGraphEdge(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -13917,7 +13991,7 @@ static void print_OwnedEquipment2(const OwnedEquipment2* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "ChildEquipmentCount");
     print_STI_uint8(&obj->ChildEquipmentCount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RivalMissionGroup1(Buffer* buffer, STI_TypeLibrary* lib, RivalMissionGroup1* out) {
     if (!read_STI_uint32(buffer, lib, &out->GroupId)) return false;
@@ -13935,7 +14009,7 @@ static void print_RivalMissionGroup1(const RivalMissionGroup1* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "Cooldown");
     print_STI_float32(&obj->Cooldown, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HunterAttackSettings(Buffer* buffer, STI_TypeLibrary* lib, HunterAttackSettings* out) {
     if (!read_STI_float32(buffer, lib, &out->melee_jump_attack_chance_suppressor)) return false;
@@ -13957,7 +14031,7 @@ static void print_HunterAttackSettings(const HunterAttackSettings* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "melee_jump_attack_chance_backsteper");
     print_STI_float32(&obj->melee_jump_attack_chance_backsteper, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RigidBodyControllerParameters(Buffer* buffer, STI_TypeLibrary* lib, RigidBodyControllerParameters* out) {
     if (!read_STI_float32(buffer, lib, &out->HierarchyGain)) return false;
@@ -14015,7 +14089,7 @@ static void print_RigidBodyControllerParameters(const RigidBodyControllerParamet
     fprintf(handle, "%*s%s = ", indent * 4, "", "SnapMaxAngularDistance");
     print_STI_float32(&obj->SnapMaxAngularDistance, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldSaveData5(Buffer* buffer, STI_TypeLibrary* lib, WorldSaveData5* out) {
     if (!read_DynamicArray_RegionData(buffer, lib, &out->Regions)) return false;
@@ -14056,51 +14130,51 @@ static void print_WorldSaveData5(const WorldSaveData5* obj, STI_TypeLibrary* lib
     fprintf(handle, "WorldSaveData5 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData2(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Raids");
-    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent+1);
+    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Timers");
-    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent+1);
+    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RoutesCollection(Buffer* buffer, STI_TypeLibrary* lib, RoutesCollection* out) {
     if (!read_DynamicArray_Route(buffer, lib, &out->Routes)) return false;
@@ -14113,9 +14187,9 @@ static void print_RoutesCollection(const RoutesCollection* obj, STI_TypeLibrary*
     fprintf(handle, "RoutesCollection {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Routes");
-    print_DynamicArray_Route(&obj->Routes, lib, handle, indent+1);
+    print_DynamicArray_Route(&obj->Routes, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_PfxBreakablePartInstance(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_PfxBreakablePartInstance* out) {
     uint32 count = 0;
@@ -14149,9 +14223,9 @@ static void print_DynamicArray_PfxBreakablePartInstance(const DynamicArray_PfxBr
     fprintf(handle, "DynamicArray_PfxBreakablePartInstance {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PfxBreakablePartInstance(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PfxBreakablePartInstance(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PfxBreakablePartInstance(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -14198,9 +14272,9 @@ static void print_DynamicArray_ImpostorInfo(const DynamicArray_ImpostorInfo* obj
     fprintf(handle, "DynamicArray_ImpostorInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ImpostorInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ImpostorInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ImpostorInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -14230,15 +14304,15 @@ static void print_AnimalPopulationsSaveData2(const AnimalPopulationsSaveData2* o
     fprintf(handle, "AnimalPopulationsSaveData2 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Populations");
-    print_DynamicArray_AnimalPopulationSaveData2(&obj->Populations, lib, handle, indent+1);
+    print_DynamicArray_AnimalPopulationSaveData2(&obj->Populations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Groups");
-    print_DynamicArray_AnimalGroupSaveData(&obj->Groups, lib, handle, indent+1);
+    print_DynamicArray_AnimalGroupSaveData(&obj->Groups, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Animals");
-    print_DynamicArray_AnimalSaveData(&obj->Animals, lib, handle, indent+1);
+    print_DynamicArray_AnimalSaveData(&obj->Animals, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_TerrainPrimitive(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_TerrainPrimitive* out) {
     uint32 count = 0;
@@ -14272,9 +14346,9 @@ static void print_DynamicArray_TerrainPrimitive(const DynamicArray_TerrainPrimit
     fprintf(handle, "DynamicArray_TerrainPrimitive {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_TerrainPrimitive(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_TerrainPrimitive(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_TerrainPrimitive(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -14313,9 +14387,9 @@ static void print_RivalRegion1(const RivalRegion1* obj, STI_TypeLibrary* lib, FI
     print_STI_float32(&obj->Cooldown, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Rivals");
-    print_DynamicArray_Rival1(&obj->Rivals, lib, handle, indent+1);
+    print_DynamicArray_Rival1(&obj->Rivals, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RagdollSetting(Buffer* buffer, STI_TypeLibrary* lib, RagdollSetting* out) {
     if (!read_STI_String(buffer, lib, &out->Name)) return false;
@@ -14361,12 +14435,12 @@ static void print_RagdollSetting(const RagdollSetting* obj, STI_TypeLibrary* lib
     print_RigidBodyControllerParameters(&obj->RigidBodyControllerParameters, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "KeyframedRigidBodies");
-    print_DynamicArray_STI_String(&obj->KeyframedRigidBodies, lib, handle, indent+1);
+    print_DynamicArray_STI_String(&obj->KeyframedRigidBodies, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CollisionSubSystems");
-    print_DynamicArray_CollisionSubSystemByName(&obj->CollisionSubSystems, lib, handle, indent+1);
+    print_DynamicArray_CollisionSubSystemByName(&obj->CollisionSubSystems, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_Route(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_Route* out) {
     uint32 count = 0;
@@ -14400,9 +14474,9 @@ static void print_DynamicArray_Route(const DynamicArray_Route* obj, STI_TypeLibr
     fprintf(handle, "DynamicArray_Route {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_Route(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_Route(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_Route(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -14437,7 +14511,7 @@ static void print_RivalMissionComplete(const RivalMissionComplete* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "ScoreLoss");
     print_STI_int32(&obj->ScoreLoss, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BoneLengthAdjustmentType(Buffer* buffer, STI_TypeLibrary* lib, BoneLengthAdjustmentType* out) {
     uint32 value = 0;
@@ -14448,11 +14522,25 @@ static bool read_BoneLengthAdjustmentType(Buffer* buffer, STI_TypeLibrary* lib, 
 static void free_BoneLengthAdjustmentType(BoneLengthAdjustmentType* obj, STI_TypeLibrary* lib) {
 }
 static void print_BoneLengthAdjustmentType(const BoneLengthAdjustmentType* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "BoneLengthAdjustmentType {\n");
+    fprintf(handle, "BoneLengthAdjustmentType( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "BoneLengthAdjustmentType");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(NONE): {
+            fprintf(handle, "NONE )");
+break;
+            break;
+        }
+        case(REFERRENCE_POSE): {
+            fprintf(handle, "REFERRENCE_POSE )");
+break;
+            break;
+        }
+        case(CURRENT_POSE): {
+            fprintf(handle, "CURRENT_POSE )");
+break;
+            break;
+        }
+    }
 }
 static bool read_PfxBodyPropertiesDict(Buffer* buffer, STI_TypeLibrary* lib, PfxBodyPropertiesDict* out) {
     if (!read_DynamicArray_PfxBodyPropertiesEntry(buffer, lib, &out->entries)) return false;
@@ -14465,9 +14553,9 @@ static void print_PfxBodyPropertiesDict(const PfxBodyPropertiesDict* obj, STI_Ty
     fprintf(handle, "PfxBodyPropertiesDict {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "entries");
-    print_DynamicArray_PfxBodyPropertiesEntry(&obj->entries, lib, handle, indent+1);
+    print_DynamicArray_PfxBodyPropertiesEntry(&obj->entries, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharactersSaveData3(Buffer* buffer, STI_TypeLibrary* lib, CharactersSaveData3* out) {
     for (uint32 i = 0; i < 4; ++i) {
@@ -14513,27 +14601,27 @@ static void print_CharactersSaveData3(const CharactersSaveData3* obj, STI_TypeLi
     print_STI_uint32(&obj->EquipmentIDCounter, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemStash");
-    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UnknownItemsStash");
-    print_DynamicArray_OwnedEquipment1(&obj->UnknownItemsStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->UnknownItemsStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "InaccessibleItems");
-    print_DynamicArray_OwnedEquipment1(&obj->InaccessibleItems, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->InaccessibleItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveCharacterIndex");
     print_STI_uint32(&obj->ActiveCharacterIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaigns");
-    print_DynamicArray_MissionSaveData(&obj->MissionCampaigns, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData(&obj->MissionCampaigns, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaignsReserveIds");
-    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RoadGraphRoadExtraInfo(Buffer* buffer, STI_TypeLibrary* lib, RoadGraphRoadExtraInfo* out) {
     if (!read_DynamicArray_RoadInfoEx(buffer, lib, &out->RoadInfos)) return false;
@@ -14548,12 +14636,12 @@ static void print_RoadGraphRoadExtraInfo(const RoadGraphRoadExtraInfo* obj, STI_
     fprintf(handle, "RoadGraphRoadExtraInfo {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "RoadInfos");
-    print_DynamicArray_RoadInfoEx(&obj->RoadInfos, lib, handle, indent+1);
+    print_DynamicArray_RoadInfoEx(&obj->RoadInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GameObjectToEdgeTable");
     print_RoadToGraphLookup(&obj->GameObjectToEdgeTable, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_GSNode(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_GSNode* out) {
     uint32 count = 0;
@@ -14587,9 +14675,9 @@ static void print_DynamicArray_GSNode(const DynamicArray_GSNode* obj, STI_TypeLi
     fprintf(handle, "DynamicArray_GSNode {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_GSNode(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_GSNode(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_GSNode(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -14620,7 +14708,7 @@ static void print_PfxSolverStabilizationProperties(const PfxSolverStabilizationP
     fprintf(handle, "%*s%s = ", indent * 4, "", "solver_stabilization_speed_reduction");
     print_STI_float32(&obj->solver_stabilization_speed_reduction, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldSaveData1(Buffer* buffer, STI_TypeLibrary* lib, WorldSaveData1* out) {
     if (!read_DynamicArray_RegionData(buffer, lib, &out->Regions)) return false;
@@ -14657,45 +14745,45 @@ static void print_WorldSaveData1(const WorldSaveData1* obj, STI_TypeLibrary* lib
     fprintf(handle, "WorldSaveData1 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BuildingSaveData1(Buffer* buffer, STI_TypeLibrary* lib, BuildingSaveData1* out) {
     if (!read_STI_uint32(buffer, lib, &out->Id)) return false;
@@ -14734,7 +14822,7 @@ static void print_BuildingSaveData1(const BuildingSaveData1* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "DismantleComponent");
     print_DismantleBuildingComponentSaveData1(&obj->DismantleComponent, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AmfModelVariant(Buffer* buffer, STI_TypeLibrary* lib, AmfModelVariant* out) {
     if (!read_AmfModel(buffer, lib, &out->Data)) return false;
@@ -14754,12 +14842,12 @@ static void print_AmfModelVariant(const AmfModelVariant* obj, STI_TypeLibrary* l
     print_AmfModel(&obj->Data, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Resources");
-    print_DynamicArray_STI_String(&obj->Resources, lib, handle, indent+1);
+    print_DynamicArray_STI_String(&obj->Resources, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "HrResources");
-    print_DynamicArray_STI_String(&obj->HrResources, lib, handle, indent+1);
+    print_DynamicArray_STI_String(&obj->HrResources, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VariableVec3(Buffer* buffer, STI_TypeLibrary* lib, VariableVec3* out) {
     if (!read_STI_String(buffer, lib, &out->Name)) return false;
@@ -14787,7 +14875,7 @@ static void print_VariableVec3(const VariableVec3* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "ValZ");
     print_STI_float32(&obj->ValZ, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CachedFile(Buffer* buffer, STI_TypeLibrary* lib, CachedFile* out) {
     for (uint32 i = 0; i < 64; ++i) {
@@ -14819,7 +14907,7 @@ static void print_CachedFile(const CachedFile* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "%*s%s = ", indent * 4, "", "Url_Hash");
     print_STI_uint32(&obj->Url_Hash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AnimalGroupSaveData(Buffer* buffer, STI_TypeLibrary* lib, AnimalGroupSaveData* out) {
     if (!read_STI_uint32(buffer, lib, &out->PopulationNameHashId)) return false;
@@ -14837,7 +14925,7 @@ static void print_AnimalGroupSaveData(const AnimalGroupSaveData* obj, STI_TypeLi
     fprintf(handle, "%*s%s = ", indent * 4, "", "SpawnAreaId");
     print_STI_int32(&obj->SpawnAreaId, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AnimalRepopulateSaveData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AnimalRepopulateSaveData* out) {
     uint32 count = 0;
@@ -14871,9 +14959,9 @@ static void print_DynamicArray_AnimalRepopulateSaveData(const DynamicArray_Anima
     fprintf(handle, "DynamicArray_AnimalRepopulateSaveData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AnimalRepopulateSaveData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AnimalRepopulateSaveData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AnimalRepopulateSaveData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -14899,9 +14987,9 @@ static void print_EquipmentEntities(const EquipmentEntities* obj, STI_TypeLibrar
     fprintf(handle, "EquipmentEntities {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Items");
-    print_DynamicArray_EquipmentEntity(&obj->Items, lib, handle, indent+1);
+    print_DynamicArray_EquipmentEntity(&obj->Items, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StreamPatchBlockHeader(Buffer* buffer, STI_TypeLibrary* lib, StreamPatchBlockHeader* out) {
     if (!read_STI_uint32(buffer, lib, &out->Version)) return false;
@@ -14922,8 +15010,7 @@ static void print_StreamPatchBlockHeader(const StreamPatchBlockHeader* obj, STI_
     print_STI_uint32(&obj->Version, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MemoryType");
-    fprintf(handle, "%s", "StreamPatchBlockHeader");
-    fprintf(handle, " (%i)", (int)obj->MemoryType);
+    print_StreamPatchMemoryType(&obj->MemoryType, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MemorySize");
     print_STI_int32(&obj->MemorySize, lib, handle, indent + 1);
@@ -14937,7 +15024,7 @@ static void print_StreamPatchBlockHeader(const StreamPatchBlockHeader* obj, STI_
     fprintf(handle, "%*s%s = ", indent * 4, "", "PatchLod");
     print_STI_int32(&obj->PatchLod, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DifficultyScalingSettings(Buffer* buffer, STI_TypeLibrary* lib, DifficultyScalingSettings* out) {
     if (!read_DynamicArray_DifficultyLevel(buffer, lib, &out->difficulties)) return false;
@@ -14950,9 +15037,9 @@ static void print_DifficultyScalingSettings(const DifficultyScalingSettings* obj
     fprintf(handle, "DifficultyScalingSettings {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "difficulties");
-    print_DynamicArray_DifficultyLevel(&obj->difficulties, lib, handle, indent+1);
+    print_DynamicArray_DifficultyLevel(&obj->difficulties, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_FactionSaveData1(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_FactionSaveData1* out) {
     uint32 count = 0;
@@ -14986,9 +15073,9 @@ static void print_DynamicArray_FactionSaveData1(const DynamicArray_FactionSaveDa
     fprintf(handle, "DynamicArray_FactionSaveData1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_FactionSaveData1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_FactionSaveData1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_FactionSaveData1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15035,9 +15122,9 @@ static void print_DynamicArray_StringLookupHashProperties(const DynamicArray_Str
     fprintf(handle, "DynamicArray_StringLookupHashProperties {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_StringLookupHashProperties(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_StringLookupHashProperties(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_StringLookupHashProperties(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15074,7 +15161,7 @@ static void print_CollisionSubSystemByName(const CollisionSubSystemByName* obj, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "NoCollideID");
     print_STI_uint8(&obj->NoCollideID, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_GSDataSet(Buffer* buffer, STI_TypeLibrary* lib, GSDataSet* out) {
     if (!read_STI_uint32(buffer, lib, &out->Name)) return false;
@@ -15095,12 +15182,12 @@ static void print_GSDataSet(const GSDataSet* obj, STI_TypeLibrary* lib, FILE* ha
     print_STI_uint32(&obj->Name, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Data");
-    print_DynamicArray_GSData(&obj->Data, lib, handle, indent+1);
+    print_DynamicArray_GSData(&obj->Data, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DataSets");
-    print_DynamicArray_GSDataSet(&obj->DataSets, lib, handle, indent+1);
+    print_DynamicArray_GSDataSet(&obj->DataSets, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_InstanceDataLayer(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_InstanceDataLayer* out) {
     uint32 count = 0;
@@ -15134,9 +15221,9 @@ static void print_DynamicArray_InstanceDataLayer(const DynamicArray_InstanceData
     fprintf(handle, "DynamicArray_InstanceDataLayer {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_InstanceDataLayer(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_InstanceDataLayer(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_InstanceDataLayer(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15183,9 +15270,9 @@ static void print_DynamicArray_BuildContainer1(const DynamicArray_BuildContainer
     fprintf(handle, "DynamicArray_BuildContainer1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_BuildContainer1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_BuildContainer1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_BuildContainer1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15232,9 +15319,9 @@ static void print_DynamicArray_EffectRTSpecialEffect(const DynamicArray_EffectRT
     fprintf(handle, "DynamicArray_EffectRTSpecialEffect {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTSpecialEffect(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTSpecialEffect(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTSpecialEffect(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15281,9 +15368,9 @@ static void print_DynamicArray_BuildingSaveData2(const DynamicArray_BuildingSave
     fprintf(handle, "DynamicArray_BuildingSaveData2 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_BuildingSaveData2(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_BuildingSaveData2(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_BuildingSaveData2(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15317,7 +15404,7 @@ static void print_EffectRTInstantiator(const EffectRTInstantiator* obj, STI_Type
     print_EffectRTParameters(&obj->Parameters, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RenderInfos");
-    print_DynamicArray_EffectRTRenderInfo(&obj->RenderInfos, lib, handle, indent+1);
+    print_DynamicArray_EffectRTRenderInfo(&obj->RenderInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TypeHash");
     print_STI_uint32(&obj->TypeHash, lib, handle, indent + 1);
@@ -15328,7 +15415,7 @@ static void print_EffectRTInstantiator(const EffectRTInstantiator* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "TrimIndex");
     print_STI_uint16(&obj->TrimIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_STI_uint16(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_STI_uint16* out) {
     uint32 count = 0;
@@ -15359,9 +15446,9 @@ static void print_DynamicArray_STI_uint16(const DynamicArray_STI_uint16* obj, ST
     fprintf(handle, "DynamicArray_STI_uint16 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_uint16(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_uint16(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_uint16(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15409,7 +15496,7 @@ static void print_CompanionSchematicCurrencySettings(const CompanionSchematicCur
     fprintf(handle, "%*s%s = ", indent * 4, "", "TravelReward");
     print_STI_uint8(&obj->TravelReward, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PlayerRaidStatsSaveData(Buffer* buffer, STI_TypeLibrary* lib, PlayerRaidStatsSaveData* out) {
     if (!read_STI_uint64(buffer, lib, &out->ProfileTrackingId)) return false;
@@ -15463,7 +15550,7 @@ static void print_PlayerRaidStatsSaveData(const PlayerRaidStatsSaveData* obj, ST
     fprintf(handle, "%*s%s = ", indent * 4, "", "TankKills");
     print_STI_int32(&obj->TankKills, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharactersSaveData5(Buffer* buffer, STI_TypeLibrary* lib, CharactersSaveData5* out) {
     for (uint32 i = 0; i < 4; ++i) {
@@ -15509,27 +15596,27 @@ static void print_CharactersSaveData5(const CharactersSaveData5* obj, STI_TypeLi
     print_STI_uint32(&obj->EquipmentIDCounter, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemStash");
-    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UnknownItemsStash");
-    print_DynamicArray_OwnedEquipment1(&obj->UnknownItemsStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->UnknownItemsStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "InaccessibleItems");
-    print_DynamicArray_OwnedEquipment1(&obj->InaccessibleItems, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->InaccessibleItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveCharacterIndex");
     print_STI_uint32(&obj->ActiveCharacterIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaigns");
-    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaignsReserveIds");
-    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PerceptionSettings(Buffer* buffer, STI_TypeLibrary* lib, PerceptionSettings* out) {
     if (!read_DataLifespans(buffer, lib, &out->Lifespans)) return false;
@@ -15549,7 +15636,7 @@ static void print_PerceptionSettings(const PerceptionSettings* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "EventRanges");
     print_AwarenessEventRanges(&obj->EventRanges, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_CollectibleInfo(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_CollectibleInfo* out) {
     uint32 count = 0;
@@ -15583,9 +15670,9 @@ static void print_DynamicArray_CollectibleInfo(const DynamicArray_CollectibleInf
     fprintf(handle, "DynamicArray_CollectibleInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_CollectibleInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_CollectibleInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_CollectibleInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15632,9 +15719,9 @@ static void print_DynamicArray_EnvParam(const DynamicArray_EnvParam* obj, STI_Ty
     fprintf(handle, "DynamicArray_EnvParam {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EnvParam(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EnvParam(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EnvParam(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15662,12 +15749,12 @@ static void print_ReseveIconInfo(const ReseveIconInfo* obj, STI_TypeLibrary* lib
     fprintf(handle, "ReseveIconInfo {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "IconInfos");
-    print_DynamicArray_IconInfo(&obj->IconInfos, lib, handle, indent+1);
+    print_DynamicArray_IconInfo(&obj->IconInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RoadGraph(Buffer* buffer, STI_TypeLibrary* lib, RoadGraph* out) {
     if (!read_STI_String(buffer, lib, &out->RoadType)) return false;
@@ -15700,24 +15787,24 @@ static void print_RoadGraph(const RoadGraph* obj, STI_TypeLibrary* lib, FILE* ha
     print_STI_uint32(&obj->RoadTypeHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Nodes");
-    print_DynamicArray_RoadGraphNode(&obj->Nodes, lib, handle, indent+1);
+    print_DynamicArray_RoadGraphNode(&obj->Nodes, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Edges");
-    print_DynamicArray_RoadGraphEdge(&obj->Edges, lib, handle, indent+1);
+    print_DynamicArray_RoadGraphEdge(&obj->Edges, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NodeEdges");
-    print_DynamicArray_STI_uint16(&obj->NodeEdges, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->NodeEdges, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EdgeMap");
-    print_DynamicArray_STI_uint64(&obj->EdgeMap, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->EdgeMap, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EdgeSamples");
     print_RoadGraphEdgeSamples(&obj->EdgeSamples, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EdgeRegions");
-    print_DynamicArray_STI_uint16(&obj->EdgeRegions, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->EdgeRegions, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_STI_uint8(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_STI_uint8* out) {
     uint32 count = 0;
@@ -15748,9 +15835,9 @@ static void print_DynamicArray_STI_uint8(const DynamicArray_STI_uint8* obj, STI_
     fprintf(handle, "DynamicArray_STI_uint8 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_uint8(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_uint8(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_uint8(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15786,7 +15873,7 @@ static void print_DreaAttackSettings(const DreaAttackSettings* obj, STI_TypeLibr
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BuildingSaveData2(Buffer* buffer, STI_TypeLibrary* lib, BuildingSaveData2* out) {
     if (!read_STI_uint32(buffer, lib, &out->Id)) return false;
@@ -15830,7 +15917,7 @@ static void print_BuildingSaveData2(const BuildingSaveData2* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "InventoryComponent");
     print_InventoryBuildingComponentSaveData1(&obj->InventoryComponent, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_EffectRTEmitterTemplate(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_EffectRTEmitterTemplate* out) {
     uint32 count = 0;
@@ -15864,9 +15951,9 @@ static void print_DynamicArray_EffectRTEmitterTemplate(const DynamicArray_Effect
     fprintf(handle, "DynamicArray_EffectRTEmitterTemplate {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTEmitterTemplate(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTEmitterTemplate(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTEmitterTemplate(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15900,9 +15987,9 @@ static void print_BitmapData(const BitmapData* obj, STI_TypeLibrary* lib, FILE* 
     print_STI_int32(&obj->Height, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Layers");
-    print_DynamicArray_BitmapLayer(&obj->Layers, lib, handle, indent+1);
+    print_DynamicArray_BitmapLayer(&obj->Layers, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_VehicleData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_VehicleData* out) {
     uint32 count = 0;
@@ -15936,9 +16023,9 @@ static void print_DynamicArray_VehicleData(const DynamicArray_VehicleData* obj, 
     fprintf(handle, "DynamicArray_VehicleData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VehicleData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VehicleData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VehicleData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -15964,9 +16051,9 @@ static void print_WorldAudioPatchNormalData(const WorldAudioPatchNormalData* obj
     fprintf(handle, "WorldAudioPatchNormalData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "ZoneNormalData");
-    print_DynamicArray_WorldAudioPatchZoneNormalData(&obj->ZoneNormalData, lib, handle, indent+1);
+    print_DynamicArray_WorldAudioPatchZoneNormalData(&obj->ZoneNormalData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_TerrainPatchTexelNeighborhood(Buffer* buffer, STI_TypeLibrary* lib, TerrainPatchTexelNeighborhood* out) {
     if (!read_STI_uint16(buffer, lib, &out->Flags)) return false;
@@ -15988,7 +16075,7 @@ static void print_TerrainPatchTexelNeighborhood(const TerrainPatchTexelNeighborh
     fprintf(handle, "%*s%s = ", indent * 4, "", "Start");
     print_STI_uint32(&obj->Start, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RivalLevel(Buffer* buffer, STI_TypeLibrary* lib, RivalLevel* out) {
     if (!read_STI_uint32(buffer, lib, &out->XP)) return false;
@@ -16018,7 +16105,7 @@ static void print_RivalLevel(const RivalLevel* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "%*s%s = ", indent * 4, "", "XPRewardModifier");
     print_STI_float32(&obj->XPRewardModifier, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_LocationSummarySaveData(Buffer* buffer, STI_TypeLibrary* lib, LocationSummarySaveData* out) {
     if (!read_STI_uint32(buffer, lib, &out->LocationId)) return false;
@@ -16055,24 +16142,24 @@ static void print_LocationSummarySaveData(const LocationSummarySaveData* obj, ST
     print_STI_uint32(&obj->NrRequiredLootCrates, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FoundLootCrates");
-    print_DynamicArray_STI_uint64(&obj->FoundLootCrates, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->FoundLootCrates, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FoundItemIds");
-    print_DynamicArray_STI_uint64(&obj->FoundItemIds, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->FoundItemIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FoundWeaponTokens");
-    print_DynamicArray_STI_uint64(&obj->FoundWeaponTokens, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->FoundWeaponTokens, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FoundCollectables");
-    print_DynamicArray_STI_uint64(&obj->FoundCollectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->FoundCollectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FoundNests");
-    print_DynamicArray_STI_uint64(&obj->FoundNests, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->FoundNests, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FoundWorldMissionTokens");
-    print_DynamicArray_STI_uint64(&obj->FoundWorldMissionTokens, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->FoundWorldMissionTokens, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_GlobalFilter(Buffer* buffer, STI_TypeLibrary* lib, GlobalFilter* out) {
     if (!read_STI_float32(buffer, lib, &out->MinRetriggerTime)) return false;
@@ -16100,7 +16187,7 @@ static void print_GlobalFilter(const GlobalFilter* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "DisableEvent");
     print_STI_String(&obj->DisableEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RoadInfoEx(Buffer* buffer, STI_TypeLibrary* lib, RoadInfoEx* out) {
     if (!read_DynamicArray_STI_float32(buffer, lib, &out->SplinePoints)) return false;
@@ -16129,7 +16216,7 @@ static void print_RoadInfoEx(const RoadInfoEx* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "RoadInfoEx {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "SplinePoints");
-    print_DynamicArray_STI_float32(&obj->SplinePoints, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->SplinePoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AABBMin");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -16172,7 +16259,7 @@ static void print_RoadInfoEx(const RoadInfoEx* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "%*s%s = ", indent * 4, "", "SpeedLimit");
     print_STI_float32(&obj->SpeedLimit, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DifficultySetting(Buffer* buffer, STI_TypeLibrary* lib, DifficultySetting* out) {
     if (!read_STI_float32(buffer, lib, &out->player_damage_component_multiplier)) return false;
@@ -16234,7 +16321,7 @@ static void print_DifficultySetting(const DifficultySetting* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "max_target_count_multiplier");
     print_STI_float32(&obj->max_target_count_multiplier, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_GSGraph(Buffer* buffer, STI_TypeLibrary* lib, GSGraph* out) {
     if (!read_DynamicArray_GSNode(buffer, lib, &out->Nodes)) return false;
@@ -16247,9 +16334,9 @@ static void print_GSGraph(const GSGraph* obj, STI_TypeLibrary* lib, FILE* handle
     fprintf(handle, "GSGraph {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Nodes");
-    print_DynamicArray_GSNode(&obj->Nodes, lib, handle, indent+1);
+    print_DynamicArray_GSNode(&obj->Nodes, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PfxBodyMassProperties(Buffer* buffer, STI_TypeLibrary* lib, PfxBodyMassProperties* out) {
     if (!read_STI_float32(buffer, lib, &out->mass)) return false;
@@ -16301,7 +16388,7 @@ static void print_PfxBodyMassProperties(const PfxBodyMassProperties* obj, STI_Ty
     fprintf(handle, "%*s%s = ", indent * 4, "", "unit_inertia_roll");
     print_STI_float32(&obj->unit_inertia_roll, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RagdollSetting(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RagdollSetting* out) {
     uint32 count = 0;
@@ -16335,9 +16422,9 @@ static void print_DynamicArray_RagdollSetting(const DynamicArray_RagdollSetting*
     fprintf(handle, "DynamicArray_RagdollSetting {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RagdollSetting(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RagdollSetting(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RagdollSetting(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -16365,7 +16452,7 @@ static void print_SchematicCurrencySettings(const SchematicCurrencySettings* obj
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompanionSchematicCurrencySettings");
     print_CompanionSchematicCurrencySettings(&obj->CompanionSchematicCurrencySettings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DamageOverTimeCamShakeSettings(Buffer* buffer, STI_TypeLibrary* lib, DamageOverTimeCamShakeSettings* out) {
     if (!read_STI_float32(buffer, lib, &out->CamShakeFrequency)) return false;
@@ -16404,7 +16491,7 @@ static void print_DamageOverTimeCamShakeSettings(const DamageOverTimeCamShakeSet
     fprintf(handle, "%*s%s = ", indent * 4, "", "EaseOutTime");
     print_STI_float32(&obj->EaseOutTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AmfMeshBuffers(Buffer* buffer, STI_TypeLibrary* lib, AmfMeshBuffers* out) {
     if (!read_STI_uint32(buffer, lib, &out->MemoryTag)) return false;
@@ -16424,12 +16511,12 @@ static void print_AmfMeshBuffers(const AmfMeshBuffers* obj, STI_TypeLibrary* lib
     print_STI_uint32(&obj->MemoryTag, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "IndexBuffers");
-    print_DynamicArray_AmfBuffer(&obj->IndexBuffers, lib, handle, indent+1);
+    print_DynamicArray_AmfBuffer(&obj->IndexBuffers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VertexBuffers");
-    print_DynamicArray_AmfBuffer(&obj->VertexBuffers, lib, handle, indent+1);
+    print_DynamicArray_AmfBuffer(&obj->VertexBuffers, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_WorldAudioPatchZoneNormalData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_WorldAudioPatchZoneNormalData* out) {
     uint32 count = 0;
@@ -16463,9 +16550,9 @@ static void print_DynamicArray_WorldAudioPatchZoneNormalData(const DynamicArray_
     fprintf(handle, "DynamicArray_WorldAudioPatchZoneNormalData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_WorldAudioPatchZoneNormalData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_WorldAudioPatchZoneNormalData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_WorldAudioPatchZoneNormalData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -16538,36 +16625,36 @@ static void print_RivalData(const RivalData* obj, STI_TypeLibrary* lib, FILE* ha
     print_STI_float32(&obj->RivalXPMultiplier, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "HostKillTitles");
-    print_DynamicArray_RegionTitle(&obj->HostKillTitles, lib, handle, indent+1);
+    print_DynamicArray_RegionTitle(&obj->HostKillTitles, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ClientKillTitles");
-    print_DynamicArray_RegionTitle(&obj->ClientKillTitles, lib, handle, indent+1);
+    print_DynamicArray_RegionTitle(&obj->ClientKillTitles, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RegionTitles");
-    print_DynamicArray_RegionTitleCollection(&obj->RegionTitles, lib, handle, indent+1);
+    print_DynamicArray_RegionTitleCollection(&obj->RegionTitles, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalLevels");
-    print_DynamicArray_RivalLevel(&obj->RivalLevels, lib, handle, indent+1);
+    print_DynamicArray_RivalLevel(&obj->RivalLevels, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ControlPointLevels");
-    print_DynamicArray_ControlPointLevel(&obj->ControlPointLevels, lib, handle, indent+1);
+    print_DynamicArray_ControlPointLevel(&obj->ControlPointLevels, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "InsurrectionLevels");
-    print_DynamicArray_InsurrectionLevel(&obj->InsurrectionLevels, lib, handle, indent+1);
+    print_DynamicArray_InsurrectionLevel(&obj->InsurrectionLevels, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalNames");
-    print_DynamicArray_RivalNames(&obj->RivalNames, lib, handle, indent+1);
+    print_DynamicArray_RivalNames(&obj->RivalNames, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalMissionGroups");
-    print_DynamicArray_RivalMissionGroupData(&obj->RivalMissionGroups, lib, handle, indent+1);
+    print_DynamicArray_RivalMissionGroupData(&obj->RivalMissionGroups, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalMissionCompletes");
-    print_DynamicArray_RivalMissionComplete(&obj->RivalMissionCompletes, lib, handle, indent+1);
+    print_DynamicArray_RivalMissionComplete(&obj->RivalMissionCompletes, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalTerminalData");
     print_RivalTerminalData(&obj->RivalTerminalData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_StringHash_99cfa095_6(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_StringHash_99cfa095_6* out) {
     uint32 count = 0;
@@ -16598,9 +16685,9 @@ static void print_DynamicArray_StringHash_99cfa095_6(const DynamicArray_StringHa
     fprintf(handle, "DynamicArray_StringHash_99cfa095_6 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_StringHash_99cfa095_6(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_StringHash_99cfa095_6(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_StringHash_99cfa095_6(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -16630,15 +16717,15 @@ static void print_VegetationSet(const VegetationSet* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "VegetationSet {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ProbabilityBuffer");
-    print_DynamicArray_ProbabilityBuffer(&obj->ProbabilityBuffer, lib, handle, indent+1);
+    print_DynamicArray_ProbabilityBuffer(&obj->ProbabilityBuffer, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ModelGrassClustering");
     print_STI_float32(&obj->ModelGrassClustering, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PfxBodyProperties(Buffer* buffer, STI_TypeLibrary* lib, PfxBodyProperties* out) {
     if (!read_STI_float32(buffer, lib, &out->desired_mass)) return false;
@@ -16705,7 +16792,7 @@ static void print_PfxBodyProperties(const PfxBodyProperties* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "time_factor");
     print_STI_float32(&obj->time_factor, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StringLookupSubtitle(Buffer* buffer, STI_TypeLibrary* lib, StringLookupSubtitle* out) {
     if (!read_STI_uint32(buffer, lib, &out->LineHash)) return false;
@@ -16727,7 +16814,7 @@ static void print_StringLookupSubtitle(const StringLookupSubtitle* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "Duration");
     print_STI_float32(&obj->Duration, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ControllerType(Buffer* buffer, STI_TypeLibrary* lib, ControllerType* out) {
     uint32 value = 0;
@@ -16738,11 +16825,30 @@ static bool read_ControllerType(Buffer* buffer, STI_TypeLibrary* lib, Controller
 static void free_ControllerType(ControllerType* obj, STI_TypeLibrary* lib) {
 }
 static void print_ControllerType(const ControllerType* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "ControllerType {\n");
+    fprintf(handle, "ControllerType( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "ControllerType");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(DISABLE): {
+            fprintf(handle, "DISABLE )");
+break;
+            break;
+        }
+        case(RIGID_BODY): {
+            fprintf(handle, "RIGID_BODY )");
+break;
+            break;
+        }
+        case(POWERED_CHAIN): {
+            fprintf(handle, "POWERED_CHAIN )");
+break;
+            break;
+        }
+        case(POWERED_CONSTRAINT): {
+            fprintf(handle, "POWERED_CONSTRAINT )");
+break;
+            break;
+        }
+    }
 }
 static bool read_ControlPointSaveData1(Buffer* buffer, STI_TypeLibrary* lib, ControlPointSaveData1* out) {
     if (!read_STI_uint64(buffer, lib, &out->Id)) return false;
@@ -16769,9 +16875,9 @@ static void print_ControlPointSaveData1(const ControlPointSaveData1* obj, STI_Ty
     print_BuildingGridSaveData1(&obj->Grid, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Buildings");
-    print_DynamicArray_BuildingSaveData1(&obj->Buildings, lib, handle, indent+1);
+    print_DynamicArray_BuildingSaveData1(&obj->Buildings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AmfBuffer(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AmfBuffer* out) {
     uint32 count = 0;
@@ -16805,9 +16911,9 @@ static void print_DynamicArray_AmfBuffer(const DynamicArray_AmfBuffer* obj, STI_
     fprintf(handle, "DynamicArray_AmfBuffer {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AmfBuffer(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AmfBuffer(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AmfBuffer(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -16833,9 +16939,9 @@ static void print_DownloadFileCache(const DownloadFileCache* obj, STI_TypeLibrar
     fprintf(handle, "DownloadFileCache {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Files");
-    print_DynamicArray_CachedFile(&obj->Files, lib, handle, indent+1);
+    print_DynamicArray_CachedFile(&obj->Files, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_TerrainPatchInfo(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_TerrainPatchInfo* out) {
     uint32 count = 0;
@@ -16869,9 +16975,9 @@ static void print_DynamicArray_TerrainPatchInfo(const DynamicArray_TerrainPatchI
     fprintf(handle, "DynamicArray_TerrainPatchInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_TerrainPatchInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_TerrainPatchInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_TerrainPatchInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -16918,9 +17024,9 @@ static void print_DynamicArray_LocationState(const DynamicArray_LocationState* o
     fprintf(handle, "DynamicArray_LocationState {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_LocationState(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_LocationState(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_LocationState(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -16967,9 +17073,9 @@ static void print_DynamicArray_WorldAudioVector4(const DynamicArray_WorldAudioVe
     fprintf(handle, "DynamicArray_WorldAudioVector4 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_WorldAudioVector4(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_WorldAudioVector4(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_WorldAudioVector4(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -17017,7 +17123,7 @@ static void print_EffectTrimData(const EffectTrimData* obj, STI_TypeLibrary* lib
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AmfLodGroup(Buffer* buffer, STI_TypeLibrary* lib, AmfLodGroup* out) {
     if (!read_STI_uint32(buffer, lib, &out->LODIndex)) return false;
@@ -17035,9 +17141,9 @@ static void print_AmfLodGroup(const AmfLodGroup* obj, STI_TypeLibrary* lib, FILE
     print_STI_uint32(&obj->LODIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Meshes");
-    print_DynamicArray_AmfMesh(&obj->Meshes, lib, handle, indent+1);
+    print_DynamicArray_AmfMesh(&obj->Meshes, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Rival1(Buffer* buffer, STI_TypeLibrary* lib, Rival1* out) {
     if (!read_STI_uint32(buffer, lib, &out->Id)) return false;
@@ -17076,9 +17182,9 @@ static void print_Rival1(const Rival1* obj, STI_TypeLibrary* lib, FILE* handle, 
     print_STI_uint8(&obj->Dead, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "History");
-    print_DynamicArray_RivalHistory1(&obj->History, lib, handle, indent+1);
+    print_DynamicArray_RivalHistory1(&obj->History, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_LookoutPOIList(Buffer* buffer, STI_TypeLibrary* lib, LookoutPOIList* out) {
     if (!read_DynamicArray_LookoutList(buffer, lib, &out->List)) return false;
@@ -17093,12 +17199,12 @@ static void print_LookoutPOIList(const LookoutPOIList* obj, STI_TypeLibrary* lib
     fprintf(handle, "LookoutPOIList {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "List");
-    print_DynamicArray_LookoutList(&obj->List, lib, handle, indent+1);
+    print_DynamicArray_LookoutList(&obj->List, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "POIList");
-    print_DynamicArray_POIInfo(&obj->POIList, lib, handle, indent+1);
+    print_DynamicArray_POIInfo(&obj->POIList, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProfileSaveData6(Buffer* buffer, STI_TypeLibrary* lib, ProfileSaveData6* out) {
     if (!read_DynamicArray_STI_uint64(buffer, lib, &out->Collectables)) return false;
@@ -17149,10 +17255,10 @@ static void print_ProfileSaveData6(const ProfileSaveData6* obj, STI_TypeLibrary*
     fprintf(handle, "ProfileSaveData6 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -17168,10 +17274,10 @@ static void print_ProfileSaveData6(const ProfileSaveData6* obj, STI_TypeLibrary*
     print_STI_uint64(&obj->TrackingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletedBounties");
-    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLogin");
     print_STI_int64(&obj->LastLogin, lib, handle, indent + 1);
@@ -17208,10 +17314,10 @@ static void print_ProfileSaveData6(const ProfileSaveData6* obj, STI_TypeLibrary*
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceStorage");
-    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent+1);
+    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorage");
-    print_DynamicArray_OwnedEquipment1(&obj->SafehouseStorage, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->SafehouseStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorageSizeColumns");
     print_STI_uint8(&obj->SafehouseStorageSizeColumns, lib, handle, indent + 1);
@@ -17222,7 +17328,7 @@ static void print_ProfileSaveData6(const ProfileSaveData6* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "FixVersion");
     print_STI_uint32(&obj->FixVersion, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ProceduralSpawn(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ProceduralSpawn* out) {
     uint32 count = 0;
@@ -17256,9 +17362,9 @@ static void print_DynamicArray_ProceduralSpawn(const DynamicArray_ProceduralSpaw
     fprintf(handle, "DynamicArray_ProceduralSpawn {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ProceduralSpawn(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ProceduralSpawn(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ProceduralSpawn(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -17299,12 +17405,12 @@ static void print_PfxBreakableInstance(const PfxBreakableInstance* obj, STI_Type
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "breakable_parts");
-    print_DynamicArray_PfxBreakablePartInstance(&obj->breakable_parts, lib, handle, indent+1);
+    print_DynamicArray_PfxBreakablePartInstance(&obj->breakable_parts, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "stump_parts");
-    print_DynamicArray_PfxSimplePartInstance(&obj->stump_parts, lib, handle, indent+1);
+    print_DynamicArray_PfxSimplePartInstance(&obj->stump_parts, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BuildingGridSaveData1(Buffer* buffer, STI_TypeLibrary* lib, BuildingGridSaveData1* out) {
     if (!read_DynamicArray_BuildContainer1(buffer, lib, &out->Buildings)) return false;
@@ -17317,9 +17423,9 @@ static void print_BuildingGridSaveData1(const BuildingGridSaveData1* obj, STI_Ty
     fprintf(handle, "BuildingGridSaveData1 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Buildings");
-    print_DynamicArray_BuildContainer1(&obj->Buildings, lib, handle, indent+1);
+    print_DynamicArray_BuildContainer1(&obj->Buildings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_UnlockCondition(Buffer* buffer, STI_TypeLibrary* lib, UnlockCondition* out) {
     uint32 value = 0;
@@ -17330,11 +17436,40 @@ static bool read_UnlockCondition(Buffer* buffer, STI_TypeLibrary* lib, UnlockCon
 static void free_UnlockCondition(UnlockCondition* obj, STI_TypeLibrary* lib) {
 }
 static void print_UnlockCondition(const UnlockCondition* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "UnlockCondition {\n");
+    fprintf(handle, "UnlockCondition( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "UnlockCondition");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(EUNLOCK_CONDITION_NONE): {
+            fprintf(handle, "EUNLOCK_CONDITION_NONE )");
+break;
+            break;
+        }
+        case(EUNLOCK_CONDITION_WEAPON_SCORE_RIFLE): {
+            fprintf(handle, "EUNLOCK_CONDITION_WEAPON_SCORE_RIFLE )");
+break;
+            break;
+        }
+        case(EUNLOCK_CONDITION_WEAPON_SCORE_HANDGUN): {
+            fprintf(handle, "EUNLOCK_CONDITION_WEAPON_SCORE_HANDGUN )");
+break;
+            break;
+        }
+        case(EUNLOCK_CONDITION_WEAPON_SCORE_SHOTGUN): {
+            fprintf(handle, "EUNLOCK_CONDITION_WEAPON_SCORE_SHOTGUN )");
+break;
+            break;
+        }
+        case(EUNLOCK_CONDITION_WEAPON_SCORE_BOW): {
+            fprintf(handle, "EUNLOCK_CONDITION_WEAPON_SCORE_BOW )");
+break;
+            break;
+        }
+        case(EUNLOCK_CONDITION_CHARACTER_LEVEL): {
+            fprintf(handle, "EUNLOCK_CONDITION_CHARACTER_LEVEL )");
+break;
+            break;
+        }
+    }
 }
 static bool read_RoadToGraphLookup(Buffer* buffer, STI_TypeLibrary* lib, RoadToGraphLookup* out) {
     if (!read_DynamicArray_STI_uint64(buffer, lib, &out->GameObjectIDs)) return false;
@@ -17349,12 +17484,12 @@ static void print_RoadToGraphLookup(const RoadToGraphLookup* obj, STI_TypeLibrar
     fprintf(handle, "RoadToGraphLookup {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "GameObjectIDs");
-    print_DynamicArray_STI_uint64(&obj->GameObjectIDs, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->GameObjectIDs, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EdgeIds");
-    print_DynamicArray_STI_uint16(&obj->EdgeIds, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->EdgeIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StreamPatchMemoryType(Buffer* buffer, STI_TypeLibrary* lib, StreamPatchMemoryType* out) {
     uint32 value = 0;
@@ -17365,11 +17500,25 @@ static bool read_StreamPatchMemoryType(Buffer* buffer, STI_TypeLibrary* lib, Str
 static void free_StreamPatchMemoryType(StreamPatchMemoryType* obj, STI_TypeLibrary* lib) {
 }
 static void print_StreamPatchMemoryType(const StreamPatchMemoryType* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "StreamPatchMemoryType {\n");
+    fprintf(handle, "StreamPatchMemoryType( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "StreamPatchMemoryType");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(STREAM_PATCH_STATIC_POOL): {
+            fprintf(handle, "STREAM_PATCH_STATIC_POOL )");
+break;
+            break;
+        }
+        case(STREAM_PATCH_DYNAMIC): {
+            fprintf(handle, "STREAM_PATCH_DYNAMIC )");
+break;
+            break;
+        }
+        case(STREAM_PATCH_USER): {
+            fprintf(handle, "STREAM_PATCH_USER )");
+break;
+            break;
+        }
+    }
 }
 static bool read_CharacterProfile4(Buffer* buffer, STI_TypeLibrary* lib, CharacterProfile4* out) {
     if (!read_CharacterLooks(buffer, lib, &out->CharacterLooks)) return false;
@@ -17474,7 +17623,7 @@ static void print_CharacterProfile4(const CharacterProfile4* obj, STI_TypeLibrar
     print_STI_uint8(&obj->Created, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Inventory");
-    print_DynamicArray_OwnedEquipment2(&obj->Inventory, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->Inventory, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PPInventorySlot");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -17487,13 +17636,13 @@ static void print_CharacterProfile4(const CharacterProfile4* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehicleData");
-    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent+1);
+    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehiclePreferedCameraThirdPerson");
     print_STI_uint8(&obj->VehiclePreferedCameraThirdPerson, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -17506,7 +17655,7 @@ static void print_CharacterProfile4(const CharacterProfile4* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DistanceTravelled");
     print_STI_float32(&obj->DistanceTravelled, lib, handle, indent + 1);
@@ -17518,21 +17667,21 @@ static void print_CharacterProfile4(const CharacterProfile4* obj, STI_TypeLibrar
     print_STI_float32(&obj->WeatherTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerPositions");
-    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent+1);
+    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLevelUpTS");
     print_STI_uint64(&obj->LastLevelUpTS, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RaidLootAcquired");
-    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent+1);
+    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveTitle");
     print_STI_uint32(&obj->ActiveTitle, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ProceduralMissionInstance(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ProceduralMissionInstance* out) {
     uint32 count = 0;
@@ -17566,9 +17715,9 @@ static void print_DynamicArray_ProceduralMissionInstance(const DynamicArray_Proc
     fprintf(handle, "DynamicArray_ProceduralMissionInstance {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ProceduralMissionInstance(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ProceduralMissionInstance(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ProceduralMissionInstance(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -17615,9 +17764,9 @@ static void print_DynamicArray_VariableInt(const DynamicArray_VariableInt* obj, 
     fprintf(handle, "DynamicArray_VariableInt {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VariableInt(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VariableInt(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VariableInt(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -17690,7 +17839,7 @@ static void print_AdfModelCollectionInstance(const AdfModelCollectionInstance* o
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RoadInfoEx(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RoadInfoEx* out) {
     uint32 count = 0;
@@ -17724,9 +17873,9 @@ static void print_DynamicArray_RoadInfoEx(const DynamicArray_RoadInfoEx* obj, ST
     fprintf(handle, "DynamicArray_RoadInfoEx {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RoadInfoEx(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RoadInfoEx(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RoadInfoEx(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -17773,9 +17922,9 @@ static void print_DynamicArray_RegionTitleCollection(const DynamicArray_RegionTi
     fprintf(handle, "DynamicArray_RegionTitleCollection {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RegionTitleCollection(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RegionTitleCollection(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RegionTitleCollection(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -17815,7 +17964,7 @@ static void print_FogOfWar(const FogOfWar* obj, STI_TypeLibrary* lib, FILE* hand
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AmfMesh(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AmfMesh* out) {
     uint32 count = 0;
@@ -17849,9 +17998,9 @@ static void print_DynamicArray_AmfMesh(const DynamicArray_AmfMesh* obj, STI_Type
     fprintf(handle, "DynamicArray_AmfMesh {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AmfMesh(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AmfMesh(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AmfMesh(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -17893,7 +18042,7 @@ static void print_GSNode(const GSNode* obj, STI_TypeLibrary* lib, FILE* handle, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "DataSet");
     print_GSDataSet(&obj->DataSet, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RivalMissionGroupData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RivalMissionGroupData* out) {
     uint32 count = 0;
@@ -17927,9 +18076,9 @@ static void print_DynamicArray_RivalMissionGroupData(const DynamicArray_RivalMis
     fprintf(handle, "DynamicArray_RivalMissionGroupData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RivalMissionGroupData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RivalMissionGroupData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RivalMissionGroupData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -17976,9 +18125,9 @@ static void print_DynamicArray_ArrayAABB(const DynamicArray_ArrayAABB* obj, STI_
     fprintf(handle, "DynamicArray_ArrayAABB {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ArrayAABB(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ArrayAABB(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ArrayAABB(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -18025,9 +18174,9 @@ static void print_DynamicArray_POIInfo(const DynamicArray_POIInfo* obj, STI_Type
     fprintf(handle, "DynamicArray_POIInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_POIInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_POIInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_POIInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -18061,13 +18210,12 @@ static void print_CompressedData(const CompressedData* obj, STI_TypeLibrary* lib
     print_STI_uint32(&obj->UncompressedSize, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Data");
-    print_DynamicArray_STI_uint8(&obj->Data, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->Data, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UncompressAllocator");
-    fprintf(handle, "%s", "CompressedData");
-    fprintf(handle, " (%i)", (int)obj->UncompressAllocator);
+    print_MemAllocator(&obj->UncompressAllocator, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProceduralSpawn(Buffer* buffer, STI_TypeLibrary* lib, ProceduralSpawn* out) {
     if (!read_STI_String(buffer, lib, &out->SpawnTag)) return false;
@@ -18101,18 +18249,18 @@ static void print_ProceduralSpawn(const ProceduralSpawn* obj, STI_TypeLibrary* l
     print_MaterialOverride(&obj->Default, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Overrides");
-    print_DynamicArray_MaterialOverride(&obj->Overrides, lib, handle, indent+1);
+    print_DynamicArray_MaterialOverride(&obj->Overrides, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RegionMode");
     print_STI_uint8(&obj->RegionMode, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RegionRestrictions");
-    print_DynamicArray_STI_uint32(&obj->RegionRestrictions, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->RegionRestrictions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CollisionShapes");
-    print_DynamicArray_AdfShape(&obj->CollisionShapes, lib, handle, indent+1);
+    print_DynamicArray_AdfShape(&obj->CollisionShapes, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_CraftingResourceData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_CraftingResourceData* out) {
     uint32 count = 0;
@@ -18146,9 +18294,9 @@ static void print_DynamicArray_CraftingResourceData(const DynamicArray_CraftingR
     fprintf(handle, "DynamicArray_CraftingResourceData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_CraftingResourceData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_CraftingResourceData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_CraftingResourceData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -18183,18 +18331,18 @@ static void print_HunterMissionRandomizer(const HunterMissionRandomizer* obj, ST
     print_STI_int32(&obj->Id, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameShort");
-    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Enabled");
     print_STI_uint8(&obj->Enabled, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesRequired");
-    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesOptional");
-    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HairConstants(Buffer* buffer, STI_TypeLibrary* lib, HairConstants* out) {
     if (!read_STI_float32(buffer, lib, &out->SpecularGloss)) return false;
@@ -18273,7 +18421,7 @@ static void print_HairConstants(const HairConstants* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "UseColorMask");
     fprintf(handle, "%i", obj->UseColorMask);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CodexInfo(Buffer* buffer, STI_TypeLibrary* lib, CodexInfo* out) {
     if (!read_STI_uint32(buffer, lib, &out->Id)) return false;
@@ -18296,7 +18444,7 @@ static void print_CodexInfo(const CodexInfo* obj, STI_TypeLibrary* lib, FILE* ha
     fprintf(handle, "%*s%s = ", indent * 4, "", "Category");
     print_STI_uint8(&obj->Category, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HealthBuildingComponentSaveData1(Buffer* buffer, STI_TypeLibrary* lib, HealthBuildingComponentSaveData1* out) {
     if (!read_STI_float32(buffer, lib, &out->Health)) return false;
@@ -18310,7 +18458,7 @@ static void print_HealthBuildingComponentSaveData1(const HealthBuildingComponent
     fprintf(handle, "%*s%s = ", indent * 4, "", "Health");
     print_STI_float32(&obj->Health, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_MemAllocator(Buffer* buffer, STI_TypeLibrary* lib, MemAllocator* out) {
     uint32 value = 0;
@@ -18321,11 +18469,25 @@ static bool read_MemAllocator(Buffer* buffer, STI_TypeLibrary* lib, MemAllocator
 static void free_MemAllocator(MemAllocator* obj, STI_TypeLibrary* lib) {
 }
 static void print_MemAllocator(const MemAllocator* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "MemAllocator {\n");
+    fprintf(handle, "MemAllocator( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "MemAllocator");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(E_MEMALLOCATOR_CPU): {
+            fprintf(handle, "E_MEMALLOCATOR_CPU )");
+break;
+            break;
+        }
+        case(E_MEMALLOCATOR_SHARED): {
+            fprintf(handle, "E_MEMALLOCATOR_SHARED )");
+break;
+            break;
+        }
+        case(E_MEMALLOCATOR_GPU): {
+            fprintf(handle, "E_MEMALLOCATOR_GPU )");
+break;
+            break;
+        }
+    }
 }
 static bool read_DynamicArray_STI_int16(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_STI_int16* out) {
     uint32 count = 0;
@@ -18356,9 +18518,9 @@ static void print_DynamicArray_STI_int16(const DynamicArray_STI_int16* obj, STI_
     fprintf(handle, "DynamicArray_STI_int16 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_int16(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_int16(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_int16(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -18408,16 +18570,16 @@ static void print_VegetationEffect(const VegetationEffect* obj, STI_TypeLibrary*
     fprintf(handle, "VegetationEffect {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "BreakEffect");
-    print_StringHash_48c5294d_4(&obj->BreakEffect, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->BreakEffect, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CollideEffect");
-    print_StringHash_48c5294d_4(&obj->CollideEffect, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->CollideEffect, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PassThroughEffect");
-    print_StringHash_48c5294d_4(&obj->PassThroughEffect, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->PassThroughEffect, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FastThroughEffect");
-    print_StringHash_48c5294d_4(&obj->FastThroughEffect, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->FastThroughEffect, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BreakEffectOffset");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -18462,7 +18624,7 @@ static void print_VegetationEffect(const VegetationEffect* obj, STI_TypeLibrary*
     print_STI_String(&obj->FastThroughSound, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FallingLeavesEffect");
-    print_StringHash_48c5294d_4(&obj->FallingLeavesEffect, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->FallingLeavesEffect, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PassThroughSoundVolume");
     print_STI_int32(&obj->PassThroughSoundVolume, lib, handle, indent + 1);
@@ -18471,9 +18633,9 @@ static void print_VegetationEffect(const VegetationEffect* obj, STI_TypeLibrary*
     print_STI_int32(&obj->FoliageDensity, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocatorFile");
-    print_StringHash_48c5294d_4(&obj->LocatorFile, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->LocatorFile, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_IconInfo(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_IconInfo* out) {
     uint32 count = 0;
@@ -18507,9 +18669,9 @@ static void print_DynamicArray_IconInfo(const DynamicArray_IconInfo* obj, STI_Ty
     fprintf(handle, "DynamicArray_IconInfo {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_IconInfo(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_IconInfo(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_IconInfo(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -18540,7 +18702,7 @@ static void print_ControlPointLevel(const ControlPointLevel* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "Level");
     print_STI_uint32(&obj->Level, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_FogOfWar(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_FogOfWar* out) {
     uint32 count = 0;
@@ -18574,9 +18736,9 @@ static void print_DynamicArray_FogOfWar(const DynamicArray_FogOfWar* obj, STI_Ty
     fprintf(handle, "DynamicArray_FogOfWar {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_FogOfWar(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_FogOfWar(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_FogOfWar(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -18623,9 +18785,9 @@ static void print_DynamicArray_RaidSaveData2(const DynamicArray_RaidSaveData2* o
     fprintf(handle, "DynamicArray_RaidSaveData2 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RaidSaveData2(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RaidSaveData2(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RaidSaveData2(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -18655,7 +18817,7 @@ static void print_TerrainTextureInfo(const TerrainTextureInfo* obj, STI_TypeLibr
     fprintf(handle, "TerrainTextureInfo {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Data");
-    print_DynamicArray_STI_uint8(&obj->Data, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->Data, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Width");
     print_STI_uint32(&obj->Width, lib, handle, indent + 1);
@@ -18666,7 +18828,7 @@ static void print_TerrainTextureInfo(const TerrainTextureInfo* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "NumSlices");
     print_STI_uint32(&obj->NumSlices, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RaidSaveData2(Buffer* buffer, STI_TypeLibrary* lib, RaidSaveData2* out) {
     if (!read_STI_uint32(buffer, lib, &out->RaidId)) return false;
@@ -18696,9 +18858,9 @@ static void print_RaidSaveData2(const RaidSaveData2* obj, STI_TypeLibrary* lib, 
     print_STI_uint64(&obj->ElapsedTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerRaidStartingStats");
-    print_DynamicArray_PlayerRaidStatsSaveData(&obj->PlayerRaidStartingStats, lib, handle, indent+1);
+    print_DynamicArray_PlayerRaidStatsSaveData(&obj->PlayerRaidStartingStats, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProfileSaveData8(Buffer* buffer, STI_TypeLibrary* lib, ProfileSaveData8* out) {
     if (!read_DynamicArray_STI_uint64(buffer, lib, &out->Collectables)) return false;
@@ -18746,10 +18908,10 @@ static void print_ProfileSaveData8(const ProfileSaveData8* obj, STI_TypeLibrary*
     fprintf(handle, "ProfileSaveData8 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -18765,10 +18927,10 @@ static void print_ProfileSaveData8(const ProfileSaveData8* obj, STI_TypeLibrary*
     print_STI_uint64(&obj->TrackingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletedBounties");
-    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLogin");
     print_STI_int64(&obj->LastLogin, lib, handle, indent + 1);
@@ -18795,18 +18957,18 @@ static void print_ProfileSaveData8(const ProfileSaveData8* obj, STI_TypeLibrary*
     fprintf(handle, "%i", obj->AcceptedEULA);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceStorage");
-    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent+1);
+    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorage");
-    print_DynamicArray_OwnedEquipment2(&obj->SafehouseStorage, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->SafehouseStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FixVersion");
     print_STI_uint32(&obj->FixVersion, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AcceptedPolicies");
-    print_DynamicArray_AcceptedPolicyPair(&obj->AcceptedPolicies, lib, handle, indent+1);
+    print_DynamicArray_AcceptedPolicyPair(&obj->AcceptedPolicies, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DreaChargeSettings(Buffer* buffer, STI_TypeLibrary* lib, DreaChargeSettings* out) {
     if (!read_STI_float32(buffer, lib, &out->LockOnTargetDistance)) return false;
@@ -18828,7 +18990,7 @@ static void print_DreaChargeSettings(const DreaChargeSettings* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "ChargeDistance");
     print_STI_float32(&obj->ChargeDistance, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_SaveGameData1(Buffer* buffer, STI_TypeLibrary* lib, SaveGameData1* out) {
     if (!read_STI_Deferred(buffer, lib, &out->Characters)) return false;
@@ -18853,7 +19015,7 @@ static void print_SaveGameData1(const SaveGameData1* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "World");
     print_STI_Deferred(&obj->World, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharacterLooks(Buffer* buffer, STI_TypeLibrary* lib, CharacterLooks* out) {
     if (!read_DynamicArray_PlayerDecalData(buffer, lib, &out->DecalData)) return false;
@@ -18875,10 +19037,10 @@ static void print_CharacterLooks(const CharacterLooks* obj, STI_TypeLibrary* lib
     fprintf(handle, "CharacterLooks {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "DecalData");
-    print_DynamicArray_PlayerDecalData(&obj->DecalData, lib, handle, indent+1);
+    print_DynamicArray_PlayerDecalData(&obj->DecalData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Parts");
-    print_DynamicArray_STI_uint32(&obj->Parts, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->Parts, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Character");
     print_STI_uint32(&obj->Character, lib, handle, indent + 1);
@@ -18898,7 +19060,7 @@ static void print_CharacterLooks(const CharacterLooks* obj, STI_TypeLibrary* lib
     fprintf(handle, "%*s%s = ", indent * 4, "", "Gender");
     print_STI_uint8(&obj->Gender, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_StorageLevel(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_StorageLevel* out) {
     uint32 count = 0;
@@ -18932,9 +19094,9 @@ static void print_DynamicArray_StorageLevel(const DynamicArray_StorageLevel* obj
     fprintf(handle, "DynamicArray_StorageLevel {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_StorageLevel(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_StorageLevel(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_StorageLevel(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -18958,11 +19120,65 @@ static bool read_AmfUsage(Buffer* buffer, STI_TypeLibrary* lib, AmfUsage* out) {
 static void free_AmfUsage(AmfUsage* obj, STI_TypeLibrary* lib) {
 }
 static void print_AmfUsage(const AmfUsage* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "AmfUsage {\n");
+    fprintf(handle, "AmfUsage( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "AmfUsage");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(AmfUsage_Unspecified): {
+            fprintf(handle, "AmfUsage_Unspecified )");
+break;
+            break;
+        }
+        case(AmfUsage_Position): {
+            fprintf(handle, "AmfUsage_Position )");
+break;
+            break;
+        }
+        case(AmfUsage_TextureCoordinate): {
+            fprintf(handle, "AmfUsage_TextureCoordinate )");
+break;
+            break;
+        }
+        case(AmfUsage_Normal): {
+            fprintf(handle, "AmfUsage_Normal )");
+break;
+            break;
+        }
+        case(AmfUsage_Tangent): {
+            fprintf(handle, "AmfUsage_Tangent )");
+break;
+            break;
+        }
+        case(AmfUsage_BiTangent): {
+            fprintf(handle, "AmfUsage_BiTangent )");
+break;
+            break;
+        }
+        case(AmfUsage_TangentSpace): {
+            fprintf(handle, "AmfUsage_TangentSpace )");
+break;
+            break;
+        }
+        case(AmfUsage_BoneIndex): {
+            fprintf(handle, "AmfUsage_BoneIndex )");
+break;
+            break;
+        }
+        case(AmfUsage_BoneWeight): {
+            fprintf(handle, "AmfUsage_BoneWeight )");
+break;
+            break;
+        }
+        case(AmfUsage_Color): {
+            fprintf(handle, "AmfUsage_Color )");
+break;
+            break;
+        }
+        case(AmfUsage_WireRadius): {
+            fprintf(handle, "AmfUsage_WireRadius )");
+break;
+            break;
+        }
+    }
 }
 static bool read_DynamicArray_RivalMissionComplete(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RivalMissionComplete* out) {
     uint32 count = 0;
@@ -18996,9 +19212,9 @@ static void print_DynamicArray_RivalMissionComplete(const DynamicArray_RivalMiss
     fprintf(handle, "DynamicArray_RivalMissionComplete {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RivalMissionComplete(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RivalMissionComplete(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RivalMissionComplete(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -19058,10 +19274,10 @@ static void print_ProfileSaveData4(const ProfileSaveData4* obj, STI_TypeLibrary*
     fprintf(handle, "ProfileSaveData4 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -19077,10 +19293,10 @@ static void print_ProfileSaveData4(const ProfileSaveData4* obj, STI_TypeLibrary*
     print_STI_uint64(&obj->TrackingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_STI_int32(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletedBounties");
-    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLogin");
     print_STI_int64(&obj->LastLogin, lib, handle, indent + 1);
@@ -19104,10 +19320,10 @@ static void print_ProfileSaveData4(const ProfileSaveData4* obj, STI_TypeLibrary*
     fprintf(handle, "%i", obj->ShownCrashReportingEnabledOptIn);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceStorage");
-    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent+1);
+    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorage");
-    print_DynamicArray_OwnedEquipment1(&obj->SafehouseStorage, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->SafehouseStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorageSizeColumns");
     print_STI_uint8(&obj->SafehouseStorageSizeColumns, lib, handle, indent + 1);
@@ -19118,7 +19334,7 @@ static void print_ProfileSaveData4(const ProfileSaveData4* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "FixVersion");
     print_STI_uint32(&obj->FixVersion, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_OwnedEquipment1(Buffer* buffer, STI_TypeLibrary* lib, OwnedEquipment1* out) {
     for (uint32 i = 0; i < 8; ++i) {
@@ -19169,7 +19385,7 @@ static void print_OwnedEquipment1(const OwnedEquipment1* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "Row");
     print_STI_uint8(&obj->Row, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DismantleBuildingComponentSaveData1(Buffer* buffer, STI_TypeLibrary* lib, DismantleBuildingComponentSaveData1* out) {
     if (!read_STI_uint8(buffer, lib, &out->Dismantling)) return false;
@@ -19183,7 +19399,7 @@ static void print_DismantleBuildingComponentSaveData1(const DismantleBuildingCom
     fprintf(handle, "%*s%s = ", indent * 4, "", "Dismantling");
     print_STI_uint8(&obj->Dismantling, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldSaveData4(Buffer* buffer, STI_TypeLibrary* lib, WorldSaveData4* out) {
     if (!read_DynamicArray_RegionData(buffer, lib, &out->Regions)) return false;
@@ -19222,48 +19438,48 @@ static void print_WorldSaveData4(const WorldSaveData4* obj, STI_TypeLibrary* lib
     fprintf(handle, "WorldSaveData4 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData2(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Raids");
-    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent+1);
+    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_TerrainColor(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_TerrainColor* out) {
     uint32 count = 0;
@@ -19297,9 +19513,9 @@ static void print_DynamicArray_TerrainColor(const DynamicArray_TerrainColor* obj
     fprintf(handle, "DynamicArray_TerrainColor {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_TerrainColor(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_TerrainColor(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_TerrainColor(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -19325,9 +19541,9 @@ static void print_RouteInputsCollection(const RouteInputsCollection* obj, STI_Ty
     fprintf(handle, "RouteInputsCollection {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "RouteInputs");
-    print_DynamicArray_RouteInput(&obj->RouteInputs, lib, handle, indent+1);
+    print_DynamicArray_RouteInput(&obj->RouteInputs, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_TerrainPrimitive(Buffer* buffer, STI_TypeLibrary* lib, TerrainPrimitive* out) {
     for (uint32 i = 0; i < 3; ++i) {
@@ -19371,7 +19587,7 @@ static void print_TerrainPrimitive(const TerrainPrimitive* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "MaxW");
     print_STI_float32(&obj->MaxW, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RaidSaveData(Buffer* buffer, STI_TypeLibrary* lib, RaidSaveData* out) {
     if (!read_STI_uint32(buffer, lib, &out->RaidId)) return false;
@@ -19397,9 +19613,9 @@ static void print_RaidSaveData(const RaidSaveData* obj, STI_TypeLibrary* lib, FI
     print_STI_uint32(&obj->CompletedWithSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerRaidStartingStats");
-    print_DynamicArray_PlayerRaidStatsSaveData(&obj->PlayerRaidStartingStats, lib, handle, indent+1);
+    print_DynamicArray_PlayerRaidStatsSaveData(&obj->PlayerRaidStartingStats, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_LookoutList(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_LookoutList* out) {
     uint32 count = 0;
@@ -19433,9 +19649,9 @@ static void print_DynamicArray_LookoutList(const DynamicArray_LookoutList* obj, 
     fprintf(handle, "DynamicArray_LookoutList {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_LookoutList(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_LookoutList(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_LookoutList(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -19459,11 +19675,25 @@ static bool read_EquipmentGender(Buffer* buffer, STI_TypeLibrary* lib, Equipment
 static void free_EquipmentGender(EquipmentGender* obj, STI_TypeLibrary* lib) {
 }
 static void print_EquipmentGender(const EquipmentGender* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "EquipmentGender {\n");
+    fprintf(handle, "EquipmentGender( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "EquipmentGender");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(MALE): {
+            fprintf(handle, "MALE )");
+break;
+            break;
+        }
+        case(FEMALE): {
+            fprintf(handle, "FEMALE )");
+break;
+            break;
+        }
+        case(BOTH): {
+            fprintf(handle, "BOTH )");
+break;
+            break;
+        }
+    }
 }
 static bool read_DynamicArray_CachedFile(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_CachedFile* out) {
     uint32 count = 0;
@@ -19497,9 +19727,9 @@ static void print_DynamicArray_CachedFile(const DynamicArray_CachedFile* obj, ST
     fprintf(handle, "DynamicArray_CachedFile {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_CachedFile(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_CachedFile(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_CachedFile(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -19546,9 +19776,9 @@ static void print_DynamicArray_Shader(const DynamicArray_Shader* obj, STI_TypeLi
     fprintf(handle, "DynamicArray_Shader {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_Shader(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_Shader(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_Shader(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -19603,7 +19833,7 @@ static void print_CollectibleInfo(const CollectibleInfo* obj, STI_TypeLibrary* l
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_GerstnerWaves(Buffer* buffer, STI_TypeLibrary* lib, GerstnerWaves* out) {
     if (!read_STI_float32(buffer, lib, &out->shallow_surface_speed_multiplier)) return false;
@@ -19625,7 +19855,7 @@ static void print_GerstnerWaves(const GerstnerWaves* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "deep_sea_depth");
     print_STI_float32(&obj->deep_sea_depth, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RegionTitle(Buffer* buffer, STI_TypeLibrary* lib, RegionTitle* out) {
     if (!read_STI_uint32(buffer, lib, &out->TitleId)) return false;
@@ -19643,7 +19873,7 @@ static void print_RegionTitle(const RegionTitle* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "TitleType");
     print_STI_uint32(&obj->TitleType, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharactersSaveData4(Buffer* buffer, STI_TypeLibrary* lib, CharactersSaveData4* out) {
     for (uint32 i = 0; i < 4; ++i) {
@@ -19689,27 +19919,27 @@ static void print_CharactersSaveData4(const CharactersSaveData4* obj, STI_TypeLi
     print_STI_uint32(&obj->EquipmentIDCounter, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemStash");
-    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->ItemStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UnknownItemsStash");
-    print_DynamicArray_OwnedEquipment1(&obj->UnknownItemsStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->UnknownItemsStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "InaccessibleItems");
-    print_DynamicArray_OwnedEquipment1(&obj->InaccessibleItems, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment1(&obj->InaccessibleItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveCharacterIndex");
     print_STI_uint32(&obj->ActiveCharacterIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaigns");
-    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaignsReserveIds");
-    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTOutputBufferDescriptor(Buffer* buffer, STI_TypeLibrary* lib, EffectRTOutputBufferDescriptor* out) {
     if (!read_STI_uint32(buffer, lib, &out->OutputBufferSize)) return false;
@@ -19729,12 +19959,12 @@ static void print_EffectRTOutputBufferDescriptor(const EffectRTOutputBufferDescr
     print_STI_uint32(&obj->OutputBufferSize, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BatchDescriptors");
-    print_DynamicArray_EffectRTBatchDescriptor(&obj->BatchDescriptors, lib, handle, indent+1);
+    print_DynamicArray_EffectRTBatchDescriptor(&obj->BatchDescriptors, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SpecialEffectData");
-    print_DynamicArray_EffectRTSpecialEffectData(&obj->SpecialEffectData, lib, handle, indent+1);
+    print_DynamicArray_EffectRTSpecialEffectData(&obj->SpecialEffectData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldAudioInfo(Buffer* buffer, STI_TypeLibrary* lib, WorldAudioInfo* out) {
     if (!read_STI_float32(buffer, lib, &out->SortStability)) return false;
@@ -19768,9 +19998,9 @@ static void print_WorldAudioInfo(const WorldAudioInfo* obj, STI_TypeLibrary* lib
     print_STI_float32(&obj->DropOffDistance, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Zones");
-    print_DynamicArray_WorldAudioZone(&obj->Zones, lib, handle, indent+1);
+    print_DynamicArray_WorldAudioZone(&obj->Zones, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_NetworkedCollectible(Buffer* buffer, STI_TypeLibrary* lib, NetworkedCollectible* out) {
     if (!read_STI_uint64(buffer, lib, &out->ID)) return false;
@@ -19789,7 +20019,7 @@ static void print_NetworkedCollectible(const NetworkedCollectible* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "SaveFlags");
     print_STI_uint8(&obj->SaveFlags, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_STI_uint64(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_STI_uint64* out) {
     uint32 count = 0;
@@ -19820,9 +20050,9 @@ static void print_DynamicArray_STI_uint64(const DynamicArray_STI_uint64* obj, ST
     fprintf(handle, "DynamicArray_STI_uint64 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_uint64(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_uint64(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_uint64(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -19869,9 +20099,9 @@ static void print_DynamicArray_RivalRegion1(const DynamicArray_RivalRegion1* obj
     fprintf(handle, "DynamicArray_RivalRegion1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RivalRegion1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RivalRegion1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RivalRegion1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -19930,27 +20160,27 @@ static void print_CharactersSaveData6(const CharactersSaveData6* obj, STI_TypeLi
     print_STI_uint32(&obj->EquipmentIDCounter, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ItemStash");
-    print_DynamicArray_OwnedEquipment2(&obj->ItemStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->ItemStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UnknownItemsStash");
-    print_DynamicArray_OwnedEquipment2(&obj->UnknownItemsStash, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->UnknownItemsStash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "InaccessibleItems");
-    print_DynamicArray_OwnedEquipment2(&obj->InaccessibleItems, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->InaccessibleItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveCharacterIndex");
     print_STI_uint32(&obj->ActiveCharacterIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaigns");
-    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData2(&obj->MissionCampaigns, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionCampaignsReserveIds");
-    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionCampaignsReserveIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AnimalPopulationSaveData2(Buffer* buffer, STI_TypeLibrary* lib, AnimalPopulationSaveData2* out) {
     if (!read_STI_uint32(buffer, lib, &out->NameHashId)) return false;
@@ -19968,9 +20198,9 @@ static void print_AnimalPopulationSaveData2(const AnimalPopulationSaveData2* obj
     print_STI_uint32(&obj->NameHashId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RepopulateData");
-    print_DynamicArray_AnimalRepopulateSaveData(&obj->RepopulateData, lib, handle, indent+1);
+    print_DynamicArray_AnimalRepopulateSaveData(&obj->RepopulateData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RivalMissionGroupData(Buffer* buffer, STI_TypeLibrary* lib, RivalMissionGroupData* out) {
     if (!read_STI_uint32(buffer, lib, &out->GroupId)) return false;
@@ -19991,9 +20221,9 @@ static void print_RivalMissionGroupData(const RivalMissionGroupData* obj, STI_Ty
     print_STI_uint32(&obj->RegionHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MissionIds");
-    print_DynamicArray_STI_int32(&obj->MissionIds, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->MissionIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Compatibility(Buffer* buffer, STI_TypeLibrary* lib, Compatibility* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->ChildHash)) return false;
@@ -20014,18 +20244,18 @@ static void print_Compatibility(const Compatibility* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "Compatibility {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "ChildHash");
-    print_StringHash_48c5294d_4(&obj->ChildHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->ChildHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ParentHash");
-    print_StringHash_48c5294d_4(&obj->ParentHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->ParentHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Tags");
-    print_DynamicArray_STI_uint32(&obj->Tags, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->Tags, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Operation");
     fprintf(handle, "%i", obj->Operation);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StorageLevel(Buffer* buffer, STI_TypeLibrary* lib, StorageLevel* out) {
     if (!read_STI_float32(buffer, lib, &out->Capacity)) return false;
@@ -20045,7 +20275,7 @@ static void print_StorageLevel(const StorageLevel* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "UpgradeCost");
     print_STI_String(&obj->UpgradeCost, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationZone(Buffer* buffer, STI_TypeLibrary* lib, VegetationZone* out) {
     if (!read_DynamicArray_VegetationSet(buffer, lib, &out->VegetationSets)) return false;
@@ -20058,9 +20288,9 @@ static void print_VegetationZone(const VegetationZone* obj, STI_TypeLibrary* lib
     fprintf(handle, "VegetationZone {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationSets");
-    print_DynamicArray_VegetationSet(&obj->VegetationSets, lib, handle, indent+1);
+    print_DynamicArray_VegetationSet(&obj->VegetationSets, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_CharacterProfile6(Buffer* buffer, STI_TypeLibrary* lib, CharacterProfile6* out) {
     if (!read_CharacterLooks(buffer, lib, &out->CharacterLooks)) return false;
@@ -20168,7 +20398,7 @@ static void print_CharacterProfile6(const CharacterProfile6* obj, STI_TypeLibrar
     print_STI_uint8(&obj->Created, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Inventory");
-    print_DynamicArray_OwnedEquipment3(&obj->Inventory, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment3(&obj->Inventory, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PPInventorySlot");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -20191,13 +20421,13 @@ static void print_CharacterProfile6(const CharacterProfile6* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehicleData");
-    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent+1);
+    print_DynamicArray_VehicleData(&obj->VehicleData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehiclePreferedCameraThirdPerson");
     print_STI_uint8(&obj->VehiclePreferedCameraThirdPerson, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -20210,7 +20440,7 @@ static void print_CharacterProfile6(const CharacterProfile6* obj, STI_TypeLibrar
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DistanceTravelled");
     print_STI_float32(&obj->DistanceTravelled, lib, handle, indent + 1);
@@ -20222,21 +20452,21 @@ static void print_CharacterProfile6(const CharacterProfile6* obj, STI_TypeLibrar
     print_STI_float32(&obj->WeatherTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerPositions");
-    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent+1);
+    print_DynamicArray_PlayerPosition(&obj->PlayerPositions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLevelUpTS");
     print_STI_uint64(&obj->LastLevelUpTS, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GivenDLCItems");
-    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GivenDLCItems, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RaidLootAcquired");
-    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent+1);
+    print_DynamicArray_RaidLootSaveData(&obj->RaidLootAcquired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActiveTitle");
     print_STI_uint32(&obj->ActiveTitle, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_HunterMissionRandomizer(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_HunterMissionRandomizer* out) {
     uint32 count = 0;
@@ -20270,9 +20500,9 @@ static void print_DynamicArray_HunterMissionRandomizer(const DynamicArray_Hunter
     fprintf(handle, "DynamicArray_HunterMissionRandomizer {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_HunterMissionRandomizer(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_HunterMissionRandomizer(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_HunterMissionRandomizer(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -20319,9 +20549,9 @@ static void print_DynamicArray_OwnedEquipment2(const DynamicArray_OwnedEquipment
     fprintf(handle, "DynamicArray_OwnedEquipment2 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_OwnedEquipment2(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_OwnedEquipment2(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_OwnedEquipment2(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -20368,9 +20598,9 @@ static void print_DynamicArray_PfxBodyPropertiesEntry(const DynamicArray_PfxBody
     fprintf(handle, "DynamicArray_PfxBodyPropertiesEntry {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PfxBodyPropertiesEntry(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PfxBodyPropertiesEntry(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PfxBodyPropertiesEntry(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -20432,10 +20662,10 @@ static void print_ProfileSaveData7(const ProfileSaveData7* obj, STI_TypeLibrary*
     fprintf(handle, "ProfileSaveData7 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -20451,10 +20681,10 @@ static void print_ProfileSaveData7(const ProfileSaveData7* obj, STI_TypeLibrary*
     print_STI_uint64(&obj->TrackingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletedBounties");
-    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLogin");
     print_STI_int64(&obj->LastLogin, lib, handle, indent + 1);
@@ -20491,15 +20721,15 @@ static void print_ProfileSaveData7(const ProfileSaveData7* obj, STI_TypeLibrary*
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceStorage");
-    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent+1);
+    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorage");
-    print_DynamicArray_OwnedEquipment2(&obj->SafehouseStorage, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment2(&obj->SafehouseStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FixVersion");
     print_STI_uint32(&obj->FixVersion, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_EffectRTInstantiator(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_EffectRTInstantiator* out) {
     uint32 count = 0;
@@ -20533,9 +20763,9 @@ static void print_DynamicArray_EffectRTInstantiator(const DynamicArray_EffectRTI
     fprintf(handle, "DynamicArray_EffectRTInstantiator {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTInstantiator(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTInstantiator(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTInstantiator(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -20582,9 +20812,9 @@ static void print_DynamicArray_PersistentRoadSamples(const DynamicArray_Persiste
     fprintf(handle, "DynamicArray_PersistentRoadSamples {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_PersistentRoadSamples(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_PersistentRoadSamples(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_PersistentRoadSamples(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -20634,45 +20864,45 @@ static void print_EffectRTSystem(const EffectRTSystem* obj, STI_TypeLibrary* lib
     fprintf(handle, "EffectRTSystem {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmitterTemplates");
-    print_DynamicArray_EffectRTEmitterTemplate(&obj->EmitterTemplates, lib, handle, indent+1);
+    print_DynamicArray_EffectRTEmitterTemplate(&obj->EmitterTemplates, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Emitters");
-    print_DynamicArray_EffectRTEmitter(&obj->Emitters, lib, handle, indent+1);
+    print_DynamicArray_EffectRTEmitter(&obj->Emitters, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Modifiers");
-    print_DynamicArray_EffectRTModifier(&obj->Modifiers, lib, handle, indent+1);
+    print_DynamicArray_EffectRTModifier(&obj->Modifiers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Timelines");
-    print_DynamicArray_EffectRTTimeline(&obj->Timelines, lib, handle, indent+1);
+    print_DynamicArray_EffectRTTimeline(&obj->Timelines, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Instantiators");
-    print_DynamicArray_EffectRTInstantiator(&obj->Instantiators, lib, handle, indent+1);
+    print_DynamicArray_EffectRTInstantiator(&obj->Instantiators, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SpecialEffects");
-    print_DynamicArray_EffectRTSpecialEffect(&obj->SpecialEffects, lib, handle, indent+1);
+    print_DynamicArray_EffectRTSpecialEffect(&obj->SpecialEffects, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ParamHandler");
-    print_DynamicArray_EffectRTParamHandler(&obj->ParamHandler, lib, handle, indent+1);
+    print_DynamicArray_EffectRTParamHandler(&obj->ParamHandler, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Params");
-    print_DynamicArray_STI_float32(&obj->Params, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->Params, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "OutputBufferDescriptor");
     print_EffectRTOutputBufferDescriptor(&obj->OutputBufferDescriptor, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NamedParameters");
-    print_DynamicArray_EffectRTLocalParam(&obj->NamedParameters, lib, handle, indent+1);
+    print_DynamicArray_EffectRTLocalParam(&obj->NamedParameters, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NamedParametersSize");
     print_STI_uint32(&obj->NamedParametersSize, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Dependencies");
-    print_DynamicArray_StringHash_48c5294d_4(&obj->Dependencies, lib, handle, indent+1);
+    print_DynamicArray_StringHash_48c5294d_4(&obj->Dependencies, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Properties");
-    print_DynamicArray_STI_float32(&obj->Properties, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->Properties, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_HunterMission(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_HunterMission* out) {
     uint32 count = 0;
@@ -20706,9 +20936,9 @@ static void print_DynamicArray_HunterMission(const DynamicArray_HunterMission* o
     fprintf(handle, "DynamicArray_HunterMission {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_HunterMission(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_HunterMission(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_HunterMission(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -20755,9 +20985,9 @@ static void print_DynamicArray_RouteInput(const DynamicArray_RouteInput* obj, ST
     fprintf(handle, "DynamicArray_RouteInput {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RouteInput(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RouteInput(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RouteInput(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -20842,64 +21072,64 @@ static void print_HunterMission(const HunterMission* obj, STI_TypeLibrary* lib, 
     print_STI_uint8(&obj->Visible, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Type");
-    print_StringHash_48c5294d_4(&obj->Type, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Type, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Name");
-    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameShort");
-    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AchievementId");
-    print_StringHash_48c5294d_4(&obj->AchievementId, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->AchievementId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActivationEvent");
-    print_StringHash_99cfa095_6(&obj->ActivationEvent, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->ActivationEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CancelEvent");
-    print_StringHash_99cfa095_6(&obj->CancelEvent, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->CancelEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SpecificCancelEvents");
-    print_DynamicArray_SpecificEvent(&obj->SpecificCancelEvents, lib, handle, indent+1);
+    print_DynamicArray_SpecificEvent(&obj->SpecificCancelEvents, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TimeLimit");
     print_STI_int32(&obj->TimeLimit, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Summary");
-    print_StringHash_48c5294d_4(&obj->Summary, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Summary, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Description");
-    print_StringHash_48c5294d_4(&obj->Description, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Description, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Reward");
-    print_StringHash_99cfa095_6(&obj->Reward, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->Reward, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_StringHash_48c5294d_4(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_StringHash_48c5294d_4(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_StringHash_48c5294d_4(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_StringHash_48c5294d_4(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "WarboardRegion");
     print_STI_uint64(&obj->WarboardRegion, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "WarboardSubType");
-    print_StringHash_48c5294d_4(&obj->WarboardSubType, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->WarboardSubType, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Banner");
     print_STI_String(&obj->Banner, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Character");
-    print_StringHash_48c5294d_4(&obj->Character, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Character, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContentKey");
-    print_StringHash_48c5294d_4(&obj->ContentKey, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->ContentKey, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesRequired");
-    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesOptional");
-    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContentHash");
     print_STI_uint32(&obj->ContentHash, lib, handle, indent + 1);
@@ -20917,21 +21147,21 @@ static void print_HunterMission(const HunterMission* obj, STI_TypeLibrary* lib, 
     print_STI_uint8(&obj->ShowInLog, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Objectives");
-    print_DynamicArray_HunterMissionObjective(&obj->Objectives, lib, handle, indent+1);
+    print_DynamicArray_HunterMissionObjective(&obj->Objectives, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Events");
-    print_DynamicArray_HunterMissionEvent(&obj->Events, lib, handle, indent+1);
+    print_DynamicArray_HunterMissionEvent(&obj->Events, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Attachments");
-    print_DynamicArray_HunterMissionAttachment(&obj->Attachments, lib, handle, indent+1);
+    print_DynamicArray_HunterMissionAttachment(&obj->Attachments, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Randomizers");
-    print_DynamicArray_HunterMissionRandomizer(&obj->Randomizers, lib, handle, indent+1);
+    print_DynamicArray_HunterMissionRandomizer(&obj->Randomizers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Variables");
-    print_DynamicArray_HunterMissionVariable(&obj->Variables, lib, handle, indent+1);
+    print_DynamicArray_HunterMissionVariable(&obj->Variables, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_OccluderBoxCollection(Buffer* buffer, STI_TypeLibrary* lib, OccluderBoxCollection* out) {
     if (!read_DynamicArray_OccluderBox(buffer, lib, &out->Boxes)) return false;
@@ -20944,9 +21174,9 @@ static void print_OccluderBoxCollection(const OccluderBoxCollection* obj, STI_Ty
     fprintf(handle, "OccluderBoxCollection {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Boxes");
-    print_DynamicArray_OccluderBox(&obj->Boxes, lib, handle, indent+1);
+    print_DynamicArray_OccluderBox(&obj->Boxes, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Type(Buffer* buffer, STI_TypeLibrary* lib, Type* out) {
     if (!read_STI_uint32(buffer, lib, &out->SettingsNameHash)) return false;
@@ -20981,7 +21211,7 @@ static void print_Type(const Type* obj, STI_TypeLibrary* lib, FILE* handle, uint
     print_STI_float32(&obj->MaxRetriggerTime, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GlobalFilters");
-    print_DynamicArray_STI_uint32(&obj->GlobalFilters, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->GlobalFilters, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Type");
     print_STI_uint32(&obj->Type, lib, handle, indent + 1);
@@ -20998,7 +21228,7 @@ static void print_Type(const Type* obj, STI_TypeLibrary* lib, FILE* handle, uint
     fprintf(handle, "%*s%s = ", indent * 4, "", "MaxTriggerCount");
     print_STI_uint32(&obj->MaxTriggerCount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RegionTitle(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RegionTitle* out) {
     uint32 count = 0;
@@ -21032,9 +21262,9 @@ static void print_DynamicArray_RegionTitle(const DynamicArray_RegionTitle* obj, 
     fprintf(handle, "DynamicArray_RegionTitle {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RegionTitle(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RegionTitle(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RegionTitle(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -21064,15 +21294,15 @@ static void print_BitmapLayer(const BitmapLayer* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "BitmapLayer {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Areas");
-    print_DynamicArray_BitmapArea(&obj->Areas, lib, handle, indent+1);
+    print_DynamicArray_BitmapArea(&obj->Areas, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Bitfield");
-    print_DynamicArray_STI_uint32(&obj->Bitfield, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->Bitfield, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TypeHash");
     print_STI_uint32(&obj->TypeHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_UtilitiesCollection(Buffer* buffer, STI_TypeLibrary* lib, UtilitiesCollection* out) {
     if (!read_DynamicArray_SafehouseUtilities(buffer, lib, &out->Safehouses)) return false;
@@ -21085,9 +21315,9 @@ static void print_UtilitiesCollection(const UtilitiesCollection* obj, STI_TypeLi
     fprintf(handle, "UtilitiesCollection {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Safehouses");
-    print_DynamicArray_SafehouseUtilities(&obj->Safehouses, lib, handle, indent+1);
+    print_DynamicArray_SafehouseUtilities(&obj->Safehouses, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RivalNames(Buffer* buffer, STI_TypeLibrary* lib, RivalNames* out) {
     if (!read_STI_uint32(buffer, lib, &out->MachineType)) return false;
@@ -21112,7 +21342,7 @@ static void print_RivalNames(const RivalNames* obj, STI_TypeLibrary* lib, FILE* 
     print_STI_uint32(&obj->Number, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Names");
-    print_DynamicArray_STI_uint32(&obj->Names, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->Names, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "UsePrefix");
     print_STI_uint8(&obj->UsePrefix, lib, handle, indent + 1);
@@ -21123,7 +21353,7 @@ static void print_RivalNames(const RivalNames* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "%*s%s = ", indent * 4, "", "TitleType");
     print_STI_uint32(&obj->TitleType, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ChildEquipment(Buffer* buffer, STI_TypeLibrary* lib, ChildEquipment* out) {
     if (!read_STI_uint32(buffer, lib, &out->ID)) return false;
@@ -21141,7 +21371,7 @@ static void print_ChildEquipment(const ChildEquipment* obj, STI_TypeLibrary* lib
     fprintf(handle, "%*s%s = ", indent * 4, "", "EquipmentHash");
     print_STI_uint32(&obj->EquipmentHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ControlPointSaveData2(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ControlPointSaveData2* out) {
     uint32 count = 0;
@@ -21175,9 +21405,9 @@ static void print_DynamicArray_ControlPointSaveData2(const DynamicArray_ControlP
     fprintf(handle, "DynamicArray_ControlPointSaveData2 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ControlPointSaveData2(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ControlPointSaveData2(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ControlPointSaveData2(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -21209,7 +21439,7 @@ static void print_PlayerPosition(const PlayerPosition* obj, STI_TypeLibrary* lib
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PfxBreakableCompound(Buffer* buffer, STI_TypeLibrary* lib, PfxBreakableCompound* out) {
     for (uint32 i = 0; i < 16; ++i) {
@@ -21236,9 +21466,9 @@ static void print_PfxBreakableCompound(const PfxBreakableCompound* obj, STI_Type
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "breakable_instances");
-    print_DynamicArray_PfxBreakableInstance(&obj->breakable_instances, lib, handle, indent+1);
+    print_DynamicArray_PfxBreakableInstance(&obj->breakable_instances, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationLayers(Buffer* buffer, STI_TypeLibrary* lib, VegetationLayers* out) {
     if (!read_DynamicArray_VegetationForestLayer(buffer, lib, &out->VegetationForestLayer)) return false;
@@ -21257,18 +21487,18 @@ static void print_VegetationLayers(const VegetationLayers* obj, STI_TypeLibrary*
     fprintf(handle, "VegetationLayers {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationForestLayer");
-    print_DynamicArray_VegetationForestLayer(&obj->VegetationForestLayer, lib, handle, indent+1);
+    print_DynamicArray_VegetationForestLayer(&obj->VegetationForestLayer, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationBillboardLayer");
-    print_DynamicArray_VegetationBillboardLayer(&obj->VegetationBillboardLayer, lib, handle, indent+1);
+    print_DynamicArray_VegetationBillboardLayer(&obj->VegetationBillboardLayer, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationModelLayer");
-    print_DynamicArray_VegetationModelLayer(&obj->VegetationModelLayer, lib, handle, indent+1);
+    print_DynamicArray_VegetationModelLayer(&obj->VegetationModelLayer, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationPhysicsLayer");
-    print_DynamicArray_VegetationPhysicsLayer(&obj->VegetationPhysicsLayer, lib, handle, indent+1);
+    print_DynamicArray_VegetationPhysicsLayer(&obj->VegetationPhysicsLayer, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTTimeline(Buffer* buffer, STI_TypeLibrary* lib, EffectRTTimeline* out) {
     for (uint32 i = 0; i < 16; ++i) {
@@ -21330,7 +21560,7 @@ static void print_EffectRTTimeline(const EffectRTTimeline* obj, STI_TypeLibrary*
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_BuildingSaveData3(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_BuildingSaveData3* out) {
     uint32 count = 0;
@@ -21364,9 +21594,9 @@ static void print_DynamicArray_BuildingSaveData3(const DynamicArray_BuildingSave
     fprintf(handle, "DynamicArray_BuildingSaveData3 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_BuildingSaveData3(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_BuildingSaveData3(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_BuildingSaveData3(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -21413,15 +21643,15 @@ static void print_MissionSaveData(const MissionSaveData* obj, STI_TypeLibrary* l
     print_STI_uint8(&obj->CompletionState, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ValueOccuranceIds");
-    print_DynamicArray_STI_uint32(&obj->ValueOccuranceIds, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->ValueOccuranceIds, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ValueOccurences");
-    print_DynamicArray_ValueOccurance(&obj->ValueOccurences, lib, handle, indent+1);
+    print_DynamicArray_ValueOccurance(&obj->ValueOccurences, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Children");
-    print_DynamicArray_MissionSaveData(&obj->Children, lib, handle, indent+1);
+    print_DynamicArray_MissionSaveData(&obj->Children, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTSpecialEffect(Buffer* buffer, STI_TypeLibrary* lib, EffectRTSpecialEffect* out) {
     if (!read_DynamicArray_STI_uint16(buffer, lib, &out->FloatParamIndices)) return false;
@@ -21442,13 +21672,13 @@ static void print_EffectRTSpecialEffect(const EffectRTSpecialEffect* obj, STI_Ty
     fprintf(handle, "EffectRTSpecialEffect {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "FloatParamIndices");
-    print_DynamicArray_STI_uint16(&obj->FloatParamIndices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->FloatParamIndices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmitterTimelineConnections");
-    print_DynamicArray_STI_uint32(&obj->EmitterTimelineConnections, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmitterTimelineConnections, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Modifiers");
-    print_DynamicArray_STI_uint8(&obj->Modifiers, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->Modifiers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Params");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -21463,7 +21693,7 @@ static void print_EffectRTSpecialEffect(const EffectRTSpecialEffect* obj, STI_Ty
     fprintf(handle, "%*s%s = ", indent * 4, "", "Hash");
     print_STI_uint32(&obj->Hash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_LightInfo(Buffer* buffer, STI_TypeLibrary* lib, LightInfo* out) {
     for (uint32 i = 0; i < 3; ++i) {
@@ -21521,7 +21751,7 @@ static void print_LightInfo(const LightInfo* obj, STI_TypeLibrary* lib, FILE* ha
     fprintf(handle, "%*s%s = ", indent * 4, "", "CellIndex");
     print_STI_uint16(&obj->CellIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Route(Buffer* buffer, STI_TypeLibrary* lib, Route* out) {
     if (!read_STI_uint64(buffer, lib, &out->GameObjectID)) return false;
@@ -21541,7 +21771,7 @@ static void print_Route(const Route* obj, STI_TypeLibrary* lib, FILE* handle, ui
     print_STI_uint64(&obj->GameObjectID, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RoadInfos");
-    print_DynamicArray_RoadInfo(&obj->RoadInfos, lib, handle, indent+1);
+    print_DynamicArray_RoadInfo(&obj->RoadInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "IsLooping");
     print_STI_uint16(&obj->IsLooping, lib, handle, indent + 1);
@@ -21549,7 +21779,7 @@ static void print_Route(const Route* obj, STI_TypeLibrary* lib, FILE* handle, ui
     fprintf(handle, "%*s%s = ", indent * 4, "", "IsReversed");
     print_STI_uint16(&obj->IsReversed, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_OwnedEquipment3(Buffer* buffer, STI_TypeLibrary* lib, OwnedEquipment3* out) {
     for (uint32 i = 0; i < 8; ++i) {
@@ -21593,7 +21823,7 @@ static void print_OwnedEquipment3(const OwnedEquipment3* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "RefinementLevels");
     print_STI_uint8(&obj->RefinementLevels, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PersistentDataEx(Buffer* buffer, STI_TypeLibrary* lib, PersistentDataEx* out) {
     if (!read_DynamicArray_PersistentRoadSamples(buffer, lib, &out->PersistentInfo)) return false;
@@ -21606,9 +21836,9 @@ static void print_PersistentDataEx(const PersistentDataEx* obj, STI_TypeLibrary*
     fprintf(handle, "PersistentDataEx {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "PersistentInfo");
-    print_DynamicArray_PersistentRoadSamples(&obj->PersistentInfo, lib, handle, indent+1);
+    print_DynamicArray_PersistentRoadSamples(&obj->PersistentInfo, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_HunterMissionObjective(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_HunterMissionObjective* out) {
     uint32 count = 0;
@@ -21642,9 +21872,9 @@ static void print_DynamicArray_HunterMissionObjective(const DynamicArray_HunterM
     fprintf(handle, "DynamicArray_HunterMissionObjective {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_HunterMissionObjective(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_HunterMissionObjective(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_HunterMissionObjective(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -21682,10 +21912,10 @@ static void print_WorldAudioPatchZoneNormalData(const WorldAudioPatchZoneNormalD
     fprintf(handle, "WorldAudioPatchZoneNormalData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Points");
-    print_DynamicArray_WorldAudioVector4(&obj->Points, lib, handle, indent+1);
+    print_DynamicArray_WorldAudioVector4(&obj->Points, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Normals");
-    print_DynamicArray_WorldAudioVector4(&obj->Normals, lib, handle, indent+1);
+    print_DynamicArray_WorldAudioVector4(&obj->Normals, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ZoneIndex");
     print_STI_uint32(&obj->ZoneIndex, lib, handle, indent + 1);
@@ -21720,7 +21950,7 @@ static void print_WorldAudioPatchZoneNormalData(const WorldAudioPatchZoneNormalD
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationModelLayer(Buffer* buffer, STI_TypeLibrary* lib, VegetationModelLayer* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->NameHash)) return false;
@@ -21745,7 +21975,7 @@ static void print_VegetationModelLayer(const VegetationModelLayer* obj, STI_Type
     fprintf(handle, "VegetationModelLayer {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Channel");
     print_STI_int32(&obj->Channel, lib, handle, indent + 1);
@@ -21783,7 +22013,7 @@ static void print_VegetationModelLayer(const VegetationModelLayer* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "FadeOutEnd");
     print_STI_float32(&obj->FadeOutEnd, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_EquipmentEntity(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_EquipmentEntity* out) {
     uint32 count = 0;
@@ -21817,9 +22047,9 @@ static void print_DynamicArray_EquipmentEntity(const DynamicArray_EquipmentEntit
     fprintf(handle, "DynamicArray_EquipmentEntity {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EquipmentEntity(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EquipmentEntity(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EquipmentEntity(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -21850,9 +22080,9 @@ static void print_RegionTitleCollection(const RegionTitleCollection* obj, STI_Ty
     print_STI_uint32(&obj->RegionHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Titles");
-    print_DynamicArray_RegionTitle(&obj->Titles, lib, handle, indent+1);
+    print_DynamicArray_RegionTitle(&obj->Titles, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PfxSimplePartInstance(Buffer* buffer, STI_TypeLibrary* lib, PfxSimplePartInstance* out) {
     for (uint32 i = 0; i < 16; ++i) {
@@ -21880,7 +22110,7 @@ static void print_PfxSimplePartInstance(const PfxSimplePartInstance* obj, STI_Ty
     fprintf(handle, "%*s%s = ", indent * 4, "", "collision_path");
     print_STI_String(&obj->collision_path, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RoadInfo(Buffer* buffer, STI_TypeLibrary* lib, RoadInfo* out) {
     if (!read_STI_uint16(buffer, lib, &out->EdgeId)) return false;
@@ -21898,7 +22128,7 @@ static void print_RoadInfo(const RoadInfo* obj, STI_TypeLibrary* lib, FILE* hand
     fprintf(handle, "%*s%s = ", indent * 4, "", "IsReversed");
     print_STI_uint16(&obj->IsReversed, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EntityDisplayStat(Buffer* buffer, STI_TypeLibrary* lib, EntityDisplayStat* out) {
     if (!read_STI_uint32(buffer, lib, &out->DisplayName)) return false;
@@ -21927,7 +22157,7 @@ static void print_EntityDisplayStat(const EntityDisplayStat* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "IsNegative");
     fprintf(handle, "%i", obj->IsNegative);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AIGlobals_2(Buffer* buffer, STI_TypeLibrary* lib, AIGlobals_2* out) {
     if (!read_PerceptionSettings_2(buffer, lib, &out->Perception)) return false;
@@ -21952,7 +22182,7 @@ static void print_AIGlobals_2(const AIGlobals_2* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "BlackboardVariables");
     print_BlackboardVarList(&obj->BlackboardVariables, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_BitmapArea(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_BitmapArea* out) {
     uint32 count = 0;
@@ -21986,9 +22216,9 @@ static void print_DynamicArray_BitmapArea(const DynamicArray_BitmapArea* obj, ST
     fprintf(handle, "DynamicArray_BitmapArea {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_BitmapArea(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_BitmapArea(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_BitmapArea(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -22027,7 +22257,7 @@ static void print_AIGlobals(const AIGlobals* obj, STI_TypeLibrary* lib, FILE* ha
     fprintf(handle, "%*s%s = ", indent * 4, "", "BlackboardVariables");
     print_BlackboardVarList(&obj->BlackboardVariables, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_MachinePersistentStatsData(Buffer* buffer, STI_TypeLibrary* lib, MachinePersistentStatsData* out) {
     if (!read_STI_float32(buffer, lib, &out->Age)) return false;
@@ -22063,7 +22293,7 @@ static void print_MachinePersistentStatsData(const MachinePersistentStatsData* o
     fprintf(handle, "%*s%s = ", indent * 4, "", "EncountersCount");
     print_STI_uint32(&obj->EncountersCount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ForestVertex(Buffer* buffer, STI_TypeLibrary* lib, ForestVertex* out) {
     if (!read_STI_uint16(buffer, lib, &out->Y)) return false;
@@ -22090,7 +22320,7 @@ static void print_ForestVertex(const ForestVertex* obj, STI_TypeLibrary* lib, FI
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_MissionSaveData2(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_MissionSaveData2* out) {
     uint32 count = 0;
@@ -22124,9 +22354,9 @@ static void print_DynamicArray_MissionSaveData2(const DynamicArray_MissionSaveDa
     fprintf(handle, "DynamicArray_MissionSaveData2 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_MissionSaveData2(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_MissionSaveData2(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_MissionSaveData2(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -22173,9 +22403,9 @@ static void print_DynamicArray_AdfShape(const DynamicArray_AdfShape* obj, STI_Ty
     fprintf(handle, "DynamicArray_AdfShape {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AdfShape(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AdfShape(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AdfShape(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -22239,55 +22469,55 @@ static void print_WorldSaveData8(const WorldSaveData8* obj, STI_TypeLibrary* lib
     fprintf(handle, "WorldSaveData8 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData3(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Raids");
-    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent+1);
+    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Timers");
-    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent+1);
+    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerSpawnPoints");
-    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalRegions");
-    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent+1);
+    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalUsedNumbers");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -22305,7 +22535,7 @@ static void print_WorldSaveData8(const WorldSaveData8* obj, STI_TypeLibrary* lib
     fprintf(handle, "%*s%s = ", indent * 4, "", "DifficultyScaleByPlayers");
     print_STI_uint8(&obj->DifficultyScaleByPlayers, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationWorld(Buffer* buffer, STI_TypeLibrary* lib, VegetationWorld* out) {
     if (!read_VegetationLayers(buffer, lib, &out->VegetationLayers)) return false;
@@ -22339,16 +22569,16 @@ static void print_VegetationWorld(const VegetationWorld* obj, STI_TypeLibrary* l
     print_VegetationLayers(&obj->VegetationLayers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationZones");
-    print_DynamicArray_VegetationZone(&obj->VegetationZones, lib, handle, indent+1);
+    print_DynamicArray_VegetationZone(&obj->VegetationZones, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationObjects");
-    print_DynamicArray_VegetationObject(&obj->VegetationObjects, lib, handle, indent+1);
+    print_DynamicArray_VegetationObject(&obj->VegetationObjects, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DefaultVegetationZone");
     print_VegetationZone(&obj->DefaultVegetationZone, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationIndex");
-    print_DynamicArray_VegetationIndex(&obj->VegetationIndex, lib, handle, indent+1);
+    print_DynamicArray_VegetationIndex(&obj->VegetationIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BillboardAtlasDiffuse");
     print_STI_String(&obj->BillboardAtlasDiffuse, lib, handle, indent + 1);
@@ -22369,7 +22599,7 @@ static void print_VegetationWorld(const VegetationWorld* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "ImpostorCollection");
     print_ImpostorCollection(&obj->ImpostorCollection, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ProbabilityBuffer(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ProbabilityBuffer* out) {
     uint32 count = 0;
@@ -22403,9 +22633,9 @@ static void print_DynamicArray_ProbabilityBuffer(const DynamicArray_ProbabilityB
     fprintf(handle, "DynamicArray_ProbabilityBuffer {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ProbabilityBuffer(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ProbabilityBuffer(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ProbabilityBuffer(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -22441,7 +22671,7 @@ static void print_WorldAudioVector4(const WorldAudioVector4* obj, STI_TypeLibrar
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_TerrainSystem(Buffer* buffer, STI_TypeLibrary* lib, TerrainSystem* out) {
     if (!read_TerrainTextureInfo(buffer, lib, &out->TerrainDisplacementTexture)) return false;
@@ -22479,12 +22709,12 @@ static void print_TerrainSystem(const TerrainSystem* obj, STI_TypeLibrary* lib, 
     print_STI_float32(&obj->TextureTilingDetail, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TerrainMeanColor");
-    print_DynamicArray_TerrainColor(&obj->TerrainMeanColor, lib, handle, indent+1);
+    print_DynamicArray_TerrainColor(&obj->TerrainMeanColor, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ShaderRules");
-    print_DynamicArray_ShaderRules(&obj->ShaderRules, lib, handle, indent+1);
+    print_DynamicArray_ShaderRules(&obj->ShaderRules, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ArrayAABB(Buffer* buffer, STI_TypeLibrary* lib, ArrayAABB* out) {
     if (!read_STI_uint32(buffer, lib, &out->X)) return false;
@@ -22527,7 +22757,7 @@ static void print_ArrayAABB(const ArrayAABB* obj, STI_TypeLibrary* lib, FILE* ha
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ControlPointSaveData2(Buffer* buffer, STI_TypeLibrary* lib, ControlPointSaveData2* out) {
     if (!read_STI_uint64(buffer, lib, &out->Id)) return false;
@@ -22554,9 +22784,9 @@ static void print_ControlPointSaveData2(const ControlPointSaveData2* obj, STI_Ty
     print_BuildingGridSaveData1(&obj->Grid, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Buildings");
-    print_DynamicArray_BuildingSaveData2(&obj->Buildings, lib, handle, indent+1);
+    print_DynamicArray_BuildingSaveData2(&obj->Buildings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationSystemInstance(Buffer* buffer, STI_TypeLibrary* lib, VegetationSystemInstance* out) {
     if (!read_STI_uint16(buffer, lib, &out->X)) return false;
@@ -22614,9 +22844,9 @@ static void print_VegetationSystemInstance(const VegetationSystemInstance* obj, 
     print_STI_uint8(&obj->Color_B, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_VariableFloat(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_VariableFloat* out) {
     uint32 count = 0;
@@ -22650,9 +22880,9 @@ static void print_DynamicArray_VariableFloat(const DynamicArray_VariableFloat* o
     fprintf(handle, "DynamicArray_VariableFloat {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VariableFloat(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VariableFloat(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VariableFloat(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -22684,7 +22914,7 @@ static void print_ContextualHelpInfo(const ContextualHelpInfo* obj, STI_TypeLibr
     fprintf(handle, "%*s%s = ", indent * 4, "", "State");
     print_STI_uint8(&obj->State, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationForestLayer(Buffer* buffer, STI_TypeLibrary* lib, VegetationForestLayer* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->NameHash)) return false;
@@ -22711,7 +22941,7 @@ static void print_VegetationForestLayer(const VegetationForestLayer* obj, STI_Ty
     fprintf(handle, "VegetationForestLayer {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ConstructionPipelineWidth");
     print_STI_int32(&obj->ConstructionPipelineWidth, lib, handle, indent + 1);
@@ -22755,7 +22985,7 @@ static void print_VegetationForestLayer(const VegetationForestLayer* obj, STI_Ty
     fprintf(handle, "%*s%s = ", indent * 4, "", "MeshNumVertices");
     print_STI_int32(&obj->MeshNumVertices, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationPlacementSettings(Buffer* buffer, STI_TypeLibrary* lib, VegetationPlacementSettings* out) {
     if (!read_STI_float32(buffer, lib, &out->SafeRadius)) return false;
@@ -22814,10 +23044,9 @@ static void print_VegetationPlacementSettings(const VegetationPlacementSettings*
     print_STI_float32(&obj->HeightVariation, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Flags");
-    fprintf(handle, "%s", "VegetationPlacementSettings");
-    fprintf(handle, " (%i)", (int)obj->Flags);
+    print_VegetationPlacementFlags(&obj->Flags, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProfileSaveData1(Buffer* buffer, STI_TypeLibrary* lib, ProfileSaveData1* out) {
     if (!read_DynamicArray_STI_uint64(buffer, lib, &out->Collectables)) return false;
@@ -22848,10 +23077,10 @@ static void print_ProfileSaveData1(const ProfileSaveData1* obj, STI_TypeLibrary*
     fprintf(handle, "ProfileSaveData1 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -22867,10 +23096,10 @@ static void print_ProfileSaveData1(const ProfileSaveData1* obj, STI_TypeLibrary*
     print_STI_uint64(&obj->TrackingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_STI_int32(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletedBounties");
-    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLogin");
     print_STI_int64(&obj->LastLogin, lib, handle, indent + 1);
@@ -22881,7 +23110,7 @@ static void print_ProfileSaveData1(const ProfileSaveData1* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "VehiclePreferedCameraThirdPerson");
     print_STI_uint8(&obj->VehiclePreferedCameraThirdPerson, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ImpostorVertex(Buffer* buffer, STI_TypeLibrary* lib, ImpostorVertex* out) {
     for (uint32 i = 0; i < 2; ++i) {
@@ -22930,7 +23159,7 @@ static void print_ImpostorVertex(const ImpostorVertex* obj, STI_TypeLibrary* lib
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PfxBreakablePartInstance(Buffer* buffer, STI_TypeLibrary* lib, PfxBreakablePartInstance* out) {
     for (uint32 i = 0; i < 16; ++i) {
@@ -22963,7 +23192,7 @@ static void print_PfxBreakablePartInstance(const PfxBreakablePartInstance* obj, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "breaking_collision_impulse");
     print_STI_float32(&obj->breaking_collision_impulse, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RivalHistory1(Buffer* buffer, STI_TypeLibrary* lib, RivalHistory1* out) {
     if (!read_STI_uint32(buffer, lib, &out->Hash)) return false;
@@ -22981,7 +23210,7 @@ static void print_RivalHistory1(const RivalHistory1* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "Age");
     print_STI_float32(&obj->Age, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EyeGlossConstants(Buffer* buffer, STI_TypeLibrary* lib, EyeGlossConstants* out) {
     if (!read_STI_float32(buffer, lib, &out->EyeGlossiness)) return false;
@@ -23020,7 +23249,7 @@ static void print_EyeGlossConstants(const EyeGlossConstants* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "CustomEyeReflectionCube");
     fprintf(handle, "%i", obj->CustomEyeReflectionCube);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Settings(Buffer* buffer, STI_TypeLibrary* lib, Settings* out) {
     if (!read_DynamicArray_GlobalFilter(buffer, lib, &out->GlobalFilters)) return false;
@@ -23035,12 +23264,12 @@ static void print_Settings(const Settings* obj, STI_TypeLibrary* lib, FILE* hand
     fprintf(handle, "Settings {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "GlobalFilters");
-    print_DynamicArray_GlobalFilter(&obj->GlobalFilters, lib, handle, indent+1);
+    print_DynamicArray_GlobalFilter(&obj->GlobalFilters, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Types");
-    print_DynamicArray_Type(&obj->Types, lib, handle, indent+1);
+    print_DynamicArray_Type(&obj->Types, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WarSeason1(Buffer* buffer, STI_TypeLibrary* lib, WarSeason1* out) {
     if (!read_STI_int32(buffer, lib, &out->SeasonId)) return false;
@@ -23062,15 +23291,15 @@ static void print_WarSeason1(const WarSeason1* obj, STI_TypeLibrary* lib, FILE* 
     print_STI_int32(&obj->SeasonId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Factions");
-    print_DynamicArray_FactionSaveData1(&obj->Factions, lib, handle, indent+1);
+    print_DynamicArray_FactionSaveData1(&obj->Factions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ControlPoints");
-    print_DynamicArray_ControlPointSaveData3(&obj->ControlPoints, lib, handle, indent+1);
+    print_DynamicArray_ControlPointSaveData3(&obj->ControlPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NextBuildingId");
     print_STI_uint32(&obj->NextBuildingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProfileSaveData9(Buffer* buffer, STI_TypeLibrary* lib, ProfileSaveData9* out) {
     if (!read_DynamicArray_STI_uint64(buffer, lib, &out->Collectables)) return false;
@@ -23118,10 +23347,10 @@ static void print_ProfileSaveData9(const ProfileSaveData9* obj, STI_TypeLibrary*
     fprintf(handle, "ProfileSaveData9 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmotesUnlocked");
-    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->EmotesUnlocked, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "EmoteSlots");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -23137,10 +23366,10 @@ static void print_ProfileSaveData9(const ProfileSaveData9* obj, STI_TypeLibrary*
     print_STI_uint64(&obj->TrackingId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_SettingNameValuePair(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CompletedBounties");
-    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->CompletedBounties, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LastLogin");
     print_STI_int64(&obj->LastLogin, lib, handle, indent + 1);
@@ -23167,18 +23396,18 @@ static void print_ProfileSaveData9(const ProfileSaveData9* obj, STI_TypeLibrary*
     fprintf(handle, "%i", obj->AcceptedEULA);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceStorage");
-    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent+1);
+    print_DynamicArray_ResourceStorageItem(&obj->ResourceStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorage");
-    print_DynamicArray_OwnedEquipment3(&obj->SafehouseStorage, lib, handle, indent+1);
+    print_DynamicArray_OwnedEquipment3(&obj->SafehouseStorage, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FixVersion");
     print_STI_uint32(&obj->FixVersion, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AcceptedPolicies");
-    print_DynamicArray_AcceptedPolicyPair(&obj->AcceptedPolicies, lib, handle, indent+1);
+    print_DynamicArray_AcceptedPolicyPair(&obj->AcceptedPolicies, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AdfShape(Buffer* buffer, STI_TypeLibrary* lib, AdfShape* out) {
     if (!read_STI_uint8(buffer, lib, &out->Type)) return false;
@@ -23206,7 +23435,7 @@ static void print_AdfShape(const AdfShape* obj, STI_TypeLibrary* lib, FILE* hand
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTModifier(Buffer* buffer, STI_TypeLibrary* lib, EffectRTModifier* out) {
     if (!read_EffectRTParameters(buffer, lib, &out->Parameters)) return false;
@@ -23229,7 +23458,7 @@ static void print_EffectRTModifier(const EffectRTModifier* obj, STI_TypeLibrary*
     fprintf(handle, "%*s%s = ", indent * 4, "", "Flags");
     print_STI_uint32(&obj->Flags, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldSaveData11(Buffer* buffer, STI_TypeLibrary* lib, WorldSaveData11* out) {
     if (!read_DynamicArray_RegionData(buffer, lib, &out->Regions)) return false;
@@ -23284,55 +23513,55 @@ static void print_WorldSaveData11(const WorldSaveData11* obj, STI_TypeLibrary* l
     fprintf(handle, "WorldSaveData11 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData3(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Raids");
-    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent+1);
+    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Timers");
-    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent+1);
+    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerSpawnPoints");
-    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalRegions");
-    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent+1);
+    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalUsedNumbers");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -23351,12 +23580,12 @@ static void print_WorldSaveData11(const WorldSaveData11* obj, STI_TypeLibrary* l
     print_STI_uint8(&obj->DifficultyScaleByPlayers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ControlPoints");
-    print_DynamicArray_ControlPointSaveData3(&obj->ControlPoints, lib, handle, indent+1);
+    print_DynamicArray_ControlPointSaveData3(&obj->ControlPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalMissionGroups");
-    print_DynamicArray_RivalMissionGroup1(&obj->RivalMissionGroups, lib, handle, indent+1);
+    print_DynamicArray_RivalMissionGroup1(&obj->RivalMissionGroups, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldAudioZone(Buffer* buffer, STI_TypeLibrary* lib, WorldAudioZone* out) {
     if (!read_STI_String(buffer, lib, &out->Name)) return false;
@@ -23467,7 +23696,7 @@ static void print_WorldAudioZone(const WorldAudioZone* obj, STI_TypeLibrary* lib
     fprintf(handle, "%*s%s = ", indent * 4, "", "IsAllowedUnderwater");
     print_STI_uint8(&obj->IsAllowedUnderwater, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ProceduralSpawnList(Buffer* buffer, STI_TypeLibrary* lib, ProceduralSpawnList* out) {
     if (!read_DynamicArray_ProceduralSpawn(buffer, lib, &out->ProceduralSpawns)) return false;
@@ -23480,9 +23709,9 @@ static void print_ProceduralSpawnList(const ProceduralSpawnList* obj, STI_TypeLi
     fprintf(handle, "ProceduralSpawnList {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "ProceduralSpawns");
-    print_DynamicArray_ProceduralSpawn(&obj->ProceduralSpawns, lib, handle, indent+1);
+    print_DynamicArray_ProceduralSpawn(&obj->ProceduralSpawns, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_HunterMissionEvent(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_HunterMissionEvent* out) {
     uint32 count = 0;
@@ -23516,9 +23745,9 @@ static void print_DynamicArray_HunterMissionEvent(const DynamicArray_HunterMissi
     fprintf(handle, "DynamicArray_HunterMissionEvent {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_HunterMissionEvent(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_HunterMissionEvent(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_HunterMissionEvent(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -23546,12 +23775,12 @@ static void print_GameDataCollection(const GameDataCollection* obj, STI_TypeLibr
     fprintf(handle, "GameDataCollection {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Files");
-    print_DynamicArray_GDCFileEntry(&obj->Files, lib, handle, indent+1);
+    print_DynamicArray_GDCFileEntry(&obj->Files, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Names");
-    print_DynamicArray_StringHash_48c5294d_4(&obj->Names, lib, handle, indent+1);
+    print_DynamicArray_StringHash_48c5294d_4(&obj->Names, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RivalNames(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RivalNames* out) {
     uint32 count = 0;
@@ -23585,9 +23814,9 @@ static void print_DynamicArray_RivalNames(const DynamicArray_RivalNames* obj, ST
     fprintf(handle, "DynamicArray_RivalNames {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RivalNames(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RivalNames(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RivalNames(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -23631,9 +23860,9 @@ static void print_DynamicArray_STI_float32(const DynamicArray_STI_float32* obj, 
     fprintf(handle, "DynamicArray_STI_float32 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_float32(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_float32(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_float32(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -23680,9 +23909,9 @@ static void print_DynamicArray_WorldAudioPatchZoneData(const DynamicArray_WorldA
     fprintf(handle, "DynamicArray_WorldAudioPatchZoneData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_WorldAudioPatchZoneData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_WorldAudioPatchZoneData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_WorldAudioPatchZoneData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -23710,7 +23939,7 @@ static void print_SaveGameRoot(const SaveGameRoot* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "SaveData");
     print_STI_Deferred(&obj->SaveData, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_GeneralMeshConstants(Buffer* buffer, STI_TypeLibrary* lib, GeneralMeshConstants* out) {
     if (!read_STI_uint32(buffer, lib, &out->PristineIndexCount)) return false;
@@ -23737,7 +23966,7 @@ static void print_GeneralMeshConstants(const GeneralMeshConstants* obj, STI_Type
     fprintf(handle, "%*s%s = ", indent * 4, "", "IsSkinnedMesh");
     fprintf(handle, "%i", obj->IsSkinnedMesh);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTParameters(Buffer* buffer, STI_TypeLibrary* lib, EffectRTParameters* out) {
     if (!read_DynamicArray_STI_uint16(buffer, lib, &out->FloatParamIndices)) return false;
@@ -23758,21 +23987,21 @@ static void print_EffectRTParameters(const EffectRTParameters* obj, STI_TypeLibr
     fprintf(handle, "EffectRTParameters {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "FloatParamIndices");
-    print_DynamicArray_STI_uint16(&obj->FloatParamIndices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->FloatParamIndices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Int32Params");
-    print_DynamicArray_STI_int32(&obj->Int32Params, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->Int32Params, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocalParams");
-    print_DynamicArray_EffectRTLocalParam(&obj->LocalParams, lib, handle, indent+1);
+    print_DynamicArray_EffectRTLocalParam(&obj->LocalParams, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocalParamsSize");
     print_STI_uint32(&obj->LocalParamsSize, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TimelineConnections");
-    print_DynamicArray_STI_uint32(&obj->TimelineConnections, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->TimelineConnections, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RivalTerminalData(Buffer* buffer, STI_TypeLibrary* lib, RivalTerminalData* out) {
     if (!read_DynamicArray_RivalTerminalOption(buffer, lib, &out->Options)) return false;
@@ -23785,9 +24014,9 @@ static void print_RivalTerminalData(const RivalTerminalData* obj, STI_TypeLibrar
     fprintf(handle, "RivalTerminalData {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Options");
-    print_DynamicArray_RivalTerminalOption(&obj->Options, lib, handle, indent+1);
+    print_DynamicArray_RivalTerminalOption(&obj->Options, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VariableFloat(Buffer* buffer, STI_TypeLibrary* lib, VariableFloat* out) {
     if (!read_STI_String(buffer, lib, &out->Name)) return false;
@@ -23807,7 +24036,7 @@ static void print_VariableFloat(const VariableFloat* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "Val");
     print_STI_float32(&obj->Val, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_Rival1(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_Rival1* out) {
     uint32 count = 0;
@@ -23841,9 +24070,9 @@ static void print_DynamicArray_Rival1(const DynamicArray_Rival1* obj, STI_TypeLi
     fprintf(handle, "DynamicArray_Rival1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_Rival1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_Rival1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_Rival1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -23874,7 +24103,7 @@ static void print_RegionData(const RegionData* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "%*s%s = ", indent * 4, "", "Status");
     print_STI_uint32(&obj->Status, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ShaderRules(Buffer* buffer, STI_TypeLibrary* lib, ShaderRules* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->NameHash)) return false;
@@ -23938,10 +24167,10 @@ static void print_ShaderRules(const ShaderRules* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "ShaderRules {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AudioZone");
-    print_StringHash_48c5294d_4(&obj->AudioZone, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->AudioZone, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TopographyIndex");
     print_STI_uint8(&obj->TopographyIndex, lib, handle, indent + 1);
@@ -24072,7 +24301,7 @@ static void print_ShaderRules(const ShaderRules* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "BlendBias");
     print_STI_float32(&obj->BlendBias, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_SchematicTrees(Buffer* buffer, STI_TypeLibrary* lib, SchematicTrees* out) {
     if (!read_DynamicArray_SchematicTree(buffer, lib, &out->Trees)) return false;
@@ -24085,9 +24314,9 @@ static void print_SchematicTrees(const SchematicTrees* obj, STI_TypeLibrary* lib
     fprintf(handle, "SchematicTrees {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Trees");
-    print_DynamicArray_SchematicTree(&obj->Trees, lib, handle, indent+1);
+    print_DynamicArray_SchematicTree(&obj->Trees, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AmfMaterial(Buffer* buffer, STI_TypeLibrary* lib, AmfMaterial* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->Name)) return false;
@@ -24104,18 +24333,18 @@ static void print_AmfMaterial(const AmfMaterial* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "AmfMaterial {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Name");
-    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RenderBlockId");
-    print_StringHash_48c5294d_4(&obj->RenderBlockId, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->RenderBlockId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Attributes");
     print_STI_Deferred(&obj->Attributes, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Textures");
-    print_DynamicArray_StringHash_48c5294d_4(&obj->Textures, lib, handle, indent+1);
+    print_DynamicArray_StringHash_48c5294d_4(&obj->Textures, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RagdollSettings(Buffer* buffer, STI_TypeLibrary* lib, RagdollSettings* out) {
     if (!read_DynamicArray_RagdollSetting(buffer, lib, &out->Settings)) return false;
@@ -24128,9 +24357,9 @@ static void print_RagdollSettings(const RagdollSettings* obj, STI_TypeLibrary* l
     fprintf(handle, "RagdollSettings {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Settings");
-    print_DynamicArray_RagdollSetting(&obj->Settings, lib, handle, indent+1);
+    print_DynamicArray_RagdollSetting(&obj->Settings, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VehicleData(Buffer* buffer, STI_TypeLibrary* lib, VehicleData* out) {
     if (!read_STI_uint32(buffer, lib, &out->EquipmentHash)) return false;
@@ -24152,7 +24381,7 @@ static void print_VehicleData(const VehicleData* obj, STI_TypeLibrary* lib, FILE
     fprintf(handle, "%*s%s = ", indent * 4, "", "Health");
     print_STI_int32(&obj->Health, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ImpostorCollection(Buffer* buffer, STI_TypeLibrary* lib, ImpostorCollection* out) {
     if (!read_DynamicArray_ImpostorInfo(buffer, lib, &out->Impostors)) return false;
@@ -24165,9 +24394,9 @@ static void print_ImpostorCollection(const ImpostorCollection* obj, STI_TypeLibr
     fprintf(handle, "ImpostorCollection {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Impostors");
-    print_DynamicArray_ImpostorInfo(&obj->Impostors, lib, handle, indent+1);
+    print_DynamicArray_ImpostorInfo(&obj->Impostors, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_EffectRTParamHandler(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_EffectRTParamHandler* out) {
     uint32 count = 0;
@@ -24201,9 +24430,9 @@ static void print_DynamicArray_EffectRTParamHandler(const DynamicArray_EffectRTP
     fprintf(handle, "DynamicArray_EffectRTParamHandler {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTParamHandler(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTParamHandler(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTParamHandler(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -24250,9 +24479,9 @@ static void print_DynamicArray_RivalMissionGroup1(const DynamicArray_RivalMissio
     fprintf(handle, "DynamicArray_RivalMissionGroup1 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RivalMissionGroup1(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RivalMissionGroup1(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RivalMissionGroup1(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -24299,9 +24528,9 @@ static void print_DynamicArray_VegetationZone(const DynamicArray_VegetationZone*
     fprintf(handle, "DynamicArray_VegetationZone {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VegetationZone(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VegetationZone(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VegetationZone(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -24325,11 +24554,15 @@ static bool read_CraftingOptionChance(Buffer* buffer, STI_TypeLibrary* lib, Craf
 static void free_CraftingOptionChance(CraftingOptionChance* obj, STI_TypeLibrary* lib) {
 }
 static void print_CraftingOptionChance(const CraftingOptionChance* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "CraftingOptionChance {\n");
+    fprintf(handle, "CraftingOptionChance( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "CraftingOptionChance");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(ECRAFT_CHANCE_ODDS): {
+            fprintf(handle, "ECRAFT_CHANCE_ODDS )");
+break;
+            break;
+        }
+    }
 }
 static bool read_TerrainTexture(Buffer* buffer, STI_TypeLibrary* lib, TerrainTexture* out) {
     if (!read_STI_uint32(buffer, lib, &out->Width)) return false;
@@ -24358,8 +24591,7 @@ static void print_TerrainTexture(const TerrainTexture* obj, STI_TypeLibrary* lib
     print_STI_uint32(&obj->Height, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BlockCompressionType");
-    fprintf(handle, "%s", "TerrainTexture");
-    fprintf(handle, " (%i)", (int)obj->BlockCompressionType);
+    print_BlockCompressionType(&obj->BlockCompressionType, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Tiled");
     fprintf(handle, "%i", obj->Tiled);
@@ -24370,7 +24602,7 @@ static void print_TerrainTexture(const TerrainTexture* obj, STI_TypeLibrary* lib
     fprintf(handle, "%*s%s = ", indent * 4, "", "Data");
     print_CompressedData(&obj->Data, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_BuildDatas(Buffer* buffer, STI_TypeLibrary* lib, BuildDatas* out) {
     if (!read_DynamicArray_BuildData(buffer, lib, &out->Datas)) return false;
@@ -24383,9 +24615,9 @@ static void print_BuildDatas(const BuildDatas* obj, STI_TypeLibrary* lib, FILE* 
     fprintf(handle, "BuildDatas {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Datas");
-    print_DynamicArray_BuildData(&obj->Datas, lib, handle, indent+1);
+    print_DynamicArray_BuildData(&obj->Datas, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_AnimalPopulationSaveData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_AnimalPopulationSaveData* out) {
     uint32 count = 0;
@@ -24419,9 +24651,9 @@ static void print_DynamicArray_AnimalPopulationSaveData(const DynamicArray_Anima
     fprintf(handle, "DynamicArray_AnimalPopulationSaveData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AnimalPopulationSaveData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AnimalPopulationSaveData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AnimalPopulationSaveData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -24461,30 +24693,30 @@ static void print_XLSBook(const XLSBook* obj, STI_TypeLibrary* lib, FILE* handle
     fprintf(handle, "XLSBook {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Sheet");
-    print_DynamicArray_XLSSheet(&obj->Sheet, lib, handle, indent+1);
+    print_DynamicArray_XLSSheet(&obj->Sheet, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Cell");
-    print_DynamicArray_XLSCell(&obj->Cell, lib, handle, indent+1);
+    print_DynamicArray_XLSCell(&obj->Cell, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "StringData");
-    print_DynamicArray_STI_String(&obj->StringData, lib, handle, indent+1);
+    print_DynamicArray_STI_String(&obj->StringData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ValueData");
-    print_DynamicArray_STI_float32(&obj->ValueData, lib, handle, indent+1);
+    print_DynamicArray_STI_float32(&obj->ValueData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "BoolData");
-    print_DynamicArray_STI_uint8(&obj->BoolData, lib, handle, indent+1);
+    print_DynamicArray_STI_uint8(&obj->BoolData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DateData");
-    print_DynamicArray_STI_String(&obj->DateData, lib, handle, indent+1);
+    print_DynamicArray_STI_String(&obj->DateData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ColorData");
-    print_DynamicArray_STI_uint32(&obj->ColorData, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->ColorData, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Attribute");
-    print_DynamicArray_XLSAttribute(&obj->Attribute, lib, handle, indent+1);
+    print_DynamicArray_XLSAttribute(&obj->Attribute, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HunterMissionVariable(Buffer* buffer, STI_TypeLibrary* lib, HunterMissionVariable* out) {
     if (!read_STI_int32(buffer, lib, &out->Id)) return false;
@@ -24510,24 +24742,24 @@ static void print_HunterMissionVariable(const HunterMissionVariable* obj, STI_Ty
     print_STI_int32(&obj->Id, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameShort");
-    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Enabled");
     print_STI_uint8(&obj->Enabled, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesRequired");
-    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesOptional");
-    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Type");
-    print_StringHash_48c5294d_4(&obj->Type, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Type, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Default");
     print_STI_String(&obj->Default, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_ValueOccurance(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_ValueOccurance* out) {
     uint32 count = 0;
@@ -24561,9 +24793,9 @@ static void print_DynamicArray_ValueOccurance(const DynamicArray_ValueOccurance*
     fprintf(handle, "DynamicArray_ValueOccurance {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_ValueOccurance(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_ValueOccurance(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_ValueOccurance(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -24602,7 +24834,7 @@ static void print_RoadGraphEdge(const RoadGraphEdge* obj, STI_TypeLibrary* lib, 
     fprintf(handle, "%*s%s = ", indent * 4, "", "Flags");
     print_STI_uint16(&obj->Flags, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StrategicResource(Buffer* buffer, STI_TypeLibrary* lib, StrategicResource* out) {
     if (!read_StrategicResourceType(buffer, lib, &out->Type)) return false;
@@ -24617,8 +24849,7 @@ static void print_StrategicResource(const StrategicResource* obj, STI_TypeLibrar
     fprintf(handle, "StrategicResource {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Type");
-    fprintf(handle, "%s", "StrategicResource");
-    fprintf(handle, " (%i)", (int)obj->Type);
+    print_StrategicResourceType(&obj->Type, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CraftingMaterialHash");
     print_STI_uint32(&obj->CraftingMaterialHash, lib, handle, indent + 1);
@@ -24626,7 +24857,7 @@ static void print_StrategicResource(const StrategicResource* obj, STI_TypeLibrar
     fprintf(handle, "%*s%s = ", indent * 4, "", "Amount");
     print_STI_float32(&obj->Amount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_HunterMissionAttachment(Buffer* buffer, STI_TypeLibrary* lib, HunterMissionAttachment* out) {
     if (!read_STI_int32(buffer, lib, &out->Id)) return false;
@@ -24667,28 +24898,28 @@ static void print_HunterMissionAttachment(const HunterMissionAttachment* obj, ST
     print_STI_uint8(&obj->ForceActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Name");
-    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameShort");
-    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Type");
     print_STI_int32(&obj->Type, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Event");
-    print_StringHash_99cfa095_6(&obj->Event, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->Event, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Text");
-    print_StringHash_48c5294d_4(&obj->Text, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Text, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Reward");
-    print_StringHash_99cfa095_6(&obj->Reward, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->Reward, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayAudioEvent");
-    print_StringHash_99cfa095_6(&obj->PlayAudioEvent, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->PlayAudioEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "StopAudioEvent");
-    print_StringHash_99cfa095_6(&obj->StopAudioEvent, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->StopAudioEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Enabled");
     print_STI_uint8(&obj->Enabled, lib, handle, indent + 1);
@@ -24700,15 +24931,15 @@ static void print_HunterMissionAttachment(const HunterMissionAttachment* obj, ST
     print_STI_String(&obj->Entity, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesRequired");
-    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesOptional");
-    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Persist");
     print_STI_uint8(&obj->Persist, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_RivalTerminalOption(Buffer* buffer, STI_TypeLibrary* lib, RivalTerminalOption* out) {
     if (!read_STI_uint32(buffer, lib, &out->TypeHash)) return false;
@@ -24738,7 +24969,7 @@ static void print_RivalTerminalOption(const RivalTerminalOption* obj, STI_TypeLi
     fprintf(handle, "%*s%s = ", indent * 4, "", "CostConsumedAmount");
     print_STI_uint32(&obj->CostConsumedAmount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_GDCFileEntry(Buffer* buffer, STI_TypeLibrary* lib, GDCFileEntry* out) {
     if (!read_STI_Deferred(buffer, lib, &out->Data)) return false;
@@ -24763,7 +24994,7 @@ static void print_GDCFileEntry(const GDCFileEntry* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "Version");
     print_STI_uint32(&obj->Version, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_Currency(Buffer* buffer, STI_TypeLibrary* lib, Currency* out) {
     if (!read_STI_uint32(buffer, lib, &out->Name)) return false;
@@ -24803,7 +25034,7 @@ static void print_Currency(const Currency* obj, STI_TypeLibrary* lib, FILE* hand
     fprintf(handle, "%*s%s = ", indent * 4, "", "DisplayIcon");
     print_STI_String(&obj->DisplayIcon, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_EffectRTParamHandler(Buffer* buffer, STI_TypeLibrary* lib, EffectRTParamHandler* out) {
     if (!read_DynamicArray_STI_uint16(buffer, lib, &out->FloatParamIndices)) return false;
@@ -24822,18 +25053,18 @@ static void print_EffectRTParamHandler(const EffectRTParamHandler* obj, STI_Type
     fprintf(handle, "EffectRTParamHandler {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "FloatParamIndices");
-    print_DynamicArray_STI_uint16(&obj->FloatParamIndices, lib, handle, indent+1);
+    print_DynamicArray_STI_uint16(&obj->FloatParamIndices, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Timelines");
-    print_DynamicArray_STI_uint32(&obj->Timelines, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->Timelines, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Age");
     print_STI_float32(&obj->Age, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ParamHash");
-    print_DynamicArray_STI_uint32(&obj->ParamHash, lib, handle, indent+1);
+    print_DynamicArray_STI_uint32(&obj->ParamHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_RoadGraphEdgeSample(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_RoadGraphEdgeSample* out) {
     uint32 count = 0;
@@ -24867,9 +25098,9 @@ static void print_DynamicArray_RoadGraphEdgeSample(const DynamicArray_RoadGraphE
     fprintf(handle, "DynamicArray_RoadGraphEdgeSample {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_RoadGraphEdgeSample(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_RoadGraphEdgeSample(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_RoadGraphEdgeSample(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -24901,7 +25132,7 @@ static void print_IconInfo(const IconInfo* obj, STI_TypeLibrary* lib, FILE* hand
     fprintf(handle, "%*s%s = ", indent * 4, "", "State");
     print_STI_uint8(&obj->State, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_AmfBoundingBox(Buffer* buffer, STI_TypeLibrary* lib, AmfBoundingBox* out) {
     for (uint32 i = 0; i < 3; ++i) {
@@ -24937,7 +25168,7 @@ static void print_AmfBoundingBox(const AmfBoundingBox* obj, STI_TypeLibrary* lib
     }
     fprintf(handle, "\n%*s}", (indent+1)*4, "");
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_ResourceStorageItem(Buffer* buffer, STI_TypeLibrary* lib, ResourceStorageItem* out) {
     if (!read_STI_uint32(buffer, lib, &out->Name)) return false;
@@ -24955,7 +25186,7 @@ static void print_ResourceStorageItem(const ResourceStorageItem* obj, STI_TypeLi
     fprintf(handle, "%*s%s = ", indent * 4, "", "Amount");
     print_STI_uint32(&obj->Amount, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_StorageSettings(Buffer* buffer, STI_TypeLibrary* lib, StorageSettings* out) {
     if (!read_EncumbranceSettings(buffer, lib, &out->EncumbranceSettings)) return false;
@@ -24976,12 +25207,12 @@ static void print_StorageSettings(const StorageSettings* obj, STI_TypeLibrary* l
     print_EncumbranceSettings(&obj->EncumbranceSettings, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "SafehouseStorageLevels");
-    print_DynamicArray_StorageLevel(&obj->SafehouseStorageLevels, lib, handle, indent+1);
+    print_DynamicArray_StorageLevel(&obj->SafehouseStorageLevels, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResourceStorageLevels");
-    print_DynamicArray_StorageLevel(&obj->ResourceStorageLevels, lib, handle, indent+1);
+    print_DynamicArray_StorageLevel(&obj->ResourceStorageLevels, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_XLSSheet(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_XLSSheet* out) {
     uint32 count = 0;
@@ -25015,9 +25246,9 @@ static void print_DynamicArray_XLSSheet(const DynamicArray_XLSSheet* obj, STI_Ty
     fprintf(handle, "DynamicArray_XLSSheet {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_XLSSheet(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_XLSSheet(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_XLSSheet(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -25064,9 +25295,9 @@ static void print_DynamicArray_AmfMaterial(const DynamicArray_AmfMaterial* obj, 
     fprintf(handle, "DynamicArray_AmfMaterial {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AmfMaterial(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AmfMaterial(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AmfMaterial(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -25097,7 +25328,7 @@ static void print_VegetationIndex(const VegetationIndex* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "ClimateZoneIndex");
     print_STI_int16(&obj->ClimateZoneIndex, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_PlayerMusicSettings(Buffer* buffer, STI_TypeLibrary* lib, PlayerMusicSettings* out) {
     if (!read_STI_float32(buffer, lib, &out->PreZeroDistance)) return false;
@@ -25175,7 +25406,7 @@ static void print_PlayerMusicSettings(const PlayerMusicSettings* obj, STI_TypeLi
     fprintf(handle, "%*s%s = ", indent * 4, "", "StateChangeCooldown");
     print_STI_float32(&obj->StateChangeCooldown, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_StringLookupSubtitle(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_StringLookupSubtitle* out) {
     uint32 count = 0;
@@ -25209,9 +25440,9 @@ static void print_DynamicArray_StringLookupSubtitle(const DynamicArray_StringLoo
     fprintf(handle, "DynamicArray_StringLookupSubtitle {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_StringLookupSubtitle(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_StringLookupSubtitle(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_StringLookupSubtitle(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -25249,21 +25480,21 @@ static void print_StringLookupDialogueLine(const StringLookupDialogueLine* obj, 
     print_STI_uint32(&obj->NameOffset, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Subtitles");
-    print_DynamicArray_StringLookupSubtitle(&obj->Subtitles, lib, handle, indent+1);
+    print_DynamicArray_StringLookupSubtitle(&obj->Subtitles, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FMODEvent");
     print_STI_uint32(&obj->FMODEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "IncomingCall");
-    print_StringHash_48c5294d_4(&obj->IncomingCall, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->IncomingCall, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CharacterName");
-    print_StringHash_48c5294d_4(&obj->CharacterName, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->CharacterName, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Flags");
     print_STI_uint32(&obj->Flags, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_XLSAttribute(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_XLSAttribute* out) {
     uint32 count = 0;
@@ -25297,9 +25528,9 @@ static void print_DynamicArray_XLSAttribute(const DynamicArray_XLSAttribute* obj
     fprintf(handle, "DynamicArray_XLSAttribute {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_XLSAttribute(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_XLSAttribute(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_XLSAttribute(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -25346,9 +25577,9 @@ static void print_DynamicArray_VegetationBillboardLayer(const DynamicArray_Veget
     fprintf(handle, "DynamicArray_VegetationBillboardLayer {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_VegetationBillboardLayer(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_VegetationBillboardLayer(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_VegetationBillboardLayer(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -25395,9 +25626,9 @@ static void print_DynamicArray_AdfBool(const DynamicArray_AdfBool* obj, STI_Type
     fprintf(handle, "DynamicArray_AdfBool {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_AdfBool(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_AdfBool(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_AdfBool(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -25421,11 +25652,265 @@ static bool read_AmfFormat(Buffer* buffer, STI_TypeLibrary* lib, AmfFormat* out)
 static void free_AmfFormat(AmfFormat* obj, STI_TypeLibrary* lib) {
 }
 static void print_AmfFormat(const AmfFormat* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "AmfFormat {\n");
+    fprintf(handle, "AmfFormat( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "AmfFormat");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(AmfFormat_R32G32B32A32_FLOAT): {
+            fprintf(handle, "AmfFormat_R32G32B32A32_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32G32B32A32_UINT): {
+            fprintf(handle, "AmfFormat_R32G32B32A32_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32G32B32A32_SINT): {
+            fprintf(handle, "AmfFormat_R32G32B32A32_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32G32B32_FLOAT): {
+            fprintf(handle, "AmfFormat_R32G32B32_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32G32B32_UINT): {
+            fprintf(handle, "AmfFormat_R32G32B32_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32G32B32_SINT): {
+            fprintf(handle, "AmfFormat_R32G32B32_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16A16_FLOAT): {
+            fprintf(handle, "AmfFormat_R16G16B16A16_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16A16_UNORM): {
+            fprintf(handle, "AmfFormat_R16G16B16A16_UNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16A16_UINT): {
+            fprintf(handle, "AmfFormat_R16G16B16A16_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16A16_SNORM): {
+            fprintf(handle, "AmfFormat_R16G16B16A16_SNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16A16_SINT): {
+            fprintf(handle, "AmfFormat_R16G16B16A16_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16_FLOAT): {
+            fprintf(handle, "AmfFormat_R16G16B16_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16_UNORM): {
+            fprintf(handle, "AmfFormat_R16G16B16_UNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16_UINT): {
+            fprintf(handle, "AmfFormat_R16G16B16_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16_SNORM): {
+            fprintf(handle, "AmfFormat_R16G16B16_SNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16B16_SINT): {
+            fprintf(handle, "AmfFormat_R16G16B16_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32G32_FLOAT): {
+            fprintf(handle, "AmfFormat_R32G32_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32G32_UINT): {
+            fprintf(handle, "AmfFormat_R32G32_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32G32_SINT): {
+            fprintf(handle, "AmfFormat_R32G32_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R10G10B10A2_UNORM): {
+            fprintf(handle, "AmfFormat_R10G10B10A2_UNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R10G10B10A2_UINT): {
+            fprintf(handle, "AmfFormat_R10G10B10A2_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R11G11B10_FLOAT): {
+            fprintf(handle, "AmfFormat_R11G11B10_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8B8A8_UNORM): {
+            fprintf(handle, "AmfFormat_R8G8B8A8_UNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8B8A8_UNORM_SRGB): {
+            fprintf(handle, "AmfFormat_R8G8B8A8_UNORM_SRGB )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8B8A8_UINT): {
+            fprintf(handle, "AmfFormat_R8G8B8A8_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8B8A8_SNORM): {
+            fprintf(handle, "AmfFormat_R8G8B8A8_SNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8B8A8_SINT): {
+            fprintf(handle, "AmfFormat_R8G8B8A8_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16_FLOAT): {
+            fprintf(handle, "AmfFormat_R16G16_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16_UNORM): {
+            fprintf(handle, "AmfFormat_R16G16_UNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16_UINT): {
+            fprintf(handle, "AmfFormat_R16G16_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16_SNORM): {
+            fprintf(handle, "AmfFormat_R16G16_SNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R16G16_SINT): {
+            fprintf(handle, "AmfFormat_R16G16_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32_FLOAT): {
+            fprintf(handle, "AmfFormat_R32_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32_UINT): {
+            fprintf(handle, "AmfFormat_R32_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32_SINT): {
+            fprintf(handle, "AmfFormat_R32_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8_UNORM): {
+            fprintf(handle, "AmfFormat_R8G8_UNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8_UINT): {
+            fprintf(handle, "AmfFormat_R8G8_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8_SNORM): {
+            fprintf(handle, "AmfFormat_R8G8_SNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8_SINT): {
+            fprintf(handle, "AmfFormat_R8G8_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16_FLOAT): {
+            fprintf(handle, "AmfFormat_R16_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16_UNORM): {
+            fprintf(handle, "AmfFormat_R16_UNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R16_UINT): {
+            fprintf(handle, "AmfFormat_R16_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R16_SNORM): {
+            fprintf(handle, "AmfFormat_R16_SNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R16_SINT): {
+            fprintf(handle, "AmfFormat_R16_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R8_UNORM): {
+            fprintf(handle, "AmfFormat_R8_UNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R8_UINT): {
+            fprintf(handle, "AmfFormat_R8_UINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R8_SNORM): {
+            fprintf(handle, "AmfFormat_R8_SNORM )");
+break;
+            break;
+        }
+        case(AmfFormat_R8_SINT): {
+            fprintf(handle, "AmfFormat_R8_SINT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32_UNIT_VEC_AS_FLOAT): {
+            fprintf(handle, "AmfFormat_R32_UNIT_VEC_AS_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R32_R8G8B8A8_UNORM_AS_FLOAT): {
+            fprintf(handle, "AmfFormat_R32_R8G8B8A8_UNORM_AS_FLOAT )");
+break;
+            break;
+        }
+        case(AmfFormat_R8G8B8A8_TANGENT_SPACE): {
+            fprintf(handle, "AmfFormat_R8G8B8A8_TANGENT_SPACE )");
+break;
+            break;
+        }
+    }
 }
 static bool read_TerrainMaterial(Buffer* buffer, STI_TypeLibrary* lib, TerrainMaterial* out) {
     if (!read_StringHash_48c5294d_4(buffer, lib, &out->NameHash)) return false;
@@ -25463,13 +25948,13 @@ static void print_TerrainMaterial(const TerrainMaterial* obj, STI_TypeLibrary* l
     fprintf(handle, "TerrainMaterial {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameHash");
-    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameHash, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "VegetationSet");
-    print_StringHash_48c5294d_4(&obj->VegetationSet, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->VegetationSet, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "GameMaterial");
-    print_StringHash_48c5294d_4(&obj->GameMaterial, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->GameMaterial, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TextureNearIndex");
     print_STI_uint8(&obj->TextureNearIndex, lib, handle, indent + 1);
@@ -25524,7 +26009,7 @@ static void print_TerrainMaterial(const TerrainMaterial* obj, STI_TypeLibrary* l
     fprintf(handle, "%*s%s = ", indent * 4, "", "BlendBias");
     print_STI_float32(&obj->BlendBias, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_WorldSaveData10(Buffer* buffer, STI_TypeLibrary* lib, WorldSaveData10* out) {
     if (!read_DynamicArray_RegionData(buffer, lib, &out->Regions)) return false;
@@ -25579,55 +26064,55 @@ static void print_WorldSaveData10(const WorldSaveData10* obj, STI_TypeLibrary* l
     fprintf(handle, "WorldSaveData10 {\n");
     indent++;
     fprintf(handle, "%*s%s = ", indent * 4, "", "Regions");
-    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent+1);
+    print_DynamicArray_RegionData(&obj->Regions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "AnimalPopulations");
     print_AnimalPopulationsSaveData3(&obj->AnimalPopulations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Collectables");
-    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->Collectables, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LootSeed");
     print_STI_uint32(&obj->LootSeed, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "FogOfWar");
-    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent+1);
+    print_DynamicArray_FogOfWar(&obj->FogOfWar, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ReserveId");
     print_STI_int32(&obj->ReserveId, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Locations");
-    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent+1);
+    print_DynamicArray_LocationState(&obj->Locations, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CodexInfos");
-    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent+1);
+    print_DynamicArray_CodexInfo(&obj->CodexInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerFoundIcons");
-    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent+1);
+    print_DynamicArray_ReseveIconInfo(&obj->PlayerFoundIcons, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Statistics");
-    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent+1);
+    print_DynamicArray_StatisticInfo(&obj->Statistics, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpInfos");
-    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent+1);
+    print_DynamicArray_ContextualHelpInfo(&obj->ContextualHelpInfos, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ContextualHelpActive");
     print_STI_uint8(&obj->ContextualHelpActive, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "LocationSummaries");
-    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent+1);
+    print_DynamicArray_LocationSummarySaveData(&obj->LocationSummaries, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Raids");
-    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent+1);
+    print_DynamicArray_RaidSaveData2(&obj->Raids, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Timers");
-    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent+1);
+    print_DynamicArray_TimerSaveData1(&obj->Timers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "PlayerSpawnPoints");
-    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent+1);
+    print_DynamicArray_STI_uint64(&obj->PlayerSpawnPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalRegions");
-    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent+1);
+    print_DynamicArray_RivalRegion1(&obj->RivalRegions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalUsedNumbers");
     fprintf(handle, "{\n%*s", (indent+1)*4, "");
@@ -25646,12 +26131,12 @@ static void print_WorldSaveData10(const WorldSaveData10* obj, STI_TypeLibrary* l
     print_STI_uint8(&obj->DifficultyScaleByPlayers, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ControlPoints");
-    print_DynamicArray_ControlPointSaveData2(&obj->ControlPoints, lib, handle, indent+1);
+    print_DynamicArray_ControlPointSaveData2(&obj->ControlPoints, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "RivalMissionGroups");
-    print_DynamicArray_RivalMissionGroup1(&obj->RivalMissionGroups, lib, handle, indent+1);
+    print_DynamicArray_RivalMissionGroup1(&obj->RivalMissionGroups, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_VegetationPlacementFlags(Buffer* buffer, STI_TypeLibrary* lib, VegetationPlacementFlags* out) {
     uint32 value = 0;
@@ -25662,11 +26147,20 @@ static bool read_VegetationPlacementFlags(Buffer* buffer, STI_TypeLibrary* lib, 
 static void free_VegetationPlacementFlags(VegetationPlacementFlags* obj, STI_TypeLibrary* lib) {
 }
 static void print_VegetationPlacementFlags(const VegetationPlacementFlags* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {
-    fprintf(handle, "VegetationPlacementFlags {\n");
+    fprintf(handle, "VegetationPlacementFlags( ");
     indent++;
-    fprintf(handle, "%*s%s", indent * 4, "", "VegetationPlacementFlags");
-    fprintf(handle, " (%i)", (int)*obj);
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    switch(*obj) {
+        case(E_VEGETATIONPLACEMENTFLAGS_NONE): {
+            fprintf(handle, "E_VEGETATIONPLACEMENTFLAGS_NONE )");
+break;
+            break;
+        }
+        case(E_VEGETATIONPLACEMENTFLAGS_FLOATS): {
+            fprintf(handle, "E_VEGETATIONPLACEMENTFLAGS_FLOATS )");
+break;
+            break;
+        }
+    }
 }
 static bool read_HunterMissionObjective(Buffer* buffer, STI_TypeLibrary* lib, HunterMissionObjective* out) {
     if (!read_STI_int32(buffer, lib, &out->Id)) return false;
@@ -25732,10 +26226,10 @@ static void print_HunterMissionObjective(const HunterMissionObjective* obj, STI_
     print_STI_uint8(&obj->ShowProgression, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Name");
-    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->Name, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "NameShort");
-    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent+1);
+    print_StringHash_48c5294d_4(&obj->NameShort, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "TimeLimit");
     print_STI_int32(&obj->TimeLimit, lib, handle, indent + 1);
@@ -25753,22 +26247,22 @@ static void print_HunterMissionObjective(const HunterMissionObjective* obj, STI_
     print_STI_String(&obj->MarkerName, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ShowMarker");
-    print_StringHash_99cfa095_6(&obj->ShowMarker, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->ShowMarker, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "HideMarker");
-    print_StringHash_99cfa095_6(&obj->HideMarker, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->HideMarker, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ResetEvent");
-    print_StringHash_99cfa095_6(&obj->ResetEvent, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->ResetEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Reward");
-    print_StringHash_99cfa095_6(&obj->Reward, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->Reward, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "MultiplayerCompletionMode");
     print_STI_uint8(&obj->MultiplayerCompletionMode, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ActivateEvent");
-    print_StringHash_99cfa095_6(&obj->ActivateEvent, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->ActivateEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "CountRequired");
     print_STI_int32(&obj->CountRequired, lib, handle, indent + 1);
@@ -25777,18 +26271,18 @@ static void print_HunterMissionObjective(const HunterMissionObjective* obj, STI_
     print_STI_int32(&obj->InitialCount, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesRequired");
-    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesRequired, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "DependenciesOptional");
-    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent+1);
+    print_DynamicArray_STI_int32(&obj->DependenciesOptional, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "Conditions");
     print_HunterMissionRulesGroup(&obj->Conditions, lib, handle, indent + 1);
     fprintf(handle, "\n");
     fprintf(handle, "%*s%s = ", indent * 4, "", "ForceCompleteEvent");
-    print_StringHash_99cfa095_6(&obj->ForceCompleteEvent, lib, handle, indent+1);
+    print_StringHash_99cfa095_6(&obj->ForceCompleteEvent, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_InsurrectionLevel(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_InsurrectionLevel* out) {
     uint32 count = 0;
@@ -25822,9 +26316,9 @@ static void print_DynamicArray_InsurrectionLevel(const DynamicArray_Insurrection
     fprintf(handle, "DynamicArray_InsurrectionLevel {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_InsurrectionLevel(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_InsurrectionLevel(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_InsurrectionLevel(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -25852,7 +26346,7 @@ static void print_WarSaveData1(const WarSaveData1* obj, STI_TypeLibrary* lib, FI
     fprintf(handle, "%*s%s = ", indent * 4, "", "CurrentSeason");
     print_WarSeason1(&obj->CurrentSeason, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_STI_int8(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_STI_int8* out) {
     uint32 count = 0;
@@ -25883,9 +26377,9 @@ static void print_DynamicArray_STI_int8(const DynamicArray_STI_int8* obj, STI_Ty
     fprintf(handle, "DynamicArray_STI_int8 {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_STI_int8(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_STI_int8(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_STI_int8(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -25932,9 +26426,9 @@ static void print_DynamicArray_EffectRTLocalParam(const DynamicArray_EffectRTLoc
     fprintf(handle, "DynamicArray_EffectRTLocalParam {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_EffectRTLocalParam(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_EffectRTLocalParam(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_EffectRTLocalParam(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -25977,7 +26471,7 @@ static void print_PoweredConstraintParameters(const PoweredConstraintParameters*
     fprintf(handle, "%*s%s = ", indent * 4, "", "MaxForce");
     print_STI_float32(&obj->MaxForce, lib, handle, indent + 1);
     fprintf(handle, "\n");
-    fprintf(handle, "%*s}", (indent - 1) * 4, "");
+    fprintf(handle, "%*s}", (indent - 1)*4, "");
 }
 static bool read_DynamicArray_MissionSaveData(Buffer* buffer, STI_TypeLibrary* lib, DynamicArray_MissionSaveData* out) {
     uint32 count = 0;
@@ -26011,9 +26505,9 @@ static void print_DynamicArray_MissionSaveData(const DynamicArray_MissionSaveDat
     fprintf(handle, "DynamicArray_MissionSaveData {\n");
     indent++;
     if (obj->count>50) {
-        fprintf(handle, "%*s", indent*4, "");
-        print_MissionSaveData(&obj->items[0], lib, handle, indent+1);
-        fprintf(handle, "\n%*s...\n%*s", indent*4, "", indent*4, "");
+        fprintf(handle, "%*s", indent * 4, "");
+        print_MissionSaveData(&obj->items[0], lib, handle, indent + 1);
+        fprintf(handle, "\n%*s...\n%*s", indent * 4, "", indent * 4, "");
         print_MissionSaveData(&obj->items[obj->count-1], lib, handle, indent+1);
         fprintf(handle, "\n");
     } else {
@@ -26028,7 +26522,7 @@ static void print_DynamicArray_MissionSaveData(const DynamicArray_MissionSaveDat
     }
     fprintf(handle, "%*s}", (indent - 1) * 4, "");
 }
-void STI_ADF_TYPES_register_functions(STI_TypeLibrary* lib) {
+void STI_ADF_TYPES_register_functions(STI_TypeLibrary* lib){
     *((STI_ObjectMethods*)(DM_insert(&lib->object_functions, 0x000639DC))) = (STI_ObjectMethods){(readSTIObject)read_DynamicArray_MissionSaveData, (freeSTIObject)free_DynamicArray_MissionSaveData, (printSTIObject)print_DynamicArray_MissionSaveData, sizeof(DynamicArray_MissionSaveData)};
     *((STI_ObjectMethods*)(DM_insert(&lib->object_functions, 0x00306438))) = (STI_ObjectMethods){(readSTIObject)read_PoweredConstraintParameters, (freeSTIObject)free_PoweredConstraintParameters, (printSTIObject)print_PoweredConstraintParameters, sizeof(PoweredConstraintParameters)};
     *((STI_ObjectMethods*)(DM_insert(&lib->object_functions, 0x0073CA09))) = (STI_ObjectMethods){(readSTIObject)read_DynamicArray_EffectRTLocalParam, (freeSTIObject)free_DynamicArray_EffectRTLocalParam, (printSTIObject)print_DynamicArray_EffectRTLocalParam, sizeof(DynamicArray_EffectRTLocalParam)};
@@ -26579,13 +27073,14 @@ void STI_ADF_TYPES_register_functions(STI_TypeLibrary* lib) {
     *((STI_ObjectMethods*)(DM_insert(&lib->object_functions, 0xFD88832A))) = (STI_ObjectMethods){(readSTIObject)read_InstanceDataPatch, (freeSTIObject)free_InstanceDataPatch, (printSTIObject)print_InstanceDataPatch, sizeof(InstanceDataPatch)};
     *((STI_ObjectMethods*)(DM_insert(&lib->object_functions, 0xFDF5F6EC))) = (STI_ObjectMethods){(readSTIObject)read_DynamicArray_ControlPointSaveData1, (freeSTIObject)free_DynamicArray_ControlPointSaveData1, (printSTIObject)print_DynamicArray_ControlPointSaveData1, sizeof(DynamicArray_ControlPointSaveData1)};
     *((STI_ObjectMethods*)(DM_insert(&lib->object_functions, 0xFE9699DB))) = (STI_ObjectMethods){(readSTIObject)read_PersistentRoadSamples, (freeSTIObject)free_PersistentRoadSamples, (printSTIObject)print_PersistentRoadSamples, sizeof(PersistentRoadSamples)};
-    for(uint32 ___i=0;___i<18841;___i++) {
-        const char* str = STI_ADF_TYPES_hash_strings_string[___i];
-        uint64 hash =     STI_ADF_TYPES_hash_strings_hash[___i];
-        String* slot = DM_insert(&lib->hash_strings, hash);
-        if(slot) String_from_cstr(slot, str);
-    }
+for(uint32 ___i=0;___i<18841;___i++) {
+    const char* str = STI_ADF_TYPES_hash_strings_string[___i];
+    uint64 hash =     STI_ADF_TYPES_hash_strings_hash[___i];
+    String* slot = DM_insert(&lib->hash_strings, hash);
+    if(slot) String_from_cstr(slot, str);
 }
+}
+
 const char* STI_ADF_TYPES_hash_strings_string[18841] = {
 "", "exp02_sm040_obj070", "models/characters/machines/skirmisher/skir_classc_internal_core_processor.meshc", "intermediate/models/characters/humans/corpse/civilian/civlian_corpse_male_01_jacket_rain_m.hrmeshc", "strt_conv_look_here", "Meta14/Rule13/variation:1 (template:_Default_)", "models/characters/humans/male/npc/npc_m_facial_hair_m_01_a.meshc", "tut_binoculars", "models/characters/humans/male/outfit_sneaky_resistance_hat_m_42_sneaky_resistance.meshc", "models/characters/machines/harvester/harvester_fueltank03.meshc", 
 "mission_wm_13_missionitem_02_header", "models/characters/machines/firebird/firebird_reaper_jet_armor_r_r_03.meshc", "mi_logbook01", "intermediate/models/characters/machines/harvester/harvester_sidearmor_15.hrmeshc", "Meta21/Rule47/primitive:1 (template:z01_grass_field_01)", "intermediate/models/characters/machines/dreadnought/dreadnought_class_d_legplate_right_damaged.hrmeshc", "Meta2/default", "models/characters/humans/male/textures/clothes/accessory_neck_03/accessory_neck_03_a_nrm.ddsc", "models/characters/humans/male/player_m_hat_m_10_summer_bucket_hat_camo.meshc", "Meta8/Rule117", 
@@ -28473,7 +28968,6 @@ const char* STI_ADF_TYPES_hash_strings_string[18841] = {
 "basegame_im060_obj030_dia010_complete", "hb_unlock_revamp_mission_complete", "am_06_clue_02", "exp03_sm080_obj060_completed", "fm050_obj060_satellite_dish_activated", "exp03_mm030_obj033_dia_010.finish", "fake_pot_3_broken", "exp02_mm040_obj030_dia_020.stop", "wm_16b_key_taken", "meta_protagonist_southcoast_tick_05", 
 "poi_clue_02_hide", 
 };
-
 const uint64 STI_ADF_TYPES_hash_strings_hash[18841] = {
 0, 96389, 655903, 668040, 758558, 1095388, 1435356, 1455702, 1691896, 1789320, 
 2090295, 2652703, 3102347, 3309813, 3917783, 4457650, 4663808, 5132740, 5150578, 5231982, 
@@ -30068,296 +30562,296 @@ const uint64 STI_ADF_TYPES_hash_strings_hash[18841] = {
 4288102017, 4288199811, 4288219370, 4288232634, 4288285663, 4288514260, 4288889829, 4288925242, 4289020925, 4289499846, 
 4289736900, 4289765515, 4289787000, 4289895321, 4289940354, 4289967153, 4290003610, 4290359878, 4290507939, 4290571305, 
 4290624199, 4291063433, 4291168804, 4291174818, 4291359809, 4291467057, 4291992594, 4293299664, 4293541110, 4293753038, 
-4293974935, 4294175127, 4294247525, 4294273527, 4294561930, 4294956565, 53284155447, 271239138585, 291922142354, 307337600955, 
-341528158027, 450989971363, 489709081897, 616834989570, 840801231808, 919700405056, 1070484177361, 1148105320433, 1176954575728, 1273346298386, 
-1320052933424, 1403946601816, 1503923099970, 1697849725911, 1747983800728, 2052247664875, 2056404806289, 2068166688229, 2115376736709, 2121571335291, 
-2178655430650, 2213456533428, 2329376101434, 2400909386015, 2521900311353, 2685099209907, 2685869773218, 2686031509366, 3170730389559, 3341865221853, 
-3681979018398, 3734586186717, 3740905754775, 3992415128574, 3999691808042, 4235634165384, 4379392416851, 4397363552979, 4408112067163, 4470671191485, 
-4554928502527, 4609414395766, 4757538129231, 4817288649183, 4851449289084, 4895331961804, 4962956842846, 5052886770548, 5152408846406, 5187550352544, 
-5210078453810, 5377039983465, 5422104565705, 5472834101193, 5489860909940, 5561846680101, 5575419739693, 5606458491264, 5663603648014, 5830370449851, 
-5947712102059, 6023213165930, 6047573177904, 6073902407418, 6276460251749, 6287514492969, 7026238277695, 7184547465014, 7228067585190, 7266781494105, 
-7345733280635, 7423173334516, 7544698013858, 7591692415387, 7628150823432, 7678078638658, 7684575857294, 7862011576387, 7926034568819, 8085177241787, 
-8205776666486, 8210380797151, 8287108563507, 8295650083377, 8300799315753, 8663829380945, 8707194465853, 8928871028806, 8929822178692, 9126011511312, 
-9151849162189, 9178357648352, 9296724565363, 9325251587954, 9335864176424, 9431415027951, 9687282453098, 9946904931152, 10007100694361, 10065859800185, 
-10070924659685, 10103263004329, 10109663501139, 10133085885571, 10214958007990, 10269621617676, 10440396923984, 10498444259462, 10533128457776, 10693179764281, 
-10703573843855, 10806080565591, 10850934300546, 10924715544750, 10932460783338, 11117090632743, 11306805321536, 11425525690463, 11429118954079, 11635423760914, 
-11760438670771, 11760564149466, 11782136308942, 11830183037824, 11843727434972, 11910938591052, 12124226500036, 12257024510476, 12274759638870, 12466309003898, 
-12538988955378, 12597160351043, 12682698300376, 12762522408280, 12801502516659, 12837209304752, 12859536896177, 12931609681588, 12941154758440, 12968587016918, 
-12986050144660, 12999285971637, 13019974880404, 13438295034020, 13452378891563, 13452701549927, 13497526536991, 13533479265539, 13595033092326, 13756909180628, 
-13845797749218, 14062168501137, 14067473717610, 14132511280929, 14376275324226, 14465029645977, 14484039108572, 14617905069293, 14678329429742, 14743607405336, 
-14910683382121, 14916154560988, 14984815531623, 15229342233964, 15232145203331, 15475899611814, 15588144368137, 15631670128893, 15796500926059, 15824362080203, 
-15968117552626, 16111989791538, 16114645294766, 16500226889510, 16509459086161, 16592871838798, 16609265172754, 16798134396837, 16805321985402, 16919486863990, 
-16946031532306, 17141933637263, 17180183523780, 17353088288331, 17394960181944, 17514412321782, 17633547722790, 17774135480688, 17849833349700, 17857209786940, 
-17906909118005, 18082699935566, 18134657905854, 18315054934528, 18335135976305, 18337715998991, 18524860681137, 18623088560496, 18769643596145, 18827752509673, 
-18987557922068, 19000459149812, 19115486148891, 19263596987785, 19386358167632, 19438746072395, 19677208915548, 19895095200852, 20082087009293, 20088018080414, 
-20385711883586, 20390343681712, 20654684505484, 20819908220286, 20876227492859, 20972029895483, 21022793119847, 21473782785132, 21618659437118, 21652459227421, 
-21664556269813, 21713084490656, 21961133635648, 22012402001993, 22415361675570, 22434707685904, 22442332526524, 22444606184378, 22621950001555, 22652709439219, 
-22666258018225, 22667751470938, 22682603983777, 22702952630856, 22727088583484, 22790033116822, 22790753339397, 23011437389262, 23113274519570, 23317651332988, 
-23544427698246, 23552281267287, 23593710832109, 23619391197303, 23796630575233, 23856987561644, 23912387463374, 24009622999116, 24073743233076, 24213628464932, 
-24340518472588, 24475375512936, 24550873722893, 24582848109805, 24607353860953, 24608272772880, 24843672444724, 24926077665336, 24939169375855, 25037873948997, 
-25079626625923, 25207280819033, 25298969717243, 25427987486879, 25483711280332, 25511422376028, 25520413448428, 25594103014050, 25731865398437, 25772542057100, 
-25885232176370, 26002602842083, 26041277641560, 26076813450252, 26078042143348, 26086460053675, 26319491326843, 26600429121630, 26733203157497, 26756171217533, 
-26904720149635, 26919496636532, 26936607921720, 27031375331882, 27076148215437, 27221468266225, 27295599737016, 27297732911583, 27336594429423, 27376085133699, 
-27461656611465, 27870322689794, 27922611021197, 27961265578681, 27992063076811, 28092013625288, 28383657246512, 28610286505171, 28679447185909, 28725390261898, 
-29067875339346, 29069262808711, 29415749054811, 29435526063342, 29635104904392, 29756049383847, 29799593727479, 29910926302373, 30026537201240, 30414183820081, 
-30969140817308, 31307079058589, 31331845148869, 31412798716513, 31478447227204, 31573004322328, 31648022053747, 31693829230273, 31836693104258, 31853911324155, 
-32062235629773, 32133054009820, 32145254061481, 32303402326633, 32464789648437, 32492866843791, 32656651859124, 32683822066790, 32692940272975, 32790621574602, 
-32820026587603, 32841765588404, 33076811731130, 33686851024796, 33713364284131, 33715415782196, 33901972496292, 34126523737205, 34252444862206, 34307983293926, 
-34434677558557, 34550766129237, 34576462149816, 34686454193740, 34704685354669, 34717044348510, 34729504292443, 34920970566834, 34965491044534, 35114201029633, 
-35192096863968, 35379000555300, 35423647680386, 35603808864163, 35654977551065, 35679773136644, 35889123398668, 35924773380812, 35957109527174, 35980909510017, 
-36039233500345, 36156578703766, 36249401523856, 36280295006129, 36420988672698, 36648446183105, 36687782734322, 36770993520356, 37132058968972, 37276883936352, 
-37439423583395, 37490520988883, 37517782574796, 37579107941269, 37599591249991, 37742910471308, 37792462968840, 37804939817719, 37887899885149, 37993327575415, 
-38010950295093, 38495771210294, 38538780682943, 38747418838115, 38786964041583, 38829165693790, 38869928885096, 38913323262465, 38923960193746, 38941145531107, 
-39049494105441, 39054786658463, 39108176522561, 39144373375051, 39201780936751, 39418087563399, 39430867354002, 39476601798092, 39483485592271, 39580928832006, 
-39611881395143, 39842938102433, 39908282940321, 39949107343833, 39981574004964, 40068866297566, 40096013869287, 40137390185784, 40246386976362, 40251014651042, 
-40298985784369, 40330941232215, 40359131795842, 40600109735832, 40606070416418, 40648497809894, 40707626119229, 40943950393451, 41071278522234, 41244374341770, 
-41271904391515, 41405768194988, 41567680722819, 41851143286420, 42233547332855, 42448342973324, 42549635257746, 42550667261135, 42614467060729, 42631612491979, 
-43266543811423, 43279684951675, 43460977289311, 43520669273845, 43739250703801, 43971343726969, 44004868674754, 44023861267483, 44104044483716, 44242709125664, 
-44262628257015, 44385700729416, 44664314620296, 44855212003818, 44893627206767, 44965187706667, 45044255484681, 45058259368751, 45068190283841, 45199707404845, 
-45356540923095, 45421703860929, 45483972094046, 45650160567802, 45721630074078, 45736181652496, 45833768090158, 45926354658800, 46015248254755, 46397272826696, 
-46570375827905, 46911438852288, 47167625317728, 47295372974031, 47419428816155, 47558226814943, 47599623278444, 47723232345160, 47740319551163, 47874618849909, 
-47894525405614, 47905478425262, 47962471109596, 48045712150284, 48051762167606, 48168218628369, 48310879205867, 48331563757175, 48513893563790, 48592369144936, 
-48803801214333, 49020199944356, 49111465731125, 49122702084145, 49142662396200, 49292486782104, 49320220591896, 49517293314077, 49554334993067, 49560302167347, 
-49607843358066, 49635012984048, 49673624162834, 49833156623138, 49888219128015, 49930901418984, 50044249323346, 50119446622179, 50217600449600, 50320787358772, 
-50376444114070, 50411939368348, 50432379079092, 50495078865643, 50798021429909, 50853316058773, 50892448776596, 50907322050414, 50939938881466, 50960329788211, 
-50964851164500, 50984057834218, 51006220019015, 51094274888716, 51163955186553, 51246170545672, 51328628347310, 51816801996113, 52129676816429, 52217991868871, 
-52283186360432, 52379145010701, 52390353890056, 52426862486824, 52578781145949, 52714533419262, 52727219744638, 52739962677901, 52743501036023, 52796307074399, 
-52800963638243, 52969780345286, 52979931254458, 53001726914240, 53073415802183, 53106189936077, 53147275120959, 53226327371375, 53242450946479, 53291210327596, 
-53441714072845, 53591763423383, 53615031740130, 53621760944136, 53679922349984, 53766212151667, 53842927279702, 53961506732678, 53997953544352, 54011054718072, 
-54112912435774, 54130781583328, 54201954031412, 54213547186614, 54257030331131, 54400449842342, 54415252942339, 54790443533417, 54953751365737, 54995497188131, 
-55006574673450, 55124952737347, 55263750891259, 55368109465308, 55899907063557, 55976674083007, 56003903443367, 56090009095961, 56209770269330, 56218531933036, 
-56256250853192, 56260983528517, 56303247637145, 56362866975400, 56420937587669, 56451545035370, 56592235403719, 56625192061002, 56696417564625, 56796450255159, 
-57093276134159, 57172503918631, 57478215964676, 57504158834641, 57518128083286, 57666513659768, 57864730437300, 57865910299003, 57897813733604, 57959444524490, 
-58112643038277, 58296677121398, 58430125569858, 58442500087881, 58492318164696, 58625961380315, 58633613193049, 58655238642216, 59077139207194, 59331331033403, 
-59556279920841, 59650580979923, 59653144378311, 59666175761407, 59690159835560, 59856525265570, 60011665402046, 60033184597649, 60153750054800, 60155312001775, 
-60201251320864, 60324742929819, 60398167982686, 60437574662386, 60464892305460, 60567487085275, 60620542660802, 60694032532345, 60707333472031, 60726299717859, 
-60919270285568, 61010747852478, 61140130629700, 61155447993615, 61245188649430, 61293639865340, 61309849182639, 61367994910219, 61387203492889, 61409133781217, 
-61825464314268, 61938409914015, 61951162627671, 61976122145602, 61990105951549, 62133278254147, 62139842855985, 62237596537914, 62333845753449, 62359148089110, 
-62403608141633, 62461051714646, 62464773066753, 62605885665343, 62745134543408, 62756556350457, 63087346607261, 63090644636651, 63340927445892, 63576190061133, 
-63596839537659, 63617759044918, 63633687382660, 64159191409669, 64260243416406, 64345275173086, 64818102973861, 64915464141299, 64960721044527, 65364312669621, 
-65377587462905, 65488088762225, 65880699760618, 65939530331510, 66098540804018, 66547667302539, 66612493549944, 66799861800786, 66919790608980, 67083741023407, 
-67139524525498, 67205132465646, 67238357244238, 67272211580318, 67360254224924, 67510274941300, 67517334913631, 67533948084569, 67802434730826, 67893492109640, 
-67912423823558, 67919672753220, 67944644791473, 68060595466802, 68239677369863, 68298541451311, 68366737814702, 68524876468688, 68710100233309, 68761574876432, 
-68789074317974, 69035796239729, 69102616701634, 69126365887316, 69188377534412, 69211637627307, 69238475210799, 69272109243145, 69425368803743, 69468322407264, 
-69499929658330, 69562892484714, 69834550112015, 69891199333660, 69984615557417, 70237387162980, 70341829617713, 70643448677033, 70644124625487, 70649879237660, 
-70682670177022, 70745002930776, 70750456603529, 71091162179381, 71228097092859, 71374546282945, 71623212622041, 71631012452285, 71957791264978, 72126660829754, 
-72441977699200, 72567210164397, 72579629818932, 72679390076130, 72970227203660, 73070790345388, 73259588208593, 73284055787148, 73302283611042, 73369116901088, 
-73371465353557, 73382485315608, 73480418537057, 73581794070071, 74139359588691, 74199670603129, 74267625251178, 74494446687112, 74760449075279, 74773928218461, 
-74773936315770, 74790314000303, 74898985136075, 74934254810581, 75010139362730, 75230529296083, 75564015298916, 75588846527120, 75599640546230, 75640962663794, 
-75678335515344, 75693306402010, 75869589362196, 75886653829698, 75999149490125, 76162319875761, 76219302872642, 76386298658998, 76441464336112, 76749916188011, 
-76794672233026, 76965135237113, 76980305654233, 77253902415154, 77304587063038, 77485473131284, 77517743637360, 77557842294808, 77623495775877, 77705870313697, 
-77957861427048, 77958802464559, 78001791655066, 78035400095930, 78178158329358, 78198737260107, 78225185259761, 78254742703530, 78303102287921, 78380724669802, 
-78421810727349, 78429013356283, 78464969722109, 78478310517504, 78509798321875, 78749411191736, 78779321900870, 79036033370884, 79103347274134, 79336975351409, 
-79423411291925, 79674372339303, 79679385242289, 79735182759077, 79858820426659, 79893241638080, 79910326181240, 79944426076430, 80096275862731, 80137291355616, 
-80208307075554, 80254101417793, 80254668772308, 80333408979021, 80379077742341, 80421480197210, 80687896339585, 80792558465256, 80808522203267, 80830994208446, 
-80907900226935, 80908354958469, 80949017249586, 80988703205046, 81086848615798, 81087550986545, 81099368637888, 81112491796680, 81115735850498, 81270618296675, 
-81347838676781, 81633529345528, 81634494070828, 81636971933682, 81680931955819, 81778074955909, 81791463395032, 81901512951369, 81904118674404, 82091985461499, 
-82120880731847, 82199907890952, 82542430558115, 82755124109876, 83043531820175, 83108375597368, 83153175583218, 83193213638685, 83212931003976, 83331469744598, 
-83548834892251, 83652323185527, 83665169238230, 83738644550118, 83822446192914, 83877078935466, 83951364831486, 83975863999011, 84006726499741, 84016880251988, 
-84342949283340, 84375960444258, 84415924756915, 84438849133423, 84461699380261, 84623547575418, 84976618922268, 85041386705808, 85052637278806, 85136438693632, 
-85160203918622, 85161258127325, 85205301760607, 85228541929808, 85436551859031, 85461185348706, 85510411232013, 85687470899225, 85807554949085, 85902187209815, 
-86167573606763, 86218674631061, 86274437238492, 86293002349878, 86294817528741, 86487248559788, 86526302695761, 86584409576585, 86729433673273, 86810022619410, 
-86836419298669, 86910531314779, 87082832414591, 87198261760371, 87367831892746, 87379638068048, 87544642496113, 87572445063605, 87602579110841, 87807852355820, 
-87915677046650, 87951243184149, 88026233370509, 88133219652857, 88234209031734, 88274979194589, 88341146680675, 88425305337299, 88610445277383, 88616920517878, 
-88787666264043, 88828421503056, 89095615907416, 89140125013287, 89190745797176, 89218784682448, 89244147722437, 89266919245764, 89481025683961, 89696744893677, 
-89773539085402, 89840383862104, 89875626973647, 89906884235308, 89997493551058, 90090159025743, 90091182794920, 90132422575516, 90202710947785, 90240818230322, 
-90263567524972, 90369967082700, 90562195170479, 90596147541544, 90733279817044, 90787340105867, 90935528760250, 91018467737375, 91199046070886, 91516228296240, 
-91563580944883, 91752543054097, 91839344289326, 91889290620605, 91915728745399, 92219579619097, 92297609625676, 92302543767530, 92339492188915, 92340773809641, 
-92383929250240, 92439776580177, 92541455762378, 92656392329093, 92944959137528, 92977368403202, 93165670281756, 93405113412776, 93423626394476, 93532520836355, 
-93766616150187, 93810398445257, 93907020105647, 94042088466810, 94057921529405, 94243170583276, 94255201937003, 94297095551083, 94369760396851, 94442526856400, 
-94584375810829, 94601987140775, 94621373525522, 94632900676276, 94699075844259, 94794160976010, 94838077034828, 94851206653978, 95135235179938, 95152866039482, 
-95152896287958, 95300318172143, 95323337532641, 95330590563764, 95363395544217, 95386841538252, 95442685471260, 95616188805201, 95800855690544, 95847806619756, 
-95968550148597, 95994640926079, 96127156622426, 96190615882714, 96222293282116, 96543332350914, 96547176834330, 96549724039551, 96662619732777, 96869545198906, 
-96946936068091, 97204524251324, 97228618434487, 97352052231864, 97379182845373, 97487343487164, 97598130310970, 97613777542287, 97637787303531, 97747838475262, 
-97756016972134, 97868743388922, 97894388504458, 98092695249857, 98116498714538, 98277881040671, 98418671806864, 98522621928940, 98560869981546, 98603278330368, 
-98689379189017, 98745079964862, 98762683063280, 99078569242223, 99087467411495, 99142581783612, 99204266018929, 99230623875872, 99330728310179, 99416375499936, 
-99503652678438, 99512139508296, 99593165851721, 99734671853268, 99953038778686, 100086204766076, 100099534120614, 100104291334265, 100121246417801, 100128609587978, 
-100141765151663, 100510972519703, 100635841048698, 100787862109340, 100896826064143, 101250014613367, 101504600358849, 101599160339109, 101647810356728, 101661261361235, 
-101683305261651, 101714670642194, 101752127719371, 101987761638170, 102191110938277, 102445231746594, 102503245970730, 102513584517298, 102821483698394, 102895658149487, 
-103385434607405, 103477077857711, 103570503925982, 103592020702777, 103628006001055, 103712856239102, 103834817311664, 104028798691876, 104180514985586, 104184111555651, 
-104243308721109, 104632641738011, 104669173417464, 104792469875545, 104872463690171, 104916374371235, 105068571736794, 105556834954208, 105584725652275, 105589999636202, 
-105713689385370, 105751774783904, 105812680989911, 106018609371312, 106105369301884, 106236570508772, 106354227076263, 106440851911765, 106511098262696, 106649599518944, 
-106963567024786, 106966666720657, 107111621739164, 107235578537592, 107265478235723, 107385687863683, 107473549846386, 107622961799474, 107714204399313, 107810817471359, 
-107887137281326, 107949720390707, 108147445820670, 108182152217182, 108385486662010, 108499378826979, 108552207525439, 108839820832190, 108928391422275, 109038854464516, 
-109139284979623, 109172485348416, 109248811465179, 109340187194611, 109385525464640, 109435012417549, 109494893679015, 109514579029204, 109517559798720, 109811132623802, 
-110039813583540, 110043266476619, 110050062320597, 110150393999106, 110260915660704, 110290306839883, 110290780452858, 110380433867623, 110428123556088, 110460087870453, 
-110537128225563, 110545318272830, 110595359486655, 110635132778550, 110807180446847, 110898281733356, 110976358442709, 111070669302815, 111213996005637, 111363423756750, 
-111396860960313, 111475957744392, 111571388934701, 111752260365892, 111815588357876, 111840146787331, 111930830000230, 112092922153746, 112129602877486, 112152787573661, 
-112180189307559, 112223522155032, 112407049949905, 112422035634144, 112671259328300, 112686767506891, 113048166205868, 113511107281821, 113682229107123, 113800815936296, 
-113811876527310, 113939518495250, 114013152101043, 114065265372940, 114116343230742, 114227693702104, 114302281709680, 114401696869444, 114415325361369, 114676986950300, 
-114716654845636, 114989620052747, 115119289611478, 115195148849675, 115453340901864, 115501091360552, 115522563161784, 115589782707417, 115662580914532, 115722111349180, 
-115904038383373, 115953275296243, 115987837226614, 116073534309097, 116095949694582, 116241777600164, 116370563394298, 116464954588565, 116573381811955, 116742778906534, 
-116867413244292, 116875889176712, 116945456140878, 116950382475924, 117088606430547, 117095116177130, 117129380029255, 117164005408504, 117225455075684, 117239959577278, 
-117251801818741, 117450400750318, 117564331757277, 117603540678427, 117858054511047, 117893609200521, 117901481759017, 117913547181014, 117962087970011, 118053831698016, 
-118303733691048, 118474973644737, 118537511942656, 118676458462223, 118742923649774, 118828662494197, 118863794421688, 119175689294580, 119199233484739, 119280150326068, 
-119371325188868, 119423431649085, 119432644735418, 119482615293670, 119490382644992, 119549075419661, 119895937462213, 120014464562999, 120157303436809, 120183692618306, 
-120193401272343, 120400117960879, 120428704423924, 120583356179208, 120638867896038, 120738644999346, 120752003721915, 120772979410332, 120782760996554, 120801233169774, 
-120844024774483, 121268158498261, 121692050604024, 121809097763155, 121834078991736, 121984475171444, 122046633837240, 122183868839416, 122217192817623, 122259291622995, 
-122440572507575, 122486850323427, 122547071868380, 122624539817807, 122661062459227, 122857154760782, 122864517644026, 122880411370361, 122918035230207, 122928648524979, 
-122971358329185, 122974303308384, 123022089667667, 123276600203981, 123279138434458, 123411592342263, 123486928101685, 123548044481580, 123679244179529, 123699053661872, 
-123806634750145, 123893636130565, 123960769314178, 124028410138643, 124054183671547, 124205020164232, 124375429555347, 124482118685899, 124791261239039, 124865230914930, 
-124985736444276, 125030435974460, 125108327620376, 125158104830712, 125159698551537, 125219289840337, 125576377254073, 125649848911276, 125681433715246, 125699917832394, 
-125764079141334, 125806678859907, 125892251905015, 126001638424597, 126005042307868, 126090460326180, 126157581907566, 126158991505196, 126188615725364, 126250509915354, 
-126781291250208, 126954071694522, 126959111523708, 126997025659414, 127095642288833, 127163234422468, 127229680242733, 127347198943806, 127509046417464, 127585582418561, 
-127624831709152, 127698828721420, 127715649689132, 127726242747413, 127799080206709, 127846412663887, 127856111249479, 127868554066285, 127901742954436, 127986004055747, 
-128018426041059, 128031404534038, 128127227176391, 128132111825681, 128248375582184, 128291109891789, 128306479395287, 128316416194521, 128421577762929, 128518380020695, 
-128591213626319, 128601835262992, 128666588199161, 128892548430618, 129012073697574, 129137763649254, 129155299334020, 129287117962772, 129350312259031, 129356224974820, 
-129419578855536, 129485932575931, 129506075819333, 129553367248004, 129648320925049, 129718662698325, 129729398311640, 129755093236184, 129755802598766, 129855182290069, 
-130214781396852, 130226062150135, 130260439575884, 130408784174969, 130476093720885, 130540632574471, 130630814469263, 130676494705875, 130808754878440, 130830850174059, 
-130867868885963, 130919314464072, 131051370307276, 131256864898208, 131319604948623, 131464691845313, 131661276988388, 131810732780692, 131821420699812, 131922064469730, 
-131998965392571, 132003555951157, 132059004204279, 132153834337351, 132239622740765, 132400836363325, 132441049532979, 132492220659158, 132864262002320, 132993665474795, 
-133064297618362, 133261637690998, 133534210067698, 133584939776695, 133679600274675, 133894968738230, 133913869764247, 134028364634446, 134135363391917, 134167281896692, 
-134193287612101, 134289391602648, 134457930072344, 134499112521953, 134554711954493, 134566754890891, 134578323899722, 134705071873326, 134783184017085, 134811666683787, 
-135008264852351, 135071059291583, 135168415062030, 135219886160984, 135227827488160, 135324517294745, 135327522966265, 135509303593846, 135574576246452, 135813447287533, 
-135818665304521, 135827700122971, 135909986684000, 136001562174208, 136014301197483, 136067301498102, 136138524518785, 136155406180078, 136160812914735, 136185266322437, 
-136185789418896, 136333861375767, 136508514400158, 136595341289886, 136644777559266, 136742830129222, 136896255484112, 136908405435810, 137016379886775, 137106557467010, 
-137115891689029, 137212105617100, 137278539115064, 137400620827601, 137513740807191, 137556888902802, 137598655164532, 137599561671749, 137838140359753, 137895924157197, 
-137940157861422, 138145316887059, 138222801358863, 138355139708700, 138423816731264, 138455207440557, 138470601298037, 138554027557080, 138623290849229, 138741084285198, 
-138760776708064, 138771037766510, 138833340996559, 139081947805016, 139214452888245, 139240187761240, 139305458506340, 139330775361786, 139459809858092, 139718969387662, 
-139767591978486, 139809750258845, 139917382199159, 139925343645995, 139950308331771, 139954883171451, 140014280058452, 140035441602823, 140092161003195, 140120326217102, 
-140123939816170, 140188253615141, 140247260707351, 140555654720934, 140621860575803, 140640248533638, 140728740435546, 140774445221422, 141173639437961, 141267162793507, 
-141521369402861, 141527790064343, 141577289297764, 141711840929485, 141836466771275, 142285306501314, 142293946470442, 142535681343560, 142673031548388, 142812495548757, 
-142820935496768, 142850154680747, 142865165299594, 142887648751949, 142915364260598, 142962242583615, 143109378384503, 143114470495932, 143162210469257, 143425216987382, 
-143431993964992, 143631850125182, 143684609068083, 143748455422696, 143753616176337, 143758942536080, 143781874748566, 143797275688129, 143837655668445, 143916903397664, 
-143958954526755, 144086225941913, 144188533429673, 144238635460780, 144272094550875, 144363924164025, 144401596520630, 144695709367296, 144723504663816, 144896488532736, 
-144999805805048, 145005877930285, 145078664262391, 145293267240759, 145348026850532, 145663261935046, 145818242880759, 145873849242296, 145914479041348, 146029481738915, 
-146088831129200, 146116006521679, 146158395421598, 146355297759043, 146417794393152, 146472689702407, 146652190903217, 146912880434888, 147126451550529, 147157012299252, 
-147365012510158, 147382700011801, 147542495406214, 147543553258596, 147574581364186, 147616970493681, 147843469279294, 147877239233071, 147969512239338, 148047097572067, 
-148055440218075, 148256398267670, 148529519232792, 148575059560111, 148660214832251, 148753224162754, 148777363946778, 148862267125313, 148897197014741, 148941361441615, 
-148947756447522, 149025234057109, 149072415583481, 149108080762578, 149208581549556, 149418153366443, 149633708103545, 149638273598559, 149959543798067, 150109299446183, 
-150221443292359, 150275661952392, 150444571462009, 150617308753082, 150765778412164, 150780350532634, 150818531602439, 150847904318114, 151175732513082, 151188377879469, 
-151432825281274, 151564710555302, 151573417483369, 151673013141310, 151785146642101, 151884270716989, 151956696954902, 151978707404775, 152027075919319, 152200925522503, 
-152357037542450, 152645639412371, 152707977390937, 153130479213859, 153235906813002, 153331878614239, 153449370851326, 153517972465674, 153638732222466, 153642315431633, 
-153675993079808, 153709371852952, 153753975370506, 153777279270778, 153860251447050, 153886801985935, 154024385162125, 154189759229672, 154210838141043, 154213737082552, 
-154374035911331, 154563469032482, 154615885741151, 154853415090013, 154995195549235, 155008220459545, 155150920240140, 155162835296792, 155175400727839, 155288901753516, 
-155525903081225, 155529195635663, 155586532786641, 155649439835289, 155972441325791, 156069221970740, 156131594524964, 156145938666656, 156157030404677, 156172082241767, 
-156439870715189, 156505847919030, 156664593103395, 156853308352408, 156927794100278, 156992936428232, 157076766301288, 157436736885378, 157504224644292, 157797253455580, 
-158064679909687, 158065213321787, 158106031351105, 158107248273856, 158143239963893, 158341403710186, 158392408053455, 158545691288977, 158575922334175, 158583201889184, 
-158653185303075, 158765598591444, 158896871149626, 158956552343050, 158960491879774, 158998286845293, 159093871451925, 159177576462064, 159185281471338, 159219229385761, 
-159372746847007, 159524276587003, 159726686493419, 159762479320751, 159767084916248, 159889843140602, 159949209229436, 159968054491041, 159992668699899, 160116472752169, 
-160218561869235, 160271249715400, 160596829579151, 160639739745311, 160653749235856, 160760828804185, 160796458304538, 160885737877804, 160941322509883, 160947544505630, 
-161005817328545, 161145359419690, 161334446808993, 161497784648180, 161503086456197, 161561095016621, 161689287360435, 161757439650066, 161860626246608, 161876802500341, 
-161939565603714, 162127002179653, 162399618726448, 162501077699582, 162514306788772, 162516206456246, 162658333389520, 162686597067918, 162692748735283, 162868800755982, 
-163010776573950, 163085016667029, 163099979463396, 163182017076600, 163449261545320, 163467305477423, 163480117348193, 163496302321015, 163575519861932, 163909211563127, 
-163920815914813, 163964627833082, 163998940460705, 164066601999077, 164079439077155, 164237633016158, 164372328523115, 164430678046707, 164457850245465, 164562032214282, 
-164590875857796, 164626373143926, 164726234086802, 164775662843457, 164838921999452, 164884561994780, 165162653657109, 165317999692509, 165551508689675, 165662346637688, 
-166055997843360, 166118654674851, 166239753253736, 166300882409144, 166568593522587, 166626811292396, 166680221315837, 166765907229447, 166780946440349, 166850717325146, 
-166887337043370, 166920628091730, 166965811992277, 167260332352123, 167346958727375, 167521781587736, 167539247609446, 167607541822738, 167693013792719, 167981921196918, 
-168882000212188, 168960735885965, 168967908066697, 169086269770654, 169215374744020, 169284837593368, 169289067215084, 169301899289907, 169800299700805, 169967455871123, 
-170067333967840, 170302174481379, 170365949730583, 170497348381229, 170562006036698, 171192542263542, 171460951725138, 171495058108716, 171513692112572, 171614209714283, 
-171649610267358, 171937002201743, 171995083078705, 171998482528956, 172061431752898, 172121097207585, 172163835757571, 172193308585538, 172309668563633, 172513883022298, 
-172568332100166, 172666903771335, 172743232658890, 172758736721844, 172920834171944, 172984900638630, 172992932205567, 173411024619298, 173457514952284, 173469687999628, 
-173604521243947, 173875781756298, 174045436912689, 174162526617337, 174199549097752, 174240972837998, 174292397238281, 174414715302015, 174500160310060, 174577725102409, 
-174594699494019, 174714994128995, 174914611407430, 174972603085995, 174994296250166, 175017438176634, 175046548535488, 175082604514210, 175231727292350, 175292765483252, 
-175360121455594, 175560884105704, 175570229824957, 175607010476241, 175715146835187, 175718605772950, 176007974014990, 176049298748108, 176076331709794, 176251233135556, 
-176403770023205, 176725332616037, 176794055175249, 176819272765514, 176861515120200, 177028935561935, 177111516019025, 177218302217425, 177241468675859, 177244741412696, 
-177270196894773, 177431739206840, 177447054335343, 177511326275018, 177631461910696, 177705322558510, 177725740293462, 177784509030222, 177852461625410, 177912587382513, 
-177931360025775, 177998840715567, 178058374759925, 178121548545066, 178236996096102, 178300561438819, 178360910720940, 178712946856602, 178770016240378, 178934389209303, 
-178994824473144, 179082989109200, 179109275290794, 179165877312481, 179286969006611, 179717989647788, 179800821894143, 179846710692270, 179893804859838, 180073489660727, 
-180199707561531, 180267965443213, 180436453152222, 180500726684379, 180636147261072, 180667997872961, 180764316376809, 180899764811398, 180908031429335, 181118135603581, 
-181133504994462, 181181803142707, 181468021662629, 181505874814076, 181547901160834, 181790593519114, 181816481274737, 181918962509088, 182039901823159, 182108639512266, 
-182268307059706, 182426141231009, 182452108721213, 182613562564964, 182884754432091, 182911204397305, 182936382074814, 182936968845828, 182967151947909, 183009449678120, 
-183035752851357, 183340106571816, 183446402249589, 183465547402653, 183499781702671, 183592938073516, 183812236609819, 183996117823588, 184087653801988, 184186887067658, 
-184212842796943, 184375174311155, 184416776691971, 184797456618847, 184876095635239, 184888230247307, 185216676955246, 185282669634469, 185625104550290, 185639218249687, 
-185662191564362, 185798961303901, 185819545242453, 186008108186233, 186120694978082, 186177882732130, 186273696429537, 186405382428942, 186460781783798, 186469526907823, 
-186472526373116, 186481742870967, 186732238471845, 186744858890095, 186903179018792, 186998668212113, 187191442298238, 187275263836272, 187430591089644, 187706649439739, 
-187733954180965, 187776535636317, 187777069875178, 187911599285693, 187970963990917, 187971752341230, 188049045166405, 188212059769893, 188401417507471, 188429120720829, 
-188433074213508, 188441013484117, 188477439890515, 188569562666602, 188684761287104, 188753080824838, 188832590649988, 188903769295714, 188912373290062, 188967947233814, 
-188972673806542, 189094501166393, 189143361064249, 189151877928382, 189222880510865, 189241283273265, 189245091049243, 189358525258493, 189410226608286, 189479978683808, 
-189637812674918, 189721598902210, 189780793193000, 189828275652792, 190258791039115, 190347117354874, 190538727341384, 190562664996864, 190693389467547, 190737116194271, 
-190814591179264, 190845315622398, 191000623431409, 191082415999471, 191093934362959, 191170389538638, 191367257444287, 191367791401175, 191525359570689, 191557705464013, 
-191640220670054, 191710241128695, 191743389904884, 191898759359538, 191945702999099, 191971081485835, 191993218281318, 192114658604586, 192258296001146, 192267392643508, 
-192439257450312, 192485422462633, 192658749832518, 192761766129201, 192803889060934, 192846635293314, 192900110313676, 193301448718449, 193359904958313, 193475392948013, 
-193524734016817, 193535220011266, 193851175334627, 194190873241418, 194289826773928, 194348296431032, 194486987384036, 194522637205705, 194823963468067, 194942368740064, 
-194960328588121, 195193617191399, 195304333117729, 195516636897321, 195555788872566, 195596747900241, 195624899514700, 195774657469109, 195776526480520, 195860885807377, 
-195912409899686, 196170870192303, 196379514798528, 196399514673621, 196447835918757, 196480420252119, 196488149678936, 196589754755705, 196725659139848, 196737342643668, 
-196799540898739, 196830737427148, 196951462910701, 196971456807887, 197084627428986, 197110135892793, 197214578486797, 197338099001067, 197388519503191, 197458075454835, 
-197500053894815, 197613726048342, 197671071838416, 197686010566138, 197706830429000, 197742560702332, 197836941165563, 197846633473986, 197892516673584, 198066707758751, 
-198068453753724, 198201272014559, 198333139557202, 198661745772242, 198683965474167, 198741989769094, 198830585076760, 198841657189279, 198892892863843, 198893877751386, 
-198895722429467, 199178208022208, 199304571398340, 199375031395950, 199388134282271, 199455407902438, 199693309469860, 200036869618818, 200090621216027, 200250327020741, 
-200313814626321, 200370608330535, 200475038810646, 200563088779167, 200935256804934, 200956830030993, 200957477087660, 201090635504481, 201136837171117, 201145446378812, 
-201162707543222, 201306046494529, 201370279990025, 201479240893079, 201585078294611, 201589813117420, 201595271666497, 201609215868678, 201665617766153, 201786783629356, 
-201845426296193, 201915675587033, 202025277729025, 202058652140442, 202123039700195, 202150189684713, 202152883094975, 202177245625803, 202193658651617, 202209307192242, 
-202218692622627, 202245370288566, 202258112059155, 202260996047188, 202365461632239, 202426428651299, 202459200931155, 202559187960616, 202566759519105, 202682468876315, 
-202931109969377, 203045594130195, 203087157329433, 203126385631682, 203148256416264, 203287513029478, 203478719650131, 203493054506288, 203749056514389, 203970248348867, 
-204014360318730, 204017181221322, 204036226792931, 204124529573622, 204143913068993, 204144359083612, 204189759565883, 204301593426857, 204547552512535, 204554449578979, 
-204630761051361, 204796713822302, 205050638353012, 205133707156461, 205142621879513, 205143337842979, 205263469648102, 205290368479002, 205377420454223, 205595916288926, 
-205597880015351, 205668470165829, 205755234983762, 205774270894479, 205777946443499, 206258415542743, 206453473740746, 206492320529855, 206643804190412, 206699598277234, 
-206705359417836, 206785130834350, 206838517568559, 206988319413278, 207342817680958, 207345749701971, 207669779278997, 207899913383382, 207999385922913, 208109805343326, 
-208214069740219, 208221967102605, 208384693023030, 208476037340264, 208515762317781, 208520081075025, 208715861656863, 208809964998371, 208872975494068, 208954741173330, 
-208986178516109, 209196209565542, 209224237127013, 209325953377580, 209403263989513, 209435383889467, 209496931087947, 209599026021117, 209640136580825, 209711753652598, 
-209761147712465, 209774742963301, 209809903136668, 209853500182178, 209863462655038, 210072291447559, 210109123135343, 210294081436950, 210318186291294, 210406776154391, 
-210632056839854, 210660054551653, 210856013721804, 210876643233024, 210949883353253, 211122992341280, 211177896826377, 211269002313974, 211314183768441, 211613882853827, 
-211748373884846, 212014200307644, 212094312397123, 212117914350781, 212134916031111, 212344675823637, 212455529297027, 212567823101898, 212639422638455, 212655477345796, 
-212862473613116, 212876530740811, 212965124074065, 213003550254316, 213057842037170, 213080992409247, 213449406215212, 213456060124598, 213758874687928, 213780984036109, 
-214107111235474, 214154800144045, 214174536394052, 214293292192762, 214320442293155, 214472639605282, 214475882772427, 214503301272343, 214522315641797, 214551121390755, 
-214649841357805, 214679524550726, 214842050822800, 214967943539062, 215065128929181, 215076332855512, 215190862125929, 215264700322885, 215475347233641, 215649400239363, 
-215729115943202, 215751678359737, 215778231179110, 215876704308128, 215898087485436, 215957357172150, 215961504825466, 216275693029422, 216366571100448, 216473135080507, 
-216600838237313, 216687439466991, 216723738550284, 216779284937978, 216804047537248, 216820597607793, 216825119706781, 216897172189102, 216966189566068, 217121260129335, 
-217318282088490, 217369106906094, 217446945294547, 217595747291803, 217620806418971, 217690786999649, 217808409108180, 217837750760224, 217839312596718, 218081782235684, 
-218088981131562, 218165463428114, 218177340391709, 218178464840937, 218303828698232, 218375156631165, 218379107615100, 218504612035542, 218722003062112, 218874932687393, 
-219136493443506, 219366445780028, 219367116267568, 219435667822337, 219572329962219, 219705855105109, 219831675334372, 219832766444590, 219833692182814, 219892866389045, 
-219946794437668, 219953011531473, 220005580741831, 220097712442463, 220272586582601, 220301777748788, 220361821744184, 220456240328225, 220501943438476, 220921456161320, 
-221047608449043, 221062269895406, 221335396991806, 221480110749329, 221501690156442, 221561505673521, 221587235487181, 221632651742125, 221635355642630, 221683695470791, 
-221714230648649, 221725597122674, 221770256894475, 222000182301429, 222039385535913, 222043826164712, 222084333182850, 222384970733761, 222395850468810, 222463624054477, 
-222559290727494, 222569016304196, 222707815742430, 222716581257183, 222902943423717, 222910179262784, 223071963633660, 223146592853517, 223194474448881, 223246542539805, 
-223259684874037, 223492992092364, 223505051009953, 223527680695301, 223702506694559, 223842289993318, 223917454825339, 223936583460539, 224003373439364, 224153679661718, 
-224249977414270, 224289258520953, 224427772773208, 224485303373111, 224565841189565, 224593015997494, 224598706103177, 225015402739771, 225233339396000, 225265925506321, 
-225295051365362, 225335843735136, 225410616570617, 225488231542041, 225545325791219, 225662010755253, 226000982968096, 226047522891215, 226177207846745, 226257226215021, 
-226259153580284, 226285769275600, 226393860438478, 226397740336095, 226601872517748, 226793076297620, 226927231200875, 226975529014330, 227012926237352, 227013723919954, 
-227036898525124, 227068332109836, 227116874464347, 227267808266900, 227346349717773, 227688471935826, 228017281813153, 228060808932644, 228099767684400, 228113720817715, 
-228289520209439, 228316466920504, 228473319305916, 228486689707907, 228736324155544, 228858313870887, 228874549776748, 228968280474218, 228978260529046, 229166165066308, 
-229200378472873, 229237438287382, 229251506610167, 229300534874125, 229339554141510, 229418978414917, 229529134558840, 229598497571419, 229779353454193, 229880728445206, 
-230022434879309, 230082456285702, 230089294919851, 230103592568167, 230115918382433, 230158014785895, 230361678351220, 230391621831413, 230561849141417, 230723305551878, 
-230733107515013, 230852485860057, 230865848263734, 230867682319632, 230899276209593, 230923292723263, 230989707340318, 231093886861274, 231315932572484, 231414433887739, 
-231422246176520, 231450757953379, 231519859439047, 231582664879442, 231684636139416, 231920270930590, 231952227019964, 231999592363501, 232038687497822, 232043399327915, 
-232283202760108, 232589365242602, 232995683292973, 233132921483169, 233262682612876, 233473407674390, 233494038784456, 233578493753626, 233636163913834, 233727541211754, 
-233883930210948, 233930176714991, 233960000421618, 234071662150935, 234314609763894, 234354680683946, 234530740562933, 234716554552798, 234842068170882, 234846644106850, 
-235002300242708, 235031423197891, 235119448039280, 235148810587979, 235153558720378, 235399718735308, 235814359642190, 235823118884108, 235957161116178, 236008911909738, 
-236571336235063, 236732891852762, 236737957267087, 236840308641734, 236887725857425, 236930111852607, 236965347635312, 237115673735053, 237156107277140, 237404147068222, 
-237414265510509, 237515395515692, 237644365127298, 237651361881622, 237654037226209, 237674516739433, 237867142811553, 237872545980657, 237990473945296, 238157363598211, 
-238350393192339, 238445024561638, 238457576589176, 238468529288859, 238493207460080, 238639856317999, 238656718052494, 238955328567193, 239054759930821, 239087465888586, 
-239160741484420, 239448653150566, 239475140881729, 239647297258934, 239720497175474, 239729663119952, 239799616805440, 240023811350160, 240051457775071, 240079651924935, 
-240104521217955, 240116255272246, 240388775019272, 240539398163762, 240548834633550, 240569485363845, 240639366374227, 240741016600822, 240855553401399, 240963822693457, 
-241036049131449, 241179834355773, 241184037703862, 241375395684383, 241437418749800, 241514888491665, 241683434334194, 241899580809612, 242241203788501, 242335368170780, 
-242379956795666, 242500951719300, 242515595726457, 242554710189873, 242679100286243, 242940063095472, 243013548744147, 243157445887041, 243410708417481, 243513265230529, 
-243642606243174, 243681279959311, 243900176980618, 243957005164159, 244064018442503, 244204068329454, 244327350596189, 244658061790796, 244919319692242, 244929039313300, 
-245100910625563, 245263785536979, 245266973906234, 245325877459568, 245392699437058, 245417231844713, 245473139302312, 245493119908730, 245505105269505, 245926685807852, 
-246196596364012, 246216740343768, 246263862247768, 246409647005744, 246529494179038, 246564793185369, 246624724413379, 246664480188447, 246755330325426, 246826244968451, 
-246870244831365, 247149420832042, 247219121068730, 247224146825445, 247373850333099, 247642083458604, 247805399366849, 247860480731702, 248047222534923, 248104396268515, 
-248145719634237, 248169918754263, 248325097750005, 248374094413016, 248584800709451, 248627310975186, 248649367893776, 248704034661712, 248879758663416, 248910210953562, 
-248950412620831, 248990697735073, 249180605720690, 249483406946554, 249493765073648, 249502485527521, 249552654832910, 249565291890029, 249615570577585, 249723256281886, 
-249810867281241, 249838104581248, 249931603665849, 250043828247807, 250108768256093, 250137565812357, 250234082242073, 250354979065077, 250444197856921, 250473526410937, 
-250485657172142, 250530610142627, 250546123538262, 250574498099942, 250599007919594, 250603956092970, 250892065430948, 251034412900009, 251187394551139, 251196491748796, 
-251495546835896, 251528287321610, 251809940306748, 252107009748595, 252136060044779, 252154043945718, 252165946805828, 252351713678587, 252362317817077, 252405952335299, 
-252483755770764, 252556422248976, 252650820432963, 252735461787663, 252780028290810, 252835509647024, 252883949844896, 252949762097638, 252999808606722, 253060150752911, 
-253088254010763, 253113110669398, 253180745889079, 253260167859941, 253273361253976, 253373926497041, 253471482401150, 253472495796087, 253619977028524, 253623964060232, 
-253649036164728, 253700630297491, 253715313493752, 254035322992389, 254079150901005, 254317797452463, 254359643977752, 254383011348347, 254434413507779, 254594732493168, 
-254814188835623, 254911228571449, 254912990769277, 254918527454007, 255142180314800, 255278906018708, 255330748892670, 255339880095948, 255435979417549, 255621599478671, 
-255867221814967, 255878465058313, 255896839030219, 256052709989974, 256090425956371, 256155860701644, 256161353753389, 256312243842242, 256415253860673, 256514958235492, 
-256635010559099, 256645510128720, 256648860992147, 256778585555557, 256800790414569, 256812193678150, 256857567874453, 256866333840854, 256935215850773, 257141861148697, 
-257197164326689, 257364509492678, 257458111751586, 257535526017040, 257609559745240, 257694261191700, 257967650000265, 258142498392845, 258171622798097, 258249487756292, 
-258433961833605, 258490377885018, 258543361704032, 258550365678936, 258553819939777, 258606072024159, 258693632885124, 258696002980489, 258748002290694, 258901183272127, 
-258912446142992, 259025074447933, 259176130799152, 259380210975195, 259394784441428, 259583356988019, 259588513992211, 259697691596294, 259724518623460, 259746264736248, 
-259759095075321, 259789364865306, 259928768563003, 260049570710819, 260184703625863, 260242481833075, 260255237259459, 260268361926709, 260327320129123, 260386586458871, 
-260439354741367, 260441874316540, 260555997251369, 261058658642976, 261084334606384, 261149011937789, 261399951118170, 261421621639117, 261630666847975, 262107705650055, 
-262194248506344, 262236994026676, 262360259544499, 262405468846962, 262409441296582, 262498179275757, 262570898536728, 262654968064187, 262691701454765, 262707922102844, 
-263164864343908, 263166220838538, 263207420382388, 263229904334578, 263243777984468, 263403921511615, 263545282914367, 263748660194221, 263874667921806, 263899494345027, 
-264163599900252, 264196330454745, 264313007879455, 264376042707341, 264521526954639, 264600188312485, 264714671609916, 264903317341335, 265051592032847, 265107432101831, 
-265164845874362, 265664697027095, 265816027923481, 265840081696987, 265843929489849, 265969710382408, 266062084793114, 266202024929826, 266279046171430, 266306923496525, 
-266336495956643, 266359301665923, 266449189387243, 266710376892531, 267596752633813, 267621402204343, 267748473445372, 268000505490341, 268044022044210, 268195739248327, 
-268204729968869, 268229941959515, 268311398185909, 268457985877440, 268535698496289, 268794431020807, 268949330053476, 268965230799924, 268999664338092, 269183237210594, 
-269220865373728, 269275854181690, 269462417788977, 269466031811153, 269512139414742, 269611483755332, 269679409331810, 269836498023729, 269991683280482, 270298958660234, 
-270366071635272, 270372294855417, 270435267839862, 270462837410968, 270530400401844, 270567920179457, 270680494184088, 270806036081463, 270870970004936, 270985290094454, 
-271052808960152, 271076544686222, 271080229100301, 271090135098588, 271244517558229, 271263409634200, 271285475356520, 271421831632558, 271458386611898, 271466797271514, 
-271522814975108, 271525441670969, 271553149096636, 271799659804538, 272032125797463, 272045886070598, 272071811582795, 272133051191761, 272156925647848, 272159729503577, 
-272242450959389, 272284080511969, 272288018809819, 272314379514863, 272567068442924, 272589508466527, 272590018074367, 272909010560272, 272933552684127, 272936760924497, 
-272963841266605, 273233584508442, 273357181621098, 273375059948959, 273391137144962, 273586565121906, 273775874030081, 273946373243671, 273976437134363, 274017740659252, 
-274287312230217, 274323049900001, 274372239298360, 274487432899792, 274515850848065, 274753630718411, 274821812156772, 274947497826702, 275007475270090, 275223142873723, 
-275262314859378, 275269301979256, 275279892981752, 275347593074259, 275431485962082, 275736915644646, 275751119051725, 275751172198387, 275848752213879, 275870000263660, 
-275880928341968, 276080620283639, 276145635779864, 276253652970201, 276288947949837, 276348168065926, 276351007913318, 276485903631145, 276655580019007, 276754494275315, 
-276791713933554, 276993897939243, 277321017717789, 277440870954070, 277658823217171, 277784505297062, 278009703680785, 278066949253013, 278081037004462, 278100526651250, 
-278127444663578, 278130261334965, 278185159233848, 278338251653766, 278344585794182, 278436580198211, 278553695620981, 278817573578844, 279285894765211, 279620631781831, 
-279791710944112, 279816355534275, 279821783068556, 280103211440395, 280862343074626, 280893547837635, 280894311886373, 280926990378548, 281008899480334, 281140966443359, 
-281229975595785,
+4293974935, 4294175127, 4294247525, 4294273527, 4294561930, 4294956565, 1744547895, 656198937, 4159333522, 2394922939, 
+2225741643, 18405283, 82810153, 2654666242, 3282609088, 577403712, 1037320657, 1349052401, 133536624, 2035978770, 
+1497973552, 3787263320, 684546370, 1337643991, 4227078552, 3548264683, 3410438801, 2287418853, 2252827077, 4152458363, 
+1107011578, 1548375988, 1503827002, 22667551, 754508601, 744649907, 1515213218, 1676949366, 1044525111, 380665565, 
+1192045726, 2259606493, 4284207255, 2390510590, 1077255466, 796411528, 2820742227, 3612009171, 1475621467, 3905203645, 
+2263168767, 914487158, 3009332559, 2630310367, 2431211900, 3364211660, 2269615966, 2005230452, 2743058502, 3524826272, 
+283123762, 4035896169, 1855838153, 1045766089, 892705652, 4158999077, 552189485, 1526169984, 2836751886, 2099829179, 
+3477364395, 1669016938, 259225136, 818650874, 1513032293, 3977338921, 3966748735, 3362146102, 3932593318, 3991796569, 
+1339204475, 1469847028, 2735442082, 2485203355, 288905736, 2972080706, 879364750, 2221424707, 1819907699, 2048790715, 
+2389131126, 2698294495, 2116649523, 2068234801, 2922499881, 880344913, 1295756861, 3928987718, 585170308, 3500974608, 
+3568821709, 12536800, 2415336819, 877588338, 2900242216, 3961813231, 2131200618, 4055640912, 4121861977, 2751425657, 
+3521317861, 1499924137, 3605453651, 1258034307, 1525778102, 354812940, 3626394704, 1544188038, 1868647984, 3006164537, 
+515342223, 4237816151, 1846910850, 2613711022, 1769015018, 1715270695, 2451398464, 912683103, 210979423, 357356050, 
+818214323, 943693018, 1041016014, 1843104640, 2502599900, 994279244, 3828790724, 3482814988, 4038074198, 2313910906, 
+1979418354, 21271875, 3954842584, 2174571864, 2499974579, 3847024304, 404811953, 3758120628, 418295592, 2080750294, 
+2364008852, 2714933941, 1929006228, 3637332132, 541320491, 863978855, 2739292959, 37315843, 1461600486, 128931540, 
+3118154210, 445574033, 1455823210, 2068877089, 1019784514, 3874760345, 1409386460, 2131361005, 2426179310, 3279645464, 
+2851897705, 4028109276, 3969603175, 3683169644, 2191171715, 1132444326, 1708050953, 2284138749, 3906178667, 1702561739, 
+3724113394, 1567464242, 4222967470, 3257505574, 3899767633, 1413174350, 626639122, 517302181, 3409923450, 1610685046, 
+2385549586, 719158927, 314339780, 1420412491, 342633144, 3830655990, 2706972710, 1560809840, 4244234820, 3030737468, 
+1190460981, 887619406, 1305982142, 1314384384, 4215556977, 2500612367, 666733489, 110365040, 636512625, 2910851305, 
+3802473748, 3818799604, 2881681691, 668665225, 3170760784, 4019057995, 1963732572, 806685780, 3114900493, 456037022, 
+1797096770, 2133927600, 186779020, 2201736574, 2686434299, 3999556411, 3223173223, 3241272428, 2089036350, 1529088285, 
+741228789, 2024809376, 965851200, 694609993, 4222325042, 2093498896, 1128404924, 3402062778, 357253523, 1051920115, 
+1715597233, 3209049946, 881693601, 4050471496, 2416620348, 936644246, 1656866821, 3297584590, 2055499794, 273883004, 
+3711948870, 2975583319, 1455475181, 1366036599, 2511755393, 2739199660, 2304526542, 755814476, 451538996, 2897817380, 
+938806156, 2651860328, 840658957, 2750274797, 1486222169, 2405134096, 1581604660, 2382446648, 2589255279, 2509580613, 
+1312584579, 117758809, 1612343803, 1781094559, 1670313164, 3611605084, 4012742892, 392897186, 716328101, 2738281100, 
+3759250674, 870832099, 890925912, 2066996236, 3295689332, 3123665067, 4226704251, 1696657502, 1326707193, 2819930749, 
+1045007491, 2936592500, 2868008504, 3146138154, 674381453, 4260511473, 1082570936, 3215745503, 3422557679, 4258556291, 
+3930688137, 279906050, 1028629901, 1028481721, 1761208779, 2927509448, 2513354544, 1509346515, 1950550517, 648986250, 
+3831647314, 924149383, 3813011803, 2115183854, 4125529288, 515957159, 1110627831, 774053029, 420834904, 1520397105, 
+2426613148, 1062438045, 58724549, 3702880865, 631914820, 699729432, 2703016819, 1265553089, 2395506306, 2433857019, 
+304765133, 2403668444, 1718818217, 953293417, 3426825269, 1439249551, 2015507636, 3415911526, 3944183119, 2841236938, 
+2181478867, 2445643188, 1268584634, 1422522268, 2165977827, 4217475892, 1795628964, 3008570485, 80676606, 4079500774, 
+1924746525, 2049200213, 1975417016, 298311244, 1349602989, 823694942, 398736987, 2886450354, 162287798, 2843384833, 
+3429807840, 1354938148, 3052390274, 2824947619, 2454026969, 1479808772, 376673292, 1666917068, 3938292358, 1968471425, 
+162919609, 1544006038, 4172512912, 706256817, 3960969914, 3785213633, 172091890, 1778499300, 2066695052, 862774368, 
+193664163, 4046429395, 1243244236, 2439068565, 1447540807, 3032841356, 1045731336, 637678327, 1993367133, 46874999, 
+489725493, 4274303542, 39135935, 2518860899, 3409358703, 2661337950, 474856296, 919560705, 2966557394, 2972025571, 
+3946417505, 649035935, 2499292481, 41439307, 1614426159, 3172688007, 3067576722, 1557380556, 4146207439, 2805199366, 
+3692991431, 2821464737, 3741793185, 1616523737, 4018413796, 1116393182, 2494161127, 920804664, 2543412842, 2876120226, 
+3602613297, 1198322775, 3619082626, 4078854040, 1449600034, 927320550, 4221055037, 27160683, 2801237882, 4098365578, 
+1563644251, 2283461548, 987232131, 981954196, 1133911287, 1181186956, 3689223570, 426259663, 4096517113, 4062079179, 
+3338238815, 3594477179, 203221087, 4060630773, 3598728633, 3763517817, 2928727234, 446483483, 3320288388, 251009568, 
+2990271735, 1508692552, 949709192, 2868531690, 2629028975, 1175084843, 2933451529, 4052433711, 1098446913, 3766549037, 
+1686277335, 2424705729, 268429406, 3248145914, 1703208158, 3369884688, 2172074542, 269362672, 3263612707, 3036095304, 
+45437377, 1806045376, 294473056, 3488077775, 2989868315, 53946335, 2795704172, 1850719304, 1758056123, 2913368693, 
+1345087918, 3708172974, 571315164, 2207977228, 3963027254, 160403729, 1087060459, 296775287, 2237955470, 3404125288, 
+87829885, 1738195108, 2809668661, 1161119793, 3941562664, 3442093208, 1111131928, 615358493, 3297299115, 674538803, 
+971089266, 2370911472, 2327384594, 2946054946, 2173984975, 1906602984, 3585357650, 1473245155, 842824768, 950518836, 
+772699286, 1908215196, 873089460, 3443333867, 1443220117, 903274133, 1381286292, 3369658222, 1626750906, 542821171, 
+769230164, 2796030698, 3483379015, 1343935500, 2304756601, 2915737096, 3769160110, 2316537169, 1658744877, 4074451399, 
+549466224, 2018835981, 342813448, 2491671848, 4086475613, 2399795454, 2201218942, 2059250317, 1302641143, 2569071967, 
+2930668515, 4243651014, 1509658298, 1830481600, 504925511, 3214288333, 1349800255, 3092639343, 2036345263, 3551086124, 
+3730976013, 3456471191, 954984162, 3389220872, 1421084576, 1811540339, 1217257046, 3832593030, 1624699040, 1840970872, 
+619473470, 1308751840, 3761723188, 2469976502, 3003448059, 394071206, 2312269315, 3840705641, 3939780713, 2735930147, 
+928513578, 3342460483, 406693627, 1686052572, 907706117, 365314239, 1824870823, 2031177497, 1533266578, 1704995692, 
+769210184, 1206918213, 521353881, 11149992, 2247187413, 2789864042, 1746311623, 343230538, 2849257425, 4097700151, 
+275868431, 2194241575, 2963609604, 3136675793, 4221022550, 2282743672, 2931025588, 4110887291, 1654583524, 3155832266, 
+1735523397, 1086012790, 1390475074, 880091209, 3453527768, 3952757211, 3014635353, 3165248040, 4159018010, 652806459, 
+2263394505, 2075173075, 343604167, 490085375, 2999323048, 1861028514, 2382342334, 2426701457, 2733074320, 53999, 
+2989700128, 1927257499, 2337866334, 3089840370, 342712372, 4153244379, 1374245058, 1849672569, 2265710367, 4052087011, 
+3749126400, 737412798, 1271171140, 3703633167, 3249975766, 161584124, 3485999535, 1502184971, 3530898457, 3986350305, 
+3705055644, 686538399, 554350167, 4039031618, 842968381, 2281350211, 256017457, 3520418874, 985386601, 517918486, 
+2028298049, 3637296214, 3063681025, 2442358847, 4252283440, 2789188601, 2866963613, 1870025707, 3044731780, 2084145741, 
+1258785787, 703456566, 3746892420, 969942021, 3237700950, 2370111710, 2751509925, 1328429555, 3635659823, 3500359093, 
+3890250489, 2722400113, 196407274, 3192403318, 3289085874, 1444018315, 1845756280, 235446098, 4200137300, 646827183, 
+595754426, 1779185134, 644225358, 138823070, 2282121756, 1978982772, 449020511, 4177289561, 2080996170, 2944061768, 
+400939206, 3354901572, 2557136049, 2543694386, 1236971015, 4266477615, 3743364270, 2968228304, 3508399197, 3443434768, 
+878105238, 2786891121, 887876290, 3162225492, 749363148, 2534619563, 3602399279, 2876693257, 1517431199, 1521361760, 
+3063841754, 1602158698, 2676846351, 3491493148, 2418436393, 1786971492, 3150211121, 4121559721, 502540879, 1962185756, 
+393386750, 2596598360, 3755303817, 863495989, 359455995, 779758017, 337993945, 3842856893, 4204155090, 1275028026, 
+3059284864, 3737698477, 3272451124, 4248460514, 3027811916, 511738540, 331040721, 3323782796, 76770210, 2485550816, 
+539035989, 2969063448, 2118037089, 414354999, 3929092435, 4110564729, 3345736042, 2533905288, 2248321103, 2842562397, 
+2850659706, 2048475055, 3345428427, 4255364565, 2830505386, 4177106643, 2655660388, 1717084816, 3921169334, 2293613938, 
+1011759824, 3097744602, 3287045652, 3171643970, 3998154701, 3959783089, 813237826, 305299638, 3931369200, 3145575787, 
+656980546, 3616260089, 1606808025, 325662002, 3765669630, 4263111444, 2173879152, 3617830936, 551835269, 1321994465, 
+4205004648, 851074863, 890592410, 139294906, 1163607566, 267701835, 945897713, 438570410, 1553514545, 1866485098, 
+2869685, 2910531323, 212191485, 668084992, 2091118291, 1185819576, 1031757638, 45189892, 2934583702, 339459697, 
+876054293, 2728998503, 3446934193, 3409876133, 2493492131, 2554965184, 2459639160, 2199795982, 3725726923, 1791546848, 
+4087790050, 2637492033, 3204846548, 340674637, 3059764997, 2512546906, 2640716929, 4223627496, 3007496323, 4004665022, 
+3601272183, 4056003717, 1768621874, 2799871670, 2161034614, 2863405361, 1796154816, 2034411720, 983498242, 1247121763, 
+1158090541, 3380917752, 50675756, 2528538610, 3538887787, 1897640069, 2401177304, 781583945, 3387306980, 2275533051, 
+1106032327, 2823780104, 1749063587, 3989217844, 339152015, 758419768, 2608732658, 3992082461, 2234611272, 514267606, 
+3131050459, 3540128631, 3501279446, 3962147302, 1864444178, 662611882, 1934063870, 663427619, 1461157277, 3024974932, 
+2676491788, 1327914338, 2637521331, 4087061359, 1167504421, 4101909626, 690970908, 1034245008, 3694883414, 1596952320, 
+3887340830, 646582237, 1740542559, 3505875280, 1062406999, 4221060194, 1907335949, 2873344025, 2698309597, 2841289815, 
+1939714411, 1501131157, 1429163740, 2814405942, 334617509, 3787087532, 4186517841, 2163856521, 1159065145, 143632658, 
+770508141, 1868080219, 2370488191, 1835716979, 3902124810, 2823398224, 324101745, 2356865461, 2426141625, 1540956396, 
+1991464826, 3197863957, 878638989, 490738937, 2695870006, 516359901, 2259336547, 518647251, 974993607, 3155266806, 
+2102321131, 4202854480, 814319192, 2373752103, 1454928440, 3724009936, 3317246149, 318965700, 3972006393, 647884013, 
+132664410, 2552931672, 3436304847, 333828140, 748830674, 3219992143, 4243761320, 2533868956, 4102764489, 3555341362, 
+534832236, 3855174860, 2809734319, 2402367016, 2095689044, 321403019, 2481169338, 3815767839, 4005474918, 3360120368, 
+3468128755, 3451676945, 58598958, 2760289981, 3428610999, 2336806681, 3057401932, 3696576490, 1990292211, 3271912937, 
+3477680576, 3490435665, 2090402762, 1062852485, 1866852088, 4211346690, 3534664220, 2459626664, 3792739180, 1018031363, 
+3185111211, 4017733321, 1855145903, 3779520890, 2432714301, 2998174444, 2144626283, 1088567403, 738969139, 490984656, 
+606018317, 1037479079, 3243994642, 1886243508, 3636902051, 4232753290, 904171852, 1148889114, 1709573538, 2160563898, 
+2190812374, 3583808495, 833365217, 3791429044, 2236671129, 4207828684, 4217186844, 1626861649, 1610153264, 1316442220, 
+1800886773, 2121860479, 1493570650, 528321498, 2140949828, 1057471426, 606987546, 3154192767, 85769001, 852804922, 
+934262779, 824408252, 3443754935, 2323500728, 3684310461, 175802556, 3588443962, 2055806095, 295763563, 2972752894, 
+2561315174, 3618582266, 3493894026, 4232143809, 2265804714, 439373599, 3791186320, 367125996, 4255440234, 3714116096, 
+3915628825, 3781829822, 4205059056, 2263658095, 2571892775, 1851690044, 3406383217, 3994436384, 1019655587, 767499424, 
+2145332006, 2042227272, 1464192073, 1236272852, 559866174, 581867388, 1026320038, 1488566393, 1263780745, 37016330, 
+307678127, 147858711, 462336122, 2159541404, 3749313807, 455577463, 1638252481, 1708952229, 3114329592, 3680432211, 
+4249496147, 1255138322, 57509835, 3763194650, 954064549, 1671802402, 3851451690, 1305096370, 4261599450, 1126639215, 
+1276825389, 2725762479, 1662550238, 1704490553, 3330050463, 2280942590, 3982930864, 395815460, 1788253810, 1089856579, 
+157479893, 2943440155, 820413944, 3857787737, 2247223739, 3208231843, 786774746, 3718687712, 1544614707, 2523631338, 
+1659328922, 1090021792, 1866685655, 1636636848, 2497221500, 554442212, 2246892711, 2972382293, 204289192, 1266591968, 
+1701485202, 506213777, 3727311516, 3130058360, 2964985419, 2915529091, 583198578, 3966263602, 719582929, 2843374463, 
+1853773102, 12373043, 169307390, 515965534, 1986947450, 4209962723, 1204086335, 1054584254, 3725828419, 2519720964, 
+4165988263, 3006618688, 2023324123, 3204740339, 1298370112, 3540682765, 3292402087, 1502915796, 188718016, 1703766970, 
+2751460020, 1909385803, 115295189, 1662725890, 515237792, 4136613195, 315258874, 4069327719, 219408632, 2118951925, 
+1849895707, 1450008382, 4246581951, 1070200886, 1319177343, 2226150636, 2993448661, 2815028255, 112843013, 3511706062, 
+2589171257, 81576712, 1023486509, 1506291268, 409773812, 3493366787, 3982266470, 2865662738, 891680814, 2601540509, 
+4233470631, 321677848, 3460846289, 1266661344, 1382252332, 4005529035, 332007852, 3711583133, 3034716595, 1362461480, 
+3833117902, 2626066962, 3245228723, 3818893068, 3357143318, 3038464984, 317061232, 947973188, 1691563225, 1360147100, 
+2373336772, 460636939, 1281176790, 4125970955, 325018088, 830836520, 827801272, 3622837465, 3406600548, 2807493052, 
+50933517, 2043206131, 2245398134, 2043134697, 2983683702, 2782701220, 2719476474, 2621390229, 3674431219, 1272833958, 
+1353120132, 1239117960, 2086605390, 2717973140, 3502974291, 1422786282, 1326900039, 1592540920, 2912665956, 237298366, 
+3489605237, 225073902, 2486931165, 3041146651, 4151908807, 1051892617, 334516521, 3810003926, 811185371, 2360600160, 
+3154490024, 2595751873, 709540352, 2217106447, 4257784558, 4097283061, 574504888, 3231732468, 1006118851, 318581556, 
+1299131140, 1865983805, 2489135546, 920086246, 97502976, 2955702797, 1925394373, 193410871, 1298363913, 1917741634, 
+3036461079, 3594719407, 2116411380, 2149344008, 1826485990, 2819341490, 3293162171, 2794014108, 3985665738, 983002478, 
+824934227, 4051862997, 2742206456, 3825248595, 3036673400, 3108997748, 843154104, 639202808, 3898409943, 3047542355, 
+3939800503, 2972976099, 3064978908, 3223517007, 1091452763, 3910225998, 2683174650, 1397031801, 366185983, 2389546163, 
+2149677409, 799689312, 1341408339, 2448874189, 692137370, 2058999, 2323374389, 3310212140, 1365923913, 3995537072, 
+4202442945, 1009510149, 3718184322, 2639532051, 2643261179, 3155898504, 1766597779, 1081545931, 986453759, 1941685618, 
+2188130676, 3937987900, 225255192, 2757825272, 56578801, 3813292753, 123453625, 580666796, 2100699694, 3404947658, 
+3141747158, 2791792771, 2465491959, 182861845, 3586745116, 3105417508, 1507522158, 2917119788, 2476568884, 4241216730, 
+2446606880, 3428359354, 4173221244, 3432651286, 3265032897, 2137689796, 4159000621, 1418617406, 57333816, 3578890881, 
+4173475808, 861076748, 502175276, 2505298965, 2328314229, 2416131151, 3524782151, 3082697069, 1911846852, 273602243, 
+2630816483, 2724407574, 4057769415, 352484113, 652123624, 436760269, 2921361879, 4268226521, 2055612529, 73622487, 
+4187751375, 1924486160, 2252912889, 579877658, 4141027622, 981960422, 1337776004, 12418580, 3077172695, 399953892, 
+3624292464, 1258536123, 4221910341, 4268698756, 438127993, 2060424533, 4206103256, 4131224024, 545619310, 1141062805, 
+4257884020, 2653735415, 2671422796, 692166521, 3577202997, 3691547143, 3679128719, 2114725075, 1230911464, 1851370603, 
+215376843, 121347400, 3328171724, 2664332448, 979873423, 37882049, 3349496804, 2481433748, 284450980, 2143973090, 
+1735484603, 2031075893, 1644754167, 1985606727, 1874664221, 4174496829, 1437993523, 1069512150, 3743667856, 3154155, 
+1915820986, 1687398006, 3676835058, 2866936503, 3038153971, 3658252726, 1084442263, 3910162766, 3534737837, 1093504244, 
+1329415877, 2944125912, 3978871064, 2211647713, 1976505405, 1134539915, 4113614154, 2012568878, 2815301309, 1233196939, 
+262869887, 2927766975, 1499289614, 1430781016, 782173600, 2982699673, 1693403897, 3085405046, 3933548212, 2286420717, 
+3209470409, 3654354267, 41569376, 1422746368, 1276867755, 2737560822, 946137473, 647929582, 1759696943, 443300869, 
+966397328, 3009466135, 1568831390, 2496375198, 393037026, 3956326470, 2762858704, 2027908514, 2628177079, 2611444098, 
+3355731525, 785411788, 2794400312, 322061265, 1772891159, 1971313810, 787902580, 1694409797, 4049896521, 1704151821, 
+2988183086, 1988778515, 2163838991, 1358202652, 1315748480, 2641686701, 855674997, 2677555416, 3221370829, 755722510, 
+3268276192, 644432750, 2818120655, 2316825944, 1677922997, 1642992216, 2489227876, 2036279546, 2221756972, 3683248782, 
+766232054, 4269806749, 232597367, 3899076907, 3093958907, 3373831291, 2641176148, 2327884039, 3212709563, 1313152398, 
+631784170, 521073701, 3693591063, 2849959334, 336337467, 1544426118, 4136982106, 2597127726, 2359385737, 1393460771, 
+2196999661, 27726551, 2282319716, 3689965261, 3761755467, 1629919426, 1679953962, 2896658504, 2807909860, 537989461, 
+388002880, 3837383083, 1668132746, 2676748621, 327486198, 4256136255, 1068081783, 1865225916, 2360558985, 3374072054, 
+1561115072, 3848779646, 773147699, 194992872, 1060779217, 2092171664, 3549547670, 1770618049, 3495892701, 1139243296, 
+240699427, 2958063001, 2186335657, 748759212, 4143078235, 1483410873, 501061814, 2556132352, 286657800, 1471834880, 
+1709892088, 3487050029, 3258938103, 3113551671, 2038586596, 3741058502, 4103181559, 3874968248, 1555094340, 593674915, 
+4108490352, 1219111759, 658338718, 4287147843, 2359272512, 1420006919, 532581297, 3524075208, 2346826049, 2842803700, 
+389617102, 897249561, 1778854022, 2836706404, 3800040922, 3239497457, 2105016382, 1515231791, 3593924842, 3869846243, 
+3622557659, 2717144342, 960202520, 3550856879, 2806783099, 1326833090, 3991780634, 2995613249, 3565764309, 485550927, 
+2585589538, 2753787797, 2690673913, 3996114642, 1417686516, 536105899, 1342478201, 1613005919, 760658227, 192450983, 
+667147463, 3346199944, 457017721, 1395616954, 3836387972, 1228639258, 755003399, 62948002, 1473628474, 1234092973, 
+868358906, 3904614054, 4021607529, 538050366, 1002401461, 1342228541, 754022422, 1289635815, 2413510103, 169454151, 
+1662651442, 2501712531, 415181657, 2010209571, 63626314, 1546147039, 3074267134, 2956404746, 3457077250, 2745319121, 
+2063228928, 1082263704, 2736108298, 270204794, 1638002442, 2418737551, 2562960269, 433303272, 37378163, 2936319672, 
+26391203, 480951330, 1358052447, 2664200029, 2710738483, 2850746905, 3816606732, 2846761496, 2527290655, 64199340, 
+842325769, 4134880207, 1342489041, 4119995545, 703971551, 2995335988, 943380772, 2402620576, 609456709, 2776391911, 
+4276892981, 1534620086, 1366014499, 1102702488, 2574006326, 3291824840, 1222351976, 415683202, 3478932676, 155000540, 
+1293482295, 1826894395, 3990218049, 912173504, 2544125173, 3139375850, 2604111567, 1268524433, 1434798559, 124418976, 
+1388356131, 2132494804, 261066810, 4107685386, 3752254814, 2892514669, 3987840789, 1793505008, 908579690, 496755745, 
+3690361631, 601278971, 1147722475, 2580811439, 2891439640, 1095612410, 332159100, 1997551521, 841956603, 91957289, 
+3396826547, 250097864, 3707414415, 3667907615, 497528976, 202914905, 1472676890, 557936940, 307994171, 2235022622, 
+378303393, 2481441066, 2590269345, 2719351284, 3726192005, 1605210285, 948535219, 381348114, 488729552, 3780081397, 
+2118675330, 576690245, 2610297392, 990055422, 1334242724, 3233910198, 3626922704, 1825830030, 3682530099, 3640891662, 
+3882788862, 813470613, 2891365092, 3324599672, 4281096040, 850191663, 777160545, 4077231479, 1690393772, 374645879, 
+3389062973, 4251308282, 4204197537, 3146259173, 3098435363, 2378584414, 3930105195, 2150086643, 3552481625, 360268042, 
+3434107780, 276688246, 1353383314, 3537499713, 2372146268, 767501340, 3981256725, 413502173, 1994265355, 1163063672, 
+3972245408, 2204567459, 3044062056, 4043675320, 1171849115, 3555044076, 1130492669, 917060359, 3071369373, 4122777434, 
+2087789994, 1019099986, 3253327573, 1420943995, 2147973327, 877174552, 1163327078, 738063634, 310687695, 1455283062, 
+3886133468, 1017428621, 3894642057, 1997261726, 2253216212, 2996588824, 2931243244, 2878416179, 3062620741, 2715066515, 
+3808915424, 2426227683, 1776967447, 31631917, 264777946, 3735779574, 1562301522, 1308946732, 2763081404, 201468011, 
+1242282718, 871408271, 3117710385, 2222193340, 746907842, 282820385, 71697411, 3774721602, 4170582705, 2226611162, 
+841114182, 628537543, 3942981066, 2267174836, 1155867688, 797824934, 239457279, 1720043298, 965736028, 253881484, 
+1943139627, 2620712330, 477176881, 1602764537, 4265506584, 2739573870, 2624366601, 388378751, 4229008172, 189421897, 
+4278911619, 19495011, 2068277830, 4225381547, 148741942, 1815831930, 861419712, 2557660066, 1356582846, 2265231604, 
+901727210, 4095881704, 556699069, 2977611985, 3739788531, 2903758998, 214224910, 2884252364, 4147410274, 2955176900, 
+873241893, 313287525, 316370001, 4059123786, 3351805512, 3268522703, 4244601169, 3656617169, 1053271827, 31041368, 
+4011686965, 2345241784, 480501103, 327931338, 204482728, 1050686510, 4288552278, 2927746894, 2160865346, 2157080305, 
+3749854383, 2511067439, 1915569653, 664845354, 148279398, 3584079971, 3803819948, 3652637338, 592478970, 1756690647, 
+2062412344, 32735184, 549113002, 1316559841, 2149169683, 3673081260, 605981695, 3545106862, 3394634174, 2690808631, 
+59690555, 3893062797, 582079966, 431102683, 2707693200, 198566721, 2027790057, 37271174, 4008921815, 3659698557, 
+1849220254, 2902728243, 1358439333, 556885116, 3928526210, 1807748618, 1925700465, 1327719712, 2007949495, 2026161866, 
+2779919354, 1700300705, 1897987133, 143073636, 752001115, 1432162553, 840036286, 1426807300, 1545138309, 893195560, 
+1426565021, 837607464, 4054070133, 1724386717, 1598948367, 266038700, 521242907, 4013830244, 1060528132, 1509545994, 
+1695471503, 818228467, 3765903619, 2193741151, 3523346215, 2773056395, 507282542, 2075452325, 912984466, 2141781975, 
+3640260170, 2971046237, 2080148309, 1664531065, 2582173218, 3935352418, 964802017, 3801782542, 3366562550, 3521751983, 
+2226249980, 2852813239, 4240310949, 3975827311, 3382166056, 87111569, 3882636670, 1804828784, 2513259500, 3693702651, 
+933672805, 565455197, 1099694058, 2485118397, 1720281477, 2508631790, 2492045637, 2297891877, 2677068431, 315510717, 
+4269003396, 3618339413, 1390040147, 3318503018, 2553006528, 2153067526, 58514052, 2517683042, 2531742798, 2271111702, 
+2702717134, 4270992697, 1591283001, 1518212542, 3801318289, 729244209, 242052891, 2007112445, 2168854686, 3201453472, 
+2121654630, 8536002, 3368251944, 3606071480, 329760907, 2756730746, 1093188936, 3556007936, 1136492443, 1913546207, 
+2079119872, 2738791934, 3427778289, 3615967727, 2249429327, 1395193678, 694603711, 1228560599, 4177907457, 2164062413, 
+3074889830, 80904439, 3164909556, 3915541554, 3614540859, 3223223819, 3885182822, 771454506, 2674930298, 3181638068, 
+3247753032, 2168125097, 3696803142, 3633884721, 2807143494, 2603702914, 244148428, 2150594673, 477292393, 1165101, 
+2097593649, 3993653506, 2121396963, 2516887370, 2686172072, 1026287032, 2278286564, 3568369865, 4246921507, 2393109216, 
+3173088089, 238490087, 3580234017, 1135648809, 1632918390, 3937240401, 2024083788, 1458182837, 3327194248, 1787175185, 
+1771659942, 2533914799, 725123520, 3545129429, 326767013, 2846329303, 1985821528, 511683193, 3272081160, 2070683092, 
+4139396019, 976186060, 1442585325, 4256613327, 1463117434, 1201777465, 2565156365, 1531619051, 412513623, 1248988531, 
+277755551, 2280759382, 3791974608, 1550833146, 895859528, 2266394492, 2157577211, 3259951042, 1898510384, 4290903711, 
+1741931388, 1416206047, 139762514, 2328463058, 3073328503, 968081286, 3664043032, 1851253663, 1547320675, 2532208218, 
+81919003, 3394637504, 908994756, 2649515630, 2867500063, 1421643494, 3100009636, 3062774914, 979797275, 1771812037, 
+834908177, 1794037543, 3145302550, 1000957855, 3801796166, 3900185745, 252275116, 266705761, 3518699437, 3537972540, 
+3619267766, 929331009, 738317065, 2325037719, 788256851, 1228112364, 2391694145, 3450994438, 4018317065, 630128684, 
+3438220673, 673067481, 2901027073, 1915700122, 1878750435, 3258931177, 1657374143, 250101195, 3778225121, 2246896562, 
+3042392355, 3950254518, 3807123219, 2396143956, 3782513903, 325023523, 3032532307, 4235313960, 3216937857, 2962178075, 
+2495167969, 1015211795, 3923705369, 202334658, 598282760, 2415942502, 349034835, 1798989104, 102959445, 2251461827, 
+3413758730, 1939694026, 3805396451, 1913863926, 4117490113, 268537436, 2719346747, 2884058025, 4030007831, 2337139683, 
+1339200737, 4083214430, 309707380, 1774132205, 2098920665, 2814884131, 2687604966, 3816632090, 674294095, 126796702, 
+2090523127, 3961196869, 531701586, 2387743119, 1768324843, 1201086935, 2985756618, 3177840063, 42677964, 2189938, 
+1468363244, 3930368430, 1482527791, 960517150, 3271466558, 1908520275, 3815550101, 2021420502, 2709712225, 1459982942, 
+2645164731, 1952592525, 1469755702, 2619759720, 3690031573, 3713821521, 1925907743, 1539968739, 125954996, 287255634, 
+1659827341, 1237479270, 3495236965, 2132272428, 2133473033, 4188601915, 1311290955, 327009021, 2782863065, 1385490806, 
+3534910417, 4245259365, 750727068, 1398099618, 2770637886, 1146032903, 3617982319, 3892690198, 2227740766, 623290647, 
+2565676718, 498617445, 3184259276, 2338934016, 2564610213, 3874906400, 2944816649, 3855991030, 1792805241, 844179907, 
+2191224750, 1729675196, 237386051, 2364503229, 2186314375, 1492709397, 677033091, 1301688266, 4181748087, 3056586244, 
+3894423356, 771681867, 3465669201, 3237143788, 1694351794, 3369887391, 2416505900, 480480694, 2647333304, 3281845005, 
+2991529874, 3435798189, 1697211716, 193926138, 1574222755, 3447679522, 2395879371, 4044575511, 1584108485, 325086371, 
+260805613, 4174194758, 3491709584, 535406966, 3231516573, 1550541016, 115694441, 939447365, 1132960617, 3387274499, 
+1498599714, 2586179769, 3369195366, 3058076576, 2966417404, 2106561974, 1959247994, 2614839342, 3298597152, 2488394811, 
+1342532737, 2044416495, 3983761420, 3695574266, 2688369760, 2058571121, 2285702813, 1323741102, 1621641332, 2073381943, 
+1526845482, 812055534, 1341032659, 4114141851, 3403465243, 369601889, 2027593428, 1304474400, 2866310894, 522813988, 
+3426742570, 2599627794, 1591689501, 2716138729, 3525944440, 1839433341, 1495449980, 2445818838, 793513312, 3399283233, 
+2967034290, 991136828, 1661624368, 1493702401, 716888811, 1098045525, 2364223204, 3455333422, 86104350, 3425735733, 
+1519209508, 3441336017, 175971527, 2113358943, 893839945, 20235060, 4229655608, 4158959137, 2617429132, 1223356968, 
+2821593107, 303170286, 2847327038, 1532196497, 1636767130, 1322742065, 1282751949, 3749333933, 2158267142, 3253455047, 
+3723861833, 2205433970, 3915532811, 1912705781, 2461234601, 2606896104, 164241282, 154081473, 2443881930, 1497990861, 
+2675383366, 3811025476, 876542942, 1052123103, 2730695909, 1376600384, 4247181308, 1566989837, 2203944945, 2732428317, 
+2989860661, 73877708, 3542860705, 402742277, 3430049695, 1479427686, 3629815675, 1283614395, 3649083780, 3631450774, 
+1144955518, 1771356537, 2846655320, 247713079, 3476118205, 586155062, 1981293449, 2066102331, 959426464, 3480765713, 
+2541853682, 384550496, 2142941945, 2448502041, 3708176371, 134056117, 4098819872, 3394102735, 4230039385, 2644029037, 
+276427004, 1122318544, 1839299022, 1424229343, 3692948084, 1623199636, 2634116715, 3687289914, 2429807272, 3227489874, 
+632291268, 2001104908, 3298819163, 3908766356, 845838605, 3665640274, 1763035809, 2340482340, 2644528432, 3712759859, 
+3418492447, 300432440, 2533995196, 3019495299, 3545839768, 981503527, 37540204, 3573924458, 669077398, 3890020932, 
+3743689129, 2148797974, 3332218871, 820875277, 1185436998, 3300299077, 1787293304, 2430829147, 2898085489, 1193861398, 
+1166374733, 1058238982, 3601905835, 719684967, 160597345, 3602295143, 1107430260, 986139381, 3709724841, 1957378054, 
+3169406597, 2288667353, 2766169142, 305257744, 1834376633, 81086527, 2071194142, 3171499994, 1878911812, 1595979259, 
+818333448, 3560306531, 3942315463, 2323246418, 1215291288, 626881182, 2518199484, 2638902765, 3079331422, 3496194219, 
+2781457836, 4001262314, 2297419565, 2096656289, 3008767116, 3280431126, 2436704712, 992327962, 2827913322, 4010898026, 
+1486107268, 487971055, 246906610, 239486231, 2668930614, 4085145002, 4051364853, 886793694, 1846360194, 2127328866, 
+3164642068, 2222826179, 53354352, 3646099275, 4099264378, 1151176140, 3475222606, 3644529932, 247808530, 458994538, 
+242604087, 2884431834, 3654878863, 2927038406, 3099613841, 2535936063, 3411980400, 3414224781, 898093908, 4124749118, 
+1358289517, 3704046892, 3824639618, 2231459350, 611836641, 3911480681, 3264024481, 77258993, 2041106640, 1427035011, 
+1183100819, 1325189606, 992315256, 3355080347, 2263447792, 2883417647, 2565282958, 528086937, 1175202757, 3816389450, 
+4077541252, 4226398566, 649358657, 1007044022, 1192516530, 1768526416, 3002735168, 3858980496, 1440634335, 3864980423, 
+2964469667, 1813622070, 3750429448, 4049718578, 601286478, 4072147589, 938713939, 3804692726, 2377376311, 3272485969, 
+2484479929, 240816189, 149196982, 2528616479, 127172456, 287502993, 1329620978, 2727731596, 753326805, 428428572, 
+2067380498, 2803219844, 267357817, 727115569, 563160355, 3827931824, 4169171, 2167391297, 2026851273, 1504449217, 
+1996442982, 2015453455, 1869142666, 2862751359, 2501847303, 817813486, 3840995933, 3839708748, 3104605138, 4234291604, 
+11944731, 3973066195, 2866468154, 1640479344, 4037947394, 2800551273, 2873434024, 1379203962, 479662849, 1153406188, 
+481022700, 3445133272, 3322397016, 3078266928, 2666355934, 3605623897, 3407309763, 213411871, 869235634, 3064401923, 
+4114591877, 4117718314, 803510970, 1534300389, 913952683, 2859105836, 2966256833, 2213046838, 4271256331, 1315447779, 
+3984107837, 2413424087, 2973597173, 430652632, 683551563, 244144338, 826226448, 3953386832, 3583729400, 3971248474, 
+1223242783, 2853651361, 3783075954, 1641623802, 3409816304, 3540335585, 2170033422, 1922188653, 661268657, 972790558, 
+2684443993, 4151940224, 3161744313, 3717176575, 4232675421, 2965460613, 697642521, 1335381237, 359859865, 3918610105, 
+3164469422, 872799651, 3501293398, 1811084006, 551099882, 1204305962, 1550835108, 2164383401, 527211875, 1034474940, 
+3736818616, 2117565962, 302709564, 1019407987, 4933099, 808964854, 4121890372, 910202107, 2924406005, 3609251267, 
+4103275404, 3755309584, 3664213059, 2406221839, 4023052026, 3669833392, 570423712, 1958167014, 465068546, 677672591, 
+3011126667, 2097981526, 1013724471, 3126284005, 3434776152, 920804113, 3987427710, 705855351, 2158199724, 1850264136, 
+1152564856, 1207090067, 3005384440, 892335877, 1770571533, 4193921711, 3090774040, 688340859, 550892739, 1956088176, 
+2369098535, 624586553, 2386784381, 3628501815, 3943063216, 3229813652, 3533080062, 4074348748, 1389422541, 2325889935, 
+3135090359, 1493431817, 2687534539, 3939671638, 3000932371, 4011168204, 914285357, 1480518850, 1411322177, 2331449188, 
+2124688507, 4034323536, 3090219667, 3965764197, 400819433, 3214148422, 1343704469, 1519736278, 1682269461, 2169137177, 
+1637740321, 1479181766, 592160162, 697014288, 1716298456, 518398996, 3324267913, 2079001357, 1138635537, 1694182404, 
+1484665989, 2066142554, 3510354016, 1924394328, 1083687873, 1796164703, 3457679748, 1532807817, 1992510470, 554669247, 
+3227605520, 4186760765, 624289328, 2841002459, 234599508, 4123552371, 690621971, 2494043654, 3551267044, 3822543352, 
+3767980537, 3972999450, 1642776379, 2185839907, 4174768775, 1823433843, 1693958339, 1933723701, 762383971, 4194138871, 
+1127846519, 3647421692, 1806239529, 1956457504, 1862617136, 2115439101, 3946516314, 4142200781, 2734012135, 3031444359, 
+3674954728, 3470802100, 2182268339, 146930546, 4119380166, 2663046125, 2367863064, 538044603, 2911696813, 1952475708, 
+3628183396, 689710730, 3234548916, 4243664626, 937445332, 2167182527, 1794664511, 3308481453, 467190158, 3818776899, 
+1636359772, 7175897, 720483615, 3625769357, 3081128591, 138107813, 2952255548, 2619425943, 570262095, 575756231, 
+2154953914, 3789900311, 501974041, 3080911067, 2633736633, 3860577608, 1745707802, 4246891042, 3958721318, 1771275341, 
+1278964387, 2609837187, 2303245291, 1497745523, 3110223829, 1989990583, 212212732, 3136154533, 3703035442, 801416903, 
+1202202853, 644389723, 496237493, 1055040960, 1458248481, 2492735239, 2772945252, 1493822516, 1567622316, 456901090, 
+3725325856, 2879558970, 464605233, 4078627409, 2941590742, 3501683524, 2707783266, 882685233, 1449119330, 3781821066, 
+2175319368, 4103572217, 2652047222, 156847256, 3295328692, 2160400641, 3065255576, 4053101367, 267548104, 2918487926, 
+1717876888, 3978766478, 3368213261, 389309660, 152946645, 1865153432, 2456039272, 1373361838, 3568602810, 3389327834, 
+3572456580, 1904185145, 3841807036, 1244411770, 1782170711, 2657541958, 2813250379, 3923317201, 2027969512, 536857945, 
+1653935133, 333814753, 4272112603, 568046575, 4148871468, 819091295, 1328699135, 2493605136, 1265925215, 179198289, 
+1489736621, 650038810, 3988067178, 391558559, 3583852674, 1443334002, 1773681153, 474202903, 473322523, 3122141748, 
+2110773065, 3488704481, 1138495288, 367979728, 3016124225, 277825995, 4034754916, 871405966, 719307210, 1638546043, 
+2155826034, 553011320, 2554079224, 1534694995, 3823204194, 15241446, 1333746637, 1386893299, 182660983, 4250841580, 
+2294018000, 122496759, 713483544, 1356491481, 2291732749, 1382306694, 4222154086, 1678918441, 3851581759, 3981590259, 
+2546542834, 2867085611, 3569349661, 3163501654, 2072432659, 3200460966, 765578001, 2176575381, 3379424942, 1394235250, 
+2542443802, 1064147893, 127471928, 2896036486, 640242310, 2440333123, 3591638901, 1181624412, 1351375515, 1080943047, 
+361413488, 3531167171, 368766860, 2624264459, 1546687298, 2686679235, 3450727973, 1769481780, 2074204942, 997181791, 
+4106988297, 
 };

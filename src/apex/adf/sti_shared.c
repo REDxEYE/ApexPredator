@@ -144,9 +144,9 @@ void print_StringHash_48c5294d_4(const StringHash_48c5294d_4 *obj, STI_TypeLibra
 void print_StringHash_99cfa095_6(const StringHash_99cfa095_6 *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent) {
     String *string = DM_get(&lib->hash_strings, *obj);
     if (string != NULL) {
-        fprintf(handle, "\"%s\" (0x%016llX)", String_data(string), (uint64)*obj);
+        fprintf(handle, "\"%s\" (0x%016lX)", String_data(string), (uint64)*obj);
     } else {
-        fprintf(handle, "0x%016llX", (uint64)*obj);
+        fprintf(handle, "0x%016lX", (uint64)*obj);
     }
 }
 

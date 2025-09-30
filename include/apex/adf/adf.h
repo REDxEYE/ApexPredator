@@ -39,7 +39,7 @@ typedef struct {
     uint32 offset;
     uint32 size;
     uint64 name_id;
-}ADFInstance;
+} ADFInstance;
 
 #pragma pack(pop)
 
@@ -57,7 +57,14 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib);
 
 void ADF_free(ADF *adf);
 
-void ADF_load_builtin_adf(STI_TypeLibrary* lib, const uint8* data, int64 size);
+void ADF_load_builtin_adf(STI_TypeLibrary *lib, const uint8 *data, int64 size);
 
+ADFInstance *ADF_get_instance(ADF *adf, uint32 instance_id);
+
+void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance *instance, const MemoryBuffer *mb);
+
+void ADF_free_instance(STI_TypeLibrary* lib, const ADFInstance *instance, void* instance_data);
+
+void ADF_print_instance(STI_TypeLibrary *lib, const ADFInstance *instance, const void* instance_data, int indent);
 
 #endif //APEXPREDATOR_ADF_H

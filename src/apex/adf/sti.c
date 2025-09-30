@@ -8,6 +8,7 @@
 #include "utils/common.h"
 #include "utils/lookup3.h"
 #include "apex/adf/sti.h"
+#include "utils/string.h"
 
 
 void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
@@ -380,7 +381,7 @@ void STI_generate_reader_function(STI_TypeLibrary *lib, STI_Type *type, FILE *ou
             STI_Type *inner_array_type = DM_get(&lib->types, type->info.element_type_hash);
             String inner_array_type_name = {0};
             STI_get_type_name(lib, inner_array_type, &inner_array_type_name);
-            char *inner_type_name_cstr = String_data(&inner_array_type_name);
+            const char *inner_type_name_cstr = String_data(&inner_array_type_name);
             fprintf(output,
                     "static bool read_%s(Buffer* buffer, STI_TypeLibrary* lib, %s* out) {\n"
                     "    uint32 count = 0;\n"
@@ -472,7 +473,7 @@ void STI_generate_free_function(STI_TypeLibrary *lib, STI_Type *type, FILE *outp
     String type_name = {};
     STI_get_type_name(lib, type, &type_name);
 
-    char *type_name_cstr = String_data(&type_name);
+    const char *type_name_cstr = String_data(&type_name);
     if (prototype_only) {
         fprintf(output, "static void free_%s(%s* obj, STI_TypeLibrary* lib);\n", type_name_cstr, type_name_cstr);
         String_free(&type_name);
@@ -586,27 +587,27 @@ void STI_generate_print_function(STI_TypeLibrary *lib, STI_Type *type, FILE *out
 
     String type_name = {};
     STI_get_type_name(lib, type, &type_name);
+    const char *type_name_cstr = String_data(&type_name);
     if (prototype_only) {
         fprintf(output, "static void print_%s(const %s* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent);\n",
-                String_data(&type_name),
-                String_data(&type_name));
+                type_name_cstr, type_name_cstr);
         String_free(&type_name);
         return;
     }
 
     fprintf(output, "static void print_%s(const %s* obj, STI_TypeLibrary* lib, FILE* handle, uint32 indent) {\n",
-            String_data(&type_name),
-            String_data(&type_name));
-    fprintf(output, "    fprintf(handle, \"%s {\\n\");\n    indent++;\n", String_data(&type_name));
+            type_name_cstr, type_name_cstr);
+
     switch (type->type) {
         case STI_Structure: {
+            fprintf(output, "    fprintf(handle, \"%s {\\n\");\n    indent++;\n", type_name_cstr);
             DynamicArray_STI_StructMember *members = &type->type_data.struct_data.members;
             String member_type_name = {0};
             for (uint32 i = 0; i < members->count; ++i) {
                 STI_StructMember *member = &members->items[i];
                 STI_Type *member_type = DM_get(&lib->types, member->info.type_hash);
                 STI_get_type_name(lib, member_type, &member_type_name);
-                char *member_name_cstr = String_data(&member->name);
+                const char *member_name_cstr = String_data(&member->name);
                 fprintf(output, "    fprintf(handle, \"%%*s%%s = \", indent * 4, \"\", \"%s\");\n", member_name_cstr);
                 switch (member_type->type) {
                     case STI_InlineArray: {
@@ -623,20 +624,9 @@ void STI_generate_print_function(STI_TypeLibrary *lib, STI_Type *type, FILE *out
                                 member_name_cstr, member_type->info.element_len - 1);
                         break;
                     }
-                    case STI_Array: {
-                        fprintf(output,
-                                "    print_%s(&obj->%s, lib, handle, indent+1);\n",
-                                String_data(&member_type_name), member_name_cstr);
-                        break;
-                    }
                     case STI_Bitfield: {
                         fprintf(output, "    fprintf(handle, \"%%i\", obj->%s);\n",
                                 member_name_cstr);
-                        break;
-                    }
-                    case STI_StringHash: {
-                        fprintf(output, "    print_%s(&obj->%s, lib, handle, indent+1);\n",
-                                String_data(&member_type_name), member_name_cstr);
                         break;
                     }
                     case STI_Pointer: {
@@ -646,34 +636,33 @@ void STI_generate_print_function(STI_TypeLibrary *lib, STI_Type *type, FILE *out
                         // Skip
                         break;
                     }
-                    case STI_Enumeration: {
-                        fprintf(output, "    fprintf(handle, \"%%s\", \"%s\");\n", String_data(&type_name));
-                        fprintf(output, "    fprintf(handle, \" (%%i)\", (int)obj->%s);\n", member_name_cstr);
-                        break;
-                    }
-                    case STI_Primitive: {
+                    case STI_Enumeration:
+                    case STI_StringHash:
+                    case STI_Primitive:
+                    case STI_Array:
                     default: {
                         fprintf(output,
                                 "    print_%s(&obj->%s, lib, handle, indent + 1);\n",
                                 String_data(&member_type_name), member_name_cstr);
                         break;
                     }
-                    }
                 }
                 fprintf(output, "    fprintf(handle, \"\\n\");\n");
                 String_free(&member_type_name);
             }
+            fprintf(output, "    fprintf(handle, \"%%*s}\", (indent - 1)*4, \"\");\n");
             break;
         }
         case STI_Array: {
+            fprintf(output, "    fprintf(handle, \"%s {\\n\");\n    indent++;\n", type_name_cstr);
             STI_Type *inner_type = DM_get(&lib->types, type->info.element_type_hash);
             String inner_type_name = {};
             STI_get_type_name(lib, inner_type, &inner_type_name);
             fprintf(output,
                     "    if (obj->count>50) {\n"
-                    "        fprintf(handle, \"%%*s\", indent*4, \"\");\n"
-                    "        print_%s(&obj->items[0], lib, handle, indent+1);\n"
-                    "        fprintf(handle, \"\\n%%*s...\\n%%*s\", indent*4, \"\", indent*4, \"\");\n"
+                    "        fprintf(handle, \"%%*s\", indent * 4, \"\");\n"
+                    "        print_%s(&obj->items[0], lib, handle, indent + 1);\n"
+                    "        fprintf(handle, \"\\n%%*s...\\n%%*s\", indent * 4, \"\", indent * 4, \"\");\n"
                     "        print_%s(&obj->items[obj->count-1], lib, handle, indent+1);\n"
                     "        fprintf(handle, \"\\n\");\n"
                     "    } else {\n"
@@ -690,12 +679,21 @@ void STI_generate_print_function(STI_TypeLibrary *lib, STI_Type *type, FILE *out
                     String_data(&inner_type_name),
                     String_data(&inner_type_name)
             );
+            fprintf(output, "    fprintf(handle, \"%%*s}\", (indent - 1) * 4, \"\");\n");
             String_free(&inner_type_name);
             break;
         }
         case STI_Enumeration: {
-            fprintf(output, "    fprintf(handle, \"%%*s%%s\", indent * 4, \"\", \"%s\");\n", String_data(&type_name));
-            fprintf(output, "    fprintf(handle, \" (%%i)\", (int)*obj);\n");
+            fprintf(output, "    fprintf(handle, \"%s( \");\n    indent++;\n", type_name_cstr);
+            fprintf(output, "    switch(*obj) {\n");
+            for (int i = 0; i < type->type_data.enum_data.members.count; ++i) {
+                STI_EnumMember* enum_member = &type->type_data.enum_data.members.items[i];
+                fprintf(output, "        case(%s): {\n", String_data(&enum_member->name));
+                fprintf(output, "            fprintf(handle, \"%s )\");\nbreak;\n", String_data(&enum_member->name));
+                fprintf(output, "            break;\n");
+                fprintf(output, "        }\n");
+            }
+            fprintf(output, "    }\n");
             break;
         }
         case STI_DeferredType:
@@ -712,7 +710,7 @@ void STI_generate_print_function(STI_TypeLibrary *lib, STI_Type *type, FILE *out
             assert(false && "Unknown type");
         }
     }
-    fprintf(output, "    fprintf(handle, \"%%*s}\", (indent - 1) * 4, \"\");\n");
+
     fprintf(output, "}\n");
     String_free(&type_name);
 }
@@ -740,12 +738,11 @@ void STI_generate_register_function(STI_TypeLibrary *lib, String *namespace, FIL
         STI_get_type_name(lib, type, &type_name);
         fprintf(output, "    *((STI_ObjectMethods*)(DM_insert(&lib->object_functions, 0x%08X)))",
                 type->info.hash);
-        char *string_data = String_data(&type_name);
+        const char *string_data = String_data(&type_name);
         fprintf(output,
                 " = (STI_ObjectMethods){(readSTIObject)read_%s, (freeSTIObject)free_%s, (printSTIObject)print_%s, sizeof(%s)};\n",
                 string_data, string_data, string_data, string_data);
     }
-    fprintf(output, "}\n\n");
 
     fprintf(output, "for(uint32 ___i=0;___i<%i;___i++) {\n", lib->hash_strings.keys.count);
     fprintf(output, "    const char* str = STI_%s_hash_strings_string[___i];\n", String_data(namespace));
@@ -754,6 +751,7 @@ void STI_generate_register_function(STI_TypeLibrary *lib, String *namespace, FIL
     fprintf(output, "    if(slot) String_from_cstr(slot, str);\n");
     fprintf(output, "}\n");
 
+    fprintf(output, "}\n\n");
     String_free(&type_name);
 }
 
@@ -854,6 +852,11 @@ void STI_TypeLibrary_free(STI_TypeLibrary *lib) {
     DM_free(&lib->object_functions);
     DM_free(&lib->name_hash_to_type);
     DA_free(&lib->exported_hashes);
+
+    for (int i = 0; i < lib->hash_strings.keys.count; ++i) {
+        String_free(&lib->hash_strings.values.items[i]);
+    }
+    DM_free(&lib->hash_strings);
 }
 
 void STI_Type_free(STI_Type *type) {
@@ -1005,7 +1008,7 @@ void STI_TypeLibrary_generate_types(STI_TypeLibrary *lib, String *namespace, FIL
             lib->hash_strings.keys.count);
     for (int i = 0; i < lib->hash_strings.keys.count; ++i) {
         if (i % 10 == 0)fprintf(impl_output, "\n");
-        fprintf(impl_output, "%llu, ", lib->hash_strings.keys.items[i]);
+        fprintf(impl_output, "%lu, ", lib->hash_strings.keys.items[i]);
     }
     fprintf(impl_output, "\n};\n");
     fprintf(header_output, "#endif //%s_GUARD\n", String_data(namespace));

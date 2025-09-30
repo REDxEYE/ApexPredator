@@ -23,6 +23,10 @@ add_executable(ApexPredator
         src/utils/ply_writer.c
         src/utils/common.c
         src/apex/adf/adf_types.c
+        src/utils/gltf/cgltf_helper.c
+        include/utils/gltf/cgltf_helper.h
+        src/apex/package/archives.c
+        include/apex/package/archives.h
 )
 
 add_executable(TypeGenerator
@@ -60,8 +64,9 @@ if(UNIX)
     target_compile_options(ApexPredator PRIVATE -fms-extensions)
     target_compile_options(TypeGenerator PRIVATE -fms-extensions)
     target_compile_options(HashCollector PRIVATE -fms-extensions)
+    target_link_libraries(ApexPredator PUBLIC m)
 endif()
-target_include_directories(ApexPredator PUBLIC include)
+target_include_directories(ApexPredator PUBLIC include external/cgltf)
 target_include_directories(TypeGenerator PUBLIC include)
 target_include_directories(HashCollector PUBLIC include)
 

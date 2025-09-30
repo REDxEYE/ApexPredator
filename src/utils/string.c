@@ -49,7 +49,7 @@ String* String_from_cstr(String *string, const char *str) {
     return string;
 }
 
-char *String_data(const String *string) {
+const char *String_data(const String *string) {
     if (string->can_be_moved) {
         printf("Warning, using string that can be moved\n");
     }
@@ -83,7 +83,7 @@ void String_trim_zeros(String *string) {
     String_resize(string, actual_len);
 }
 
-void String_sub_string(String *string, uint32 start, int32 size, String *out) {
+void String_sub_string(const String *string, uint32 start, int32 size, String *out) {
     if (start >= string->size || size == 0) {
         String_init(out, 0);
         return;
@@ -104,7 +104,7 @@ void String_sub_string(String *string, uint32 start, int32 size, String *out) {
     out->buffer[length] = '\0';
 }
 
-int32 String_find_chr(String *string, char chr) {
+int32 String_find_chr(const String *string, char chr) {
     char *found = strchr(string->buffer, chr);
     return found ? (int32) (found - string->buffer) : -1;
 }
@@ -154,7 +154,7 @@ void String_append_format(String *string, const char *fmt, ...) {
     string->size += needed;
 }
 
-bool String_equals(String *string, String *other) {
+bool String_equals(const String *string, const String *other) {
     if (string->size != other->size) {
         return false;
     }

@@ -144,3 +144,57 @@ void ADF_load_builtin_adf(STI_TypeLibrary *lib, const uint8 *data, int64 size) {
         ADF_free(&adf);
         emb.close(&emb);
 }
+
+ADFInstance * ADF_get_instance(ADF *adf, uint32 instance_id) {
+    if (instance_id >= adf->instances.count) return NULL;
+    return DA_at(&adf->instances, instance_id);
+}
+
+void * ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance *instance, const MemoryBuffer *mb) {
+    STI_Type *type = DM_get(&lib->types, instance->type_hash);
+    printf("Instance: %s, type %s\n", String_data(&adf->strings.items[instance->name_id]),
+           type ? String_data(&type->name) : "UNKNOWN");
+    if (type == NULL) {
+        printf("Unknown type hash %08X for instance %s\n", instance->type_hash,
+               String_data(&adf->strings.items[instance->name_id]));
+        return NULL;
+    }
+
+    MemoryBuffer instance_memory = {0};
+
+    STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
+    if (object_methods == NULL) {
+        printf("No read function for type hash %08X (%s)\n", instance->type_hash, String_data(&type->name));
+        return NULL;
+    }
+    MemoryBuffer_allocate(&instance_memory, instance->size);
+    memcpy(instance_memory.data, mb->data + instance->offset, instance->size);
+
+    void *instance_data = malloc(object_methods->size);
+
+    if (!object_methods->read((Buffer *) &instance_memory, lib, instance_data)) {
+        printf("Failed to read instance %s of type %s\n", String_data(&adf->strings.items[instance->name_id]),
+               String_data(&type->name));
+        object_methods->free(instance_data, lib);
+        instance_memory.close(&instance_memory);
+        free(instance_data);
+        return NULL;
+    }
+    instance_memory.close(&instance_memory);
+    return instance_data;
+}
+
+void ADF_free_instance(STI_TypeLibrary *lib, const ADFInstance *instance, void *instance_data) {
+    const STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
+    if (object_methods != NULL) {
+        object_methods->free(instance_data, lib);
+    }
+    free(instance_data);
+}
+
+void ADF_print_instance(STI_TypeLibrary *lib, const ADFInstance *instance, const void *instance_data, int indent) {
+    const STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
+    if (object_methods != NULL) {
+        object_methods->print(instance_data, lib, stdout, indent);
+    }
+}

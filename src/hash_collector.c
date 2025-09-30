@@ -130,13 +130,13 @@ void collect_hash_strings(DynamicArray_String *all_tabs, STI_TypeLibrary *lib) {
                 ADF_from_buffer(&adf, (Buffer *) &mb, lib);
                 uint32 hash = 0;
                 uint32 hash2 = 0;
-                for (int j = 0; j < adf.hash_strings.count; ++j) {
-                    hash = 0;
-                    hash2 = 0;
-                    String *hash_str = DA_at(&adf.hash_strings, j);
-                    hashlittle2(String_data(hash_str), hash_str->size, &hash, &hash2);
-                    fprintf(hash_file, "0x%08X %s\n", hash, String_data(hash_str));
-                }
+                // for (int j = 0; j < adf.hash_strings.count; ++j) {
+                //     hash = 0;
+                //     hash2 = 0;
+                //     String *hash_str = DA_at(&adf.hash_strings, j);
+                //     hashlittle2(String_data(hash_str), hash_str->size, &hash, &hash2);
+                //     fprintf(hash_file, "0x%08X %s\n", hash, String_data(hash_str));
+                // }
 
                 ADF_free(&adf);
             }

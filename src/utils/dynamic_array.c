@@ -90,3 +90,18 @@ bool DA_contains_(DynamicArray__Base *da, void *element, DA_compare_fn compare_f
     }
     return false;
 }
+
+void * DA_detach_buffer_(DynamicArray__Base *da) {
+    NULL_ITEM_CHECK;
+    void* items = da->items;
+    da->items = NULL;
+    da->count = 0;
+    da->capacity = 0;
+    da->item_size = 0;
+    return items;
+}
+
+void * DA_get_buffer_(DynamicArray__Base *da) {
+    NULL_ITEM_CHECK;
+    return da->items;
+}

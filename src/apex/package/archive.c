@@ -51,17 +51,23 @@ bool Archive_get_data(Archive *ar, uint32 key, MemoryBuffer *mb) {
     FileBuffer arc_file = {0};
     FileBuffer_open_read(&arc_file, String_data(&ar->arc_path));
     TabEntry *entry = Archive__find_entry(ar, key);
-    if (entry == NULL)return false;
+    if (entry == NULL) {
+        arc_file.close(&arc_file);
+        return false;
+    }
 
     arc_file.set_position(&arc_file, entry->offset, BUFFER_ORIGIN_START);
     if (MemoryBuffer_allocate(mb, entry->size) != BUFFER_SUCCESS) {
+        arc_file.close(&arc_file);
         return false;
     }
     uint32 read_bytes = 0;
     if (arc_file.read(&arc_file, mb->data, entry->size, &read_bytes) != BUFFER_SUCCESS) {
+        arc_file.close(&arc_file);
         return false;
     }
     if (read_bytes != entry->size) {
+        arc_file.close(&arc_file);
         return false;
     }
     arc_file.close(&arc_file);

@@ -35,6 +35,19 @@
         <AlternativeType Name="DynamicArray_InstanceDataLayer"/>
         <AlternativeType Name="DynamicArray_StringHash_48c5294d_4"/>
         <AlternativeType Name="DynamicArray_AmfMaterial"/>
+        <AlternativeType Name="DynamicArray_cgltf_mesh"/>
+        <AlternativeType Name="DynamicArray_cgltf_node"/>
+        <AlternativeType Name="DynamicArray_cgltf_accessor"/>
+        <AlternativeType Name="DynamicArray_cgltf_buffer"/>
+        <AlternativeType Name="DynamicArray_cgltf_buffer_view"/>
+        <AlternativeType Name="DynamicArray_cgltf_attribute"/>
+        <AlternativeType Name="DynamicArray_AmfStreamAttribute"/>
+        <AlternativeType Name="DynamicArray_AmfMesh"/>
+        <AlternativeType Name="DynamicArray_STI_uint8"/>
+        <AlternativeType Name="DynamicArray_STI_uint32"/>
+        <AlternativeType Name="DynamicArray_STI_int16"/>
+        <AlternativeType Name="DynamicArray_AmfLodGroup"/>
+        <AlternativeType Name="DynamicArray_AmfBuffer"/>
         <DisplayString>{{size={count}, cap={capacity}}}</DisplayString>
         <Expand>
             <Item Name="size">count</Item>

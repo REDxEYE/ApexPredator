@@ -34,6 +34,8 @@ void DA_reserve_(DynamicArray__Base *da, uint32 needed_capacity);
 void *DA_at_(DynamicArray__Base *da, uint32 index);
 void DA_free_(DynamicArray__Base *da);
 bool DA_contains_(DynamicArray__Base* da, void* element, DA_compare_fn compare_fn);
+void* DA_detach_buffer_(DynamicArray__Base* da);
+void* DA_get_buffer_(DynamicArray__Base* da);
 
 #define DA_init(da, item_type, initial_capacity) DA_init_((DynamicArray__Base*)(da), sizeof(item_type), initial_capacity)
 #define DA_append(da, element) DA_append_((DynamicArray__Base*)(da), element)
@@ -50,5 +52,6 @@ bool DA_contains_(DynamicArray__Base* da, void* element, DA_compare_fn compare_f
         }\
         DA_free(da);\
     }while(0)
-
+#define DA_detach_buffer(da) DA_detach_buffer_((DynamicArray__Base*)(da))
+#define DA_get_buffer(da) DA_get_buffer_((DynamicArray__Base*)(da))
 #endif //APEXPREDATOR_DYNAMIC_ARRAY_H

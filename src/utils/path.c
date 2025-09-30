@@ -7,6 +7,7 @@
 
 #include "utils/path.h"
 
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -19,6 +20,7 @@
 #  include <sys/stat.h>
 #  include <sys/types.h>
 #  include <unistd.h>
+#  include <dirent.h>
 #  define PATH_MKDIR(p) mkdir(p, 0777)
 #  define PATH_NATIVE_SEP '/'
 #endif
@@ -82,7 +84,7 @@ static int Path__ensure_upto(const char *s, uint32 upto_len) {
                 String_append_cstr2(&cur, sep, 1);
             }
             if (cur.size >= start) {
-                char *p = String_data(&cur);
+                char *p = cur.buffer;
                 int r = PATH_MKDIR(p);
                 if (r != 0 && errno != EEXIST) {
                     int saved = errno;
@@ -97,7 +99,7 @@ static int Path__ensure_upto(const char *s, uint32 upto_len) {
     }
 
     if (cur.size > 0) {
-        char *p = String_data(&cur);
+        char *p = cur.buffer;
         int r = PATH_MKDIR(p);
         if (r != 0 && errno != EEXIST) {
             int saved = errno;
@@ -158,7 +160,7 @@ static void Path__append_normalized(Path *base, const char *component, uint32_t 
  Ensures all directories in the given path exist. Treats a trailing separator
  as a directory. Returns 0 on success, -1 on error (errno set).
 */
-int Path_ensure_dirs(Path *path) {
+int Path_ensure_dirs(const Path *path) {
     const char *s = String_data(path);
     uint32_t len = path->size;
     if (len == 0) return 0;
@@ -173,7 +175,7 @@ int Path_ensure_dirs(Path *path) {
  Ensures all parent directories for the given path exist, skipping the final
  component. Returns 0 on success, -1 on error (errno set).
 */
-int Path_ensure_parent_dirs(Path *path) {
+int Path_ensure_parent_dirs(const Path *path) {
     const char *s = String_data(path);
     uint32_t len = path->size;
     if (len == 0) return 0;
@@ -194,7 +196,7 @@ int Path_ensure_parent_dirs(Path *path) {
  Joins base with the given String component, normalizing separators and
  handling absolute components as replacements.
 */
-void Path_join(Path *base, String *component) {
+void Path_join(Path *base, const String *component) {
     const char *s = String_data(component);
     uint32_t len = component->size;
     Path__append_normalized(base, s, len);
@@ -228,7 +230,7 @@ void Path_convert_to_wsl(Path *out, Path *in) {
         String_copy_from(out, in);
 #else
         String_init(out, in->size + 10);
-        char *buffer = String_data(out);
+        char *buffer = out->buffer;
 
         char drive = in->buffer[0];
         snprintf(buffer, out->capacity, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in->buffer + 2);
@@ -240,4 +242,95 @@ void Path_convert_to_wsl(Path *out, Path *in) {
         }
         out->size = strlen(String_data(out));
 #endif
+}
+void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *tab_files);
+#ifdef WIN32
+#include <Windows.h>
+
+void find_files_by_ext(const char *dir, const String* ext, DynamicArray_Path *tab_files) {
+    char search_path[MAX_PATH];
+    snprintf(search_path, MAX_PATH, "%s\\*", dir);
+
+    WIN32_FIND_DATAA fd;
+    HANDLE hFind = FindFirstFileA(search_path, &fd);
+    if (hFind == INVALID_HANDLE_VALUE) return;
+
+    do {
+        if (strcmp(fd.cFileName, ".") == 0 || strcmp(fd.cFileName, "..") == 0) continue;
+
+        char full_path[MAX_PATH];
+        snprintf(full_path, MAX_PATH, "%s\\%s", dir, fd.cFileName);
+
+        if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+            find_files_by_ext(full_path, ext, tab_files);
+        } else {
+            const char *file_ext = strrchr(fd.cFileName, '.');
+            if (file_ext && strcmp(file_ext, String_data(ext)) == 0) {
+                String *tmp = DA_append_get(tab_files);
+                String_from_cstr(tmp, full_path);
+            }
+        }
+    } while (FindNextFileA(hFind, &fd));
+    FindClose(hFind);
+}
+
+#else
+#include <dirent.h>
+#include <sys/stat.h>
+#include <limits.h>
+#include <string.h>
+#include <stdio.h>
+
+static int is_dir_path(const char *fullpath, const struct dirent *ent) {
+
+
+
+// Use d_type if available and reliable; otherwise lstat
+#ifdef DT_DIR
+if (ent&& ent->d_type!= DT_UNKNOWN) {
+        return ent->d_type == DT_DIR;
+    }
+#endif
+struct stat st;
+    if (lstat(fullpath, &st)== 0) {
+        return S_ISDIR(st.st_mode);
+    }
+    return 0;
+}
+
+void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *tab_files) {
+    DIR *d = opendir(dir);
+    if (!d) return;
+
+    struct dirent *ent;
+    char full_path[PATH_MAX];
+
+    while ((ent = readdir(d)) != NULL) {
+        const char *name = ent->d_name;
+
+        if (name[0] == '.' && (name[1] == '\0' || (name[1] == '.' && name[2] == '\0')))
+            continue;
+
+        int n = snprintf(full_path, sizeof full_path, "%s/%s", dir, name);
+        if (n < 0 || (size_t) n >= sizeof full_path)
+            continue; // path too long, skip
+
+        if (is_dir_path(full_path, ent)) {
+            find_files_by_ext(full_path, ext, tab_files);
+        } else {
+            const char *file_ext = strrchr(name, '.');
+            if (file_ext && strcmp(file_ext, String_data(ext)) == 0) {
+                String_from_cstr(DA_append_get(tab_files), full_path);
+
+            }
+        }
+    }
+    closedir(d);
+}
+#endif
+
+void Path_rglob(const Path *path, const String *ext, DynamicArray_Path *out) {
+    DA_init(out, Path, 1);
+    if (path->size == 0) return;
+    find_files_by_ext(String_data(path), ext, out);
 }
