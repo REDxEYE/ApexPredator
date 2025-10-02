@@ -43,4 +43,10 @@ void Path_convert_to_wsl(Path *out, Path *in);
 
 void Path_rglob(const Path *path, const String *ext, DynamicArray_Path* out);
 
+void Path_remove_extension(const Path* path, Path* extensionless);
+
+void Path_filename(const Path* path, Path* filename);
+
+bool Path_exists(const Path* path);
+
 #endif //APEXPREDATOR_PATH_H

@@ -4,6 +4,7 @@ project(ApexPredator C)
 set(CMAKE_C_STANDARD 17)
 
 add_subdirectory(external/zstd/build/cmake)
+add_subdirectory(external/zlib)
 
 add_executable(ApexPredator
         src/main.c
@@ -12,7 +13,7 @@ add_executable(ApexPredator
         src/utils/buffer/buffer.c
         src/utils/lookup3.c
         src/utils/dynamic_array.c
-        src/apex/package/archive.c
+        src/apex/package/tab_archive.c
         src/utils/buffer/memory_buffer.c
         src/apex/adf/adf.c
         src/apex/adf/sti.c
@@ -24,9 +25,17 @@ add_executable(ApexPredator
         src/utils/common.c
         src/apex/adf/adf_types.c
         src/utils/gltf/cgltf_helper.c
-        include/utils/gltf/cgltf_helper.h
         src/apex/package/archives.c
-        include/apex/package/archives.h
+        src/apex/avtx.c
+        src/platform/texture.c
+        include/apex/avtx.h
+        src/apex/aaf/aaf.c
+        include/apex/aaf/aaf.h
+        src/utils/zlib_wrapper.c
+        src/apex/sarc.c
+        include/apex/sarc.h
+        src/platform/archive.c
+        src/platform/archive_manager.c
 )
 
 add_executable(TypeGenerator
@@ -36,7 +45,7 @@ add_executable(TypeGenerator
         src/utils/buffer/buffer.c
         src/utils/lookup3.c
         src/utils/dynamic_array.c
-        src/apex/package/archive.c
+        src/apex/package/tab_archive.c
         src/utils/buffer/memory_buffer.c
         src/apex/adf/adf.c
         src/apex/adf/sti.c
@@ -51,13 +60,14 @@ add_executable(HashCollector
         src/utils/buffer/buffer.c
         src/utils/lookup3.c
         src/utils/dynamic_array.c
-        src/apex/package/archive.c
+        src/apex/package/tab_archive.c
         src/utils/buffer/memory_buffer.c
         src/apex/adf/adf.c
         src/apex/adf/sti.c
         src/utils/dynamic_insert_only_map.c
         src/utils/path.c
         src/utils/common.c
+        src/apex/package/archives.c
 )
 
 if(UNIX)
@@ -66,8 +76,8 @@ if(UNIX)
     target_compile_options(HashCollector PRIVATE -fms-extensions)
     target_link_libraries(ApexPredator PUBLIC m)
 endif()
-target_include_directories(ApexPredator PUBLIC include external/cgltf)
-target_include_directories(TypeGenerator PUBLIC include)
-target_include_directories(HashCollector PUBLIC include)
+target_include_directories(ApexPredator PUBLIC include external/cgltf external/zlib)
+target_include_directories(TypeGenerator PUBLIC include external/zlib)
+target_include_directories(HashCollector PUBLIC include external/zlib)
 
-target_link_libraries(ApexPredator PUBLIC libzstd)
+target_link_libraries(ApexPredator PUBLIC libzstd zlibstatic)

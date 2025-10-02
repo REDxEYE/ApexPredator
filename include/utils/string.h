@@ -14,10 +14,15 @@ typedef struct String {
     uint32 size;
     uint32 capacity;
     uint32 can_be_moved: 1;
+    uint32 statically_allocated: 1;
+    uint32 heap_allocated: 1;
 } String;
 
 void String_free(String *string);
 
+String* String_new(uint32 size);
+String* String_new_from_cstr(const char *str);
+String* String_new_from_str(const String* other);
 void String_init(String *string, uint32 size);
 
 String *String_from_cstr(String *string, const char *str);
@@ -26,9 +31,9 @@ const char *String_data(const String *string);
 
 void String_append_cstr(String *string, char *str);
 
-void String_append_cstr2(String *string, char *str, uint32 size);
+void String_append_cstr2(String *string, const char *str, uint32 size);
 
-void String_append_str(String *string, String *other);
+void String_append_str(String *string, const String *other);
 
 void String_resize(String *string, uint32 size);
 
@@ -38,7 +43,9 @@ void String_sub_string(const String *string, uint32 start, int32 size, String *o
 
 int32 String_find_chr(const String *string, char chr);
 
-void String_copy_from(String *string, String *other);
+void String_copy_from(String *string, const String *other);
+
+void String_move_from(String *string, String *other);
 
 void String_format(String *string, const char *fmt, ...);
 
@@ -46,12 +53,12 @@ void String_append_format(String *string, const char *fmt, ...);
 
 bool String_equals(const String *string, const String *other);
 
-static  inline String *String_move(String *string) {
+static inline String *String_move(String *string) {
     string->can_be_moved = 1;
     return string;
 }
 
-static  inline String *String_steal(String* string, String* other) {
+static inline String *String_steal(String *string, String *other) {
     if (!other->can_be_moved) {
         printf("Error: trying to steal from string that is not marked movable\n");
         exit(1);
@@ -61,9 +68,9 @@ static  inline String *String_steal(String* string, String* other) {
         exit(1);
     }
 
-    char* buffer = other->buffer;
+    char *buffer = other->buffer;
     other->buffer = NULL;
-    if (string->buffer!=NULL) {
+    if (string->buffer != NULL) {
         free(string->buffer);
     }
     string->buffer = buffer;
@@ -74,20 +81,20 @@ static  inline String *String_steal(String* string, String* other) {
     return string;
 }
 
-static inline char* String_detach(String* string) {
+static inline char *String_detach(String *string) {
     if (!string->can_be_moved) {
         printf("Error: trying to detach from string that is not marked movable\n");
         exit(1);
     }
-    char* buffer = string->buffer;
+    char *buffer = string->buffer;
     string->buffer = NULL;
     string->size = 0;
     string->capacity = 0;
     return buffer;
 }
 
-static inline uint32 String_find_subcstring(String* string, const char* sub) {
-    char* found = strstr(string->buffer, sub);
+static inline uint32 String_find_subcstring(String *string, const char *sub) {
+    char *found = strstr(string->buffer, sub);
     return found ? (uint32) (found - string->buffer) : UINT32_MAX;
 }
 

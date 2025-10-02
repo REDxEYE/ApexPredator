@@ -1,12 +1,12 @@
 // Created by RED on 18.09.2025.
 
-#include "apex/package/archive.h"
+#include "apex/package/tab_archive.h"
 #include "utils/buffer/file_buffer.h"
 
 #include <assert.h>
 #include <stdio.h>
 
-void Archive_open(Archive *ar, String *path) {
+void TabArchive_open(TabArchive *ar, String *path) {
     String_copy_from(&ar->tab_path, path);
     int32 dot_pos = String_find_chr(path, '.');
     assert(dot_pos>0 && "Invalid .tab file path");
@@ -18,7 +18,7 @@ void Archive_open(Archive *ar, String *path) {
         printf("Failed to open tab file %s\n", String_data(path));
         return;
     }
-    DA_init(&ar->entries, TabEntry, 128);
+    DM_init(&ar->entries, TabEntry, 128);
 
     TabHeader header;
     tab_buffer.read(&tab_buffer, &header, sizeof(header),NULL);
@@ -32,22 +32,16 @@ void Archive_open(Archive *ar, String *path) {
             printf("Failed to read entry %d\n", i);
             return;
         }
-        DA_append(&ar->entries, &entry);
+        *(TabEntry*)DM_insert(&ar->entries, entry.hash) = entry;
     }
     tab_buffer.close(&tab_buffer);
 }
 
-TabEntry *Archive__find_entry(Archive *ar, uint32 hash) {
-    for (int i = 0; i < ar->entries.count; i++) {
-        TabEntry *entry = DA_at(&ar->entries, i);
-        if (entry->hash == hash) {
-            return entry;
-        }
-    }
-    return NULL;
+TabEntry *Archive__find_entry(TabArchive *ar, uint32 hash) {
+    return DM_get(&ar->entries, hash);
 }
 
-bool Archive_get_data(Archive *ar, uint32 key, MemoryBuffer *mb) {
+bool TabArchive_get_data(TabArchive *ar, uint32 key, MemoryBuffer *mb) {
     FileBuffer arc_file = {0};
     FileBuffer_open_read(&arc_file, String_data(&ar->arc_path));
     TabEntry *entry = Archive__find_entry(ar, key);
@@ -74,8 +68,12 @@ bool Archive_get_data(Archive *ar, uint32 key, MemoryBuffer *mb) {
     return true;
 }
 
-void Archive_free(Archive *ar) {
+bool TabArchive_has_hash(const TabArchive *ar, uint32 hash) {
+    return DM_get(&ar->entries, hash) != NULL;
+}
+
+void TabArchive_free(TabArchive *ar) {
     String_free(&ar->tab_path);
     String_free(&ar->arc_path);
-    DA_free(&ar->entries);
+    DM_free(&ar->entries);
 }

@@ -91,9 +91,10 @@ static BufferError Buffer__read_string(Buffer *fb, uint32 size, String *string) 
     String_init(string, size);
     uint32 readResult;
     BufferError readErr;
-    if ((readErr = fb->read(fb, String_data(string), size, &readResult)) <= BUFFER_FAILED) {
+    if ((readErr = fb->read(fb, string->buffer, size, &readResult)) <= BUFFER_FAILED) {
         return readErr;
     }
+    string->size = readResult;
     String_trim_zeros(string);
     return readErr;
 }
@@ -205,7 +206,7 @@ void Buffer_init(Buffer *buffer) {
 
 uint64 Buffer_remaining(Buffer *buffer, BufferError *error) {
     uint64 size;
-    uint64 position;
+    int64 position;
     BufferError tmp_error = buffer->getsize(buffer, &size);
     if (error != NULL) {
         *error = tmp_error;

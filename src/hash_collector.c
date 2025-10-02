@@ -11,19 +11,10 @@
 
 #include "apex/package/tab.h"
 #include "apex/adf/adf.h"
-#include "apex/package/archive.h"
+#include "apex/package/tab_archive.h"
 #include "apex/adf/builtin_adf.h"
+#include "apex/package/archives.h"
 #include "utils/lookup3.h"
-
-typedef struct {
-    uint32 hash;
-    String archive_name;
-    String file_name;
-} TabToArch;
-
-DYNAMIC_ARRAY_STRUCT(TabToArch, TabToArch);
-
-DynamicArray_TabToArch all_entries;
 
 #ifdef WIN32
 #include <Windows.h>
@@ -110,42 +101,32 @@ void find_tab_files(const char *dir, DynamicArray_String *tab_files) {
 
 #endif
 
-void collect_hash_strings(DynamicArray_String *all_tabs, STI_TypeLibrary *lib) {
-    Archive ar = {0};
-    ADF adf = {0};
-    FILE *hash_file = fopen("./../hashes.txt", "w");
-    for (int i = 0; i < all_tabs->count; ++i) {
-        String *tab_path = DA_at(all_tabs, i);
-        printf("Processing types from %s\n", String_data(tab_path));
-        Archive_open(&ar, tab_path);
-
-        for (int i = 0; i < ar.entries.count; ++i) {
-            TabEntry *entry = DA_at(&ar.entries, i);
-            MemoryBuffer mb = {0};
-            if (!Archive_get_data(&ar, entry->hash, &mb)) {
-                printf("File not found\n");
-                continue;
-            }
-            if (mb.data[0] == ' ' && mb.data[1] == 'F' && mb.data[2] == 'D' && mb.data[3] == 'A') {
-                ADF_from_buffer(&adf, (Buffer *) &mb, lib);
-                uint32 hash = 0;
-                uint32 hash2 = 0;
-                // for (int j = 0; j < adf.hash_strings.count; ++j) {
-                //     hash = 0;
-                //     hash2 = 0;
-                //     String *hash_str = DA_at(&adf.hash_strings, j);
-                //     hashlittle2(String_data(hash_str), hash_str->size, &hash, &hash2);
-                //     fprintf(hash_file, "0x%08X %s\n", hash, String_data(hash_str));
-                // }
-
-                ADF_free(&adf);
-            }
-            mb.close(&mb);
-        }
-        Archive_free(&ar);
-    }
-    fclose(hash_file);
-}
+// void collect_hash_strings(Archives* archives, DynamicArray_ArchiveEntryInfo *all_entries, STI_TypeLibrary *lib) {
+//     Archive ar = {0};
+//     ADF adf = {0};
+//     FILE *hash_file = fopen("./../hashes.txt", "w");
+//     for (int i = 0; i < all_tabs->count; ++i) {
+//         String *tab_path = DA_at(all_tabs, i);
+//         printf("Processing types from %s\n", String_data(tab_path));
+//         Archive_open(&ar, tab_path);
+//
+//         for (int i = 0; i < ar.entries.count; ++i) {
+//             TabEntry *entry = DA_at(&ar.entries, i);
+//             MemoryBuffer mb = {0};
+//             if (!Archive_get_data(&ar, entry->hash, &mb)) {
+//                 printf("File not found\n");
+//                 continue;
+//             }
+//             if (mb.data[0] == ' ' && mb.data[1] == 'F' && mb.data[2] == 'D' && mb.data[3] == 'A') {
+//                 ADF_from_buffer(&adf, (Buffer *) &mb, lib);
+//                 ADF_free(&adf);
+//             }
+//             mb.close(&mb);
+//         }
+//         Archive_free(&ar);
+//     }
+//     fclose(hash_file);
+// }
 
 int main(int argc, const char *argv[]) {
     if (argc < 2) {
@@ -153,22 +134,66 @@ int main(int argc, const char *argv[]) {
         return 0;
     }
 
-    STI_TypeLibrary lib = {0};
+    DynamicInsertOnlyIntMap_HashString known_strings = {0};
+    DM_init(&known_strings, String, 1024);
+    //Read strings from "strings_procmon.txt"
+    FILE *f = fopen("./../strings_procmon.txt", "r");
+    if (f) {
+        char line[1024];
+        while (fgets(line, sizeof(line), f)) {
+            size_t len = strlen(line);
+            if (len > 0 && line[len - 1] == '\n') {
+                line[len - 1] = '\0';
+                len--;
+            }
+            String *tmp = String_new_from_cstr(line);
+            uint32 hash = path_hash(tmp);
+            if (DM_get(&known_strings, hash) == NULL) {
+                String *slot = DM_insert(&known_strings, hash);
+                String_move_from(slot, String_move(tmp));
+            }
+            free(tmp);
+        }
+        fclose(f);
+    }
+
     String tmp = {0};
     String game_root = {0};
-    STI_TypeLibrary_init(&lib);
-    DynamicArray_String all_tabs;
-    DA_init(&all_tabs, String, 64);
-
     String_from_cstr(&tmp, argv[1]);
+    Archives archives = {0};
     Path_convert_to_wsl(&game_root, &tmp);
-    find_tab_files(String_data(&game_root), &all_tabs);
+    Archives_init(&archives, &game_root);
 
-    collect_hash_strings(&all_tabs, &lib);
+    DynamicArray_ArchiveEntryInfo *all_entries = Archives_get_all_entries(&archives);
+
+    STI_TypeLibrary lib = {0};
+    STI_TypeLibrary_init(&lib);
+
+    f = fopen("./../archive_info.csv", "w");
+    fprintf(f, "archive_name,hash,filename,size\n");
+    for (int i = 0; i < all_entries->count; ++i) {
+        if ((i & 100) == 0)
+            printf("Processing %i/%i\r", i + 1, all_entries->count);
+        String *filename = String_new(16);
+        String *found_hash = DM_get(&known_strings, all_entries->items[i].info->hash);
+        Path_filename(&all_entries->items[i].archive->arc_path, filename);
+        fprintf(f, "%s", String_data(filename));
+        free(filename);
+
+        if (found_hash != NULL) {
+            fprintf(f, ",0x%08X,%s,%u\n", all_entries->items[i].info->hash, String_data(found_hash),
+                    all_entries->items[i].info->size);
+        } else {
+            fprintf(f, ",0x%08X,<NOT_FOUND>,%u\n", all_entries->items[i].info->hash, all_entries->items[i].info->size);
+        }
+    }
+    fclose(f);
+
+    // collect_hash_strings(all_entries, &lib);
 
     STI_TypeLibrary_free(&lib);
     String_free(&game_root);
     String_free(&tmp);
-    DA_free_with_inner(&all_tabs, {String_free(it);});
+    DA_free(all_entries);
     return 0;
 }

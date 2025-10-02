@@ -135,7 +135,7 @@ STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType meta_type,
     uint32 *slot = NULL;
     if (type) {
         STI_Type_init(type, meta_type);
-        String_copy_from(&type->name, name);
+        String_move_from(&type->name, name);
         uint32 name_hash = 0;
         uint32 init_tmp = 0;
         hashlittle2(String_data(&type->name), type->name.size, &name_hash, &init_tmp);
@@ -191,7 +191,7 @@ void STI_get_type_name(STI_TypeLibrary *lib, STI_Type *type, String *type_name) 
     switch (type->type) {
         case STI_Structure:
         case STI_Enumeration: {
-            String_copy_from(type_name, &type->name);
+            String_move_from(type_name, &type->name);
             break;
         }
         case STI_DeferredType:
@@ -211,7 +211,7 @@ void STI_get_type_name(STI_TypeLibrary *lib, STI_Type *type, String *type_name) 
             String_from_cstr(&tmp, "DynamicArray_");
             STI_get_type_name(lib, inner_array_type, type_name);
             String_append_str(&tmp, type_name);
-            String_copy_from(type_name, String_move(&tmp));
+            String_move_from(type_name, String_move(&tmp));
             String_free(&tmp);
             break;
         }
@@ -221,7 +221,7 @@ void STI_get_type_name(STI_TypeLibrary *lib, STI_Type *type, String *type_name) 
             break;
         }
         case STI_Bitfield: {
-            String_copy_from(type_name, &type->name);
+            String_move_from(type_name, &type->name);
             int32 sep_id = String_find_chr(type_name, ':');
             assert(sep_id!=-1 && "Failed to find separator in bitfield.");
             String_resize(type_name, sep_id);

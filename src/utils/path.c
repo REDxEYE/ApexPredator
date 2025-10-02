@@ -227,27 +227,28 @@ void Path_join_format(Path *base, const char *fmt, ...) {
 
 void Path_convert_to_wsl(Path *out, Path *in) {
 #ifdef WIN32
-        String_copy_from(out, in);
+    String_copy_from(out, in);
 #else
-        String_init(out, in->size + 10);
-        char *buffer = out->buffer;
+    String_init(out, in->size + 10);
+    char *buffer = out->buffer;
 
-        char drive = in->buffer[0];
-        snprintf(buffer, out->capacity, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in->buffer + 2);
-        // Fix slashes
-        for (int i = 0; i < out->capacity; ++i) {
-            if (buffer[i] == '\\') {
-                buffer[i] = '/';
-            }
+    char drive = in->buffer[0];
+    snprintf(buffer, out->capacity, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in->buffer + 2);
+    // Fix slashes
+    for (int i = 0; i < out->capacity; ++i) {
+        if (buffer[i] == '\\') {
+            buffer[i] = '/';
         }
-        out->size = strlen(String_data(out));
+    }
+    out->size = strlen(String_data(out));
 #endif
 }
+
 void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *tab_files);
 #ifdef WIN32
 #include <Windows.h>
 
-void find_files_by_ext(const char *dir, const String* ext, DynamicArray_Path *tab_files) {
+void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *tab_files) {
     char search_path[MAX_PATH];
     snprintf(search_path, MAX_PATH, "%s\\*", dir);
 
@@ -321,7 +322,6 @@ void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *ta
             const char *file_ext = strrchr(name, '.');
             if (file_ext && strcmp(file_ext, String_data(ext)) == 0) {
                 String_from_cstr(DA_append_get(tab_files), full_path);
-
             }
         }
     }
@@ -333,4 +333,53 @@ void Path_rglob(const Path *path, const String *ext, DynamicArray_Path *out) {
     DA_init(out, Path, 1);
     if (path->size == 0) return;
     find_files_by_ext(String_data(path), ext, out);
+}
+
+void Path_remove_extension(const Path *path, Path *extensionless) {
+    String_init(extensionless, path->size);
+    const char *s = String_data(path);
+    int32_t last_dot = -1;
+    for (int32_t i = (int32_t) path->size - 1; i >= 0; --i) {
+        if (s[i] == '.') {
+            last_dot = i;
+            break;
+        }
+        if (Path__is_sep(s[i])) {
+            break;
+        }
+    }
+    if (last_dot < 0) {
+        String_copy_from(extensionless, path);
+    } else {
+        String_append_cstr2(extensionless, s, (uint32_t) last_dot);
+    }
+}
+
+void Path_filename(const Path *path, Path *filename) {
+    String_init(filename, path->size);
+    const char *s = String_data(path);
+    int32_t last_sep = -1;
+    for (int32_t i = (int32_t) path->size - 1; i >= 0; --i) {
+        if (Path__is_sep(s[i])) {
+            last_sep = i;
+            break;
+        }
+    }
+    if (last_sep < 0) {
+        String_copy_from(filename, path);
+    } else {
+        String_append_cstr2(filename, s + last_sep + 1, path->size - (uint32_t) last_sep - 1);
+    }
+}
+
+bool Path_exists(const Path *path) {
+    if (path->size == 0) return false;
+    const char *s = String_data(path);
+#ifdef WIN32
+    DWORD attrs = GetFileAttributesA(s);
+    return attrs != INVALID_FILE_ATTRIBUTES;
+#else
+    struct stat st;
+    return stat(s, &st) == 0;
+#endif
 }

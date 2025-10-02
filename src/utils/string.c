@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 void String_free(String *string) {
-    if (string->buffer!=NULL) {
+    if (string->buffer != NULL && !string->statically_allocated) {
         free(string->buffer);
         string->buffer = NULL;
     }
@@ -17,9 +17,33 @@ void String_free(String *string) {
     string->capacity = 0;
 }
 
+String * String_new(uint32 size) {
+    String *string = malloc(sizeof(String));
+    memset(string, 0, sizeof(String));
+    string->heap_allocated = 1;
+    String_init(string, size);
+    return string;
+}
+
+String * String_new_from_cstr(const char *str) {
+    String *string = malloc(sizeof(String));
+    memset(string, 0, sizeof(String));
+    string->heap_allocated = 1;
+    return String_from_cstr(string, str);
+}
+
+String * String_new_from_str(const String *other) {
+    String *string = malloc(sizeof(String));
+    memset(string, 0, sizeof(String));
+    string->heap_allocated = 1;
+    String_copy_from(string, other);
+    return string;
+}
+
+
 void String_init(String *string, uint32 size) {
     string->can_be_moved = 0;
-    if (string->buffer!=NULL) {
+    if (string->buffer != NULL) {
         if (size + 1 > string->capacity) {
             String_resize(string, size);
             assert(string->buffer && "Out of memory");
@@ -38,7 +62,7 @@ void String_init(String *string, uint32 size) {
     memset(string->buffer, 0, string->capacity);
 }
 
-String* String_from_cstr(String *string, const char *str) {
+String *String_from_cstr(String *string, const char *str) {
     const size_t len = strlen(str);
     assert(len<UINT32_MAX && "Input CStr is to long");
     String_init(string, len);
@@ -53,7 +77,7 @@ const char *String_data(const String *string) {
     if (string->can_be_moved) {
         printf("Warning, using string that can be moved\n");
     }
-    if (string->buffer==NULL) {
+    if (string->buffer == NULL) {
         printf("Error: trying to get data from uninitialized string\n");
         exit(1);
     }
@@ -109,12 +133,16 @@ int32 String_find_chr(const String *string, char chr) {
     return found ? (int32) (found - string->buffer) : -1;
 }
 
-void String_copy_from(String *string, String *other) {
+void String_move_from(String *string, String *other) {
     if (other->can_be_moved) {
         String_steal(string, other);
         return;
     }
 
+    String_copy_from(string, other);
+}
+
+void String_copy_from(String *string, const String *other) {
     String_init(string, other->size);
     memcpy(string->buffer, String_data(other), other->size);
     string->size = other->size;
@@ -161,7 +189,7 @@ bool String_equals(const String *string, const String *other) {
     return memcmp(string->buffer, other->buffer, string->size) == 0;
 }
 
-void String_append_cstr2(String *string, char *str, uint32 size) {
+void String_append_cstr2(String *string, const char *str, uint32 size) {
     if (string->size + size >= string->capacity) {
         String_resize(string, string->size + size);
     }
@@ -171,6 +199,6 @@ void String_append_cstr2(String *string, char *str, uint32 size) {
     string->buffer[string->size] = '\0';
 }
 
-void String_append_str(String *string, String *other) {
+void String_append_str(String *string, const String *other) {
     String_append_cstr2(string, other->buffer, other->size);
 }

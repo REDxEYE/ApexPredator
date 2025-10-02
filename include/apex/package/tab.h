@@ -20,4 +20,5 @@ typedef struct {
 }TabEntry;
 
 #pragma pack(pop)
+
 #endif //APEXPREDATOR_HEADER_H

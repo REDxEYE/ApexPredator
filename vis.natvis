@@ -47,7 +47,8 @@
         <AlternativeType Name="DynamicArray_STI_uint32"/>
         <AlternativeType Name="DynamicArray_STI_int16"/>
         <AlternativeType Name="DynamicArray_AmfLodGroup"/>
-        <AlternativeType Name="DynamicArray_AmfBuffer"/>
+        <AlternativeType Name="DynamicArray_AmDfBuffer"/>
+        <AlternativeType Name="DynamicArray_SArcEntry"/>
         <DisplayString>{{size={count}, cap={capacity}}}</DisplayString>
         <Expand>
             <Item Name="size">count</Item>

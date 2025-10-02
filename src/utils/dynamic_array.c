@@ -8,6 +8,14 @@
 
 #define NULL_ITEM_CHECK  assert(da->items!=NULL && "Uninitialized dynamic array")
 
+DynamicArray__Base * DA_new_(uint32 item_size, uint32 initial_capacity) {
+    DynamicArray__Base *da = malloc(sizeof(DynamicArray__Base));
+    memset(da, 0, sizeof(DynamicArray__Base));
+    da->heap_allocated = 1;
+    DA_init_(da, item_size, initial_capacity);
+    return da;
+}
+
 void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity) {
     da->capacity = initial_capacity;
     da->count = 0;
@@ -72,12 +80,14 @@ void *DA_at_(DynamicArray__Base *da, uint32 index) {
 }
 
 void DA_free_(DynamicArray__Base *da) {
-    if (da->items == NULL)return;
-    free(da->items);
+    if (da->items != NULL && !da->statically_allocated)free(da->items);
     da->items = 0;
     da->count = 0;
     da->capacity = 0;
     da->item_size = 0;
+    if (da->heap_allocated) {
+        free(da);
+    }
 }
 
 bool DA_contains_(DynamicArray__Base *da, void *element, DA_compare_fn compare_fn) {

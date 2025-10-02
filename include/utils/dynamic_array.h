@@ -8,7 +8,9 @@
 
 typedef struct DynamicArray {
     void **items;
-    uint32 item_size;
+    uint32 item_size:24;
+    uint32 statically_allocated:1;
+    uint32 heap_allocated:1;
     uint32 count;
     uint32 capacity;
 } DynamicArray__Base;
@@ -20,13 +22,16 @@ enum {
 #define DYNAMIC_ARRAY_STRUCT(element_type, name)\
     typedef struct DynamicArray_##name{\
         element_type* items;\
-        uint32 item_size;\
+        uint32 item_size:24;\
+        uint32 statically_allocated:1;\
+        uint32 heap_allocated:1;\
         uint32 count;\
         uint32 capacity;\
     }DynamicArray_##name
 
 typedef bool (*DA_compare_fn)(const void* a, const void* b);
 
+DynamicArray__Base* DA_new_(uint32 item_size, uint32 initial_capacity);
 void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity);
 void DA_append_(DynamicArray__Base *da, void *element);
 void* DA_append_get_(DynamicArray__Base *da);
@@ -37,6 +42,7 @@ bool DA_contains_(DynamicArray__Base* da, void* element, DA_compare_fn compare_f
 void* DA_detach_buffer_(DynamicArray__Base* da);
 void* DA_get_buffer_(DynamicArray__Base* da);
 
+#define DA_new(item_type, initial_capacity) (DynamicArray_##item_type*)DA_new_(sizeof(item_type), initial_capacity)
 #define DA_init(da, item_type, initial_capacity) DA_init_((DynamicArray__Base*)(da), sizeof(item_type), initial_capacity)
 #define DA_append(da, element) DA_append_((DynamicArray__Base*)(da), element)
 #define DA_append_get(da) DA_append_get_((DynamicArray__Base*)(da))

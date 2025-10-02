@@ -10,7 +10,7 @@
 
 #include "apex/package/tab.h"
 #include "apex/adf/adf.h"
-#include "apex/package/archive.h"
+#include "apex/package/tab_archive.h"
 #include "apex/adf/builtin_adf.h"
 
 
@@ -111,7 +111,7 @@ void find_tab_files(const char *dir, DynamicArray_String *tab_files) {
 #endif
 
 void collect_types(DynamicArray_String *all_tabs, STI_TypeLibrary* lib) {
-    Archive ar = {0};
+    TabArchive ar = {0};
     ADF adf = {0};
     STI_start_type_dump(lib);
     ADF_load_builtin_adf(lib, VEGETATIONINFO_ADF, sizeof(VEGETATIONINFO_ADF));
@@ -149,12 +149,12 @@ void collect_types(DynamicArray_String *all_tabs, STI_TypeLibrary* lib) {
     for (int i = 0; i < all_tabs->count; ++i) {
         String *tab_path = DA_at(all_tabs, i);
         printf("Processing types from %s\n", String_data(tab_path));
-        Archive_open(&ar, tab_path);
+        TabArchive_open(&ar, tab_path);
 
         for (int i = 0; i < ar.entries.count; ++i) {
             TabEntry *entry = DA_at(&ar.entries, i);
             MemoryBuffer mb = {0};
-            if (!Archive_get_data(&ar, entry->hash, &mb)) {
+            if (!TabArchive_get_data(&ar, entry->hash, &mb)) {
                 printf("File not found\n");
                 continue;
             }
@@ -165,7 +165,7 @@ void collect_types(DynamicArray_String *all_tabs, STI_TypeLibrary* lib) {
             mb.close(&mb);
         }
 
-        Archive_free(&ar);
+        TabArchive_free(&ar);
     }
 
     String namespace = {0};
