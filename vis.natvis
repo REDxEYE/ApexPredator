@@ -49,6 +49,8 @@
         <AlternativeType Name="DynamicArray_AmfLodGroup"/>
         <AlternativeType Name="DynamicArray_AmDfBuffer"/>
         <AlternativeType Name="DynamicArray_SArcEntry"/>
+        <AlternativeType Name="DynamicArray_ArchivePtr"/>
+        <AlternativeType Name="DynamicArray_AAFSection"/>
         <DisplayString>{{size={count}, cap={capacity}}}</DisplayString>
         <Expand>
             <Item Name="size">count</Item>

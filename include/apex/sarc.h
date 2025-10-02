@@ -4,7 +4,9 @@
 #define APEXPREDATOR_SARC_H
 #include "int_def.h"
 #include "adf/adf.h"
+#include "platform/archive.h"
 #include "utils/buffer/buffer.h"
+#include "utils/dynamic_insert_only_map.h"
 
 typedef struct {
     uint32 version;
@@ -22,14 +24,18 @@ typedef struct {
 }SArcEntry;
 
 DYNAMIC_ARRAY_STRUCT(SArcEntry, SArcEntry);
+DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(SArcEntry, SArcEntryMap);
 
 typedef struct {
+    struct ArchiveInterface;
     SArcHeader header;
     char* strings;
-    DynamicArray_SArcEntry entries;
+    DynamicInsertOnlyIntMap_SArcEntryMap entries;
+    Buffer* buffer;
 }SArchive;
 
-void SArchive_from_buffer(SArchive* archive, Buffer* buffer);
-void SArchive_free(SArchive* archive);
+SArchive* SArchive_new(Buffer* buffer);
+// void SArchive_from_buffer(SArchive* archive, Buffer* buffer);
+// void SArchive_free(SArchive* archive);
 
 #endif //APEXPREDATOR_SARC_H

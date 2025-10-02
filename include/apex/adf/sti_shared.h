@@ -25,6 +25,8 @@ typedef float32 STI_float32;
 typedef float64 STI_float64;
 typedef String STI_String;
 typedef uint32 StringHash_48c5294d_4;
+typedef uint64 StringHash_99cfa095_6;
+typedef uint64 StringHash_48c5294d_8;
 
 typedef struct {
     uint32 offset;
@@ -34,7 +36,7 @@ typedef struct {
     void *data;
 } STI_Deferred;
 
-typedef uint64 StringHash_99cfa095_6;
+
 
 bool read_STI_int8(Buffer *buffer, STI_TypeLibrary *lib, STI_int8 *out);
 
@@ -51,6 +53,8 @@ bool read_STI_uint32(Buffer *buffer, STI_TypeLibrary *lib, STI_uint32 *out);
 bool read_StringHash_48c5294d_4(Buffer *buffer, STI_TypeLibrary *lib, StringHash_48c5294d_4 *out);
 
 bool read_StringHash_99cfa095_6(Buffer *buffer, STI_TypeLibrary *lib, StringHash_99cfa095_6 *out);
+
+bool read_StringHash_48c5294d_8(Buffer *buffer, STI_TypeLibrary *lib, StringHash_48c5294d_8 *out);
 
 bool read_STI_int64(Buffer *buffer, STI_TypeLibrary *lib, STI_int64 *out);
 
@@ -83,6 +87,8 @@ void print_STI_uint32(const STI_uint32 *obj, STI_TypeLibrary *lib, FILE *handle,
 void print_StringHash_48c5294d_4(const StringHash_48c5294d_4 *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent);
 
 void print_StringHash_99cfa095_6(const StringHash_99cfa095_6 *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent);
+
+void print_StringHash_48c5294d_8(const StringHash_48c5294d_8 *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent);
 
 void print_STI_int64(const STI_int64 *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent);
 

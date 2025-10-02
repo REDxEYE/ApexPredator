@@ -38,7 +38,7 @@ typedef struct {
 
 void AAFArchive_from_buffer(AAFArchive *archive, Buffer* buffer);
 
-bool AAFArchive_get_section(AAFArchive *archive, uint32 index, MemoryBuffer *out);
+bool AAFArchive_get_data(AAFArchive *archive, MemoryBuffer *out);
 
 void AAFArchive_free(AAFArchive *archive);
 

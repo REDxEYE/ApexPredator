@@ -11,8 +11,10 @@ typedef struct {
     int64 size;
     int64 capacity;
     int64 position;
+    uint32 heap_allocated:1;
 }MemoryBuffer;
 
+MemoryBuffer* MemoryBuffer_new();
 BufferError MemoryBuffer_allocate(MemoryBuffer* mb, int64 size);
 
 

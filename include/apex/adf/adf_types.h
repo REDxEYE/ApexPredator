@@ -9,168 +9,307 @@
 void STI_ADF_TYPES_register_functions(STI_TypeLibrary* lib);
 
 typedef struct PersistentRoadSamples PersistentRoadSamples;// size: 32
+typedef struct RigidObjectEffects RigidObjectEffects;// size: 124
 typedef struct InstanceDataPatch InstanceDataPatch;// size: 48
 typedef struct TerrainPatch TerrainPatch;// size: 632
+typedef struct FirstPersonVehicleCameraModifierParams_2 FirstPersonVehicleCameraModifierParams_2;// size: 256
 typedef struct SafehouseUtilities SafehouseUtilities;// size: 32
 typedef struct CraftingItemOption CraftingItemOption;// size: 20
 typedef struct InstanceDataLayer InstanceDataLayer;// size: 128
 typedef struct WaveWorks WaveWorks;// size: 4
 typedef struct WorldSaveData9 WorldSaveData9;// size: 336
+typedef struct LandAudio LandAudio;// size: 8
 typedef struct AmfModel AmfModel;// size: 48
+typedef struct AirplaneAI AirplaneAI;// size: 696
+typedef struct MotorbikeFuelSettings MotorbikeFuelSettings;// size: 8
+typedef struct BarkConstants BarkConstants;// size: 160
 typedef struct AnimalPopulationsSaveData3 AnimalPopulationsSaveData3;// size: 48
+typedef struct AuxiliaryMotionModifierParams AuxiliaryMotionModifierParams;// size: 56
+typedef struct ListenerPositionParams ListenerPositionParams;// size: 20
+typedef struct CameraInputParams_2 CameraInputParams_2;// size: 172
+typedef struct AlignToVelocityParams AlignToVelocityParams;// size: 40
 typedef struct EffectRTEmitterTemplate EffectRTEmitterTemplate;// size: 120
 typedef struct Spline20 Spline20;// size: 260
+typedef struct SetOffsetFramingParams SetOffsetFramingParams;// size: 28
 typedef struct CurrencyCollection CurrencyCollection;// size: 16
+typedef struct SpringPart SpringPart;// size: 8
 typedef struct BuildingSaveData3 BuildingSaveData3;// size: 32
 typedef struct LynxSettings LynxSettings;// size: 8
 typedef struct ShaderLibrary ShaderLibrary;// size: 112
+typedef struct MoveInputYawParams MoveInputYawParams;// size: 40
+typedef struct CameraInputParams CameraInputParams;// size: 160
+typedef struct FullScreenEffectModifierParams FullScreenEffectModifierParams;// size: 1
+typedef struct AirGlobal AirGlobal;// size: 144
 typedef struct CharactersSaveData7 CharactersSaveData7;// size: 4464
-typedef struct PlayerSettings PlayerSettings;// size: 488
+typedef struct PlayerSettings_2 PlayerSettings_2;// size: 488
 typedef struct EnvParam EnvParam;// size: 48
+typedef struct WheelDamage WheelDamage;// size: 12
+typedef struct StaminaThresholds StaminaThresholds;// size: 4
+typedef struct WeaponModTuningSettings WeaponModTuningSettings;// size: 32
 typedef struct ProceduralMission ProceduralMission;// size: 24
+typedef struct DockingPropLimits DockingPropLimits;// size: 24
+typedef struct PerformanceBoost PerformanceBoost;// size: 20
 typedef struct InsurrectionLevel InsurrectionLevel;// size: 80
 typedef struct SchematicTreeNode SchematicTreeNode;// size: 48
+typedef struct RotorCollision RotorCollision;// size: 16
 typedef struct PfxDeactivationProperties PfxDeactivationProperties;// size: 36
 typedef struct ProceduralMissions ProceduralMissions;// size: 16
 typedef struct BlackboardVarList BlackboardVarList;// size: 64
+typedef struct CharacterRealizationSettings CharacterRealizationSettings;// size: 232
 typedef struct AmfMeshHeader AmfMeshHeader;// size: 56
+typedef struct VehicleParts VehicleParts;// size: 192
 typedef struct WaterTuning WaterTuning;// size: 16
+typedef struct EulerAngles EulerAngles;// size: 12
+typedef struct ExpCraftProbabilities ExpCraftProbabilities;// size: 52
 typedef struct EnvironmentParameters EnvironmentParameters;// size: 32
 typedef struct ProfileSaveData5 ProfileSaveData5;// size: 160
 typedef struct OccluderBox OccluderBox;// size: 76
+typedef struct MotionBlurModifierParams MotionBlurModifierParams;// size: 16
+typedef struct LandmarkConstants LandmarkConstants;// size: 48
 typedef struct DamageOverTimeEffectSettings DamageOverTimeEffectSettings;// size: 40
 typedef struct RouteInput RouteInput;// size: 24
+typedef struct DriverLean DriverLean;// size: 64
 typedef struct Vec3 Vec3;// size: 12
 typedef struct PerceptionSettings_2 PerceptionSettings_2;// size: 176
 typedef struct ActionToken ActionToken;// size: 32
 typedef struct EffectRTBatchDescriptor EffectRTBatchDescriptor;// size: 24
+typedef struct ChaseCameraModifierParams ChaseCameraModifierParams;// size: 216
 typedef struct BuildData BuildData;// size: 64
 typedef struct ImpostorMesh ImpostorMesh;// size: 56
+typedef struct Node Node;// size: 48
+typedef struct AdditiveOffsetModifierParams AdditiveOffsetModifierParams;// size: 24
 typedef struct ValueOccurance ValueOccurance;// size: 96
 typedef struct HunterMissionEvent HunterMissionEvent;// size: 56
 typedef struct CharactersSaveData1 CharactersSaveData1;// size: 4080
 typedef struct DamageOverTimeScreenEffectSettings DamageOverTimeScreenEffectSettings;// size: 12
 typedef struct AnimalPopulationsSaveData AnimalPopulationsSaveData;// size: 48
+typedef struct InputToOrbitModifierParams InputToOrbitModifierParams;// size: 32
+typedef struct LandGlobal LandGlobal;// size: 104
 typedef struct SettingNameValuePair SettingNameValuePair;// size: 8
 typedef struct CraftingData CraftingData;// size: 64
 typedef struct CharacterProfile3 CharacterProfile3;// size: 1024
+typedef struct PartTunings PartTunings;// size: 16
 typedef struct MaterialOverride MaterialOverride;// size: 24
 typedef struct ControlPointSaveData3 ControlPointSaveData3;// size: 48
+typedef struct TurboJump TurboJump;// size: 24
 typedef struct TerrainPatchTexelConnectivity TerrainPatchTexelConnectivity;// size: 80
 typedef struct StringLookupHashProperties StringLookupHashProperties;// size: 12
+typedef struct PartTuning PartTuning;// size: 24
+typedef struct VehicleEffects VehicleEffects;// size: 324
 typedef struct VegetationBillboardLayer VegetationBillboardLayer;// size: 44
 typedef struct WorldSettings WorldSettings;// size: 28
+typedef struct NoiseAnimation NoiseAnimation;// size: 496
+typedef struct VelocityDamper VelocityDamper;// size: 12
 typedef struct XLSSheet XLSSheet;// size: 32
+typedef struct HingedPartProperties HingedPartProperties;// size: 40
 typedef struct ProbabilityBuffer ProbabilityBuffer;// size: 24
 typedef struct AmfBuffer AmfBuffer;// size: 24
+typedef struct HelicopterAI HelicopterAI;// size: 420
 typedef struct WorldAudioPatchZoneData WorldAudioPatchZoneData;// size: 48
+typedef struct ExtendedExposedVariable ExtendedExposedVariable;// size: 8
 typedef struct AnimalRepopulateSaveData AnimalRepopulateSaveData;// size: 1
+typedef struct SuspensionAxis SuspensionAxis;// size: 64
 typedef struct BlobOfBytes BlobOfBytes;// size: 16
+typedef struct LandAerodynamics LandAerodynamics;// size: 20
 typedef struct PfxBodyPropertiesEntry PfxBodyPropertiesEntry;// size: 64
 typedef struct AcceptedPolicyPair AcceptedPolicyPair;// size: 68
 typedef struct VegetationModel VegetationModel;// size: 96
+typedef struct HitEntitySpawn HitEntitySpawn;// size: 24
+typedef struct Tint Tint;// size: 80
+typedef struct Transmission Transmission;// size: 160
+typedef struct MovementSteeringParams MovementSteeringParams;// size: 48
 typedef struct VariableInt VariableInt;// size: 16
 typedef struct WorldSaveData6 WorldSaveData6;// size: 264
 typedef struct PfxStaticInstance PfxStaticInstance;// size: 96
+typedef struct SteeringAngleLimits SteeringAngleLimits;// size: 12
+typedef struct FoliageConstants FoliageConstants;// size: 52
+typedef struct DynamicZParams DynamicZParams;// size: 28
+typedef struct PartWaterInteractionElement PartWaterInteractionElement;// size: 64
 typedef struct WorldSaveData3 WorldSaveData3;// size: 232
+typedef struct PatchProvision PatchProvision;// size: 80
 typedef struct InventoryBuildingComponentSaveData1 InventoryBuildingComponentSaveData1;// size: 16
+typedef struct CharacterSwimSettings CharacterSwimSettings;// size: 12
+typedef struct CameraBaseSmoothingModifierParams CameraBaseSmoothingModifierParams;// size: 44
 typedef struct TerrainPatchType TerrainPatchType;// size: 464
 typedef struct VegetationPhysicsLayer VegetationPhysicsLayer;// size: 24
 typedef struct NetworkStaticObjects NetworkStaticObjects;// size: 24
 typedef struct ArcRenderSettings ArcRenderSettings;// size: 156
+typedef struct GeneralMkIIIConstants GeneralMkIIIConstants;// size: 320
 typedef struct AmfSubMesh AmfSubMesh;// size: 36
 typedef struct VegetationPhysics VegetationPhysics;// size: 88
 typedef struct PlayerDecalData PlayerDecalData;// size: 12
+typedef struct FinPartProperties FinPartProperties;// size: 16
 typedef struct GSData GSData;// size: 32
+typedef struct Suspension Suspension;// size: 144
 typedef struct CharacterConstants CharacterConstants;// size: 52
 typedef struct AmfStreamAttribute AmfStreamAttribute;// size: 20
 typedef struct LocationState LocationState;// size: 8
 typedef struct SplineControlPoint SplineControlPoint;// size: 12
 typedef struct CraftingResourceData CraftingResourceData;// size: 8
+typedef struct MachineSettings_2 MachineSettings_2;// size: 44
+typedef struct AimControlSettings AimControlSettings;// size: 12
+typedef struct MoveInputOffsetParams MoveInputOffsetParams;// size: 132
+typedef struct SetCameraPivotModifierParams SetCameraPivotModifierParams;// size: 16
 typedef struct WorldSaveData7 WorldSaveData7;// size: 296
 typedef struct EffectVertexArray EffectVertexArray;// size: 16
+typedef struct ThirdPersonCameraModifierParams_2 ThirdPersonCameraModifierParams_2;// size: 232
 typedef struct CharacterProfile1 CharacterProfile1;// size: 1000
+typedef struct SequenceDofModifierParams SequenceDofModifierParams;// size: 1
 typedef struct Spline10 Spline10;// size: 140
 typedef struct VegetationObject VegetationObject;// size: 352
 typedef struct VegetationDebugData VegetationDebugData;// size: 64
+typedef struct GroundAlignmentBoneAdjustment GroundAlignmentBoneAdjustment;// size: 16
+typedef struct AmmunitionTuning AmmunitionTuning;// size: 296
+typedef struct Submersible Submersible;// size: 80
+typedef struct VehicleDoor VehicleDoor;// size: 24
 typedef struct MachinePersistentStatsEncounterData MachinePersistentStatsEncounterData;// size: 16
 typedef struct PhysicsStreamPatchType PhysicsStreamPatchType;// size: 24
+typedef struct BoatGlobal BoatGlobal;// size: 76
 typedef struct EffectRTRenderInfo EffectRTRenderInfo;// size: 24
 typedef struct ProfileSaveData3 ProfileSaveData3;// size: 160
 typedef struct AnimalSaveData AnimalSaveData;// size: 1384
 typedef struct TimerSaveData1 TimerSaveData1;// size: 16
-typedef struct HunterMissionData HunterMissionData;// size: 16
+typedef struct HunterMissionData_2 HunterMissionData_2;// size: 16
 typedef struct ForestMesh ForestMesh;// size: 40
 typedef struct Shader Shader;// size: 40
 typedef struct ProceduralMissionInstance ProceduralMissionInstance;// size: 96
 typedef struct Items Items;// size: 32
+typedef struct AreaBulletSettings AreaBulletSettings;// size: 20
+typedef struct AutoPitchParams AutoPitchParams;// size: 28
+typedef struct HunterMissionAttachment HunterMissionAttachment;// size: 104
+typedef struct CharacterReelToParaSettings CharacterReelToParaSettings;// size: 84
+typedef struct WheelHardpoint WheelHardpoint;// size: 12
 typedef struct SchematicTree SchematicTree;// size: 56
+typedef struct Drift Drift;// size: 84
+typedef struct AerodynamicSurface AerodynamicSurface;// size: 96
+typedef struct RcTickSettings RcTickSettings;// size: 172
 typedef struct Collection Collection;// size: 32
+typedef struct RotatingPart RotatingPart;// size: 44
+typedef struct GenericVehicleCamera GenericVehicleCamera;// size: 800
+typedef struct BoatBuoyancyModule BoatBuoyancyModule;// size: 36
+typedef struct MotorbikeWheelie MotorbikeWheelie;// size: 56
 typedef struct Spline5 Spline5;// size: 80
+typedef struct PID PID;// size: 12
 typedef struct Vector2 Vector2;// size: 8
+typedef struct CompanionSettings CompanionSettings;// size: 72
+typedef struct DeformPoints DeformPoints;// size: 112
 typedef struct RoadGraphEdgeSamples RoadGraphEdgeSamples;// size: 40
 typedef struct TerrainPatchInfo TerrainPatchInfo;// size: 48
+typedef struct CameraSpline10 CameraSpline10;// size: 140
 typedef struct AmfMesh AmfMesh;// size: 152
+typedef struct VisionSettings VisionSettings;// size: 144
+typedef struct CharacterSpline10 CharacterSpline10;// size: 140
 typedef struct MachineSettings MachineSettings;// size: 40
 typedef struct HarvesterSettings HarvesterSettings;// size: 24
+typedef struct Propellers Propellers;// size: 496
 typedef struct VariableBool VariableBool;// size: 16
+typedef struct ScopeOffsetTransform ScopeOffsetTransform;// size: 12
 typedef struct AdfModelCollection AdfModelCollection;// size: 64
 typedef struct StringLookup StringLookup;// size: 48
 typedef struct EncumbranceSettings EncumbranceSettings;// size: 84
 typedef struct BitmapArea BitmapArea;// size: 56
 typedef struct ForcePulseSettings ForcePulseSettings;// size: 48
 typedef struct LookoutList LookoutList;// size: 24
+typedef struct MotorbikeTurnSettings MotorbikeTurnSettings;// size: 12
 typedef struct TerrainOccluderMesh TerrainOccluderMesh;// size: 64
+typedef struct Fin Fin;// size: 72
 typedef struct EquipmentEntity EquipmentEntity;// size: 24
 typedef struct WorldAudioPatchData WorldAudioPatchData;// size: 16
+typedef struct SplineFuncOfPitchParams SplineFuncOfPitchParams;// size: 328
 typedef struct RoadGraphNode RoadGraphNode;// size: 16
+typedef struct VehicleRumbleEffects VehicleRumbleEffects;// size: 88
+typedef struct Decals Decals;// size: 32
 typedef struct FactionSaveData1 FactionSaveData1;// size: 24
+typedef struct HelicopterCommon HelicopterCommon;// size: 12
 typedef struct AwarenessEventRanges AwarenessEventRanges;// size: 64
+typedef struct GroundAlignmentDataSplines GroundAlignmentDataSplines;// size: 420
+typedef struct Brakes Brakes;// size: 28
 typedef struct POIInfo POIInfo;// size: 96
 typedef struct CharacterProfile2 CharacterProfile2;// size: 1016
 typedef struct ImpostorInfo ImpostorInfo;// size: 72
+typedef struct LandEngine LandEngine;// size: 60
+typedef struct FollowSpringModifierParams FollowSpringModifierParams;// size: 208
 typedef struct PatchSampleList PatchSampleList;// size: 4
+typedef struct CharacterParachuteSettings CharacterParachuteSettings;// size: 552
 typedef struct Equipment Equipment;// size: 288
+typedef struct StorageSettings StorageSettings;// size: 16
+typedef struct AimPartConstraint AimPartConstraint;// size: 96
+typedef struct TriangulatedMesh TriangulatedMesh;// size: 32
+typedef struct FoliageMeshConstants FoliageMeshConstants;// size: 12
+typedef struct LandSteering LandSteering;// size: 60
+typedef struct HashString HashString;// size: 16
 typedef struct WorldSaveData2 WorldSaveData2;// size: 216
 typedef struct CharacterSkinConstants CharacterSkinConstants;// size: 52
-typedef struct PlayerHealthSettings PlayerHealthSettings;// size: 180
+typedef struct GeneralConstants GeneralConstants;// size: 12
+typedef struct PlayerHealthSettings_2 PlayerHealthSettings_2;// size: 180
 typedef struct AnimalPopulationSaveData AnimalPopulationSaveData;// size: 72
 typedef struct VegetationBillboardLayerStats VegetationBillboardLayerStats;// size: 32
 typedef struct TerrainOccluderPackedMesh TerrainOccluderPackedMesh;// size: 16
+typedef struct RotatingPartProperties RotatingPartProperties;// size: 40
 typedef struct DataLifespans DataLifespans;// size: 68
+typedef struct SpringPartProperties SpringPartProperties;// size: 16
+typedef struct CustomVelocityDamper CustomVelocityDamper;// size: 16
+typedef struct PhysicsGlobalSettings PhysicsGlobalSettings;// size: 4
 typedef struct AITuningSettings AITuningSettings;// size: 152
+typedef struct CustomMovementSettings CustomMovementSettings;// size: 2020
 typedef struct EffectRTEmitter EffectRTEmitter;// size: 40
+typedef struct ArcadePhysics ArcadePhysics;// size: 108
 typedef struct RoadGraphEdgeSample RoadGraphEdgeSample;// size: 6
+typedef struct AmmunitionFireModeSettings AmmunitionFireModeSettings;// size: 4
 typedef struct SmallMachineSettings SmallMachineSettings;// size: 16
+typedef struct FirebirdSettings FirebirdSettings;// size: 8
 typedef struct XLSCell XLSCell;// size: 12
 typedef struct CharactersSaveData8 CharactersSaveData8;// size: 4464
+typedef struct EnginelessReverse EnginelessReverse;// size: 8
 typedef struct RaidLootSaveData RaidLootSaveData;// size: 8
+typedef struct CarPaintMMConstants CarPaintMMConstants;// size: 324
+typedef struct CameraShakeModifierParams CameraShakeModifierParams;// size: 8
 typedef struct LowHealthScreenEffectSettings LowHealthScreenEffectSettings;// size: 28
+typedef struct AdditivePivotModifierParams AdditivePivotModifierParams;// size: 24
 typedef struct AnimalDamageablePartSaveData AnimalDamageablePartSaveData;// size: 16
 typedef struct SightTuning SightTuning;// size: 20
+typedef struct PartDamageType PartDamageType;// size: 32
 typedef struct MissionSaveData2 MissionSaveData2;// size: 64
 typedef struct TerrainMesh TerrainMesh;// size: 224
+typedef struct DoorPart DoorPart;// size: 1
+typedef struct MissileArcSettings MissileArcSettings;// size: 12
 typedef struct ActionTokenList ActionTokenList;// size: 16
 typedef struct HunterMissionRule HunterMissionRule;// size: 96
 typedef struct AllLights AllLights;// size: 16
 typedef struct WindowConstants WindowConstants;// size: 40
+typedef struct StuntAreas StuntAreas;// size: 13064
+typedef struct ExtendedEffectUsages ExtendedEffectUsages;// size: 16
+typedef struct BoatEngine BoatEngine;// size: 152
+typedef struct MoveInputPitchParams MoveInputPitchParams;// size: 32
+typedef struct CarPaintMMDynamicConstants CarPaintMMDynamicConstants;// size: 48
+typedef struct TrainAudio TrainAudio;// size: 168
 typedef struct PfxStaticCompound PfxStaticCompound;// size: 96
 typedef struct VegetationDataBuffer VegetationDataBuffer;// size: 16
 typedef struct XLSAttribute XLSAttribute;// size: 2
+typedef struct CharacterAirSteerSettings CharacterAirSteerSettings;// size: 24
+typedef struct MotorbikeSuspension MotorbikeSuspension;// size: 152
+typedef struct CharacterSpring CharacterSpring;// size: 12
 typedef struct DifficultyLevel DifficultyLevel;// size: 220
 typedef struct EffectRTLocalParam EffectRTLocalParam;// size: 8
+typedef struct FirstPersonVehicleCameraModifierParams FirstPersonVehicleCameraModifierParams;// size: 240
 typedef struct HunterMissionRulesGroup HunterMissionRulesGroup;// size: 24
+typedef struct BuoyancyModule BuoyancyModule;// size: 12
 typedef struct CharactersSaveData2 CharactersSaveData2;// size: 4144
+typedef struct CharacterMovementSettings CharacterMovementSettings;// size: 352
 typedef struct GeneralR2Constants GeneralR2Constants;// size: 32
 typedef struct TerrainColor TerrainColor;// size: 3
 typedef struct SaveVector3 SaveVector3;// size: 12
 typedef struct VegetationSystemInstanceSrc VegetationSystemInstanceSrc;// size: 48
 typedef struct ProfileSaveData2 ProfileSaveData2;// size: 120
+typedef struct WeaponAttachData WeaponAttachData;// size: 44
 typedef struct BuildContainer1 BuildContainer1;// size: 16
 typedef struct StatisticInfo StatisticInfo;// size: 8
 typedef struct AdfBool AdfBool;// size: 16
+typedef struct MotorbikeSteering MotorbikeSteering;// size: 116
 typedef struct SaveGameData2 SaveGameData2;// size: 64
+typedef struct WingsuitAttachmentModifierParams WingsuitAttachmentModifierParams;// size: 132
 typedef struct RepairBuildingComponentSaveData1 RepairBuildingComponentSaveData1;// size: 1
+typedef struct VehicleCommon VehicleCommon;// size: 352
 typedef struct AwarenessEventThreats AwarenessEventThreats;// size: 44
 typedef struct CharacterProfile5 CharacterProfile5;// size: 1088
 typedef struct SpecificEvent SpecificEvent;// size: 12
@@ -179,95 +318,187 @@ typedef struct DreaThermobaricSettings DreaThermobaricSettings;// size: 32
 typedef struct AnimalSaveData2 AnimalSaveData2;// size: 1392
 typedef struct StreamPatchFileHeader StreamPatchFileHeader;// size: 24
 typedef struct OwnedEquipment2 OwnedEquipment2;// size: 48
+typedef struct AirEngine AirEngine;// size: 28
 typedef struct RivalMissionGroup1 RivalMissionGroup1;// size: 8
 typedef struct HunterAttackSettings HunterAttackSettings;// size: 12
 typedef struct RigidBodyControllerParameters RigidBodyControllerParameters;// size: 48
 typedef struct WorldSaveData5 WorldSaveData5;// size: 248
 typedef struct RoutesCollection RoutesCollection;// size: 16
+typedef struct BoneData BoneData;// size: 864
+typedef struct ParachuteCameraCollisionModifierParams ParachuteCameraCollisionModifierParams;// size: 28
+typedef struct PhysicsComponentDamageFromPart PhysicsComponentDamageFromPart;// size: 32
+typedef struct SplineAnimation SplineAnimation;// size: 1120
+typedef struct DoorPartProperties DoorPartProperties;// size: 16
+typedef struct BrakeAxis BrakeAxis;// size: 12
 typedef struct AnimalPopulationsSaveData2 AnimalPopulationsSaveData2;// size: 48
 typedef struct RivalRegion1 RivalRegion1;// size: 32
+typedef struct DataSplines DataSplines;// size: 420
 typedef struct RagdollSetting RagdollSetting;// size: 112
+typedef struct AimAssistParams AimAssistParams;// size: 24
 typedef struct RivalMissionComplete RivalMissionComplete;// size: 12
+typedef struct CharacterFpsSettings CharacterFpsSettings;// size: 256
+typedef struct JointPivotModifierParams JointPivotModifierParams;// size: 16
+typedef struct VehicleMisc VehicleMisc;// size: 160
+typedef struct PartsHierarchy PartsHierarchy;// size: 16
 typedef struct PfxBodyPropertiesDict PfxBodyPropertiesDict;// size: 16
 typedef struct CharactersSaveData3 CharactersSaveData3;// size: 4176
+typedef struct MotorbikeMotionComponents MotorbikeMotionComponents;// size: 64
+typedef struct CharacterWingsuitSettings CharacterWingsuitSettings;// size: 484
+typedef struct BoatCommon BoatCommon;// size: 12
 typedef struct RoadGraphRoadExtraInfo RoadGraphRoadExtraInfo;// size: 48
+typedef struct Rotors Rotors;// size: 48
+typedef struct CameraTowing CameraTowing;// size: 24
 typedef struct PfxSolverStabilizationProperties PfxSolverStabilizationProperties;// size: 8
 typedef struct WorldSaveData1 WorldSaveData1;// size: 216
+typedef struct HunterMissionData HunterMissionData;// size: 16
+typedef struct CharacterReeledHangSettings CharacterReeledHangSettings;// size: 24
 typedef struct BuildingSaveData1 BuildingSaveData1;// size: 20
 typedef struct AmfModelVariant AmfModelVariant;// size: 80
 typedef struct VariableVec3 VariableVec3;// size: 24
 typedef struct CachedFile CachedFile;// size: 80
 typedef struct AnimalGroupSaveData AnimalGroupSaveData;// size: 8
+typedef struct MotorbikeTiltSettings MotorbikeTiltSettings;// size: 44
 typedef struct EquipmentEntities EquipmentEntities;// size: 16
+typedef struct Bone Bone;// size: 48
+typedef struct CharacterFreefallSettings CharacterFreefallSettings;// size: 460
+typedef struct CharacterReelInSettings CharacterReelInSettings;// size: 20
 typedef struct StreamPatchBlockHeader StreamPatchBlockHeader;// size: 24
+typedef struct CameraAnimationControl CameraAnimationControl;// size: 56
 typedef struct DifficultyScalingSettings DifficultyScalingSettings;// size: 16
+typedef struct AxisAlignedBoundingBox AxisAlignedBoundingBox;// size: 24
 typedef struct CollisionSubSystemByName CollisionSubSystemByName;// size: 16
+typedef struct MotorbikeDebugSettings MotorbikeDebugSettings;// size: 128
 typedef struct GSDataSet GSDataSet;// size: 48
+typedef struct SkinnedPart SkinnedPart;// size: 24
+typedef struct InputAxisTiming InputAxisTiming;// size: 16
+typedef struct MotorbikeLeanSettings MotorbikeLeanSettings;// size: 32
+typedef struct CharacterRetractSShotSettings CharacterRetractSShotSettings;// size: 20
+typedef struct Fins Fins;// size: 544
 typedef struct EffectRTInstantiator EffectRTInstantiator;// size: 96
 typedef struct CompanionSchematicCurrencySettings CompanionSchematicCurrencySettings;// size: 12
 typedef struct PlayerRaidStatsSaveData PlayerRaidStatsSaveData;// size: 48
 typedef struct CharactersSaveData5 CharactersSaveData5;// size: 4208
+typedef struct ShakeAnimation ShakeAnimation;// size: 432
 typedef struct PerceptionSettings PerceptionSettings;// size: 132
 typedef struct ReseveIconInfo ReseveIconInfo;// size: 24
 typedef struct RoadGraph RoadGraph;// size: 136
+typedef struct SoundFalloff SoundFalloff;// size: 24
 typedef struct DreaAttackSettings DreaAttackSettings;// size: 8
 typedef struct BuildingSaveData2 BuildingSaveData2;// size: 40
+typedef struct ProjectileEntitySpawn ProjectileEntitySpawn;// size: 24
 typedef struct BitmapData BitmapData;// size: 24
+typedef struct TankPositionModifierParams TankPositionModifierParams;// size: 16
 typedef struct WorldAudioPatchNormalData WorldAudioPatchNormalData;// size: 16
+typedef struct MotorbikeCommon MotorbikeCommon;// size: 40
 typedef struct TerrainPatchTexelNeighborhood TerrainPatchTexelNeighborhood;// size: 8
 typedef struct RivalLevel RivalLevel;// size: 20
 typedef struct LocationSummarySaveData LocationSummarySaveData;// size: 112
 typedef struct GlobalFilter GlobalFilter;// size: 24
+typedef struct CharacterPhysicsEffects CharacterPhysicsEffects;// size: 84
 typedef struct RoadInfoEx RoadInfoEx;// size: 72
 typedef struct DifficultySetting DifficultySetting;// size: 52
 typedef struct GSGraph GSGraph;// size: 16
 typedef struct PfxBodyMassProperties PfxBodyMassProperties;// size: 44
+typedef struct BoatAI BoatAI;// size: 260
+typedef struct Propeller Propeller;// size: 104
+typedef struct FirstPersonCameraModifierParams_2 FirstPersonCameraModifierParams_2;// size: 280
 typedef struct SchematicCurrencySettings SchematicCurrencySettings;// size: 12
 typedef struct DamageOverTimeCamShakeSettings DamageOverTimeCamShakeSettings;// size: 28
 typedef struct AmfMeshBuffers AmfMeshBuffers;// size: 40
+typedef struct Part Part;// size: 368
+typedef struct PlayerHealthSettings PlayerHealthSettings;// size: 164
+typedef struct PartBehavior PartBehavior;// size: 32
 typedef struct RivalData RivalData;// size: 192
+typedef struct VehicleDamageCommon VehicleDamageCommon;// size: 40
 typedef struct VegetationSet VegetationSet;// size: 32
 typedef struct PfxBodyProperties PfxBodyProperties;// size: 56
+typedef struct DeformPoint DeformPoint;// size: 224
+typedef struct Graph Graph;// size: 16
 typedef struct StringLookupSubtitle StringLookupSubtitle;// size: 12
+typedef struct RadialBlurParams RadialBlurParams;// size: 36
+typedef struct PerceptionConfig PerceptionConfig;// size: 328
 typedef struct ControlPointSaveData1 ControlPointSaveData1;// size: 48
+typedef struct BoatPerformanceBoost BoatPerformanceBoost;// size: 12
 typedef struct DownloadFileCache DownloadFileCache;// size: 16
+typedef struct JointOffsetFramingParams JointOffsetFramingParams;// size: 16
+typedef struct LandWheel LandWheel;// size: 32
 typedef struct EffectTrimData EffectTrimData;// size: 40
 typedef struct AmfLodGroup AmfLodGroup;// size: 24
 typedef struct Rival1 Rival1;// size: 40
 typedef struct LookoutPOIList LookoutPOIList;// size: 32
 typedef struct ProfileSaveData6 ProfileSaveData6;// size: 224
+typedef struct VehicleAngleLimitsModifierParams VehicleAngleLimitsModifierParams;// size: 36
 typedef struct PfxBreakableInstance PfxBreakableInstance;// size: 96
 typedef struct BuildingGridSaveData1 BuildingGridSaveData1;// size: 16
+typedef struct ProceduralShakeParams ProceduralShakeParams;// size: 88
+typedef struct TireEffectsCommon TireEffectsCommon;// size: 68
+typedef struct CharacterOnFootSettings CharacterOnFootSettings;// size: 36
+typedef struct ArcChainSettings ArcChainSettings;// size: 28
 typedef struct RoadToGraphLookup RoadToGraphLookup;// size: 32
+typedef struct CarAI CarAI;// size: 244
+typedef struct AirSteering AirSteering;// size: 72
 typedef struct CharacterProfile4 CharacterProfile4;// size: 1024
 typedef struct AdfModelCollectionInstance AdfModelCollectionInstance;// size: 92
+typedef struct VehicleDamage VehicleDamage;// size: 128
 typedef struct FogOfWar FogOfWar;// size: 65540
 typedef struct GSNode GSNode;// size: 64
+typedef struct StuntAreaWeldingInfo StuntAreaWeldingInfo;// size: 8
+typedef struct AmmunitionRecoilSettings AmmunitionRecoilSettings;// size: 28
+typedef struct Rudder Rudder;// size: 352
 typedef struct CompressedData CompressedData;// size: 32
+typedef struct ClusterAmmunitionSettings ClusterAmmunitionSettings;// size: 24
+typedef struct TrainGlobal TrainGlobal;// size: 100
 typedef struct ProceduralSpawn ProceduralSpawn;// size: 96
 typedef struct HunterMissionRandomizer HunterMissionRandomizer;// size: 48
 typedef struct HairConstants HairConstants;// size: 52
 typedef struct CodexInfo CodexInfo;// size: 8
 typedef struct HealthBuildingComponentSaveData1 HealthBuildingComponentSaveData1;// size: 4
+typedef struct VelocityFilterSettings VelocityFilterSettings;// size: 12
+typedef struct RollParams RollParams;// size: 56
+typedef struct RigidBody RigidBody;// size: 68
 typedef struct VegetationEffect VegetationEffect;// size: 104
+typedef struct CharacterNavigationSettings CharacterNavigationSettings;// size: 56
+typedef struct BoatTurboJump BoatTurboJump;// size: 20
 typedef struct ControlPointLevel ControlPointLevel;// size: 8
+typedef struct AmmunitionTuning_2 AmmunitionTuning_2;// size: 432
+typedef struct HearingSettings HearingSettings;// size: 96
 typedef struct TerrainTextureInfo TerrainTextureInfo;// size: 32
+typedef struct AllVehiclesCommon AllVehiclesCommon;// size: 12
 typedef struct RaidSaveData2 RaidSaveData2;// size: 40
 typedef struct ProfileSaveData8 ProfileSaveData8;// size: 176
+typedef struct FirstPersonCameraModifierParams FirstPersonCameraModifierParams;// size: 264
+typedef struct ParachuteAttachmentModifierParams ParachuteAttachmentModifierParams;// size: 20
 typedef struct DreaChargeSettings DreaChargeSettings;// size: 12
+typedef struct WheelHardpointOffset WheelHardpointOffset;// size: 16
+typedef struct DockingControls DockingControls;// size: 16
+typedef struct ExtendedEffectUsage ExtendedEffectUsage;// size: 32
 typedef struct SaveGameData1 SaveGameData1;// size: 48
+typedef struct BoatAudio BoatAudio;// size: 16
+typedef struct ViewFrustum ViewFrustum;// size: 52
 typedef struct CharacterLooks CharacterLooks;// size: 56
+typedef struct WeaponSkillSettings WeaponSkillSettings;// size: 88
+typedef struct CombinedEffectSettings CombinedEffectSettings;// size: 40
+typedef struct HingedPart HingedPart;// size: 1
 typedef struct ProfileSaveData4 ProfileSaveData4;// size: 160
+typedef struct PlayerCollisionModifierParams PlayerCollisionModifierParams;// size: 44
+typedef struct ColorRGBA ColorRGBA;// size: 16
 typedef struct OwnedEquipment1 OwnedEquipment1;// size: 80
+typedef struct Requirement Requirement;// size: 12
+typedef struct SmellSettings SmellSettings;// size: 72
+typedef struct InputStick InputStick;// size: 20
+typedef struct ChaseCameraModifierParams_2 ChaseCameraModifierParams_2;// size: 228
 typedef struct DismantleBuildingComponentSaveData1 DismantleBuildingComponentSaveData1;// size: 1
 typedef struct WorldSaveData4 WorldSaveData4;// size: 232
 typedef struct RouteInputsCollection RouteInputsCollection;// size: 16
+typedef struct AttachData AttachData;// size: 32
 typedef struct TerrainPrimitive TerrainPrimitive;// size: 32
 typedef struct RaidSaveData RaidSaveData;// size: 32
 typedef struct CollectibleInfo CollectibleInfo;// size: 40
 typedef struct GerstnerWaves GerstnerWaves;// size: 12
+typedef struct Rudders Rudders;// size: 16
 typedef struct RegionTitle RegionTitle;// size: 8
 typedef struct CharactersSaveData4 CharactersSaveData4;// size: 4176
+typedef struct Buoyancy Buoyancy;// size: 40
 typedef struct EffectRTOutputBufferDescriptor EffectRTOutputBufferDescriptor;// size: 40
 typedef struct WorldAudioInfo WorldAudioInfo;// size: 40
 typedef struct NetworkedCollectible NetworkedCollectible;// size: 16
@@ -275,103 +506,188 @@ typedef struct CharactersSaveData6 CharactersSaveData6;// size: 4208
 typedef struct AnimalPopulationSaveData2 AnimalPopulationSaveData2;// size: 24
 typedef struct RivalMissionGroupData RivalMissionGroupData;// size: 24
 typedef struct Compatibility Compatibility;// size: 32
+typedef struct CameraSplineControlPoint CameraSplineControlPoint;// size: 12
+typedef struct PartType PartType;// size: 32
+typedef struct PartPhysicsMapping PartPhysicsMapping;// size: 24
+typedef struct HunterMissionObjective HunterMissionObjective;// size: 136
 typedef struct StorageLevel StorageLevel;// size: 16
+typedef struct CurveAbscissa CurveAbscissa;// size: 12
 typedef struct VegetationZone VegetationZone;// size: 16
+typedef struct SplineFuncOfYawParams SplineFuncOfYawParams;// size: 708
 typedef struct CharacterProfile6 CharacterProfile6;// size: 1088
+typedef struct PointPartConstraint PointPartConstraint;// size: 64
 typedef struct ProfileSaveData7 ProfileSaveData7;// size: 224
+typedef struct MotorbikeAimSettings MotorbikeAimSettings;// size: 16
+typedef struct Palette Palette;// size: 16
+typedef struct HelicopterSteering HelicopterSteering;// size: 80
 typedef struct EffectRTSystem EffectRTSystem;// size: 224
-typedef struct HunterMission HunterMission;// size: 264
+typedef struct HintModifierParams HintModifierParams;// size: 84
+typedef struct ForcePulseSettings_2 ForcePulseSettings_2;// size: 72
+typedef struct CharacterSplineControlPoint CharacterSplineControlPoint;// size: 12
+typedef struct HunterMission_2 HunterMission_2;// size: 264
 typedef struct OccluderBoxCollection OccluderBoxCollection;// size: 16
 typedef struct Type Type;// size: 56
+typedef struct AirPerformanceBoost AirPerformanceBoost;// size: 12
 typedef struct BitmapLayer BitmapLayer;// size: 40
+typedef struct CameraSpline5 CameraSpline5;// size: 80
+typedef struct SphericalCoordinateFramingParams SphericalCoordinateFramingParams;// size: 44
+typedef struct CustomLandGlobal CustomLandGlobal;// size: 244
+typedef struct MovementType MovementType;// size: 48
 typedef struct UtilitiesCollection UtilitiesCollection;// size: 16
 typedef struct RivalNames RivalNames;// size: 32
 typedef struct ChildEquipment ChildEquipment;// size: 8
+typedef struct TrainCommon TrainCommon;// size: 12
 typedef struct PlayerPosition PlayerPosition;// size: 16
 typedef struct PfxBreakableCompound PfxBreakableCompound;// size: 96
+typedef struct CameraCollisionParams CameraCollisionParams;// size: 148
 typedef struct VegetationLayers VegetationLayers;// size: 64
+typedef struct AirAudio AirAudio;// size: 44
 typedef struct EffectRTTimeline EffectRTTimeline;// size: 64
+typedef struct AITuningSettings_2 AITuningSettings_2;// size: 420
+typedef struct Aerodynamics Aerodynamics;// size: 536
 typedef struct MissionSaveData MissionSaveData;// size: 64
 typedef struct EffectRTSpecialEffect EffectRTSpecialEffect;// size: 168
+typedef struct FallDamageSettings FallDamageSettings;// size: 16
 typedef struct LightInfo LightInfo;// size: 40
 typedef struct Route Route;// size: 32
 typedef struct OwnedEquipment3 OwnedEquipment3;// size: 48
 typedef struct PersistentDataEx PersistentDataEx;// size: 16
+typedef struct DamageablePhysicsComponent DamageablePhysicsComponent;// size: 32
+typedef struct ThirdPersonCameraModifierParams ThirdPersonCameraModifierParams;// size: 224
 typedef struct WorldAudioPatchZoneNormalData WorldAudioPatchZoneNormalData;// size: 72
 typedef struct VegetationModelLayer VegetationModelLayer;// size: 52
+typedef struct HelicopterModel HelicopterModel;// size: 280
 typedef struct RegionTitleCollection RegionTitleCollection;// size: 24
+typedef struct CharacterJumpSettings CharacterJumpSettings;// size: 28
 typedef struct PfxSimplePartInstance PfxSimplePartInstance;// size: 96
 typedef struct RoadInfo RoadInfo;// size: 4
 typedef struct EntityDisplayStat EntityDisplayStat;// size: 24
 typedef struct AIGlobals_2 AIGlobals_2;// size: 256
+typedef struct ZOverTimeParams ZOverTimeParams;// size: 144
 typedef struct AIGlobals AIGlobals;// size: 216
+typedef struct PartPhysicsMappings PartPhysicsMappings;// size: 16
+typedef struct AI AI;// size: 44
 typedef struct MachinePersistentStatsData MachinePersistentStatsData;// size: 272
 typedef struct ForestVertex ForestVertex;// size: 4
+typedef struct Value Value;// size: 40
+typedef struct PlayerSettings PlayerSettings;// size: 360
+typedef struct WaterInteraction WaterInteraction;// size: 336
+typedef struct IKChain IKChain;// size: 104
+typedef struct FinPart FinPart;// size: 1
+typedef struct DofModifierParams DofModifierParams;// size: 32
+typedef struct BikeAI BikeAI;// size: 332
+typedef struct CharacterAirMovementSettings CharacterAirMovementSettings;// size: 452
+typedef struct CarPaintMMStaticConstants CarPaintMMStaticConstants;// size: 268
 typedef struct WorldSaveData8 WorldSaveData8;// size: 304
 typedef struct VegetationWorld VegetationWorld;// size: 176
+typedef struct PartNode PartNode;// size: 56
+typedef struct ExtendedExposedVariables ExtendedExposedVariables;// size: 16
+typedef struct LocalAngleLimitsModifierParams LocalAngleLimitsModifierParams;// size: 44
 typedef struct WorldAudioVector4 WorldAudioVector4;// size: 16
 typedef struct TerrainSystem TerrainSystem;// size: 136
+typedef struct SpeedDependentInputFilter SpeedDependentInputFilter;// size: 28
+typedef struct HunterMission HunterMission;// size: 232
 typedef struct ArrayAABB ArrayAABB;// size: 28
+typedef struct PlaneCommon PlaneCommon;// size: 12
 typedef struct ControlPointSaveData2 ControlPointSaveData2;// size: 48
 typedef struct VegetationSystemInstance VegetationSystemInstance;// size: 24
 typedef struct ContextualHelpInfo ContextualHelpInfo;// size: 8
 typedef struct VegetationForestLayer VegetationForestLayer;// size: 64
 typedef struct VegetationPlacementSettings VegetationPlacementSettings;// size: 48
+typedef struct AvoidanceSettings AvoidanceSettings;// size: 24
 typedef struct ProfileSaveData1 ProfileSaveData1;// size: 120
 typedef struct ImpostorVertex ImpostorVertex;// size: 24
+typedef struct PositionRotation PositionRotation;// size: 848
 typedef struct PfxBreakablePartInstance PfxBreakablePartInstance;// size: 96
 typedef struct RivalHistory1 RivalHistory1;// size: 8
+typedef struct CarPaintMeshConstants CarPaintMeshConstants;// size: 1
 typedef struct EyeGlossConstants EyeGlossConstants;// size: 24
 typedef struct Settings Settings;// size: 32
 typedef struct WarSeason1 WarSeason1;// size: 48
 typedef struct ProfileSaveData9 ProfileSaveData9;// size: 176
+typedef struct BalloonSettings BalloonSettings;// size: 32
 typedef struct AdfShape AdfShape;// size: 68
 typedef struct EffectRTModifier EffectRTModifier;// size: 80
 typedef struct WorldSaveData11 WorldSaveData11;// size: 336
 typedef struct WorldAudioZone WorldAudioZone;// size: 112
 typedef struct ProceduralSpawnList ProceduralSpawnList;// size: 16
+typedef struct VehicleMisc_2 VehicleMisc_2;// size: 176
 typedef struct GameDataCollection GameDataCollection;// size: 32
 typedef struct SaveGameRoot SaveGameRoot;// size: 16
 typedef struct GeneralMeshConstants GeneralMeshConstants;// size: 8
 typedef struct EffectRTParameters EffectRTParameters;// size: 72
+typedef struct CameraTransitionParams CameraTransitionParams;// size: 72
 typedef struct RivalTerminalData RivalTerminalData;// size: 16
 typedef struct VariableFloat VariableFloat;// size: 16
+typedef struct TrackPlayerModifierParams TrackPlayerModifierParams;// size: 28
+typedef struct CharacterAimingSettings CharacterAimingSettings;// size: 2608
+typedef struct WheelPartProperties WheelPartProperties;// size: 16
 typedef struct RegionData RegionData;// size: 8
 typedef struct ShaderRules ShaderRules;// size: 564
 typedef struct SchematicTrees SchematicTrees;// size: 16
+typedef struct WolfSettings WolfSettings;// size: 12
 typedef struct AmfMaterial AmfMaterial;// size: 40
+typedef struct VehicleSplineFuncOfPitchParams VehicleSplineFuncOfPitchParams;// size: 424
 typedef struct RagdollSettings RagdollSettings;// size: 16
 typedef struct VehicleData VehicleData;// size: 12
 typedef struct ImpostorCollection ImpostorCollection;// size: 16
+typedef struct Rotor Rotor;// size: 56
+typedef struct HitEntity HitEntity;// size: 8
+typedef struct WeaponCameraParams WeaponCameraParams;// size: 32
 typedef struct TerrainTexture TerrainTexture;// size: 48
+typedef struct Tire Tire;// size: 1576
+typedef struct CarCommon CarCommon;// size: 12
 typedef struct BuildDatas BuildDatas;// size: 16
+typedef struct FocusDofModifierParams FocusDofModifierParams;// size: 148
 typedef struct XLSBook XLSBook;// size: 128
 typedef struct HunterMissionVariable HunterMissionVariable;// size: 64
+typedef struct PropellerPartProperties PropellerPartProperties;// size: 16
 typedef struct RoadGraphEdge RoadGraphEdge;// size: 8
+typedef struct PropellerPart PropellerPart;// size: 1
 typedef struct StrategicResource StrategicResource;// size: 12
-typedef struct HunterMissionAttachment HunterMissionAttachment;// size: 112
+typedef struct HunterMissionAttachment_2 HunterMissionAttachment_2;// size: 112
 typedef struct RivalTerminalOption RivalTerminalOption;// size: 20
+typedef struct DriverLean_2 DriverLean_2;// size: 72
 typedef struct GDCFileEntry GDCFileEntry;// size: 32
 typedef struct Currency Currency;// size: 32
+typedef struct CameraSpring CameraSpring;// size: 12
 typedef struct EffectRTParamHandler EffectRTParamHandler;// size: 56
 typedef struct IconInfo IconInfo;// size: 16
 typedef struct AmfBoundingBox AmfBoundingBox;// size: 24
 typedef struct ResourceStorageItem ResourceStorageItem;// size: 8
-typedef struct StorageSettings StorageSettings;// size: 120
+typedef struct BoatBuoyancy BoatBuoyancy;// size: 56
+typedef struct StorageSettings_2 StorageSettings_2;// size: 120
 typedef struct VegetationIndex VegetationIndex;// size: 4
+typedef struct StuntArea StuntArea;// size: 392
+typedef struct AmmunitionMagazineSettings AmmunitionMagazineSettings;// size: 4
 typedef struct PlayerMusicSettings PlayerMusicSettings;// size: 68
 typedef struct StringLookupDialogueLine StringLookupDialogueLine;// size: 40
 typedef struct TerrainMaterial TerrainMaterial;// size: 56
+typedef struct Connection Connection;// size: 12
+typedef struct BoatSteering BoatSteering;// size: 32
 typedef struct WorldSaveData10 WorldSaveData10;// size: 336
-typedef struct HunterMissionObjective HunterMissionObjective;// size: 144
+typedef struct HunterMissionObjective_2 HunterMissionObjective_2;// size: 144
+typedef struct WheelPart WheelPart;// size: 4
 typedef struct WarSaveData1 WarSaveData1;// size: 48
 typedef struct PoweredConstraintParameters PoweredConstraintParameters;// size: 20
+
+#define STI_TYPE_HASH_ARRAY_PartTuning 0xFFBCACBA 
+DYNAMIC_ARRAY_STRUCT(PartTuning, PartTuning);
+
+#define STI_TYPE_HASH_ARRAY_WeaponAttachData 0xFF569B1D 
+DYNAMIC_ARRAY_STRUCT(WeaponAttachData, WeaponAttachData);
 
 #define STI_TYPE_HASH_ARRAY_ControlPointSaveData1 0xFDF5F6EC 
 DYNAMIC_ARRAY_STRUCT(ControlPointSaveData1, ControlPointSaveData1);
 
+#define STI_TYPE_HASH_ARRAY_ViewFrustum 0xFD88A4AB 
+DYNAMIC_ARRAY_STRUCT(ViewFrustum, ViewFrustum);
+
 #define STI_TYPE_HASH_ARRAY_RivalTerminalOption 0xFD4EB67C 
 DYNAMIC_ARRAY_STRUCT(RivalTerminalOption, RivalTerminalOption);
+
+#define STI_TYPE_HASH_ARRAY_MovementSteeringParams 0xFD038990 
+DYNAMIC_ARRAY_STRUCT(MovementSteeringParams, MovementSteeringParams);
 
 #define STI_TYPE_HASH_ARRAY_AmfSubMesh 0xFBB375AE 
 DYNAMIC_ARRAY_STRUCT(AmfSubMesh, AmfSubMesh);
@@ -388,11 +704,17 @@ DYNAMIC_ARRAY_STRUCT(Compatibility, Compatibility);
 #define STI_TYPE_HASH_ARRAY_PlayerDecalData 0xF70C7D60 
 DYNAMIC_ARRAY_STRUCT(PlayerDecalData, PlayerDecalData);
 
+#define STI_TYPE_HASH_ARRAY_BoatBuoyancyModule 0xF5591500 
+DYNAMIC_ARRAY_STRUCT(BoatBuoyancyModule, BoatBuoyancyModule);
+
 #define STI_TYPE_HASH_ARRAY_Currency 0xF5185019 
 DYNAMIC_ARRAY_STRUCT(Currency, Currency);
 
 #define STI_TYPE_HASH_ARRAY_VariableBool 0xF3A00D50 
 DYNAMIC_ARRAY_STRUCT(VariableBool, VariableBool);
+
+#define STI_TYPE_HASH_ARRAY_DoorPart 0xF37672FC 
+DYNAMIC_ARRAY_STRUCT(DoorPart, DoorPart);
 
 #define STI_TYPE_HASH_ARRAY_RegionData 0xF33CC2F5 
 DYNAMIC_ARRAY_STRUCT(RegionData, RegionData);
@@ -445,6 +767,9 @@ DYNAMIC_ARRAY_STRUCT(Type, Type);
 #define STI_TYPE_HASH_ARRAY_VegetationPhysicsLayer 0xE707093D 
 DYNAMIC_ARRAY_STRUCT(VegetationPhysicsLayer, VegetationPhysicsLayer);
 
+#define STI_TYPE_HASH_ARRAY_SkinnedPart 0xE53E990C 
+DYNAMIC_ARRAY_STRUCT(SkinnedPart, SkinnedPart);
+
 #define STI_TYPE_HASH_ARRAY_GSDataSet 0xE442B43E 
 DYNAMIC_ARRAY_STRUCT(GSDataSet, GSDataSet);
 
@@ -453,6 +778,9 @@ DYNAMIC_ARRAY_STRUCT(GDCFileEntry, GDCFileEntry);
 
 #define STI_TYPE_HASH_ARRAY_STI_Deferred 0xE133D7D5 
 DYNAMIC_ARRAY_STRUCT(STI_Deferred, STI_Deferred);
+
+#define STI_TYPE_HASH_ARRAY_PartWaterInteractionElement 0xE0FA54DF 
+DYNAMIC_ARRAY_STRUCT(PartWaterInteractionElement, PartWaterInteractionElement);
 
 #define STI_TYPE_HASH_ARRAY_TimerSaveData1 0xDF216242 
 DYNAMIC_ARRAY_STRUCT(TimerSaveData1, TimerSaveData1);
@@ -484,6 +812,9 @@ DYNAMIC_ARRAY_STRUCT(ControlPointSaveData3, ControlPointSaveData3);
 #define STI_TYPE_HASH_ARRAY_AmfStreamAttribute 0xD1C9E8DC 
 DYNAMIC_ARRAY_STRUCT(AmfStreamAttribute, AmfStreamAttribute);
 
+#define STI_TYPE_HASH_ARRAY_AimPartConstraint 0xD07D279C 
+DYNAMIC_ARRAY_STRUCT(AimPartConstraint, AimPartConstraint);
+
 #define STI_TYPE_HASH_ARRAY_StrategicResource 0xD06546CE 
 DYNAMIC_ARRAY_STRUCT(StrategicResource, StrategicResource);
 
@@ -499,17 +830,29 @@ DYNAMIC_ARRAY_STRUCT(SpecificEvent, SpecificEvent);
 #define STI_TYPE_HASH_ARRAY_DifficultyLevel 0xCC2DCA23 
 DYNAMIC_ARRAY_STRUCT(DifficultyLevel, DifficultyLevel);
 
+#define STI_TYPE_HASH_ARRAY_HunterMissionObjective 0xCC0C9DAC 
+DYNAMIC_ARRAY_STRUCT(HunterMissionObjective, HunterMissionObjective);
+
 #define STI_TYPE_HASH_ARRAY_EffectRTSpecialEffectData 0xCB5CEA2E 
 DYNAMIC_ARRAY_STRUCT(EffectRTSpecialEffectData, EffectRTSpecialEffectData);
 
+#define STI_TYPE_HASH_ARRAY_PartBehavior 0xCA1B437E 
+DYNAMIC_ARRAY_STRUCT(PartBehavior, PartBehavior);
+
 #define STI_TYPE_HASH_ARRAY_ProceduralMission 0xC7FBAA69 
 DYNAMIC_ARRAY_STRUCT(ProceduralMission, ProceduralMission);
+
+#define STI_TYPE_HASH_ARRAY_ExtendedEffectUsage 0xC664427A 
+DYNAMIC_ARRAY_STRUCT(ExtendedEffectUsage, ExtendedEffectUsage);
 
 #define STI_TYPE_HASH_ARRAY_VariableVec3 0xC5FB392B 
 DYNAMIC_ARRAY_STRUCT(VariableVec3, VariableVec3);
 
 #define STI_TYPE_HASH_ARRAY_VegetationObject 0xC5E3777F 
 DYNAMIC_ARRAY_STRUCT(VegetationObject, VegetationObject);
+
+#define STI_TYPE_HASH_ARRAY_RotatingPartProperties 0xC58EFD33 
+DYNAMIC_ARRAY_STRUCT(RotatingPartProperties, RotatingPartProperties);
 
 #define STI_TYPE_HASH_ARRAY_PfxSimplePartInstance 0xC3BE0863 
 DYNAMIC_ARRAY_STRUCT(PfxSimplePartInstance, PfxSimplePartInstance);
@@ -520,14 +863,23 @@ DYNAMIC_ARRAY_STRUCT(AmfLodGroup, AmfLodGroup);
 #define STI_TYPE_HASH_ARRAY_BitmapLayer 0xC148E455 
 DYNAMIC_ARRAY_STRUCT(BitmapLayer, BitmapLayer);
 
+#define STI_TYPE_HASH_ARRAY_PartNode 0xC110BF49 
+DYNAMIC_ARRAY_STRUCT(PartNode, PartNode);
+
 #define STI_TYPE_HASH_ARRAY_STI_String 0xC106B357 
 DYNAMIC_ARRAY_STRUCT(STI_String, STI_String);
+
+#define STI_TYPE_HASH_ARRAY_SpringPartProperties 0xBFD9DDF9 
+DYNAMIC_ARRAY_STRUCT(SpringPartProperties, SpringPartProperties);
 
 #define STI_TYPE_HASH_ARRAY_VegetationSet 0xBEDA8528 
 DYNAMIC_ARRAY_STRUCT(VegetationSet, VegetationSet);
 
 #define STI_TYPE_HASH_ARRAY_SchematicTree 0xBC0DBDA3 
 DYNAMIC_ARRAY_STRUCT(SchematicTree, SchematicTree);
+
+#define STI_TYPE_HASH_ARRAY_Rotor 0xBC000A07 
+DYNAMIC_ARRAY_STRUCT(Rotor, Rotor);
 
 #define STI_TYPE_HASH_ARRAY_SafehouseUtilities 0xBBCED13C 
 DYNAMIC_ARRAY_STRUCT(SafehouseUtilities, SafehouseUtilities);
@@ -547,26 +899,56 @@ DYNAMIC_ARRAY_STRUCT(StatisticInfo, StatisticInfo);
 #define STI_TYPE_HASH_ARRAY_PlayerPosition 0xB92A82A1 
 DYNAMIC_ARRAY_STRUCT(PlayerPosition, PlayerPosition);
 
+#define STI_TYPE_HASH_ARRAY_CharacterNavigationSettings 0xB8E51EBA 
+DYNAMIC_ARRAY_STRUCT(CharacterNavigationSettings, CharacterNavigationSettings);
+
 #define STI_TYPE_HASH_ARRAY_CollisionSubSystemByName 0xB8D7AE1E 
 DYNAMIC_ARRAY_STRUCT(CollisionSubSystemByName, CollisionSubSystemByName);
+
+#define STI_TYPE_HASH_ARRAY_Bone 0xB89C9F9A 
+DYNAMIC_ARRAY_STRUCT(Bone, Bone);
 
 #define STI_TYPE_HASH_ARRAY_StringHash_48c5294d_4 0xB68E5583 
 DYNAMIC_ARRAY_STRUCT(StringHash_48c5294d_4, StringHash_48c5294d_4);
 
+#define STI_TYPE_HASH_ARRAY_PropellerPart 0xB680C9FB 
+DYNAMIC_ARRAY_STRUCT(PropellerPart, PropellerPart);
+
+#define STI_TYPE_HASH_ARRAY_HitEntitySpawn 0xB3B621AD 
+DYNAMIC_ARRAY_STRUCT(HitEntitySpawn, HitEntitySpawn);
+
+#define STI_TYPE_HASH_ARRAY_PartDamageType 0xB2477BDD 
+DYNAMIC_ARRAY_STRUCT(PartDamageType, PartDamageType);
+
 #define STI_TYPE_HASH_ARRAY_BuildData 0xB21F49BC 
 DYNAMIC_ARRAY_STRUCT(BuildData, BuildData);
+
+#define STI_TYPE_HASH_ARRAY_Connection 0xAF94BB3E 
+DYNAMIC_ARRAY_STRUCT(Connection, Connection);
+
+#define STI_TYPE_HASH_ARRAY_WheelPartProperties 0xAED95135 
+DYNAMIC_ARRAY_STRUCT(WheelPartProperties, WheelPartProperties);
 
 #define STI_TYPE_HASH_ARRAY_RoadGraphNode 0xAE4B125D 
 DYNAMIC_ARRAY_STRUCT(RoadGraphNode, RoadGraphNode);
 
+#define STI_TYPE_HASH_ARRAY_SpringPart 0xAE42CDED 
+DYNAMIC_ARRAY_STRUCT(SpringPart, SpringPart);
+
 #define STI_TYPE_HASH_ARRAY_HunterMissionVariable 0xADFD371E 
 DYNAMIC_ARRAY_STRUCT(HunterMissionVariable, HunterMissionVariable);
+
+#define STI_TYPE_HASH_ARRAY_IKChain 0xADF2728C 
+DYNAMIC_ARRAY_STRUCT(IKChain, IKChain);
 
 #define STI_TYPE_HASH_ARRAY_OccluderBox 0xADC2BF32 
 DYNAMIC_ARRAY_STRUCT(OccluderBox, OccluderBox);
 
 #define STI_TYPE_HASH_ARRAY_EntityDisplayStat 0xAB34E3AA 
 DYNAMIC_ARRAY_STRUCT(EntityDisplayStat, EntityDisplayStat);
+
+#define STI_TYPE_HASH_ARRAY_PhysicsComponentDamageFromPart 0xAA2A48E5 
+DYNAMIC_ARRAY_STRUCT(PhysicsComponentDamageFromPart, PhysicsComponentDamageFromPart);
 
 #define STI_TYPE_HASH_ARRAY_ControlPointLevel 0xA9840D79 
 DYNAMIC_ARRAY_STRUCT(ControlPointLevel, ControlPointLevel);
@@ -582,6 +964,9 @@ DYNAMIC_ARRAY_STRUCT(OwnedEquipment3, OwnedEquipment3);
 
 #define STI_TYPE_HASH_ARRAY_BuildingSaveData1 0xA3A38BEC 
 DYNAMIC_ARRAY_STRUCT(BuildingSaveData1, BuildingSaveData1);
+
+#define STI_TYPE_HASH_ARRAY_Value 0x9F220774 
+DYNAMIC_ARRAY_STRUCT(Value, Value);
 
 #define STI_TYPE_HASH_ARRAY_ContextualHelpInfo 0x9E5F7769 
 DYNAMIC_ARRAY_STRUCT(ContextualHelpInfo, ContextualHelpInfo);
@@ -601,8 +986,8 @@ DYNAMIC_ARRAY_STRUCT(TerrainMesh, TerrainMesh);
 #define STI_TYPE_HASH_ARRAY_VegetationForestLayer 0x980B9F7A 
 DYNAMIC_ARRAY_STRUCT(VegetationForestLayer, VegetationForestLayer);
 
-#define STI_TYPE_HASH_ARRAY_HunterMissionAttachment 0x978A2639 
-DYNAMIC_ARRAY_STRUCT(HunterMissionAttachment, HunterMissionAttachment);
+#define STI_TYPE_HASH_ARRAY_HunterMissionAttachment_2 0x978A2639 
+DYNAMIC_ARRAY_STRUCT(HunterMissionAttachment_2, HunterMissionAttachment_2);
 
 #define STI_TYPE_HASH_ARRAY_SettingNameValuePair 0x96663D9E 
 DYNAMIC_ARRAY_STRUCT(SettingNameValuePair, SettingNameValuePair);
@@ -616,6 +1001,9 @@ DYNAMIC_ARRAY_STRUCT(ImpostorVertex, ImpostorVertex);
 #define STI_TYPE_HASH_ARRAY_AnimalSaveData2 0x92E6BDA5 
 DYNAMIC_ARRAY_STRUCT(AnimalSaveData2, AnimalSaveData2);
 
+#define STI_TYPE_HASH_ARRAY_DeformPoint 0x9272B4C9 
+DYNAMIC_ARRAY_STRUCT(DeformPoint, DeformPoint);
+
 #define STI_TYPE_HASH_ARRAY_VegetationModelLayer 0x918B782D 
 DYNAMIC_ARRAY_STRUCT(VegetationModelLayer, VegetationModelLayer);
 
@@ -624,6 +1012,9 @@ DYNAMIC_ARRAY_STRUCT(ActionToken, ActionToken);
 
 #define STI_TYPE_HASH_ARRAY_VegetationIndex 0x8F8B460B 
 DYNAMIC_ARRAY_STRUCT(VegetationIndex, VegetationIndex);
+
+#define STI_TYPE_HASH_ARRAY_HunterMission 0x8F836B09 
+DYNAMIC_ARRAY_STRUCT(HunterMission, HunterMission);
 
 #define STI_TYPE_HASH_ARRAY_EffectRTEmitter 0x8F771246 
 DYNAMIC_ARRAY_STRUCT(EffectRTEmitter, EffectRTEmitter);
@@ -637,6 +1028,15 @@ DYNAMIC_ARRAY_STRUCT(StringLookupDialogueLine, StringLookupDialogueLine);
 #define STI_TYPE_HASH_ARRAY_RoadInfo 0x8E4E12DA 
 DYNAMIC_ARRAY_STRUCT(RoadInfo, RoadInfo);
 
+#define STI_TYPE_HASH_ARRAY_DoorPartProperties 0x8D610401 
+DYNAMIC_ARRAY_STRUCT(DoorPartProperties, DoorPartProperties);
+
+#define STI_TYPE_HASH_ARRAY_NoiseAnimation 0x877D7B41 
+DYNAMIC_ARRAY_STRUCT(NoiseAnimation, NoiseAnimation);
+
+#define STI_TYPE_HASH_ARRAY_Node 0x870D89AE 
+DYNAMIC_ARRAY_STRUCT(Node, Node);
+
 #define STI_TYPE_HASH_ARRAY_PatchSampleList 0x86138DA9 
 DYNAMIC_ARRAY_STRUCT(PatchSampleList, PatchSampleList);
 
@@ -646,11 +1046,20 @@ DYNAMIC_ARRAY_STRUCT(XLSCell, XLSCell);
 #define STI_TYPE_HASH_ARRAY_RoadGraphEdge 0x850E7451 
 DYNAMIC_ARRAY_STRUCT(RoadGraphEdge, RoadGraphEdge);
 
+#define STI_TYPE_HASH_ARRAY_PointPartConstraint 0x849D274C 
+DYNAMIC_ARRAY_STRUCT(PointPartConstraint, PointPartConstraint);
+
 #define STI_TYPE_HASH_ARRAY_PfxBreakablePartInstance 0x82B641CB 
 DYNAMIC_ARRAY_STRUCT(PfxBreakablePartInstance, PfxBreakablePartInstance);
 
+#define STI_TYPE_HASH_ARRAY_WheelPart 0x82A02ED4 
+DYNAMIC_ARRAY_STRUCT(WheelPart, WheelPart);
+
 #define STI_TYPE_HASH_ARRAY_ImpostorInfo 0x826D2C79 
 DYNAMIC_ARRAY_STRUCT(ImpostorInfo, ImpostorInfo);
+
+#define STI_TYPE_HASH_ARRAY_HingedPart 0x81D37ED6 
+DYNAMIC_ARRAY_STRUCT(HingedPart, HingedPart);
 
 #define STI_TYPE_HASH_ARRAY_TerrainPrimitive 0x80B0FEC7 
 DYNAMIC_ARRAY_STRUCT(TerrainPrimitive, TerrainPrimitive);
@@ -658,11 +1067,20 @@ DYNAMIC_ARRAY_STRUCT(TerrainPrimitive, TerrainPrimitive);
 #define STI_TYPE_HASH_ARRAY_Route 0x80330D9B 
 DYNAMIC_ARRAY_STRUCT(Route, Route);
 
+#define STI_TYPE_HASH_ARRAY_VehicleDoor 0x7DB3F539 
+DYNAMIC_ARRAY_STRUCT(VehicleDoor, VehicleDoor);
+
 #define STI_TYPE_HASH_ARRAY_GSNode 0x7CA67BB8 
 DYNAMIC_ARRAY_STRUCT(GSNode, GSNode);
 
+#define STI_TYPE_HASH_ARRAY_BoneData 0x799DEDF7 
+DYNAMIC_ARRAY_STRUCT(BoneData, BoneData);
+
 #define STI_TYPE_HASH_ARRAY_AnimalRepopulateSaveData 0x799AB336 
 DYNAMIC_ARRAY_STRUCT(AnimalRepopulateSaveData, AnimalRepopulateSaveData);
+
+#define STI_TYPE_HASH_ARRAY_FinPart 0x78FF133E 
+DYNAMIC_ARRAY_STRUCT(FinPart, FinPart);
 
 #define STI_TYPE_HASH_ARRAY_FactionSaveData1 0x7874D912 
 DYNAMIC_ARRAY_STRUCT(FactionSaveData1, FactionSaveData1);
@@ -700,14 +1118,29 @@ DYNAMIC_ARRAY_STRUCT(EffectRTEmitterTemplate, EffectRTEmitterTemplate);
 #define STI_TYPE_HASH_ARRAY_VehicleData 0x6DD2F5AE 
 DYNAMIC_ARRAY_STRUCT(VehicleData, VehicleData);
 
+#define STI_TYPE_HASH_ARRAY_Part 0x6DB3EB66 
+DYNAMIC_ARRAY_STRUCT(Part, Part);
+
+#define STI_TYPE_HASH_ARRAY_Tint 0x6B66EB68 
+DYNAMIC_ARRAY_STRUCT(Tint, Tint);
+
 #define STI_TYPE_HASH_ARRAY_RagdollSetting 0x69429C1B 
 DYNAMIC_ARRAY_STRUCT(RagdollSetting, RagdollSetting);
+
+#define STI_TYPE_HASH_ARRAY_RotatingPart 0x689D218F 
+DYNAMIC_ARRAY_STRUCT(RotatingPart, RotatingPart);
+
+#define STI_TYPE_HASH_ARRAY_ShakeAnimation 0x66CC8091 
+DYNAMIC_ARRAY_STRUCT(ShakeAnimation, ShakeAnimation);
 
 #define STI_TYPE_HASH_ARRAY_WorldAudioPatchZoneNormalData 0x65950F52 
 DYNAMIC_ARRAY_STRUCT(WorldAudioPatchZoneNormalData, WorldAudioPatchZoneNormalData);
 
 #define STI_TYPE_HASH_ARRAY_StringHash_99cfa095_6 0x64193B5D 
 DYNAMIC_ARRAY_STRUCT(StringHash_99cfa095_6, StringHash_99cfa095_6);
+
+#define STI_TYPE_HASH_ARRAY_PartPhysicsMapping 0x63696EE4 
+DYNAMIC_ARRAY_STRUCT(PartPhysicsMapping, PartPhysicsMapping);
 
 #define STI_TYPE_HASH_ARRAY_AmfBuffer 0x62039D16 
 DYNAMIC_ARRAY_STRUCT(AmfBuffer, AmfBuffer);
@@ -718,8 +1151,14 @@ DYNAMIC_ARRAY_STRUCT(TerrainPatchInfo, TerrainPatchInfo);
 #define STI_TYPE_HASH_ARRAY_LocationState 0x5FFD080C 
 DYNAMIC_ARRAY_STRUCT(LocationState, LocationState);
 
+#define STI_TYPE_HASH_ARRAY_AerodynamicSurface 0x5F077085 
+DYNAMIC_ARRAY_STRUCT(AerodynamicSurface, AerodynamicSurface);
+
 #define STI_TYPE_HASH_ARRAY_WorldAudioVector4 0x5EE422D0 
 DYNAMIC_ARRAY_STRUCT(WorldAudioVector4, WorldAudioVector4);
+
+#define STI_TYPE_HASH_ARRAY_HunterMissionAttachment 0x5D8B31E6 
+DYNAMIC_ARRAY_STRUCT(HunterMissionAttachment, HunterMissionAttachment);
 
 #define STI_TYPE_HASH_ARRAY_ProceduralSpawn 0x5D171760 
 DYNAMIC_ARRAY_STRUCT(ProceduralSpawn, ProceduralSpawn);
@@ -751,6 +1190,9 @@ DYNAMIC_ARRAY_STRUCT(POIInfo, POIInfo);
 #define STI_TYPE_HASH_ARRAY_CraftingResourceData 0x55A7EA9A 
 DYNAMIC_ARRAY_STRUCT(CraftingResourceData, CraftingResourceData);
 
+#define STI_TYPE_HASH_ARRAY_HingedPartProperties 0x5430686C 
+DYNAMIC_ARRAY_STRUCT(HingedPartProperties, HingedPartProperties);
+
 #define STI_TYPE_HASH_ARRAY_STI_int16 0x52A3F45E 
 DYNAMIC_ARRAY_STRUCT(STI_int16, STI_int16);
 
@@ -765,6 +1207,12 @@ DYNAMIC_ARRAY_STRUCT(RaidSaveData2, RaidSaveData2);
 
 #define STI_TYPE_HASH_ARRAY_StorageLevel 0x4CDBE823 
 DYNAMIC_ARRAY_STRUCT(StorageLevel, StorageLevel);
+
+#define STI_TYPE_HASH_ARRAY_DamageablePhysicsComponent 0x4CD850DA 
+DYNAMIC_ARRAY_STRUCT(DamageablePhysicsComponent, DamageablePhysicsComponent);
+
+#define STI_TYPE_HASH_ARRAY_STI_float32 0x4AE0AE58 
+DYNAMIC_ARRAY_STRUCT(STI_float32, STI_float32);
 
 #define STI_TYPE_HASH_ARRAY_RivalMissionComplete 0x49586DB7 
 DYNAMIC_ARRAY_STRUCT(RivalMissionComplete, RivalMissionComplete);
@@ -787,6 +1235,9 @@ DYNAMIC_ARRAY_STRUCT(STI_uint64, STI_uint64);
 #define STI_TYPE_HASH_ARRAY_RivalRegion1 0x41CFE53B 
 DYNAMIC_ARRAY_STRUCT(RivalRegion1, RivalRegion1);
 
+#define STI_TYPE_HASH_ARRAY_WheelHardpointOffset 0x3CC22814 
+DYNAMIC_ARRAY_STRUCT(WheelHardpointOffset, WheelHardpointOffset);
+
 #define STI_TYPE_HASH_ARRAY_HunterMissionRandomizer 0x3C76FCD6 
 DYNAMIC_ARRAY_STRUCT(HunterMissionRandomizer, HunterMissionRandomizer);
 
@@ -802,8 +1253,8 @@ DYNAMIC_ARRAY_STRUCT(EffectRTInstantiator, EffectRTInstantiator);
 #define STI_TYPE_HASH_ARRAY_PersistentRoadSamples 0x3AA31483 
 DYNAMIC_ARRAY_STRUCT(PersistentRoadSamples, PersistentRoadSamples);
 
-#define STI_TYPE_HASH_ARRAY_HunterMission 0x3A58C0DF 
-DYNAMIC_ARRAY_STRUCT(HunterMission, HunterMission);
+#define STI_TYPE_HASH_ARRAY_HunterMission_2 0x3A58C0DF 
+DYNAMIC_ARRAY_STRUCT(HunterMission_2, HunterMission_2);
 
 #define STI_TYPE_HASH_ARRAY_RouteInput 0x39CB3995 
 DYNAMIC_ARRAY_STRUCT(RouteInput, RouteInput);
@@ -817,14 +1268,23 @@ DYNAMIC_ARRAY_STRUCT(ControlPointSaveData2, ControlPointSaveData2);
 #define STI_TYPE_HASH_ARRAY_BuildingSaveData3 0x32242945 
 DYNAMIC_ARRAY_STRUCT(BuildingSaveData3, BuildingSaveData3);
 
-#define STI_TYPE_HASH_ARRAY_HunterMissionObjective 0x2F4FAC15 
-DYNAMIC_ARRAY_STRUCT(HunterMissionObjective, HunterMissionObjective);
+#define STI_TYPE_HASH_ARRAY_HunterMissionObjective_2 0x2F4FAC15 
+DYNAMIC_ARRAY_STRUCT(HunterMissionObjective_2, HunterMissionObjective_2);
 
 #define STI_TYPE_HASH_ARRAY_EquipmentEntity 0x2E894175 
 DYNAMIC_ARRAY_STRUCT(EquipmentEntity, EquipmentEntity);
 
+#define STI_TYPE_HASH_ARRAY_BuoyancyModule 0x2E7A5F9D 
+DYNAMIC_ARRAY_STRUCT(BuoyancyModule, BuoyancyModule);
+
 #define STI_TYPE_HASH_ARRAY_BitmapArea 0x2ACBA889 
 DYNAMIC_ARRAY_STRUCT(BitmapArea, BitmapArea);
+
+#define STI_TYPE_HASH_ARRAY_PropellerPartProperties 0x29312A09 
+DYNAMIC_ARRAY_STRUCT(PropellerPartProperties, PropellerPartProperties);
+
+#define STI_TYPE_HASH_ARRAY_SplineAnimation 0x2883EBF3 
+DYNAMIC_ARRAY_STRUCT(SplineAnimation, SplineAnimation);
 
 #define STI_TYPE_HASH_ARRAY_MissionSaveData2 0x25BED5E6 
 DYNAMIC_ARRAY_STRUCT(MissionSaveData2, MissionSaveData2);
@@ -838,17 +1298,29 @@ DYNAMIC_ARRAY_STRUCT(ProbabilityBuffer, ProbabilityBuffer);
 #define STI_TYPE_HASH_ARRAY_VariableFloat 0x1D893C22 
 DYNAMIC_ARRAY_STRUCT(VariableFloat, VariableFloat);
 
+#define STI_TYPE_HASH_ARRAY_FinPartProperties 0x1D843AF9 
+DYNAMIC_ARRAY_STRUCT(FinPartProperties, FinPartProperties);
+
+#define STI_TYPE_HASH_ARRAY_Rudder 0x1AB30F7E 
+DYNAMIC_ARRAY_STRUCT(Rudder, Rudder);
+
 #define STI_TYPE_HASH_ARRAY_HunterMissionEvent 0x185FA32E 
 DYNAMIC_ARRAY_STRUCT(HunterMissionEvent, HunterMissionEvent);
 
 #define STI_TYPE_HASH_ARRAY_RivalNames 0x17854606 
 DYNAMIC_ARRAY_STRUCT(RivalNames, RivalNames);
 
-#define STI_TYPE_HASH_ARRAY_STI_float32 0x168B4EB8 
-DYNAMIC_ARRAY_STRUCT(STI_float32, STI_float32);
+#define STI_TYPE_HASH_ARRAY_WheelHardpoint 0x172FE64B 
+DYNAMIC_ARRAY_STRUCT(WheelHardpoint, WheelHardpoint);
+
+#define STI_TYPE_HASH_ARRAY_STI_float32_2 0x168B4EB8
+DYNAMIC_ARRAY_STRUCT(STI_float32, STI_float32_2);
 
 #define STI_TYPE_HASH_ARRAY_WorldAudioPatchZoneData 0x165A5795 
 DYNAMIC_ARRAY_STRUCT(WorldAudioPatchZoneData, WorldAudioPatchZoneData);
+
+#define STI_TYPE_HASH_ARRAY_MovementType 0x146D96CD 
+DYNAMIC_ARRAY_STRUCT(MovementType, MovementType);
 
 #define STI_TYPE_HASH_ARRAY_Rival1 0x13010931 
 DYNAMIC_ARRAY_STRUCT(Rival1, Rival1);
@@ -861,6 +1333,9 @@ DYNAMIC_ARRAY_STRUCT(RivalMissionGroup1, RivalMissionGroup1);
 
 #define STI_TYPE_HASH_ARRAY_VegetationZone 0x0EF1B60A 
 DYNAMIC_ARRAY_STRUCT(VegetationZone, VegetationZone);
+
+#define STI_TYPE_HASH_ARRAY_ProjectileEntitySpawn 0x0D62D9A4 
+DYNAMIC_ARRAY_STRUCT(ProjectileEntitySpawn, ProjectileEntitySpawn);
 
 #define STI_TYPE_HASH_ARRAY_AnimalPopulationSaveData 0x0C312EDA 
 DYNAMIC_ARRAY_STRUCT(AnimalPopulationSaveData, AnimalPopulationSaveData);
@@ -889,6 +1364,9 @@ DYNAMIC_ARRAY_STRUCT(VegetationBillboardLayer, VegetationBillboardLayer);
 #define STI_TYPE_HASH_ARRAY_AdfBool 0x05A488F8 
 DYNAMIC_ARRAY_STRUCT(AdfBool, AdfBool);
 
+#define STI_TYPE_HASH_ARRAY_ExtendedExposedVariable 0x0320923A 
+DYNAMIC_ARRAY_STRUCT(ExtendedExposedVariable, ExtendedExposedVariable);
+
 #define STI_TYPE_HASH_ARRAY_InsurrectionLevel 0x02D0DA2E 
 DYNAMIC_ARRAY_STRUCT(InsurrectionLevel, InsurrectionLevel);
 
@@ -907,6 +1385,28 @@ typedef struct PersistentRoadSamples{
     DynamicArray_PatchSampleList Patches; // offset: 0, size: 16
     DynamicArray_STI_uint16 SampleIndices; // offset: 16, size: 16
 } PersistentRoadSamples; // size: 32
+
+#define STI_TYPE_HASH_CombinedEffectSettings 0x4BCC09AF
+typedef struct CombinedEffectSettings{
+    STI_float32 MinImpulseVelocity; // offset: 0, size: 4
+    STI_float32 MaxImpulseVelocity; // offset: 4, size: 4
+    STI_float32 MaxImpulseMass; // offset: 8, size: 4
+    STI_float32 MinScrape; // offset: 12, size: 4
+    STI_float32 MaxScrape; // offset: 16, size: 4
+    STI_float32 FilterTime; // offset: 20, size: 4
+    STI_float32 MinRadius; // offset: 24, size: 4
+    STI_float32 MaxRadius; // offset: 28, size: 4
+    STI_float32 Priority; // offset: 32, size: 4
+    STI_float32 MaxRingingTime; // offset: 36, size: 4
+} CombinedEffectSettings; // size: 40
+
+#define STI_TYPE_HASH_RigidObjectEffects 0xFDCF8095
+typedef struct RigidObjectEffects{
+    CombinedEffectSettings Impact; // offset: 0, size: 40
+    CombinedEffectSettings WaterImpact; // offset: 40, size: 40
+    CombinedEffectSettings Sliding; // offset: 80, size: 40
+    STI_float32 SpinningSpeedThreshold; // offset: 120, size: 4
+} RigidObjectEffects; // size: 124
 
 #define STI_TYPE_HASH_DifficultySetting 0x6BD99D59
 typedef struct DifficultySetting{
@@ -991,6 +1491,61 @@ typedef struct TerrainPatch{
     TerrainTexture TerrainSSDFAtlas; // offset: 576, size: 48
     uint32 DisplacementDownsampled:1; // offset: 624, size: 4
 } TerrainPatch; // size: 632
+
+#define STI_TYPE_HASH_CameraSplineControlPoint 0x3F6554A2
+typedef struct CameraSplineControlPoint{
+    STI_float32 x; // offset: 0, size: 4
+    STI_float32 y; // offset: 4, size: 4
+    STI_float32 y2; // offset: 8, size: 4
+} CameraSplineControlPoint; // size: 12
+
+#define STI_TYPE_HASH_CameraSpline10 0xB91DE16D
+typedef struct CameraSpline10{
+    STI_float32 x_min; // offset: 0, size: 4
+    STI_float32 x_max; // offset: 4, size: 4
+    STI_float32 y_min; // offset: 8, size: 4
+    STI_float32 y_max; // offset: 12, size: 4
+    STI_int8 number_of_control_points; // offset: 16, size: 1
+    STI_int8 interpolation_type; // offset: 17, size: 1
+    CameraSplineControlPoint control_points[10]; // offset: 20, size: 120
+} CameraSpline10; // size: 140
+
+#define STI_TYPE_HASH_CameraInputParams_2 0xF42BA99B
+typedef struct CameraInputParams_2{
+    STI_float32 MaxHorizontalAngularSpeed; // offset: 0, size: 4
+    STI_float32 MaxVerticalAngularSpeed; // offset: 4, size: 4
+    CameraSpline10 InputCurve; // offset: 8, size: 140
+    STI_float32 InputAcceleration; // offset: 148, size: 4
+    STI_float32 InputAccelerationStartAt; // offset: 152, size: 4
+    STI_float32 StaticMouseSensitivity; // offset: 156, size: 4
+    STI_float32 StaticControllerSensitivity; // offset: 160, size: 4
+    STI_float32 ProportionalMouseSensitivity; // offset: 164, size: 4
+    STI_float32 ProportionalControllerSensitivity; // offset: 168, size: 4
+} CameraInputParams_2; // size: 172
+
+#define STI_TYPE_HASH_FirstPersonVehicleCameraModifierParams_2 0xFAE9418D
+typedef struct FirstPersonVehicleCameraModifierParams_2{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams_2 InputParams; // offset: 4, size: 172
+    STI_float32 ForeGroundFOV; // offset: 176, size: 4
+    STI_float32 WorldFOV; // offset: 180, size: 4
+    STI_uint8 UseGameSettingsWorldFov; // offset: 184, size: 1
+    STI_String ForegroundBBKey; // offset: 192, size: 16
+    STI_float32 VehicleFovMaxIncrease; // offset: 200, size: 4
+    STI_float32 MaxFovOneAngle; // offset: 204, size: 4
+    STI_float32 MaxFovZeroAngle; // offset: 208, size: 4
+    STI_float32 FovVehicleMinSpeed; // offset: 212, size: 4
+    STI_float32 FovVehicleMaxSpeed; // offset: 216, size: 4
+    STI_float32 VehiclePitchScale; // offset: 220, size: 4
+    STI_float32 VehicleRollScale; // offset: 224, size: 4
+    STI_float32 VehiclePitchScaleDotThreshold; // offset: 228, size: 4
+    STI_float32 VehicleRollScaleDotThreshold; // offset: 232, size: 4
+    STI_float32 AutoAlignTime; // offset: 236, size: 4
+    STI_float32 AutoAlignDelay; // offset: 240, size: 4
+    STI_float32 AutoAlignSafeAngle; // offset: 244, size: 4
+    STI_float32 AutoAlignMinimumSpeed; // offset: 248, size: 4
+} FirstPersonVehicleCameraModifierParams_2; // size: 256
 
 #define STI_TYPE_HASH_SafehouseUtilities 0xFAA9CDD3
 typedef struct SafehouseUtilities{
@@ -1080,6 +1635,12 @@ typedef struct WorldSaveData9{
     DynamicArray_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
 } WorldSaveData9; // size: 336
 
+#define STI_TYPE_HASH_LandAudio 0xF801B918
+typedef struct LandAudio{
+    STI_float32 min_rpm; // offset: 0, size: 4
+    STI_float32 max_rpm; // offset: 4, size: 4
+} LandAudio; // size: 8
+
 #define STI_TYPE_HASH_AmfModel 0xF7C20A69
 typedef struct AmfModel{
     StringHash_48c5294d_4 Mesh; // offset: 0, size: 4
@@ -1088,6 +1649,137 @@ typedef struct AmfModel{
     STI_float32 LodFactor; // offset: 28, size: 4
     DynamicArray_AmfMaterial Materials; // offset: 32, size: 16
 } AmfModel; // size: 48
+
+#define STI_TYPE_HASH_SplineControlPoint 0xCC733C4E
+typedef struct SplineControlPoint{
+    STI_float32 x; // offset: 0, size: 4
+    STI_float32 y; // offset: 4, size: 4
+    STI_float32 y2; // offset: 8, size: 4
+} SplineControlPoint; // size: 12
+
+#define STI_TYPE_HASH_Spline5 0xBB1A741B
+typedef struct Spline5{
+    STI_float32 x_min; // offset: 0, size: 4
+    STI_float32 x_max; // offset: 4, size: 4
+    STI_float32 y_min; // offset: 8, size: 4
+    STI_float32 y_max; // offset: 12, size: 4
+    STI_int8 interpolation_type; // offset: 16, size: 1
+    STI_int8 number_of_control_points; // offset: 17, size: 1
+    SplineControlPoint control_points[5]; // offset: 20, size: 60
+} Spline5; // size: 80
+
+#define STI_TYPE_HASH_AirplaneAI 0xF699D55C
+typedef struct AirplaneAI{
+    Spline5 Input_Flight_Thrust; // offset: 0, size: 80
+    Spline5 Input_Flight_Pitch; // offset: 80, size: 80
+    Spline5 Input_Flight_Roll; // offset: 160, size: 80
+    Spline5 Input_Flight_Yaw; // offset: 240, size: 80
+    Spline5 Limit_Flight_Speed; // offset: 320, size: 80
+    Spline5 Input_Taxi_Speed; // offset: 400, size: 80
+    Spline5 Input_Taxi_Turn; // offset: 480, size: 80
+    Spline5 Limit_Taxi_Speed; // offset: 560, size: 80
+    STI_float32 Speed_Takeoff; // offset: 640, size: 4
+    STI_float32 Speed_Cruising; // offset: 644, size: 4
+    STI_float32 Speed_Landing; // offset: 648, size: 4
+    STI_float32 Speed_Taxi; // offset: 652, size: 4
+    STI_float32 Altitude_Cruising; // offset: 656, size: 4
+    STI_float32 Limit_Path_Altitude; // offset: 660, size: 4
+    STI_float32 Limit_Path_Radius; // offset: 664, size: 4
+    STI_float32 Limit_Path_Jump_Scalar_Flight; // offset: 668, size: 4
+    STI_float32 Limit_Path_Jump_Scalar_Taxi; // offset: 672, size: 4
+    STI_float32 Limit_Pitch; // offset: 676, size: 4
+    STI_float32 Limit_Roll; // offset: 680, size: 4
+    STI_float32 Limit_Full_Roll; // offset: 684, size: 4
+    STI_float32 Limit_Pitch_Yaw_Switch; // offset: 688, size: 4
+    STI_uint8 Stunt_BarrelRoll; // offset: 692, size: 1
+    STI_uint8 Stunt_Loop; // offset: 693, size: 1
+    STI_uint8 Stunt_UTurn; // offset: 694, size: 1
+} AirplaneAI; // size: 696
+
+#define STI_TYPE_HASH_MotorbikeFuelSettings 0xF6434BF3
+typedef struct MotorbikeFuelSettings{
+    STI_float32 fuel_base_consumption; // offset: 0, size: 4
+    STI_float32 fuel_velocity_consumption_per_second; // offset: 4, size: 4
+} MotorbikeFuelSettings; // size: 8
+
+#define STI_TYPE_HASH_BarkConstants 0xF5BBB286
+typedef struct BarkConstants{
+    STI_float32 Glossiness; // offset: 0, size: 4
+    STI_float32 NormalStrength; // offset: 4, size: 4
+    STI_float32 DiffuseWrap; // offset: 8, size: 4
+    STI_float32 Fresnel; // offset: 12, size: 4
+    STI_float32 DiffuseModulator[4]; // offset: 16, size: 16
+    STI_float32 LayeredHeightMapUVScale; // offset: 32, size: 4
+    STI_float32 LayeredUVScale; // offset: 36, size: 4
+    STI_float32 LayeredHeight1Influence; // offset: 40, size: 4
+    STI_float32 LayeredHeight2Influence; // offset: 44, size: 4
+    STI_float32 LayeredHeightMapInfluence; // offset: 48, size: 4
+    STI_float32 LayeredMaskInfluence; // offset: 52, size: 4
+    STI_float32 LayeredShift; // offset: 56, size: 4
+    STI_float32 LayeredRoughness; // offset: 60, size: 4
+    STI_float32 LayeredDiffuseWrap; // offset: 64, size: 4
+    STI_float32 LayeredEmissive; // offset: 68, size: 4
+    STI_float32 LayeredTransmission; // offset: 72, size: 4
+    STI_float32 LayeredReflectivity; // offset: 76, size: 4
+    STI_float32 LayeredClearCoat; // offset: 80, size: 4
+    STI_float32 LayeredUpInfluence; // offset: 84, size: 4
+    STI_float32 OverlayHeightInfluence; // offset: 88, size: 4
+    STI_float32 OverlayHeightMapInfluence; // offset: 92, size: 4
+    STI_float32 OverlayMaskInfluence; // offset: 96, size: 4
+    STI_float32 OverlayShift; // offset: 100, size: 4
+    STI_float32 OverlayColor[3]; // offset: 104, size: 12
+    STI_float32 OverlayBrightness; // offset: 116, size: 4
+    STI_float32 OverlayGloss; // offset: 120, size: 4
+    STI_float32 OverlayMetallic; // offset: 124, size: 4
+    STI_float32 OverlayReflectivity; // offset: 128, size: 4
+    STI_float32 OverlayRoughness; // offset: 132, size: 4
+    STI_float32 OverlayDiffuseWrap; // offset: 136, size: 4
+    STI_float32 OverlayEmissive; // offset: 140, size: 4
+    STI_float32 OverlayTransmission; // offset: 144, size: 4
+    STI_float32 OverlayClearCoat; // offset: 148, size: 4
+    STI_float32 OverlayUpInfluence; // offset: 152, size: 4
+    uint8 NoFade:1; // offset: 156, size: 1
+    uint8 UseWaterFog:1; // offset: 156, size: 1
+    uint8 LowResShadows:1; // offset: 156, size: 1
+    uint8 UseLayered:1; // offset: 156, size: 1
+    uint8 UseOverlay:1; // offset: 156, size: 1
+    uint8 IgnoreColorTint:1; // offset: 156, size: 1
+} BarkConstants; // size: 160
+
+#define STI_TYPE_HASH_AuxiliaryMotionModifierParams 0xF49B2335
+typedef struct AuxiliaryMotionModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 DrawDebug; // offset: 1, size: 1
+    DynamicArray_SplineAnimation SplineAnimations; // offset: 8, size: 16
+    DynamicArray_NoiseAnimation NoiseAnimations; // offset: 24, size: 16
+    DynamicArray_ShakeAnimation ShakeAnimations; // offset: 40, size: 16
+} AuxiliaryMotionModifierParams; // size: 56
+
+#define STI_TYPE_HASH_ListenerPositionParams 0xF458D1C3
+typedef struct ListenerPositionParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 CameraPositionAmount; // offset: 4, size: 4
+    STI_float32 AttachedOffset[3]; // offset: 8, size: 12
+} ListenerPositionParams; // size: 20
+
+#define STI_TYPE_HASH_CameraSpring 0x09FFE9A3
+typedef struct CameraSpring{
+    STI_float32 Speed; // offset: 0, size: 4
+    STI_float32 Constant; // offset: 4, size: 4
+    STI_float32 Damping; // offset: 8, size: 4
+} CameraSpring; // size: 12
+
+#define STI_TYPE_HASH_AlignToVelocityParams 0xF4264F1C
+typedef struct AlignToVelocityParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 YawAlignAmount; // offset: 4, size: 4
+    STI_float32 PitchAlignAmount; // offset: 8, size: 4
+    CameraSpring LookSpring; // offset: 12, size: 12
+    STI_float32 AlignDelay; // offset: 24, size: 4
+    STI_float32 LowSpeedTargetPitch; // offset: 28, size: 4
+    STI_float32 LowSpeedStartBlend; // offset: 32, size: 4
+    STI_float32 LowSpeedEndBlend; // offset: 36, size: 4
+} AlignToVelocityParams; // size: 40
 
 #define STI_TYPE_HASH_EffectRTEmitterTemplate 0xF421C359
 typedef struct EffectRTEmitterTemplate{
@@ -1105,13 +1797,6 @@ typedef struct EffectRTEmitterTemplate{
     DynamicArray_EffectRTLocalParam LocalParams; // offset: 104, size: 16
 } EffectRTEmitterTemplate; // size: 120
 
-#define STI_TYPE_HASH_SplineControlPoint 0xCC733C4E
-typedef struct SplineControlPoint{
-    STI_float32 x; // offset: 0, size: 4
-    STI_float32 y; // offset: 4, size: 4
-    STI_float32 y2; // offset: 8, size: 4
-} SplineControlPoint; // size: 12
-
 #define STI_TYPE_HASH_Spline20 0xF3FF06A4
 typedef struct Spline20{
     STI_float32 x_min; // offset: 0, size: 4
@@ -1123,10 +1808,27 @@ typedef struct Spline20{
     SplineControlPoint control_points[20]; // offset: 20, size: 240
 } Spline20; // size: 260
 
+#define STI_TYPE_HASH_SetOffsetFramingParams 0xF3CCD5D9
+typedef struct SetOffsetFramingParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    STI_float32 OffsetPosition[3]; // offset: 4, size: 12
+    STI_float32 Pitch; // offset: 16, size: 4
+    STI_float32 Yaw; // offset: 20, size: 4
+    STI_float32 Roll; // offset: 24, size: 4
+} SetOffsetFramingParams; // size: 28
+
 #define STI_TYPE_HASH_CurrencyCollection 0xF3CA6501
 typedef struct CurrencyCollection{
     DynamicArray_Currency Currencies; // offset: 0, size: 16
 } CurrencyCollection; // size: 16
+
+#define STI_TYPE_HASH_SpringPart 0xF3AF13A9
+typedef struct SpringPart{
+    STI_int8 part_index; // offset: 0, size: 1
+    STI_int8 wheel_slot; // offset: 1, size: 1
+    STI_float32 model_length_at_rest; // offset: 4, size: 4
+} SpringPart; // size: 8
 
 #define STI_TYPE_HASH_HealthBuildingComponentSaveData1 0x535A906B
 typedef struct HealthBuildingComponentSaveData1{
@@ -1164,6 +1866,111 @@ typedef struct ShaderLibrary{
     DynamicArray_Shader HullShaders; // offset: 80, size: 16
     DynamicArray_Shader DomainShaders; // offset: 96, size: 16
 } ShaderLibrary; // size: 112
+
+#define STI_TYPE_HASH_MoveInputYawParams 0xF27B84C6
+typedef struct MoveInputYawParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 MinimumYSpeed; // offset: 4, size: 4
+    STI_float32 DelayTime; // offset: 8, size: 4
+    STI_float32 MoveStickInputThreshold; // offset: 12, size: 4
+    STI_uint32 ResetTimerOnIdle; // offset: 16, size: 4
+    STI_uint32 ResetOnFire; // offset: 20, size: 4
+    STI_uint32 ResetOnGround; // offset: 24, size: 4
+    STI_float32 Accel; // offset: 28, size: 4
+    STI_float32 MaxSpeed; // offset: 32, size: 4
+    STI_uint8 DrawDebug; // offset: 36, size: 1
+} MoveInputYawParams; // size: 40
+
+#define STI_TYPE_HASH_CameraInputParams 0xF249CB3A
+typedef struct CameraInputParams{
+    STI_float32 MaxHorizontalAngularSpeed; // offset: 0, size: 4
+    STI_float32 MaxVerticalAngularSpeed; // offset: 4, size: 4
+    CameraSpline10 InputCurve; // offset: 8, size: 140
+    STI_float32 InputAcceleration; // offset: 148, size: 4
+    STI_float32 InputAccelerationStartAt; // offset: 152, size: 4
+    STI_float32 Sensitivity; // offset: 156, size: 4
+} CameraInputParams; // size: 160
+
+#define STI_TYPE_HASH_HashString 0xA62E34F9
+typedef struct HashString{
+    STI_String string; // offset: 0, size: 16
+    STI_uint32 hash; // offset: 8, size: 4
+} HashString; // size: 16
+
+#define STI_TYPE_HASH_EulerAngles 0xE9C6F4CA
+typedef struct EulerAngles{
+    STI_float32 pitch_deg; // offset: 0, size: 4
+    STI_float32 yaw_deg; // offset: 4, size: 4
+    STI_float32 roll_deg; // offset: 8, size: 4
+} EulerAngles; // size: 12
+
+#define STI_TYPE_HASH_SteeringAngleLimits 0xD32A26F8
+typedef struct SteeringAngleLimits{
+    STI_float32 steer_left_angle_deg; // offset: 0, size: 4
+    STI_float32 steer_right_angle_deg; // offset: 4, size: 4
+    STI_uint8 invert_steering_input; // offset: 8, size: 1
+} SteeringAngleLimits; // size: 12
+
+#define STI_TYPE_HASH_DockingPropLimits 0xEE060E57
+typedef struct DockingPropLimits{
+    SteeringAngleLimits docking_yaw_angles; // offset: 0, size: 12
+    SteeringAngleLimits docking_strafe_angles; // offset: 12, size: 12
+} DockingPropLimits; // size: 24
+
+#define STI_TYPE_HASH_Propeller 0x68D69DD0
+typedef struct Propeller{
+    HashString physics_component_name; // offset: 0, size: 16
+    STI_float32 hinge_position[3]; // offset: 16, size: 12
+    EulerAngles hinge_angles; // offset: 28, size: 12
+    STI_float32 trim_flattening_in_turns; // offset: 40, size: 4
+    STI_float32 distance_to_hinge; // offset: 44, size: 4
+    STI_float32 min_angle_deg; // offset: 48, size: 4
+    STI_float32 max_angle_deg; // offset: 52, size: 4
+    DockingPropLimits docking_limits; // offset: 56, size: 24
+    STI_float32 zero_angle_deg; // offset: 80, size: 4
+    STI_uint8 is_impeller; // offset: 84, size: 1
+    STI_float32 impeller_intake_position[3]; // offset: 88, size: 12
+} Propeller; // size: 104
+
+#define STI_TYPE_HASH_FullScreenEffectModifierParams 0xF165BD1E
+typedef struct FullScreenEffectModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+} FullScreenEffectModifierParams; // size: 1
+
+#define STI_TYPE_HASH_LandWheel 0x608271C3
+typedef struct LandWheel{
+    STI_float32 radius; // offset: 0, size: 4
+    STI_float32 rim_radius; // offset: 4, size: 4
+    STI_float32 width; // offset: 8, size: 4
+    STI_int8 use_shape_cast; // offset: 12, size: 1
+    STI_float32 mass; // offset: 16, size: 4
+    STI_float32 arcade_friction_multiplier; // offset: 20, size: 4
+    STI_float32 arcade_drag_multiplier; // offset: 24, size: 4
+    STI_int8 match_road_velocity_on_landing; // offset: 28, size: 1
+} LandWheel; // size: 32
+
+#define STI_TYPE_HASH_AirPerformanceBoost 0x38C5CB30
+typedef struct AirPerformanceBoost{
+    STI_float32 push_acceleration; // offset: 0, size: 4
+    STI_float32 boost_blend_time; // offset: 4, size: 4
+    STI_float32 extra_top_speed; // offset: 8, size: 4
+} AirPerformanceBoost; // size: 12
+
+#define STI_TYPE_HASH_AirGlobal 0xF151966D
+typedef struct AirGlobal{
+    STI_float32 ground_pitch_angle_deg; // offset: 0, size: 4
+    STI_float32 altitude_limit_threshold_low; // offset: 4, size: 4
+    STI_float32 altitude_limit_threshold_high; // offset: 8, size: 4
+    STI_int32 number_of_wheels; // offset: 12, size: 4
+    STI_int32 number_of_front_wheels; // offset: 16, size: 4
+    STI_int8 is_rear_steered; // offset: 20, size: 1
+    LandWheel front_wheels; // offset: 24, size: 32
+    LandWheel rear_wheels; // offset: 56, size: 32
+    DynamicArray_WheelHardpoint base_wheel_hardpoint_positions; // offset: 88, size: 16
+    AirPerformanceBoost nitro_boost; // offset: 104, size: 12
+    AirPerformanceBoost nitro_boost_upgraded; // offset: 116, size: 12
+    AirPerformanceBoost heat_boost; // offset: 128, size: 12
+} AirGlobal; // size: 144
 
 #define STI_TYPE_HASH_CharacterLooks 0x4D061095
 typedef struct CharacterLooks{
@@ -1219,19 +2026,8 @@ typedef struct CharactersSaveData7{
     DynamicArray_STI_int32 MissionCampaignsReserveIds; // offset: 4448, size: 16
 } CharactersSaveData7; // size: 4464
 
-#define STI_TYPE_HASH_Spline5 0xBB1A741B
-typedef struct Spline5{
-    STI_float32 x_min; // offset: 0, size: 4
-    STI_float32 x_max; // offset: 4, size: 4
-    STI_float32 y_min; // offset: 8, size: 4
-    STI_float32 y_max; // offset: 12, size: 4
-    STI_int8 interpolation_type; // offset: 16, size: 1
-    STI_int8 number_of_control_points; // offset: 17, size: 1
-    SplineControlPoint control_points[5]; // offset: 20, size: 60
-} Spline5; // size: 80
-
-#define STI_TYPE_HASH_PlayerHealthSettings 0xA5910678
-typedef struct PlayerHealthSettings{
+#define STI_TYPE_HASH_PlayerHealthSettings_2 0xA5910678
+typedef struct PlayerHealthSettings_2{
     STI_float32 Health; // offset: 0, size: 4
     STI_float32 InstantKillProtectionThreshold; // offset: 4, size: 4
     STI_float32 InstantKillProtectionHealth; // offset: 8, size: 4
@@ -1239,7 +2035,7 @@ typedef struct PlayerHealthSettings{
     STI_float32 InstantKillHealthMemoryTime; // offset: 16, size: 4
     Spline5 FallDamageCurve; // offset: 20, size: 80
     Spline5 DamageCurve; // offset: 100, size: 80
-} PlayerHealthSettings; // size: 180
+} PlayerHealthSettings_2; // size: 180
 
 #define STI_TYPE_HASH_LowHealthScreenEffectSettings 0x98E7289C
 typedef struct LowHealthScreenEffectSettings{
@@ -1300,12 +2096,12 @@ typedef struct EncumbranceSettings{
     Spline5 MoveStaminaCost; // offset: 4, size: 80
 } EncumbranceSettings; // size: 84
 
-#define STI_TYPE_HASH_StorageSettings 0x0884DC88
-typedef struct StorageSettings{
+#define STI_TYPE_HASH_StorageSettings_2 0x0884DC88
+typedef struct StorageSettings_2{
     EncumbranceSettings EncumbranceSettings; // offset: 0, size: 84
     DynamicArray_StorageLevel SafehouseStorageLevels; // offset: 88, size: 16
     DynamicArray_StorageLevel ResourceStorageLevels; // offset: 104, size: 16
-} StorageSettings; // size: 120
+} StorageSettings_2; // size: 120
 
 #define STI_TYPE_HASH_CompanionSchematicCurrencySettings 0x71EE6B0E
 typedef struct CompanionSchematicCurrencySettings{
@@ -1322,21 +2118,21 @@ typedef struct SchematicCurrencySettings{
     CompanionSchematicCurrencySettings CompanionSchematicCurrencySettings; // offset: 0, size: 12
 } SchematicCurrencySettings; // size: 12
 
-#define STI_TYPE_HASH_PlayerSettings 0xF0FEED9D
-typedef struct PlayerSettings{
+#define STI_TYPE_HASH_PlayerSettings_2 0xF0FEED9D
+typedef struct PlayerSettings_2{
     STI_String LocalPlayerExpentity; // offset: 0, size: 16
     STI_String RemotePlayerExpentity; // offset: 8, size: 16
     STI_uint8 DisableCharacterCustomization; // offset: 16, size: 1
     STI_float32 DownedAbandonTime; // offset: 20, size: 4
     STI_float32 CustomGravity; // offset: 24, size: 4
     STI_float32 KnockDownForceThreshold; // offset: 28, size: 4
-    PlayerHealthSettings PlayerHealthSettings; // offset: 32, size: 180
+    PlayerHealthSettings_2 PlayerHealthSettings; // offset: 32, size: 180
     LowHealthScreenEffectSettings LowHealthScreenEffectSettings; // offset: 212, size: 28
     PlayerMusicSettings PlayerMusicSettings; // offset: 240, size: 68
     DamageOverTimeEffectSettings DamageOverTimeEffectSettings; // offset: 308, size: 40
-    StorageSettings StorageSettings; // offset: 352, size: 120
+    StorageSettings_2 StorageSettings; // offset: 352, size: 120
     SchematicCurrencySettings SchematicCurrencySettings; // offset: 472, size: 12
-} PlayerSettings; // size: 488
+} PlayerSettings_2; // size: 488
 
 #define STI_TYPE_HASH_EnvParam 0xF0C1376C
 typedef struct EnvParam{
@@ -1349,11 +2145,44 @@ typedef struct EnvParam{
     STI_int8 Operation; // offset: 43, size: 1
 } EnvParam; // size: 48
 
+#define STI_TYPE_HASH_WheelDamage 0xF003BC4D
+typedef struct WheelDamage{
+    STI_int32 skew_health; // offset: 0, size: 4
+    STI_float32 broken_wheel_friction_fraction; // offset: 4, size: 4
+    STI_float32 broken_wheel_radius_fraction; // offset: 8, size: 4
+} WheelDamage; // size: 12
+
+#define STI_TYPE_HASH_StaminaThresholds 0xEF81DAE4
+typedef struct StaminaThresholds{
+    STI_float32 SprintThreshold; // offset: 0, size: 4
+} StaminaThresholds; // size: 4
+
+#define STI_TYPE_HASH_WeaponModTuningSettings 0xEF0C9EDF
+typedef struct WeaponModTuningSettings{
+    STI_float32 noise_multiplier; // offset: 0, size: 4
+    STI_float32 muzzle_velocity_multiplier; // offset: 4, size: 4
+    STI_float32 weapon_spread_multiplier; // offset: 8, size: 4
+    STI_float32 recoil_multiplier; // offset: 12, size: 4
+    STI_float32 aim_wobble_multiplier; // offset: 16, size: 4
+    STI_float32 recoil_first_shot_multiplier; // offset: 20, size: 4
+    STI_uint32 increased_mag_size; // offset: 24, size: 4
+    STI_float32 damage_multiplier; // offset: 28, size: 4
+} WeaponModTuningSettings; // size: 32
+
 #define STI_TYPE_HASH_ProceduralMission 0xEE90DA7C
 typedef struct ProceduralMission{
     STI_int32 MissionTemplateId; // offset: 0, size: 4
     DynamicArray_ProceduralMissionInstance Instances; // offset: 8, size: 16
 } ProceduralMission; // size: 24
+
+#define STI_TYPE_HASH_PerformanceBoost 0xEDF58978
+typedef struct PerformanceBoost{
+    STI_float32 torque_multiplier; // offset: 0, size: 4
+    STI_float32 grip_multiplier; // offset: 4, size: 4
+    STI_float32 push_force; // offset: 8, size: 4
+    STI_float32 boost_blend_time; // offset: 12, size: 4
+    STI_float32 extra_top_speed; // offset: 16, size: 4
+} PerformanceBoost; // size: 20
 
 #define STI_TYPE_HASH_InsurrectionLevel 0xEDF23CC0
 typedef struct InsurrectionLevel{
@@ -1377,6 +2206,14 @@ typedef struct SchematicTreeNode{
     STI_uint16 Children[8]; // offset: 30, size: 16
     STI_uint8 DisplayMode; // offset: 46, size: 1
 } SchematicTreeNode; // size: 48
+
+#define STI_TYPE_HASH_RotorCollision 0xED54D0D9
+typedef struct RotorCollision{
+    STI_float32 min_rpm; // offset: 0, size: 4
+    STI_float32 mass_ratio_when_no_mass; // offset: 4, size: 4
+    STI_float32 damage_to_other_per_second; // offset: 8, size: 4
+    STI_float32 light_object_mass_ratio; // offset: 12, size: 4
+} RotorCollision; // size: 16
 
 #define STI_TYPE_HASH_PfxDeactivationProperties 0xED375A21
 typedef struct PfxDeactivationProperties{
@@ -1433,6 +2270,83 @@ typedef struct BlackboardVarList{
     DynamicArray_VariableVec3 Vec3s; // offset: 48, size: 16
 } BlackboardVarList; // size: 64
 
+#define STI_TYPE_HASH_MotorbikeTurnSettings 0xB10C6BB1
+typedef struct MotorbikeTurnSettings{
+    STI_float32 max_turn_angle; // offset: 0, size: 4
+    STI_float32 turn_directional_spring_coeff; // offset: 4, size: 4
+    STI_float32 turn_directional_scale; // offset: 8, size: 4
+} MotorbikeTurnSettings; // size: 12
+
+#define STI_TYPE_HASH_MotorbikeLeanSettings 0x753EAF11
+typedef struct MotorbikeLeanSettings{
+    STI_float32 max_lean_angle; // offset: 0, size: 4
+    STI_float32 lean_time_spring_coeff; // offset: 4, size: 4
+    STI_float32 lean_directional_spring_coeff; // offset: 8, size: 4
+    STI_float32 lean_directional_scale; // offset: 12, size: 4
+    STI_float32 max_roll_speed; // offset: 16, size: 4
+    STI_float32 steering_influence; // offset: 20, size: 4
+    STI_float32 roll_speed_influence; // offset: 24, size: 4
+    STI_float32 roll_angle_influence; // offset: 28, size: 4
+} MotorbikeLeanSettings; // size: 32
+
+#define STI_TYPE_HASH_MotorbikeTiltSettings 0x79FB1A03
+typedef struct MotorbikeTiltSettings{
+    STI_float32 tilt_time_offset; // offset: 0, size: 4
+    STI_float32 max_tilt_angle; // offset: 4, size: 4
+    STI_float32 tilt_time_spring_coeff; // offset: 8, size: 4
+    STI_float32 tilt_directional_spring_coeff; // offset: 12, size: 4
+    STI_float32 tilt_directional_scale; // offset: 16, size: 4
+    STI_float32 max_pitch_acceleration; // offset: 20, size: 4
+    STI_float32 steering_influence; // offset: 24, size: 4
+    STI_float32 pitch_acceleration_influence; // offset: 28, size: 4
+    STI_float32 pitch_angle_influence; // offset: 32, size: 4
+    STI_float32 max_vertical_acceleration; // offset: 36, size: 4
+    STI_float32 vertical_acceleration_influence; // offset: 40, size: 4
+} MotorbikeTiltSettings; // size: 44
+
+#define STI_TYPE_HASH_MotorbikeAimSettings 0x3B12E100
+typedef struct MotorbikeAimSettings{
+    STI_float32 aim_play_speed; // offset: 0, size: 4
+    STI_float32 no_aim_angle_threshold; // offset: 4, size: 4
+    STI_float32 no_aim_ease_in_speed; // offset: 8, size: 4
+    STI_float32 no_aim_ease_out_speed; // offset: 12, size: 4
+} MotorbikeAimSettings; // size: 16
+
+#define STI_TYPE_HASH_MotorbikeMotionComponents 0x7DF9CB35
+typedef struct MotorbikeMotionComponents{
+    STI_float32 turn_mid_to_left; // offset: 0, size: 4
+    STI_float32 turn_left_to_mid; // offset: 4, size: 4
+    STI_float32 turn_mid_to_right; // offset: 8, size: 4
+    STI_float32 turn_right_to_mid; // offset: 12, size: 4
+    STI_float32 lean_mid_to_left; // offset: 16, size: 4
+    STI_float32 lean_left_to_mid; // offset: 20, size: 4
+    STI_float32 lean_mid_to_right; // offset: 24, size: 4
+    STI_float32 lean_right_to_mid; // offset: 28, size: 4
+    STI_float32 tilt_bwd_to_fwd; // offset: 32, size: 4
+    STI_float32 tilt_fwd_to_bwd; // offset: 36, size: 4
+    STI_float32 wind_effect; // offset: 40, size: 4
+    STI_float32 exist_effect; // offset: 44, size: 4
+    STI_float32 base_motion; // offset: 48, size: 4
+    STI_float32 aim_cw_to_ccw; // offset: 52, size: 4
+    STI_float32 no_aim_partial; // offset: 56, size: 4
+    STI_float32 recoil_partial; // offset: 60, size: 4
+} MotorbikeMotionComponents; // size: 64
+
+#define STI_TYPE_HASH_MotorbikeDebugSettings 0x7791749E
+typedef struct MotorbikeDebugSettings{
+    MotorbikeMotionComponents OverrideNormalizedTimes; // offset: 0, size: 64
+    MotorbikeMotionComponents OverrideWeights; // offset: 64, size: 64
+} MotorbikeDebugSettings; // size: 128
+
+#define STI_TYPE_HASH_CharacterRealizationSettings 0xEBF8A9A3
+typedef struct CharacterRealizationSettings{
+    MotorbikeTurnSettings TurnSettings; // offset: 0, size: 12
+    MotorbikeLeanSettings LeanSettings; // offset: 12, size: 32
+    MotorbikeTiltSettings TiltSettings; // offset: 44, size: 44
+    MotorbikeAimSettings AimSettings; // offset: 88, size: 16
+    MotorbikeDebugSettings DebugSettings; // offset: 104, size: 128
+} CharacterRealizationSettings; // size: 232
+
 #define STI_TYPE_HASH_AmfBoundingBox 0x08E31707
 typedef struct AmfBoundingBox{
     STI_float32 Min[3]; // offset: 0, size: 12
@@ -1447,6 +2361,22 @@ typedef struct AmfMeshHeader{
     StringHash_48c5294d_4 HighLodPath; // offset: 48, size: 4
 } AmfMeshHeader; // size: 56
 
+#define STI_TYPE_HASH_VehicleParts 0xEA5CE415
+typedef struct VehicleParts{
+    DynamicArray_Part parts; // offset: 0, size: 16
+    DynamicArray_WheelPart wheel_parts; // offset: 16, size: 16
+    DynamicArray_HingedPart hinged_parts; // offset: 32, size: 16
+    DynamicArray_RotatingPart rotating_parts; // offset: 48, size: 16
+    DynamicArray_PropellerPart propeller_parts; // offset: 64, size: 16
+    DynamicArray_FinPart fin_parts; // offset: 80, size: 16
+    DynamicArray_SpringPart spring_parts; // offset: 96, size: 16
+    DynamicArray_SkinnedPart skinned_parts; // offset: 112, size: 16
+    DynamicArray_DoorPart door_parts; // offset: 128, size: 16
+    DynamicArray_AimPartConstraint aim_part_constraints; // offset: 144, size: 16
+    DynamicArray_PointPartConstraint point_part_constraints; // offset: 160, size: 16
+    DynamicArray_IKChain ik_chains; // offset: 176, size: 16
+} VehicleParts; // size: 192
+
 #define STI_TYPE_HASH_GerstnerWaves 0x4449336F
 typedef struct GerstnerWaves{
     STI_float32 shallow_surface_speed_multiplier; // offset: 0, size: 4
@@ -1459,6 +2389,23 @@ typedef struct WaterTuning{
     GerstnerWaves gerstner_waves; // offset: 0, size: 12
     WaveWorks wave_works; // offset: 12, size: 4
 } WaterTuning; // size: 16
+
+#define STI_TYPE_HASH_ExpCraftProbabilities 0xE99ACACA
+typedef struct ExpCraftProbabilities{
+    STI_float32 NoBonusSlot; // offset: 0, size: 4
+    STI_float32 OneBonusSlot; // offset: 4, size: 4
+    STI_float32 TwoBonusSlot; // offset: 8, size: 4
+    STI_float32 MediocreChance; // offset: 12, size: 4
+    STI_float32 CommonChance; // offset: 16, size: 4
+    STI_float32 RareChance; // offset: 20, size: 4
+    STI_float32 EpicChance; // offset: 24, size: 4
+    STI_float32 LegendaryChance; // offset: 28, size: 4
+    STI_float32 Q1Chance; // offset: 32, size: 4
+    STI_float32 Q2Chance; // offset: 36, size: 4
+    STI_float32 Q3Chance; // offset: 40, size: 4
+    STI_float32 Q4Chance; // offset: 44, size: 4
+    STI_float32 Q5Chance; // offset: 48, size: 4
+} ExpCraftProbabilities; // size: 52
 
 #define STI_TYPE_HASH_EnvironmentParameters 0xE998CACE
 typedef struct EnvironmentParameters{
@@ -1495,12 +2442,54 @@ typedef struct OccluderBox{
     STI_float32 Transform[16]; // offset: 12, size: 64
 } OccluderBox; // size: 76
 
+#define STI_TYPE_HASH_MotionBlurModifierParams 0xE7FCB175
+typedef struct MotionBlurModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 MotionBlurFactor; // offset: 4, size: 4
+    STI_float32 MaxMotionBlur; // offset: 8, size: 4
+    STI_float32 MotionBlurShutterExposure; // offset: 12, size: 4
+} MotionBlurModifierParams; // size: 16
+
+#define STI_TYPE_HASH_LandmarkConstants 0xE73F3C81
+typedef struct LandmarkConstants{
+    STI_float32 SpecularGloss; // offset: 0, size: 4
+    STI_float32 Reflectivity; // offset: 4, size: 4
+    STI_float32 Emissive; // offset: 8, size: 4
+    STI_float32 SpecularFresnel; // offset: 12, size: 4
+    STI_float32 DiffuseModulator[3]; // offset: 16, size: 12
+    STI_float32 DiffuseWrap; // offset: 28, size: 4
+    STI_float32 BackLight; // offset: 32, size: 4
+    STI_float32 MinTimeOfDayEmissive; // offset: 36, size: 4
+    STI_float32 StartFadeOutDistanceEmissive; // offset: 40, size: 4
+    STI_float32 DepthBias; // offset: 44, size: 4
+} LandmarkConstants; // size: 48
+
 #define STI_TYPE_HASH_RouteInput 0xE5E2EABF
 typedef struct RouteInput{
     STI_uint64 GameObjectID; // offset: 0, size: 8
     STI_uint64 StartingRoadGameObjectID; // offset: 8, size: 8
     STI_uint16 IsReversed; // offset: 16, size: 2
 } RouteInput; // size: 24
+
+#define STI_TYPE_HASH_DriverLean 0xE546C190
+typedef struct DriverLean{
+    STI_float32 t_to_full_lean_min_speed_s; // offset: 0, size: 4
+    STI_float32 t_to_full_lean_max_speed_s; // offset: 4, size: 4
+    STI_float32 lean_start_speed_kmph; // offset: 8, size: 4
+    STI_float32 lean_max_speed_kmph; // offset: 12, size: 4
+    STI_float32 counterlean_speed_factor; // offset: 16, size: 4
+    STI_float32 zerolean_speed_factor; // offset: 20, size: 4
+    STI_float32 lean_speedcurve_falloff; // offset: 24, size: 4
+    STI_float32 max_lean_angle_deg; // offset: 28, size: 4
+    STI_float32 max_drift_lean_angle_deg; // offset: 32, size: 4
+    STI_float32 ease_in_angle_deg; // offset: 36, size: 4
+    STI_float32 leaning_torque; // offset: 40, size: 4
+    STI_float32 drift_leaning_torque; // offset: 44, size: 4
+    STI_float32 righting_torque; // offset: 48, size: 4
+    STI_float32 drift_factor_lean_power; // offset: 52, size: 4
+    STI_float32 lean_damping; // offset: 56, size: 4
+    STI_float32 lean_ratio_for_max_steer; // offset: 60, size: 4
+} DriverLean; // size: 64
 
 #define STI_TYPE_HASH_Vec3 0xE533B659
 typedef struct Vec3{
@@ -1591,6 +2580,22 @@ typedef struct EffectRTBatchDescriptor{
     STI_uint32* ConstantRenderBlockData; // offset: 16, size: 8
 } EffectRTBatchDescriptor; // size: 24
 
+#define STI_TYPE_HASH_ChaseCameraModifierParams 0xE4E3BE1D
+typedef struct ChaseCameraModifierParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams InputParams; // offset: 4, size: 160
+    STI_float32 SpringCoeffX; // offset: 164, size: 4
+    STI_float32 SpringCoeffY; // offset: 168, size: 4
+    STI_float32 ChaseDelayAfterInput; // offset: 172, size: 4
+    STI_float32 SpeedThreshold; // offset: 176, size: 4
+    STI_float32 MaxSpeed; // offset: 180, size: 4
+    STI_float32 MaxDeltaDolly; // offset: 184, size: 4
+    CameraSpring DollySpring; // offset: 188, size: 12
+    STI_float32 MaxDeltaFOV; // offset: 200, size: 4
+    CameraSpring FOVSpring; // offset: 204, size: 12
+} ChaseCameraModifierParams; // size: 216
+
 #define STI_TYPE_HASH_BuildData 0xE407EDF3
 typedef struct BuildData{
     StringHash_48c5294d_4 BuildingHash; // offset: 0, size: 4
@@ -1613,6 +2618,24 @@ typedef struct ImpostorMesh{
     STI_float32 Offset[3]; // offset: 40, size: 12
     STI_uint8 Single; // offset: 52, size: 1
 } ImpostorMesh; // size: 56
+
+#define STI_TYPE_HASH_Node 0xE3408BEC
+typedef struct Node{
+    DynamicArray_Value Values; // offset: 0, size: 16
+    DynamicArray_Connection Connections; // offset: 16, size: 16
+    StringHash_48c5294d_4 ClassHash; // offset: 32, size: 4
+    STI_uint32 EditorId; // offset: 36, size: 4
+    STI_int8 IsVariable; // offset: 40, size: 1
+} Node; // size: 48
+
+#define STI_TYPE_HASH_AdditiveOffsetModifierParams 0xE2A37906
+typedef struct AdditiveOffsetModifierParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    STI_String JointName; // offset: 8, size: 16
+    STI_float32 TranslationWeight; // offset: 16, size: 4
+    STI_float32 RotationWeight; // offset: 20, size: 4
+} AdditiveOffsetModifierParams; // size: 24
 
 #define STI_TYPE_HASH_ValueOccurance 0xE289C362
 typedef struct ValueOccurance{
@@ -1683,6 +2706,33 @@ typedef struct AnimalPopulationsSaveData{
     DynamicArray_AnimalSaveData Animals; // offset: 32, size: 16
 } AnimalPopulationsSaveData; // size: 48
 
+#define STI_TYPE_HASH_InputToOrbitModifierParams 0xE067E35F
+typedef struct InputToOrbitModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 StickyAimEnabled; // offset: 1, size: 1
+    STI_float32 InputScale; // offset: 4, size: 4
+    STI_float32 DirectSpeed; // offset: 8, size: 4
+    STI_float32 DirectSpeedExponential; // offset: 12, size: 4
+    STI_float32 AccelExponential; // offset: 16, size: 4
+    STI_float32 TopSpeed; // offset: 20, size: 4
+    STI_float32 AccPeriod; // offset: 24, size: 4
+    STI_float32 MouseInputScale; // offset: 28, size: 4
+} InputToOrbitModifierParams; // size: 32
+
+#define STI_TYPE_HASH_LandGlobal 0xE0555F7F
+typedef struct LandGlobal{
+    STI_int32 number_of_wheels; // offset: 0, size: 4
+    STI_int32 number_of_front_wheels; // offset: 4, size: 4
+    STI_int8 is_rear_steered; // offset: 8, size: 1
+    STI_int8 is_all_wheel_steered; // offset: 9, size: 1
+    STI_int32 wheels_friction_type; // offset: 12, size: 4
+    STI_float32 normal_clipping_angle_cosine; // offset: 16, size: 4
+    STI_float32 ground_clearance; // offset: 20, size: 4
+    LandWheel front_wheels; // offset: 24, size: 32
+    LandWheel rear_wheels; // offset: 56, size: 32
+    DynamicArray_WheelHardpoint base_wheel_hardpoint_positions; // offset: 88, size: 16
+} LandGlobal; // size: 104
+
 #define STI_TYPE_HASH_SettingNameValuePair 0xE034A9D2
 typedef struct SettingNameValuePair{
     STI_uint32 Name; // offset: 0, size: 4
@@ -1729,6 +2779,11 @@ typedef struct CharacterProfile3{
     STI_uint32 ActiveTitle; // offset: 1016, size: 4
 } CharacterProfile3; // size: 1024
 
+#define STI_TYPE_HASH_PartTunings 0xDF26A755
+typedef struct PartTunings{
+    DynamicArray_PartTuning part_tunings; // offset: 0, size: 16
+} PartTunings; // size: 16
+
 #define STI_TYPE_HASH_MaterialOverride 0xDF12F2A8
 typedef struct MaterialOverride{
     STI_uint32 MaterialId; // offset: 0, size: 4
@@ -1761,6 +2816,16 @@ typedef struct ControlPointSaveData3{
     DynamicArray_BuildingSaveData3 Buildings; // offset: 32, size: 16
 } ControlPointSaveData3; // size: 48
 
+#define STI_TYPE_HASH_TurboJump 0xDD968D41
+typedef struct TurboJump{
+    STI_float32 f_multiplier; // offset: 0, size: 4
+    STI_float32 r_multiplier; // offset: 4, size: 4
+    STI_float32 punch_delay_time; // offset: 8, size: 4
+    STI_float32 punch_speed_kph; // offset: 12, size: 4
+    STI_float32 top_speed_kph; // offset: 16, size: 4
+    STI_float32 top_speed_jump_multiplier; // offset: 20, size: 4
+} TurboJump; // size: 24
+
 #define STI_TYPE_HASH_TerrainPatchTexelConnectivity 0xDD8B3562
 typedef struct TerrainPatchTexelConnectivity{
     DynamicArray_STI_int32 TexelMap; // offset: 0, size: 16
@@ -1776,6 +2841,26 @@ typedef struct StringLookupHashProperties{
     STI_uint32 TextOffset; // offset: 4, size: 4
     STI_uint32 NameOffset; // offset: 8, size: 4
 } StringLookupHashProperties; // size: 12
+
+#define STI_TYPE_HASH_PartTuning 0xDCED0396
+typedef struct PartTuning{
+    STI_String part_name; // offset: 0, size: 16
+    STI_String hello_world; // offset: 8, size: 16
+    STI_float32 magnetic_sensitivity; // offset: 16, size: 4
+} PartTuning; // size: 24
+
+#define STI_TYPE_HASH_VehicleEffects 0xDBF90EF3
+typedef struct VehicleEffects{
+    CombinedEffectSettings Impact; // offset: 0, size: 40
+    CombinedEffectSettings WaterImpact; // offset: 40, size: 40
+    CombinedEffectSettings Sliding; // offset: 80, size: 40
+    CombinedEffectSettings Deform; // offset: 120, size: 40
+    CombinedEffectSettings UnderCarriageImpact; // offset: 160, size: 40
+    CombinedEffectSettings UnderCarriageSlide; // offset: 200, size: 40
+    CombinedEffectSettings PieceImpact; // offset: 240, size: 40
+    CombinedEffectSettings PieceSliding; // offset: 280, size: 40
+    STI_float32 SpinningSpeedThreshold; // offset: 320, size: 4
+} VehicleEffects; // size: 324
 
 #define STI_TYPE_HASH_VegetationBillboardLayer 0xDBB46F58
 typedef struct VegetationBillboardLayer{
@@ -1800,6 +2885,76 @@ typedef struct WorldSettings{
     STI_int32 StaticPatchMemoryRequirements; // offset: 24, size: 4
 } WorldSettings; // size: 28
 
+#define STI_TYPE_HASH_CameraAnimationControl 0x78CA2A53
+typedef struct CameraAnimationControl{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_String StartMessage; // offset: 8, size: 16
+    STI_String StopMessage; // offset: 16, size: 16
+    STI_String ParameterMessage; // offset: 24, size: 16
+    STI_uint8 AutoStart; // offset: 32, size: 1
+    STI_float32 Duration; // offset: 36, size: 4
+    STI_float32 EaseInTime; // offset: 40, size: 4
+    STI_float32 EaseOutTime; // offset: 44, size: 4
+    STI_uint8 Looping; // offset: 48, size: 1
+    STI_uint8 EnableHorizonStabilization; // offset: 49, size: 1
+} CameraAnimationControl; // size: 56
+
+#define STI_TYPE_HASH_CameraSpline5 0x377FDF13
+typedef struct CameraSpline5{
+    STI_float32 x_min; // offset: 0, size: 4
+    STI_float32 x_max; // offset: 4, size: 4
+    STI_float32 y_min; // offset: 8, size: 4
+    STI_float32 y_max; // offset: 12, size: 4
+    STI_int8 number_of_control_points; // offset: 16, size: 1
+    STI_int8 interpolation_type; // offset: 17, size: 1
+    CameraSplineControlPoint control_points[5]; // offset: 20, size: 60
+} CameraSpline5; // size: 80
+
+#define STI_TYPE_HASH_NoiseAnimation 0xDA1C735D
+typedef struct NoiseAnimation{
+    CameraAnimationControl Control; // offset: 0, size: 56
+    STI_uint8 ForcedWave; // offset: 56, size: 1
+    STI_float32 MasterAmplitudeScale; // offset: 60, size: 4
+    CameraSpline5 MasterAmplitudeScaleSpline; // offset: 64, size: 80
+    STI_float32 MasterFrequencyScale; // offset: 144, size: 4
+    CameraSpline5 MasterFrequencyScaleSpline; // offset: 148, size: 80
+    STI_float32 MasterStiffnessScale; // offset: 228, size: 4
+    CameraSpline5 MasterStiffnessScaleSpline; // offset: 232, size: 80
+    STI_float32 TiltMaxAmplitude; // offset: 312, size: 4
+    STI_float32 TiltMinAmplitude; // offset: 316, size: 4
+    STI_float32 TiltFrequency; // offset: 320, size: 4
+    STI_float32 TiltStiffness; // offset: 324, size: 4
+    STI_float32 PanMaxAmplitude; // offset: 328, size: 4
+    STI_float32 PanMinAmplitude; // offset: 332, size: 4
+    STI_float32 PanFrequency; // offset: 336, size: 4
+    STI_float32 PanStiffness; // offset: 340, size: 4
+    STI_float32 DutchMaxAmplitude; // offset: 344, size: 4
+    STI_float32 DutchMinAmplitude; // offset: 348, size: 4
+    STI_float32 DutchFrequency; // offset: 352, size: 4
+    STI_float32 DutchStiffness; // offset: 356, size: 4
+    STI_float32 PedistalMaxAmplitude; // offset: 360, size: 4
+    STI_float32 PedistalMinAmplitude; // offset: 364, size: 4
+    STI_float32 PedistalFrequency; // offset: 368, size: 4
+    STI_float32 PedistalStiffness; // offset: 372, size: 4
+    STI_float32 TruckMaxAmplitude; // offset: 376, size: 4
+    STI_float32 TruckMinAmplitude; // offset: 380, size: 4
+    STI_float32 TruckFrequency; // offset: 384, size: 4
+    STI_float32 TruckStiffness; // offset: 388, size: 4
+    STI_float32 DollyMaxAmplitude; // offset: 392, size: 4
+    STI_float32 DollyMinAmplitude; // offset: 396, size: 4
+    STI_float32 DollyFrequency; // offset: 400, size: 4
+    STI_float32 DollyStiffness; // offset: 404, size: 4
+    STI_uint8 UseTransformedSpeed; // offset: 408, size: 1
+    CameraSpline5 SpeedScaleSpline; // offset: 412, size: 80
+} NoiseAnimation; // size: 496
+
+#define STI_TYPE_HASH_VelocityDamper 0xD993D699
+typedef struct VelocityDamper{
+    STI_float32 normal_spin_damping; // offset: 0, size: 4
+    STI_float32 collision_spin_damping; // offset: 4, size: 4
+    STI_float32 collision_spin_threshold; // offset: 8, size: 4
+} VelocityDamper; // size: 12
+
 #define STI_TYPE_HASH_XLSSheet 0xD987FB8B
 typedef struct XLSSheet{
     STI_uint32 Cols; // offset: 0, size: 4
@@ -1807,6 +2962,14 @@ typedef struct XLSSheet{
     DynamicArray_STI_uint32 CellIndex; // offset: 8, size: 16
     STI_String Name; // offset: 24, size: 16
 } XLSSheet; // size: 32
+
+#define STI_TYPE_HASH_HingedPartProperties 0xD95D1C62
+typedef struct HingedPartProperties{
+    HashString name; // offset: 0, size: 16
+    HashString target_position_variable; // offset: 16, size: 16
+    STI_int8 lod; // offset: 32, size: 1
+    STI_int8 use_target_position_as_angle; // offset: 33, size: 1
+} HingedPartProperties; // size: 40
 
 #define STI_TYPE_HASH_ProbabilityBuffer 0xD94A182E
 typedef struct ProbabilityBuffer{
@@ -1820,6 +2983,20 @@ typedef struct AmfBuffer{
     uint8 CreateSRV:1; // offset: 16, size: 1
 } AmfBuffer; // size: 24
 
+#define STI_TYPE_HASH_HelicopterAI 0xD8D4435E
+typedef struct HelicopterAI{
+    Spline5 Input_Pitch; // offset: 0, size: 80
+    Spline5 Input_Roll; // offset: 80, size: 80
+    Spline5 Input_Yaw; // offset: 160, size: 80
+    Spline5 Input_Altitude; // offset: 240, size: 80
+    STI_float32 Input_Altitude_Landing; // offset: 320, size: 4
+    Spline5 Limit_Path_Altitude; // offset: 324, size: 80
+    STI_float32 Limit_Path_Radius; // offset: 404, size: 4
+    STI_float32 Limit_Path_Jump_Scalar; // offset: 408, size: 4
+    STI_float32 Limit_Speed_Flight; // offset: 412, size: 4
+    STI_float32 Limit_Speed_Hover; // offset: 416, size: 4
+} HelicopterAI; // size: 420
+
 #define STI_TYPE_HASH_WorldAudioPatchZoneData 0xD7FF1C92
 typedef struct WorldAudioPatchZoneData{
     DynamicArray_WorldAudioVector4 Points; // offset: 0, size: 16
@@ -1828,15 +3005,47 @@ typedef struct WorldAudioPatchZoneData{
     STI_float32 MaxBounds[3]; // offset: 32, size: 12
 } WorldAudioPatchZoneData; // size: 48
 
+#define STI_TYPE_HASH_ExtendedExposedVariable 0xD7FD9895
+typedef struct ExtendedExposedVariable{
+    STI_String expression; // offset: 0, size: 16
+} ExtendedExposedVariable; // size: 8
+
 #define STI_TYPE_HASH_AnimalRepopulateSaveData 0xD78B6D39
 typedef struct AnimalRepopulateSaveData{
     STI_uint8 Loadout; // offset: 0, size: 1
 } AnimalRepopulateSaveData; // size: 1
 
+#define STI_TYPE_HASH_SuspensionAxis 0xD74FB627
+typedef struct SuspensionAxis{
+    STI_float32 antirollbar_strength; // offset: 0, size: 4
+    STI_float32 compression; // offset: 4, size: 4
+    STI_float32 direction[3]; // offset: 8, size: 12
+    STI_float32 length; // offset: 20, size: 4
+    STI_float32 relaxation; // offset: 24, size: 4
+    STI_float32 max_velocity_for_damp_clamp; // offset: 28, size: 4
+    STI_float32 strength; // offset: 32, size: 4
+    STI_float32 raycast_offset; // offset: 36, size: 4
+    STI_float32 lateral_tire_force_offset; // offset: 40, size: 4
+    STI_float32 longitudinal_tire_force_offset; // offset: 44, size: 4
+    STI_float32 tire_drag_force_offset; // offset: 48, size: 4
+    STI_float32 hardpoint_offset_along_spring; // offset: 52, size: 4
+    STI_float32 min_length; // offset: 56, size: 4
+    STI_float32 max_length_offset; // offset: 60, size: 4
+} SuspensionAxis; // size: 64
+
 #define STI_TYPE_HASH_BlobOfBytes 0xD74CC4CB
 typedef struct BlobOfBytes{
     DynamicArray_STI_uint8 Bytes; // offset: 0, size: 16
 } BlobOfBytes; // size: 16
+
+#define STI_TYPE_HASH_LandAerodynamics 0xD735B573
+typedef struct LandAerodynamics{
+    STI_float32 air_density; // offset: 0, size: 4
+    STI_float32 frontal_area; // offset: 4, size: 4
+    STI_float32 drag_coefficient; // offset: 8, size: 4
+    STI_float32 top_speed_drag_coefficient; // offset: 12, size: 4
+    STI_float32 lift_coefficient; // offset: 16, size: 4
+} LandAerodynamics; // size: 20
 
 #define STI_TYPE_HASH_PfxBodyProperties 0x63BFE73C
 typedef struct PfxBodyProperties{
@@ -1898,6 +3107,80 @@ typedef struct VegetationModel{
     STI_uint32 Flags; // offset: 92, size: 4
 } VegetationModel; // size: 96
 
+#define STI_TYPE_HASH_Requirement 0x482B29E5
+typedef struct Requirement{
+    STI_float32 charge; // offset: 0, size: 4
+    STI_float32 damage; // offset: 4, size: 4
+    STI_float32 lifetime; // offset: 8, size: 4
+} Requirement; // size: 12
+
+#define STI_TYPE_HASH_HitEntity 0x0E2CDB1F
+typedef struct HitEntity{
+    STI_String spawn_tag; // offset: 0, size: 16
+} HitEntity; // size: 8
+
+#define STI_TYPE_HASH_HitEntitySpawn 0xD54F2716
+typedef struct HitEntitySpawn{
+    Requirement requirement; // offset: 0, size: 12
+    HitEntity hit_entity; // offset: 16, size: 8
+} HitEntitySpawn; // size: 24
+
+#define STI_TYPE_HASH_ColorRGBA 0x48CCE0EE
+typedef struct ColorRGBA{
+    STI_float32 R; // offset: 0, size: 4
+    STI_float32 G; // offset: 4, size: 4
+    STI_float32 B; // offset: 8, size: 4
+    STI_float32 A; // offset: 12, size: 4
+} ColorRGBA; // size: 16
+
+#define STI_TYPE_HASH_Tint 0xD4899FC9
+typedef struct Tint{
+    HashString name; // offset: 0, size: 16
+    STI_int32 occurrence; // offset: 16, size: 4
+    ColorRGBA tint_r; // offset: 20, size: 16
+    ColorRGBA tint_g; // offset: 36, size: 16
+    ColorRGBA tint_b; // offset: 52, size: 16
+    STI_float32 specular_gloss; // offset: 68, size: 4
+    STI_float32 metallic; // offset: 72, size: 4
+    STI_float32 clear_coat; // offset: 76, size: 4
+} Tint; // size: 80
+
+#define STI_TYPE_HASH_Transmission 0xD3F9E92B
+typedef struct Transmission{
+    STI_int32 gears; // offset: 0, size: 4
+    STI_int32 nitrous_gears; // offset: 4, size: 4
+    STI_float32 gear_ratios[8]; // offset: 8, size: 32
+    STI_float32 upshift_rpm[8]; // offset: 40, size: 32
+    STI_float32 downshift_rpm[8]; // offset: 72, size: 32
+    STI_int32 sequential; // offset: 104, size: 4
+    STI_int32 manual_clutch; // offset: 108, size: 4
+    STI_float32 manual_clutch_blend_rpm; // offset: 112, size: 4
+    STI_float32 manual_clutch_blend_time; // offset: 116, size: 4
+    STI_float32 forward_ratio_percentage; // offset: 120, size: 4
+    STI_float32 low_gear_forward_ratio_pct; // offset: 124, size: 4
+    STI_float32 top_speed; // offset: 128, size: 4
+    STI_float32 low_gears_final_drive; // offset: 132, size: 4
+    STI_float32 final_drive; // offset: 136, size: 4
+    STI_int32 reverse_uses_forward_gears; // offset: 140, size: 4
+    STI_float32 reverse_gear_ratio; // offset: 144, size: 4
+    STI_float32 clutch_delay; // offset: 148, size: 4
+    STI_float32 decay_time_to_cruise_rpm; // offset: 152, size: 4
+    STI_float32 target_cruise_rpm; // offset: 156, size: 4
+} Transmission; // size: 160
+
+#define STI_TYPE_HASH_MovementSteeringParams 0xD3D817F0
+typedef struct MovementSteeringParams{
+    StringHash_48c5294d_8 MovementType; // offset: 0, size: 8
+    StringHash_48c5294d_8 StanceType; // offset: 8, size: 8
+    STI_float32 Friction; // offset: 16, size: 4
+    STI_float32 Acceleration; // offset: 20, size: 4
+    STI_float32 MinMovementSpeed; // offset: 24, size: 4
+    STI_float32 MaxMovementSpeed; // offset: 28, size: 4
+    STI_float32 MinAnimationSpeed; // offset: 32, size: 4
+    STI_float32 MaxAnimationSpeed; // offset: 36, size: 4
+    STI_float32 TargetHeartRate; // offset: 40, size: 4
+} MovementSteeringParams; // size: 48
+
 #define STI_TYPE_HASH_VariableInt 0xD3CC2A98
 typedef struct VariableInt{
     STI_String Name; // offset: 0, size: 16
@@ -1938,6 +3221,48 @@ typedef struct PfxStaticInstance{
     STI_String model_path; // offset: 72, size: 16
 } PfxStaticInstance; // size: 96
 
+#define STI_TYPE_HASH_FoliageConstants 0xD32674C9
+typedef struct FoliageConstants{
+    STI_float32 DiffuseModulator[4]; // offset: 0, size: 16
+    STI_float32 SpecularGloss; // offset: 16, size: 4
+    STI_float32 EmissionIntensity; // offset: 20, size: 4
+    STI_float32 TransmissionIntensity; // offset: 24, size: 4
+    STI_float32 DiffuseWrap; // offset: 28, size: 4
+    STI_float32 Reflectivity; // offset: 32, size: 4
+    STI_float32 SpecularFresnel; // offset: 36, size: 4
+    STI_float32 SphereNormalStrength; // offset: 40, size: 4
+    STI_float32 OneOverSubpixelDetailFadeRange; // offset: 44, size: 4
+    uint8 RenderTransparent:1; // offset: 48, size: 1
+    uint8 ObjectSpaceNormalMap:1; // offset: 48, size: 1
+    uint8 UseInteractionDisplacement:1; // offset: 48, size: 1
+    uint8 UseInteractionFlattening:1; // offset: 48, size: 1
+    uint8 UseCharacterInteractionFlattening:1; // offset: 48, size: 1
+} FoliageConstants; // size: 52
+
+#define STI_TYPE_HASH_DynamicZParams 0xD2F33D33
+typedef struct DynamicZParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 FlatMotionOnly; // offset: 1, size: 1
+    STI_float32 DistanceLimits[2]; // offset: 4, size: 8
+    STI_float32 SpeedCloser; // offset: 12, size: 4
+    STI_float32 SpeedFarther; // offset: 16, size: 4
+    STI_float32 WeightAnimX; // offset: 20, size: 4
+    STI_float32 WeightLookInput; // offset: 24, size: 4
+} DynamicZParams; // size: 28
+
+#define STI_TYPE_HASH_TriangulatedMesh 0xA843C6A1
+typedef struct TriangulatedMesh{
+    DynamicArray_STI_float32 vertices; // offset: 0, size: 16
+    DynamicArray_STI_uint8 triangles; // offset: 16, size: 16
+} TriangulatedMesh; // size: 32
+
+#define STI_TYPE_HASH_PartWaterInteractionElement 0xD2C348C6
+typedef struct PartWaterInteractionElement{
+    HashString name; // offset: 0, size: 16
+    HashString from_part; // offset: 16, size: 16
+    TriangulatedMesh hull; // offset: 32, size: 32
+} PartWaterInteractionElement; // size: 64
+
 #define STI_TYPE_HASH_WorldSaveData3 0xD2966D76
 typedef struct WorldSaveData3{
     DynamicArray_RegionData Regions; // offset: 0, size: 16
@@ -1955,6 +3280,52 @@ typedef struct WorldSaveData3{
     DynamicArray_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
     DynamicArray_RaidSaveData Raids; // offset: 216, size: 16
 } WorldSaveData3; // size: 232
+
+#define STI_TYPE_HASH_PatchProvision 0xD281D72D
+typedef struct PatchProvision{
+    STI_float32 value_0; // offset: 0, size: 4
+    STI_float32 value_1; // offset: 4, size: 4
+    STI_float32 value_2; // offset: 8, size: 4
+    STI_float32 value_3; // offset: 12, size: 4
+    STI_float32 value_4; // offset: 16, size: 4
+    STI_float32 value_5; // offset: 20, size: 4
+    STI_float32 value_6; // offset: 24, size: 4
+    STI_float32 value_7; // offset: 28, size: 4
+    STI_float32 value_8; // offset: 32, size: 4
+    STI_float32 value_9; // offset: 36, size: 4
+    STI_float32 value_10; // offset: 40, size: 4
+    STI_float32 value_11; // offset: 44, size: 4
+    STI_float32 value_12; // offset: 48, size: 4
+    STI_float32 value_13; // offset: 52, size: 4
+    STI_float32 value_14; // offset: 56, size: 4
+    STI_float32 value_15; // offset: 60, size: 4
+    STI_float32 value_16; // offset: 64, size: 4
+    STI_float32 value_17; // offset: 68, size: 4
+    STI_float32 value_18; // offset: 72, size: 4
+    STI_float32 value_19; // offset: 76, size: 4
+} PatchProvision; // size: 80
+
+#define STI_TYPE_HASH_CharacterSwimSettings 0xD2314AB5
+typedef struct CharacterSwimSettings{
+    STI_float32 SurfaceSwimFullDeflection; // offset: 0, size: 4
+    STI_float32 SurfaceToUnderwaterPitch; // offset: 4, size: 4
+    STI_float32 SurfaceSwimNoInputToStopTime; // offset: 8, size: 4
+} CharacterSwimSettings; // size: 12
+
+#define STI_TYPE_HASH_CameraBaseSmoothingModifierParams 0xD1C9BF21
+typedef struct CameraBaseSmoothingModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 Speed; // offset: 4, size: 4
+    STI_float32 MinY; // offset: 8, size: 4
+    STI_uint8 OnlySmoothY; // offset: 12, size: 1
+    STI_float32 SpeedTranslationY; // offset: 16, size: 4
+    STI_float32 SpeedTranslationYScaleStart; // offset: 20, size: 4
+    STI_float32 SpeedTranslationYScaleEnd; // offset: 24, size: 4
+    STI_float32 SpeedTranslationYScale; // offset: 28, size: 4
+    STI_float32 MaxTranslationYOff; // offset: 32, size: 4
+    STI_float32 SpeedTranslationXZ; // offset: 36, size: 4
+    STI_float32 MaxTranslationXZOff; // offset: 40, size: 4
+} CameraBaseSmoothingModifierParams; // size: 44
 
 #define STI_TYPE_HASH_TerrainPatchType 0xD1100928
 typedef struct TerrainPatchType{
@@ -2030,6 +3401,103 @@ typedef struct ArcRenderSettings{
     STI_float32 emission_color_b; // offset: 152, size: 4
 } ArcRenderSettings; // size: 156
 
+#define STI_TYPE_HASH_GeneralMkIIIConstants 0xD01A8371
+typedef struct GeneralMkIIIConstants{
+    STI_float32 NormalStrength; // offset: 0, size: 4
+    STI_float32 Reflectivity_1; // offset: 4, size: 4
+    STI_float32 Roughness_1; // offset: 8, size: 4
+    STI_float32 DiffuseWrap_1; // offset: 12, size: 4
+    STI_float32 Emissive_1; // offset: 16, size: 4
+    STI_float32 Transmission_1; // offset: 20, size: 4
+    STI_float32 ClearCoat_1; // offset: 24, size: 4
+    STI_float32 Roughness_2; // offset: 28, size: 4
+    STI_float32 DiffuseWrap_2; // offset: 32, size: 4
+    STI_float32 Emissive_2; // offset: 36, size: 4
+    STI_float32 Transmission_2; // offset: 40, size: 4
+    STI_float32 Reflectivity_2; // offset: 44, size: 4
+    STI_float32 ClearCoat_2; // offset: 48, size: 4
+    STI_float32 Roughness_3; // offset: 52, size: 4
+    STI_float32 DiffuseWrap_3; // offset: 56, size: 4
+    STI_float32 Emissive_3; // offset: 60, size: 4
+    STI_float32 Transmission_3; // offset: 64, size: 4
+    STI_float32 Reflectivity_3; // offset: 68, size: 4
+    STI_float32 ClearCoat_3; // offset: 72, size: 4
+    STI_float32 Roughness_4; // offset: 76, size: 4
+    STI_float32 DiffuseWrap_4; // offset: 80, size: 4
+    STI_float32 Emissive_4; // offset: 84, size: 4
+    STI_float32 Transmission_4; // offset: 88, size: 4
+    STI_float32 Reflectivity_4; // offset: 92, size: 4
+    STI_float32 ClearCoat_4; // offset: 96, size: 4
+    STI_float32 LayeredHeightMapUVScale; // offset: 100, size: 4
+    STI_float32 LayeredUVScale; // offset: 104, size: 4
+    STI_float32 LayeredHeight1Influence; // offset: 108, size: 4
+    STI_float32 LayeredHeight2Influence; // offset: 112, size: 4
+    STI_float32 LayeredHeightMapInfluence; // offset: 116, size: 4
+    STI_float32 LayeredMaskInfluence; // offset: 120, size: 4
+    STI_float32 LayeredShift; // offset: 124, size: 4
+    STI_float32 LayeredRoughness; // offset: 128, size: 4
+    STI_float32 LayeredDiffuseWrap; // offset: 132, size: 4
+    STI_float32 LayeredEmissive; // offset: 136, size: 4
+    STI_float32 LayeredTransmission; // offset: 140, size: 4
+    STI_float32 LayeredReflectivity; // offset: 144, size: 4
+    STI_float32 LayeredClearCoat; // offset: 148, size: 4
+    STI_float32 DecalBlend; // offset: 152, size: 4
+    STI_float32 DecalBlendNormal; // offset: 156, size: 4
+    STI_float32 DecalReflectivity; // offset: 160, size: 4
+    STI_float32 DecalRoughness; // offset: 164, size: 4
+    STI_float32 DecalDiffuseWrap; // offset: 168, size: 4
+    STI_float32 DecalEmissive; // offset: 172, size: 4
+    STI_float32 DecalTransmission; // offset: 176, size: 4
+    STI_float32 DecalClearCoat; // offset: 180, size: 4
+    STI_float32 OverlayHeightInfluence; // offset: 184, size: 4
+    STI_float32 OverlayHeightMapInfluence; // offset: 188, size: 4
+    STI_float32 OverlayMaskInfluence; // offset: 192, size: 4
+    STI_float32 OverlayShift; // offset: 196, size: 4
+    STI_float32 OverlayColorR; // offset: 200, size: 4
+    STI_float32 OverlayColorG; // offset: 204, size: 4
+    STI_float32 OverlayColorB; // offset: 208, size: 4
+    STI_float32 OverlayBrightness; // offset: 212, size: 4
+    STI_float32 OverlayGloss; // offset: 216, size: 4
+    STI_float32 OverlayMetallic; // offset: 220, size: 4
+    STI_float32 OverlayReflectivity; // offset: 224, size: 4
+    STI_float32 OverlayRoughness; // offset: 228, size: 4
+    STI_float32 OverlayDiffuseWrap; // offset: 232, size: 4
+    STI_float32 OverlayEmissive; // offset: 236, size: 4
+    STI_float32 OverlayTransmission; // offset: 240, size: 4
+    STI_float32 OverlayClearCoat; // offset: 244, size: 4
+    STI_float32 DamageReflectivity; // offset: 248, size: 4
+    STI_float32 DamageRoughness; // offset: 252, size: 4
+    STI_float32 DamageDiffuseWrap; // offset: 256, size: 4
+    STI_float32 DamageEmissive; // offset: 260, size: 4
+    STI_float32 DamageTransmission; // offset: 264, size: 4
+    STI_float32 DamageHeightInfluence; // offset: 268, size: 4
+    STI_float32 DamageMaskInfluence; // offset: 272, size: 4
+    STI_float32 DamageClearCoat; // offset: 276, size: 4
+    STI_float32 DepthBias; // offset: 280, size: 4
+    STI_float32 HardwareDepthBias; // offset: 284, size: 4
+    STI_float32 HardwareSlopeBias; // offset: 288, size: 4
+    STI_float32 MinTimeOfDayEmissive; // offset: 292, size: 4
+    STI_float32 StartFadeOutDistanceEmissiveSq; // offset: 296, size: 4
+    STI_float32 GIEmissionModulator; // offset: 300, size: 4
+    STI_float32 RippleAngle; // offset: 304, size: 4
+    STI_float32 RippleSpeed; // offset: 308, size: 4
+    STI_float32 RippleMagnitude; // offset: 312, size: 4
+    uint32 DynamicEmissive:1; // offset: 316, size: 4
+    uint32 AlphaBlend:1; // offset: 316, size: 4
+    uint32 AlphaTest:1; // offset: 316, size: 4
+    uint32 BackfaceCulling:1; // offset: 316, size: 4
+    uint32 WorldSpaceNormals:1; // offset: 316, size: 4
+    uint32 UsePropertyMasking:1; // offset: 316, size: 4
+    uint32 UseLayered:1; // offset: 316, size: 4
+    uint32 UseOverlay:1; // offset: 316, size: 4
+    uint32 UseDecal:1; // offset: 316, size: 4
+    uint32 UseDamage:1; // offset: 316, size: 4
+    uint32 UseVertexAnimation:1; // offset: 316, size: 4
+    uint32 RoadDepthBias:1; // offset: 316, size: 4
+    uint32 AnisotropicFiltering:1; // offset: 316, size: 4
+    uint32 WireAA:1; // offset: 316, size: 4
+} GeneralMkIIIConstants; // size: 320
+
 #define STI_TYPE_HASH_AmfSubMesh 0xD004AC12
 typedef struct AmfSubMesh{
     StringHash_48c5294d_4 SubMeshId; // offset: 0, size: 4
@@ -2072,6 +3540,11 @@ typedef struct PlayerDecalData{
     STI_uint32 DecalHash; // offset: 8, size: 4
 } PlayerDecalData; // size: 12
 
+#define STI_TYPE_HASH_FinPartProperties 0xCF09CD96
+typedef struct FinPartProperties{
+    HashString name; // offset: 0, size: 16
+} FinPartProperties; // size: 16
+
 #define STI_TYPE_HASH_GSData 0xCEBF6839
 typedef struct GSData{
     STI_uint32 Name; // offset: 0, size: 4
@@ -2079,6 +3552,13 @@ typedef struct GSData{
     DynamicArray_STI_uint8 Value; // offset: 8, size: 16
     STI_uint8 Reference; // offset: 24, size: 1
 } GSData; // size: 32
+
+#define STI_TYPE_HASH_Suspension 0xCE85ADF9
+typedef struct Suspension{
+    SuspensionAxis front; // offset: 0, size: 64
+    SuspensionAxis rear; // offset: 64, size: 64
+    DynamicArray_WheelHardpointOffset wheel_hardpoint_offsets; // offset: 128, size: 16
+} Suspension; // size: 144
 
 #define STI_TYPE_HASH_CharacterConstants 0xCE6A3748
 typedef struct CharacterConstants{
@@ -2199,6 +3679,47 @@ typedef struct CraftingResourceData{
     STI_uint32 Amount; // offset: 4, size: 4
 } CraftingResourceData; // size: 8
 
+#define STI_TYPE_HASH_MachineSettings_2 0xCB3BAD92
+typedef struct MachineSettings_2{
+    STI_float32 lured_attack_range; // offset: 0, size: 4
+    STI_float32 check_last_seen_heard; // offset: 4, size: 4
+    STI_int32 max_target_count; // offset: 8, size: 4
+    STI_float32 melee_weapon_range; // offset: 12, size: 4
+    STI_float32 melee_weapon_cooldown[2]; // offset: 16, size: 8
+    STI_float32 support_weapon_range; // offset: 24, size: 4
+    STI_float32 support_weapon_cooldown[2]; // offset: 28, size: 8
+    STI_float32 ranged_weapon_aim_prediction_multiplier; // offset: 36, size: 4
+    STI_float32 machine_damage_multiplier; // offset: 40, size: 4
+} MachineSettings_2; // size: 44
+
+#define STI_TYPE_HASH_AimControlSettings 0xCAD14753
+typedef struct AimControlSettings{
+    STI_float32 YawDeadZone; // offset: 0, size: 4
+    STI_float32 PitchDeadZone; // offset: 4, size: 4
+    STI_float32 SensivityMultiplier; // offset: 8, size: 4
+} AimControlSettings; // size: 12
+
+#define STI_TYPE_HASH_MoveInputOffsetParams 0xCAC71B6C
+typedef struct MoveInputOffsetParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 MaxCloserDist; // offset: 4, size: 4
+    STI_float32 MaxFartherDist; // offset: 8, size: 4
+    STI_float32 MaxLeftDist; // offset: 12, size: 4
+    STI_float32 MaxRightDist; // offset: 16, size: 4
+    STI_float32 MaxValueThreshold; // offset: 20, size: 4
+    STI_uint8 LeftRightAffectsCloseFar; // offset: 24, size: 1
+    CameraSpring BlendInSpring; // offset: 28, size: 12
+    CameraSpring BlendOutSpring; // offset: 40, size: 12
+    CameraSpline5 PitchScaleSpline; // offset: 52, size: 80
+} MoveInputOffsetParams; // size: 132
+
+#define STI_TYPE_HASH_SetCameraPivotModifierParams 0xCA9796B6
+typedef struct SetCameraPivotModifierParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    STI_float32 Offset[3]; // offset: 4, size: 12
+} SetCameraPivotModifierParams; // size: 16
+
 #define STI_TYPE_HASH_WorldSaveData7 0xCA977B94
 typedef struct WorldSaveData7{
     DynamicArray_RegionData Regions; // offset: 0, size: 16
@@ -2225,6 +3746,32 @@ typedef struct WorldSaveData7{
 typedef struct EffectVertexArray{
     DynamicArray_STI_float32 Array; // offset: 0, size: 16
 } EffectVertexArray; // size: 16
+
+#define STI_TYPE_HASH_AimAssistParams 0x800AB894
+typedef struct AimAssistParams{
+    STI_float32 StrafingAimAssist_Turning; // offset: 0, size: 4
+    STI_float32 AimAssistSlowDown_Turning; // offset: 4, size: 4
+    STI_float32 StrafingAimAssist_Default; // offset: 8, size: 4
+    STI_float32 AimAssistSlowDown_Default; // offset: 12, size: 4
+    STI_float32 SlowDownSpeedLimit; // offset: 16, size: 4
+    STI_float32 PostSlowDownRampUpSpeed; // offset: 20, size: 4
+} AimAssistParams; // size: 24
+
+#define STI_TYPE_HASH_ThirdPersonCameraModifierParams_2 0xC9D843E6
+typedef struct ThirdPersonCameraModifierParams_2{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams_2 InputParams; // offset: 4, size: 172
+    STI_float32 WorldFOV; // offset: 176, size: 4
+    STI_uint8 UseGameSettingsWorldFov; // offset: 180, size: 1
+    STI_String AimAdjustmentSegments[3]; // offset: 184, size: 24
+    AimAssistParams AimAssist; // offset: 208, size: 24
+} ThirdPersonCameraModifierParams_2; // size: 232
+
+#define STI_TYPE_HASH_SequenceDofModifierParams 0xC938D931
+typedef struct SequenceDofModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+} SequenceDofModifierParams; // size: 1
 
 #define STI_TYPE_HASH_Spline10 0xC8F4CBF3
 typedef struct Spline10{
@@ -2285,6 +3832,89 @@ typedef struct VegetationObject{
     VegetationPlacementSettings PlacementSettings; // offset: 304, size: 48
 } VegetationObject; // size: 352
 
+#define STI_TYPE_HASH_GroundAlignmentBoneAdjustment 0xC72C29CC
+typedef struct GroundAlignmentBoneAdjustment{
+    DynamicArray_BoneData GroundAlignmentBoneData; // offset: 0, size: 16
+} GroundAlignmentBoneAdjustment; // size: 16
+
+#define STI_TYPE_HASH_MissileArcSettings 0x9502D786
+typedef struct MissileArcSettings{
+    STI_float32 arc_height; // offset: 0, size: 4
+    STI_float32 arc_angle; // offset: 4, size: 4
+    STI_float32 arc_velocity_multiplier; // offset: 8, size: 4
+} MissileArcSettings; // size: 12
+
+#define STI_TYPE_HASH_ClusterAmmunitionSettings 0x564018B8
+typedef struct ClusterAmmunitionSettings{
+    STI_String cluster_entity_spawn_tag; // offset: 0, size: 16
+    STI_uint8 no_of_clusters; // offset: 8, size: 1
+    STI_float32 spawn_distance; // offset: 12, size: 4
+    STI_float32 spread_min; // offset: 16, size: 4
+    STI_float32 spread_max; // offset: 20, size: 4
+} ClusterAmmunitionSettings; // size: 24
+
+#define STI_TYPE_HASH_AmmunitionTuning 0xC71FEDFE
+typedef struct AmmunitionTuning{
+    STI_float32 max_range; // offset: 0, size: 4
+    STI_float32 diameter; // offset: 4, size: 4
+    STI_float32 length; // offset: 8, size: 4
+    STI_float32 ballistic_coefficient_front; // offset: 12, size: 4
+    STI_float32 ballistic_coefficient_side; // offset: 16, size: 4
+    STI_float32 drag_coefficient; // offset: 20, size: 4
+    STI_float32 kinetic_energy; // offset: 24, size: 4
+    STI_float32 mass; // offset: 28, size: 4
+    STI_float32 projectile_damage; // offset: 32, size: 4
+    STI_float32 armour_damage_multiplier; // offset: 36, size: 4
+    STI_float32 organ_damage_multiplier; // offset: 40, size: 4
+    STI_uint8 projectiles_per_shot; // offset: 44, size: 1
+    STI_String projectile_model_path; // offset: 48, size: 16
+    STI_float32 hit_radius; // offset: 56, size: 4
+    STI_String hit_entity_spawn_tag; // offset: 64, size: 16
+    STI_uint8 trigger_non_attached_entities; // offset: 72, size: 1
+    STI_uint8 spawn_hit_entity_weapon_controller_only; // offset: 73, size: 1
+    STI_uint8 use_arc_movement; // offset: 74, size: 1
+    STI_uint8 use_staggered_arming; // offset: 75, size: 1
+    STI_uint8 pierce_armor_pieces; // offset: 76, size: 1
+    STI_String projectile_entity_spawn_tag; // offset: 80, size: 16
+    STI_float32 scatter_multiplier; // offset: 88, size: 4
+    STI_float32 multi_projectile_scatter_angle; // offset: 92, size: 4
+    Spline5 damage_falloff_curve; // offset: 96, size: 80
+    Spline5 penetration_falloff_curve; // offset: 176, size: 80
+    MissileArcSettings missile_arc_settings; // offset: 256, size: 12
+    ClusterAmmunitionSettings cluster_ammunition_settings; // offset: 272, size: 24
+} AmmunitionTuning; // size: 296
+
+#define STI_TYPE_HASH_Submersible 0xC660362C
+typedef struct Submersible{
+    STI_float32 dive_buoyancy_modifier; // offset: 0, size: 4
+    STI_float32 surface_buoyancy_modifier; // offset: 4, size: 4
+    STI_float32 dive_input_speed; // offset: 8, size: 4
+    STI_float32 dive_dead_zone; // offset: 12, size: 4
+    STI_float32 max_depth_delta; // offset: 16, size: 4
+    STI_float32 min_depth; // offset: 20, size: 4
+    STI_float32 depth_control_proportional; // offset: 24, size: 4
+    STI_float32 depth_control_integral; // offset: 28, size: 4
+    STI_float32 depth_control_derivative; // offset: 32, size: 4
+    STI_float32 surfacing_depth; // offset: 36, size: 4
+    STI_float32 surfacing_pitch; // offset: 40, size: 4
+    STI_float32 climbing_pitch; // offset: 44, size: 4
+    STI_float32 diving_pitch; // offset: 48, size: 4
+    STI_float32 min_speed_for_pitch; // offset: 52, size: 4
+    STI_float32 full_pitch_control_speed; // offset: 56, size: 4
+    STI_float32 pitch_control_torque_scale; // offset: 60, size: 4
+    STI_float32 pitch_control_proportional; // offset: 64, size: 4
+    STI_float32 pitch_control_integral; // offset: 68, size: 4
+    STI_float32 pitch_control_derivative; // offset: 72, size: 4
+    STI_float32 roll_control_torque_scale; // offset: 76, size: 4
+} Submersible; // size: 80
+
+#define STI_TYPE_HASH_VehicleDoor 0xC5FFC03F
+typedef struct VehicleDoor{
+    HashString door_behavior; // offset: 0, size: 16
+    STI_float32 open_door_duration_s; // offset: 16, size: 4
+    STI_float32 close_door_duration_s; // offset: 20, size: 4
+} VehicleDoor; // size: 24
+
 #define STI_TYPE_HASH_MachinePersistentStatsEncounterData 0xC519FB33
 typedef struct MachinePersistentStatsEncounterData{
     STI_uint64 PlayerPlatformID; // offset: 0, size: 8
@@ -2297,6 +3927,31 @@ typedef struct PhysicsStreamPatchType{
     DynamicArray_STI_uint8 ResourceContainer; // offset: 0, size: 16
     STI_uint32 ResourceContainerSizeUnpacked; // offset: 16, size: 4
 } PhysicsStreamPatchType; // size: 24
+
+#define STI_TYPE_HASH_BoatPerformanceBoost 0x622BB8E0
+typedef struct BoatPerformanceBoost{
+    STI_float32 prop_torque_multiplier; // offset: 0, size: 4
+    STI_float32 prop_rpm_multiplier; // offset: 4, size: 4
+    STI_float32 extra_top_speed; // offset: 8, size: 4
+} BoatPerformanceBoost; // size: 12
+
+#define STI_TYPE_HASH_BoatTurboJump 0x51C0BF29
+typedef struct BoatTurboJump{
+    STI_float32 up_multiplier; // offset: 0, size: 4
+    STI_float32 punch_delay_time; // offset: 4, size: 4
+    STI_float32 punch_speed_kph; // offset: 8, size: 4
+    STI_float32 top_speed_kph; // offset: 12, size: 4
+    STI_float32 top_speed_jump_multiplier; // offset: 16, size: 4
+} BoatTurboJump; // size: 20
+
+#define STI_TYPE_HASH_BoatGlobal 0xC48F2AC9
+typedef struct BoatGlobal{
+    BoatPerformanceBoost heat_boost; // offset: 0, size: 12
+    BoatPerformanceBoost nitro_boost; // offset: 12, size: 12
+    BoatPerformanceBoost nitro_boost_upgraded; // offset: 24, size: 12
+    BoatTurboJump turbo_jump; // offset: 36, size: 20
+    BoatTurboJump turbo_jump_upgraded; // offset: 56, size: 20
+} BoatGlobal; // size: 76
 
 #define STI_TYPE_HASH_EffectRTRenderInfo 0xC47ADDF4
 typedef struct EffectRTRenderInfo{
@@ -2358,10 +4013,10 @@ typedef struct TimerSaveData1{
     STI_int32 TimeLeft; // offset: 8, size: 4
 } TimerSaveData1; // size: 16
 
-#define STI_TYPE_HASH_HunterMissionData 0xC34D2AD9
-typedef struct HunterMissionData{
-    DynamicArray_HunterMission Missions; // offset: 0, size: 16
-} HunterMissionData; // size: 16
+#define STI_TYPE_HASH_HunterMissionData_2 0xC34D2AD9
+typedef struct HunterMissionData_2{
+    DynamicArray_HunterMission_2 Missions; // offset: 0, size: 16
+} HunterMissionData_2; // size: 16
 
 #define STI_TYPE_HASH_ForestMesh 0xC2D93166
 typedef struct ForestMesh{
@@ -2402,6 +4057,66 @@ typedef struct Items{
     DynamicArray_Compatibility Compatibility; // offset: 16, size: 16
 } Items; // size: 32
 
+#define STI_TYPE_HASH_AreaBulletSettings 0xC275272D
+typedef struct AreaBulletSettings{
+    STI_float32 hit_radius_start; // offset: 0, size: 4
+    STI_float32 despawn_radius_start; // offset: 4, size: 4
+    STI_float32 despawn_radius_end; // offset: 8, size: 4
+    STI_float32 despawn_sphere_margin; // offset: 12, size: 4
+    STI_uint8 hit_holey_materials; // offset: 16, size: 1
+    STI_uint8 holey_materials_stop_bullet; // offset: 17, size: 1
+} AreaBulletSettings; // size: 20
+
+#define STI_TYPE_HASH_AutoPitchParams 0xC1D281C9
+typedef struct AutoPitchParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 DelayTime; // offset: 4, size: 4
+    STI_uint32 ResetOnFire; // offset: 8, size: 4
+    STI_float32 TargetPitch; // offset: 12, size: 4
+    STI_uint32 AlwaysPitchDown; // offset: 16, size: 4
+    STI_float32 Accel; // offset: 20, size: 4
+    STI_float32 MaxSpeed; // offset: 24, size: 4
+} AutoPitchParams; // size: 28
+
+#define STI_TYPE_HASH_HunterMissionAttachment 0xC1078CAA
+typedef struct HunterMissionAttachment{
+    STI_int32 Id; // offset: 0, size: 4
+    StringHash_48c5294d_4 Name; // offset: 4, size: 4
+    StringHash_48c5294d_4 NameShort; // offset: 8, size: 4
+    STI_int32 Type; // offset: 12, size: 4
+    StringHash_99cfa095_6 Event; // offset: 16, size: 6
+    StringHash_48c5294d_4 Text; // offset: 24, size: 4
+    StringHash_99cfa095_6 Reward; // offset: 28, size: 6
+    StringHash_99cfa095_6 PlayAudioEvent; // offset: 34, size: 6
+    StringHash_99cfa095_6 StopAudioEvent; // offset: 40, size: 6
+    STI_uint8 Enabled; // offset: 46, size: 1
+    STI_String Image; // offset: 48, size: 16
+    STI_String Entity; // offset: 56, size: 16
+    DynamicArray_STI_int32 DependenciesRequired; // offset: 64, size: 16
+    DynamicArray_STI_int32 DependenciesOptional; // offset: 80, size: 16
+    STI_uint8 Persist; // offset: 96, size: 1
+} HunterMissionAttachment; // size: 104
+
+#define STI_TYPE_HASH_CharacterReelToParaSettings 0xC0CE022A
+typedef struct CharacterReelToParaSettings{
+    STI_float32 ExtraLiftCutoff; // offset: 0, size: 4
+    STI_float32 ExtraLift[3]; // offset: 4, size: 12
+    STI_float32 ExtraDownwardForce[3]; // offset: 16, size: 12
+    STI_float32 StopExtraLiftHeight; // offset: 28, size: 4
+    STI_float32 DragX[3]; // offset: 32, size: 12
+    STI_float32 DragY[3]; // offset: 44, size: 12
+    STI_float32 DragZ[3]; // offset: 56, size: 12
+    STI_float32 UpwardVelocityClamp; // offset: 68, size: 4
+    STI_float32 FakeSlingshotSpeedThreshold; // offset: 72, size: 4
+    STI_float32 FakeSlingshotAccel; // offset: 76, size: 4
+    STI_float32 FakeSlingshotMinPitch; // offset: 80, size: 4
+} CharacterReelToParaSettings; // size: 84
+
+#define STI_TYPE_HASH_WheelHardpoint 0xC0950F5F
+typedef struct WheelHardpoint{
+    STI_float32 position[3]; // offset: 0, size: 12
+} WheelHardpoint; // size: 12
+
 #define STI_TYPE_HASH_SchematicTree 0xBFCFC9CE
 typedef struct SchematicTree{
     STI_uint32 Name; // offset: 0, size: 4
@@ -2412,17 +4127,230 @@ typedef struct SchematicTree{
     uint8 ShowInSchematicsScreen:1; // offset: 48, size: 1
 } SchematicTree; // size: 56
 
+#define STI_TYPE_HASH_Drift 0xBFB2F8CB
+typedef struct Drift{
+    STI_float32 drift_entry_slip_angle; // offset: 0, size: 4
+    STI_float32 drift_exit_slip_angle; // offset: 4, size: 4
+    STI_float32 max_drift_angle_deg; // offset: 8, size: 4
+    STI_float32 drift_limit_spread_angle_deg; // offset: 12, size: 4
+    STI_float32 constant_drift_torque; // offset: 16, size: 4
+    STI_float32 max_drift_torque; // offset: 20, size: 4
+    STI_float32 counter_steer_torque; // offset: 24, size: 4
+    STI_float32 counter_steer_torque_handbrake; // offset: 28, size: 4
+    STI_float32 counter_steer_torque_brake; // offset: 32, size: 4
+    STI_float32 drift_yaw_vel_damp; // offset: 36, size: 4
+    STI_float32 overdrift_yaw_vel_damp; // offset: 40, size: 4
+    STI_float32 exit_drift_yaw_vel_damp; // offset: 44, size: 4
+    STI_float32 velocity_rotation_start_angle; // offset: 48, size: 4
+    STI_float32 velocity_rotation_end_angle; // offset: 52, size: 4
+    STI_float32 velocity_rotation_amount; // offset: 56, size: 4
+    STI_float32 velocity_rotation_angle_exp; // offset: 60, size: 4
+    STI_float32 counter_steer_rot_factor; // offset: 64, size: 4
+    STI_float32 steering_sensitivity; // offset: 68, size: 4
+    STI_float32 min_speed_to_drift_kmph; // offset: 72, size: 4
+    STI_float32 keep_velocity_strength; // offset: 76, size: 4
+    STI_float32 max_keep_velocity_acceleration_g; // offset: 80, size: 4
+} Drift; // size: 84
+
+#define STI_TYPE_HASH_AerodynamicSurface 0xBF54EF46
+typedef struct AerodynamicSurface{
+    HashString name; // offset: 0, size: 16
+    HashString physics_component_name; // offset: 16, size: 16
+    STI_float32 center_point[3]; // offset: 32, size: 12
+    EulerAngles surface_normal_angles; // offset: 44, size: 12
+    STI_float32 turn_steering_factor; // offset: 56, size: 4
+    STI_float32 pitch_steering_factor; // offset: 60, size: 4
+    STI_float32 roll_steering_factor; // offset: 64, size: 4
+    STI_float32 air_density; // offset: 68, size: 4
+    STI_float32 frontal_area; // offset: 72, size: 4
+    STI_float32 drag_coefficient; // offset: 76, size: 4
+    STI_float32 top_speed_drag_coefficient; // offset: 80, size: 4
+    STI_float32 extra_brake_drag_coefficient; // offset: 84, size: 4
+    STI_float32 lift_coefficient; // offset: 88, size: 4
+} AerodynamicSurface; // size: 96
+
+#define STI_TYPE_HASH_RcTickSettings 0xBF45821A
+typedef struct RcTickSettings{
+    STI_float32 maximum_signal_range; // offset: 0, size: 4
+    STI_float32 warning_signal_range; // offset: 4, size: 4
+    Spline10 signal_strength_noise; // offset: 8, size: 140
+    STI_float32 remote_control_maximum_time; // offset: 148, size: 4
+    STI_float32 camera_delay_start; // offset: 152, size: 4
+    STI_float32 camera_delay_end; // offset: 156, size: 4
+    STI_float32 jump_strength[2]; // offset: 160, size: 8
+    STI_float32 jump_local_to_aim; // offset: 168, size: 4
+} RcTickSettings; // size: 172
+
 #define STI_TYPE_HASH_Collection 0xBDC3C8DF
 typedef struct Collection{
     DynamicArray_CollectibleInfo Collectibles; // offset: 0, size: 16
     DynamicArray_NetworkedCollectible NetworkedCollectibles; // offset: 16, size: 16
 } Collection; // size: 32
 
+#define STI_TYPE_HASH_RotatingPart 0xBD803D08
+typedef struct RotatingPart{
+    STI_int8 part_index; // offset: 0, size: 1
+    STI_int8 number_of_blades; // offset: 1, size: 1
+    STI_float32 position[3]; // offset: 4, size: 12
+    STI_float32 rotation_axis[3]; // offset: 16, size: 12
+    STI_float32 rpm_multiplier; // offset: 28, size: 4
+    STI_float32 min_rpm_visible; // offset: 32, size: 4
+    STI_float32 max_rpm_visible; // offset: 36, size: 4
+    STI_float32 rpm_opacity_transition; // offset: 40, size: 4
+} RotatingPart; // size: 44
+
+#define STI_TYPE_HASH_CameraTowing 0x7C28DDBA
+typedef struct CameraTowing{
+    STI_float32 TowingOffsetCamera[3]; // offset: 0, size: 12
+    STI_float32 TowingOffsetLookAt[3]; // offset: 12, size: 12
+} CameraTowing; // size: 24
+
+#define STI_TYPE_HASH_InputStick 0x4789DAD4
+typedef struct InputStick{
+    STI_float32 DirectSpeed; // offset: 0, size: 4
+    STI_float32 DirectSpeedExponential; // offset: 4, size: 4
+    STI_float32 AccelExponential; // offset: 8, size: 4
+    STI_float32 TopSpeed; // offset: 12, size: 4
+    STI_float32 AccPeriod; // offset: 16, size: 4
+} InputStick; // size: 20
+
+#define STI_TYPE_HASH_VehicleSplineFuncOfPitchParams 0x1165029E
+typedef struct VehicleSplineFuncOfPitchParams{
+    STI_int8 use_spline_for_rotation_point; // offset: 0, size: 1
+    CameraSpline10 PedestalSpline; // offset: 4, size: 140
+    CameraSpline10 DollySpline; // offset: 144, size: 140
+    CameraSpline10 FOVSpline; // offset: 284, size: 140
+} VehicleSplineFuncOfPitchParams; // size: 424
+
+#define STI_TYPE_HASH_GenericVehicleCamera 0xBBFC91EE
+typedef struct GenericVehicleCamera{
+    STI_float32 StateTransitionTime; // offset: 0, size: 4
+    STI_float32 TransitionToCrashStateDelay; // offset: 4, size: 4
+    STI_float32 DriftTransitionTime; // offset: 8, size: 4
+    STI_float32 CameraPosition[3]; // offset: 12, size: 12
+    STI_float32 CrashingCameraPosition[3]; // offset: 24, size: 12
+    STI_float32 RotationPoint[3]; // offset: 36, size: 12
+    STI_float32 LookAtPoint[3]; // offset: 48, size: 12
+    STI_float32 LookAtReferenceWheelbaseRatio; // offset: 60, size: 4
+    STI_float32 AddLookAtPointToPositionRatio; // offset: 64, size: 4
+    STI_float32 VelDirBlendWithVehicleDirSpeed; // offset: 68, size: 4
+    STI_float32 DrivingVelocityMatrixBlend; // offset: 72, size: 4
+    STI_float32 MinTimeForHalfTurn; // offset: 76, size: 4
+    STI_float32 YawSpringStiffness; // offset: 80, size: 4
+    STI_float32 DriftYawSpringStiffness; // offset: 84, size: 4
+    STI_float32 YawSpringAngleLimit; // offset: 88, size: 4
+    STI_float32 YawSpringLimitStiffnessPower; // offset: 92, size: 4
+    STI_float32 YawSpringStiffnessMax; // offset: 96, size: 4
+    STI_float32 PitchSpringStiffness; // offset: 100, size: 4
+    STI_float32 PitchLimit[2]; // offset: 104, size: 8
+    STI_float32 RollSpringStiffness; // offset: 112, size: 4
+    STI_float32 RollLimit[2]; // offset: 116, size: 8
+    CameraSpring LagSpring; // offset: 124, size: 12
+    STI_float32 LagCameraRelativity; // offset: 136, size: 4
+    STI_float32 LagVelocityScale; // offset: 140, size: 4
+    STI_float32 FollowCameraRange[2]; // offset: 144, size: 8
+    CameraSpring CameraVelocitySpring; // offset: 152, size: 12
+    CameraSpring LookAtVelocitySpring; // offset: 164, size: 12
+    STI_float32 UpCameraVelocityRefSpeedKph; // offset: 176, size: 4
+    STI_float32 UpCameraRange[2]; // offset: 180, size: 8
+    STI_float32 UpLookAtVelocityRefSpeedKph; // offset: 188, size: 4
+    STI_float32 UpLookAtRange[2]; // offset: 192, size: 8
+    STI_float32 RightCameraVelocityRefSpeedKph; // offset: 200, size: 4
+    STI_float32 RightCameraRange[2]; // offset: 204, size: 8
+    STI_float32 RightLookAtVelocityRefSpeedKph; // offset: 212, size: 4
+    STI_float32 RightLookAtRange[2]; // offset: 216, size: 8
+    STI_float32 RollWithVehicleAmount; // offset: 224, size: 4
+    STI_float32 ReCenterDelay; // offset: 228, size: 4
+    STI_float32 ReCenterSpeed; // offset: 232, size: 4
+    STI_float32 FOVVelocityRange[2]; // offset: 236, size: 8
+    STI_float32 FOV[2]; // offset: 244, size: 8
+    CameraSpring FOVBlendSpring; // offset: 252, size: 12
+    STI_float32 FOVZoomAdjustment; // offset: 264, size: 4
+    CameraSpring CollisionBlendSpring; // offset: 268, size: 12
+    STI_float32 CollisionFudgeFactor; // offset: 280, size: 4
+    STI_uint8 CollisionPitchEnabled; // offset: 284, size: 1
+    CameraSpring CollisionPitchSpring; // offset: 288, size: 12
+    STI_float32 CollisionPitchDistance; // offset: 300, size: 4
+    STI_uint32 CollisionCheckWater; // offset: 304, size: 4
+    STI_float32 CollisionStartPoint[3]; // offset: 308, size: 12
+    CameraTowing TowingOffsets; // offset: 320, size: 24
+    STI_uint8 AlignReferenceWithWorldUp; // offset: 344, size: 1
+    STI_uint32 DrawDebugInfo; // offset: 348, size: 4
+    STI_float32 ListenerHeadRelativity; // offset: 352, size: 4
+    InputStick InputSettings; // offset: 356, size: 20
+    VehicleSplineFuncOfPitchParams SplineFuncOfPitchParams; // offset: 376, size: 424
+} GenericVehicleCamera; // size: 800
+
+#define STI_TYPE_HASH_BoatBuoyancyModule 0xBBCDC7F2
+typedef struct BoatBuoyancyModule{
+    STI_float32 position[3]; // offset: 0, size: 12
+    STI_float32 radius; // offset: 12, size: 4
+    STI_float32 buoyancy; // offset: 16, size: 4
+    STI_float32 forward_drag; // offset: 20, size: 4
+    STI_float32 lateral_drag; // offset: 24, size: 4
+    STI_float32 vertical_drag; // offset: 28, size: 4
+    STI_float32 air_drag; // offset: 32, size: 4
+} BoatBuoyancyModule; // size: 36
+
+#define STI_TYPE_HASH_MotorbikeWheelie 0xBBCBB145
+typedef struct MotorbikeWheelie{
+    STI_float32 max_lean_angle_deg; // offset: 0, size: 4
+    STI_float32 input_reactiveness; // offset: 4, size: 4
+    STI_float32 dead_zone; // offset: 8, size: 4
+    STI_float32 min_speed; // offset: 12, size: 4
+    STI_float32 wheelie_angle_deg; // offset: 16, size: 4
+    STI_float32 wheelie_torque; // offset: 20, size: 4
+    STI_float32 wheelie_center_of_mass_offset[3]; // offset: 24, size: 12
+    STI_float32 nosie_angle_deg; // offset: 36, size: 4
+    STI_float32 nosie_torque; // offset: 40, size: 4
+    STI_float32 nosie_center_of_mass_offset[3]; // offset: 44, size: 12
+} MotorbikeWheelie; // size: 56
+
+#define STI_TYPE_HASH_PID 0xBAE3FB45
+typedef struct PID{
+    STI_float32 P; // offset: 0, size: 4
+    STI_float32 I; // offset: 4, size: 4
+    STI_float32 D; // offset: 8, size: 4
+} PID; // size: 12
+
 #define STI_TYPE_HASH_Vector2 0xBA9D34AF
 typedef struct Vector2{
     STI_float32 X; // offset: 0, size: 4
     STI_float32 Y; // offset: 4, size: 4
 } Vector2; // size: 8
+
+#define STI_TYPE_HASH_CompanionSettings 0xBA658830
+typedef struct CompanionSettings{
+    STI_int32 heal_amount; // offset: 0, size: 4
+    STI_float32 heal_cooldown; // offset: 4, size: 4
+    STI_float32 heal_duration; // offset: 8, size: 4
+    STI_float32 heal_threshold; // offset: 12, size: 4
+    STI_float32 spot_duration; // offset: 16, size: 4
+    STI_float32 spot_xp_mult; // offset: 20, size: 4
+    STI_float32 spot_damage_mult; // offset: 24, size: 4
+    STI_float32 spot_cooldown; // offset: 28, size: 4
+    STI_float32 scavenge_range; // offset: 32, size: 4
+    STI_float32 scavenge_height; // offset: 36, size: 4
+    STI_float32 scavenge_duration; // offset: 40, size: 4
+    STI_float32 calm_player_range; // offset: 44, size: 4
+    STI_float32 calm_run_range; // offset: 48, size: 4
+    STI_float32 alert_player_range; // offset: 52, size: 4
+    STI_float32 alert_duration; // offset: 56, size: 4
+    STI_float32 teleport_range; // offset: 60, size: 4
+    STI_float32 shutdown_health; // offset: 64, size: 4
+    STI_float32 base_health; // offset: 68, size: 4
+} CompanionSettings; // size: 72
+
+#define STI_TYPE_HASH_DeformPoints 0xBA022EDF
+typedef struct DeformPoints{
+    DynamicArray_DeformPoint points; // offset: 0, size: 16
+    DynamicArray_STI_uint16 constraint_indices; // offset: 16, size: 16
+    DynamicArray_STI_uint16 light_indices; // offset: 32, size: 16
+    DynamicArray_STI_uint16 wheel_indices; // offset: 48, size: 16
+    DynamicArray_STI_uint16 non_deformable_parts_indices; // offset: 64, size: 16
+    DynamicArray_STI_uint16 hauling_hitch_indices; // offset: 80, size: 16
+    DynamicArray_STI_uint16 trailing_hitch_indices; // offset: 96, size: 16
+} DeformPoints; // size: 112
 
 #define STI_TYPE_HASH_RoadGraphEdgeSamples 0xB9E3B8BE
 typedef struct RoadGraphEdgeSamples{
@@ -2459,6 +4387,36 @@ typedef struct AmfMesh{
     DynamicArray_AmfStreamAttribute StreamAttributes; // offset: 136, size: 16
 } AmfMesh; // size: 152
 
+#define STI_TYPE_HASH_VisionSettings 0xB8386CAB
+typedef struct VisionSettings{
+    DynamicArray_STI_float32 ProneDistanceScore; // offset: 0, size: 16
+    DynamicArray_STI_float32 CrouchDistanceScore; // offset: 16, size: 16
+    DynamicArray_STI_float32 StandDistanceScore; // offset: 32, size: 16
+    DynamicArray_STI_float32 SwimDistanceScore; // offset: 48, size: 16
+    DynamicArray_STI_float32 CrawlDistanceScore; // offset: 64, size: 16
+    DynamicArray_STI_float32 SneakDistanceScore; // offset: 80, size: 16
+    DynamicArray_STI_float32 WalkDistanceScore; // offset: 96, size: 16
+    DynamicArray_STI_float32 JogDistanceScore; // offset: 112, size: 16
+    DynamicArray_STI_float32 RunDistanceScore; // offset: 128, size: 16
+} VisionSettings; // size: 144
+
+#define STI_TYPE_HASH_CharacterSplineControlPoint 0x39408479
+typedef struct CharacterSplineControlPoint{
+    STI_float32 x; // offset: 0, size: 4
+    STI_float32 y; // offset: 4, size: 4
+    STI_float32 y2; // offset: 8, size: 4
+} CharacterSplineControlPoint; // size: 12
+
+#define STI_TYPE_HASH_CharacterSpline10 0xB83445A2
+typedef struct CharacterSpline10{
+    STI_float32 x_min; // offset: 0, size: 4
+    STI_float32 x_max; // offset: 4, size: 4
+    STI_float32 y_min; // offset: 8, size: 4
+    STI_float32 y_max; // offset: 12, size: 4
+    STI_int8 number_of_control_points; // offset: 16, size: 1
+    CharacterSplineControlPoint control_points[10]; // offset: 20, size: 120
+} CharacterSpline10; // size: 140
+
 #define STI_TYPE_HASH_MachineSettings 0xB82AB2B3
 typedef struct MachineSettings{
     STI_float32 lured_attack_range; // offset: 0, size: 4
@@ -2478,11 +4436,41 @@ typedef struct HarvesterSettings{
     STI_int32 max_reinforcements[2]; // offset: 16, size: 8
 } HarvesterSettings; // size: 24
 
+#define STI_TYPE_HASH_DockingControls 0x4EA8860C
+typedef struct DockingControls{
+    STI_float32 optimal_docking_speed_ms; // offset: 0, size: 4
+    STI_float32 max_docking_speed_ms; // offset: 4, size: 4
+    STI_float32 max_docking_control_throttle; // offset: 8, size: 4
+    STI_float32 docking_yaw_throttle_limit; // offset: 12, size: 4
+} DockingControls; // size: 16
+
+#define STI_TYPE_HASH_Propellers 0xB65DD93C
+typedef struct Propellers{
+    STI_float32 max_thrust; // offset: 0, size: 4
+    STI_float32 max_rpm; // offset: 4, size: 4
+    STI_float32 max_reverse_rpm; // offset: 8, size: 4
+    STI_float32 diameter; // offset: 12, size: 4
+    STI_float32 pitch; // offset: 16, size: 4
+    DockingControls docking_controls; // offset: 20, size: 16
+    Spline5 thrust_vs_advance_ratio; // offset: 36, size: 80
+    Spline5 max_steering_vs_speed_ms; // offset: 116, size: 80
+    Spline5 trim_deg_vs_speed_ms; // offset: 196, size: 80
+    Propeller propellers[2]; // offset: 280, size: 208
+    STI_uint8 number_of_propellers; // offset: 488, size: 1
+} Propellers; // size: 496
+
 #define STI_TYPE_HASH_VariableBool 0xB6040E06
 typedef struct VariableBool{
     STI_String Name; // offset: 0, size: 16
     STI_uint8 Val; // offset: 8, size: 1
 } VariableBool; // size: 16
+
+#define STI_TYPE_HASH_ScopeOffsetTransform 0xB5BB6B1C
+typedef struct ScopeOffsetTransform{
+    STI_float32 X; // offset: 0, size: 4
+    STI_float32 Y; // offset: 4, size: 4
+    STI_float32 Z; // offset: 8, size: 4
+} ScopeOffsetTransform; // size: 12
 
 #define STI_TYPE_HASH_AdfModelCollection 0xB5B062F1
 typedef struct AdfModelCollection{
@@ -2545,6 +4533,21 @@ typedef struct TerrainOccluderMesh{
     uint32 TriangleOmitted:1; // offset: 56, size: 4
 } TerrainOccluderMesh; // size: 64
 
+#define STI_TYPE_HASH_Fin 0xB0B5664A
+typedef struct Fin{
+    HashString physics_component_name; // offset: 0, size: 16
+    STI_float32 area; // offset: 16, size: 4
+    STI_float32 height; // offset: 20, size: 4
+    STI_uint8 effective_in_air; // offset: 24, size: 1
+    STI_uint8 effective_in_water; // offset: 25, size: 1
+    STI_float32 steering_factor; // offset: 28, size: 4
+    STI_float32 hinge_position[3]; // offset: 32, size: 12
+    EulerAngles hinge_angles; // offset: 44, size: 12
+    STI_float32 distance_to_hinge; // offset: 56, size: 4
+    STI_float32 min_angle_deg; // offset: 60, size: 4
+    STI_float32 max_angle_deg; // offset: 64, size: 4
+} Fin; // size: 72
+
 #define STI_TYPE_HASH_EquipmentEntity 0xB069DC5F
 typedef struct EquipmentEntity{
     STI_uint32 EquipmentHash; // offset: 0, size: 4
@@ -2556,6 +4559,17 @@ typedef struct WorldAudioPatchData{
     DynamicArray_WorldAudioPatchZoneData ZoneData; // offset: 0, size: 16
 } WorldAudioPatchData; // size: 16
 
+#define STI_TYPE_HASH_SplineFuncOfPitchParams 0xAE4480DA
+typedef struct SplineFuncOfPitchParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 UseWorldPitch; // offset: 1, size: 1
+    CameraSpline5 TruckSpline; // offset: 4, size: 80
+    CameraSpline5 PedestalSpline; // offset: 84, size: 80
+    CameraSpline5 DollySpline; // offset: 164, size: 80
+    CameraSpline5 FOVSpline; // offset: 244, size: 80
+    STI_uint8 DrawDebug; // offset: 324, size: 1
+} SplineFuncOfPitchParams; // size: 328
+
 #define STI_TYPE_HASH_RoadGraphNode 0xADE91332
 typedef struct RoadGraphNode{
     STI_float32 Position[3]; // offset: 0, size: 12
@@ -2563,11 +4577,71 @@ typedef struct RoadGraphNode{
     STI_uint16 EdgesCount; // offset: 14, size: 2
 } RoadGraphNode; // size: 16
 
+#define STI_TYPE_HASH_VehicleRumbleEffects 0xAD92D81A
+typedef struct VehicleRumbleEffects{
+    STI_float32 BumpDecaySpeed; // offset: 0, size: 4
+    STI_float32 MaxBump; // offset: 4, size: 4
+    STI_float32 DoorCloseBump; // offset: 8, size: 4
+    STI_float32 GearChangeBump; // offset: 12, size: 4
+    STI_float32 MinImpactBumpImpulse; // offset: 16, size: 4
+    STI_float32 ImpactBumpAmount; // offset: 20, size: 4
+    STI_float32 MinScrapeFactor; // offset: 24, size: 4
+    STI_float32 ScrapeBumpAmount; // offset: 28, size: 4
+    STI_float32 RpmHFMinAmount; // offset: 32, size: 4
+    STI_float32 RpmLFAmount; // offset: 36, size: 4
+    STI_float32 RpmLFModulateAmount; // offset: 40, size: 4
+    STI_float32 RpmLFModulateSpeed; // offset: 44, size: 4
+    STI_float32 RpmHFAmount; // offset: 48, size: 4
+    STI_float32 RpmHFModulateAmount; // offset: 52, size: 4
+    STI_float32 RpmHFModulateSpeed; // offset: 56, size: 4
+    STI_float32 LoadLFAmount; // offset: 60, size: 4
+    STI_float32 LoadLFModulateAmount; // offset: 64, size: 4
+    STI_float32 LoadLFModulateSpeed; // offset: 68, size: 4
+    STI_float32 GroundScale; // offset: 72, size: 4
+    STI_float32 GroundModulateSpeed; // offset: 76, size: 4
+    STI_float32 GroundModulateAmount; // offset: 80, size: 4
+    STI_float32 WheelSuspensionAmount; // offset: 84, size: 4
+} VehicleRumbleEffects; // size: 88
+
+#define STI_TYPE_HASH_Decals 0xAD1F0EAE
+typedef struct Decals{
+    DynamicArray_STI_int16 decal_indices; // offset: 0, size: 16
+    DynamicArray_STI_int16 decal_counts; // offset: 16, size: 16
+} Decals; // size: 32
+
 #define STI_TYPE_HASH_FactionSaveData1 0xAC9CD509
 typedef struct FactionSaveData1{
     STI_uint64 Id; // offset: 0, size: 8
     STI_float32 Resources[4]; // offset: 8, size: 16
 } FactionSaveData1; // size: 24
+
+#define STI_TYPE_HASH_HelicopterCommon 0xAC817067
+typedef struct HelicopterCommon{
+    STI_float32 engine_shut_down_delay_s; // offset: 0, size: 4
+    STI_float32 crash_min_vel_change_ms; // offset: 4, size: 4
+    STI_float32 crash_in_air_min_vel_change_ms; // offset: 8, size: 4
+} HelicopterCommon; // size: 12
+
+#define STI_TYPE_HASH_GroundAlignmentDataSplines 0xABF9943C
+typedef struct GroundAlignmentDataSplines{
+    Spline10 X; // offset: 0, size: 140
+    Spline10 Y; // offset: 140, size: 140
+    Spline10 Z; // offset: 280, size: 140
+} GroundAlignmentDataSplines; // size: 420
+
+#define STI_TYPE_HASH_BrakeAxis 0x813CBAC5
+typedef struct BrakeAxis{
+    STI_int32 handbrake; // offset: 0, size: 4
+    STI_float32 max_brake_torque; // offset: 4, size: 4
+    STI_float32 min_time_to_block; // offset: 8, size: 4
+} BrakeAxis; // size: 12
+
+#define STI_TYPE_HASH_Brakes 0xABCE3066
+typedef struct Brakes{
+    BrakeAxis front; // offset: 0, size: 12
+    BrakeAxis rear; // offset: 12, size: 12
+    STI_float32 handbrake_friction_factor; // offset: 24, size: 4
+} Brakes; // size: 28
 
 #define STI_TYPE_HASH_POIInfo 0xAB4CE47E
 typedef struct POIInfo{
@@ -2622,6 +4696,40 @@ typedef struct ImpostorInfo{
     STI_uint16 TreeId; // offset: 64, size: 2
 } ImpostorInfo; // size: 72
 
+#define STI_TYPE_HASH_LandEngine 0xAA6BEE76
+typedef struct LandEngine{
+    STI_int32 rpm_power_band; // offset: 0, size: 4
+    STI_float32 resistance_at_min_rpm; // offset: 4, size: 4
+    STI_float32 resistance_at_max_rpm; // offset: 8, size: 4
+    STI_float32 resistance_at_optimal_rpm; // offset: 12, size: 4
+    STI_float32 rev_limiter_rpm_drop; // offset: 16, size: 4
+    STI_float32 max_rpm; // offset: 20, size: 4
+    STI_float32 min_rpm; // offset: 24, size: 4
+    STI_float32 optimal_rpm; // offset: 28, size: 4
+    STI_float32 torque_factor_at_max_rpm; // offset: 32, size: 4
+    STI_float32 torque_factor_at_min_rpm; // offset: 36, size: 4
+    STI_float32 torque_factor_at_optimal_rpm; // offset: 40, size: 4
+    STI_float32 clutch_slip_rpm; // offset: 44, size: 4
+    STI_float32 engine_min_noise; // offset: 48, size: 4
+    STI_float32 engine_damage_noise_scale; // offset: 52, size: 4
+    STI_float32 engine_max_damage_torque; // offset: 56, size: 4
+} LandEngine; // size: 60
+
+#define STI_TYPE_HASH_FollowSpringModifierParams 0xAA59BD9C
+typedef struct FollowSpringModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 XZOnly; // offset: 1, size: 1
+    CameraSpring FollowSpring; // offset: 4, size: 12
+    STI_float32 FollowCameraRelativity; // offset: 16, size: 4
+    STI_uint8 UseStuckBehavior; // offset: 20, size: 1
+    CameraSpring StuckSpring; // offset: 24, size: 12
+    STI_float32 MaxSpeedWhenStuck; // offset: 36, size: 4
+    STI_float32 DistWhenStuck; // offset: 40, size: 4
+    CameraSpline5 SpeedToDistSpline; // offset: 44, size: 80
+    CameraSpline5 PitchScaleSpline; // offset: 124, size: 80
+    STI_uint8 DrawDebug; // offset: 204, size: 1
+} FollowSpringModifierParams; // size: 208
+
 #define STI_TYPE_HASH_PatchSampleList 0xA9C339D3
 typedef struct PatchSampleList{
     STI_uint8 PatchX; // offset: 0, size: 1
@@ -2638,6 +4746,92 @@ typedef enum{ // size: 4
     UNLOCKED_STEAM_INVENTORY = 4,
     INVISIBLE = 5,
 } LockMode;
+
+#define STI_TYPE_HASH_CharacterSpring 0x8EA5D6C0
+typedef struct CharacterSpring{
+    STI_float32 Speed; // offset: 0, size: 4
+    STI_float32 Constant; // offset: 4, size: 4
+    STI_float32 Damping; // offset: 8, size: 4
+} CharacterSpring; // size: 12
+
+#define STI_TYPE_HASH_CharacterRetractSShotSettings 0x750CFDD7
+typedef struct CharacterRetractSShotSettings{
+    STI_float32 BlendInSpeed; // offset: 0, size: 4
+    STI_float32 BlendOutSpeed; // offset: 4, size: 4
+    STI_float32 MaxSpeedAdjust; // offset: 8, size: 4
+    STI_float32 DirectAccel; // offset: 12, size: 4
+    STI_float32 ForwardAccel; // offset: 16, size: 4
+} CharacterRetractSShotSettings; // size: 20
+
+#define STI_TYPE_HASH_CharacterAirMovementSettings 0x242E0171
+typedef struct CharacterAirMovementSettings{
+    STI_float32 Gravity; // offset: 0, size: 4
+    STI_float32 MaxVelocity; // offset: 4, size: 4
+    STI_float32 MaxVelocityXZ; // offset: 8, size: 4
+    STI_float32 ClampVelocitySpeed; // offset: 12, size: 4
+    STI_float32 Lift[3]; // offset: 16, size: 12
+    STI_float32 DragX[3]; // offset: 28, size: 12
+    STI_float32 DragY[3]; // offset: 40, size: 12
+    STI_float32 DragZ[3]; // offset: 52, size: 12
+    STI_float32 LiftPoint[3]; // offset: 64, size: 12
+    STI_float32 PitchLimit[2]; // offset: 76, size: 8
+    STI_float32 YawSteerAmount; // offset: 84, size: 4
+    STI_uint32 DrawDebugLines; // offset: 88, size: 4
+    CharacterSpring RotateCharYawToVelocity; // offset: 92, size: 12
+    CharacterSpring RotateCharPitchToVelocity; // offset: 104, size: 12
+    CharacterSpring PitchInputSpring; // offset: 116, size: 12
+    CharacterSpring YawInputSpring; // offset: 128, size: 12
+    CharacterSpring RollInputSpring; // offset: 140, size: 12
+    STI_float32 XInputYawPitchRollAmount[3]; // offset: 152, size: 12
+    STI_float32 YInputYawPitchRollAmount[3]; // offset: 164, size: 12
+    STI_float32 XLookYawPitchRollAmount[3]; // offset: 176, size: 12
+    STI_float32 YLookYawPitchRollAmount[3]; // offset: 188, size: 12
+    CharacterSpring RotateCharYawToSlingshot; // offset: 200, size: 12
+    STI_float32 PersistYawPitchRoll[3]; // offset: 212, size: 12
+    STI_float32 CenterYawPitchRoll[3]; // offset: 224, size: 12
+    CharacterSpring LiftInputSpring; // offset: 236, size: 12
+    CharacterSpring DragInputSpring; // offset: 248, size: 12
+    CharacterSpring AnimInputSpringX; // offset: 260, size: 12
+    CharacterSpring AnimInputSpringY; // offset: 272, size: 12
+    STI_float32 NearGroundLiftDistance; // offset: 284, size: 4
+    STI_float32 NearGroundMaxLift; // offset: 288, size: 4
+    STI_float32 NearGroundLiftExponent; // offset: 292, size: 4
+    STI_float32 NearGroundLiftDecayMax; // offset: 296, size: 4
+    STI_float32 NearGroundLiftDecayMultiplier; // offset: 300, size: 4
+    STI_float32 NearGroundLiftRecoverRate; // offset: 304, size: 4
+    STI_float32 LookSteerDeadZone[2]; // offset: 308, size: 8
+    STI_float32 LookSteerMaxSpeed[2]; // offset: 316, size: 8
+    STI_float32 LookSteerMaxYaw; // offset: 324, size: 4
+    STI_float32 LookSteerMaxPitch[2]; // offset: 328, size: 8
+    STI_float32 LookSteerExponential[2]; // offset: 336, size: 8
+    STI_float32 LookSteerAimingDeadZone[2]; // offset: 344, size: 8
+    STI_float32 LookSteerAimingMaxSpeed[2]; // offset: 352, size: 8
+    STI_float32 LookSteerAimingMaxYaw; // offset: 360, size: 4
+    STI_float32 LookSteerAimingMaxPitch[2]; // offset: 364, size: 8
+    STI_float32 LookSteerAimingExponential[2]; // offset: 372, size: 8
+    STI_float32 SlingshotPitchAdjust; // offset: 380, size: 4
+    STI_float32 SlingshotExtraLift; // offset: 384, size: 4
+    STI_float32 SlingshotDirectAccel; // offset: 388, size: 4
+    STI_float32 SlingshotForwardAccel; // offset: 392, size: 4
+    STI_float32 SlingshotMaxSpeedAdjust; // offset: 396, size: 4
+    STI_float32 SlingshotDragXYZAdjust[3]; // offset: 400, size: 12
+    STI_float32 SlingshotBreakPitch; // offset: 412, size: 4
+    STI_float32 SlingshotBreakYawStart; // offset: 416, size: 4
+    STI_float32 SlingshotBreakYawEnd; // offset: 420, size: 4
+    STI_float32 SlingshotBreakYawBlendTime; // offset: 424, size: 4
+    STI_float32 SlingshotBreakDistance; // offset: 428, size: 4
+    CharacterRetractSShotSettings RetractSlingshotSettings; // offset: 432, size: 20
+} CharacterAirMovementSettings; // size: 452
+
+#define STI_TYPE_HASH_CharacterParachuteSettings 0xA88A574E
+typedef struct CharacterParachuteSettings{
+    STI_float32 MaxAngularSpeed; // offset: 0, size: 4
+    STI_float32 MaxAngularAccel; // offset: 4, size: 4
+    STI_float32 VelocityAlignMinSpeed; // offset: 8, size: 4
+    STI_float32 ParachuteToPivotDistance; // offset: 12, size: 4
+    CharacterReelToParaSettings ReelToParaSettings; // offset: 16, size: 84
+    CharacterAirMovementSettings AirControl; // offset: 100, size: 452
+} CharacterParachuteSettings; // size: 552
 
 #define STI_TYPE_HASH_UnlockCondition 0x5AA20A70
 typedef enum{ // size: 4
@@ -2704,6 +4898,51 @@ typedef struct Equipment{
     STI_String AttributeFile; // offset: 280, size: 16
 } Equipment; // size: 288
 
+#define STI_TYPE_HASH_StorageSettings 0xA866D7EB
+typedef struct StorageSettings{
+    STI_float32 SafehouseStorageCapacity; // offset: 0, size: 4
+    STI_float32 ResourceStorageCapacity; // offset: 4, size: 4
+    STI_float32 LightEncumberanceExtraWeight; // offset: 8, size: 4
+    STI_float32 HeavyEncumberanceExtraWeight; // offset: 12, size: 4
+} StorageSettings; // size: 16
+
+#define STI_TYPE_HASH_AimPartConstraint 0xA84D9A9A
+typedef struct AimPartConstraint{
+    HashString source_part; // offset: 0, size: 16
+    HashString target_part; // offset: 16, size: 16
+    STI_int8 source_part_index; // offset: 32, size: 1
+    STI_int8 target_part_index; // offset: 33, size: 1
+    STI_float32 aim_vector[3]; // offset: 36, size: 12
+    STI_float32 up_vector[3]; // offset: 48, size: 12
+    STI_float32 world_up_vector[3]; // offset: 60, size: 12
+    STI_float32 angle_offset[3]; // offset: 72, size: 12
+    STI_float32 constrained_rotation_axes[3]; // offset: 84, size: 12
+} AimPartConstraint; // size: 96
+
+#define STI_TYPE_HASH_FoliageMeshConstants 0xA7CACE80
+typedef struct FoliageMeshConstants{
+    STI_float32 BoundingBoxDimensions[3]; // offset: 0, size: 12
+} FoliageMeshConstants; // size: 12
+
+#define STI_TYPE_HASH_LandSteering 0xA69E58BC
+typedef struct LandSteering{
+    STI_float32 dead_zone; // offset: 0, size: 4
+    STI_float32 saturation_zone; // offset: 4, size: 4
+    STI_float32 t_to_full_steer_s; // offset: 8, size: 4
+    STI_float32 max_speed_t_to_full_steer_s; // offset: 12, size: 4
+    STI_float32 min_speed_kmph; // offset: 16, size: 4
+    STI_float32 max_speed_kmph; // offset: 20, size: 4
+    STI_float32 steer_angle_min_speed_deg; // offset: 24, size: 4
+    STI_float32 steer_angle_max_speed_deg; // offset: 28, size: 4
+    STI_float32 steer_curve_falloff; // offset: 32, size: 4
+    STI_float32 countersteer_speed_factor; // offset: 36, size: 4
+    STI_float32 steer_in_speed_factor; // offset: 40, size: 4
+    STI_float32 steer_input_power_pc; // offset: 44, size: 4
+    STI_float32 steer_input_power_durango; // offset: 48, size: 4
+    STI_float32 steer_input_power_orbis; // offset: 52, size: 4
+    STI_float32 wheel_drift_aligning_strength; // offset: 56, size: 4
+} LandSteering; // size: 60
+
 #define STI_TYPE_HASH_WorldSaveData2 0xA5ABA935
 typedef struct WorldSaveData2{
     DynamicArray_RegionData Regions; // offset: 0, size: 16
@@ -2741,6 +4980,19 @@ typedef struct CharacterSkinConstants{
     uint16 UseFur:1; // offset: 48, size: 2
 } CharacterSkinConstants; // size: 52
 
+#define STI_TYPE_HASH_GeneralConstants 0xA59F1968
+typedef struct GeneralConstants{
+    STI_float32 DepthBias; // offset: 0, size: 4
+    STI_float32 SpecularPower; // offset: 4, size: 4
+    uint16 DoubleSided:1; // offset: 8, size: 2
+    uint16 AlphaBlending:1; // offset: 8, size: 2
+    uint16 AdditiveBlending:1; // offset: 8, size: 2
+    uint16 AnimateTexture:1; // offset: 8, size: 2
+    uint16 AlphaTest:1; // offset: 8, size: 2
+    uint16 DiffuseChannel:3; // offset: 8, size: 2
+    uint16 AOChannel:3; // offset: 8, size: 2
+} GeneralConstants; // size: 12
+
 #define STI_TYPE_HASH_AnimalPopulationSaveData 0xA56B4D42
 typedef struct AnimalPopulationSaveData{
     STI_uint32 NameHashId; // offset: 0, size: 4
@@ -2752,6 +5004,33 @@ typedef struct AnimalPopulationSaveData{
 typedef struct TerrainOccluderPackedMesh{
     DynamicArray_STI_uint8 Data; // offset: 0, size: 16
 } TerrainOccluderPackedMesh; // size: 16
+
+#define STI_TYPE_HASH_RotatingPartProperties 0xA44B60A9
+typedef struct RotatingPartProperties{
+    HashString name; // offset: 0, size: 16
+    HashString rpm_variable; // offset: 16, size: 16
+    STI_int8 rotoscope_enabled; // offset: 32, size: 1
+    STI_int8 inverted; // offset: 33, size: 1
+    STI_int8 special_collision_enabled; // offset: 34, size: 1
+    STI_int8 number_of_water_collision_sensors; // offset: 35, size: 1
+    STI_float32 rotoscope_rpm_per_cycle; // offset: 36, size: 4
+} RotatingPartProperties; // size: 40
+
+#define STI_TYPE_HASH_SpringPartProperties 0xA38A3E72
+typedef struct SpringPartProperties{
+    HashString name; // offset: 0, size: 16
+} SpringPartProperties; // size: 16
+
+#define STI_TYPE_HASH_CustomVelocityDamper 0xA24EF7C5
+typedef struct CustomVelocityDamper{
+    VelocityDamper velocity_damper; // offset: 0, size: 12
+    STI_float32 handbrake_spin_damping; // offset: 12, size: 4
+} CustomVelocityDamper; // size: 16
+
+#define STI_TYPE_HASH_PhysicsGlobalSettings 0xA20EA9D1
+typedef struct PhysicsGlobalSettings{
+    STI_uint32 dummy; // offset: 0, size: 4
+} PhysicsGlobalSettings; // size: 4
 
 #define STI_TYPE_HASH_HunterAttackSettings 0x83A13191
 typedef struct HunterAttackSettings{
@@ -2804,6 +5083,61 @@ typedef struct AITuningSettings{
     MachineSettings Machine_Settings; // offset: 112, size: 40
 } AITuningSettings; // size: 152
 
+#define STI_TYPE_HASH_CharacterFreefallSettings 0x790755CA
+typedef struct CharacterFreefallSettings{
+    CharacterAirMovementSettings AirControl; // offset: 0, size: 452
+    STI_float32 YawSpeedAnimXEffect; // offset: 452, size: 4
+    STI_float32 DecelXZNoInputSpeed; // offset: 456, size: 4
+} CharacterFreefallSettings; // size: 460
+
+#define STI_TYPE_HASH_CharacterReelInSettings 0x78E1020B
+typedef struct CharacterReelInSettings{
+    STI_float32 PerpendicularDrag; // offset: 0, size: 4
+    CharacterSpring LookSteerSpring; // offset: 4, size: 12
+    STI_float32 Gravity; // offset: 16, size: 4
+} CharacterReelInSettings; // size: 20
+
+#define STI_TYPE_HASH_CharacterAirSteerSettings 0x8ED81101
+typedef struct CharacterAirSteerSettings{
+    STI_float32 MaxAcceleration; // offset: 0, size: 4
+    STI_float32 MaxDeceleration; // offset: 4, size: 4
+    STI_float32 FacingSpeed; // offset: 8, size: 4
+    STI_float32 NoInputAcceleration; // offset: 12, size: 4
+    STI_float32 MaxSpeed; // offset: 16, size: 4
+    STI_float32 AngularDisplacementSpeed; // offset: 20, size: 4
+} CharacterAirSteerSettings; // size: 24
+
+#define STI_TYPE_HASH_CharacterReeledHangSettings 0x7AD42D51
+typedef struct CharacterReeledHangSettings{
+    CharacterAirSteerSettings AirSteerSettings; // offset: 0, size: 24
+} CharacterReeledHangSettings; // size: 24
+
+#define STI_TYPE_HASH_CharacterJumpSettings 0x2D58F9E2
+typedef struct CharacterJumpSettings{
+    CharacterAirSteerSettings AirSteerSettings; // offset: 0, size: 24
+    STI_float32 FallingUpwardsDecel; // offset: 24, size: 4
+} CharacterJumpSettings; // size: 28
+
+#define STI_TYPE_HASH_CharacterWingsuitSettings 0x7DE82967
+typedef struct CharacterWingsuitSettings{
+    CharacterAirMovementSettings AirControl; // offset: 0, size: 452
+    STI_float32 MaxAngularSpeed; // offset: 452, size: 4
+    STI_float32 MaxAngularAccel; // offset: 456, size: 4
+    CharacterSpring AnimTwitchInputSpringX; // offset: 460, size: 12
+    CharacterSpring AnimTwitchInputSpringY; // offset: 472, size: 12
+} CharacterWingsuitSettings; // size: 484
+
+#define STI_TYPE_HASH_CustomMovementSettings 0x9F56E45C
+typedef struct CustomMovementSettings{
+    CharacterAirMovementSettings FallingAirControl; // offset: 0, size: 452
+    CharacterFreefallSettings FreefallSettings; // offset: 452, size: 460
+    CharacterReelInSettings ReelInSettings; // offset: 912, size: 20
+    CharacterReeledHangSettings ReeledHangSettings; // offset: 932, size: 24
+    CharacterJumpSettings JumpSettings; // offset: 956, size: 28
+    CharacterParachuteSettings ParachuteSettings; // offset: 984, size: 552
+    CharacterWingsuitSettings WingsuitSettings; // offset: 1536, size: 484
+} CustomMovementSettings; // size: 2020
+
 #define STI_TYPE_HASH_EffectRTEmitter 0x9F160F8C
 typedef struct EffectRTEmitter{
     STI_uint16 EmitterTemplateIndex; // offset: 0, size: 2
@@ -2812,6 +5146,15 @@ typedef struct EffectRTEmitter{
     DynamicArray_STI_uint32 StartInOutputBuffer; // offset: 24, size: 16
 } EffectRTEmitter; // size: 40
 
+#define STI_TYPE_HASH_ArcadePhysics 0x9E5090AF
+typedef struct ArcadePhysics{
+    PerformanceBoost heat_boost; // offset: 0, size: 20
+    PerformanceBoost nitro_boost; // offset: 20, size: 20
+    PerformanceBoost nitro_boost_upgraded; // offset: 40, size: 20
+    TurboJump turbo_jump; // offset: 60, size: 24
+    TurboJump turbo_jump_upgraded; // offset: 84, size: 24
+} ArcadePhysics; // size: 108
+
 #define STI_TYPE_HASH_RoadGraphEdgeSample 0x9E0A91AC
 typedef struct RoadGraphEdgeSample{
     STI_uint8 OffsetX; // offset: 0, size: 1
@@ -2819,6 +5162,17 @@ typedef struct RoadGraphEdgeSample{
     STI_uint16 Y; // offset: 2, size: 2
     STI_uint16 EdgeId; // offset: 4, size: 2
 } RoadGraphEdgeSample; // size: 6
+
+#define STI_TYPE_HASH_AmmunitionFireModeSettings 0x9B821F83
+typedef struct AmmunitionFireModeSettings{
+    STI_float32 fire_delay_multiplier; // offset: 0, size: 4
+} AmmunitionFireModeSettings; // size: 4
+
+#define STI_TYPE_HASH_FirebirdSettings 0x9B2FBF77
+typedef struct FirebirdSettings{
+    STI_float32 bomb_run_desired_height; // offset: 0, size: 4
+    STI_float32 strafe_chance; // offset: 4, size: 4
+} FirebirdSettings; // size: 8
 
 #define STI_TYPE_HASH_XLSCell 0x9AE3055D
 typedef struct XLSCell{
@@ -2840,11 +5194,89 @@ typedef struct CharactersSaveData8{
     DynamicArray_STI_int32 MissionCampaignsReserveIds; // offset: 4448, size: 16
 } CharactersSaveData8; // size: 4464
 
+#define STI_TYPE_HASH_EnginelessReverse 0x9A1D555A
+typedef struct EnginelessReverse{
+    STI_float32 max_reverse_torque; // offset: 0, size: 4
+    STI_float32 reverse_top_speed; // offset: 4, size: 4
+} EnginelessReverse; // size: 8
+
 #define STI_TYPE_HASH_RaidLootSaveData 0x99BE971F
 typedef struct RaidLootSaveData{
     STI_uint32 RaidId; // offset: 0, size: 4
     STI_uint32 RaidSeed; // offset: 4, size: 4
 } RaidLootSaveData; // size: 8
+
+#define STI_TYPE_HASH_CarPaintMMStaticConstants 0x241CCF67
+typedef struct CarPaintMMStaticConstants{
+    STI_float32 SpecularGloss[4]; // offset: 0, size: 16
+    STI_float32 Metallic[4]; // offset: 16, size: 16
+    STI_float32 ClearCoat[4]; // offset: 32, size: 16
+    STI_float32 Emissive[4]; // offset: 48, size: 16
+    STI_float32 DiffuseWrap[4]; // offset: 64, size: 16
+    STI_float32 DirtParams[4]; // offset: 80, size: 16
+    STI_float32 DirtColor[4]; // offset: 96, size: 16
+    STI_float32 DecalWidth[4]; // offset: 112, size: 16
+    STI_float32 DamageBlend[4]; // offset: 128, size: 16
+    STI_float32 Damage[4]; // offset: 144, size: 16
+    STI_float32 Decal1Color[3]; // offset: 160, size: 12
+    STI_float32 SupportDecals; // offset: 172, size: 4
+    STI_float32 Decal2Color[3]; // offset: 176, size: 12
+    STI_float32 SupportDmgBlend; // offset: 188, size: 4
+    STI_float32 Decal3Color[3]; // offset: 192, size: 12
+    STI_float32 SupportLayered; // offset: 204, size: 4
+    STI_float32 Decal4Color[3]; // offset: 208, size: 12
+    STI_float32 SupportOverlay; // offset: 220, size: 4
+    STI_float32 DecalBlend[3]; // offset: 224, size: 12
+    STI_float32 SupportRotating; // offset: 236, size: 4
+    STI_float32 DamageColor[3]; // offset: 240, size: 12
+    STI_float32 SupportDirt; // offset: 252, size: 4
+    STI_float32 DirtBlend[2]; // offset: 256, size: 8
+    STI_float32 SupportSoftTint; // offset: 264, size: 4
+} CarPaintMMStaticConstants; // size: 268
+
+#define STI_TYPE_HASH_CarPaintMMDynamicConstants 0x909A38BD
+typedef struct CarPaintMMDynamicConstants{
+    STI_float32 TintColorR[3]; // offset: 0, size: 12
+    STI_float32 SpecularGlossOverride; // offset: 12, size: 4
+    STI_float32 TintColorG[3]; // offset: 16, size: 12
+    STI_float32 MetallicOverride; // offset: 28, size: 4
+    STI_float32 TintColorB[3]; // offset: 32, size: 12
+    STI_float32 ClearCoatOverride; // offset: 44, size: 4
+} CarPaintMMDynamicConstants; // size: 48
+
+#define STI_TYPE_HASH_CarPaintMMConstants 0x99A777D9
+typedef struct CarPaintMMConstants{
+    CarPaintMMStaticConstants Static; // offset: 0, size: 268
+    CarPaintMMDynamicConstants Dynamic; // offset: 268, size: 48
+    STI_float32 GIEmissionModulator; // offset: 316, size: 4
+    uint16 Decals:1; // offset: 320, size: 2
+    uint16 UseDamageBlend:1; // offset: 320, size: 2
+    uint16 Dirt:1; // offset: 320, size: 2
+    uint16 Tint:1; // offset: 320, size: 2
+    uint16 TintSoftBlend:1; // offset: 320, size: 2
+    uint16 Layered:1; // offset: 320, size: 2
+    uint16 Overlay:1; // offset: 320, size: 2
+    uint16 TwoSided:1; // offset: 320, size: 2
+    uint16 AlphaBlend:1; // offset: 320, size: 2
+    uint16 AlphaTest:1; // offset: 320, size: 2
+    uint16 Rotating:1; // offset: 320, size: 2
+} CarPaintMMConstants; // size: 324
+
+#define STI_TYPE_HASH_CameraShakeModifierParams 0x9922B266
+typedef struct CameraShakeModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 OnfootLayerActivate; // offset: 1, size: 1
+    STI_uint8 VehicleLayerActivate; // offset: 2, size: 1
+    STI_float32 BlurScale; // offset: 4, size: 4
+} CameraShakeModifierParams; // size: 8
+
+#define STI_TYPE_HASH_AdditivePivotModifierParams 0x98A936A0
+typedef struct AdditivePivotModifierParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    STI_String JointName; // offset: 8, size: 16
+    STI_float32 Weight; // offset: 16, size: 4
+} AdditivePivotModifierParams; // size: 24
 
 #define STI_TYPE_HASH_SightTuning 0x97E92882
 typedef struct SightTuning{
@@ -2854,6 +5286,18 @@ typedef struct SightTuning{
     STI_float32 zoom_multiplier_level_3; // offset: 12, size: 4
     STI_float32 zoom_multiplier_level_4; // offset: 16, size: 4
 } SightTuning; // size: 20
+
+#define STI_TYPE_HASH_PartDamageType 0x9724E4C1
+typedef struct PartDamageType{
+    HashString type; // offset: 0, size: 16
+    STI_int32 initial_health; // offset: 16, size: 4
+    STI_int32 damaged_health; // offset: 20, size: 4
+    STI_int32 loosen_health; // offset: 24, size: 4
+    STI_int8 instantly_damaged_by_bullets; // offset: 28, size: 1
+    STI_int8 instantly_loosened_by_bullets; // offset: 29, size: 1
+    STI_int8 instantly_broken_by_bullets; // offset: 30, size: 1
+    STI_int8 damages_owning_vehicle; // offset: 31, size: 1
+} PartDamageType; // size: 32
 
 #define STI_TYPE_HASH_MissionSaveData2 0x96CF2AD4
 typedef struct MissionSaveData2{
@@ -2886,6 +5330,11 @@ typedef struct TerrainMaterial{
     STI_float32 BlendScale; // offset: 48, size: 4
     STI_float32 BlendBias; // offset: 52, size: 4
 } TerrainMaterial; // size: 56
+
+#define STI_TYPE_HASH_DoorPart 0x95699934
+typedef struct DoorPart{
+    STI_int8 part_index; // offset: 0, size: 1
+} DoorPart; // size: 1
 
 #define STI_TYPE_HASH_ActionTokenList 0x94A8CB2B
 typedef struct ActionTokenList{
@@ -2925,6 +5374,86 @@ typedef struct WindowConstants{
     uint8 LensOcclusion:1; // offset: 36, size: 1
 } WindowConstants; // size: 40
 
+#define STI_TYPE_HASH_AxisAlignedBoundingBox 0x77D16175
+typedef struct AxisAlignedBoundingBox{
+    STI_float32 min_x; // offset: 0, size: 4
+    STI_float32 max_x; // offset: 4, size: 4
+    STI_float32 min_y; // offset: 8, size: 4
+    STI_float32 max_y; // offset: 12, size: 4
+    STI_float32 min_z; // offset: 16, size: 4
+    STI_float32 max_z; // offset: 20, size: 4
+} AxisAlignedBoundingBox; // size: 24
+
+#define STI_TYPE_HASH_StuntArea 0x083BBC1E
+typedef struct StuntArea{
+    STI_String name; // offset: 0, size: 16
+    STI_uint32 name_hash; // offset: 8, size: 4
+    STI_String part_name; // offset: 16, size: 16
+    STI_uint32 part_hash; // offset: 24, size: 4
+    STI_uint32 part_index; // offset: 28, size: 4
+    STI_uint32 deform_points[16]; // offset: 32, size: 64
+    STI_uint8 edge_validity[16]; // offset: 96, size: 16
+    STI_uint16 number_of_deform_points; // offset: 112, size: 2
+    STI_uint16 active; // offset: 114, size: 2
+    STI_float32 vertices3D_local[48]; // offset: 116, size: 192
+    STI_uint8 triangle_indices[42]; // offset: 308, size: 42
+    STI_uint16 number_of_triangles; // offset: 350, size: 2
+    AxisAlignedBoundingBox bounding_box_local; // offset: 352, size: 24
+    STI_float32 center_local[3]; // offset: 376, size: 12
+} StuntArea; // size: 392
+
+#define STI_TYPE_HASH_StuntAreaWeldingInfo 0x56E5108C
+typedef struct StuntAreaWeldingInfo{
+    STI_int16 stunt_area_a_index; // offset: 0, size: 2
+    STI_int16 edge_a_index; // offset: 2, size: 2
+    STI_int16 stunt_area_b_index; // offset: 4, size: 2
+    STI_int16 edge_b_index; // offset: 6, size: 2
+} StuntAreaWeldingInfo; // size: 8
+
+#define STI_TYPE_HASH_StuntAreas 0x9327DF87
+typedef struct StuntAreas{
+    StuntArea stunt_areas[32]; // offset: 0, size: 12544
+    STI_uint8 number_of_stunt_areas; // offset: 12544, size: 1
+    StuntAreaWeldingInfo welding_info[64]; // offset: 12546, size: 512
+    STI_uint16 number_of_welding_info; // offset: 13058, size: 2
+} StuntAreas; // size: 13064
+
+#define STI_TYPE_HASH_ExtendedEffectUsages 0x92F2DFA0
+typedef struct ExtendedEffectUsages{
+    DynamicArray_ExtendedEffectUsage usages; // offset: 0, size: 16
+} ExtendedEffectUsages; // size: 16
+
+#define STI_TYPE_HASH_BoatEngine 0x91E1C243
+typedef struct BoatEngine{
+    HashString physics_component_name; // offset: 0, size: 16
+    Spline5 max_acceleration_vs_speed; // offset: 16, size: 80
+    STI_float32 propulsion_displacement_limit; // offset: 96, size: 4
+    STI_float32 engine_axis[3]; // offset: 100, size: 12
+    STI_float32 engine_position[3]; // offset: 112, size: 12
+    STI_float32 engine_graphical_offset[3]; // offset: 124, size: 12
+    STI_float32 propeller_offset[3]; // offset: 136, size: 12
+} BoatEngine; // size: 152
+
+#define STI_TYPE_HASH_MoveInputPitchParams 0x90F23AB3
+typedef struct MoveInputPitchParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 DelayTime; // offset: 4, size: 4
+    STI_float32 MoveStickInputThreshold; // offset: 8, size: 4
+    STI_uint32 ResetTimerOnIdle; // offset: 12, size: 4
+    STI_uint32 ResetTimerOnEnter; // offset: 16, size: 4
+    STI_uint32 AlwaysPitchDown; // offset: 20, size: 4
+    STI_float32 Accel; // offset: 24, size: 4
+    STI_float32 MaxSpeed; // offset: 28, size: 4
+} MoveInputPitchParams; // size: 32
+
+#define STI_TYPE_HASH_TrainAudio 0x9049DB0C
+typedef struct TrainAudio{
+    STI_float32 load_smoothing; // offset: 0, size: 4
+    STI_float32 rpm_smoothing; // offset: 4, size: 4
+    Spline5 min_rpm_vs_speed; // offset: 8, size: 80
+    Spline5 max_rpm_vs_speed; // offset: 88, size: 80
+} TrainAudio; // size: 168
+
 #define STI_TYPE_HASH_PfxStaticCompound 0x8FD3E3C4
 typedef struct PfxStaticCompound{
     STI_float32 location_transform[16]; // offset: 0, size: 64
@@ -2942,6 +5471,12 @@ typedef struct XLSAttribute{
     STI_uint8 BGColorIndex; // offset: 1, size: 1
 } XLSAttribute; // size: 2
 
+#define STI_TYPE_HASH_MotorbikeSuspension 0x8EB9E5CC
+typedef struct MotorbikeSuspension{
+    Suspension land_suspension; // offset: 0, size: 144
+    STI_float32 upper_steering_offset; // offset: 144, size: 4
+} MotorbikeSuspension; // size: 152
+
 #define STI_TYPE_HASH_DifficultyLevel 0x8E5826C9
 typedef struct DifficultyLevel{
     STI_uint32 level; // offset: 0, size: 4
@@ -2957,11 +5492,40 @@ typedef struct EffectRTLocalParam{
     STI_uint16 NumParams; // offset: 6, size: 2
 } EffectRTLocalParam; // size: 8
 
+#define STI_TYPE_HASH_FirstPersonVehicleCameraModifierParams 0x8DE3074A
+typedef struct FirstPersonVehicleCameraModifierParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams InputParams; // offset: 4, size: 160
+    STI_float32 ForeGroundFOV; // offset: 164, size: 4
+    STI_float32 WorldFOV; // offset: 168, size: 4
+    STI_uint8 UseGameSettingsWorldFov; // offset: 172, size: 1
+    STI_String ForegroundBBKey; // offset: 176, size: 16
+    STI_float32 VehicleFovMaxIncrease; // offset: 184, size: 4
+    STI_float32 MaxFovOneAngle; // offset: 188, size: 4
+    STI_float32 MaxFovZeroAngle; // offset: 192, size: 4
+    STI_float32 FovVehicleMinSpeed; // offset: 196, size: 4
+    STI_float32 FovVehicleMaxSpeed; // offset: 200, size: 4
+    STI_float32 VehiclePitchScale; // offset: 204, size: 4
+    STI_float32 VehicleRollScale; // offset: 208, size: 4
+    STI_float32 VehiclePitchScaleDotThreshold; // offset: 212, size: 4
+    STI_float32 VehicleRollScaleDotThreshold; // offset: 216, size: 4
+    STI_float32 AutoAlignTime; // offset: 220, size: 4
+    STI_float32 AutoAlignDelay; // offset: 224, size: 4
+    STI_float32 AutoAlignSafeAngle; // offset: 228, size: 4
+    STI_float32 AutoAlignMinimumSpeed; // offset: 232, size: 4
+} FirstPersonVehicleCameraModifierParams; // size: 240
+
 #define STI_TYPE_HASH_HunterMissionRulesGroup 0x8D3F7C2C
 typedef struct HunterMissionRulesGroup{
     StringHash_48c5294d_4 Condition; // offset: 0, size: 4
     DynamicArray_STI_Deferred Rules; // offset: 8, size: 16
 } HunterMissionRulesGroup; // size: 24
+
+#define STI_TYPE_HASH_BuoyancyModule 0x8CE64096
+typedef struct BuoyancyModule{
+    STI_float32 position[3]; // offset: 0, size: 12
+} BuoyancyModule; // size: 12
 
 #define STI_TYPE_HASH_CharactersSaveData2 0x8C9469B0
 typedef struct CharactersSaveData2{
@@ -2973,6 +5537,72 @@ typedef struct CharactersSaveData2{
     DynamicArray_MissionSaveData MissionCampaigns; // offset: 4112, size: 16
     DynamicArray_STI_int32 MissionCampaignsReserveIds; // offset: 4128, size: 16
 } CharactersSaveData2; // size: 4144
+
+#define STI_TYPE_HASH_WeaponSkillSettings 0x4CB92B3B
+typedef struct WeaponSkillSettings{
+    STI_float32 RestingHeartRate; // offset: 0, size: 4
+    STI_float32 MaxHeartRate; // offset: 4, size: 4
+    STI_float32 HeartRateRecoveryCooldown; // offset: 8, size: 4
+    STI_float32 HeartRateRecoverySpeed; // offset: 12, size: 4
+    STI_float32 HeartRateIncreaseSpeed; // offset: 16, size: 4
+    STI_float32 JumpHeartRatePenalty; // offset: 20, size: 4
+    STI_float32 HoldBreathHeartRateThreshold; // offset: 24, size: 4
+    STI_float32 MaxBreathOutPenalty; // offset: 28, size: 4
+    STI_float32 BreathOutPenaltyRate; // offset: 32, size: 4
+    STI_float32 HoldBreathDurationPenaltyScale; // offset: 36, size: 4
+    STI_float32 HoldBreathHeartRatePenalty; // offset: 40, size: 4
+    STI_float32 HoldBreathWobbleScale; // offset: 44, size: 4
+    STI_float32 MinBreathingWobbleScale; // offset: 48, size: 4
+    STI_float32 WobbleEaseInSpeed; // offset: 52, size: 4
+    STI_float32 WobbleEaseOutSpeed; // offset: 56, size: 4
+    STI_float32 StandingWoobleModifier; // offset: 60, size: 4
+    STI_float32 CrouchWoobleModifier; // offset: 64, size: 4
+    STI_float32 CrawlWoobleModifier; // offset: 68, size: 4
+    STI_float32 CameraRotationPenalty; // offset: 72, size: 4
+    STI_float32 CameraAngleDiffForPenalty; // offset: 76, size: 4
+    STI_float32 PenaltyEaseOutSpeed; // offset: 80, size: 4
+    STI_float32 MaxPenalty; // offset: 84, size: 4
+} WeaponSkillSettings; // size: 88
+
+#define STI_TYPE_HASH_CharacterFpsSettings 0x7F8C57CA
+typedef struct CharacterFpsSettings{
+    StaminaThresholds StaminaThresholds; // offset: 0, size: 4
+    STI_float32 AimSpeedModifier; // offset: 4, size: 4
+    STI_float32 JumpSpeed; // offset: 8, size: 4
+    CharacterSpline10 InputToMovementSpeedCurve; // offset: 12, size: 140
+    WeaponSkillSettings WeaponSkillSettings; // offset: 152, size: 88
+    DynamicArray_MovementSteeringParams MovementParams; // offset: 240, size: 16
+} CharacterFpsSettings; // size: 256
+
+#define STI_TYPE_HASH_CharacterOnFootSettings 0x5BF7B765
+typedef struct CharacterOnFootSettings{
+    STI_float32 WalkSpeed; // offset: 0, size: 4
+    STI_float32 WalkMaxVelocity; // offset: 4, size: 4
+    STI_float32 WalkMinInput; // offset: 8, size: 4
+    STI_float32 JogMaxVelocity; // offset: 12, size: 4
+    STI_float32 RunSpeed; // offset: 16, size: 4
+    STI_float32 MaxSpeedToPlayStartAnim; // offset: 20, size: 4
+    STI_float32 EnableStarts; // offset: 24, size: 4
+    STI_float32 EnablePlants; // offset: 28, size: 4
+    STI_float32 EnableStops; // offset: 32, size: 4
+} CharacterOnFootSettings; // size: 36
+
+#define STI_TYPE_HASH_VelocityFilterSettings 0x534F7900
+typedef struct VelocityFilterSettings{
+    STI_float32 gain; // offset: 0, size: 4
+    STI_float32 max_speed; // offset: 4, size: 4
+    STI_float32 max_acceleration; // offset: 8, size: 4
+} VelocityFilterSettings; // size: 12
+
+#define STI_TYPE_HASH_CharacterMovementSettings 0x8C3760D4
+typedef struct CharacterMovementSettings{
+    CharacterFpsSettings FpsSettings; // offset: 0, size: 256
+    CharacterOnFootSettings OnFootSettings; // offset: 256, size: 36
+    CharacterSwimSettings SwimSettings; // offset: 292, size: 12
+    VelocityFilterSettings VelocityFilterSettings; // offset: 304, size: 12
+    DynamicArray_CharacterNavigationSettings NavigationSettings; // offset: 320, size: 16
+    DynamicArray_MovementType MovementTypes; // offset: 336, size: 16
+} CharacterMovementSettings; // size: 352
 
 #define STI_TYPE_HASH_GeneralR2Constants 0x8BB29AA0
 typedef struct GeneralR2Constants{
@@ -3050,6 +5680,15 @@ typedef struct ProfileSaveData2{
     uint8 ShownCrashReportingEnabledOptIn:1; // offset: 114, size: 1
 } ProfileSaveData2; // size: 120
 
+#define STI_TYPE_HASH_WeaponAttachData 0x8A3548E2
+typedef struct WeaponAttachData{
+    StringHash_48c5294d_4 WeaponKey; // offset: 0, size: 4
+    StringHash_48c5294d_4 ScopeAttachementBone; // offset: 4, size: 4
+    ScopeOffsetTransform ScopeOffset; // offset: 8, size: 12
+    ScopeOffsetTransform RailOffset; // offset: 20, size: 12
+    ScopeOffsetTransform ScopeAdapterOffset; // offset: 32, size: 12
+} WeaponAttachData; // size: 44
+
 #define STI_TYPE_HASH_BuildContainer1 0x89CC2B53
 typedef struct BuildContainer1{
     STI_uint32 BuildingId; // offset: 0, size: 4
@@ -3070,6 +5709,12 @@ typedef struct AdfBool{
     STI_uint8 On; // offset: 8, size: 1
 } AdfBool; // size: 16
 
+#define STI_TYPE_HASH_MotorbikeSteering 0x887CF1BB
+typedef struct MotorbikeSteering{
+    LandSteering land_steering; // offset: 0, size: 60
+    MotorbikeWheelie wheelie; // offset: 60, size: 56
+} MotorbikeSteering; // size: 116
+
 #define STI_TYPE_HASH_SaveGameData2 0x8878829F
 typedef struct SaveGameData2{
     STI_Deferred Characters; // offset: 0, size: 16
@@ -3078,10 +5723,133 @@ typedef struct SaveGameData2{
     STI_Deferred War; // offset: 48, size: 16
 } SaveGameData2; // size: 64
 
+#define STI_TYPE_HASH_WingsuitAttachmentModifierParams 0x88612420
+typedef struct WingsuitAttachmentModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 DrawDebug; // offset: 1, size: 1
+    STI_float32 SpeedScaleX; // offset: 4, size: 4
+    STI_float32 SpeedScaleXMaxSpeed; // offset: 8, size: 4
+    STI_float32 InputScaleX; // offset: 12, size: 4
+    STI_float32 InputScaleUpY; // offset: 16, size: 4
+    STI_float32 InputScaleDwnY; // offset: 20, size: 4
+    STI_float32 OffsetSmoothingFactor; // offset: 24, size: 4
+    CameraSpring CameraOffsetInputSpringX; // offset: 28, size: 12
+    CameraSpring CameraOffsetInputSpringY; // offset: 40, size: 12
+    CameraSpline5 PitchToDefaultCameraOffset; // offset: 52, size: 80
+} WingsuitAttachmentModifierParams; // size: 132
+
 #define STI_TYPE_HASH_RepairBuildingComponentSaveData1 0x88085078
 typedef struct RepairBuildingComponentSaveData1{
     STI_uint8 Repairing; // offset: 0, size: 1
 } RepairBuildingComponentSaveData1; // size: 1
+
+#define STI_TYPE_HASH_AllVehiclesCommon 0x50CEDC31
+typedef struct AllVehiclesCommon{
+    STI_float32 high_up_in_air_height; // offset: 0, size: 4
+    STI_float32 radar_rpm_slow; // offset: 4, size: 4
+    STI_float32 radar_rpm_fast; // offset: 8, size: 4
+} AllVehiclesCommon; // size: 12
+
+#define STI_TYPE_HASH_CarCommon 0x0D0E8647
+typedef struct CarCommon{
+    STI_float32 engine_shut_down_delay_s; // offset: 0, size: 4
+    STI_float32 crash_min_vel_change_ms; // offset: 4, size: 4
+    STI_float32 crash_in_air_min_vel_change_ms; // offset: 8, size: 4
+} CarCommon; // size: 12
+
+#define STI_TYPE_HASH_MotorbikeCommon 0x6D32E634
+typedef struct MotorbikeCommon{
+    STI_float32 engine_shut_down_delay_s; // offset: 0, size: 4
+    STI_float32 crash_min_vel_change_ms; // offset: 4, size: 4
+    STI_float32 crash_in_air_min_vel_change_ms; // offset: 8, size: 4
+    STI_float32 roll_rate_to_fall_degs; // offset: 12, size: 4
+    STI_float32 roll_to_fall_with_driver_deg; // offset: 16, size: 4
+    STI_float32 roll_to_fall_no_driver_deg; // offset: 20, size: 4
+    STI_float32 animation_roll_pid_p; // offset: 24, size: 4
+    STI_float32 animation_roll_pid_i; // offset: 28, size: 4
+    STI_float32 animation_roll_pid_d; // offset: 32, size: 4
+    STI_float32 animation_max_roll_error_deg; // offset: 36, size: 4
+} MotorbikeCommon; // size: 40
+
+#define STI_TYPE_HASH_PlaneCommon 0x1FECE2BA
+typedef struct PlaneCommon{
+    STI_float32 engine_shut_down_delay_s; // offset: 0, size: 4
+    STI_float32 crash_min_vel_change_ms; // offset: 4, size: 4
+    STI_float32 crash_in_air_min_vel_change_ms; // offset: 8, size: 4
+} PlaneCommon; // size: 12
+
+#define STI_TYPE_HASH_BoatCommon 0x7DA550FD
+typedef struct BoatCommon{
+    STI_float32 engine_shut_down_delay_s; // offset: 0, size: 4
+    STI_float32 crash_min_vel_change_ms; // offset: 4, size: 4
+    STI_float32 crash_in_air_min_vel_change_ms; // offset: 8, size: 4
+} BoatCommon; // size: 12
+
+#define STI_TYPE_HASH_TrainCommon 0x351BA5F5
+typedef struct TrainCommon{
+    STI_float32 train_track_width_scale; // offset: 0, size: 4
+    STI_float32 cruise_control_responsiveness; // offset: 4, size: 4
+    STI_float32 ambient_traffic_speed_kmph; // offset: 8, size: 4
+} TrainCommon; // size: 12
+
+#define STI_TYPE_HASH_TireEffectsCommon 0x5C12664C
+typedef struct TireEffectsCommon{
+    STI_float32 min_slip_velocity_notyre_eff; // offset: 0, size: 4
+    STI_float32 max_slip_velocity_notyre_eff; // offset: 4, size: 4
+    STI_float32 min_spin_velocity_roll_effect; // offset: 8, size: 4
+    STI_float32 min_slip_velocity_for_spin_ms; // offset: 12, size: 4
+    STI_float32 min_skid_velocity_for_skid_ms; // offset: 16, size: 4
+    STI_float32 min_skid_for_effect_front; // offset: 20, size: 4
+    STI_float32 min_skid_for_effect_rear; // offset: 24, size: 4
+    STI_float32 min_spin_for_effect_front; // offset: 28, size: 4
+    STI_float32 min_spin_for_effect_rear; // offset: 32, size: 4
+    STI_float32 slip_angle_to_peak_to_skid; // offset: 36, size: 4
+    STI_float32 skid_effect_drift_boost; // offset: 40, size: 4
+    STI_float32 slip_ratio_to_peak_to_spin; // offset: 44, size: 4
+    STI_float32 slip_effect_drift_boost; // offset: 48, size: 4
+    STI_float32 slip_velocity_scale; // offset: 52, size: 4
+    STI_float32 skid_velocity_scale; // offset: 56, size: 4
+    STI_uint8 effect_frame_hold_roll; // offset: 60, size: 1
+    STI_uint8 effect_frame_hold_skid; // offset: 61, size: 1
+    STI_uint8 effect_frame_hold_spin; // offset: 62, size: 1
+    STI_uint8 effect_frame_hold_notyre; // offset: 63, size: 1
+    STI_uint8 effect_frame_delay_roll; // offset: 64, size: 1
+    STI_uint8 effect_frame_delay_skid; // offset: 65, size: 1
+    STI_uint8 effect_frame_delay_spin; // offset: 66, size: 1
+    STI_uint8 effect_frame_delay_notyre; // offset: 67, size: 1
+} TireEffectsCommon; // size: 68
+
+#define STI_TYPE_HASH_VehicleDamageCommon 0x645DED37
+typedef struct VehicleDamageCommon{
+    STI_float32 fire_spreading_speed_ms; // offset: 0, size: 4
+    STI_float32 min_water_entry_ms; // offset: 4, size: 4
+    STI_float32 fatal_water_entry_ms; // offset: 8, size: 4
+    STI_float32 min_water_entry_floating_ms; // offset: 12, size: 4
+    STI_float32 fatal_water_entry_floating_ms; // offset: 16, size: 4
+    STI_float32 in_air_vulnerability_duration; // offset: 20, size: 4
+    DynamicArray_DamageablePhysicsComponent damageable_physics_components; // offset: 24, size: 16
+} VehicleDamageCommon; // size: 40
+
+#define STI_TYPE_HASH_VehicleCommon 0x87633D79
+typedef struct VehicleCommon{
+    AllVehiclesCommon all_vehicles_common; // offset: 0, size: 12
+    CarCommon car_common; // offset: 12, size: 12
+    MotorbikeCommon motorbike_common; // offset: 24, size: 40
+    PlaneCommon plane_common; // offset: 64, size: 12
+    HelicopterCommon helicopter_common; // offset: 76, size: 12
+    BoatCommon boat_common; // offset: 88, size: 12
+    TrainCommon train_common; // offset: 100, size: 12
+    TireEffectsCommon tire_effects; // offset: 112, size: 68
+    VehicleDamageCommon vehicle_damage; // offset: 184, size: 40
+    RotorCollision rotor_collision; // offset: 224, size: 16
+    DynamicArray_DoorPartProperties all_door_part_properties; // offset: 240, size: 16
+    DynamicArray_FinPartProperties all_fin_part_properties; // offset: 256, size: 16
+    DynamicArray_HingedPartProperties all_hinged_part_properties; // offset: 272, size: 16
+    DynamicArray_PropellerPartProperties all_propeller_part_properties; // offset: 288, size: 16
+    DynamicArray_RotatingPartProperties all_rotating_part_properties; // offset: 304, size: 16
+    DynamicArray_SpringPartProperties all_spring_part_properties; // offset: 320, size: 16
+    DynamicArray_WheelPartProperties all_wheel_part_properties; // offset: 336, size: 16
+} VehicleCommon; // size: 352
 
 #define STI_TYPE_HASH_SpecificEvent 0x86428854
 typedef struct SpecificEvent{
@@ -3126,6 +5894,17 @@ typedef struct OwnedEquipment2{
     STI_uint32 Amount; // offset: 40, size: 4
     STI_uint8 ChildEquipmentCount; // offset: 44, size: 1
 } OwnedEquipment2; // size: 48
+
+#define STI_TYPE_HASH_AirEngine 0x8446310D
+typedef struct AirEngine{
+    STI_float32 min_thrust; // offset: 0, size: 4
+    STI_float32 max_thrust; // offset: 4, size: 4
+    STI_float32 run_thrust; // offset: 8, size: 4
+    STI_float32 max_thrust_acceleration; // offset: 12, size: 4
+    STI_float32 taxiing_max_thrust; // offset: 16, size: 4
+    STI_float32 taxiing_input_threshold; // offset: 20, size: 4
+    STI_float32 taxiing_top_speed; // offset: 24, size: 4
+} AirEngine; // size: 28
 
 #define STI_TYPE_HASH_RivalMissionGroup1 0x840D4CE1
 typedef struct RivalMissionGroup1{
@@ -3173,6 +5952,53 @@ typedef struct RoutesCollection{
     DynamicArray_Route Routes; // offset: 0, size: 16
 } RoutesCollection; // size: 16
 
+#define STI_TYPE_HASH_BoneData 0x82F08092
+typedef struct BoneData{
+    DynamicArray_StringHash_48c5294d_4 Bones; // offset: 0, size: 16
+    STI_uint8 LocalOrModelSpaceRotation; // offset: 16, size: 1
+    GroundAlignmentDataSplines Position; // offset: 20, size: 420
+    GroundAlignmentDataSplines Rotation; // offset: 440, size: 420
+} BoneData; // size: 864
+
+#define STI_TYPE_HASH_ParachuteCameraCollisionModifierParams 0x82E6CA3D
+typedef struct ParachuteCameraCollisionModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 DrawDebug; // offset: 1, size: 1
+    STI_float32 BoxWidth; // offset: 4, size: 4
+    STI_float32 BoxHeight; // offset: 8, size: 4
+    STI_float32 BoxDepth; // offset: 12, size: 4
+    STI_float32 MinOpacity; // offset: 16, size: 4
+    STI_float32 HideSpeed; // offset: 20, size: 4
+    STI_float32 RestoreSpeed; // offset: 24, size: 4
+} ParachuteCameraCollisionModifierParams; // size: 28
+
+#define STI_TYPE_HASH_PhysicsComponentDamageFromPart 0x82CB15D4
+typedef struct PhysicsComponentDamageFromPart{
+    HashString part_behavior; // offset: 0, size: 16
+    STI_float32 damage_ratio_from_damaged; // offset: 16, size: 4
+    STI_float32 damage_ratio_from_loose; // offset: 20, size: 4
+    STI_float32 damage_ratio_from_broken_off; // offset: 24, size: 4
+} PhysicsComponentDamageFromPart; // size: 32
+
+#define STI_TYPE_HASH_SplineAnimation 0x82C21EC5
+typedef struct SplineAnimation{
+    CameraAnimationControl Control; // offset: 0, size: 56
+    CameraSpline10 TiltSpline; // offset: 56, size: 140
+    CameraSpline10 PanSpline; // offset: 196, size: 140
+    CameraSpline10 DutchSpline; // offset: 336, size: 140
+    CameraSpline10 TruckSpline; // offset: 476, size: 140
+    CameraSpline10 PedistalSpline; // offset: 616, size: 140
+    CameraSpline10 DollySpline; // offset: 756, size: 140
+    CameraSpline10 FOVSpline; // offset: 896, size: 140
+    STI_uint8 UseTransformedSpeed; // offset: 1036, size: 1
+    CameraSpline5 SpeedScaleSpline; // offset: 1040, size: 80
+} SplineAnimation; // size: 1120
+
+#define STI_TYPE_HASH_DoorPartProperties 0x82B4F7A1
+typedef struct DoorPartProperties{
+    HashString name; // offset: 0, size: 16
+} DoorPartProperties; // size: 16
+
 #define STI_TYPE_HASH_RivalRegion1 0x8084CEB4
 typedef struct RivalRegion1{
     STI_uint32 RegionHash; // offset: 0, size: 4
@@ -3180,6 +6006,13 @@ typedef struct RivalRegion1{
     STI_float32 Cooldown; // offset: 8, size: 4
     DynamicArray_Rival1 Rivals; // offset: 16, size: 16
 } RivalRegion1; // size: 32
+
+#define STI_TYPE_HASH_DataSplines 0x80768771
+typedef struct DataSplines{
+    Spline10 X; // offset: 0, size: 140
+    Spline10 Y; // offset: 140, size: 140
+    Spline10 Z; // offset: 280, size: 140
+} DataSplines; // size: 420
 
 #define STI_TYPE_HASH_PoweredConstraintParameters 0x00306438
 typedef struct PoweredConstraintParameters{
@@ -3217,6 +6050,40 @@ typedef enum{ // size: 4
     CURRENT_POSE = 2,
 } BoneLengthAdjustmentType;
 
+#define STI_TYPE_HASH_JointPivotModifierParams 0x7EF84BC9
+typedef struct JointPivotModifierParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    STI_String JointName; // offset: 8, size: 16
+} JointPivotModifierParams; // size: 16
+
+#define STI_TYPE_HASH_VehicleMisc 0x7ECA5AC6
+typedef struct VehicleMisc{
+    STI_float32 open_door_duration_s; // offset: 0, size: 4
+    STI_float32 close_door_duration_s; // offset: 4, size: 4
+    DynamicArray_VehicleDoor doors; // offset: 8, size: 16
+    STI_float32 official_top_speed; // offset: 24, size: 4
+    STI_float32 full_nitro_refill_time; // offset: 28, size: 4
+    STI_float32 nitro_refill_min_speed_kph; // offset: 32, size: 4
+    STI_float32 full_nitro_use_time; // offset: 36, size: 4
+    STI_float32 full_nitro_use_time_upgraded; // offset: 40, size: 4
+    STI_float32 turbo_jump_cooldown; // offset: 44, size: 4
+    STI_float32 turbo_jump_cooldown_upgraded; // offset: 48, size: 4
+    STI_float32 max_landing_speed_kmph; // offset: 52, size: 4
+    STI_float32 max_take_off_speed_kmph; // offset: 56, size: 4
+    STI_float32 max_tilt_to_land_deg; // offset: 60, size: 4
+    STI_float32 min_damage_speed_kph; // offset: 64, size: 4
+    STI_float32 max_damage_speed_kph; // offset: 68, size: 4
+    STI_int32 damage_at_min_speed; // offset: 72, size: 4
+    STI_int32 damage_at_max_speed; // offset: 76, size: 4
+    PatchProvision patch_provision; // offset: 80, size: 80
+} VehicleMisc; // size: 160
+
+#define STI_TYPE_HASH_PartsHierarchy 0x7EBB4046
+typedef struct PartsHierarchy{
+    DynamicArray_PartNode part_nodes; // offset: 0, size: 16
+} PartsHierarchy; // size: 16
+
 #define STI_TYPE_HASH_PfxBodyPropertiesDict 0x7E974F08
 typedef struct PfxBodyPropertiesDict{
     DynamicArray_PfxBodyPropertiesEntry entries; // offset: 0, size: 16
@@ -3247,6 +6114,18 @@ typedef struct RoadGraphRoadExtraInfo{
     RoadToGraphLookup GameObjectToEdgeTable; // offset: 16, size: 32
 } RoadGraphRoadExtraInfo; // size: 48
 
+#define STI_TYPE_HASH_Rotors 0x7C360B72
+typedef struct Rotors{
+    STI_float32 max_rpm; // offset: 0, size: 4
+    STI_float32 acceleration_rpm; // offset: 4, size: 4
+    STI_float32 acceleration_multiplier; // offset: 8, size: 4
+    STI_float32 deceleration_multiplier; // offset: 12, size: 4
+    STI_float32 deceleration_freespin_multiply; // offset: 16, size: 4
+    STI_float32 thrust_smoothing; // offset: 20, size: 4
+    STI_float32 freespin_control; // offset: 24, size: 4
+    DynamicArray_Rotor rotors; // offset: 32, size: 16
+} Rotors; // size: 48
+
 #define STI_TYPE_HASH_PfxSolverStabilizationProperties 0x7BA5D8B3
 typedef struct PfxSolverStabilizationProperties{
     STI_float32 solver_stabilization_speed_threshold; // offset: 0, size: 4
@@ -3269,6 +6148,11 @@ typedef struct WorldSaveData1{
     STI_uint8 ContextualHelpActive; // offset: 192, size: 1
     DynamicArray_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
 } WorldSaveData1; // size: 216
+
+#define STI_TYPE_HASH_HunterMissionData 0x7B2BAFDE
+typedef struct HunterMissionData{
+    DynamicArray_HunterMission Missions; // offset: 0, size: 16
+} HunterMissionData; // size: 16
 
 #define STI_TYPE_HASH_DismantleBuildingComponentSaveData1 0x47635897
 typedef struct DismantleBuildingComponentSaveData1{
@@ -3318,6 +6202,13 @@ typedef struct EquipmentEntities{
     DynamicArray_EquipmentEntity Items; // offset: 0, size: 16
 } EquipmentEntities; // size: 16
 
+#define STI_TYPE_HASH_Bone 0x796058B7
+typedef struct Bone{
+    HashString name; // offset: 0, size: 16
+    HashString parent_bone_name; // offset: 16, size: 16
+    HashString animation_type; // offset: 32, size: 16
+} Bone; // size: 48
+
 #define STI_TYPE_HASH_StreamPatchMemoryType 0x5A6DE0C2
 typedef enum{ // size: 4
     STREAM_PATCH_STATIC_POOL = 0,
@@ -3353,6 +6244,31 @@ typedef struct GSDataSet{
     DynamicArray_GSData Data; // offset: 8, size: 16
     DynamicArray_GSDataSet DataSets; // offset: 24, size: 16
 } GSDataSet; // size: 48
+
+#define STI_TYPE_HASH_SkinnedPart 0x75E38043
+typedef struct SkinnedPart{
+    STI_int8 part_index; // offset: 0, size: 1
+    DynamicArray_Bone bones; // offset: 8, size: 16
+} SkinnedPart; // size: 24
+
+#define STI_TYPE_HASH_InputAxisTiming 0x757B56DC
+typedef struct InputAxisTiming{
+    STI_float32 TimeToMaxInputAtMinSpeed_s; // offset: 0, size: 4
+    STI_float32 TimeToMaxInputAtMaxSpeed_s; // offset: 4, size: 4
+    STI_float32 CenteringInputTimeFactor; // offset: 8, size: 4
+    STI_float32 CounterInputTimeFactor; // offset: 12, size: 4
+} InputAxisTiming; // size: 16
+
+#define STI_TYPE_HASH_Fins 0x73401F0F
+typedef struct Fins{
+    Spline5 lift_vs_attack_angle_deg; // offset: 0, size: 80
+    Spline5 max_steering_vs_speed_ms; // offset: 80, size: 80
+    STI_float32 reference_speed_ms; // offset: 160, size: 4
+    STI_float32 pressure_drag; // offset: 164, size: 4
+    STI_float32 pressure_drag2; // offset: 168, size: 4
+    Fin fins[5]; // offset: 176, size: 360
+    STI_uint8 number_of_fins; // offset: 536, size: 1
+} Fins; // size: 544
 
 #define STI_TYPE_HASH_EffectRTParameters 0x15C3EBC7
 typedef struct EffectRTParameters{
@@ -3400,6 +6316,28 @@ typedef struct CharactersSaveData5{
     DynamicArray_STI_int32 MissionCampaignsReserveIds; // offset: 4192, size: 16
 } CharactersSaveData5; // size: 4208
 
+#define STI_TYPE_HASH_ShakeAnimation 0x711748A7
+typedef struct ShakeAnimation{
+    CameraAnimationControl Control; // offset: 0, size: 56
+    STI_uint8 Pan; // offset: 56, size: 1
+    STI_uint8 Tilt; // offset: 57, size: 1
+    STI_uint8 Dutch; // offset: 58, size: 1
+    STI_float32 RotationMaxAmplitude; // offset: 60, size: 4
+    STI_float32 RotationAmplitudeScale; // offset: 64, size: 4
+    CameraSpline5 RotationAmplitudeScaleSpline; // offset: 68, size: 80
+    STI_float32 RotationMaxFrequency; // offset: 148, size: 4
+    STI_float32 RotationFrequencyScale; // offset: 152, size: 4
+    CameraSpline5 RotationFrequencyScaleSpline; // offset: 156, size: 80
+    STI_float32 TranslationMaxAmplitude; // offset: 236, size: 4
+    STI_float32 TranslationAmplitudeScale; // offset: 240, size: 4
+    CameraSpline5 TranslationAmplitudeScaleSpline; // offset: 244, size: 80
+    STI_float32 TranslationMaxFrequency; // offset: 324, size: 4
+    STI_float32 TranslationFrequencyScale; // offset: 328, size: 4
+    CameraSpline5 TranslationFrequencyScaleSpline; // offset: 332, size: 80
+    STI_String MasterAmplitudeScaleBBKey; // offset: 416, size: 16
+    STI_String MasterFrequencyScaleBBKey; // offset: 424, size: 16
+} ShakeAnimation; // size: 432
+
 #define STI_TYPE_HASH_PerceptionSettings 0x71076821
 typedef struct PerceptionSettings{
     DataLifespans Lifespans; // offset: 0, size: 68
@@ -3424,6 +6362,16 @@ typedef struct RoadGraph{
     DynamicArray_STI_uint16 EdgeRegions; // offset: 120, size: 16
 } RoadGraph; // size: 136
 
+#define STI_TYPE_HASH_SoundFalloff 0x6FFEF00C
+typedef struct SoundFalloff{
+    STI_float32 Radius; // offset: 0, size: 4
+    STI_float32 MaxDistance; // offset: 4, size: 4
+    STI_float32 Linearity; // offset: 8, size: 4
+    STI_float32 EnergyRadius; // offset: 12, size: 4
+    STI_float32 VolumeSumBias; // offset: 16, size: 4
+    STI_uint8 DebugPlot; // offset: 20, size: 1
+} SoundFalloff; // size: 24
+
 #define STI_TYPE_HASH_BuildingSaveData2 0x6F4858F7
 typedef struct BuildingSaveData2{
     STI_uint32 Id; // offset: 0, size: 4
@@ -3435,12 +6383,24 @@ typedef struct BuildingSaveData2{
     InventoryBuildingComponentSaveData1 InventoryComponent; // offset: 24, size: 16
 } BuildingSaveData2; // size: 40
 
+#define STI_TYPE_HASH_ProjectileEntitySpawn 0x6ECC35B5
+typedef struct ProjectileEntitySpawn{
+    Requirement requirement; // offset: 0, size: 12
+    STI_String spawn_tag; // offset: 16, size: 16
+} ProjectileEntitySpawn; // size: 24
+
 #define STI_TYPE_HASH_BitmapData 0x6E9B42C0
 typedef struct BitmapData{
     STI_int32 Width; // offset: 0, size: 4
     STI_int32 Height; // offset: 4, size: 4
     DynamicArray_BitmapLayer Layers; // offset: 8, size: 16
 } BitmapData; // size: 24
+
+#define STI_TYPE_HASH_TankPositionModifierParams 0x6E72348F
+typedef struct TankPositionModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 CameraPosition[3]; // offset: 4, size: 12
+} TankPositionModifierParams; // size: 16
 
 #define STI_TYPE_HASH_WorldAudioPatchNormalData 0x6D5409F0
 typedef struct WorldAudioPatchNormalData{
@@ -3484,6 +6444,13 @@ typedef struct GlobalFilter{
     STI_String DisableEvent; // offset: 16, size: 16
 } GlobalFilter; // size: 24
 
+#define STI_TYPE_HASH_CharacterPhysicsEffects 0x6C5739CA
+typedef struct CharacterPhysicsEffects{
+    CombinedEffectSettings RagdollImpact; // offset: 0, size: 40
+    CombinedEffectSettings RagdollSliding; // offset: 40, size: 40
+    STI_float32 SpinningSpeedThreshold; // offset: 80, size: 4
+} CharacterPhysicsEffects; // size: 84
+
 #define STI_TYPE_HASH_RoadInfoEx 0x6C34A509
 typedef struct RoadInfoEx{
     DynamicArray_STI_float32 SplinePoints; // offset: 0, size: 16
@@ -3513,12 +6480,115 @@ typedef struct PfxBodyMassProperties{
     STI_float32 unit_inertia_roll; // offset: 40, size: 4
 } PfxBodyMassProperties; // size: 44
 
+#define STI_TYPE_HASH_BoatAI 0x692A1532
+typedef struct BoatAI{
+    Spline5 Input_Speed; // offset: 0, size: 80
+    Spline5 Input_Turn; // offset: 80, size: 80
+    Spline5 Limit_Speed; // offset: 160, size: 80
+    STI_float32 Limit_Speed_Cruising; // offset: 240, size: 4
+    STI_float32 Limit_Path_Radius; // offset: 244, size: 4
+    STI_float32 Limit_Path_Jump_Scalar; // offset: 248, size: 4
+    STI_float32 Limit_Path_Depth; // offset: 252, size: 4
+    STI_uint8 Limit_IsLargeVehicle; // offset: 256, size: 1
+} BoatAI; // size: 260
+
+#define STI_TYPE_HASH_FirstPersonCameraModifierParams_2 0x68D20F76
+typedef struct FirstPersonCameraModifierParams_2{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams_2 InputParams; // offset: 4, size: 172
+    STI_float32 ForegroundFOV; // offset: 176, size: 4
+    STI_float32 WorldFOV; // offset: 180, size: 4
+    STI_uint8 UseGameSettingsWorldFov; // offset: 184, size: 1
+    STI_String ForegroundBBKey; // offset: 192, size: 16
+    STI_uint8 ForegroundPitchEnabled; // offset: 200, size: 1
+    STI_String AimAdjustmentSegments[3]; // offset: 208, size: 24
+    STI_uint8 AlignToSurface; // offset: 232, size: 1
+    STI_float32 AlignToSurfaceStiffness; // offset: 236, size: 4
+    STI_float32 ProneAllowedHeightPushUp; // offset: 240, size: 4
+    STI_float32 PronePushUpRayLength; // offset: 244, size: 4
+    STI_float32 PronePushUpRayBackOffset; // offset: 248, size: 4
+    AimAssistParams AimAssist; // offset: 252, size: 24
+} FirstPersonCameraModifierParams_2; // size: 280
+
 #define STI_TYPE_HASH_AmfMeshBuffers 0x67B3A453
 typedef struct AmfMeshBuffers{
     STI_uint32 MemoryTag; // offset: 0, size: 4
     DynamicArray_AmfBuffer IndexBuffers; // offset: 8, size: 16
     DynamicArray_AmfBuffer VertexBuffers; // offset: 24, size: 16
 } AmfMeshBuffers; // size: 40
+
+#define STI_TYPE_HASH_Part 0x66C03982
+typedef struct Part{
+    HashString name; // offset: 0, size: 16
+    HashString damage_type; // offset: 16, size: 16
+    HashString behavior; // offset: 32, size: 16
+    HashString model; // offset: 48, size: 16
+    HashString model_swap; // offset: 64, size: 16
+    STI_int8 part_index; // offset: 80, size: 1
+    STI_int8 parent_part_index; // offset: 81, size: 1
+    STI_float32 parent_space_offset[16]; // offset: 84, size: 64
+    STI_float32 bind_pose_bone_matrix[16]; // offset: 148, size: 64
+    DynamicArray_STI_int8 children_part_indices; // offset: 216, size: 16
+    STI_int8 starts_loose; // offset: 232, size: 1
+    STI_int8 should_break; // offset: 233, size: 1
+    STI_int8 prevent_mesh_swap_while_alive; // offset: 234, size: 1
+    STI_int8 prevent_loosening_while_alive; // offset: 235, size: 1
+    STI_int8 prevent_breaking_while_alive; // offset: 236, size: 1
+    STI_int8 always_mesh_swap_on_death; // offset: 237, size: 1
+    STI_int8 always_loosen_on_death; // offset: 238, size: 1
+    STI_int8 always_break_on_death; // offset: 239, size: 1
+    STI_int8 disappears_when_broken; // offset: 240, size: 1
+    STI_int8 appears_on_death; // offset: 241, size: 1
+    STI_int8 disappears_on_death; // offset: 242, size: 1
+    STI_int8 starts_deleted; // offset: 243, size: 1
+    STI_int8 is_deformable; // offset: 244, size: 1
+    STI_int8 has_lights; // offset: 245, size: 1
+    STI_int8 has_world_collision_shape; // offset: 246, size: 1
+    STI_int8 only_collides_once_loose; // offset: 247, size: 1
+    STI_int8 only_collides_once_broken; // offset: 248, size: 1
+    DynamicArray_STI_int16 hide_parts_when_broken; // offset: 256, size: 16
+    DynamicArray_STI_int16 meshswap_parts_when_broken; // offset: 272, size: 16
+    DynamicArray_STI_int16 loosen_parts_when_broken; // offset: 288, size: 16
+    DynamicArray_STI_int16 break_parts_when_broken; // offset: 304, size: 16
+    STI_int16 world_collision_instance_id; // offset: 320, size: 2
+    STI_int16 raycast_instance_id; // offset: 322, size: 2
+    STI_int16 grandpa_world_instance_id; // offset: 324, size: 2
+    STI_int16 grandpa_raycast_instance_id; // offset: 326, size: 2
+    STI_int16 world_collision_body_id; // offset: 328, size: 2
+    STI_int16 raycast_body_id; // offset: 330, size: 2
+    STI_int16 constraint_index; // offset: 332, size: 2
+    STI_float32 centroid[4]; // offset: 336, size: 16
+    STI_float32 deformation_centroid_offset[4]; // offset: 352, size: 16
+} Part; // size: 368
+
+#define STI_TYPE_HASH_FallDamageSettings 0x3106F877
+typedef struct FallDamageSettings{
+    STI_float32 MinHeight; // offset: 0, size: 4
+    STI_float32 MaxHeight; // offset: 4, size: 4
+    STI_float32 MinDamage; // offset: 8, size: 4
+    STI_float32 MaxDamage; // offset: 12, size: 4
+} FallDamageSettings; // size: 16
+
+#define STI_TYPE_HASH_PlayerHealthSettings 0x65BD3DA0
+typedef struct PlayerHealthSettings{
+    STI_float32 Health; // offset: 0, size: 4
+    STI_float32 InstantKillProtectionThreshold; // offset: 4, size: 4
+    STI_float32 InstantKillProtectionHealth; // offset: 8, size: 4
+    STI_float32 InstantKillProtectionDuration; // offset: 12, size: 4
+    STI_float32 InstantKillHealthMemoryTime; // offset: 16, size: 4
+    FallDamageSettings FallDamageLight; // offset: 20, size: 16
+    FallDamageSettings FallDamageHeavy; // offset: 36, size: 16
+    FallDamageSettings FallDamageVeryHeavy; // offset: 52, size: 16
+    FallDamageSettings FallDamageDeadly; // offset: 68, size: 16
+    Spline5 DamageCurve; // offset: 84, size: 80
+} PlayerHealthSettings; // size: 164
+
+#define STI_TYPE_HASH_PartBehavior 0x659475E9
+typedef struct PartBehavior{
+    HashString behavior_type; // offset: 0, size: 16
+    HashString behavior_name; // offset: 16, size: 16
+} PartBehavior; // size: 32
 
 #define STI_TYPE_HASH_RivalTerminalData 0x159D2F92
 typedef struct RivalTerminalData{
@@ -3553,6 +6623,30 @@ typedef struct VegetationSet{
     STI_float32 ModelGrassClustering; // offset: 24, size: 4
 } VegetationSet; // size: 32
 
+#define STI_TYPE_HASH_DeformPoint 0x63B48D76
+typedef struct DeformPoint{
+    STI_String name; // offset: 0, size: 16
+    STI_uint32 name_hash; // offset: 8, size: 4
+    STI_String from_part; // offset: 16, size: 16
+    STI_uint32 from_part_hash; // offset: 24, size: 4
+    STI_uint32 from_part_index; // offset: 28, size: 4
+    STI_String skinned_to_part; // offset: 32, size: 16
+    STI_uint32 skinned_to_part_hash; // offset: 40, size: 4
+    STI_uint32 skinned_to_part_index; // offset: 44, size: 4
+    STI_uint32 shape_key; // offset: 48, size: 4
+    STI_uint8 has_custom_end; // offset: 52, size: 1
+    HashString deform_point_type; // offset: 56, size: 16
+    STI_float32 start_transform[16]; // offset: 72, size: 64
+    STI_float32 end_transform[16]; // offset: 136, size: 64
+    STI_int16 vertex_indices[4]; // offset: 200, size: 8
+    STI_float32 vertex_weights[4]; // offset: 208, size: 16
+} DeformPoint; // size: 224
+
+#define STI_TYPE_HASH_Graph 0x6379B4D2
+typedef struct Graph{
+    DynamicArray_Node Nodes; // offset: 0, size: 16
+} Graph; // size: 16
+
 #define STI_TYPE_HASH_StringLookupSubtitle 0x6355E3EF
 typedef struct StringLookupSubtitle{
     STI_uint32 LineHash; // offset: 0, size: 4
@@ -3568,6 +6662,42 @@ typedef enum{ // size: 4
     POWERED_CONSTRAINT = 3,
 } ControllerType;
 
+#define STI_TYPE_HASH_RadialBlurParams 0x6285C634
+typedef struct RadialBlurParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 SpeedRange[2]; // offset: 4, size: 8
+    STI_float32 FactorRange[2]; // offset: 12, size: 8
+    STI_float32 OffsetRange[2]; // offset: 20, size: 8
+    STI_float32 Pos[2]; // offset: 28, size: 8
+} RadialBlurParams; // size: 36
+
+#define STI_TYPE_HASH_SmellSettings 0x4821C6C2
+typedef struct SmellSettings{
+    STI_float32 SmellFov; // offset: 0, size: 4
+    DynamicArray_STI_float32 ProneDistanceScore; // offset: 8, size: 16
+    DynamicArray_STI_float32 CrouchDistanceScore; // offset: 24, size: 16
+    DynamicArray_STI_float32 StandDistanceScore; // offset: 40, size: 16
+    DynamicArray_STI_float32 SwimDistanceScore; // offset: 56, size: 16
+} SmellSettings; // size: 72
+
+#define STI_TYPE_HASH_HearingSettings 0x510ED72C
+typedef struct HearingSettings{
+    DynamicArray_STI_float32 CrawlDistanceScore; // offset: 0, size: 16
+    DynamicArray_STI_float32 SneakDistanceScore; // offset: 16, size: 16
+    DynamicArray_STI_float32 WalkDistanceScore; // offset: 32, size: 16
+    DynamicArray_STI_float32 JogDistanceScore; // offset: 48, size: 16
+    DynamicArray_STI_float32 RunDistanceScore; // offset: 64, size: 16
+    DynamicArray_STI_float32 SwimDistanceScore; // offset: 80, size: 16
+} HearingSettings; // size: 96
+
+#define STI_TYPE_HASH_PerceptionConfig 0x62616919
+typedef struct PerceptionConfig{
+    DynamicArray_ViewFrustum ViewFrustums; // offset: 0, size: 16
+    SmellSettings SmellSettings; // offset: 16, size: 72
+    HearingSettings HearingSettings; // offset: 88, size: 96
+    VisionSettings VisionSettings; // offset: 184, size: 144
+} PerceptionConfig; // size: 328
+
 #define STI_TYPE_HASH_ControlPointSaveData1 0x625B2FC5
 typedef struct ControlPointSaveData1{
     STI_uint64 Id; // offset: 0, size: 8
@@ -3580,6 +6710,13 @@ typedef struct ControlPointSaveData1{
 typedef struct DownloadFileCache{
     DynamicArray_CachedFile Files; // offset: 0, size: 16
 } DownloadFileCache; // size: 16
+
+#define STI_TYPE_HASH_JointOffsetFramingParams 0x6095148F
+typedef struct JointOffsetFramingParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    STI_String JointName; // offset: 8, size: 16
+} JointOffsetFramingParams; // size: 16
 
 #define STI_TYPE_HASH_EffectTrimData 0x5EE06CAE
 typedef struct EffectTrimData{
@@ -3635,12 +6772,74 @@ typedef struct ProfileSaveData6{
     STI_uint32 FixVersion; // offset: 220, size: 4
 } ProfileSaveData6; // size: 224
 
+#define STI_TYPE_HASH_VehicleAngleLimitsModifierParams 0x5D918B5C
+typedef struct VehicleAngleLimitsModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 PitchLimit[2]; // offset: 4, size: 8
+    STI_float32 PitchLimitSmoothing[2]; // offset: 12, size: 8
+    STI_float32 YawLimit[2]; // offset: 20, size: 8
+    STI_float32 YawLimitSmoothing[2]; // offset: 28, size: 8
+} VehicleAngleLimitsModifierParams; // size: 36
+
 #define STI_TYPE_HASH_PfxBreakableInstance 0x5CCC0EDC
 typedef struct PfxBreakableInstance{
     STI_float32 location_space_transform[16]; // offset: 0, size: 64
     DynamicArray_PfxBreakablePartInstance breakable_parts; // offset: 64, size: 16
     DynamicArray_PfxSimplePartInstance stump_parts; // offset: 80, size: 16
 } PfxBreakableInstance; // size: 96
+
+#define STI_TYPE_HASH_ProceduralShakeParams 0x5C7E1635
+typedef struct ProceduralShakeParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 SyncPhase; // offset: 1, size: 1
+    STI_float32 PitchFrequency; // offset: 4, size: 4
+    STI_float32 PitchAmplitude[2]; // offset: 8, size: 8
+    STI_float32 RollFrequency; // offset: 16, size: 4
+    STI_float32 RollAmplitude[2]; // offset: 20, size: 8
+    STI_float32 YawFrequency; // offset: 28, size: 4
+    STI_float32 YawAmplitude[2]; // offset: 32, size: 8
+    STI_float32 LocalXFrequency; // offset: 40, size: 4
+    STI_float32 LocalXAmplitude[2]; // offset: 44, size: 8
+    STI_float32 LocalYFrequency; // offset: 52, size: 4
+    STI_float32 LocalYAmplitude[2]; // offset: 56, size: 8
+    STI_float32 LocalZFrequency; // offset: 64, size: 4
+    STI_float32 LocalZAmplitude[2]; // offset: 68, size: 8
+    STI_float32 SpeedRange[2]; // offset: 76, size: 8
+    STI_float32 SpeedMaxScale; // offset: 84, size: 4
+} ProceduralShakeParams; // size: 88
+
+#define STI_TYPE_HASH_ArcChainSettings 0x5B23FAC7
+typedef struct ArcChainSettings{
+    STI_int32 ChainCount; // offset: 0, size: 4
+    STI_int32 MaxTargetsPerChain; // offset: 4, size: 4
+    STI_float32 Radius; // offset: 8, size: 4
+    STI_float32 JumpDelay; // offset: 12, size: 4
+    STI_int16 PlayerDamage; // offset: 16, size: 2
+    STI_int16 MachineDamage; // offset: 18, size: 2
+    STI_uint32 DamageTypes; // offset: 20, size: 4
+    STI_uint8 HitsLocalPlayer; // offset: 24, size: 1
+} ArcChainSettings; // size: 28
+
+#define STI_TYPE_HASH_CarAI 0x5A915290
+typedef struct CarAI{
+    Spline5 Input_Speed; // offset: 0, size: 80
+    Spline5 Input_Turn; // offset: 80, size: 80
+    Spline5 Limit_Speed; // offset: 160, size: 80
+    STI_uint8 Limit_IsLargeVehicle; // offset: 240, size: 1
+} CarAI; // size: 244
+
+#define STI_TYPE_HASH_AirSteering 0x5A5BFF51
+typedef struct AirSteering{
+    STI_float32 max_steering_angle; // offset: 0, size: 4
+    STI_float32 acceleration_smoothing; // offset: 4, size: 4
+    STI_float32 roll_return; // offset: 8, size: 4
+    STI_float32 pitch_return; // offset: 12, size: 4
+    STI_float32 ReferenceMinSpeedKPH; // offset: 16, size: 4
+    STI_float32 ReferenceMaxSpeedKPH; // offset: 20, size: 4
+    InputAxisTiming RollAxisTiming; // offset: 24, size: 16
+    InputAxisTiming PitchAxisTiming; // offset: 40, size: 16
+    InputAxisTiming YawAxisTiming; // offset: 56, size: 16
+} AirSteering; // size: 72
 
 #define STI_TYPE_HASH_CharacterProfile4 0x59A1CEA7
 typedef struct CharacterProfile4{
@@ -3681,6 +6880,43 @@ typedef struct AdfModelCollectionInstance{
     STI_float32 AABB[6]; // offset: 68, size: 24
 } AdfModelCollectionInstance; // size: 92
 
+#define STI_TYPE_HASH_VehicleDamage 0x58B2C837
+typedef struct VehicleDamage{
+    STI_int32 max_health; // offset: 0, size: 4
+    STI_int32 bullet_armor; // offset: 4, size: 4
+    STI_float32 bullet_armor_strength; // offset: 8, size: 4
+    STI_int32 bullet_heavy_armor; // offset: 12, size: 4
+    STI_float32 bullet_heavy_armor_strength; // offset: 16, size: 4
+    STI_int32 explosion_armor; // offset: 20, size: 4
+    STI_float32 explosion_armor_strength; // offset: 24, size: 4
+    STI_int32 impact_armor; // offset: 28, size: 4
+    STI_float32 impact_armor_strength; // offset: 32, size: 4
+    STI_int32 fire_armor; // offset: 36, size: 4
+    STI_float32 fire_armor_strength; // offset: 40, size: 4
+    STI_int32 melee_armor; // offset: 44, size: 4
+    STI_float32 melee_armor_strength; // offset: 48, size: 4
+    STI_int32 electricity_armor; // offset: 52, size: 4
+    STI_float32 electricity_armor_strength; // offset: 56, size: 4
+    STI_int32 grapple_pull_armor; // offset: 60, size: 4
+    STI_float32 grapple_pull_armor_strength; // offset: 64, size: 4
+    STI_float32 impact_damage_factor; // offset: 68, size: 4
+    STI_float32 deform_scale; // offset: 72, size: 4
+    STI_uint16 smoke_threshold; // offset: 76, size: 2
+    STI_uint16 heavy_smoke_threshold; // offset: 78, size: 2
+    STI_int8 burn_enabled; // offset: 80, size: 1
+    STI_uint16 burn_threshold; // offset: 82, size: 2
+    STI_uint16 explosion_delay_s; // offset: 84, size: 2
+    STI_int8 disable_interaction_on_destruction; // offset: 86, size: 1
+    STI_uint16 burn_duration_s; // offset: 88, size: 2
+    STI_uint16 vulnerable_duration_s; // offset: 90, size: 2
+    STI_int32 explosion_threshold; // offset: 92, size: 4
+    STI_int32 npc_explosion_threshold; // offset: 96, size: 4
+    STI_int32 vulnerable_explosion_threshold; // offset: 100, size: 4
+    STI_int32 impact_deform_threshold; // offset: 104, size: 4
+    STI_int32 weapon_deform_threshold; // offset: 108, size: 4
+    DynamicArray_PartDamageType part_damage_types; // offset: 112, size: 16
+} VehicleDamage; // size: 128
+
 #define STI_TYPE_HASH_FogOfWar 0x585E62B9
 typedef struct FogOfWar{
     STI_uint8 Mask[65536]; // offset: 0, size: 65536
@@ -3693,6 +6929,46 @@ typedef struct GSNode{
     STI_uint32* Function; // offset: 8, size: 8
     GSDataSet DataSet; // offset: 16, size: 48
 } GSNode; // size: 64
+
+#define STI_TYPE_HASH_AmmunitionRecoilSettings 0x56B8D197
+typedef struct AmmunitionRecoilSettings{
+    STI_float32 recoil_multiplier; // offset: 0, size: 4
+    STI_float32 recoil_first_shot_multiplier; // offset: 4, size: 4
+    STI_float32 recoil_precision_aim_multiplier; // offset: 8, size: 4
+    STI_float32 recoil_recover_perc_multiplier; // offset: 12, size: 4
+    STI_float32 recoil_recover_speed_multiplier; // offset: 16, size: 4
+    STI_float32 recoil_apply_speed_multiplier; // offset: 20, size: 4
+    STI_float32 recoil_sway_multiplier; // offset: 24, size: 4
+} AmmunitionRecoilSettings; // size: 28
+
+#define STI_TYPE_HASH_Rudder 0x566E5A72
+typedef struct Rudder{
+    STI_String name; // offset: 0, size: 16
+    HashString physics_component_name; // offset: 8, size: 16
+    STI_float32 hinge_point[3]; // offset: 24, size: 12
+    EulerAngles hinge_angles; // offset: 36, size: 12
+    Spline20 zero_angle_deg_vs_speed_kph; // offset: 48, size: 260
+    STI_float32 distance_to_hinge; // offset: 308, size: 4
+    STI_float32 turn_steering_factor; // offset: 312, size: 4
+    STI_float32 pitch_steering_factor; // offset: 316, size: 4
+    STI_float32 roll_steering_factor; // offset: 320, size: 4
+    STI_float32 min_angle_deg; // offset: 324, size: 4
+    STI_float32 max_angle_deg; // offset: 328, size: 4
+    STI_float32 air_density; // offset: 332, size: 4
+    STI_float32 frontal_area; // offset: 336, size: 4
+    STI_float32 drag_coefficient; // offset: 340, size: 4
+    STI_float32 lift_coefficient; // offset: 344, size: 4
+} Rudder; // size: 352
+
+#define STI_TYPE_HASH_TrainGlobal 0x55ED49CE
+typedef struct TrainGlobal{
+    STI_float32 drag; // offset: 0, size: 4
+    STI_float32 crashing_impulse; // offset: 4, size: 4
+    STI_int32 derailing_explosion_damage; // offset: 8, size: 4
+    STI_float32 max_angle_to_derail; // offset: 12, size: 4
+    Spline5 max_acceleration_vs_speed; // offset: 16, size: 80
+    STI_float32 max_deceleration; // offset: 96, size: 4
+} TrainGlobal; // size: 100
 
 #define STI_TYPE_HASH_ProceduralSpawn 0x55BBC217
 typedef struct ProceduralSpawn{
@@ -3741,11 +7017,123 @@ typedef struct CodexInfo{
     STI_uint8 Category; // offset: 5, size: 1
 } CodexInfo; // size: 8
 
+#define STI_TYPE_HASH_RollParams 0x52A574C7
+typedef struct RollParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    CameraSpring RollSpring; // offset: 4, size: 12
+    CameraSpring BackToZeroSpring; // offset: 16, size: 12
+    STI_float32 SpeedRelax; // offset: 28, size: 4
+    STI_float32 SpeedIncrease; // offset: 32, size: 4
+    STI_float32 AnimXScale; // offset: 36, size: 4
+    STI_float32 LookInputHorizontalScale; // offset: 40, size: 4
+    STI_float32 InheritRollRatio; // offset: 44, size: 4
+    STI_uint8 ResetOnLookInput; // offset: 48, size: 1
+    STI_float32 ReapplyDelay; // offset: 52, size: 4
+} RollParams; // size: 56
+
+#define STI_TYPE_HASH_RigidBody 0x529D3A81
+typedef struct RigidBody{
+    STI_float32 mass; // offset: 0, size: 4
+    STI_float32 center_of_mass[3]; // offset: 4, size: 12
+    STI_float32 center_of_mass_bias; // offset: 16, size: 4
+    STI_float32 unit_inertia_yaw; // offset: 20, size: 4
+    STI_float32 unit_inertia_pitch; // offset: 24, size: 4
+    STI_float32 unit_inertia_roll; // offset: 28, size: 4
+    STI_float32 linear_damping; // offset: 32, size: 4
+    STI_float32 angular_damping; // offset: 36, size: 4
+    STI_float32 max_angular_velocity; // offset: 40, size: 4
+    STI_float32 max_linear_velocity; // offset: 44, size: 4
+    STI_int32 use_calculated_inertia; // offset: 48, size: 4
+    STI_int32 add_drivers_mass; // offset: 52, size: 4
+    STI_float32 driver_center_of_mass[3]; // offset: 56, size: 12
+} RigidBody; // size: 68
+
+#define STI_TYPE_HASH_AvoidanceSettings 0x1D0668F1
+typedef struct AvoidanceSettings{
+    STI_float32 WallFollowingAngle; // offset: 0, size: 4
+    STI_float32 DodgingPenalty; // offset: 4, size: 4
+    STI_float32 VelocityHysteresis; // offset: 8, size: 4
+    STI_float32 SidednessChangingPenalty; // offset: 12, size: 4
+    STI_float32 CollisionPenalty; // offset: 16, size: 4
+    STI_float32 PenetrationPenalty; // offset: 20, size: 4
+} AvoidanceSettings; // size: 24
+
+#define STI_TYPE_HASH_CharacterNavigationSettings 0x5244E18C
+typedef struct CharacterNavigationSettings{
+    STI_uint8 KinematicConstraintType; // offset: 0, size: 1
+    STI_float32 MinLinearSpeed; // offset: 4, size: 4
+    STI_float32 MaxLinearSpeed; // offset: 8, size: 4
+    STI_float32 MaxLinearAcceleration; // offset: 12, size: 4
+    STI_float32 MaxLinearDeceleration; // offset: 16, size: 4
+    STI_float32 MaxAngularSpeed; // offset: 20, size: 4
+    STI_float32 LeftTurnRadius; // offset: 24, size: 4
+    STI_float32 RightTurnRadius; // offset: 28, size: 4
+    AvoidanceSettings AvoidanceSettings; // offset: 32, size: 24
+} CharacterNavigationSettings; // size: 56
+
 #define STI_TYPE_HASH_ControlPointLevel 0x51A91B32
 typedef struct ControlPointLevel{
     STI_uint32 XP; // offset: 0, size: 4
     STI_uint32 Level; // offset: 4, size: 4
 } ControlPointLevel; // size: 8
+
+#define STI_TYPE_HASH_CurveAbscissa 0x3E68D2C5
+typedef struct CurveAbscissa{
+    STI_float32 distance; // offset: 0, size: 4
+    STI_float32 lifetime; // offset: 4, size: 4
+    STI_float32 charge; // offset: 8, size: 4
+} CurveAbscissa; // size: 12
+
+#define STI_TYPE_HASH_AmmunitionMagazineSettings 0x07C23A2F
+typedef struct AmmunitionMagazineSettings{
+    STI_int32 increased_mag_size; // offset: 0, size: 4
+} AmmunitionMagazineSettings; // size: 4
+
+#define STI_TYPE_HASH_AmmunitionTuning_2 0x51265C00
+typedef struct AmmunitionTuning_2{
+    STI_float32 max_range; // offset: 0, size: 4
+    STI_float32 diameter; // offset: 4, size: 4
+    STI_float32 length; // offset: 8, size: 4
+    STI_float32 ballistic_coefficient_front; // offset: 12, size: 4
+    STI_float32 ballistic_coefficient_side; // offset: 16, size: 4
+    STI_float32 drag_coefficient; // offset: 20, size: 4
+    STI_float32 kinetic_energy; // offset: 24, size: 4
+    STI_float32 mass; // offset: 28, size: 4
+    STI_float32 projectile_damage; // offset: 32, size: 4
+    STI_float32 armour_damage_multiplier; // offset: 36, size: 4
+    STI_float32 organ_damage_multiplier; // offset: 40, size: 4
+    STI_float32 propagate_leftover_damage; // offset: 44, size: 4
+    STI_uint8 projectiles_per_shot; // offset: 48, size: 1
+    STI_String projectile_model_path; // offset: 56, size: 16
+    STI_float32 hit_radius; // offset: 64, size: 4
+    STI_String hit_entity_spawn_tag; // offset: 72, size: 16
+    DynamicArray_HitEntitySpawn hit_entity_spawns_on_requirement; // offset: 80, size: 16
+    STI_uint8 hit_entity_spawn_method; // offset: 96, size: 1
+    STI_uint8 hit_entity_spawn_max_count; // offset: 97, size: 1
+    STI_uint8 hit_entity_spawn_on_kill_hit; // offset: 98, size: 1
+    STI_uint8 hit_entity_use_bullet_model; // offset: 99, size: 1
+    STI_uint8 trigger_non_attached_entities; // offset: 100, size: 1
+    STI_uint8 spawn_hit_entity_weapon_controller_only; // offset: 101, size: 1
+    STI_uint8 use_arc_movement; // offset: 102, size: 1
+    STI_uint8 use_staggered_arming; // offset: 103, size: 1
+    STI_uint8 pierce_armor_pieces; // offset: 104, size: 1
+    STI_uint8 spawn_both_bullet_and_projectile_entity; // offset: 105, size: 1
+    STI_String projectile_entity_spawn_tag; // offset: 112, size: 16
+    DynamicArray_ProjectileEntitySpawn projectile_entity_spawn_tag_on_requirement; // offset: 120, size: 16
+    STI_float32 scatter_multiplier; // offset: 136, size: 4
+    STI_float32 multi_projectile_scatter_angle; // offset: 140, size: 4
+    Spline5 damage_falloff_curve; // offset: 144, size: 80
+    CurveAbscissa damage_falloff_curve_abscissa; // offset: 224, size: 12
+    Spline5 penetration_falloff_curve; // offset: 236, size: 80
+    CurveAbscissa penetration_falloff_curve_abscissa; // offset: 316, size: 12
+    MissileArcSettings missile_arc_settings; // offset: 328, size: 12
+    ClusterAmmunitionSettings cluster_ammunition_settings; // offset: 344, size: 24
+    AreaBulletSettings area_bullet_settings; // offset: 368, size: 20
+    STI_float32 noise_multiplier; // offset: 388, size: 4
+    AmmunitionRecoilSettings recoil_settings; // offset: 392, size: 28
+    AmmunitionMagazineSettings mag_settings; // offset: 420, size: 4
+    AmmunitionFireModeSettings fire_settings; // offset: 424, size: 4
+} AmmunitionTuning_2; // size: 432
 
 #define STI_TYPE_HASH_TerrainTextureInfo 0x510C5C3A
 typedef struct TerrainTextureInfo{
@@ -3786,12 +7174,84 @@ typedef struct ProfileSaveData8{
     DynamicArray_AcceptedPolicyPair AcceptedPolicies; // offset: 160, size: 16
 } ProfileSaveData8; // size: 176
 
+#define STI_TYPE_HASH_FirstPersonCameraModifierParams 0x5027B2E0
+typedef struct FirstPersonCameraModifierParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams InputParams; // offset: 4, size: 160
+    STI_float32 ForegroundFOV; // offset: 164, size: 4
+    STI_float32 WorldFOV; // offset: 168, size: 4
+    STI_uint8 UseGameSettingsWorldFov; // offset: 172, size: 1
+    STI_String ForegroundBBKey; // offset: 176, size: 16
+    STI_uint8 ForegroundPitchEnabled; // offset: 184, size: 1
+    STI_String AimAdjustmentSegments[3]; // offset: 192, size: 24
+    STI_uint8 AlignToSurface; // offset: 216, size: 1
+    STI_float32 AlignToSurfaceStiffness; // offset: 220, size: 4
+    STI_float32 ProneAllowedHeightPushUp; // offset: 224, size: 4
+    STI_float32 PronePushUpRayLength; // offset: 228, size: 4
+    STI_float32 PronePushUpRayBackOffset; // offset: 232, size: 4
+    AimAssistParams AimAssist; // offset: 236, size: 24
+} FirstPersonCameraModifierParams; // size: 264
+
+#define STI_TYPE_HASH_ParachuteAttachmentModifierParams 0x4FE34BC2
+typedef struct ParachuteAttachmentModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 DrawDebug; // offset: 1, size: 1
+    STI_float32 PivotBlendFactor; // offset: 4, size: 4
+    STI_float32 PivotPedistalOffset; // offset: 8, size: 4
+    STI_float32 YawClampAngle; // offset: 12, size: 4
+    STI_float32 PitchClampAngle; // offset: 16, size: 4
+} ParachuteAttachmentModifierParams; // size: 20
+
+#define STI_TYPE_HASH_WheelHardpointOffset 0x4F30F46B
+typedef struct WheelHardpointOffset{
+    STI_int32 wheel_index; // offset: 0, size: 4
+    STI_float32 offset[3]; // offset: 4, size: 12
+} WheelHardpointOffset; // size: 16
+
+#define STI_TYPE_HASH_ExtendedEffectUsage 0x4E0CB728
+typedef struct ExtendedEffectUsage{
+    HashString name; // offset: 0, size: 16
+    STI_String activation_expression; // offset: 16, size: 16
+    STI_String deactivation_expression; // offset: 24, size: 16
+} ExtendedEffectUsage; // size: 32
+
 #define STI_TYPE_HASH_SaveGameData1 0x4D75E188
 typedef struct SaveGameData1{
     STI_Deferred Characters; // offset: 0, size: 16
     STI_Deferred Profile; // offset: 16, size: 16
     STI_Deferred World; // offset: 32, size: 16
 } SaveGameData1; // size: 48
+
+#define STI_TYPE_HASH_BoatAudio 0x4D20464C
+typedef struct BoatAudio{
+    STI_float32 min_rpm; // offset: 0, size: 4
+    STI_float32 max_rpm; // offset: 4, size: 4
+    STI_float32 rpm_mix; // offset: 8, size: 4
+    STI_float32 velocity_to_rpm; // offset: 12, size: 4
+} BoatAudio; // size: 16
+
+#define STI_TYPE_HASH_ViewFrustum 0x4D0B5CC7
+typedef struct ViewFrustum{
+    STI_float32 FOV_H; // offset: 0, size: 4
+    STI_float32 FOV_V; // offset: 4, size: 4
+    STI_float32 Near; // offset: 8, size: 4
+    STI_float32 Far; // offset: 12, size: 4
+    STI_float32 Yaw; // offset: 16, size: 4
+    STI_float32 Pitch; // offset: 20, size: 4
+    STI_uint32 OnFoot; // offset: 24, size: 4
+    STI_uint32 InLandVehicle; // offset: 28, size: 4
+    STI_uint32 InHelicopter; // offset: 32, size: 4
+    STI_uint32 InSeaVehicle; // offset: 36, size: 4
+    STI_uint32 InTank; // offset: 40, size: 4
+    STI_uint32 Mounted; // offset: 44, size: 4
+    STI_uint32 InAAGun; // offset: 48, size: 4
+} ViewFrustum; // size: 52
+
+#define STI_TYPE_HASH_HingedPart 0x4BBC352C
+typedef struct HingedPart{
+    STI_int8 part_index; // offset: 0, size: 1
+} HingedPart; // size: 1
 
 #define STI_TYPE_HASH_ProfileSaveData4 0x4942B541
 typedef struct ProfileSaveData4{
@@ -3815,6 +7275,23 @@ typedef struct ProfileSaveData4{
     STI_uint32 FixVersion; // offset: 156, size: 4
 } ProfileSaveData4; // size: 160
 
+#define STI_TYPE_HASH_PlayerCollisionModifierParams 0x4934B283
+typedef struct PlayerCollisionModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 DrawDebug; // offset: 1, size: 1
+    STI_uint8 CheckHeadToHipsBox; // offset: 2, size: 1
+    STI_float32 HeadToHipsDepth; // offset: 4, size: 4
+    STI_float32 HeadToHipsWidth; // offset: 8, size: 4
+    STI_float32 HeadToHipsHeightScale; // offset: 12, size: 4
+    STI_uint8 CheckHipsToFeetBox; // offset: 16, size: 1
+    STI_float32 HipsToFeetDepth; // offset: 20, size: 4
+    STI_float32 HipsToFeetWidth; // offset: 24, size: 4
+    STI_float32 HipsToFeetHeightScale; // offset: 28, size: 4
+    STI_float32 IntersectOpacity; // offset: 32, size: 4
+    STI_float32 BlendInSpeed; // offset: 36, size: 4
+    STI_float32 BlendOutSpeed; // offset: 40, size: 4
+} PlayerCollisionModifierParams; // size: 44
+
 #define STI_TYPE_HASH_OwnedEquipment1 0x48A4BB06
 typedef struct OwnedEquipment1{
     ChildEquipment ChildEquipment[8]; // offset: 0, size: 64
@@ -3825,6 +7302,22 @@ typedef struct OwnedEquipment1{
     STI_uint8 Column; // offset: 77, size: 1
     STI_uint8 Row; // offset: 78, size: 1
 } OwnedEquipment1; // size: 80
+
+#define STI_TYPE_HASH_ChaseCameraModifierParams_2 0x47801B1C
+typedef struct ChaseCameraModifierParams_2{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams_2 InputParams; // offset: 4, size: 172
+    STI_float32 SpringCoeffX; // offset: 176, size: 4
+    STI_float32 SpringCoeffY; // offset: 180, size: 4
+    STI_float32 ChaseDelayAfterInput; // offset: 184, size: 4
+    STI_float32 SpeedThreshold; // offset: 188, size: 4
+    STI_float32 MaxSpeed; // offset: 192, size: 4
+    STI_float32 MaxDeltaDolly; // offset: 196, size: 4
+    CameraSpring DollySpring; // offset: 200, size: 12
+    STI_float32 MaxDeltaFOV; // offset: 212, size: 4
+    CameraSpring FOVSpring; // offset: 216, size: 12
+} ChaseCameraModifierParams_2; // size: 228
 
 #define STI_TYPE_HASH_WorldSaveData4 0x47512ED2
 typedef struct WorldSaveData4{
@@ -3848,6 +7341,12 @@ typedef struct WorldSaveData4{
 typedef struct RouteInputsCollection{
     DynamicArray_RouteInput RouteInputs; // offset: 0, size: 16
 } RouteInputsCollection; // size: 16
+
+#define STI_TYPE_HASH_AttachData 0x463452F1
+typedef struct AttachData{
+    DynamicArray_WeaponAttachData Weapons; // offset: 0, size: 16
+    ScopeOffsetTransform ScopeCenterOffset; // offset: 16, size: 12
+} AttachData; // size: 32
 
 #define STI_TYPE_HASH_TerrainPrimitive 0x45FEA6F5
 typedef struct TerrainPrimitive{
@@ -3874,6 +7373,11 @@ typedef struct CollectibleInfo{
     STI_float32 Position[3]; // offset: 24, size: 12
 } CollectibleInfo; // size: 40
 
+#define STI_TYPE_HASH_Rudders 0x443E6040
+typedef struct Rudders{
+    DynamicArray_Rudder rudders; // offset: 0, size: 16
+} Rudders; // size: 16
+
 #define STI_TYPE_HASH_RegionTitle 0x4434FA96
 typedef struct RegionTitle{
     STI_uint32 TitleId; // offset: 0, size: 4
@@ -3892,6 +7396,17 @@ typedef struct CharactersSaveData4{
     DynamicArray_MissionSaveData2 MissionCampaigns; // offset: 4144, size: 16
     DynamicArray_STI_int32 MissionCampaignsReserveIds; // offset: 4160, size: 16
 } CharactersSaveData4; // size: 4176
+
+#define STI_TYPE_HASH_Buoyancy 0x434CA2E6
+typedef struct Buoyancy{
+    STI_float32 buoyancy; // offset: 0, size: 4
+    STI_float32 drag; // offset: 4, size: 4
+    STI_float32 radius; // offset: 8, size: 4
+    STI_float32 side_area; // offset: 12, size: 4
+    STI_float32 bottom_area; // offset: 16, size: 4
+    STI_float32 up_velocity_cap; // offset: 20, size: 4
+    DynamicArray_BuoyancyModule buoyancy_modules; // offset: 24, size: 16
+} Buoyancy; // size: 40
 
 #define STI_TYPE_HASH_EffectRTOutputBufferDescriptor 0x433F04D3
 typedef struct EffectRTOutputBufferDescriptor{
@@ -3950,6 +7465,52 @@ typedef struct Compatibility{
     uint8 Operation:2; // offset: 24, size: 1
 } Compatibility; // size: 32
 
+#define STI_TYPE_HASH_PartType 0x3F5642E3
+typedef struct PartType{
+    HashString name; // offset: 0, size: 16
+    DynamicArray_PartBehavior part_behaviors; // offset: 16, size: 16
+} PartType; // size: 32
+
+#define STI_TYPE_HASH_PartPhysicsMapping 0x3EEC15F4
+typedef struct PartPhysicsMapping{
+    STI_String name; // offset: 0, size: 16
+    STI_int8 part_index; // offset: 8, size: 1
+    STI_int8 world_collision_instance_id; // offset: 9, size: 1
+    STI_int8 raycast_instance_id; // offset: 10, size: 1
+    STI_int8 grandpa_world_instance_id; // offset: 11, size: 1
+    STI_int8 grandpa_raycast_instance_id; // offset: 12, size: 1
+    STI_int16 world_collision_body_id; // offset: 14, size: 2
+    STI_int16 raycast_body_id; // offset: 16, size: 2
+    STI_int16 constraint_index; // offset: 18, size: 2
+} PartPhysicsMapping; // size: 24
+
+#define STI_TYPE_HASH_HunterMissionObjective 0x3ED6AB6F
+typedef struct HunterMissionObjective{
+    STI_int32 Id; // offset: 0, size: 4
+    STI_uint8 ForceActive; // offset: 4, size: 1
+    STI_uint8 Enabled; // offset: 5, size: 1
+    STI_uint8 Required; // offset: 6, size: 1
+    STI_uint8 Visible; // offset: 7, size: 1
+    STI_uint8 VisibleOnStart; // offset: 8, size: 1
+    STI_uint8 ShowProgression; // offset: 9, size: 1
+    StringHash_48c5294d_4 Name; // offset: 12, size: 4
+    StringHash_48c5294d_4 NameShort; // offset: 16, size: 4
+    STI_int32 TimeLimit; // offset: 20, size: 4
+    STI_uint8 ShowTimer; // offset: 24, size: 1
+    STI_String MarkerName; // offset: 32, size: 16
+    StringHash_99cfa095_6 ShowMarker; // offset: 40, size: 6
+    StringHash_99cfa095_6 HideMarker; // offset: 46, size: 6
+    StringHash_99cfa095_6 ResetEvent; // offset: 52, size: 6
+    StringHash_99cfa095_6 Reward; // offset: 58, size: 6
+    STI_uint8 MultiplayerCompletionMode; // offset: 64, size: 1
+    StringHash_99cfa095_6 ActivateEvent; // offset: 66, size: 6
+    STI_int32 CountRequired; // offset: 72, size: 4
+    STI_int32 InitialCount; // offset: 76, size: 4
+    DynamicArray_STI_int32 DependenciesRequired; // offset: 80, size: 16
+    DynamicArray_STI_int32 DependenciesOptional; // offset: 96, size: 16
+    HunterMissionRulesGroup Conditions; // offset: 112, size: 24
+} HunterMissionObjective; // size: 136
+
 #define STI_TYPE_HASH_StorageLevel 0x3ECFAA6B
 typedef struct StorageLevel{
     STI_float32 Capacity; // offset: 0, size: 4
@@ -3960,6 +7521,27 @@ typedef struct StorageLevel{
 typedef struct VegetationZone{
     DynamicArray_VegetationSet VegetationSets; // offset: 0, size: 16
 } VegetationZone; // size: 16
+
+#define STI_TYPE_HASH_SplineFuncOfYawParams 0x3CDF692B
+typedef struct SplineFuncOfYawParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    CameraSpline10 TruckSpline; // offset: 4, size: 140
+    CameraSpline10 PedestalSpline; // offset: 144, size: 140
+    CameraSpline10 DollySpline; // offset: 284, size: 140
+    CameraSpline10 FOVSpline; // offset: 424, size: 140
+    CameraSpline10 PitchScaleSpline; // offset: 564, size: 140
+    STI_uint8 DrawDebug; // offset: 704, size: 1
+} SplineFuncOfYawParams; // size: 708
+
+#define STI_TYPE_HASH_PointPartConstraint 0x3C2EFE9F
+typedef struct PointPartConstraint{
+    HashString source_part; // offset: 0, size: 16
+    HashString target_part; // offset: 16, size: 16
+    STI_int8 source_part_index; // offset: 32, size: 1
+    STI_int8 target_part_index; // offset: 33, size: 1
+    STI_float32 translation_offset[3]; // offset: 36, size: 12
+    STI_float32 constrained_translation_axes[3]; // offset: 48, size: 12
+} PointPartConstraint; // size: 64
 
 #define STI_TYPE_HASH_ProfileSaveData7 0x3BE671E0
 typedef struct ProfileSaveData7{
@@ -3983,6 +7565,18 @@ typedef struct ProfileSaveData7{
     STI_uint32 FixVersion; // offset: 216, size: 4
 } ProfileSaveData7; // size: 224
 
+#define STI_TYPE_HASH_Palette 0x3AF02A3F
+typedef struct Palette{
+    DynamicArray_Tint tints; // offset: 0, size: 16
+} Palette; // size: 16
+
+#define STI_TYPE_HASH_HelicopterSteering 0x3A77069C
+typedef struct HelicopterSteering{
+    AirSteering air_steering; // offset: 0, size: 72
+    STI_float32 return_pitch_limit; // offset: 72, size: 4
+    STI_float32 return_roll_limit; // offset: 76, size: 4
+} HelicopterSteering; // size: 80
+
 #define STI_TYPE_HASH_EffectRTSystem 0x3A6CFD95
 typedef struct EffectRTSystem{
     DynamicArray_EffectRTEmitterTemplate EmitterTemplates; // offset: 0, size: 16
@@ -4000,8 +7594,42 @@ typedef struct EffectRTSystem{
     DynamicArray_STI_float32 Properties; // offset: 208, size: 16
 } EffectRTSystem; // size: 224
 
-#define STI_TYPE_HASH_HunterMission 0x393FF444
-typedef struct HunterMission{
+#define STI_TYPE_HASH_HintModifierParams 0x3A3557FE
+typedef struct HintModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint32 HintHashes[4]; // offset: 4, size: 16
+    STI_float32 DeltaPivotOffset[3]; // offset: 20, size: 12
+    STI_float32 DeltaPitch; // offset: 32, size: 4
+    STI_float32 DeltaYaw; // offset: 36, size: 4
+    STI_float32 DeltaRoll; // offset: 40, size: 4
+    STI_float32 DeltaAzimuth; // offset: 44, size: 4
+    STI_float32 DeltaElevation; // offset: 48, size: 4
+    STI_float32 DeltaDistance; // offset: 52, size: 4
+    CameraSpring BlendInSpring; // offset: 56, size: 12
+    CameraSpring BlendOutSpring; // offset: 68, size: 12
+    STI_uint8 DrawDebug; // offset: 80, size: 1
+} HintModifierParams; // size: 84
+
+#define STI_TYPE_HASH_ForcePulseSettings_2 0x39C734DF
+typedef struct ForcePulseSettings_2{
+    STI_uint32 PlayerDamage; // offset: 0, size: 4
+    STI_float32 PlayerDamageRadius; // offset: 4, size: 4
+    STI_float32 PlayerDamageRadiusPercentageMax; // offset: 8, size: 4
+    STI_float32 PlayerDamageRadiusMin; // offset: 12, size: 4
+    STI_uint32 AIDamage; // offset: 16, size: 4
+    STI_float32 AIDamageRadius; // offset: 20, size: 4
+    STI_float32 AIDamageRadiusPercentageMax; // offset: 24, size: 4
+    STI_float32 AIDamageRadiusMin; // offset: 28, size: 4
+    STI_float32 AIAwarenessEventRange; // offset: 32, size: 4
+    STI_String HitEntitySpawnTag; // offset: 40, size: 16
+    STI_String PlayerHitEntitySpawnTag; // offset: 48, size: 16
+    STI_String AIHitEntitySpawnTag; // offset: 56, size: 16
+    STI_uint8 HitEntityAttach; // offset: 64, size: 1
+    STI_uint8 HitEntityTriggerNonAttached; // offset: 65, size: 1
+} ForcePulseSettings_2; // size: 72
+
+#define STI_TYPE_HASH_HunterMission_2 0x393FF444
+typedef struct HunterMission_2{
     STI_int32 Id; // offset: 0, size: 4
     STI_uint8 Enabled; // offset: 4, size: 1
     STI_uint8 Required; // offset: 5, size: 1
@@ -4031,12 +7659,12 @@ typedef struct HunterMission{
     STI_uint8 CanCancelCompleted; // offset: 181, size: 1
     STI_uint8 CanSaveState; // offset: 182, size: 1
     STI_uint8 ShowInLog; // offset: 183, size: 1
-    DynamicArray_HunterMissionObjective Objectives; // offset: 184, size: 16
+    DynamicArray_HunterMissionObjective_2 Objectives; // offset: 184, size: 16
     DynamicArray_HunterMissionEvent Events; // offset: 200, size: 16
-    DynamicArray_HunterMissionAttachment Attachments; // offset: 216, size: 16
+    DynamicArray_HunterMissionAttachment_2 Attachments; // offset: 216, size: 16
     DynamicArray_HunterMissionRandomizer Randomizers; // offset: 232, size: 16
     DynamicArray_HunterMissionVariable Variables; // offset: 248, size: 16
-} HunterMission; // size: 264
+} HunterMission_2; // size: 264
 
 #define STI_TYPE_HASH_OccluderBoxCollection 0x38FDA78F
 typedef struct OccluderBoxCollection{
@@ -4063,6 +7691,49 @@ typedef struct BitmapLayer{
     DynamicArray_STI_uint32 Bitfield; // offset: 16, size: 16
     STI_uint32 TypeHash; // offset: 32, size: 4
 } BitmapLayer; // size: 40
+
+#define STI_TYPE_HASH_SphericalCoordinateFramingParams 0x377BB3FB
+typedef struct SphericalCoordinateFramingParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 DrawDebug; // offset: 1, size: 1
+    STI_float32 PivotPosition[3]; // offset: 4, size: 12
+    STI_float32 Azimuth; // offset: 16, size: 4
+    STI_float32 Elevation; // offset: 20, size: 4
+    STI_float32 Distance; // offset: 24, size: 4
+    STI_float32 Pitch; // offset: 28, size: 4
+    STI_float32 Yaw; // offset: 32, size: 4
+    STI_float32 Roll; // offset: 36, size: 4
+    STI_float32 FOV; // offset: 40, size: 4
+} SphericalCoordinateFramingParams; // size: 44
+
+#define STI_TYPE_HASH_CustomLandGlobal 0x36BB2144
+typedef struct CustomLandGlobal{
+    STI_float32 linear_damping[3]; // offset: 0, size: 12
+    STI_float32 gravity_multiplier_grounded; // offset: 12, size: 4
+    STI_float32 gravity_multiplier_in_air_up; // offset: 16, size: 4
+    STI_float32 gravity_multiplier_in_air_down; // offset: 20, size: 4
+    STI_float32 takeoff_pitch_damping; // offset: 24, size: 4
+    WheelDamage front_wheels_damage; // offset: 28, size: 12
+    WheelDamage rear_wheels_damage; // offset: 40, size: 12
+    Drift drift; // offset: 52, size: 84
+    ArcadePhysics arcade; // offset: 136, size: 108
+} CustomLandGlobal; // size: 244
+
+#define STI_TYPE_HASH_MovementType 0x36B033EF
+typedef struct MovementType{
+    StringHash_48c5294d_4 MovementTypeID; // offset: 0, size: 4
+    STI_float32 DesiredHorizontalSpeed; // offset: 4, size: 4
+    STI_float32 DesiredVerticalSpeed; // offset: 8, size: 4
+    STI_float32 DesiredAltitude; // offset: 12, size: 4
+    STI_float32 DesiredTreeAltitude; // offset: 16, size: 4
+    STI_float32 MinLinearSpeed; // offset: 20, size: 4
+    STI_float32 MaxLinearSpeed; // offset: 24, size: 4
+    STI_float32 MaxLinearAcceleration; // offset: 28, size: 4
+    STI_float32 MaxLinearDeceleration; // offset: 32, size: 4
+    STI_float32 MaxAngularSpeed; // offset: 36, size: 4
+    STI_float32 MaxAngularAcceleration; // offset: 40, size: 4
+    STI_float32 MaxSteeringAngle; // offset: 44, size: 4
+} MovementType; // size: 48
 
 #define STI_TYPE_HASH_UtilitiesCollection 0x367A66D7
 typedef struct UtilitiesCollection{
@@ -4091,6 +7762,30 @@ typedef struct PfxBreakableCompound{
     DynamicArray_PfxBreakableInstance breakable_instances; // offset: 64, size: 16
 } PfxBreakableCompound; // size: 96
 
+#define STI_TYPE_HASH_CameraCollisionParams 0x339BE1DB
+typedef struct CameraCollisionParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 DrawDebug; // offset: 1, size: 1
+    STI_float32 CollisionResponseOffset[3]; // offset: 4, size: 12
+    STI_float32 Radius; // offset: 16, size: 4
+    STI_float32 PassthroughRadius; // offset: 20, size: 4
+    STI_float32 MaxCameraPassthroughThickness; // offset: 24, size: 4
+    STI_uint8 CollideCharacter; // offset: 28, size: 1
+    STI_float32 ExtensionMaxVelocity; // offset: 32, size: 4
+    STI_float32 MaxDistancePushVelocity; // offset: 36, size: 4
+    STI_float32 MovementCastAhead; // offset: 40, size: 4
+    STI_float32 AngularCastAhead; // offset: 44, size: 4
+    STI_float32 MinCollisionDist; // offset: 48, size: 4
+    STI_float32 CameraPlaneMargin; // offset: 52, size: 4
+    STI_float32 CameraPushMargin; // offset: 56, size: 4
+    CameraSpline5 DistanceToOpacitySpline; // offset: 60, size: 80
+    STI_uint8 IgnoreOffsetDistanceChange; // offset: 140, size: 1
+    STI_uint8 IgnorePlayerVehicle; // offset: 141, size: 1
+    STI_uint8 KeepAboveWater; // offset: 142, size: 1
+    STI_uint8 DisableClosestProximityCollision; // offset: 143, size: 1
+    STI_uint8 CollisionResponseUprightViewAligned; // offset: 144, size: 1
+} CameraCollisionParams; // size: 148
+
 #define STI_TYPE_HASH_VegetationLayers 0x3394E18F
 typedef struct VegetationLayers{
     DynamicArray_VegetationForestLayer VegetationForestLayer; // offset: 0, size: 16
@@ -4099,6 +7794,21 @@ typedef struct VegetationLayers{
     DynamicArray_VegetationPhysicsLayer VegetationPhysicsLayer; // offset: 48, size: 16
 } VegetationLayers; // size: 64
 
+#define STI_TYPE_HASH_AirAudio 0x330590E4
+typedef struct AirAudio{
+    STI_float32 acceleration; // offset: 0, size: 4
+    STI_float32 rpm_ramp_up_speed; // offset: 4, size: 4
+    STI_float32 shutdown_rpm; // offset: 8, size: 4
+    STI_float32 min_rpm; // offset: 12, size: 4
+    STI_float32 max_rpm; // offset: 16, size: 4
+    STI_float32 top_speed; // offset: 20, size: 4
+    STI_float32 thrust_coef; // offset: 24, size: 4
+    STI_float32 velocity_coef; // offset: 28, size: 4
+    STI_float32 idle_load; // offset: 32, size: 4
+    STI_float32 load_hold_dt; // offset: 36, size: 4
+    STI_float32 load_release_dt; // offset: 40, size: 4
+} AirAudio; // size: 44
+
 #define STI_TYPE_HASH_EffectRTTimeline 0x326A2784
 typedef struct EffectRTTimeline{
     STI_int8 ControlPointsY[16]; // offset: 0, size: 16
@@ -4106,6 +7816,35 @@ typedef struct EffectRTTimeline{
     STI_float32 EndX[4]; // offset: 32, size: 16
     STI_float32 XScaleRecip[4]; // offset: 48, size: 16
 } EffectRTTimeline; // size: 64
+
+#define STI_TYPE_HASH_WolfSettings 0x11F0041A
+typedef struct WolfSettings{
+    STI_float32 chance_reposition; // offset: 0, size: 4
+    STI_float32 heal_weapon_cooldown[2]; // offset: 4, size: 8
+} WolfSettings; // size: 12
+
+#define STI_TYPE_HASH_AITuningSettings_2 0x31B2542A
+typedef struct AITuningSettings_2{
+    RcTickSettings RcTickSettings; // offset: 0, size: 172
+    CompanionSettings Companion_Settings; // offset: 172, size: 72
+    FirebirdSettings Firebird_Settings; // offset: 244, size: 8
+    LynxSettings Lynx_Settings; // offset: 252, size: 8
+    HunterAttackSettings Hunter_Attack_Settings; // offset: 260, size: 12
+    DreaAttackSettings DreadnoughtAttackSettings; // offset: 272, size: 8
+    DreaChargeSettings DreadnoughtChargeSettings; // offset: 280, size: 12
+    DreaThermobaricSettings DreadnoughtThermobaricSettings; // offset: 292, size: 32
+    HarvesterSettings HarvesterSettings; // offset: 324, size: 24
+    WolfSettings WolfSettings; // offset: 348, size: 12
+    SmallMachineSettings SmallMachineSettings; // offset: 360, size: 16
+    MachineSettings_2 Machine_Settings; // offset: 376, size: 44
+} AITuningSettings_2; // size: 420
+
+#define STI_TYPE_HASH_Aerodynamics 0x31B1F18B
+typedef struct Aerodynamics{
+    DynamicArray_AerodynamicSurface aerodynamic_surfaces; // offset: 0, size: 16
+    Spline20 lift_c_vs_attack_angle_deg; // offset: 16, size: 260
+    Spline20 drag_c_vs_attack_angle_deg; // offset: 276, size: 260
+} Aerodynamics; // size: 536
 
 #define STI_TYPE_HASH_MissionSaveData 0x3173765E
 typedef struct MissionSaveData{
@@ -4161,6 +7900,23 @@ typedef struct PersistentDataEx{
     DynamicArray_PersistentRoadSamples PersistentInfo; // offset: 0, size: 16
 } PersistentDataEx; // size: 16
 
+#define STI_TYPE_HASH_DamageablePhysicsComponent 0x2F3643FD
+typedef struct DamageablePhysicsComponent{
+    HashString physics_component_name; // offset: 0, size: 16
+    DynamicArray_PhysicsComponentDamageFromPart damage_from_parts; // offset: 16, size: 16
+} DamageablePhysicsComponent; // size: 32
+
+#define STI_TYPE_HASH_ThirdPersonCameraModifierParams 0x2EF30D23
+typedef struct ThirdPersonCameraModifierParams{
+    STI_uint8 DrawDebug; // offset: 0, size: 1
+    STI_uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams InputParams; // offset: 4, size: 160
+    STI_float32 WorldFOV; // offset: 164, size: 4
+    STI_uint8 UseGameSettingsWorldFov; // offset: 168, size: 1
+    STI_String AimAdjustmentSegments[3]; // offset: 176, size: 24
+    AimAssistParams AimAssist; // offset: 200, size: 24
+} ThirdPersonCameraModifierParams; // size: 224
+
 #define STI_TYPE_HASH_WorldAudioPatchZoneNormalData 0x2EEB55AC
 typedef struct WorldAudioPatchZoneNormalData{
     DynamicArray_WorldAudioVector4 Points; // offset: 0, size: 16
@@ -4187,6 +7943,80 @@ typedef struct VegetationModelLayer{
     STI_float32 FadeOutStart; // offset: 44, size: 4
     STI_float32 FadeOutEnd; // offset: 48, size: 4
 } VegetationModelLayer; // size: 52
+
+#define STI_TYPE_HASH_HelicopterModel 0x2E7AAD39
+typedef struct HelicopterModel{
+    STI_float32 center_of_torques_x; // offset: 0, size: 4
+    STI_float32 center_of_torques_y; // offset: 4, size: 4
+    STI_float32 center_of_torques_z; // offset: 8, size: 4
+    STI_float32 altitude_input_power; // offset: 12, size: 4
+    STI_float32 yaw_input_power; // offset: 16, size: 4
+    STI_float32 pitch_input_power; // offset: 20, size: 4
+    STI_float32 roll_input_power; // offset: 24, size: 4
+    STI_float32 pitch_input_dead_zone; // offset: 28, size: 4
+    STI_float32 t_to_full_yaw_s; // offset: 32, size: 4
+    STI_float32 max_speed_t_to_full_yaw_s; // offset: 36, size: 4
+    STI_float32 bank_start_velocity_kmph; // offset: 40, size: 4
+    STI_float32 bank_max_velocity_kmph; // offset: 44, size: 4
+    STI_float32 min_speed_dive_kmph; // offset: 48, size: 4
+    STI_float32 max_speed_dive_kmph; // offset: 52, size: 4
+    STI_float32 add_dive_pitch_deg; // offset: 56, size: 4
+    STI_float32 add_climb_pitch_deg; // offset: 60, size: 4
+    STI_float32 max_roll_input_for_climb; // offset: 64, size: 4
+    STI_float32 climb_speed_low_speed_kmph; // offset: 68, size: 4
+    STI_float32 dive_speed_low_speed_kmph; // offset: 72, size: 4
+    STI_float32 min_altitude_input; // offset: 76, size: 4
+    STI_float32 unsettled_altitude_gain_climb; // offset: 80, size: 4
+    STI_float32 unsettled_altitude_gain_dive; // offset: 84, size: 4
+    STI_float32 max_diving_gs; // offset: 88, size: 4
+    STI_float32 max_climbing_gs; // offset: 92, size: 4
+    STI_float32 add_force_forward_power; // offset: 96, size: 4
+    STI_float32 add_force_lateral_power; // offset: 100, size: 4
+    STI_float32 trim_input_gain; // offset: 104, size: 4
+    STI_float32 forward_drag; // offset: 108, size: 4
+    STI_float32 lateral_drag; // offset: 112, size: 4
+    STI_float32 vertical_drag; // offset: 116, size: 4
+    STI_float32 tail_lateral_drag; // offset: 120, size: 4
+    STI_float32 tail_vertical_drag; // offset: 124, size: 4
+    STI_float32 angular_drag; // offset: 128, size: 4
+    STI_float32 low_speed_max_drag_yaw_speed; // offset: 132, size: 4
+    STI_float32 high_speed_max_drag_yaw_speed; // offset: 136, size: 4
+    STI_float32 yaw_drag_no_input; // offset: 140, size: 4
+    STI_float32 forward_drag_no_input; // offset: 144, size: 4
+    STI_float32 lateral_drag_no_input; // offset: 148, size: 4
+    STI_float32 vertical_drag_no_input; // offset: 152, size: 4
+    STI_float32 tail_distance_to_com_m; // offset: 156, size: 4
+    STI_float32 add_forward_force; // offset: 160, size: 4
+    STI_float32 add_right_force; // offset: 164, size: 4
+    STI_float32 add_lateral_factor_pull_up; // offset: 168, size: 4
+    STI_float32 max_roll_deg; // offset: 172, size: 4
+    STI_float32 add_bank_roll_deg; // offset: 176, size: 4
+    STI_float32 add_bank_roll_pull_up_deg; // offset: 180, size: 4
+    STI_float32 max_pitch_low_speed_deg; // offset: 184, size: 4
+    STI_float32 max_pitch_high_speed_deg; // offset: 188, size: 4
+    STI_float32 counter_pitch_angle_deg; // offset: 192, size: 4
+    STI_float32 counter_pitch_speed_kmph; // offset: 196, size: 4
+    STI_float32 roll_p; // offset: 200, size: 4
+    STI_float32 roll_i; // offset: 204, size: 4
+    STI_float32 roll_d; // offset: 208, size: 4
+    STI_float32 roll_max_amplitude; // offset: 212, size: 4
+    STI_float32 pitch_p; // offset: 216, size: 4
+    STI_float32 pitch_i; // offset: 220, size: 4
+    STI_float32 pitch_d; // offset: 224, size: 4
+    STI_float32 pitch_max_amplitude; // offset: 228, size: 4
+    STI_float32 yaw_p; // offset: 232, size: 4
+    STI_float32 yaw_i; // offset: 236, size: 4
+    STI_float32 yaw_d; // offset: 240, size: 4
+    STI_float32 yaw_max_amplitude; // offset: 244, size: 4
+    STI_float32 low_speed_altitude_p; // offset: 248, size: 4
+    STI_float32 low_speed_altitude_i; // offset: 252, size: 4
+    STI_float32 low_speed_altitude_d; // offset: 256, size: 4
+    STI_float32 high_speed_altitude_p; // offset: 260, size: 4
+    STI_float32 high_speed_altitude_i; // offset: 264, size: 4
+    STI_float32 high_speed_altitude_d; // offset: 268, size: 4
+    STI_float32 altitude_limit_threshold_low; // offset: 272, size: 4
+    STI_float32 altitude_limit_threshold_high; // offset: 276, size: 4
+} HelicopterModel; // size: 280
 
 #define STI_TYPE_HASH_RegionTitleCollection 0x2DC9B801
 typedef struct RegionTitleCollection{
@@ -4220,6 +8050,12 @@ typedef struct AIGlobals_2{
     BlackboardVarList BlackboardVariables; // offset: 192, size: 64
 } AIGlobals_2; // size: 256
 
+#define STI_TYPE_HASH_ZOverTimeParams 0x2A626FB7
+typedef struct ZOverTimeParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    CameraSpline10 TimeToZSpline; // offset: 4, size: 140
+} ZOverTimeParams; // size: 144
+
 #define STI_TYPE_HASH_AIGlobals 0x2A3F35F9
 typedef struct AIGlobals{
     PerceptionSettings Perception; // offset: 0, size: 132
@@ -4227,11 +8063,124 @@ typedef struct AIGlobals{
     BlackboardVarList BlackboardVariables; // offset: 152, size: 64
 } AIGlobals; // size: 216
 
+#define STI_TYPE_HASH_PartPhysicsMappings 0x29B100E2
+typedef struct PartPhysicsMappings{
+    DynamicArray_PartPhysicsMapping part_physics_mappings; // offset: 0, size: 16
+} PartPhysicsMappings; // size: 16
+
+#define STI_TYPE_HASH_AI 0x293EB447
+typedef struct AI{
+    STI_float32 acc_p; // offset: 0, size: 4
+    STI_float32 acc_i; // offset: 4, size: 4
+    STI_float32 acc_d; // offset: 8, size: 4
+    STI_float32 stop_p; // offset: 12, size: 4
+    STI_float32 stop_i; // offset: 16, size: 4
+    STI_float32 stop_d; // offset: 20, size: 4
+    STI_float32 turn_p; // offset: 24, size: 4
+    STI_float32 turn_i; // offset: 28, size: 4
+    STI_float32 turn_d; // offset: 32, size: 4
+    STI_float32 speed_forward; // offset: 36, size: 4
+    STI_float32 speed_backward; // offset: 40, size: 4
+} AI; // size: 44
+
 #define STI_TYPE_HASH_ForestVertex 0x291C7A90
 typedef struct ForestVertex{
     STI_uint16 Y; // offset: 0, size: 2
     STI_uint8 Slope[2]; // offset: 2, size: 2
 } ForestVertex; // size: 4
+
+#define STI_TYPE_HASH_Value 0x288A448A
+typedef struct Value{
+    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
+    StringHash_48c5294d_4 TypeHash; // offset: 4, size: 4
+    STI_int32 DataInt; // offset: 8, size: 4
+    STI_float32 DataFloat; // offset: 12, size: 4
+    STI_String DataString; // offset: 16, size: 16
+    StringHash_48c5294d_4 DataStringHash; // offset: 24, size: 4
+    STI_float32 DataVector3f[3]; // offset: 28, size: 12
+} Value; // size: 40
+
+#define STI_TYPE_HASH_PlayerSettings 0x27C7BBC4
+typedef struct PlayerSettings{
+    STI_String LocalPlayerExpentity; // offset: 0, size: 16
+    STI_String RemotePlayerExpentity; // offset: 8, size: 16
+    STI_uint8 DisableCharacterCustomization; // offset: 16, size: 1
+    STI_float32 DownedAbandonTime; // offset: 20, size: 4
+    STI_float32 CustomGravity; // offset: 24, size: 4
+    STI_float32 KnockDownForceThreshold; // offset: 28, size: 4
+    AimControlSettings AimControlSettings; // offset: 32, size: 12
+    PlayerHealthSettings PlayerHealthSettings; // offset: 44, size: 164
+    LowHealthScreenEffectSettings LowHealthScreenEffectSettings; // offset: 208, size: 28
+    PlayerMusicSettings PlayerMusicSettings; // offset: 236, size: 68
+    DamageOverTimeEffectSettings DamageOverTimeEffectSettings; // offset: 304, size: 40
+    StorageSettings StorageSettings; // offset: 344, size: 16
+} PlayerSettings; // size: 360
+
+#define STI_TYPE_HASH_WaterInteraction 0x275A6BA5
+typedef struct WaterInteraction{
+    DynamicArray_PartWaterInteractionElement part_elements; // offset: 0, size: 16
+    STI_int32 will_sink; // offset: 16, size: 4
+    STI_float32 angular_drag_pitch; // offset: 20, size: 4
+    STI_float32 angular_drag_yaw; // offset: 24, size: 4
+    STI_float32 angular_drag_roll; // offset: 28, size: 4
+    STI_float32 angular_drag_roll_at_speed; // offset: 32, size: 4
+    STI_float32 angular_drag_ref_speed_kmph; // offset: 36, size: 4
+    STI_float32 drag_falloff_power; // offset: 40, size: 4
+    STI_float32 pressure_drag; // offset: 44, size: 4
+    STI_float32 pressure_drag_2; // offset: 48, size: 4
+    STI_float32 suction_drag; // offset: 52, size: 4
+    STI_float32 suction_drag_2; // offset: 56, size: 4
+    STI_float32 depth_full_drag; // offset: 60, size: 4
+    STI_float32 add_skin_friction_laminar; // offset: 64, size: 4
+    STI_float32 add_skin_friction_turbulent; // offset: 68, size: 4
+    STI_float32 reference_drag_speed_ms; // offset: 72, size: 4
+    STI_float32 anti_penetration_max_accel; // offset: 76, size: 4
+    STI_float32 anti_penetration_multiplier; // offset: 80, size: 4
+    STI_float32 anti_penetration_power; // offset: 84, size: 4
+    STI_float32 depth_full_anti_penetration; // offset: 88, size: 4
+    Spline5 planing_vs_forward_speed_ms; // offset: 92, size: 80
+    Spline5 buoyancy_factor_vs_speed_ms; // offset: 172, size: 80
+    Spline5 flat_water_vs_speed_ms; // offset: 252, size: 80
+} WaterInteraction; // size: 336
+
+#define STI_TYPE_HASH_IKChain 0x2756F437
+typedef struct IKChain{
+    HashString attachment_part; // offset: 0, size: 16
+    STI_int8 attachment_part_index; // offset: 16, size: 1
+    HashString root_part; // offset: 24, size: 16
+    STI_int8 root_part_index; // offset: 40, size: 1
+    HashString mid_part; // offset: 48, size: 16
+    STI_int8 mid_part_index; // offset: 64, size: 1
+    HashString effector_part; // offset: 72, size: 16
+    STI_int8 effector_part_index; // offset: 88, size: 1
+    STI_float32 root_to_mid_length; // offset: 92, size: 4
+    STI_float32 mid_to_effector_length; // offset: 96, size: 4
+} IKChain; // size: 104
+
+#define STI_TYPE_HASH_FinPart 0x26ED2EC9
+typedef struct FinPart{
+    STI_int8 part_index; // offset: 0, size: 1
+} FinPart; // size: 1
+
+#define STI_TYPE_HASH_DofModifierParams 0x25FC54BA
+typedef struct DofModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 FocalDistanceNear; // offset: 4, size: 4
+    STI_float32 FocalDistanceFar; // offset: 8, size: 4
+    STI_float32 MaxDOF; // offset: 12, size: 4
+    STI_float32 MaxDOFNear; // offset: 16, size: 4
+    STI_float32 DOFSmoothness; // offset: 20, size: 4
+    STI_float32 DOFSmoothnessNear; // offset: 24, size: 4
+    STI_float32 DOFHeightFalloff; // offset: 28, size: 4
+} DofModifierParams; // size: 32
+
+#define STI_TYPE_HASH_BikeAI 0x24F557D7
+typedef struct BikeAI{
+    CarAI Input_Settings; // offset: 0, size: 244
+    Spline5 Input_Lean; // offset: 244, size: 80
+    STI_float32 Bike_Lean_Limit; // offset: 324, size: 4
+    STI_float32 Bike_Full_Lean_Angle; // offset: 328, size: 4
+} BikeAI; // size: 332
 
 #define STI_TYPE_HASH_WorldSaveData8 0x2338422B
 typedef struct WorldSaveData8{
@@ -4275,6 +8224,35 @@ typedef struct VegetationWorld{
     ImpostorCollection ImpostorCollection; // offset: 160, size: 16
 } VegetationWorld; // size: 176
 
+#define STI_TYPE_HASH_PartNode 0x2280C3D9
+typedef struct PartNode{
+    STI_String part_name; // offset: 0, size: 16
+    STI_String world_collision_shape_name; // offset: 8, size: 16
+    STI_String raycast_shape_name; // offset: 16, size: 16
+    STI_String mesh_path; // offset: 24, size: 16
+    STI_int32 is_deformable; // offset: 32, size: 4
+    STI_int16 part_index; // offset: 36, size: 2
+    STI_int16 parent_part; // offset: 38, size: 2
+    DynamicArray_STI_int16 child_parts; // offset: 40, size: 16
+} PartNode; // size: 56
+
+#define STI_TYPE_HASH_ExtendedExposedVariables 0x225C9C31
+typedef struct ExtendedExposedVariables{
+    DynamicArray_ExtendedExposedVariable variables; // offset: 0, size: 16
+} ExtendedExposedVariables; // size: 16
+
+#define STI_TYPE_HASH_LocalAngleLimitsModifierParams 0x22364C66
+typedef struct LocalAngleLimitsModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_uint8 DisablePitchLimits; // offset: 1, size: 1
+    STI_float32 PitchLimit[2]; // offset: 4, size: 8
+    STI_float32 PitchLimitSmoothing[2]; // offset: 12, size: 8
+    STI_uint8 DisableYawLimits; // offset: 20, size: 1
+    STI_float32 YawLimit[2]; // offset: 24, size: 8
+    STI_float32 YawLimitSmoothing[2]; // offset: 32, size: 8
+    STI_uint8 UsePlayerCharacterRootPitch; // offset: 40, size: 1
+} LocalAngleLimitsModifierParams; // size: 44
+
 #define STI_TYPE_HASH_WorldAudioVector4 0x21A16FA4
 typedef struct WorldAudioVector4{
     STI_float32 Vec[4]; // offset: 0, size: 16
@@ -4290,6 +8268,51 @@ typedef struct TerrainSystem{
     DynamicArray_TerrainColor TerrainMeanColor; // offset: 104, size: 16
     DynamicArray_ShaderRules ShaderRules; // offset: 120, size: 16
 } TerrainSystem; // size: 136
+
+#define STI_TYPE_HASH_SpeedDependentInputFilter 0x205667BE
+typedef struct SpeedDependentInputFilter{
+    STI_float32 t_to_full_input_min_speed_s; // offset: 0, size: 4
+    STI_float32 t_to_full_input_max_speed_s; // offset: 4, size: 4
+    STI_float32 input_start_speed_kmph; // offset: 8, size: 4
+    STI_float32 input_max_speed_kmph; // offset: 12, size: 4
+    STI_float32 counterinput_speed_factor; // offset: 16, size: 4
+    STI_float32 zeroinput_speed_factor; // offset: 20, size: 4
+    STI_float32 input_speedcurve_falloff; // offset: 24, size: 4
+} SpeedDependentInputFilter; // size: 28
+
+#define STI_TYPE_HASH_HunterMission 0x2021BC4B
+typedef struct HunterMission{
+    STI_int32 Id; // offset: 0, size: 4
+    STI_uint8 Enabled; // offset: 4, size: 1
+    STI_uint8 Required; // offset: 5, size: 1
+    STI_uint8 Visible; // offset: 6, size: 1
+    StringHash_48c5294d_4 Type; // offset: 8, size: 4
+    StringHash_48c5294d_4 Name; // offset: 12, size: 4
+    StringHash_48c5294d_4 NameShort; // offset: 16, size: 4
+    StringHash_48c5294d_4 AchievementId; // offset: 20, size: 4
+    StringHash_99cfa095_6 ActivationEvent; // offset: 24, size: 6
+    StringHash_99cfa095_6 CancelEvent; // offset: 30, size: 6
+    DynamicArray_SpecificEvent SpecificCancelEvents; // offset: 40, size: 16
+    STI_int32 TimeLimit; // offset: 56, size: 4
+    StringHash_48c5294d_4 Summary; // offset: 60, size: 4
+    StringHash_48c5294d_4 Description; // offset: 64, size: 4
+    StringHash_99cfa095_6 Reward; // offset: 68, size: 6
+    DynamicArray_StringHash_48c5294d_4 Locations; // offset: 80, size: 16
+    DynamicArray_StringHash_48c5294d_4 Regions; // offset: 96, size: 16
+    STI_uint64 WarboardRegion; // offset: 112, size: 8
+    StringHash_48c5294d_4 WarboardSubType; // offset: 120, size: 4
+    STI_String Banner; // offset: 128, size: 16
+    StringHash_48c5294d_4 Character; // offset: 136, size: 4
+    StringHash_48c5294d_4 ContentKey; // offset: 140, size: 4
+    DynamicArray_STI_int32 DependenciesRequired; // offset: 144, size: 16
+    DynamicArray_STI_int32 DependenciesOptional; // offset: 160, size: 16
+    STI_uint32 ContentHash; // offset: 176, size: 4
+    STI_uint8 CarryOver; // offset: 180, size: 1
+    STI_uint8 CanCancelCompleted; // offset: 181, size: 1
+    DynamicArray_HunterMissionObjective Objectives; // offset: 184, size: 16
+    DynamicArray_HunterMissionEvent Events; // offset: 200, size: 16
+    DynamicArray_HunterMissionAttachment Attachments; // offset: 216, size: 16
+} HunterMission; // size: 232
 
 #define STI_TYPE_HASH_ArrayAABB 0x200D0BC9
 typedef struct ArrayAABB{
@@ -4369,6 +8392,13 @@ typedef struct ImpostorVertex{
     STI_float32 Normal[2]; // offset: 16, size: 8
 } ImpostorVertex; // size: 24
 
+#define STI_TYPE_HASH_PositionRotation 0x1CBF3642
+typedef struct PositionRotation{
+    STI_String Bone; // offset: 0, size: 16
+    DataSplines Position; // offset: 8, size: 420
+    DataSplines Rotation; // offset: 428, size: 420
+} PositionRotation; // size: 848
+
 #define STI_TYPE_HASH_PfxBreakablePartInstance 0x1C8E89D6
 typedef struct PfxBreakablePartInstance{
     STI_float32 breakable_space_transform[16]; // offset: 0, size: 64
@@ -4381,6 +8411,12 @@ typedef struct RivalHistory1{
     STI_uint32 Hash; // offset: 0, size: 4
     STI_float32 Age; // offset: 4, size: 4
 } RivalHistory1; // size: 8
+
+#define STI_TYPE_HASH_CarPaintMeshConstants 0x1C363162
+typedef struct CarPaintMeshConstants{
+    uint8 Deformable:1; // offset: 0, size: 1
+    uint8 Skinned:1; // offset: 0, size: 1
+} CarPaintMeshConstants; // size: 1
 
 #define STI_TYPE_HASH_EyeGlossConstants 0x1BAC0639
 typedef struct EyeGlossConstants{
@@ -4427,6 +8463,18 @@ typedef struct ProfileSaveData9{
     STI_uint32 FixVersion; // offset: 152, size: 4
     DynamicArray_AcceptedPolicyPair AcceptedPolicies; // offset: 160, size: 16
 } ProfileSaveData9; // size: 176
+
+#define STI_TYPE_HASH_BalloonSettings 0x19E00E29
+typedef struct BalloonSettings{
+    STI_float32 InflationTime; // offset: 0, size: 4
+    STI_float32 DeflationTime; // offset: 4, size: 4
+    STI_float32 InflateForce; // offset: 8, size: 4
+    STI_float32 FloatForce; // offset: 12, size: 4
+    STI_float32 FloatHeight; // offset: 16, size: 4
+    STI_float32 FloatBounceDuration; // offset: 20, size: 4
+    STI_float32 FloatBounceStrength; // offset: 24, size: 4
+    STI_float32 FloatDriftResistance; // offset: 28, size: 4
+} BalloonSettings; // size: 32
 
 #define STI_TYPE_HASH_AdfShape 0x1964D8AC
 typedef struct AdfShape{
@@ -4498,6 +8546,30 @@ typedef struct ProceduralSpawnList{
     DynamicArray_ProceduralSpawn ProceduralSpawns; // offset: 0, size: 16
 } ProceduralSpawnList; // size: 16
 
+#define STI_TYPE_HASH_VehicleMisc_2 0x1805B2BE
+typedef struct VehicleMisc_2{
+    STI_float32 open_door_duration_s; // offset: 0, size: 4
+    STI_float32 close_door_duration_s; // offset: 4, size: 4
+    DynamicArray_VehicleDoor doors; // offset: 8, size: 16
+    STI_float32 official_top_speed; // offset: 24, size: 4
+    STI_float32 full_nitro_refill_time; // offset: 28, size: 4
+    STI_float32 nitro_refill_min_speed_kph; // offset: 32, size: 4
+    STI_float32 full_nitro_use_time; // offset: 36, size: 4
+    STI_float32 full_nitro_use_time_upgraded; // offset: 40, size: 4
+    STI_float32 turbo_jump_cooldown; // offset: 44, size: 4
+    STI_float32 turbo_jump_cooldown_upgraded; // offset: 48, size: 4
+    STI_float32 max_landing_speed_kmph; // offset: 52, size: 4
+    STI_float32 max_take_off_speed_kmph; // offset: 56, size: 4
+    STI_float32 max_tilt_to_land_deg; // offset: 60, size: 4
+    STI_float32 min_damage_speed_kph; // offset: 64, size: 4
+    STI_float32 max_damage_speed_kph; // offset: 68, size: 4
+    STI_int32 damage_at_min_speed; // offset: 72, size: 4
+    STI_int32 damage_at_max_speed; // offset: 76, size: 4
+    STI_float32 impulse_resistance; // offset: 80, size: 4
+    MotorbikeFuelSettings fuel_settings; // offset: 84, size: 8
+    PatchProvision patch_provision; // offset: 92, size: 80
+} VehicleMisc_2; // size: 176
+
 #define STI_TYPE_HASH_GameDataCollection 0x178842FE
 typedef struct GameDataCollection{
     DynamicArray_GDCFileEntry Files; // offset: 0, size: 16
@@ -4516,11 +8588,68 @@ typedef struct GeneralMeshConstants{
     uint8 IsSkinnedMesh:1; // offset: 4, size: 1
 } GeneralMeshConstants; // size: 8
 
+#define STI_TYPE_HASH_CameraTransitionParams 0x15B9C3D0
+typedef struct CameraTransitionParams{
+    STI_float32 Time; // offset: 0, size: 4
+    STI_float32 FovTimeFractionStart; // offset: 4, size: 4
+    STI_float32 FovTimeFractionEnd; // offset: 8, size: 4
+    STI_uint8 FovAlgorithm; // offset: 12, size: 1
+    STI_float32 DofTimeFractionStart; // offset: 16, size: 4
+    STI_float32 DofTimeFractionEnd; // offset: 20, size: 4
+    STI_uint8 DofAlgorithm; // offset: 24, size: 1
+    STI_float32 MotionBlurTimeFractionStart; // offset: 28, size: 4
+    STI_float32 MotionBlurTimeFractionEnd; // offset: 32, size: 4
+    STI_uint8 MotionBlurAlgorithm; // offset: 36, size: 1
+    STI_float32 TranslationTimeFractionStart; // offset: 40, size: 4
+    STI_float32 TranslationTimeFractionEnd; // offset: 44, size: 4
+    STI_uint8 TranslationAlgorithm; // offset: 48, size: 1
+    STI_float32 RotationTimeFractionStart; // offset: 52, size: 4
+    STI_float32 RotationTimeFractionEnd; // offset: 56, size: 4
+    STI_uint8 RotationAlgorithm; // offset: 60, size: 1
+    STI_uint8 CollisionEnabled; // offset: 61, size: 1
+    STI_float32 CollisionRadius; // offset: 64, size: 4
+    STI_uint8 CollisionMaxIterations; // offset: 68, size: 1
+    STI_uint8 CollisionDrawDebug; // offset: 69, size: 1
+} CameraTransitionParams; // size: 72
+
 #define STI_TYPE_HASH_VariableFloat 0x1513E576
 typedef struct VariableFloat{
     STI_String Name; // offset: 0, size: 16
     STI_float32 Val; // offset: 8, size: 4
 } VariableFloat; // size: 16
+
+#define STI_TYPE_HASH_TrackPlayerModifierParams 0x14FF19DA
+typedef struct TrackPlayerModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 TargetPositionOffset[3]; // offset: 4, size: 12
+    CameraSpring TargetPositionSpring; // offset: 16, size: 12
+} TrackPlayerModifierParams; // size: 28
+
+#define STI_TYPE_HASH_CharacterAimingSettings 0x13DE2B36
+typedef struct CharacterAimingSettings{
+    STI_uint8 DebugDraw; // offset: 0, size: 1
+    PositionRotation OffsetPivot; // offset: 8, size: 848
+    PositionRotation OffsetSpineIk; // offset: 856, size: 848
+    PositionRotation OffsetHeadIk; // offset: 1704, size: 848
+    STI_float32 LeftWeight; // offset: 2552, size: 4
+    STI_float32 RightWeight; // offset: 2556, size: 4
+    STI_float32 UpWeight; // offset: 2560, size: 4
+    STI_float32 DownWeight; // offset: 2564, size: 4
+    STI_float32 AimTimer; // offset: 2568, size: 4
+    STI_float32 NoAimUpMinAngle; // offset: 2572, size: 4
+    STI_float32 NoAimUpMaxAngle; // offset: 2576, size: 4
+    STI_float32 NoAimDownMinAngle; // offset: 2580, size: 4
+    STI_float32 NoAimDownMaxAngle; // offset: 2584, size: 4
+    STI_float32 AimUpMinAngle; // offset: 2588, size: 4
+    STI_float32 AimUpMaxAngle; // offset: 2592, size: 4
+    STI_float32 AimDownMinAngle; // offset: 2596, size: 4
+    STI_float32 AimDownMaxAngle; // offset: 2600, size: 4
+} CharacterAimingSettings; // size: 2608
+
+#define STI_TYPE_HASH_WheelPartProperties 0x132B517B
+typedef struct WheelPartProperties{
+    HashString name; // offset: 0, size: 16
+} WheelPartProperties; // size: 16
 
 #define STI_TYPE_HASH_RegionData 0x12F120D7
 typedef struct RegionData{
@@ -4581,10 +8710,68 @@ typedef struct VehicleData{
     STI_int32 Health; // offset: 8, size: 4
 } VehicleData; // size: 12
 
+#define STI_TYPE_HASH_Rotor 0x0E6B0FEB
+typedef struct Rotor{
+    HashString physics_component_name; // offset: 0, size: 16
+    STI_float32 position[3]; // offset: 16, size: 12
+    STI_float32 axis[3]; // offset: 28, size: 12
+    STI_int32 does_steer; // offset: 40, size: 4
+    STI_float32 rotation_speed; // offset: 44, size: 4
+    STI_float32 torque; // offset: 48, size: 4
+} Rotor; // size: 56
+
+#define STI_TYPE_HASH_WeaponCameraParams 0x0D949B66
+typedef struct WeaponCameraParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    CameraSpring YawSpring; // offset: 4, size: 12
+    CameraSpring PitchSpring; // offset: 16, size: 12
+    STI_uint8 SnapAimEnabled; // offset: 28, size: 1
+} WeaponCameraParams; // size: 32
+
+#define STI_TYPE_HASH_Tire 0x0D6AF4BF
+typedef struct Tire{
+    Spline10 fwd_long_tire_0_sa; // offset: 0, size: 140
+    Spline10 fwd_long_tire_peak_sa; // offset: 140, size: 140
+    Spline10 fwd_long_tire_sat_sa; // offset: 280, size: 140
+    Spline10 brake_long_tire_0_sa; // offset: 420, size: 140
+    Spline10 brake_long_tire_peak_sa; // offset: 560, size: 140
+    Spline10 brake_long_tire_sat_sa; // offset: 700, size: 140
+    Spline10 lat_tire_0_sr; // offset: 840, size: 140
+    Spline10 lat_tire_fwd_peak_sr; // offset: 980, size: 140
+    Spline10 lat_tire_fwd_sat_sr; // offset: 1120, size: 140
+    Spline10 lat_tire_brake_peak_sr; // offset: 1260, size: 140
+    Spline10 lat_tire_brake_sat_sr; // offset: 1400, size: 140
+    STI_float32 fwd_peak_sr; // offset: 1540, size: 4
+    STI_float32 fwd_sat_sr; // offset: 1544, size: 4
+    STI_float32 brake_peak_sr; // offset: 1548, size: 4
+    STI_float32 brake_sat_sr; // offset: 1552, size: 4
+    STI_float32 lat_peak_sa_deg; // offset: 1556, size: 4
+    STI_float32 lat_sat_sa_deg; // offset: 1560, size: 4
+    STI_float32 full_friction_camber_angle_deg; // offset: 1564, size: 4
+    STI_float32 no_friction_camber_angle_deg; // offset: 1568, size: 4
+    STI_float32 wheel_load_responsiveness; // offset: 1572, size: 4
+} Tire; // size: 1576
+
 #define STI_TYPE_HASH_BuildDatas 0x0C41FF13
 typedef struct BuildDatas{
     DynamicArray_BuildData Datas; // offset: 0, size: 16
 } BuildDatas; // size: 16
+
+#define STI_TYPE_HASH_FocusDofModifierParams 0x0C277C94
+typedef struct FocusDofModifierParams{
+    STI_uint8 BypassModifier; // offset: 0, size: 1
+    STI_float32 NearRicoToCamFraction; // offset: 4, size: 4
+    STI_float32 MaxNearFocusDifferential; // offset: 8, size: 4
+    STI_uint8 RespectNearLimitIfNoDirect; // offset: 12, size: 1
+    STI_float32 FarMultiplier; // offset: 16, size: 4
+    STI_float32 MaxFarFocusDifferential; // offset: 20, size: 4
+    STI_uint8 RespectFarLimitIfNoDirect; // offset: 24, size: 1
+    CameraSpring DistanceSpring; // offset: 28, size: 12
+    CameraSpline5 RightStickToMaxDof; // offset: 40, size: 80
+    CameraSpring MoreBlurSpring; // offset: 120, size: 12
+    CameraSpring LessBlurSpring; // offset: 132, size: 12
+    STI_uint8 RespectWeaponOverride; // offset: 144, size: 1
+} FocusDofModifierParams; // size: 148
 
 #define STI_TYPE_HASH_XLSBook 0x0B73315D
 typedef struct XLSBook{
@@ -4609,6 +8796,11 @@ typedef struct HunterMissionVariable{
     STI_String Default; // offset: 56, size: 16
 } HunterMissionVariable; // size: 64
 
+#define STI_TYPE_HASH_PropellerPartProperties 0x0B361CBB
+typedef struct PropellerPartProperties{
+    HashString name; // offset: 0, size: 16
+} PropellerPartProperties; // size: 16
+
 #define STI_TYPE_HASH_RoadGraphEdge 0x0A9F9A09
 typedef struct RoadGraphEdge{
     STI_uint16 NodeA; // offset: 0, size: 2
@@ -4617,6 +8809,11 @@ typedef struct RoadGraphEdge{
     STI_uint16 Flags; // offset: 6, size: 2
 } RoadGraphEdge; // size: 8
 
+#define STI_TYPE_HASH_PropellerPart 0x0A720746
+typedef struct PropellerPart{
+    STI_int8 part_index; // offset: 0, size: 1
+} PropellerPart; // size: 1
+
 #define STI_TYPE_HASH_StrategicResource 0x0A54F135
 typedef struct StrategicResource{
     StrategicResourceType Type; // offset: 0, size: 4
@@ -4624,8 +8821,8 @@ typedef struct StrategicResource{
     STI_float32 Amount; // offset: 8, size: 4
 } StrategicResource; // size: 12
 
-#define STI_TYPE_HASH_HunterMissionAttachment 0x0A4CE1D3
-typedef struct HunterMissionAttachment{
+#define STI_TYPE_HASH_HunterMissionAttachment_2 0x0A4CE1D3
+typedef struct HunterMissionAttachment_2{
     STI_int32 Id; // offset: 0, size: 4
     STI_uint8 ForceActive; // offset: 4, size: 1
     StringHash_48c5294d_4 Name; // offset: 8, size: 4
@@ -4642,7 +8839,7 @@ typedef struct HunterMissionAttachment{
     DynamicArray_STI_int32 DependenciesRequired; // offset: 72, size: 16
     DynamicArray_STI_int32 DependenciesOptional; // offset: 88, size: 16
     STI_uint8 Persist; // offset: 104, size: 1
-} HunterMissionAttachment; // size: 112
+} HunterMissionAttachment_2; // size: 112
 
 #define STI_TYPE_HASH_RivalTerminalOption 0x0A472371
 typedef struct RivalTerminalOption{
@@ -4652,6 +8849,28 @@ typedef struct RivalTerminalOption{
     STI_uint32 CostRequiredAmount; // offset: 12, size: 4
     STI_uint32 CostConsumedAmount; // offset: 16, size: 4
 } RivalTerminalOption; // size: 20
+
+#define STI_TYPE_HASH_DriverLean_2 0x0A44C93E
+typedef struct DriverLean_2{
+    STI_float32 t_to_full_lean_min_speed_s; // offset: 0, size: 4
+    STI_float32 t_to_full_lean_max_speed_s; // offset: 4, size: 4
+    STI_float32 lean_start_speed_kmph; // offset: 8, size: 4
+    STI_float32 lean_max_speed_kmph; // offset: 12, size: 4
+    STI_float32 counterlean_speed_factor; // offset: 16, size: 4
+    STI_float32 zerolean_speed_factor; // offset: 20, size: 4
+    STI_float32 lean_speedcurve_falloff; // offset: 24, size: 4
+    STI_float32 max_lean_angle_deg; // offset: 28, size: 4
+    STI_float32 max_drift_lean_angle_deg; // offset: 32, size: 4
+    STI_float32 drift_factor_lean_power; // offset: 36, size: 4
+    STI_float32 lean_damping; // offset: 40, size: 4
+    STI_float32 lean_ratio_for_max_steer; // offset: 44, size: 4
+    STI_float32 lean_p; // offset: 48, size: 4
+    STI_float32 lean_i; // offset: 52, size: 4
+    STI_float32 lean_d; // offset: 56, size: 4
+    STI_float32 lean_pid_max_output; // offset: 60, size: 4
+    STI_float32 max_lean_extra_damping; // offset: 64, size: 4
+    STI_float32 roll_speed_soft_clamp; // offset: 68, size: 4
+} DriverLean_2; // size: 72
 
 #define STI_TYPE_HASH_GDCFileEntry 0x0A0C56EE
 typedef struct GDCFileEntry{
@@ -4691,6 +8910,19 @@ typedef struct ResourceStorageItem{
     STI_uint32 Amount; // offset: 4, size: 4
 } ResourceStorageItem; // size: 8
 
+#define STI_TYPE_HASH_BoatBuoyancy 0x089F6C32
+typedef struct BoatBuoyancy{
+    STI_float32 base_position[3]; // offset: 0, size: 12
+    STI_float32 base_radius; // offset: 12, size: 4
+    STI_float32 base_buoyancy; // offset: 16, size: 4
+    STI_float32 base_forward_drag; // offset: 20, size: 4
+    STI_float32 base_lateral_drag; // offset: 24, size: 4
+    STI_float32 base_vertical_drag; // offset: 28, size: 4
+    STI_float32 base_air_drag; // offset: 32, size: 4
+    STI_float32 up_velocity_cap; // offset: 36, size: 4
+    DynamicArray_BoatBuoyancyModule buoyancy_modules; // offset: 40, size: 16
+} BoatBuoyancy; // size: 56
+
 #define STI_TYPE_HASH_VegetationIndex 0x083BCB19
 typedef struct VegetationIndex{
     STI_int16 VegetationSetIndex; // offset: 0, size: 2
@@ -4707,6 +8939,19 @@ typedef struct StringLookupDialogueLine{
     StringHash_48c5294d_4 CharacterName; // offset: 32, size: 4
     STI_uint32 Flags; // offset: 36, size: 4
 } StringLookupDialogueLine; // size: 40
+
+#define STI_TYPE_HASH_Connection 0x03CE6E38
+typedef struct Connection{
+    StringHash_48c5294d_4 StartPinHash; // offset: 0, size: 4
+    StringHash_48c5294d_4 EndPinHash; // offset: 4, size: 4
+    STI_uint16 EndNodeId; // offset: 8, size: 2
+} Connection; // size: 12
+
+#define STI_TYPE_HASH_BoatSteering 0x03C3EBDB
+typedef struct BoatSteering{
+    SpeedDependentInputFilter steeringfilter; // offset: 0, size: 28
+    STI_float32 acceleration_smoothing; // offset: 28, size: 4
+} BoatSteering; // size: 32
 
 #define STI_TYPE_HASH_WorldSaveData10 0x032EE90F
 typedef struct WorldSaveData10{
@@ -4734,8 +8979,8 @@ typedef struct WorldSaveData10{
     DynamicArray_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
 } WorldSaveData10; // size: 336
 
-#define STI_TYPE_HASH_HunterMissionObjective 0x02D34CF1
-typedef struct HunterMissionObjective{
+#define STI_TYPE_HASH_HunterMissionObjective_2 0x02D34CF1
+typedef struct HunterMissionObjective_2{
     STI_int32 Id; // offset: 0, size: 4
     STI_uint8 ForceActive; // offset: 4, size: 1
     STI_uint8 Enabled; // offset: 5, size: 1
@@ -4762,15 +9007,23 @@ typedef struct HunterMissionObjective{
     DynamicArray_STI_int32 DependenciesOptional; // offset: 96, size: 16
     HunterMissionRulesGroup Conditions; // offset: 112, size: 24
     StringHash_99cfa095_6 ForceCompleteEvent; // offset: 136, size: 6
-} HunterMissionObjective; // size: 144
+} HunterMissionObjective_2; // size: 144
+
+#define STI_TYPE_HASH_WheelPart 0x01DB7089
+typedef struct WheelPart{
+    STI_int8 part_index; // offset: 0, size: 1
+    STI_int8 wheel_slot; // offset: 1, size: 1
+    STI_int8 number_of_spokes; // offset: 2, size: 1
+    STI_int8 spins; // offset: 3, size: 1
+} WheelPart; // size: 4
 
 #define STI_TYPE_HASH_WarSaveData1 0x0135C0D8
 typedef struct WarSaveData1{
     WarSeason1 CurrentSeason; // offset: 0, size: 48
 } WarSaveData1; // size: 48
 
-extern const char*  STI_ADF_TYPES_hash_strings_string[18841];
+extern const char*  STI_ADF_TYPES_hash_strings_string[39406];
 
-extern const uint64 STI_ADF_TYPES_hash_strings_hash[18841];
+extern const uint64 STI_ADF_TYPES_hash_strings_hash[39406];
 
 #endif //ADF_TYPES_GUARD

@@ -13,7 +13,7 @@
 #include "apex/adf/adf_types.h"
 #include "apex/aaf/aaf.h"
 #include "apex/package/tab_archive.h"
-#include "apex/package/archives.h"
+#include "platform/archive_manager.h"
 #include "utils/string.h"
 #include "utils/path.h"
 #include "utils/buffer/buffer.h"
@@ -129,9 +129,10 @@ float32 lod_offsets[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 4.5f, 24.f, 96.f, 384.f};
 
 #pragma pack(pop)
 
-void export_file(Archives *archives, STI_TypeLibrary *lib, const String *path, uint32 hash, const String *export_path);
+void export_file(ArchiveManager *archive_manager, STI_TypeLibrary *lib, const String *path, uint32 hash,
+                 const String *export_path);
 
-void export_adf_file(GlTFContext *context, Archives *archives, STI_TypeLibrary *lib, uint32 path_hash,
+void export_adf_file(GlTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, uint32 path_hash,
                      const String *path, MemoryBuffer *mb,
                      const String *export_path);
 
@@ -368,7 +369,8 @@ void export_terrain_patch(String *export_path, TerrainPatch *patch, uint32 x, ui
     String_free(&tile_export_path);
 }
 
-void export_amf_mesh(GlTFContext *context, Archives *ars, STI_TypeLibrary *lib, String *export_path, uint32 path_hash,
+void export_amf_mesh(GlTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, String *export_path,
+                     uint32 path_hash,
                      const String *path, AmfMeshHeader *header, AmfMeshBuffers *mesh_buffers) {
     GlTFContext local_context = {0};
     if (context == NULL) {
@@ -393,18 +395,20 @@ void export_amf_mesh(GlTFContext *context, Archives *ars, STI_TypeLibrary *lib, 
             String hi_res_path = {0};
 
             String_from_cstr(&hi_res_path, String_data(hi_res_path_full) + strlen("intermediate/"));
-            Archives_find_path(ars, &hi_res_path, &hi_res_buffer);
-            ADF hi_res_adf = {0};
-            ADF_from_buffer(&hi_res_adf, (Buffer *) &hi_res_buffer, lib);
-            ADFInstance *instance = ADF_get_instance(&hi_res_adf, 0);
-            if (instance->type_hash == STI_TYPE_HASH_AmfMeshBuffers) {
-                hi_res_buffers = ADF_read_instance(&hi_res_adf, lib, instance, &hi_res_buffer);
-                hi_res_free_fn = ((STI_ObjectMethods *) DM_get(&lib->object_functions, instance->type_hash))->free;
+            if (ArchiveManager_get_file(archive_manager, &hi_res_path, &hi_res_buffer)) {
+                ADF hi_res_adf = {0};
+                ADF_from_buffer(&hi_res_adf, (Buffer *) &hi_res_buffer, lib);
+                ADFInstance *instance = ADF_get_instance(&hi_res_adf, 0);
+                if (instance->type_hash == STI_TYPE_HASH_AmfMeshBuffers) {
+                    hi_res_buffers = ADF_read_instance(&hi_res_adf, lib, instance, &hi_res_buffer);
+                    hi_res_free_fn = ((STI_ObjectMethods *) DM_get(&lib->object_functions, instance->type_hash))->free;
+                }
+                ADF_free(&hi_res_adf);
+                String_free(&hi_res_path);
+                hi_res_buffer.close(&hi_res_buffer);
             }
-            ADF_free(&hi_res_adf);
-            String_free(&hi_res_path);
         }
-        hi_res_buffer.close(&hi_res_buffer);
+
     }
 
     for (int i = 0; i < mesh_buffers->VertexBuffers.count; ++i) {
@@ -450,6 +454,10 @@ void export_amf_mesh(GlTFContext *context, Archives *ars, STI_TypeLibrary *lib, 
             String *mesh_type_name = DM_get(&lib->hash_strings, mesh->MeshTypeId);
             uint32 vertex_count = mesh->VertexCount;
             uint32 index_buffer_index = mesh->IndexBufferIndex;
+            if (index_buffer_index>all_index_buffer.count) {
+                continue;
+            }
+
             uint32 index_buffer_stride = mesh->IndexBufferStride;
             uint32 index_buffer_offset = mesh->IndexBufferOffset;
             DynamicArray_STI_uint8 *vertex_buffer_indices = &mesh->VertexBufferIndices;
@@ -669,7 +677,7 @@ void export_amf_mesh(GlTFContext *context, Archives *ars, STI_TypeLibrary *lib, 
 }
 
 
-void export_export_amf_model(Archives *archives, STI_TypeLibrary *lib, AmfModel *amf_model,
+void export_export_amf_model(ArchiveManager *archive_manager, STI_TypeLibrary *lib, AmfModel *amf_model,
                              const String *path, const String *export_path) {
     String model_export_path = {};
     String model_without_ext = {};
@@ -689,7 +697,7 @@ void export_export_amf_model(Archives *archives, STI_TypeLibrary *lib, AmfModel 
             if (tex_path->size == 0) {
                 break;
             }
-            export_file(archives, lib, tex_path, path_hash(tex_path), export_path);
+            export_file(archive_manager, lib, tex_path, path_hash(tex_path), export_path);
         }
     }
 
@@ -697,17 +705,17 @@ void export_export_amf_model(Archives *archives, STI_TypeLibrary *lib, AmfModel 
 
 
     MemoryBuffer mb = {0};
-    if (!Archives_find_hash(archives, path_hash(mesh_path), &mb)) {
+    if (!ArchiveManager_get_file(archive_manager, mesh_path, &mb)) {
         printf("File not found\n");
         return;
     }
 
-    export_adf_file(&context, archives, lib, path_hash(mesh_path), mesh_path, &mb, export_path);
+    export_adf_file(&context, archive_manager, lib, path_hash(mesh_path), mesh_path, &mb, export_path);
 
     mb.close(&mb);
 }
 
-void export_adf_file(GlTFContext *context, Archives *archives, STI_TypeLibrary *lib,
+void export_adf_file(GlTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
                      uint32 path_hash, const String *path, MemoryBuffer *mb,
                      const String *export_path) {
     ADF adf = {0};
@@ -732,7 +740,7 @@ void export_adf_file(GlTFContext *context, Archives *archives, STI_TypeLibrary *
             export_terrain_patch(&mesh_export_path, instance_data, tile_x, tile_y, lod);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfModel) {
             ADF_print_instance(lib, instance, instance_data, 0);
-            export_export_amf_model(archives, lib, instance_data, path, export_path);
+            export_export_amf_model(archive_manager, lib, instance_data, path, export_path);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfMeshHeader) {
             instanceId++;
             ADFInstance *mesh_buffers_instance = DA_at(&adf.instances, instanceId);
@@ -741,10 +749,21 @@ void export_adf_file(GlTFContext *context, Archives *archives, STI_TypeLibrary *
             ADF_print_instance(lib, instance, instance_data, 0);
             ADF_print_instance(lib, mesh_buffers_instance, mesh_buffers, 0);
 
-            export_amf_mesh(context, archives, lib, &mesh_export_path, path_hash, path, instance_data, mesh_buffers);
+            export_amf_mesh(context, archive_manager, lib, &mesh_export_path, path_hash, path, instance_data,
+                            mesh_buffers);
             ADF_free_instance(lib, mesh_buffers_instance, mesh_buffers);
         } else {
+            String unk_file_export_path = {};
+            String unk_file_without_ext = {};
+            Path_remove_extension(path, &unk_file_without_ext);
+            Path_join(&unk_file_export_path, export_path);
+            Path_join(&unk_file_export_path, &unk_file_without_ext);
+            Path_ensure_parent_dirs(&unk_file_export_path);
+            FILE* f = fopen(String_data(&unk_file_export_path), "wb");
+            fwrite(mb->data+instance->offset, 1, instance->size, f);
+            fclose(f);
             ADF_print_instance(lib, instance, instance_data, 0);
+
         }
         ADF_free_instance(lib, instance, instance_data);
     }
@@ -753,7 +772,8 @@ void export_adf_file(GlTFContext *context, Archives *archives, STI_TypeLibrary *
     String_free(&mesh_export_path);
 }
 
-void export_ddsc(Archives *archives, STI_TypeLibrary *lib, uint32 hash, MemoryBuffer *mb, const String *path,
+void export_ddsc(ArchiveManager *archive_manager, STI_TypeLibrary *lib, uint32 hash, MemoryBuffer *mb,
+                 const String *path,
                  const String *export_path) {
     Texture tex = {0};
 
@@ -775,12 +795,12 @@ void export_ddsc(Archives *archives, STI_TypeLibrary *lib, uint32 hash, MemoryBu
         for (int i = 5; i > 0; --i) {
             Path_remove_extension(path, &atx_path);
             String_append_format(&atx_path, ".atx%i", i);
-            if (Archives_has_path(archives, &atx_path)) {
+            if (ArchiveManager_has_file(archive_manager, &atx_path)) {
                 break;
             }
         }
         MemoryBuffer atx_buffer = {0};
-        Archives_find_path(archives, &atx_path, &atx_buffer);
+        ArchiveManager_get_file(archive_manager, &atx_path, &atx_buffer);
 
         const int64 largest_mip_size = Texture_calculate_mip_size(0, header.width, header.height, header.format);
         atx_buffer.set_position(&atx_buffer, -largest_mip_size, BUFFER_ORIGIN_END);
@@ -819,33 +839,35 @@ void export_ddsc(Archives *archives, STI_TypeLibrary *lib, uint32 hash, MemoryBu
     Texture_free(&tex);
 }
 
-void export_file(Archives *archives, STI_TypeLibrary *lib, const String *path, uint32 hash, const String *export_path) {
+void export_file(ArchiveManager *archive_manager, STI_TypeLibrary *lib, const String *path, uint32 hash,
+                 const String *export_path) {
     MemoryBuffer mb = {0};
-    if (!Archives_find_hash(archives, hash, &mb)) {
+    if (!ArchiveManager_get_file_by_hash(archive_manager, hash, &mb)) {
         printf("File not found\n");
         return;
     }
 
     if (mb.data[0] == ' ' && mb.data[1] == 'F' && mb.data[2] == 'D' && mb.data[3] == 'A') {
-        export_adf_file(NULL, archives, lib, hash, path, &mb, export_path);
+        export_adf_file(NULL, archive_manager, lib, hash, path, &mb, export_path);
     } else if (mb.data[0] == 'A' && mb.data[1] == 'A' && mb.data[2] == 'F' && mb.data[3] == '\0') {
-        AAFArchive aaf_archive={0};
+        AAFArchive aaf_archive = {0};
         AAFArchive_from_buffer(&aaf_archive, (Buffer *) &mb);
-        MemoryBuffer section_buffer = {0};
-        if (!AAFArchive_get_section(&aaf_archive, 0, &section_buffer)) {
+        MemoryBuffer *section_buffer = MemoryBuffer_new();
+        if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
             printf("[ERROR]: Failed to get AAF section 0\n");
             return;
         }
-        SArchive sarc={0};
-        SArchive_from_buffer(&sarc, (Buffer*)&section_buffer);
 
-        SArchive_free(&sarc);
+        SArchive *sarc = SArchive_new((Buffer *) section_buffer); // sarc is now owner of buffer
+        ArchiveManager_add(archive_manager, (Archive *) sarc);
+        Archive_print_files((Archive *) sarc);
+        MemoryBuffer *tmp = MemoryBuffer_new();
+        ArchiveManager_get_file(archive_manager, String_new_from_cstr("animations/ragdoll/hunter_hitreact.brd"), tmp);
+
+
         AAFArchive_free(&aaf_archive);
-        section_buffer.close(&section_buffer);
-
-        printf("[WARNING]: AAF files not supported yet\n");
     } else if (mb.data[0] == 'A' && mb.data[1] == 'V' && mb.data[2] == 'T' && mb.data[3] == 'X') {
-        export_ddsc(archives, lib, hash, &mb, path, export_path);
+        export_ddsc(archive_manager, lib, hash, &mb, path, export_path);
     }
     mb.close(&mb);
 }
@@ -855,6 +877,9 @@ int main(int argc, const char *argv[]) {
         printf("USAGE: %s <path_to_game_root>\n", argv[0]);
         return 0;
     }
+    ArchiveManager manager = {0};
+    ArchiveManager_init(&manager);
+
     STI_TypeLibrary lib = {0};
     STI_TypeLibrary_init(&lib);
     STI_ADF_TYPES_register_functions(&lib);
@@ -864,16 +889,17 @@ int main(int argc, const char *argv[]) {
     String ar_path = {0};
     String game_root = {0};
     String_from_cstr(&tmp, argv[1]);
-    Archives ars = {0};
     Path_convert_to_wsl(&game_root, &tmp);
-    Archives_init(&ars, &game_root);
+    TabArchives_init(&manager, &game_root);
     String export_path = {};
     String_from_cstr(&export_path, "../exported");
     String file_path = {};
     String_from_cstr(&file_path, "editor/entities/characters/machines/hunter/hunt_classa_load01.ee");
-    export_file(&ars, &lib, &file_path, path_hash(&file_path), &export_path);
+    export_file(&manager, &lib, &file_path, path_hash(&file_path), &export_path);
+    String_from_cstr(&file_path, "graphs/enemy_set_faction.graphc");
+    export_file(&manager, &lib, &file_path, path_hash(&file_path), &export_path);
 
-    Archives_free(&ars);
+    ArchiveManager_free(&manager);
     STI_TypeLibrary_free(&lib);
     String_free(&ar_path);
     String_free(&tmp);

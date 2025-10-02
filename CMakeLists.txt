@@ -25,15 +25,11 @@ add_executable(ApexPredator
         src/utils/common.c
         src/apex/adf/adf_types.c
         src/utils/gltf/cgltf_helper.c
-        src/apex/package/archives.c
         src/apex/avtx.c
         src/platform/texture.c
-        include/apex/avtx.h
         src/apex/aaf/aaf.c
-        include/apex/aaf/aaf.h
         src/utils/zlib_wrapper.c
         src/apex/sarc.c
-        include/apex/sarc.h
         src/platform/archive.c
         src/platform/archive_manager.c
 )
@@ -52,6 +48,11 @@ add_executable(TypeGenerator
         src/utils/dynamic_insert_only_map.c
         src/utils/path.c
         src/utils/common.c
+        src/platform/archive.c
+        src/platform/archive_manager.c
+        src/apex/aaf/aaf.c
+        src/utils/zlib_wrapper.c
+        src/apex/sarc.c
 )
 add_executable(HashCollector
         src/hash_collector.c
@@ -67,7 +68,6 @@ add_executable(HashCollector
         src/utils/dynamic_insert_only_map.c
         src/utils/path.c
         src/utils/common.c
-        src/apex/package/archives.c
 )
 
 if(UNIX)
@@ -81,3 +81,4 @@ target_include_directories(TypeGenerator PUBLIC include external/zlib)
 target_include_directories(HashCollector PUBLIC include external/zlib)
 
 target_link_libraries(ApexPredator PUBLIC libzstd zlibstatic)
+target_link_libraries(TypeGenerator PUBLIC zlibstatic)

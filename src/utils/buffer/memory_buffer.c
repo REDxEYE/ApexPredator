@@ -78,6 +78,9 @@ static BufferError MemoryBuffer__close(MemoryBuffer *fb) {
     fb->size = 0;
     fb->capacity = 0;
     fb->position = 0;
+    if (fb->heap_allocated) {
+        free(fb);
+    }
     return BUFFER_SUCCESS;
 }
 
@@ -95,6 +98,18 @@ BufferError MemoryBuffer__init(MemoryBuffer* mb) {
     mb->getsize = (BufferGetSizeFn) MemoryBuffer__get_size;
     mb->close = (BufferCloseFn) MemoryBuffer__close;
     return BUFFER_SUCCESS;
+}
+
+MemoryBuffer * MemoryBuffer_new() {
+    MemoryBuffer *mb = malloc(sizeof(MemoryBuffer));
+    if (!mb) {
+        printf("[ERROR]: Out of memory\n");
+        exit(1);
+    }
+    memset(mb, 0, sizeof(MemoryBuffer));
+    MemoryBuffer__init(mb);
+    mb->heap_allocated = 1;
+    return mb;
 }
 
 BufferError MemoryBuffer_allocate(MemoryBuffer *mb, int64 size) {

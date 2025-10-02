@@ -237,6 +237,10 @@ void STI_get_type_name(STI_TypeLibrary *lib, STI_Type *type, String *type_name) 
                     String_from_cstr(type_name, "StringHash_99cfa095_6");
                     break;
                 }
+                case 0x18db7671: {
+                    String_from_cstr(type_name, "StringHash_48c5294d_8");
+                    break;
+                }
                 default: {
                     printf("Unknown string hash size %i\n", type->type);
                     assert(false && "Unknown string hash size");

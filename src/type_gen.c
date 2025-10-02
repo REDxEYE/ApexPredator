@@ -1,8 +1,9 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 
+#include "apex/sarc.h"
+#include "apex/aaf/aaf.h"
 #include "utils/dynamic_array.h"
 #include "utils/string.h"
 #include "utils/path.h"
@@ -13,105 +14,7 @@
 #include "apex/package/tab_archive.h"
 #include "apex/adf/builtin_adf.h"
 
-
-typedef struct {
-    uint32 hash;
-    String archive_name;
-    String file_name;
-} TabToArch;
-
-DYNAMIC_ARRAY_STRUCT(TabToArch, TabToArch);
-
-DynamicArray_TabToArch all_entries;
-
-#ifdef WIN32
-#include <Windows.h>
-
-void find_tab_files(const char *dir, DynamicArray_String *tab_files) {
-    char search_path[MAX_PATH];
-    snprintf(search_path, MAX_PATH, "%s\\*", dir);
-
-    WIN32_FIND_DATAA fd;
-    HANDLE hFind = FindFirstFileA(search_path, &fd);
-    if (hFind == INVALID_HANDLE_VALUE) return;
-
-    do {
-        if (strcmp(fd.cFileName, ".") == 0 || strcmp(fd.cFileName, "..") == 0) continue;
-
-        char full_path[MAX_PATH];
-        snprintf(full_path, MAX_PATH, "%s\\%s", dir, fd.cFileName);
-
-        if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-            find_tab_files(full_path, tab_files);
-        } else {
-            const char *ext = strrchr(fd.cFileName, '.');
-            if (ext && strcmp(ext, ".tab") == 0) {
-                String *tmp = DA_append_get(tab_files);
-                String_from_cstr(tmp, full_path);
-            }
-        }
-    } while (FindNextFileA(hFind, &fd));
-    FindClose(hFind);
-}
-
-#else
-#include <dirent.h>
-#include <sys/stat.h>
-#include <limits.h>
-#include <string.h>
-#include <stdio.h>
-
-static int is_dir_path(const char *fullpath, const struct dirent *ent) {
-
-
-
-// Use d_type if available and reliable; otherwise lstat
-#ifdef DT_DIR
-if (ent&& ent->d_type!= DT_UNKNOWN) {
-        return ent->d_type == DT_DIR;
-    }
-#endif
-struct stat st;
-    if (lstat(fullpath, &st)== 0) {
-        return S_ISDIR(st.st_mode);
-    }
-    return 0;
-}
-
-void find_tab_files(const char *dir, DynamicArray_String *tab_files) {
-    DIR *d = opendir(dir);
-    if (!d) return;
-
-    struct dirent *ent;
-    char full_path[PATH_MAX];
-
-    while ((ent = readdir(d)) != NULL) {
-        const char *name = ent->d_name;
-
-        if (name[0] == '.' && (name[1] == '\0' || (name[1] == '.' && name[2] == '\0')))
-            continue;
-
-        int n = snprintf(full_path, sizeof full_path, "%s/%s", dir, name);
-        if (n < 0 || (size_t) n >= sizeof full_path)
-            continue; // path too long, skip
-
-        if (is_dir_path(full_path, ent)) {
-            find_tab_files(full_path, tab_files);
-        } else {
-            const char *ext = strrchr(name, '.');
-            if (ext && strcmp(ext, ".tab") == 0) {
-                String_from_cstr(DA_append_get(tab_files), full_path);
-
-            }
-        }
-    }
-    closedir(d);
-}
-
-#endif
-
-void collect_types(DynamicArray_String *all_tabs, STI_TypeLibrary* lib) {
-    TabArchive ar = {0};
+void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
     ADF adf = {0};
     STI_start_type_dump(lib);
     ADF_load_builtin_adf(lib, VEGETATIONINFO_ADF, sizeof(VEGETATIONINFO_ADF));
@@ -140,32 +43,68 @@ void collect_types(DynamicArray_String *all_tabs, STI_TypeLibrary* lib) {
     ADF_load_builtin_adf(lib, AI_TUNING_ADF_TYPE_MEMORY, sizeof(AI_TUNING_ADF_TYPE_MEMORY));
     ADF_load_builtin_adf(lib, SPLINES_ADF_TYPE_MEMORY_1, sizeof(SPLINES_ADF_TYPE_MEMORY_1));
     ADF_load_builtin_adf(lib, AISYS_TUNING_ADF_TYPE_MEMORY, sizeof(AISYS_TUNING_ADF_TYPE_MEMORY));
-    ADF_load_builtin_adf(lib, TERRAINSYSTEMTYPES_ADF_TYPE_LIBRARY_INFO, sizeof(TERRAINSYSTEMTYPES_ADF_TYPE_LIBRARY_INFO));
+    ADF_load_builtin_adf(lib, TERRAINSYSTEMTYPES_ADF_TYPE_LIBRARY_INFO,
+                         sizeof(TERRAINSYSTEMTYPES_ADF_TYPE_LIBRARY_INFO));
     ADF_load_builtin_adf(lib, TERRAINSYSTEM_ADF_TYPE_LIBRARY_INFO, sizeof(TERRAINSYSTEM_ADF_TYPE_LIBRARY_INFO));
     ADF_load_builtin_adf(lib, MODEL_ADF_TYPE_MEMORY_0, sizeof(MODEL_ADF_TYPE_MEMORY_0));
     ADF_load_builtin_adf(lib, RUNTIME_EFFECT_LIBRARY, sizeof(RUNTIME_EFFECT_LIBRARY));
     ADF_load_builtin_adf(lib, PFX_ADF_TYPE_MEMORY, sizeof(PFX_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, GRAPH_ADF_TYPE_MEMORY, sizeof(GRAPH_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, EXP_PROB_ADF_TYPE_MEMORY, sizeof(EXP_PROB_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, VEHICLEPHYSICSSETTINGS_ADF_TYPE_MEMORY, sizeof(VEHICLEPHYSICSSETTINGS_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, VEHICLEPIPELINE_ADF_TYPE_MEMORY, sizeof(VEHICLEPIPELINE_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, PERCEPTION_ADF_TYPE_MEMORY, sizeof(PERCEPTION_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, WATERTUNE_ADF_TYPE_MEMORY, sizeof(WATERTUNE_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, PLAYER_SETTINGS_ADF_TYPE_MEMORY, sizeof(PLAYER_SETTINGS_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, AMMO_TUNING_ADF_TYPE_MEMORY, sizeof(AMMO_TUNING_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, CUSTOM_MOVEMENT_TUNING_ADF_TYPE_MEMORY, sizeof(CUSTOM_MOVEMENT_TUNING_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, CAMERA_TUNING_ADF_TYPE_MEMORY, sizeof(CAMERA_TUNING_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, CHAINTUNE_ADF_TYPE_MEMORY, sizeof(CHAINTUNE_ADF_TYPE_MEMORY));
+    ADF_load_builtin_adf(lib, HP_MISSIONS_ADF_TYPE_MEMORY, sizeof(HP_MISSIONS_ADF_TYPE_MEMORY));
 
-    for (int i = 0; i < all_tabs->count; ++i) {
-        String *tab_path = DA_at(all_tabs, i);
-        printf("Processing types from %s\n", String_data(tab_path));
-        TabArchive_open(&ar, tab_path);
-
-        for (int i = 0; i < ar.entries.count; ++i) {
-            TabEntry *entry = DA_at(&ar.entries, i);
-            MemoryBuffer mb = {0};
-            if (!TabArchive_get_data(&ar, entry->hash, &mb)) {
-                printf("File not found\n");
-                continue;
-            }
-            if (mb.data[0] == ' ' && mb.data[1] == 'F' && mb.data[2] == 'D' && mb.data[3] == 'A') {
-                ADF_from_buffer(&adf, (Buffer *) &mb, lib);
-                ADF_free(&adf);
-            }
-            mb.close(&mb);
+    DynamicArray_ArchiveEntry all_entries = {0};
+    ArchiveManager_get_all_entries(archive_manager, &all_entries);
+    for (int i = 0; i < all_entries.count; ++i) {
+        ArchiveEntry *entry = DA_at(&all_entries, i);
+        MemoryBuffer mb = {0};
+        if (!ArchiveManager_get_file_by_hash(archive_manager, entry->path_hash, &mb)) {
+            printf("File not found\n");
+            return;
         }
 
-        TabArchive_free(&ar);
+        if (mb.data[0] == ' ' && mb.data[1] == 'F' && mb.data[2] == 'D' && mb.data[3] == 'A') {
+            ADF_from_buffer(&adf, (Buffer *) &mb, lib);
+        } else if (mb.data[0] == 'A' && mb.data[1] == 'A' && mb.data[2] == 'F' && mb.data[3] == '\0') {
+            AAFArchive aaf_archive = {0};
+            AAFArchive_from_buffer(&aaf_archive, (Buffer *) &mb);
+            MemoryBuffer *section_buffer = MemoryBuffer_new();
+            if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
+                printf("[ERROR]: Failed to get AAF section %i\n", i);
+                return;
+            }
+            if (section_buffer->data[4] == 'S' && section_buffer->data[5] == 'A' &&
+                section_buffer->data[6] == 'R' && section_buffer->data[7] == 'C') {
+                SArchive *sarc = SArchive_new((Buffer *) section_buffer); // sarc is now owner of buffer
+                DynamicArray_ArchiveEntry sarc_entries = {0};
+                DA_init(&sarc_entries, ArchiveEntry, 16);
+                Archive_get_all_entries((Archive *) sarc, &sarc_entries);
+                for (int j = 0; j < sarc_entries.count; ++j) {
+                    ArchiveEntry *aaf_entry = DA_at(&sarc_entries, j);
+                    MemoryBuffer *tmp = MemoryBuffer_new();
+                    if (Archive_get_file((Archive*)sarc, aaf_entry->path, tmp)) {
+                        if (tmp->data[0] == ' ' && tmp->data[1] == 'F' && tmp->data[2] == 'D' && tmp->data[3] == 'A') {
+                            ADF_from_buffer(&adf, (Buffer *) tmp, lib);
+                            ADF_free(&adf);
+                        }
+                    }
+                    tmp->close(tmp);
+                }
+                DA_free(&sarc_entries);
+                Archive_free((Archive*)sarc);
+            }
+            AAFArchive_free(&aaf_archive);
+        }
+        mb.close(&mb);
     }
 
     String namespace = {0};
@@ -206,18 +145,18 @@ int main(int argc, const char *argv[]) {
     String tmp = {0};
     String game_root = {0};
     STI_TypeLibrary_init(&lib);
-    DynamicArray_String all_tabs;
-    DA_init(&all_tabs, String, 64);
+
+    ArchiveManager manager = {0};
+    ArchiveManager_init(&manager);
 
     String_from_cstr(&tmp, argv[1]);
     Path_convert_to_wsl(&game_root, &tmp);
-    find_tab_files(String_data(&game_root), &all_tabs);
+    TabArchives_init(&manager, &game_root);
+    collect_types(&manager, &lib);
 
-    collect_types(&all_tabs, &lib);
-
+    ArchiveManager_free(&manager);
     STI_TypeLibrary_free(&lib);
     String_free(&game_root);
     String_free(&tmp);
-    DA_free_with_inner(&all_tabs, {String_free(it);});
     return 0;
 }

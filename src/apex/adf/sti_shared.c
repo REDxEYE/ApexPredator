@@ -38,6 +38,10 @@ bool read_StringHash_99cfa095_6(Buffer *buffer, STI_TypeLibrary *lib, StringHash
     return buffer->read(buffer, out, 6, NULL) == BUFFER_SUCCESS;
 }
 
+bool read_StringHash_48c5294d_8(Buffer *buffer, STI_TypeLibrary *lib, StringHash_48c5294d_8 *out) {
+    return buffer->read_uint64(buffer, out) == BUFFER_SUCCESS;
+}
+
 bool read_STI_int64(Buffer *buffer, STI_TypeLibrary *lib, STI_int64 *out) {
     return buffer->read_int64(buffer, out) == BUFFER_SUCCESS;
 }
@@ -147,6 +151,15 @@ void print_StringHash_99cfa095_6(const StringHash_99cfa095_6 *obj, STI_TypeLibra
         fprintf(handle, "\"%s\" (0x%016lX)", String_data(string), (uint64)*obj);
     } else {
         fprintf(handle, "0x%016lX", (uint64)*obj);
+    }
+}
+
+void print_StringHash_48c5294d_8(const StringHash_48c5294d_8 *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent) {
+    String *string = DM_get(&lib->hash_strings, *obj);
+    if (string != NULL) {
+        fprintf(handle, "\"%s\"  (0x%016lX)", String_data(string), *obj);
+    } else {
+        fprintf(handle, "0x%016llX", (unsigned long long)*obj);
     }
 }
 
