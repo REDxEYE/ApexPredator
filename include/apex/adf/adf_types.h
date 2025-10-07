@@ -9022,8 +9022,8 @@ typedef struct WarSaveData1{
     WarSeason1 CurrentSeason; // offset: 0, size: 48
 } WarSaveData1; // size: 48
 
-extern const char*  STI_ADF_TYPES_hash_strings_string[39406];
+extern const char*  STI_ADF_TYPES_hash_strings_string[39423];
 
-extern const uint64 STI_ADF_TYPES_hash_strings_hash[39406];
+extern const uint64 STI_ADF_TYPES_hash_strings_hash[39423];
 
 #endif //ADF_TYPES_GUARD

@@ -6,6 +6,8 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include "utils/hash_helper.h"
+
 bool TabArchive__has_file(const TabArchive *ar, const String *path);
 
 bool TabArchive__has_file_by_hash(const TabArchive *ar, uint32 hash);
@@ -93,7 +95,7 @@ const TabEntry *Archive__find_entry(const TabArchive *ar, uint32 hash) {
 }
 
 bool TabArchive__get_file(TabArchive *ar, const String *path, MemoryBuffer *mb) {
-    uint32 hash = path_hash(path);
+    uint32 hash = hash_string(path);
     return TabArchive__get_file_by_hash(ar, hash, mb);
 }
 
@@ -125,7 +127,7 @@ bool TabArchive__get_file_by_hash(TabArchive *ar, uint32 key, MemoryBuffer *mb) 
 }
 
 bool TabArchive__has_file(const TabArchive *ar, const String *path) {
-    uint32 hash = path_hash(path);
+    uint32 hash = hash_string(path);
     return DM_get(&ar->entries, hash) != NULL;
 }
 

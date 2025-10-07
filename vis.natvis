@@ -2,22 +2,12 @@
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
     <Type Name="String">
-        <DisplayString>{((capacity &lt;= sizeof(embeddedBuffer)) ? (char*)embeddedBuffer : buffer),s}</DisplayString>
+        <DisplayString>{(buffer),s}</DisplayString>
         <Expand>
             <Item Name="size">size</Item>
             <Item Name="capacity">capacity</Item>
-
-            <!-- Where the data lives -->
-            <Item Name="data (embedded)" Condition="capacity &lt;= sizeof(embeddedBuffer)">
-                (void*)embeddedBuffer
-            </Item>
-            <Item Name="data (heap)" Condition="capacity &gt; sizeof(embeddedBuffer)">
-                (void*)buffer
-            </Item>
-
-            <!-- Best-effort: prints as C-string if NUL-terminated -->
             <Item Name="text (nul-terminated only)">
-                ((capacity &lt;= sizeof(embeddedBuffer)) ? (char*)embeddedBuffer : buffer),s
+                (buffer),s
             </Item>
         </Expand>
     </Type>
@@ -51,6 +41,8 @@
         <AlternativeType Name="DynamicArray_SArcEntry"/>
         <AlternativeType Name="DynamicArray_ArchivePtr"/>
         <AlternativeType Name="DynamicArray_AAFSection"/>
+        <AlternativeType Name="DynamicArray_RuntimeProp"/>
+        <AlternativeType Name="DynamicArray_RuntimeNode"/>
         <DisplayString>{{size={count}, cap={capacity}}}</DisplayString>
         <Expand>
             <Item Name="size">count</Item>
@@ -66,5 +58,57 @@
             <Item Name="[null]" Condition="items == 0">"items == NULL"</Item>
         </Expand>
     </Type>
+    <Type Name="RuntimeProp">
+        <DisplayString>
+            {name = {name}, hash = 0x{ name_hash,x }, type = {type}}
+        </DisplayString>
+        <Expand>
+            <Item Name="name">name</Item>
+            <Item Name="name_hash">name_hash</Item>
+            <Item Name="type">type</Item>
+            <Item Name="uint32_value" Condition="type == PROP_TYPE_U32">value.uint32_value</Item>
+            <Item Name="float32_value" Condition="type == PROP_TYPE_F32">value.float32_value</Item>
+            <Item Name="string_value" Condition="type == PROP_TYPE_STR">value.string_value</Item>
+            <ArrayItems Condition="type == PROP_TYPE_VEC2">
+                <Size>2</Size>
+                <ValuePointer>value.vec2_value</ValuePointer>
+            </ArrayItems>
+            <ArrayItems Condition="type == PROP_TYPE_VEC3">
+                <Size>3</Size>
+                <ValuePointer>value.vec3_value</ValuePointer>
+            </ArrayItems>
+            <ArrayItems Condition="type == PROP_TYPE_VEC4">
+                <Size>4</Size>
+                <ValuePointer>value.vec4_value</ValuePointer>
+            </ArrayItems>
+            <ArrayItems Condition="type == PROP_TYPE_MAT3X3">
+                <Size>9</Size>
+                <ValuePointer>value.matrix33_value</ValuePointer>
+            </ArrayItems>
+            <ArrayItems Condition="type == PROP_TYPE_MAT4X4">
+                <Size>16</Size>
+                <ValuePointer>value.matrix44_value</ValuePointer>
+            </ArrayItems>
+            <Item Name="uint32_array_value" Condition="type == PROP_TYPE_ARRAY_U32">value.uint32_array_value</Item>
+            <Item Name="float32_array_value" Condition="type == PROP_TYPE_ARRAY_F32">value.float32_array_value</Item>
+            <Item Name="uint8_array_value" Condition="type == PROP_TYPE_ARRAY_U8">value.uint8_array_value</Item>
+            <Item Name="objid_value" Condition="type == PROP_TYPE_OBJID">value.objid_value</Item>
+            <Item Name="event_value" Condition="type == PROP_TYPE_EVENT">value.event_value</Item>
+            <Item Name="unk15_value" Condition="type == PROP_TYPE_UNK_15">value.unk15_value</Item>
+            <Item Name="unk16_value" Condition="type == PROP_TYPE_UNK_16">value.unk16_value</Item>
+        </Expand>
+    </Type>
 
+    <Type Name="RuntimeNode">
+        <DisplayString>
+            {name = {name}, hash = 0x{ name_hash,x }, props = {props.size}, children = {children.size}}
+        </DisplayString>
+        <Expand>
+            <Item Name="name">name</Item>
+            <Item Name="name_hash">name_hash</Item>
+            <Item Name="props">props</Item>
+            <Item Name="children">children</Item>
+            <Item Name="heap_allocated">heap_allocated</Item>
+        </Expand>
+    </Type>
 </AutoVisualizer>

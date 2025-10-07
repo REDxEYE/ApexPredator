@@ -2,6 +2,8 @@
 
 #include "platform/archive_manager.h"
 
+#include "utils/hash_helper.h"
+
 void ArchiveManager_init(ArchiveManager *manager) {
     DA_init(&manager->archives, Archive*, 4);
 }
@@ -11,7 +13,7 @@ void ArchiveManager_add(ArchiveManager *manager, Archive *archive) {
 }
 
 bool ArchiveManager_get_file(ArchiveManager *manager, const String *path, MemoryBuffer *mb) {
-    uint32 hash = path_hash(path);
+    uint32 hash = hash_string(path);
     for (uint32 i = 0; i < manager->archives.count; ++i) {
         Archive *ar = manager->archives.items[i];
         if (Archive_get_file_by_hash(ar, hash, mb)) {
@@ -37,7 +39,7 @@ bool ArchiveManager_get_file_by_hash(ArchiveManager *manager, const uint32 path,
 }
 
 bool ArchiveManager_has_file(const ArchiveManager *manager, String *path) {
-    uint32 hash = path_hash(path);
+    uint32 hash = hash_string(path);
     for (uint32 i = 0; i < manager->archives.count; ++i) {
         const Archive *ar = manager->archives.items[i];
         if (Archive_has_file_by_hash(ar, hash)) {

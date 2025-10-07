@@ -15,12 +15,12 @@ char *GLTFContext_dupe_cstring(const char *name) {
     return dup;
 }
 
-void GlTFContext_init(GlTFContext *ctx, const char *name) {
+void GLTFContext_init(GLTFContext *ctx, const char *name) {
     memset(ctx, 0, sizeof(*ctx));
     ctx->data = calloc(1, sizeof(cgltf_data));
     ctx->data->asset.generator = "ApexPredator via cgltf";
     ctx->data->asset.version = "2.0";
-
+    String_init(&ctx->save_path, 256);
     DA_init(&ctx->meshes, cgltf_mesh, 1);
     DA_init(&ctx->nodes, cgltf_node, 1);
     DA_init(&ctx->accessors, cgltf_accessor, 1);
@@ -39,7 +39,20 @@ void GlTFContext_init(GlTFContext *ctx, const char *name) {
     ctx->finalized = false;
 }
 
-void GLTFContext_finalize(GlTFContext *ctx) {
+void GLTFContext_set_save_path(GLTFContext *ctx, const String *path) {
+    if (ctx->save_path.size!=0) {
+        return;
+    }
+    String_copy_from(&ctx->save_path, path);
+}
+void GLTFContext_set_save_cpath(GLTFContext *ctx, const char *path) {
+    if (ctx->save_path.size!=0) {
+        return;
+    }
+    String_from_cstr(&ctx->save_path, path);
+}
+
+void GLTFContext_finalize(GLTFContext *ctx) {
     // move arrays into cgltf_data
     if (ctx->finalized) {
         printf("[ERROR]: GLTFContext_finalize: already finalized\n");
@@ -142,7 +155,7 @@ void GLTFContext_finalize(GlTFContext *ctx) {
     }
 }
 
-void GLTFContext_free(GlTFContext *ctx) {
+void GLTFContext_free(GLTFContext *ctx) {
     DA_free_with_inner(&ctx->meshes, {
                        cgltf_mesh* mesh = it;
                        if (mesh->name!=NULL)free(mesh->name);
@@ -176,7 +189,7 @@ void GLTFContext_free(GlTFContext *ctx) {
     free(ctx->data);
 }
 
-uint32 GLTFContext_create_buffer(GlTFContext *ctx, const void *data, uint32 data_size, char *name) {
+uint32 GLTFContext_create_buffer(GLTFContext *ctx, const void *data, uint32 data_size, char *name) {
     cgltf_buffer *buffer = DA_append_get(&ctx->buffers);
     buffer->size = data_size;
     buffer->data = NULL;
@@ -196,7 +209,7 @@ uint32 GLTFContext_create_buffer(GlTFContext *ctx, const void *data, uint32 data
     return ctx->buffers.count - 1;
 }
 
-uint32 GLTFContext_create_buffer_and_view(GlTFContext *ctx, const void *data, uint32 data_size, char *name,
+uint32 GLTFContext_create_buffer_and_view(GLTFContext *ctx, const void *data, uint32 data_size, char *name,
                                           cgltf_buffer_view_type type, uint32 stride, uint32 offset) {
     cgltf_buffer_view *view = DA_append_get(&ctx->buffer_views);
     view->size = data_size;
@@ -210,7 +223,7 @@ uint32 GLTFContext_create_buffer_and_view(GlTFContext *ctx, const void *data, ui
     return ctx->buffer_views.count - 1;
 }
 
-uint32 GLTFContext_create_accessor_raw(GlTFContext *ctx, uint32 buffer_view_id, cgltf_type type,
+uint32 GLTFContext_create_accessor_raw(GLTFContext *ctx, uint32 buffer_view_id, cgltf_type type,
                                        cgltf_component_type component_type, uint32 count, uint32 offset,
                                        bool normalized, char *name) {
     cgltf_accessor *acc = DA_append_get(&ctx->accessors);
@@ -227,7 +240,7 @@ uint32 GLTFContext_create_accessor_raw(GlTFContext *ctx, uint32 buffer_view_id, 
     return ctx->accessors.count - 1;
 }
 
-uint32 GLTFContext_create_accessor_from_data(GlTFContext *ctx, const void *data, uint32 data_size, uint32 count,
+uint32 GLTFContext_create_accessor_from_data(GLTFContext *ctx, const void *data, uint32 data_size, uint32 count,
                                              char *name, cgltf_type type, cgltf_component_type component_type,
                                              cgltf_buffer_view_type buffer_type, bool normalized, uint32 stride,
                                              uint32 offset) {
@@ -236,7 +249,7 @@ uint32 GLTFContext_create_accessor_from_data(GlTFContext *ctx, const void *data,
     return GLTFContext_create_accessor_raw(ctx, view_id, type, component_type, count, offset, normalized, name);
 }
 
-uint32 GLTFContext_add_node(GlTFContext *ctx, const char *name_opt) {
+uint32 GLTFContext_add_node(GLTFContext *ctx, const char *name_opt) {
     cgltf_node *n = DA_append_get(&ctx->nodes);
     memset(n, 0, sizeof(*n));
     if (name_opt) {
@@ -245,7 +258,7 @@ uint32 GLTFContext_add_node(GlTFContext *ctx, const char *name_opt) {
     return ctx->nodes.count - 1;
 }
 
-uint32 GLTFContext_add_mesh(GlTFContext *ctx, const char *name_opt, uint32 primitive_count) {
+uint32 GLTFContext_add_mesh(GLTFContext *ctx, const char *name_opt, uint32 primitive_count) {
     cgltf_mesh *m = DA_append_get(&ctx->meshes);
     memset(m, 0, sizeof(*m));
     if (name_opt) {
@@ -256,25 +269,31 @@ uint32 GLTFContext_add_mesh(GlTFContext *ctx, const char *name_opt, uint32 primi
     return ctx->meshes.count - 1;
 }
 
-void GLTFContext_node_set_mesh(GlTFContext *ctx, uint32 node_id, uint32 mesh_id) {
+void GLTFContext_node_set_mesh(GLTFContext *ctx, uint32 node_id, uint32 mesh_id) {
     cgltf_node *n = &ctx->nodes.items[node_id];
     n->mesh = gltf_tag_index(mesh_id);
 }
 
-cgltf_primitive *GLTFContext_mesh_get_primitive(GlTFContext *ctx, uint32 mesh_id, uint32 prim_index) {
+void GLTFContext_node_set_matrix(GLTFContext *ctx, uint32 node_id, const float *matrix_4x4) {
+    cgltf_node *n = &ctx->nodes.items[node_id];
+    memcpy(n->matrix, matrix_4x4, sizeof(n->matrix));
+    n->has_matrix = true;
+}
+
+cgltf_primitive *GLTFContext_mesh_get_primitive(GLTFContext *ctx, uint32 mesh_id, uint32 prim_index) {
     cgltf_mesh *m = &ctx->meshes.items[mesh_id];
     assert(prim_index < m->primitives_count);
     return &m->primitives[prim_index];
 }
 
-void GLTFContext_primitive_set_material(GlTFContext *ctx, uint32 mesh_id, uint32 primitive_id, uint32 material_id) {
+void GLTFContext_primitive_set_material(GLTFContext *ctx, uint32 mesh_id, uint32 primitive_id, uint32 material_id) {
     cgltf_mesh *m = &ctx->meshes.items[mesh_id];
     assert(primitive_id < m->primitives_count);
     cgltf_primitive *prim = &m->primitives[primitive_id];
     prim->material = gltf_tag_index(material_id);
 }
 
-void GlTFContext_set_primitive_indices_accessor(GlTFContext *ctx, uint32 mesh_id, uint32 primitive_id,
+void GLTFContext_set_primitive_indices_accessor(GLTFContext *ctx, uint32 mesh_id, uint32 primitive_id,
                                                 uint32 accessor_id) {
     cgltf_mesh *m = &ctx->meshes.items[mesh_id];
     assert(primitive_id < m->primitives_count);
@@ -282,7 +301,7 @@ void GlTFContext_set_primitive_indices_accessor(GlTFContext *ctx, uint32 mesh_id
     prim->indices = gltf_tag_index(accessor_id);
 }
 
-void GlTFContext_primitive_init_attributes(GlTFContext *ctx, uint32 mesh_id, uint32 primitive_id,
+void GLTFContext_primitive_init_attributes(GLTFContext *ctx, uint32 mesh_id, uint32 primitive_id,
                                            uint32 attribute_count) {
     cgltf_mesh *m = &ctx->meshes.items[mesh_id];
     assert(primitive_id < m->primitives_count);
@@ -291,7 +310,7 @@ void GlTFContext_primitive_init_attributes(GlTFContext *ctx, uint32 mesh_id, uin
     prim->attributes_count = attribute_count;
 }
 
-void GlTFContext_primitive_set_attribute_accessor(GlTFContext *ctx, uint32 mesh_id, uint32 primitive_id,
+void GLTFContext_primitive_set_attribute_accessor(GLTFContext *ctx, uint32 mesh_id, uint32 primitive_id,
                                                   uint32 attribute_id, uint32 accessor_id, const char *name) {
     cgltf_mesh *m = &ctx->meshes.items[mesh_id];
     assert(primitive_id < m->primitives_count);
@@ -302,10 +321,15 @@ void GlTFContext_primitive_set_attribute_accessor(GlTFContext *ctx, uint32 mesh_
     attr->name = GLTFContext_dupe_cstring(name);
 }
 
-bool GlTFContext_write_and_free(GlTFContext *ctx, const char *path) {
+bool GLTFContext_write_and_free(GLTFContext *ctx) {
+    if (ctx->save_path.size==0) {
+        printf("[ERROR]: GLTFContext_write_and_free: no save path set\n");
+        exit(1);
+    }
     GLTFContext_finalize(ctx);
     ctx->options.type = cgltf_file_type_gltf;
-    bool ok = (cgltf_write_file(&ctx->options, path, ctx->data) == cgltf_result_success);
+    printf("[INFO]: GLTF save path: %s\n", String_data(&ctx->save_path));
+    bool ok = (cgltf_write_file(&ctx->options, String_data(&ctx->save_path), ctx->data) == cgltf_result_success);
 
     // free (reusing your free helpers)
     GLTFContext_free(ctx);
@@ -313,7 +337,7 @@ bool GlTFContext_write_and_free(GlTFContext *ctx, const char *path) {
     return ok;
 }
 
-uint32 GLTFContext_add_material(GlTFContext *ctx, const char *name_opt) {
+uint32 GLTFContext_add_material(GLTFContext *ctx, const char *name_opt) {
     cgltf_material *mat = DA_append_get(&ctx->materials);
     memset(mat, 0, sizeof(*mat));
     if (name_opt) {
@@ -322,7 +346,7 @@ uint32 GLTFContext_add_material(GlTFContext *ctx, const char *name_opt) {
     return ctx->materials.count - 1;
 }
 
-uint32 GlTFContext_find_material_by_name(GlTFContext *ctx, const char *name) {
+uint32 GLTFContext_find_material_by_name(GLTFContext *ctx, const char *name) {
     for (uint32 i = 0; i < ctx->materials.count; ++i) {
         cgltf_material *mat = &ctx->materials.items[i];
         if (mat->name != NULL && strcmp(mat->name, name) == 0) {
@@ -332,7 +356,7 @@ uint32 GlTFContext_find_material_by_name(GlTFContext *ctx, const char *name) {
     return UINT32_MAX;
 }
 
-uint32 GlTFContext_create_indices_accessor_from_data(GlTFContext *ctx, const void *data, uint32 data_size, uint32 count,
+uint32 GLTFContext_create_indices_accessor_from_data(GLTFContext *ctx, const void *data, uint32 data_size, uint32 count,
                                                      char *name, cgltf_component_type component_type, uint32 offset) {
     return GLTFContext_create_accessor_from_data(ctx, data, data_size, count, name,
         cgltf_type_scalar, component_type, cgltf_buffer_view_type_indices, false, 0, offset);

@@ -13,6 +13,7 @@
 #include "apex/adf/adf.h"
 #include "apex/package/tab_archive.h"
 #include "apex/adf/builtin_adf.h"
+#include "utils/hash_helper.h"
 
 void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
     ADF adf = {0};
@@ -91,7 +92,7 @@ void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
                 for (int j = 0; j < sarc_entries.count; ++j) {
                     ArchiveEntry *aaf_entry = DA_at(&sarc_entries, j);
                     MemoryBuffer *tmp = MemoryBuffer_new();
-                    if (Archive_get_file((Archive*)sarc, aaf_entry->path, tmp)) {
+                    if (Archive_get_file((Archive *) sarc, aaf_entry->path, tmp)) {
                         if (tmp->data[0] == ' ' && tmp->data[1] == 'F' && tmp->data[2] == 'D' && tmp->data[3] == 'A') {
                             ADF_from_buffer(&adf, (Buffer *) tmp, lib);
                             ADF_free(&adf);
@@ -100,7 +101,7 @@ void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
                     tmp->close(tmp);
                 }
                 DA_free(&sarc_entries);
-                Archive_free((Archive*)sarc);
+                Archive_free((Archive *) sarc);
             }
             AAFArchive_free(&aaf_archive);
         }
@@ -127,6 +128,23 @@ void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
 
     String header_rel_path = {};
     String_append_cstr(&header_rel_path, "apex/adf/adf_types.h");
+
+    const char *extra_strings[] = {
+        "_class", "_class_hash", "name", "world", "script", "border", "_object_id", "label_key", "note", "spline",
+        "spawn_tags", "model_skeleton", "skeleton", "need_type", "start_time", "[Item]  Item ID",
+        "[ref] apex identifier", "name_hash", "aim_assist_modifier"
+    };
+
+    for (int i = 0; i < sizeof(extra_strings) / sizeof(extra_strings[0]); ++i) {
+        String str = {0};
+        String_from_cstr(&str, extra_strings[i]);
+        uint32 hash = hash_string(&str);
+
+        String* slot = DM_insert(&lib->hash_strings, (uint64)hash);
+        String_move_from(slot, String_move(&str));
+        String_free(&str);
+    }
+
     STI_TypeLibrary_generate_types(lib, &namespace, header_file, &header_rel_path, impl_file);
 
     String_free(&header_rel_path);

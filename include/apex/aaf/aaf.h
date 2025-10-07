@@ -7,6 +7,8 @@
 #include "utils/dynamic_array.h"
 #include "utils/buffer/memory_buffer.h"
 
+#define AAF_MAGIC "AAF\0"
+
 typedef struct {
     char ident[4];
     uint32 version;

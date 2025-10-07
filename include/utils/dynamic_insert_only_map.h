@@ -14,7 +14,7 @@ typedef struct {
 } DynamicInsertOnlyIntMap__Base;
 
 
-//Very specialized hash map, only support uint32 keys and keys are assumed to be unique
+//Very specialized hash map, only support uint64 keys and keys are assumed to be unique
 #define DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(value_type, name) \
     typedef struct { \
         DynamicArray_DM_Key keys; \

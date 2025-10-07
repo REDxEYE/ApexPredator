@@ -147,7 +147,7 @@ int main(int argc, const char *argv[]) {
                 len--;
             }
             String *tmp = String_new_from_cstr(line);
-            uint32 hash = path_hash(tmp);
+            uint32 hash = hash_string(tmp);
             if (DM_get(&known_strings, hash) == NULL) {
                 String *slot = DM_insert(&known_strings, hash);
                 String_move_from(slot, String_move(tmp));

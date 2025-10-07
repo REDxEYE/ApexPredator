@@ -17,6 +17,7 @@ add_executable(ApexPredator
         src/utils/buffer/memory_buffer.c
         src/apex/adf/adf.c
         src/apex/adf/sti.c
+        src/apex/adf/sti_codegen.c
         src/utils/dynamic_insert_only_map.c
         src/apex/adf/sti_shared.c
         src/utils/path.c
@@ -32,6 +33,10 @@ add_executable(ApexPredator
         src/apex/sarc.c
         src/platform/archive.c
         src/platform/archive_manager.c
+        src/apex/rtpc.c
+        include/apex/rtpc.h
+        src/apex/hashes.c
+        include/apex/hashes.h
 )
 
 add_executable(TypeGenerator
@@ -45,6 +50,7 @@ add_executable(TypeGenerator
         src/utils/buffer/memory_buffer.c
         src/apex/adf/adf.c
         src/apex/adf/sti.c
+        src/apex/adf/sti_codegen.c
         src/utils/dynamic_insert_only_map.c
         src/utils/path.c
         src/utils/common.c
@@ -53,6 +59,8 @@ add_executable(TypeGenerator
         src/apex/aaf/aaf.c
         src/utils/zlib_wrapper.c
         src/apex/sarc.c
+        src/apex/hashes.c
+        include/apex/hashes.h
 )
 add_executable(HashCollector
         src/hash_collector.c
@@ -65,9 +73,22 @@ add_executable(HashCollector
         src/utils/buffer/memory_buffer.c
         src/apex/adf/adf.c
         src/apex/adf/sti.c
+        src/apex/adf/sti_codegen.c
         src/utils/dynamic_insert_only_map.c
         src/utils/path.c
         src/utils/common.c
+        src/apex/hashes.c
+        include/apex/hashes.h
+)
+
+add_executable(StringHasher
+        src/string_hasher.c
+        src/utils/lookup3.c
+)
+
+add_executable(HashBruteforce
+        src/hash_bruteforce.c
+        src/utils/lookup3.c
 )
 
 if(UNIX)
@@ -75,10 +96,14 @@ if(UNIX)
     target_compile_options(TypeGenerator PRIVATE -fms-extensions)
     target_compile_options(HashCollector PRIVATE -fms-extensions)
     target_link_libraries(ApexPredator PUBLIC m)
+else ()
+    target_compile_options(ApexPredator PRIVATE /bigobj)
 endif()
 target_include_directories(ApexPredator PUBLIC include external/cgltf external/zlib)
 target_include_directories(TypeGenerator PUBLIC include external/zlib)
 target_include_directories(HashCollector PUBLIC include external/zlib)
+target_include_directories(StringHasher PUBLIC include )
+target_include_directories(HashBruteforce PUBLIC include )
 
 target_link_libraries(ApexPredator PUBLIC libzstd zlibstatic)
 target_link_libraries(TypeGenerator PUBLIC zlibstatic)

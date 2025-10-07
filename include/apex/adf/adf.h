@@ -5,12 +5,12 @@
 #include <stdbool.h>
 
 #include "apex/adf/sti.h"
+#include "platform/common_arrays.h"
 
 #include "utils/buffer/buffer.h"
 #include "utils/dynamic_array.h"
 
-
-DYNAMIC_ARRAY_STRUCT(String, String);
+#define ADF_MAGIC " FDA"
 
 #pragma pack(push, 1)
 typedef struct {

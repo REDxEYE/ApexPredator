@@ -136,14 +136,16 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib);
 STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType type, uint32 type_hash, String* name);
 int32 STI_TypeLibrary_types_count(const STI_TypeLibrary *lib);
 void STI_TypeLibrary_free(STI_TypeLibrary *lib);
-void STI_TypeLibrary_generate_types(STI_TypeLibrary* lib, String* namespace, FILE *header_output, String* relative_header_path, FILE* impl_output);
+void STI_TypeLibrary_generate_types(STI_TypeLibrary* lib, const String* namespace, FILE *header_output, const String* relative_header_path, FILE* impl_output);
+
+const STI_Type *STI_TypeLibrary_get_type(const STI_TypeLibrary *lib, uint32 type_hash);
 
 void STI_start_type_dump(STI_TypeLibrary* lib);
-void STI_dump_type(STI_TypeLibrary* lib, STI_Type* type, FILE* output);
-void STI_generate_reader_function(STI_TypeLibrary* lib, STI_Type* type, FILE* output, bool prototype_only);
-void STI_generate_free_function(STI_TypeLibrary* lib, STI_Type* type, FILE* output, bool prototype_only);
-void STI_generate_print_function(STI_TypeLibrary* lib, STI_Type* type, FILE* output, bool prototype_only);
-void STI_generate_register_function(STI_TypeLibrary* lib, String* namespace, FILE* output);
+void STI_dump_type(STI_TypeLibrary* lib, const STI_Type* type, FILE* output);
+void STI_generate_reader_function(STI_TypeLibrary* lib, const STI_Type* type, FILE* output, bool prototype_only);
+void STI_generate_free_function(STI_TypeLibrary* lib, const STI_Type* type, FILE* output, bool prototype_only);
+void STI_generate_print_function(STI_TypeLibrary* lib, const STI_Type* type, FILE* output, bool prototype_only);
+void STI_generate_register_function(STI_TypeLibrary* lib, const String* namespace, FILE* output);
 
 
 #define STI_TYPE_HASH_INT8  0x580D0A62

@@ -113,19 +113,12 @@ static inline const String *Archive_get_name(const Archive *archive) {
     }
     return NULL;
 }
+
 static inline void Archive_print_files(const Archive *archive) {
     assert(archive!=NULL);
     if (archive->print_all_files) {
         archive->print_all_files(archive);
     }
 }
-
-static inline uint32 path_hash(const String *str) {
-    uint32 hash_lo = 0;
-    uint32 hash_hi = 0;
-    hashlittle2(String_data(str), str->size, &hash_lo, &hash_hi);
-    return hash_lo;
-}
-
 
 #endif //APEXPREDATOR_ARCHIVE_H

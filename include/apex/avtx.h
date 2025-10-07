@@ -6,6 +6,8 @@
 #include "platform/texture.h"
 #include "utils/buffer/buffer.h"
 
+#define AVTX_MAGIC "AVTX"
+
 typedef struct {
     char ident[4];
     uint16 version;

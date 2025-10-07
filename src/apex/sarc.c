@@ -2,6 +2,8 @@
 
 #include "apex/sarc.h"
 
+#include "utils/hash_helper.h"
+
 void SArchive__from_buffer(SArchive *archive, Buffer *buffer);
 
 static const String internal_sarc_name_ = {
@@ -14,7 +16,7 @@ static const String internal_sarc_name_ = {
 };
 
 bool SArchive__has_file(const SArchive *archive, const String *path) {
-    uint32 hash = path_hash(path);
+    uint32 hash = hash_string(path);
     return DM_get(&archive->entries, hash) != NULL;
 }
 
@@ -27,7 +29,7 @@ bool SArchive__get_file_by_hash(SArchive *archive, uint32 hash, MemoryBuffer *ou
 void SArchive__free(SArchive *archive);
 
 bool SArchive__get_file(SArchive *archive, const String *path, MemoryBuffer *out) {
-    uint32 hash = path_hash(path);
+    uint32 hash = hash_string(path);
     return SArchive__get_file_by_hash(archive, hash, out);
 }
 
@@ -133,9 +135,9 @@ void SArchive__from_buffer(SArchive *archive, Buffer *buffer) {
             buffer->read_uint32(buffer, &entry.size);
             buffer->read_uint32(buffer, &entry.hash);
             buffer->read_uint32(buffer, &entry.ext_hash);
-            if (path_hash(&entry.name) != entry.hash) {
+            if (hash_string(&entry.name) != entry.hash) {
                 printf("[ERROR]: SARC entry hash mismatch for file %s, expected: %08X, actual: %08X\n",
-                       String_data(&entry.name), entry.hash, path_hash(&entry.name));
+                       String_data(&entry.name), entry.hash, hash_string(&entry.name));
                 exit(1);
             }
             SArcEntry *slot = DM_insert(&archive->entries, entry.hash);

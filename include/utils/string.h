@@ -52,6 +52,7 @@ void String_format(String *string, const char *fmt, ...);
 void String_append_format(String *string, const char *fmt, ...);
 
 bool String_equals(const String *string, const String *other);
+bool String_cequals(const String *string, const char* other);
 
 static inline String *String_move(String *string) {
     string->can_be_moved = 1;

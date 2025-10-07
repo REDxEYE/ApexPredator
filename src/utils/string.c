@@ -189,6 +189,17 @@ bool String_equals(const String *string, const String *other) {
     return memcmp(string->buffer, other->buffer, string->size) == 0;
 }
 
+bool String_cequals(const String *string, const char *other) {
+    if (other == NULL) {
+        return string->size == 0;
+    }
+    size_t other_len = strlen(other);
+    if (string->size != other_len) {
+        return false;
+    }
+    return memcmp(string->buffer, other, string->size) == 0;
+}
+
 void String_append_cstr2(String *string, const char *str, uint32 size) {
     if (string->size + size >= string->capacity) {
         String_resize(string, string->size + size);
