@@ -152,8 +152,8 @@ ADFInstance * ADF_get_instance(ADF *adf, uint32 instance_id) {
 
 void * ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance *instance, const MemoryBuffer *mb) {
     STI_Type *type = DM_get(&lib->types, instance->type_hash);
-    printf("Instance: %s, type %s\n", String_data(&adf->strings.items[instance->name_id]),
-           type ? String_data(&type->name) : "UNKNOWN");
+    // printf("Instance: %s, type %s\n", String_data(&adf->strings.items[instance->name_id]),
+    //        type ? String_data(&type->name) : "UNKNOWN");
     if (type == NULL) {
         printf("Unknown type hash %08X for instance %s\n", instance->type_hash,
                String_data(&adf->strings.items[instance->name_id]));

@@ -126,12 +126,12 @@ float32 lod_offsets[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 4.5f, 24.f, 96.f, 384.f};
 
 #pragma pack(pop)
 
-void export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, const String *path,
-                 uint32 hash, const String *export_path);
+GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, const String *path,
+                  uint32 hash, const String *export_path);
 
-void export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, uint32 path_hash,
-                     const String *path, MemoryBuffer *mb,
-                     const String *export_path);
+GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, uint32 path_hash,
+                      const String *path, MemoryBuffer *mb,
+                      const String *export_path);
 
 // void export_terrain_mesh(String *export_path, TerrainMesh *mesh, uint32 tile_x, uint32 tile_y, uint32 lod) {
 //     if (lod < 9) {
@@ -366,17 +366,17 @@ void export_terrain_patch(String *export_path, TerrainPatch *patch, uint32 x, ui
     String_free(&tile_export_path);
 }
 
-void export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, String *export_path,
-                     uint32 path_hash,
-                     const String *path, AmfMeshHeader *header, AmfMeshBuffers *mesh_buffers) {
-    GLTFContext local_context = {0};
-    if (context == NULL) {
-        GLTFContext_init(&local_context, NULL);
-        context = &local_context;
-    }
-
+GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, String *export_path,
+                      uint32 path_hash,
+                      const String *path, AmfMeshHeader *header, AmfMeshBuffers *mesh_buffers) {
     String mesh_name = {0};
-    Path_filename(path, &mesh_name);
+    if (path != NULL) {
+        Path_filename(path, &mesh_name);
+    } else {
+        String_from_cstr(&mesh_name, "mesh_");
+        String_append_format(&mesh_name, "%08X", path_hash);
+    }
+    GL_ID mesh_root_node_id = GLTFContext_add_node(context, String_data(&mesh_name));
 
     DynamicArray_AmfBuffer all_vertex_buffer = {0};
     DA_init(&all_vertex_buffer, AmfBuffer, mesh_buffers->VertexBuffers.count);
@@ -443,7 +443,8 @@ void export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_
             String_init(&lod_name, 64);
             String_copy_from(&lod_name, &mesh_name);
             String_append_format(&lod_name, "_lod_%i_mesh_%i", lod_id, mesh_id);
-            uint32 gl_node_id = GLTFContext_add_node(context, String_data(&lod_name));
+            GL_ID gl_node_id = GLTFContext_add_node(context, String_data(&lod_name));
+            GLTFContext_node_set_parent(context, gl_node_id, mesh_root_node_id);
             String_free(&lod_name);
 
             AmfMesh *mesh = DA_at(&lod_group->Meshes, mesh_id);
@@ -466,21 +467,21 @@ void export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_
             AmfBuffer *usedIndexBuffer = DA_at(&all_index_buffer, index_buffer_index);
 
 
-            uint32 gl_mesh_id = GLTFContext_add_mesh(context, String_data(mesh_type_name), mesh->SubMeshes.count);
+            GL_ID gl_mesh_id = GLTFContext_add_mesh(context, String_data(mesh_type_name), mesh->SubMeshes.count);
             GLTFContext_node_set_mesh(context, gl_node_id, gl_mesh_id);
 
             for (int sub_mesh_id = 0; sub_mesh_id < mesh->SubMeshes.count; ++sub_mesh_id) {
                 AmfSubMesh *sub_mesh = DA_at(&mesh->SubMeshes, sub_mesh_id);
                 String *material_name = DM_get(&lib->hash_strings, sub_mesh->SubMeshId);
 
-                uint32 material_id = GLTFContext_find_material_by_name(context, String_data(material_name));
+                GL_ID material_id = GLTFContext_find_material_by_name(context, String_data(material_name));
 
                 cgltf_primitive *primitive = GLTFContext_mesh_get_primitive(context, gl_mesh_id, sub_mesh_id);
-                if (material_id != UINT32_MAX) {
+                if (material_id.v != UINT32_MAX) {
                     GLTFContext_primitive_set_material(context, gl_mesh_id, sub_mesh_id, material_id);
                 }
                 primitive->type = cgltf_primitive_type_triangles;
-                uint32 index_accessor_id = GLTFContext_create_indices_accessor_from_data(
+                GL_ID index_accessor_id = GLTFContext_create_indices_accessor_from_data(
                     context,
                     usedIndexBuffer->Data.items + index_buffer_offset + sub_mesh->IndexStreamOffset,
                     sub_mesh->IndexCount * index_buffer_stride, sub_mesh->IndexCount, NULL,
@@ -645,7 +646,7 @@ void export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_
                         }
                     }
 
-                    uint32 buffer_view_id = GLTFContext_create_accessor_from_data(context,
+                    GL_ID buffer_view_id = GLTFContext_create_accessor_from_data(context,
                         attribute_data, vertex_count * stride, vertex_count, NULL,
                         data_type, comp_type, cgltf_buffer_view_type_vertices, normalized,
                         stride, 0);
@@ -671,27 +672,33 @@ void export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_
     }
     DA_free(&all_index_buffer);
     DA_free(&all_vertex_buffer);
+
+    return mesh_root_node_id;
 }
 
 
-void export_export_amf_model(GLTFContext* context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, AmfModel *amf_model,
-                             const String *path, uint32 path_hash, const String *export_path) {
+GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, AmfModel *amf_model,
+                       const String *path, uint32 path_hash, const String *export_path) {
+    assert(context!=NULL && "context must be initialized");
+
     String model_export_path = {};
     String model_without_ext = {};
+    String model_name = {};
     if (path == NULL) {
         String_init(&model_without_ext, 64);
         String_append_format(&model_without_ext, "0x%08X", path_hash);
+        String_from_cstr(&model_name, "model_");
+        String_append_format(&model_name, "%08X", path_hash);
     } else {
         Path_remove_extension(path, &model_without_ext);
+        Path_filename(path, &model_name);
     }
     Path_join(&model_export_path, export_path);
     Path_join(&model_export_path, &model_without_ext);
 
-    GLTFContext local_context = {0};
-    if (context==NULL) {
-        GLTFContext_init(&local_context, NULL);
-        context = &local_context;
-    }
+    GL_ID model_root_node_id = GLTFContext_add_node(context, String_data(&model_name));
+    String_free(&model_name);
+
     for (int mat_id = 0; mat_id < amf_model->Materials.count; ++mat_id) {
         const AmfMaterial *amf_material = &amf_model->Materials.items[mat_id];
         const String *material_name = DM_get(&lib->hash_strings, amf_material->Name);
@@ -701,7 +708,7 @@ void export_export_amf_model(GLTFContext* context, ArchiveManager *archive_manag
             if (tex_path->size == 0) {
                 break;
             }
-            export_file(0, archive_manager, lib, tex_path, hash_string(tex_path), export_path);
+            export_file(context, archive_manager, lib, tex_path, hash_string(tex_path), export_path);
         }
     }
 
@@ -711,17 +718,23 @@ void export_export_amf_model(GLTFContext* context, ArchiveManager *archive_manag
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file(archive_manager, mesh_path, &mb)) {
         printf("File not found\n");
-        return;
+        return model_root_node_id;
     }
 
-    export_adf_file(context, archive_manager, lib, hash_string(mesh_path), mesh_path, &mb, export_path);
+    GL_ID mesh_root_node = export_adf_file(context, archive_manager, lib, hash_string(mesh_path), mesh_path, &mb,
+                                           export_path);
+    GLTFContext_node_set_parent(context, mesh_root_node, model_root_node_id);
 
     mb.close(&mb);
+
+    return model_root_node_id;
 }
 
-void export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                     uint32 path_hash, const String *path, MemoryBuffer *mb,
-                     const String *export_path) {
+GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
+                      uint32 path_hash, const String *path, MemoryBuffer *mb,
+                      const String *export_path) {
+    assert(context!=NULL && "context must be initialized");
+
     ADF adf = {0};
     ADF_from_buffer(&adf, (Buffer *) mb, lib);
 
@@ -730,6 +743,8 @@ void export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_
     Path_ensure_dirs(&mesh_export_path);
 
     uint32 tile_x = 0, tile_y = 0, lod = 0;
+
+    GL_ID output_node_id = INVALID_GL_ID;
 
     for (int instanceId = 0; instanceId < adf.header.instance_count; instanceId++) {
         ADFInstance *instance = DA_at(&adf.instances, instanceId);
@@ -743,18 +758,20 @@ void export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_
         } else if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
             export_terrain_patch(&mesh_export_path, instance_data, tile_x, tile_y, lod);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfModel) {
-            ADF_print_instance(lib, instance, instance_data, 0);
-            export_export_amf_model(context, archive_manager, lib, instance_data, path, path_hash, export_path);
+            // ADF_print_instance(lib, instance, instance_data, 0);
+            output_node_id = export_amf_model(context, archive_manager, lib, instance_data, path, path_hash,
+                                              export_path);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfMeshHeader) {
             instanceId++;
             ADFInstance *mesh_buffers_instance = DA_at(&adf.instances, instanceId);
             AmfMeshBuffers *mesh_buffers = ADF_read_instance(&adf, lib, mesh_buffers_instance, mb);
 
-            ADF_print_instance(lib, instance, instance_data, 0);
-            ADF_print_instance(lib, mesh_buffers_instance, mesh_buffers, 0);
+            // ADF_print_instance(lib, instance, instance_data, 0);
+            // ADF_print_instance(lib, mesh_buffers_instance, mesh_buffers, 0);
 
-            export_amf_mesh(context, archive_manager, lib, &mesh_export_path, path_hash, path, instance_data,
-                            mesh_buffers);
+            output_node_id = export_amf_mesh(context, archive_manager, lib, &mesh_export_path, path_hash, path,
+                                             instance_data,
+                                             mesh_buffers);
             ADF_free_instance(lib, mesh_buffers_instance, mesh_buffers);
         } else {
             String unk_file_export_path = {};
@@ -771,6 +788,7 @@ void export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_
 
     ADF_free(&adf);
     String_free(&mesh_export_path);
+    return output_node_id;
 }
 
 void export_ddsc(ArchiveManager *archive_manager, STI_TypeLibrary *lib, uint32 hash, MemoryBuffer *mb,
@@ -850,52 +868,81 @@ void export_ddsc(ArchiveManager *archive_manager, STI_TypeLibrary *lib, uint32 h
     Texture_free(&tex);
 }
 
-void process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, RuntimeNode *node,
-                      uint32 path_hash,
-                      const String *path, const String *export_path) {
+GL_ID process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, RuntimeNode *node,
+                       uint32 path_hash,
+                       const String *path, const String *export_path) {
     assert(context!=NULL && "context must be initialized");
     if (!RuntimeNode_has_prop(node, "_class")) {
-        return;
+        return INVALID_GL_ID;
     }
-    const String* class_name = RuntimeNode_get_prop_str(node, "_class");
+    String *node_name = RuntimeNode_get_prop_str(node, "name");
+    String *node_name_hash = &node->name;
+    GL_ID output_node = INVALID_GL_ID;
+
+    const String *class_name = RuntimeNode_get_prop_str(node, "_class");
     if (class_name == NULL) {
         printf("[ERROR]: Failed to get _class property\n");
         exit(1);
     }
     if (String_cequals(class_name, "CCharacter")) {
-        String* model_filename_hash = RuntimeNode_get_prop_by_hash_str(node, 0xE8129FE6);
+        String *model_filename_hash = RuntimeNode_get_prop_by_hash_str(node, 0xE8129FE6);
         if (model_filename_hash == NULL) {
-            return;
+            printf("[ERROR]: Failed to get model property for CCharacter\n");
+            return INVALID_GL_ID;
         }
-        export_file(context, archive_manager, lib, model_filename_hash, hash_string(model_filename_hash), export_path);
-    }else if (String_cequals(class_name, "CSecondaryMotionAttachment")) {
-        String* model_filename = RuntimeNode_get_prop_str(node, "model");
+        output_node = export_file(context, archive_manager, lib, model_filename_hash, hash_string(model_filename_hash),
+                                  export_path);
+    } else if (String_cequals(class_name, "CSecondaryMotionAttachment")) {
+        String *model_filename = RuntimeNode_get_prop_str(node, "model");
         if (model_filename == NULL) {
-            return;
+            printf("[ERROR]: Failed to get model property for CSecondaryMotionAttachment\n");
+            return INVALID_GL_ID;
         }
-        export_file(context, archive_manager, lib, model_filename, hash_string(model_filename), export_path);
-    }else if (String_cequals(class_name, "CRigidObject")) {
+        output_node = export_file(context, archive_manager, lib, model_filename, hash_string(model_filename),
+                                  export_path);
+    } else if (String_cequals(class_name, "CRigidObject")) {
         uint32 model_filename_hash = RuntimeNode_get_prop_u32(node, "filename");
         if (model_filename_hash == 0) {
-            return;
+            printf("[ERROR]: Failed to get model property for CRigidObject\n");
+            return INVALID_GL_ID;
         }
-        export_file(context, archive_manager, lib, NULL, model_filename_hash, export_path);
+        output_node = export_file(context, archive_manager, lib, NULL, model_filename_hash, export_path);
     }
 
-    DA_FORI(node->children, i) {
-        process_epe_node(context, archive_manager, lib, DA_at(&node->children, i), path_hash, path, export_path);
+    if (!IS_VALID_GL_ID(output_node)) {
+        output_node = GLTFContext_add_node(
+            context, node_name != NULL ? String_data(node_name) : String_data(node_name_hash));
     }
+    float32 *matrix = RuntimeNode_get_prop_mat4x4(node, "world");
+    if (matrix != NULL)
+        GLTFContext_node_set_matrix(context, output_node, matrix);
+    String extra_data = {0};
+    String_append_cstr(&extra_data, "{");
+    DA_FORI(node->props, i) {
+        RuntimeProp_emit_json(&node->props.items[i], &extra_data, 1);
+        if (i + 1 < node->props.count)
+            String_append_cstr(&extra_data, ", ");
+    }
+    String_append_cstr(&extra_data, "}");
+    GLTFContext_node_set_extra(context, output_node, String_data(&extra_data));
+    String_free(&extra_data);
+    DA_FORI(node->children, i) {
+        GL_ID child_node_id = process_epe_node(context, archive_manager, lib, DA_at(&node->children, i), path_hash,
+                                               path, export_path);
+        if (IS_VALID_GL_ID(child_node_id))
+            GLTFContext_node_set_parent(context, child_node_id, output_node);
+    }
+    return output_node;
 }
 
-void export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, RuntimeNode *root_node,
-                uint32 path_hash,
-                const String *path, const String *export_path) {
-    GLTFContext local_context = {0};
-    if (context == NULL) {
-        GLTFContext_init(&local_context, NULL);
-        context = &local_context;
+GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, RuntimeNode *root_node,
+                 uint32 path_hash,
+                 const String *path, const String *export_path) {
+    assert(context!=NULL && "context must be initialized");
+    if (path == NULL) {
+        printf("[ERROR]: Path is NULL\n");
+        exit(1);
     }
-
     String epe_export_path = {};
     Path_join(&epe_export_path, export_path);
     Path_join(&epe_export_path, path);
@@ -903,28 +950,45 @@ void export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeL
     String_append_cstr(&epe_export_path, ".gltf");
     GLTFContext_set_save_path(context, &epe_export_path);
 
-    DA_FORI(root_node->children, i) {
-        process_epe_node(context, archive_manager, lib, DA_at(&root_node->children, i), path_hash, path, export_path);
+    String epe_name = {};
+    if (path != NULL) {
+        Path_filename(path, &epe_name);
+    } else {
+        String_from_cstr(&epe_name, "epe_");
+        String_append_format(&epe_name, "%08X", path_hash);
     }
+
+    GL_ID epe_root_node_id = GLTFContext_add_node(context, "epe_root");
+
+    DA_FORI(root_node->children, i) {
+        GL_ID epe_node_id = process_epe_node(context, archive_manager, lib, DA_at(&root_node->children, i), path_hash,
+                                             path, export_path);
+        if (IS_VALID_GL_ID(epe_node_id))
+            GLTFContext_node_set_parent(context, epe_node_id, epe_root_node_id);
+    }
+    return epe_root_node_id;
 }
 
-void export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, const String *path,
-                 uint32 hash, const String *export_path) {
+GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, const String *path,
+                  uint32 hash, const String *export_path) {
+    assert(context!=NULL && "context must be initialized");
+
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file_by_hash(archive_manager, hash, &mb)) {
         printf("File not found\n");
-        return;
+        return INVALID_GL_ID;
     }
+    GL_ID output_node_id = INVALID_GL_ID;
 
     if (memcmp(mb.data, ADF_MAGIC, 4) == 0) {
-        export_adf_file(context, archive_manager, lib, hash, path, &mb, export_path);
+        output_node_id = export_adf_file(context, archive_manager, lib, hash, path, &mb, export_path);
     } else if (memcmp(mb.data, AAF_MAGIC, 4) == 0) {
         AAFArchive aaf_archive = {0};
         AAFArchive_from_buffer(&aaf_archive, (Buffer *) &mb);
         MemoryBuffer *section_buffer = MemoryBuffer_new();
         if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
             printf("[ERROR]: Failed to get AAF section 0\n");
-            return;
+            return INVALID_GL_ID;
         }
 
         SArchive *sarc = SArchive_new((Buffer *) section_buffer); // sarc is now owner of buffer
@@ -937,7 +1001,7 @@ void export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Type
         RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) &mb);
         // RuntimeNode_print(root_node, stdout, 0);
         // RuntimeNode_emit_json(root_node, stdout, 0);
-        export_epe(context, archive_manager, lib, root_node, hash, path, export_path);
+        output_node_id = export_epe(context, archive_manager, lib, root_node, hash, path, export_path);
         RuntimeNode_free(root_node);
     } else {
         String unk_file_export_path = {};
@@ -951,6 +1015,18 @@ void export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Type
                String_data(&unk_file_export_path));
     }
     mb.close(&mb);
+    // if (!IS_VALID_GL_ID(output_node_id)) {
+    //     String path_stem = {};
+    //     if (path != NULL) {
+    //         Path_filename(path, &path_stem);
+    //     }else {
+    //         String_from_cstr(&path_stem, "file_");
+    //         String_append_format(&path_stem, "%08X", hash);
+    //     }
+    //     output_node_id = GLTFContext_add_node(context, String_data(&path_stem));
+    //     String_free(&path_stem);
+    // }
+    return output_node_id;
 }
 
 int main(int argc, const char *argv[]) {

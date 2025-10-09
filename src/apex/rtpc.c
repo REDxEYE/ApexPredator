@@ -136,7 +136,7 @@ float32 *RuntimeNode_get_prop_by_hash_vec4(RuntimeNode *node, uint32 hash) {
     return prop->value.vec4_value;
 }
 
-float32 * RuntimeNode_get_prop_by_hash_mat3x3(RuntimeNode *node, uint32 hash) {
+float32 *RuntimeNode_get_prop_by_hash_mat3x3(RuntimeNode *node, uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_MAT3X3) {
         return NULL;
@@ -144,7 +144,7 @@ float32 * RuntimeNode_get_prop_by_hash_mat3x3(RuntimeNode *node, uint32 hash) {
     return prop->value.matrix33_value;
 }
 
-float32 * RuntimeNode_get_prop_by_hash_mat4x4(RuntimeNode *node, uint32 hash) {
+float32 *RuntimeNode_get_prop_by_hash_mat4x4(RuntimeNode *node, uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_MAT4X4) {
         return NULL;
@@ -152,7 +152,7 @@ float32 * RuntimeNode_get_prop_by_hash_mat4x4(RuntimeNode *node, uint32 hash) {
     return prop->value.matrix44_value;
 }
 
-DynamicArray_uint32 * RuntimeNode_get_prop_by_hash_array_u32(RuntimeNode *node, uint32 hash) {
+DynamicArray_uint32 *RuntimeNode_get_prop_by_hash_array_u32(RuntimeNode *node, uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_ARRAY_U32) {
         return NULL;
@@ -160,7 +160,7 @@ DynamicArray_uint32 * RuntimeNode_get_prop_by_hash_array_u32(RuntimeNode *node, 
     return &prop->value.uint32_array_value;
 }
 
-DynamicArray_float32 * RuntimeNode_get_prop_by_hash_array_f32(RuntimeNode *node, uint32 hash) {
+DynamicArray_float32 *RuntimeNode_get_prop_by_hash_array_f32(RuntimeNode *node, uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_ARRAY_F32) {
         return NULL;
@@ -168,7 +168,7 @@ DynamicArray_float32 * RuntimeNode_get_prop_by_hash_array_f32(RuntimeNode *node,
     return &prop->value.float32_array_value;
 }
 
-DynamicArray_uint8 * RuntimeNode_get_prop_by_hash_array_u8(RuntimeNode *node, uint32 hash) {
+DynamicArray_uint8 *RuntimeNode_get_prop_by_hash_array_u8(RuntimeNode *node, uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_ARRAY_U8) {
         return NULL;
@@ -184,7 +184,7 @@ uint64 RuntimeNode_get_prop_by_hash_objid(RuntimeNode *node, uint32 hash) {
     return prop->value.objid_value;
 }
 
-DynamicArray_uint64 * RuntimeNode_get_prop_by_hash_event(RuntimeNode *node, uint32 hash) {
+DynamicArray_uint64 *RuntimeNode_get_prop_by_hash_event(RuntimeNode *node, uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_EVENT) {
         return NULL;
@@ -192,43 +192,55 @@ DynamicArray_uint64 * RuntimeNode_get_prop_by_hash_event(RuntimeNode *node, uint
     return &prop->value.event_value;
 }
 
-uint32 RuntimeNode_get_prop_u32(RuntimeNode *node, const char* name){
+uint32 RuntimeNode_get_prop_u32(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_u32(node, hash_cstring(name));
 }
-float32 RuntimeNode_get_prop_f32(RuntimeNode *node, const char* name){
+
+float32 RuntimeNode_get_prop_f32(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_f32(node, hash_cstring(name));
 }
-String *RuntimeNode_get_prop_str(RuntimeNode *node, const char* name){
+
+String *RuntimeNode_get_prop_str(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_str(node, hash_cstring(name));
 }
-float32 *RuntimeNode_get_prop_vec2(RuntimeNode *node, const char* name){
+
+float32 *RuntimeNode_get_prop_vec2(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_vec2(node, hash_cstring(name));
 }
-float32 *RuntimeNode_get_prop_vec3(RuntimeNode *node, const char* name){
+
+float32 *RuntimeNode_get_prop_vec3(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_vec3(node, hash_cstring(name));
 }
-float32 *RuntimeNode_get_prop_vec4(RuntimeNode *node, const char* name){
+
+float32 *RuntimeNode_get_prop_vec4(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_vec4(node, hash_cstring(name));
 }
-float32 * RuntimeNode_get_prop_mat3x3(RuntimeNode *node, const char* name){
+
+float32 *RuntimeNode_get_prop_mat3x3(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_mat3x3(node, hash_cstring(name));
 }
-float32 * RuntimeNode_get_prop_mat4x4(RuntimeNode *node, const char* name){
+
+float32 *RuntimeNode_get_prop_mat4x4(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_mat4x4(node, hash_cstring(name));
 }
-DynamicArray_uint32 * RuntimeNode_get_prop_array_u32(RuntimeNode *node, const char* name){
+
+DynamicArray_uint32 *RuntimeNode_get_prop_array_u32(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_array_u32(node, hash_cstring(name));
 }
-DynamicArray_float32 * RuntimeNode_get_prop_array_f32(RuntimeNode *node, const char* name){
+
+DynamicArray_float32 *RuntimeNode_get_prop_array_f32(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_array_f32(node, hash_cstring(name));
 }
-DynamicArray_uint8 * RuntimeNode_get_prop_array_u8(RuntimeNode *node, const char* name){
+
+DynamicArray_uint8 *RuntimeNode_get_prop_array_u8(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_array_u8(node, hash_cstring(name));
 }
-uint64 RuntimeNode_get_prop_objid(RuntimeNode *node, const char* name){
+
+uint64 RuntimeNode_get_prop_objid(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_objid(node, hash_cstring(name));
 }
-DynamicArray_uint64 * RuntimeNode_get_prop_event(RuntimeNode *node, const char* name){
+
+DynamicArray_uint64 *RuntimeNode_get_prop_event(RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_event(node, hash_cstring(name));
 }
 
@@ -712,150 +724,151 @@ void RuntimeProp_free(RuntimeProp *prop) {
     memset(&prop->value, 0, sizeof(prop->value));
 }
 
-static void print_indent(FILE *out, uint32 indent) {
-    for (uint32 i = 0; i < indent; ++i) fputc(' ', out);
+static void print_indent(String *out, uint32 indent) {
+    String_resize(out, out->size + indent);
+    memset(out->buffer + out->size, ' ', indent);
 }
 
-void RuntimeProp_emit_json(RuntimeProp *prop, FILE *out, uint32 indent) {
+void RuntimeProp_emit_json(RuntimeProp *prop, String *out, uint32 indent) {
     print_indent(out, indent);
-    fprintf(out, "\"%s\": ", String_data(&prop->name));
+    String_append_format(out, "\"%s\": ", String_data(&prop->name));
     switch (prop->type) {
         case PROP_TYPE_NONE:
-            fprintf(out, "null");
+            String_append_cstr(out, "null");
             break;
         case PROP_TYPE_U32:
-            fprintf(out, "%u", prop->value.uint32_value);
+            String_append_format(out, "%u", prop->value.uint32_value);
             break;
         case PROP_TYPE_F32:
-            fprintf(out, "%f", prop->value.float32_value);
+            String_append_format(out, "%f", prop->value.float32_value);
             break;
         case PROP_TYPE_STR:
-            fprintf(out, "\"%s\"", String_data(&prop->value.string_value));
+            String_append_format(out, "\"%s\"", String_data(&prop->value.string_value));
             break;
         case PROP_TYPE_VEC2:
-            fprintf(out, "[%f, %f]", prop->value.vec2_value[0], prop->value.vec2_value[1]);
+            String_append_format(out, "[%f, %f]", prop->value.vec2_value[0], prop->value.vec2_value[1]);
             break;
         case PROP_TYPE_VEC3:
-            fprintf(out, "[%f, %f, %f]", prop->value.vec3_value[0], prop->value.vec3_value[1],
+            String_append_format(out, "[%f, %f, %f]", prop->value.vec3_value[0], prop->value.vec3_value[1],
                     prop->value.vec3_value[2]);
             break;
         case PROP_TYPE_VEC4:
-            fprintf(out, "[%f, %f, %f, %f]", prop->value.vec4_value[0], prop->value.vec4_value[1],
+            String_append_format(out, "[%f, %f, %f, %f]", prop->value.vec4_value[0], prop->value.vec4_value[1],
                     prop->value.vec4_value[2], prop->value.vec4_value[3]);
             break;
         case PROP_TYPE_MAT3X3:
-            fprintf(out, "[");
+            String_append_cstr(out, "[");
             for (int i = 0; i < 9; ++i) {
-                if (i > 0) fprintf(out, ", ");
-                fprintf(out, "%f", prop->value.matrix33_value[i]);
+                if (i > 0) String_append_cstr(out, ", ");
+                String_append_format(out, "%f", prop->value.matrix33_value[i]);
             }
-            fprintf(out, "]");
+            String_append_cstr(out, "]");
             break;
         case PROP_TYPE_MAT4X4:
-            fprintf(out, "[");
+            String_append_cstr(out, "[");
             for (int i = 0; i < 16; ++i) {
-                if (i > 0) fprintf(out, ", ");
-                fprintf(out, "%f", prop->value.matrix44_value[i]);
+                if (i > 0) String_append_cstr(out, ", ");
+                String_append_format(out, "%f", prop->value.matrix44_value[i]);
             }
-            fprintf(out, "]");
+            String_append_cstr(out, "]");
             break;
         case PROP_TYPE_ARRAY_U32: {
-            fprintf(out, "[");
+            String_append_cstr(out, "[");
             uint32 count = prop->value.uint32_array_value.count;
             if (count > 32) count = 32;
             for (uint32 i = 0; i < count; ++i) {
-                if (i > 0) fprintf(out, ", ");
-                fprintf(out, "%u", prop->value.uint32_array_value.items[i]);
+                if (i > 0) String_append_cstr(out, ", ");
+                String_append_format(out, "%u", prop->value.uint32_array_value.items[i]);
             }
             if (prop->value.uint32_array_value.count > 32)
-                fprintf(out, ", null");
-            fprintf(out, "]");
+                String_append_cstr(out, ", null");
+            String_append_cstr(out, "]");
             break;
         }
         case PROP_TYPE_ARRAY_F32: {
-            fprintf(out, "[");
+            String_append_cstr(out, "[");
             uint32 count = prop->value.float32_array_value.count;
             if (count > 32) count = 32;
             for (uint32 i = 0; i < count; ++i) {
-                if (i > 0) fprintf(out, ", ");
-                fprintf(out, "%f", prop->value.float32_array_value.items[i]);
+                if (i > 0) String_append_cstr(out, ", ");
+                String_append_format(out, "%f", prop->value.float32_array_value.items[i]);
             }
             if (prop->value.float32_array_value.count > 32)
-                fprintf(out, ", null");
-            fprintf(out, "]");
+                String_append_cstr(out, ", null");
+            String_append_cstr(out, "]");
             break;
         }
         case PROP_TYPE_ARRAY_U8: {
-            fprintf(out, "[");
+            String_append_cstr(out, "[");
             uint32 count = prop->value.uint8_array_value.count;
             if (count > 32) count = 32;
             for (uint32 i = 0; i < count; ++i) {
-                if (i > 0) fprintf(out, ", ");
-                fprintf(out, "%u", prop->value.uint8_array_value.items[i]);
+                if (i > 0) String_append_cstr(out, ", ");
+                String_append_format(out, "%u", prop->value.uint8_array_value.items[i]);
             }
             if (prop->value.uint8_array_value.count > 32)
-                fprintf(out, ", null");
-            fprintf(out, "]");
+                String_append_cstr(out, ", null");
+            String_append_cstr(out, "]");
             break;
         }
         case PROP_TYPE_OBJID:
-            fprintf(out, "\"0x%016lX\"", prop->value.objid_value);
+            String_append_format(out, "%llu", prop->value.objid_value);
             break;
         case PROP_TYPE_EVENT: {
-            fprintf(out, "[");
+            String_append_cstr(out, "[");
             uint32 count = prop->value.event_value.count;
             if (count > 32) count = 32;
             for (uint32 i = 0; i < count; ++i) {
-                if (i > 0) fprintf(out, ", ");
-                fprintf(out, "\"0x%016lX\"", prop->value.event_value.items[i]);
+                if (i > 0) String_append_cstr(out, ", ");
+                String_append_format(out, "%llu", prop->value.event_value.items[i]);
             }
             if (prop->value.event_value.count > 32)
-                fprintf(out, ", null");
-            fprintf(out, "]");
+                String_append_cstr(out, ", null");
+            String_append_cstr(out, "]");
             break;
         }
         default:
-            fprintf(out, "null");
+            String_append_cstr(out, "null");
     }
 }
 
-void RuntimeNode_emit_json(RuntimeNode *node, FILE *out, uint32 indent) {
+void RuntimeNode_emit_json(RuntimeNode *node, String *out, uint32 indent) {
     print_indent(out, indent);
-    fprintf(out, "{\n");
+    String_append_cstr(out, "{\n");
     print_indent(out, indent + 2);
-    fprintf(out, "\"name\": \"%s\",\n", String_data(&node->name));
+    String_append_format(out, "\"name\": \"%s\",\n", String_data(&node->name));
     print_indent(out, indent + 2);
-    fprintf(out, "\"name_hash\": %u,\n", node->name_hash);
+    String_append_format(out, "\"name_hash\": %u,\n", node->name_hash);
 
     // Properties
     if (node->props.count) {
         print_indent(out, indent + 2);
-        fprintf(out, "\"props\": {\n");
+        String_append_cstr(out, "\"props\": {\n");
         for (uint32 i = 0; i < node->props.count; ++i) {
             RuntimeProp *prop = DA_at(&node->props, i);
             if (prop->type == PROP_TYPE_NONE) continue;
             RuntimeProp_emit_json(prop, out, indent + 4);
-            if (i + 1 < node->props.count) fprintf(out, ",");
-            fprintf(out, "\n");
+            if (i + 1 < node->props.count) String_append_cstr(out, ",");
+            String_append_cstr(out, "\n");
         }
         print_indent(out, indent + 2);
-        fprintf(out, "},\n");
+        String_append_cstr(out, "},\n");
     }
 
     // Children
     if (node->children.count) {
         print_indent(out, indent + 2);
-        fprintf(out, "\"children\": [\n");
+        String_append_cstr(out, "\"children\": [\n");
         for (uint32 i = 0; i < node->children.count; ++i) {
             RuntimeNode *child = DA_at(&node->children, i);
             RuntimeNode_emit_json(child, out, indent + 4);
-            if (i + 1 < node->children.count) fprintf(out, ",");
-            fprintf(out, "\n");
+            if (i + 1 < node->children.count) String_append_cstr(out, ",");
+            String_append_cstr(out, "\n");
         }
         print_indent(out, indent + 2);
-        fprintf(out, "]\n");
+        String_append_cstr(out, "]\n");
     }
 
     print_indent(out, indent);
-    fprintf(out, "}");
+    String_append_cstr(out, "}");
 }

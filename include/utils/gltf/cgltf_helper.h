@@ -26,6 +26,13 @@ DYNAMIC_ARRAY_STRUCT(cgltf_material, cgltf_material);
 
 DYNAMIC_ARRAY_STRUCT(uint32, rootNodeIds);
 
+typedef struct { uint32_t v; } GL_ID;
+typedef struct { void* v; } TagGL_ID;
+
+#define INVALID_GL_ID (GL_ID){UINT32_MAX}
+
+#define IS_VALID_GL_ID(gl_id) ((gl_id).v != UINT32_MAX)
+
 typedef struct GLTFContext {
     cgltf_data *data;
     cgltf_options options;
@@ -42,8 +49,8 @@ typedef struct GLTFContext {
     bool finalized;
 } GLTFContext;
 
-static inline void *gltf_tag_index(uint32 idx) { return (void *) (uintptr_t) (idx + 1u); }
-static inline uint32 gltf_untag_index(void *p) { return (uint32) ((uintptr_t) p) - 1u; }
+static inline TagGL_ID gltf_tag_index(GL_ID idx) { return (TagGL_ID){(void*)(uintptr_t)(idx.v + 1u)}; }
+static inline GL_ID gltf_untag_index(void *p) { return (GL_ID){((uintptr_t) p) - 1u}; }
 
 char *GLTFContext_dupe_cstring(const char *name);
 
@@ -57,52 +64,56 @@ void GLTFContext_finalize(GLTFContext *ctx);
 
 void GLTFContext_free(GLTFContext *ctx);
 
-uint32 GLTFContext_create_buffer(GLTFContext *ctx, const void *data, uint32 data_size, char *name);
+GL_ID GLTFContext_create_buffer(GLTFContext *ctx, const void *data, uint32 data_size, char *name);
 
-uint32 GLTFContext_create_buffer_and_view(
+GL_ID GLTFContext_create_buffer_and_view(
     GLTFContext *ctx, const void *data, uint32 data_size, char *name,
     cgltf_buffer_view_type type, uint32 stride, uint32 offset);
 
-uint32 GLTFContext_create_accessor_raw(
-    GLTFContext *ctx, uint32 buffer_view_id, cgltf_type type,
+GL_ID GLTFContext_create_accessor_raw(
+    GLTFContext *ctx, GL_ID buffer_view_id, cgltf_type type,
     cgltf_component_type component_type, uint32 count, uint32 offset,
     bool normalized, char *name);
 
-uint32 GLTFContext_create_accessor_from_data(
+GL_ID GLTFContext_create_accessor_from_data(
     GLTFContext *ctx, const void *data, uint32 data_size,
     uint32 count, char *name, cgltf_type type,
     cgltf_component_type component_type, cgltf_buffer_view_type buffer_type,
     bool normalized, uint32 stride, uint32 offset);
 
-uint32 GLTFContext_add_node(GLTFContext *ctx, const char *name_opt);
+GL_ID GLTFContext_add_node(GLTFContext *ctx, const char *name_opt);
 
-void GLTFContext_node_set_mesh(GLTFContext *ctx, uint32 node_id, uint32 mesh_id);
+void GLTFContext_node_set_mesh(GLTFContext *ctx, GL_ID node_id, GL_ID mesh_id);
 
-void GLTFContext_node_set_matrix(GLTFContext *ctx, uint32 node_id, const float *matrix_4x4);
+void GLTFContext_node_set_parent(GLTFContext *ctx, GL_ID node_id, GL_ID parent_node_id);
 
-uint32 GLTFContext_add_mesh(GLTFContext *ctx, const char *name_opt, uint32 primitive_count);
+void GLTFContext_node_set_matrix(GLTFContext *ctx, GL_ID node_id, const float *matrix_4x4);
 
-cgltf_primitive *GLTFContext_mesh_get_primitive(GLTFContext *ctx, uint32 mesh_id, uint32 prim_index);
+GL_ID GLTFContext_add_mesh(GLTFContext *ctx, const char *name_opt, uint32 primitive_count);
 
-void GLTFContext_primitive_set_material(GLTFContext *ctx, uint32 mesh_id, uint32 primitive_id, uint32 material_id);
+cgltf_primitive *GLTFContext_mesh_get_primitive(GLTFContext *ctx, GL_ID mesh_id, uint32 prim_index);
 
-void GLTFContext_set_primitive_indices_accessor(GLTFContext *ctx, uint32 mesh_id, uint32 primitive_id,
-                                                uint32 accessor_id);
+void GLTFContext_primitive_set_material(GLTFContext *ctx, GL_ID mesh_id, uint32 prim_index, GL_ID material_id);
 
-void GLTFContext_primitive_init_attributes(GLTFContext *ctx, uint32 mesh_id, uint32 primitive_id,
+void GLTFContext_set_primitive_indices_accessor(GLTFContext *ctx, GL_ID mesh_id, uint32 prim_index,
+                                                GL_ID accessor_id);
+
+void GLTFContext_primitive_init_attributes(GLTFContext *ctx, GL_ID mesh_id, uint32 prim_index,
                                            uint32 attribute_count);
 
-void GLTFContext_primitive_set_attribute_accessor(GLTFContext *ctx, uint32 mesh_id, uint32 primitive_id,
-                                                  uint32 attribute_id, uint32 accessor_id, const char *name);
+void GLTFContext_primitive_set_attribute_accessor(GLTFContext *ctx, GL_ID mesh_id, uint32 prim_index,
+                                                  uint32 attribute_index, GL_ID accessor_id, const char *name);
 
 bool GLTFContext_write_and_free(GLTFContext *ctx);
 
-uint32 GLTFContext_add_material(GLTFContext *ctx, const char *name_opt);
+GL_ID GLTFContext_add_material(GLTFContext *ctx, const char *name_opt);
 
-uint32 GLTFContext_find_material_by_name(GLTFContext *ctx, const char *name);
+GL_ID GLTFContext_find_material_by_name(GLTFContext *ctx, const char *name);
+
+void GLTFContext_node_set_extra(GLTFContext *ctx, GL_ID node_id, const char* data);
 
 // Shortcuts
-uint32 GLTFContext_create_indices_accessor_from_data(
+GL_ID GLTFContext_create_indices_accessor_from_data(
     GLTFContext *ctx, const void *data, uint32 data_size,
     uint32 count, char *name, cgltf_component_type component_type,
     uint32 offset);

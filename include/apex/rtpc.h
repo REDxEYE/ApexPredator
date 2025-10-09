@@ -118,14 +118,14 @@ bool RuntimeNode_has_prop(RuntimeNode *node, const char *name);
 
 
 void RuntimeNode_print(RuntimeNode* node, FILE* output, uint32 indent);
-void RuntimeNode_emit_json(RuntimeNode *node, FILE *out, uint32 indent);
+void RuntimeNode_emit_json(RuntimeNode *node, String *out, uint32 indent);
 
 void RuntimeNode_free(RuntimeNode *node);
 
 void RuntimeProp_init(RuntimeProp *prop, PropType type);
 
 void RuntimeProp_print(RuntimeProp* prop, FILE* output, uint32 indent);
-void RuntimeProp_emit_json(RuntimeProp *prop, FILE *out, uint32 indent);
+void RuntimeProp_emit_json(RuntimeProp *prop, String *out, uint32 indent);
 
 void RuntimeProp_free(RuntimeProp* prop);
 
