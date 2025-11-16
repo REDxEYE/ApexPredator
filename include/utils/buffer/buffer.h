@@ -128,6 +128,8 @@ void Buffer_init(Buffer *buffer);
 
 uint64 Buffer_remaining(Buffer *buffer, BufferError *error);
 
+void Buffer_align(Buffer *buffer, uint32 alignment);
+
 #define IS_SUCCESS(expr)  (expr)==BUFFER_SUCCESS
 #define IS_FAILED(expr)   (expr)<=BUFFER_FAILED
 

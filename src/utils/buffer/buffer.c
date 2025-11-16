@@ -224,3 +224,18 @@ uint64 Buffer_remaining(Buffer *buffer, BufferError *error) {
     }
     return size - position;
 }
+
+void Buffer_align(Buffer *buffer, uint32 alignment) {
+    assert(buffer != NULL);
+    if (alignment == 0) {
+        return;
+    }
+    int64 position;
+    if (buffer->get_position(buffer, &position) != BUFFER_SUCCESS) {
+        return;
+    }
+    uint32 padding = (alignment - (position % alignment)) % alignment;
+    if (padding > 0) {
+        buffer->set_position(buffer, padding, BUFFER_ORIGIN_CURRENT);
+    }
+}
