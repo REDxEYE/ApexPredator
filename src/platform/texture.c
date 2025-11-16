@@ -97,7 +97,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, uint32 input_
         case DXGI_FORMAT_BC3_TYPELESS:
         case DXGI_FORMAT_BC3_UNORM:
         case DXGI_FORMAT_BC3_UNORM_SRGB: {
-            const uint32 block_size = 8;
+            const uint32 block_size = 16;
             const uint32 blocks_wide = (texture->width + 3) / 4;
             const uint32 blocks_high = (texture->height + 3) / 4;
             const uint32 expected_compressed_size = blocks_wide * blocks_high * block_size;
@@ -109,7 +109,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, uint32 input_
             const uint32 block_count = blocks_wide * blocks_high;
             for (int i = 0; i < block_count; ++i) {
                 bcdec_bc3(input + i * 16,
-                          texture->data + (i % blocks_wide) * 4 * 4 + (i / blocks_wide) * 4 * texture->width * 4,
+                          texture->data + (i % blocks_wide) * 4 * 4 + (i / blocks_wide) * 4,
                           texture->width * 4);
             }
             break;
@@ -311,28 +311,28 @@ uint32 Texture_calculate_mip_size(uint32 mip, uint32 width, uint32 height, DDSDX
         case DXGI_FORMAT_BC2_UNORM_SRGB: {
             uint32 blocks_wide = (mip_width + 3) / 4;
             uint32 blocks_high = (mip_height + 3) / 4;
-            return blocks_wide * blocks_high * 8;
+            return blocks_wide * blocks_high * 16;
         }
         case DXGI_FORMAT_BC3_TYPELESS:
         case DXGI_FORMAT_BC3_UNORM:
         case DXGI_FORMAT_BC3_UNORM_SRGB: {
             uint32 blocks_wide = (mip_width + 3) / 4;
             uint32 blocks_high = (mip_height + 3) / 4;
-            return blocks_wide * blocks_high * 8;
+            return blocks_wide * blocks_high * 16;
         }
         case DXGI_FORMAT_BC4_TYPELESS:
         case DXGI_FORMAT_BC4_UNORM:
         case DXGI_FORMAT_BC4_SNORM: {
             uint32 blocks_wide = (mip_width + 3) / 4;
             uint32 blocks_high = (mip_height + 3) / 4;
-            return blocks_wide * blocks_high * 4;
+            return blocks_wide * blocks_high * 8;
         }
         case DXGI_FORMAT_BC5_TYPELESS:
         case DXGI_FORMAT_BC5_UNORM:
         case DXGI_FORMAT_BC5_SNORM: {
             uint32 blocks_wide = (mip_width + 3) / 4;
             uint32 blocks_high = (mip_height + 3) / 4;
-            return blocks_wide * blocks_high * 8;
+            return blocks_wide * blocks_high * 16;
         }
         default:
             printf("[ERROR]: Unsupported DXGI format: %d\n", format);
