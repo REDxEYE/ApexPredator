@@ -191,8 +191,12 @@ void GLTFContext_free(GLTFContext *ctx) {
                        });
     DA_free(&ctx->buffer_views);
     DA_free(&ctx->scene_node_ids);
+    DA_free(&ctx->materials);
+
+    String_free(&ctx->save_path);
 
     free(ctx->data->scene[0].nodes);
+    free(ctx->data->scene[0].name);
     free(ctx->data->scenes);
     free(ctx->data);
 }
@@ -346,16 +350,19 @@ void GLTFContext_primitive_set_attribute_accessor(GLTFContext *ctx, GL_ID mesh_i
 }
 
 bool GLTFContext_write_and_free(GLTFContext *ctx) {
-    if (ctx->save_path.size==0) {
-        printf("[ERROR]: GLTFContext_write_and_free: no save path set\n");
-        exit(1);
+    bool ok;
+    if (ctx->meshes.count>0 || ctx->nodes.count>0) {
+        if (ctx->save_path.size==0) {
+            printf("[ERROR]: GLTFContext_write_and_free: no save path set\n");
+            exit(1);
+        }
+        GLTFContext_finalize(ctx);
+        ctx->options.type = cgltf_file_type_gltf;
+        printf("[INFO]: GLTF save path: %s\n", String_data(&ctx->save_path));
+        ok = (cgltf_write_file(&ctx->options, String_data(&ctx->save_path), ctx->data) == cgltf_result_success);
+    }else {
+        ok = true;
     }
-    GLTFContext_finalize(ctx);
-    ctx->options.type = cgltf_file_type_gltf;
-    printf("[INFO]: GLTF save path: %s\n", String_data(&ctx->save_path));
-    bool ok = (cgltf_write_file(&ctx->options, String_data(&ctx->save_path), ctx->data) == cgltf_result_success);
-
-    // free (reusing your free helpers)
     GLTFContext_free(ctx);
     memset(ctx, 0, sizeof(*ctx));
     return ok;
