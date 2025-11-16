@@ -21,8 +21,8 @@ bool read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
         STI_Type_init(&dummy, typedef_->type);
         type = &dummy;
         String_copy_from(&type->name, &adf->strings.items[typedef_->name_id]);
-        is_dummy=true;
-    }else {
+        is_dummy = true;
+    } else {
         type = STI_TypeLibrary_new_type(lib, typedef_->type, typedef_->hash, &adf->strings.items[typedef_->name_id]);
     }
 
@@ -33,7 +33,7 @@ bool read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
     switch (typedef_->type) {
         case STI_Structure: {
             uint32 member_count = 0;
-            if (buffer->read_uint32(buffer, &member_count)){
+            if (buffer->read_uint32(buffer, &member_count)) {
                 return false;
             }
             DA_reserve(&type->type_data.struct_data.members, member_count);
@@ -48,7 +48,7 @@ bool read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
         }
         case STI_Enumeration: {
             uint32 member_count = 0;
-            if (buffer->read_uint32(buffer, &member_count)){
+            if (buffer->read_uint32(buffer, &member_count)) {
                 return false;
             }
             DA_reserve(&type->type_data.enum_data.members, member_count);
@@ -97,7 +97,7 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
     buffer->set_position(buffer, header->stringhash_offset, BUFFER_ORIGIN_START);
     String hash_tmp = {0};
     for (int i = 0; i < header->stringhash_count; ++i) {
-        buffer->read_cstring(buffer,&hash_tmp);
+        buffer->read_cstring(buffer, &hash_tmp);
         uint64 string_hash = 0;
         buffer->read_uint64(buffer, &string_hash);
         if (DA_contains(&lib->hash_strings.keys, &string_hash, compare_hashes64)) {
@@ -119,7 +119,7 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
     }
     DA_init(&adf->instances, ADFInstance, header->instance_count);
     buffer->set_position(buffer, header->instance_offset, BUFFER_ORIGIN_START);
-    for (int i = 0; i < header->instance_count; ++i){
+    for (int i = 0; i < header->instance_count; ++i) {
         ADFInstance *instance = DA_append_get(&adf->instances);
         buffer->read(buffer, instance, sizeof(ADFInstance), NULL);
     }
@@ -136,21 +136,21 @@ void ADF_free(ADF *adf) {
 }
 
 void ADF_load_builtin_adf(STI_TypeLibrary *lib, const uint8 *data, int64 size) {
-        ADF adf = {0};
-        MemoryBuffer emb = {0};
-        MemoryBuffer_allocate(&emb, size);
-        memcpy(emb.data, data, size);
-        ADF_from_buffer(&adf, (Buffer*)&emb, lib);
-        ADF_free(&adf);
-        emb.close(&emb);
+    ADF adf = {0};
+    MemoryBuffer emb = {0};
+    MemoryBuffer_allocate(&emb, size);
+    memcpy(emb.data, data, size);
+    ADF_from_buffer(&adf, (Buffer *) &emb, lib);
+    ADF_free(&adf);
+    emb.close(&emb);
 }
 
-ADFInstance * ADF_get_instance(ADF *adf, uint32 instance_id) {
+ADFInstance *ADF_get_instance(ADF *adf, uint32 instance_id) {
     if (instance_id >= adf->instances.count) return NULL;
     return DA_at(&adf->instances, instance_id);
 }
 
-void * ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance *instance, const MemoryBuffer *mb) {
+void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance *instance, const MemoryBuffer *mb) {
     STI_Type *type = DM_get(&lib->types, instance->type_hash);
     // printf("Instance: %s, type %s\n", String_data(&adf->strings.items[instance->name_id]),
     //        type ? String_data(&type->name) : "UNKNOWN");
@@ -170,7 +170,7 @@ void * ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance
     MemoryBuffer_allocate(&instance_memory, instance->size);
     memcpy(instance_memory.data, mb->data + instance->offset, instance->size);
 
-    void *instance_data = malloc(object_methods->size);
+    void *instance_data = calloc(object_methods->size, 1);
 
     if (!object_methods->read((Buffer *) &instance_memory, lib, instance_data)) {
         printf("Failed to read instance %s of type %s\n", String_data(&adf->strings.items[instance->name_id]),

@@ -43,6 +43,15 @@
         <AlternativeType Name="DynamicArray_AAFSection"/>
         <AlternativeType Name="DynamicArray_RuntimeProp"/>
         <AlternativeType Name="DynamicArray_RuntimeNode"/>
+        <AlternativeType Name="DynamicArray_HKTagType"/>
+        <AlternativeType Name="DynamicArray_HKTagTemplateType"/>
+        <AlternativeType Name="DynamicArray_HKTagMember"/>
+        <AlternativeType Name="DynamicArray_HKTagNameAndTypePair"/>
+        <AlternativeType Name="DynamicArray_HKTagInterface"/>
+        <AlternativeType Name="DynamicArray_HKTagItem"/>
+        <AlternativeType Name="DynamicArray_HavokType"/>
+        <AlternativeType Name="DynamicArray_HavokRecordMember"/>
+        <AlternativeType Name="DynamicArray_HavokTemplateArgument"/>
         <DisplayString>{{size={count}, cap={capacity}}}</DisplayString>
         <Expand>
             <Item Name="size">count</Item>

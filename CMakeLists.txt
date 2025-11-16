@@ -37,10 +37,13 @@ add_executable(ApexPredator
         include/apex/rtpc.h
         src/apex/hashes.c
         include/apex/hashes.h
+        src/havok/tag_file/havok_tag_file.c
+        src/havok/havok_generated.c
+        src/havok/tag_file/havok_tag_types.c
 )
 
-add_executable(TypeGenerator
-        src/type_gen.c
+add_executable(AdfTypeGenerator
+        src/adf_type_gen.c
         src/utils/string.c
         src/utils/buffer/file_buffer.c
         src/utils/buffer/buffer.c
@@ -62,6 +65,29 @@ add_executable(TypeGenerator
         src/apex/hashes.c
         include/apex/hashes.h
 )
+
+add_executable(HavokTypeGenerator
+        src/havok_type_gen.c
+        src/apex/aaf/aaf.c
+        src/platform/archive.c
+        src/platform/archive_manager.c
+        src/apex/package/tab_archive.c
+        src/apex/sarc.c
+        src/utils/zlib_wrapper.c
+        src/utils/lookup3.c
+        src/utils/string.c
+        src/utils/buffer/file_buffer.c
+        src/utils/buffer/buffer.c
+        src/utils/dynamic_array.c
+        src/utils/buffer/memory_buffer.c
+        src/utils/dynamic_insert_only_map.c
+        src/utils/path.c
+        src/utils/common.c
+        src/havok/havok_codegen.c
+        src/havok/tag_file/havok_tag_file.c
+        src/havok/tag_file/havok_tag_types.c
+)
+
 add_executable(HashCollector
         src/hash_collector.c
         src/utils/string.c
@@ -93,17 +119,20 @@ add_executable(HashBruteforce
 
 if(UNIX)
     target_compile_options(ApexPredator PRIVATE -fms-extensions)
-    target_compile_options(TypeGenerator PRIVATE -fms-extensions)
+    target_compile_options(AdfTypeGenerator PRIVATE -fms-extensions)
+    target_compile_options(HavokTypeGenerator PRIVATE -fms-extensions)
     target_compile_options(HashCollector PRIVATE -fms-extensions)
     target_link_libraries(ApexPredator PUBLIC m)
 else ()
     target_compile_options(ApexPredator PRIVATE /bigobj)
 endif()
 target_include_directories(ApexPredator PUBLIC include external/cgltf external/zlib)
-target_include_directories(TypeGenerator PUBLIC include external/zlib)
+target_include_directories(AdfTypeGenerator PUBLIC include external/zlib)
+target_include_directories(HavokTypeGenerator PUBLIC include external/zlib)
 target_include_directories(HashCollector PUBLIC include external/zlib)
 target_include_directories(StringHasher PUBLIC include )
 target_include_directories(HashBruteforce PUBLIC include )
 
 target_link_libraries(ApexPredator PUBLIC libzstd zlibstatic)
-target_link_libraries(TypeGenerator PUBLIC zlibstatic)
+target_link_libraries(AdfTypeGenerator PUBLIC zlibstatic)
+target_link_libraries(HavokTypeGenerator PUBLIC zlibstatic)

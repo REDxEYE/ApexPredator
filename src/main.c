@@ -15,6 +15,7 @@
 #include "apex/adf/adf_types.h"
 #include "apex/aaf/aaf.h"
 #include "apex/package/tab_archive.h"
+#include "../include/havok/tag_file/havok_tag_file.h"
 #include "platform/archive_manager.h"
 #include "utils/string.h"
 #include "utils/path.h"
@@ -1003,6 +1004,10 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
         // RuntimeNode_emit_json(root_node, stdout, 0);
         output_node_id = export_epe(context, archive_manager, lib, root_node, hash, path, export_path);
         RuntimeNode_free(root_node);
+    } else if (memcmp(mb.data + 4, "TAG0", 4) == 0) {
+        TagFile tag_file={0};
+        TagFile_from_buffer(&tag_file, (Buffer *) &mb);
+        TagFile_free(&tag_file);
     } else {
         String unk_file_export_path = {};
         Path_join(&unk_file_export_path, export_path);
@@ -1030,8 +1035,8 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
 }
 
 int main(int argc, const char *argv[]) {
-    if (argc < 2) {
-        printf("USAGE: %s <path_to_game_root>\n", argv[0]);
+    if (argc < 3) {
+        printf("USAGE: %s <path_to_game_root> <path_to_file> [extra_path]\n", argv[0]);
         return 0;
     }
     ArchiveManager manager = {0};
@@ -1054,9 +1059,16 @@ int main(int argc, const char *argv[]) {
     GLTFContext context = {0};
     GLTFContext_init(&context, "root");
 
-    String_from_cstr(&file_path, "editor/entities/characters/machines/hunter/hunt_classa_load02.ee");
+
+    String_from_cstr(&file_path, argv[2]);
+    String_from_cstr(&file_path, "editor/entities/characters/machines/dreadnought/drea_classb_load01.ee");
     export_file(&context, &manager, &lib, &file_path, hash_string(&file_path), &export_path);
-    String_from_cstr(&file_path, "editor/entities/characters/machines/hunter/hunt_classa_load02.epe");
+    String_from_cstr(&file_path, "editor/entities/characters/machines/dreadnought/drea_classb_load01.epe");
+    if (argc >=4) {
+        String_from_cstr(&file_path, argv[3]);
+        export_file(&context, &manager, &lib, &file_path, hash_string(&file_path), &export_path);
+    }
+    String_from_cstr(&file_path, "animations/skeletons/characters/dreadnought.bsk");
     export_file(&context, &manager, &lib, &file_path, hash_string(&file_path), &export_path);
 
     GLTFContext_write_and_free(&context);
