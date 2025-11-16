@@ -3,6 +3,7 @@
 #include "../../include/utils/dynamic_array.h"
 
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -17,6 +18,14 @@ DynamicArray__Base * DA_new_(uint32 item_size, uint32 initial_capacity) {
 }
 
 void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity) {
+    if (da->items!=NULL) {
+        if (da->statically_allocated) {
+            printf("[ERROR]: Trying to reinitialize statically allocated dynamic array\n");
+            exit(1);
+        }
+        free(da->items);
+        da->items = NULL;
+    }
     da->capacity = initial_capacity;
     da->count = 0;
     da->item_size = item_size;
@@ -29,7 +38,7 @@ void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity)
 }
 
 // Does copy element data to internal array
-void DA_append_(DynamicArray__Base *da, void *element) {
+void DA_append_(DynamicArray__Base *da, const void *element) {
     NULL_ITEM_CHECK;
     if (da->count >= da->capacity) {
         DA_reserve_(da, da->count + 1);
@@ -70,7 +79,7 @@ void DA_reserve_(DynamicArray__Base *da, uint32 needed_capacity) {
     }
 }
 
-void *DA_at_(DynamicArray__Base *da, uint32 index) {
+inline void *DA_at_(DynamicArray__Base *da, uint32 index) {
     NULL_ITEM_CHECK;
     if (index >= da->count) {
         return NULL;
@@ -90,7 +99,7 @@ void DA_free_(DynamicArray__Base *da) {
     }
 }
 
-bool DA_contains_(DynamicArray__Base *da, void *element, DA_compare_fn compare_fn) {
+bool DA_contains_(DynamicArray__Base *da, const void *element, DA_compare_fn compare_fn) {
     NULL_ITEM_CHECK;
     for (int i = 0; i < da->count; ++i) {
         void *item = DA_at(da, i);
