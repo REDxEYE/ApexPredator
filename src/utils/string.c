@@ -15,6 +15,9 @@ void String_free(String *string) {
     }
     string->size = 0;
     string->capacity = 0;
+    if (string->heap_allocated) {
+        free(string);
+    }
 }
 
 String * String_new(uint32 size) {
