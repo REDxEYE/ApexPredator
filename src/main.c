@@ -15,7 +15,9 @@
 #include "apex/adf/adf_types.h"
 #include "apex/aaf/aaf.h"
 #include "apex/package/tab_archive.h"
-#include "../include/havok/tag_file/havok_tag_file.h"
+#include "havok/tag_file/havok_tag_file.h"
+#include "havok/havok_codegen.h"
+#include "havok/havok_generated.h"
 #include "platform/archive_manager.h"
 #include "utils/string.h"
 #include "utils/path.h"
@@ -127,10 +129,12 @@ float32 lod_offsets[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 4.5f, 24.f, 96.f, 384.f};
 
 #pragma pack(pop)
 
-GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, const String *path,
+GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, HavokTypeLib *havok_lib,
+                  const String *path,
                   uint32 hash, const String *export_path);
 
-GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, uint32 path_hash,
+GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
+                      HavokTypeLib *havok_lib, uint32 path_hash,
                       const String *path, MemoryBuffer *mb,
                       const String *export_path);
 
@@ -678,7 +682,8 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
 }
 
 
-GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, AmfModel *amf_model,
+GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
+                       HavokTypeLib *havok_lib, AmfModel *amf_model,
                        const String *path, uint32 path_hash, const String *export_path) {
     assert(context!=NULL && "context must be initialized");
 
@@ -709,7 +714,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
             if (tex_path->size == 0) {
                 break;
             }
-            export_file(context, archive_manager, lib, tex_path, hash_string(tex_path), export_path);
+            export_file(context, archive_manager, lib, havok_lib, tex_path, hash_string(tex_path), export_path);
         }
     }
 
@@ -722,7 +727,8 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         return model_root_node_id;
     }
 
-    GL_ID mesh_root_node = export_adf_file(context, archive_manager, lib, hash_string(mesh_path), mesh_path, &mb,
+    GL_ID mesh_root_node = export_adf_file(context, archive_manager, lib, havok_lib, hash_string(mesh_path), mesh_path,
+                                           &mb,
                                            export_path);
     GLTFContext_node_set_parent(context, mesh_root_node, model_root_node_id);
 
@@ -732,7 +738,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
 }
 
 GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                      uint32 path_hash, const String *path, MemoryBuffer *mb,
+                      HavokTypeLib *havok_lib, uint32 path_hash, const String *path, MemoryBuffer *mb,
                       const String *export_path) {
     assert(context!=NULL && "context must be initialized");
 
@@ -760,7 +766,7 @@ GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI
             export_terrain_patch(&mesh_export_path, instance_data, tile_x, tile_y, lod);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfModel) {
             // ADF_print_instance(lib, instance, instance_data, 0);
-            output_node_id = export_amf_model(context, archive_manager, lib, instance_data, path, path_hash,
+            output_node_id = export_amf_model(context, archive_manager, lib, havok_lib, instance_data, path, path_hash,
                                               export_path);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfMeshHeader) {
             instanceId++;
@@ -869,7 +875,8 @@ void export_ddsc(ArchiveManager *archive_manager, STI_TypeLibrary *lib, uint32 h
     Texture_free(&tex);
 }
 
-GL_ID process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, RuntimeNode *node,
+GL_ID process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
+                       HavokTypeLib *havok_lib, RuntimeNode *node,
                        uint32 path_hash,
                        const String *path, const String *export_path) {
     assert(context!=NULL && "context must be initialized");
@@ -891,7 +898,8 @@ GL_ID process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, ST
             printf("[ERROR]: Failed to get model property for CCharacter\n");
             return INVALID_GL_ID;
         }
-        output_node = export_file(context, archive_manager, lib, model_filename_hash, hash_string(model_filename_hash),
+        output_node = export_file(context, archive_manager, lib, havok_lib, model_filename_hash,
+                                  hash_string(model_filename_hash),
                                   export_path);
     } else if (String_cequals(class_name, "CSecondaryMotionAttachment")) {
         String *model_filename = RuntimeNode_get_prop_str(node, "model");
@@ -899,7 +907,7 @@ GL_ID process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, ST
             printf("[ERROR]: Failed to get model property for CSecondaryMotionAttachment\n");
             return INVALID_GL_ID;
         }
-        output_node = export_file(context, archive_manager, lib, model_filename, hash_string(model_filename),
+        output_node = export_file(context, archive_manager, lib, havok_lib, model_filename, hash_string(model_filename),
                                   export_path);
     } else if (String_cequals(class_name, "CRigidObject")) {
         uint32 model_filename_hash = RuntimeNode_get_prop_u32(node, "filename");
@@ -907,7 +915,7 @@ GL_ID process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, ST
             printf("[ERROR]: Failed to get model property for CRigidObject\n");
             return INVALID_GL_ID;
         }
-        output_node = export_file(context, archive_manager, lib, NULL, model_filename_hash, export_path);
+        output_node = export_file(context, archive_manager, lib, havok_lib, NULL, model_filename_hash, export_path);
     }
 
     if (!IS_VALID_GL_ID(output_node)) {
@@ -928,7 +936,8 @@ GL_ID process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, ST
     GLTFContext_node_set_extra(context, output_node, String_data(&extra_data));
     String_free(&extra_data);
     DA_FORI(node->children, i) {
-        GL_ID child_node_id = process_epe_node(context, archive_manager, lib, DA_at(&node->children, i), path_hash,
+        GL_ID child_node_id = process_epe_node(context, archive_manager, lib, havok_lib, DA_at(&node->children, i),
+                                               path_hash,
                                                path, export_path);
         if (IS_VALID_GL_ID(child_node_id))
             GLTFContext_node_set_parent(context, child_node_id, output_node);
@@ -936,7 +945,8 @@ GL_ID process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, ST
     return output_node;
 }
 
-GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, RuntimeNode *root_node,
+GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, HavokTypeLib *havok_lib,
+                 RuntimeNode *root_node,
                  uint32 path_hash,
                  const String *path, const String *export_path) {
     assert(context!=NULL && "context must be initialized");
@@ -962,7 +972,8 @@ GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_Type
     GL_ID epe_root_node_id = GLTFContext_add_node(context, "epe_root");
 
     DA_FORI(root_node->children, i) {
-        GL_ID epe_node_id = process_epe_node(context, archive_manager, lib, DA_at(&root_node->children, i), path_hash,
+        GL_ID epe_node_id = process_epe_node(context, archive_manager, lib, havok_lib, DA_at(&root_node->children, i),
+                                             path_hash,
                                              path, export_path);
         if (IS_VALID_GL_ID(epe_node_id))
             GLTFContext_node_set_parent(context, epe_node_id, epe_root_node_id);
@@ -970,7 +981,8 @@ GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_Type
     return epe_root_node_id;
 }
 
-GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, const String *path,
+GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, HavokTypeLib *havok_lib,
+                  const String *path,
                   uint32 hash, const String *export_path) {
     assert(context!=NULL && "context must be initialized");
 
@@ -982,7 +994,7 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
     GL_ID output_node_id = INVALID_GL_ID;
 
     if (memcmp(mb.data, ADF_MAGIC, 4) == 0) {
-        output_node_id = export_adf_file(context, archive_manager, lib, hash, path, &mb, export_path);
+        output_node_id = export_adf_file(context, archive_manager, lib, havok_lib, hash, path, &mb, export_path);
     } else if (memcmp(mb.data, AAF_MAGIC, 4) == 0) {
         AAFArchive aaf_archive = {0};
         AAFArchive_from_buffer(&aaf_archive, (Buffer *) &mb);
@@ -994,7 +1006,7 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
 
         SArchive *sarc = SArchive_new((Buffer *) section_buffer); // sarc is now owner of buffer
         ArchiveManager_add(archive_manager, (Archive *) sarc);
-        Archive_print_files((Archive *) sarc);
+        // Archive_print_files((Archive *) sarc);
         AAFArchive_free(&aaf_archive);
     } else if (memcmp(mb.data, AVTX_MAGIC, 4) == 0) {
         export_ddsc(archive_manager, lib, hash, &mb, path, export_path);
@@ -1002,11 +1014,22 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
         RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) &mb);
         // RuntimeNode_print(root_node, stdout, 0);
         // RuntimeNode_emit_json(root_node, stdout, 0);
-        output_node_id = export_epe(context, archive_manager, lib, root_node, hash, path, export_path);
+        output_node_id = export_epe(context, archive_manager, lib, havok_lib, root_node, hash, path, export_path);
         RuntimeNode_free(root_node);
     } else if (memcmp(mb.data + 4, "TAG0", 4) == 0) {
-        TagFile tag_file={0};
+        TagFile tag_file = {0};
         TagFile_from_buffer(&tag_file, (Buffer *) &mb);
+        HavokTypeLib_copy_from_tag_file(havok_lib, &tag_file);
+        const HKItem *item = &tag_file.items.items[1];
+        const uint32 type_hash = hash_string(&tag_file.types.items[item->type].name);
+        const HavokType *item_type = DM_get(&havok_lib->types, type_hash);
+        const HAVOK_ObjectMethods *type_methods = DM_get(&havok_lib->object_functions, type_hash);
+        void *item_obj = (void *) malloc(item_type->size * item->count);
+        type_methods->read(&tag_file, havok_lib, item_obj, &tag_file.data.items[item->offset]);
+        JsonContext ctx;
+        jsonInit(&ctx, stdout);
+        type_methods->print(item_obj, havok_lib, &ctx);
+
         TagFile_free(&tag_file);
     } else {
         String unk_file_export_path = {};
@@ -1043,8 +1066,11 @@ int main(int argc, const char *argv[]) {
     ArchiveManager_init(&manager);
 
     STI_TypeLibrary lib = {0};
+    HavokTypeLib havok_lib = {0};
+    HavokTypeLib_init(&havok_lib);
     STI_TypeLibrary_init(&lib);
     STI_ADF_TYPES_register_functions(&lib);
+    HAVOK_TYPES_register_functions(&havok_lib);
 
 
     String tmp = {0};
@@ -1062,14 +1088,14 @@ int main(int argc, const char *argv[]) {
 
     String_from_cstr(&file_path, argv[2]);
     String_from_cstr(&file_path, "editor/entities/characters/machines/dreadnought/drea_classb_load01.ee");
-    export_file(&context, &manager, &lib, &file_path, hash_string(&file_path), &export_path);
+    export_file(&context, &manager, &lib, &havok_lib, &file_path, hash_string(&file_path), &export_path);
     String_from_cstr(&file_path, "editor/entities/characters/machines/dreadnought/drea_classb_load01.epe");
-    if (argc >=4) {
+    if (argc >= 4) {
         String_from_cstr(&file_path, argv[3]);
-        export_file(&context, &manager, &lib, &file_path, hash_string(&file_path), &export_path);
+        export_file(&context, &manager, &lib, &havok_lib, &file_path, hash_string(&file_path), &export_path);
     }
     String_from_cstr(&file_path, "animations/skeletons/characters/dreadnought.bsk");
-    export_file(&context, &manager, &lib, &file_path, hash_string(&file_path), &export_path);
+    export_file(&context, &manager, &lib, &havok_lib, &file_path, hash_string(&file_path), &export_path);
 
     GLTFContext_write_and_free(&context);
 

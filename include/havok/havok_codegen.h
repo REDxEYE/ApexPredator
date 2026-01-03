@@ -5,6 +5,9 @@
 
 #include "tag_file/havok_tag_file.h"
 #include "utils/dynamic_insert_only_map.h"
+#include "utils/json.h"
+
+String *Havok_full_tag_type_name(const HKTagType *type);
 
 typedef struct {
     String name;
@@ -40,6 +43,7 @@ typedef struct {
     DynamicArray_HavokRecordMember members;
     uint32 is_record: 1;
     uint32 is_array: 1;
+    uint32 is_fixed_array: 1;
     uint32 is_ptr: 1;
     uint32 is_enum: 1;
     uint32 is_primitive:1;
@@ -53,16 +57,35 @@ DYNAMIC_ARRAY_STRUCT(HavokType, HavokType);
 
 DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(HavokType, HavokType);
 
+typedef struct HavokTypeLib HavokTypeLib;
+
+typedef void (*readHavokObject)(const TagFile *tf, const HavokTypeLib* lib, void *obj, const uint8* src);
+typedef void (*freeHavokObject)(void *obj);
+typedef void (*printHavokObject)(void *obj, const HavokTypeLib* lib, JsonContext *ctx);
+
 typedef struct {
+    readHavokObject read;
+    freeHavokObject free;
+    printHavokObject print;
+} HAVOK_ObjectMethods;
+
+DYNAMIC_ARRAY_STRUCT(HAVOK_ObjectMethods, HAVOK_ObjectMethods);
+DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(HAVOK_ObjectMethods, HAVOK_ObjectMethods);
+typedef DynamicInsertOnlyIntMap_HAVOK_ObjectMethods HAVOK_FunctionDict;
+
+struct HavokTypeLib{
     DynamicInsertOnlyIntMap_HavokType types;
     DynamicArray_uint64 exported_hashes;
-} HavokTypeLib;
+    HAVOK_FunctionDict object_functions;
+} ;
 
 String *HavokTypeLib_full_type_name(const HKTagType *type);
 
 void HavokTypeLib_init(HavokTypeLib *lib);
 
 void HavokTypeLib_free(HavokTypeLib *lib);
+
+HavokType* HavokTypeLib_find_by_name(HavokTypeLib* lib, const char *name);
 
 void HavokTypeLib_copy_from_tag_file(HavokTypeLib *lib, TagFile *tf);
 

@@ -16,6 +16,14 @@ TagHeader expect_tag(Buffer *buffer, const char *expected_ident) {
     }
     if (memcmp(header.ident, expected_ident, 4) != 0) {
         printf("[ERROR]: Expected tag %.4s but got %.4s\n", expected_ident, header.ident);
+        FILE *tmp = fopen("weird_file.tag", "wb");
+        buffer->set_position(buffer, 0, BUFFER_ORIGIN_START);
+        uint8 buf[1024];
+        uint32 read_bytes = 0;
+        while ((buffer->read(buffer, buf, 1024, &read_bytes) == BUFFER_SUCCESS) && read_bytes > 0) {
+            fwrite(buf, 1, read_bytes, tmp);
+        }
+        fclose(tmp);
         exit(1);
     }
     return header;
@@ -105,7 +113,8 @@ int64 read_compressed_int(Buffer *buffer) {
 
             return 0;
         }
-        default:{}
+        default: {
+        }
     }
 
     if ((b0 & 0xc0) == 0x80) {
@@ -230,7 +239,7 @@ uint32 read_compressed_int2(Buffer *buffer) {
 }
 
 
-void print_indent(FILE *out, uint32 indent) {
+void hk_print_indent(FILE *out, uint32 indent) {
     for (uint32 i = 0; i < indent; ++i) {
         fputc(' ', out);
     }
@@ -259,12 +268,12 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
         fprintf(out, " { // size: %d, flags: %d, type: %s, format: %i\n", type->size, type->flags,
                 HKTAGTYPE_NAMES[type->data_type], type->format);
         if (type->parent != NULL) {
-            print_indent(out, indent + 4);
+            hk_print_indent(out, indent + 4);
             fprintf(out, "struct %s;\n", String_data(&type->parent->name));
         }
         DA_FORI(type->members, i) {
             const HKTagTypeMember *member = &type->members.items[i];
-            print_indent(out, indent + 4);
+            hk_print_indent(out, indent + 4);
             if (member->type == NULL) {
                 fprintf(out, "/* %s: UNKNOWN_TYPE */;\n", String_data(&member->name));
             } else {
@@ -337,7 +346,7 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
                         String_data(&type->name), type->size);
             } else {
                 fprintf(out, "typedef struct %s {\n", String_data(&type->name));
-                print_indent(out, indent + 4);
+                hk_print_indent(out, indent + 4);
                 switch (type->size) {
                     case 1: {
                         fprintf(out, "uint8 unk0;\n");
@@ -412,8 +421,8 @@ bool TagHeader_from_buffer(TagHeader *header, Buffer *buffer) {
     if (buffer->read_uint32(buffer, &size_and_flags) != BUFFER_SUCCESS)return false;
     // Size is havok tag files is in big endian;
     size_and_flags = BE32TOH(size_and_flags);
-    header->size = (size_and_flags & 0x00FFFFFF);
-    header->flags = size_and_flags >> 24;
+    header->size = (size_and_flags & 0x0FFFFFFF);
+    header->flags = size_and_flags >> 28;
     if (buffer->read(buffer, header->ident, 4, NULL) != BUFFER_SUCCESS)return false;
     return true;
 }
@@ -548,7 +557,7 @@ bool read_type_body(MemoryBuffer *mb, const DynamicArray_HKTagType *types, const
         }
         if (flags & SizeAlign) {
             type->size = read_compressed_int(buffer);
-            type->align = read_compressed_int(buffer);
+            type->align = read_compressed_int(buffer) & 0xFF;
         }
 
         if (flags & Flags) {
@@ -716,13 +725,13 @@ bool TAG0Tag_from_buffer(TagFile *tf, Buffer *buffer) {
         return false;
     }
 
-    DA_FORI(tf->items, i) {
-        if (i == 0)continue;
-        const HKItem *item = &tf->items.items[i];
-        const HKTagType type = tf->types.items[item->type];
-        printf("Index Item %d: type: %d (%s), flags: 0x%02X, offset: %d, count: %d\n", i, item->type,
-               type.name.buffer, item->flags, item->offset, item->count);
-    }
+    // DA_FORI(tf->items, i) {
+    //     if (i == 0)continue;
+    //     const HKItem *item = &tf->items.items[i];
+    //     const HKTagType type = tf->types.items[item->type];
+    //     printf("Index Item %d: type: %d (%s), flags: 0x%02X, offset: %d, count: %d\n", i, item->type,
+    //            type.name.buffer, item->flags, item->offset, item->count);
+    // }
 
     return true;
 }

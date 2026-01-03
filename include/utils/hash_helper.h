@@ -22,10 +22,10 @@ static inline uint32_t jenkins_hl_str(const char *s, const uint32_t seed) {
 #  define JENKINS_HL(s, seed) jenkins_hl_str((s), (seed))
 #endif
 
-static inline uint32 hash_string(const String *str) {
+inline uint32 hash_string(const String *str) {
     return hashlittle(String_data(str), str->size, 0);
 }
-static inline uint32 hash_cstring(const char *str) {
+inline uint32 hash_cstring(const char *str) {
     return hashlittle(str, strlen(str), 0);
 }
 

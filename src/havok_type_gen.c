@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -9,10 +8,7 @@
 #include "utils/path.h"
 #include "utils/buffer/buffer.h"
 
-#include "apex/package/tab.h"
-#include "apex/adf/adf.h"
 #include "apex/package/tab_archive.h"
-#include "apex/adf/builtin_adf.h"
 #include "havok/havok_codegen.h"
 #include "utils/hash_helper.h"
 
@@ -27,7 +23,7 @@ void collect_types(ArchiveManager *archive_manager, HavokTypeLib *lib) {
     DynamicArray_ArchiveEntry all_entries = {0};
     ArchiveManager_get_all_entries(archive_manager, &all_entries);
     for (int i = 0; i < all_entries.count; ++i) {
-        if (i>0 && i%100==0) {
+        if (i>0 && i%1000==0) {
             printf("Processing file %i/%i\r", i, all_entries.count);
             fflush(stdout);
             break;

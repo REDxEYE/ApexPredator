@@ -10,8 +10,8 @@
 #include "havok_tag_types.h"
 
 typedef struct {
-    uint32 size: 30;
-    uint32 flags: 2;
+    uint32 size: 28;
+    uint32 flags: 4;
     char ident[4];
 } TagHeader;
 
