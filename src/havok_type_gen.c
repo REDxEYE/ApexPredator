@@ -12,14 +12,14 @@
 #include "havok/havok_codegen.h"
 #include "utils/hash_helper.h"
 
-void process_havok_file(HavokTypeLib* lib, Buffer* buffer) {
+void process_havok_file(Havok_TypeLibrary* lib, Buffer* buffer) {
     TagFile tag_file={0};
     TagFile_from_buffer(&tag_file, buffer);
     HavokTypeLib_copy_from_tag_file(lib, &tag_file);
     TagFile_free(&tag_file);
 }
 
-void collect_types(ArchiveManager *archive_manager, HavokTypeLib *lib) {
+void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
     DynamicArray_ArchiveEntry all_entries = {0};
     ArchiveManager_get_all_entries(archive_manager, &all_entries);
     for (int i = 0; i < all_entries.count; ++i) {
@@ -106,7 +106,7 @@ int main(int argc, const char *argv[]) {
         return 0;
     }
 
-    HavokTypeLib lib = {0};
+    Havok_TypeLibrary lib = {0};
     String tmp = {0};
     String game_root = {0};
     HavokTypeLib_init(&lib);

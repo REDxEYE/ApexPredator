@@ -6,6 +6,7 @@
 #include "int_def.h"
 #include "utils/dynamic_array.h"
 #include "utils/string.h"
+#include "cglm/mat4.h"
 
 DYNAMIC_ARRAY_STRUCT(float32, float32);
 
@@ -18,5 +19,7 @@ DYNAMIC_ARRAY_STRUCT(uint8, uint8);
 DYNAMIC_ARRAY_STRUCT(String, String);
 
 DYNAMIC_ARRAY_STRUCT(char*, charPtr);
+
+DYNAMIC_ARRAY_STRUCT(mat4, mat4);
 
 #endif //APEXPREDATOR_COMMON_ARRAYS_H

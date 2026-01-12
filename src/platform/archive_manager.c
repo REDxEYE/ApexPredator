@@ -38,7 +38,7 @@ bool ArchiveManager_get_file_by_hash(ArchiveManager *manager, const uint32 path,
     return false;
 }
 
-bool ArchiveManager_has_file(const ArchiveManager *manager, String *path) {
+bool ArchiveManager_has_file(const ArchiveManager *manager, const String *path) {
     uint32 hash = hash_string(path);
     for (uint32 i = 0; i < manager->archives.count; ++i) {
         const Archive *ar = manager->archives.items[i];

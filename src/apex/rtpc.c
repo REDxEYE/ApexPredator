@@ -32,6 +32,15 @@ typedef struct {
 
 void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer);
 
+void RuntimeProp__move_to(RuntimeProp *src, RuntimeProp *dest) {
+    String_steal(&dest->name, String_move(&src->name));
+    dest->name_hash = src->name_hash;
+    dest->type = src->type;
+    dest->value = src->value;
+
+    memset(src, 0, sizeof(RuntimeProp));
+}
+
 void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer);
 
 RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
@@ -286,9 +295,13 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         printf("[ERROR]: Failed to seek to node data offset: %u\n", header.data_offset);
         exit(1);
     }
+    RuntimeProp tmp={0};
     for (int i = 0; i < header.prop_count; ++i) {
-        RuntimeProp *prop = DA_append_get(&node->props);
-        RuntimeProp__from_buffer(prop, buffer);
+        RuntimeProp__from_buffer(&tmp, buffer);
+        if (tmp.type!=PROP_TYPE_NONE) {
+            RuntimeProp *prop = DA_append_get(&node->props);
+            RuntimeProp__move_to(&tmp, prop);
+        }
     }
     // Align buffer position to 4
     int64 pos;
@@ -651,7 +664,7 @@ void RuntimeProp_print(RuntimeProp *prop, FILE *output, uint32 indent) {
             break;
         }
         case PROP_TYPE_OBJID: {
-            fprintf(output, "0x%016lX\n", prop->value.objid_value);
+            fprintf(output, "0x%016llX\n", prop->value.objid_value);
             break;
         }
         case PROP_TYPE_EVENT: {
@@ -660,7 +673,7 @@ void RuntimeProp_print(RuntimeProp *prop, FILE *output, uint32 indent) {
             if (count > 32) count = 32;
             for (int i = 0; i < count; ++i) {
                 if (i > 0) fprintf(output, ", ");
-                fprintf(output, "0x%016lX", prop->value.event_value.items[i]);
+                fprintf(output, "0x%016llX", prop->value.event_value.items[i]);
             }
             if (prop->value.event_value.count > 32) {
                 fprintf(output, ", ... (%u total)", prop->value.event_value.count);

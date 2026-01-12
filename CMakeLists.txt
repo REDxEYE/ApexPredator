@@ -5,6 +5,7 @@ set(CMAKE_C_STANDARD 17)
 
 add_subdirectory(external/zstd/build/cmake)
 add_subdirectory(external/zlib)
+add_subdirectory(external/cglm)
 
 add_executable(ApexPredator
         src/main.c
@@ -40,6 +41,14 @@ add_executable(ApexPredator
         src/havok/havok_generated.c
         src/havok/tag_file/havok_tag_types.c
         src/havok/havok_codegen.c
+        src/havok/havok_support_types.c
+        src/utils/hash_helper.c
+        src/exporter/amf_export.c
+        src/exporter/common_export.c
+        src/exporter/adf_export.c
+        src/exporter/ddsc_export.c
+        src/exporter/epe_export.c
+        src/exporter/havok_export.c
 )
 
 add_executable(AdfTypeGenerator
@@ -64,6 +73,7 @@ add_executable(AdfTypeGenerator
         src/apex/sarc.c
         src/apex/hashes.c
         include/apex/hashes.h
+        src/utils/hash_helper.c
 )
 
 add_executable(HavokTypeGenerator
@@ -86,6 +96,7 @@ add_executable(HavokTypeGenerator
         src/havok/havok_codegen.c
         src/havok/tag_file/havok_tag_file.c
         src/havok/tag_file/havok_tag_types.c
+        src/utils/hash_helper.c
 )
 
 add_executable(HashCollector
@@ -105,6 +116,7 @@ add_executable(HashCollector
         src/utils/common.c
         src/apex/hashes.c
         include/apex/hashes.h
+        src/utils/hash_helper.c
 )
 
 add_executable(StringHasher
@@ -133,6 +145,6 @@ target_include_directories(HashCollector PUBLIC include external/zlib)
 target_include_directories(StringHasher PUBLIC include)
 target_include_directories(HashBruteforce PUBLIC include)
 
-target_link_libraries(ApexPredator PUBLIC libzstd zlibstatic)
+target_link_libraries(ApexPredator PUBLIC libzstd zlibstatic cglm)
 target_link_libraries(AdfTypeGenerator PUBLIC zlibstatic)
 target_link_libraries(HavokTypeGenerator PUBLIC zlibstatic)

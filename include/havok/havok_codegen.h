@@ -57,11 +57,11 @@ DYNAMIC_ARRAY_STRUCT(HavokType, HavokType);
 
 DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(HavokType, HavokType);
 
-typedef struct HavokTypeLib HavokTypeLib;
+typedef struct HavokTypeLib Havok_TypeLibrary;
 
-typedef void (*readHavokObject)(const TagFile *tf, const HavokTypeLib* lib, void *obj, const uint8* src);
-typedef void (*freeHavokObject)(void *obj);
-typedef void (*printHavokObject)(void *obj, const HavokTypeLib* lib, JsonContext *ctx);
+typedef void (*readHavokObject)(const TagFile *tf, const Havok_TypeLibrary* lib, void *obj, const uint8* src);
+typedef void (*freeHavokObject)(void *obj, const Havok_TypeLibrary* lib);
+typedef void (*printHavokObject)(void *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 
 typedef struct {
     readHavokObject read;
@@ -81,15 +81,15 @@ struct HavokTypeLib{
 
 String *HavokTypeLib_full_type_name(const HKTagType *type);
 
-void HavokTypeLib_init(HavokTypeLib *lib);
+void HavokTypeLib_init(Havok_TypeLibrary *lib);
 
-void HavokTypeLib_free(HavokTypeLib *lib);
+void HavokTypeLib_free(Havok_TypeLibrary *lib);
 
-HavokType* HavokTypeLib_find_by_name(HavokTypeLib* lib, const char *name);
+HavokType* HavokTypeLib_find_by_name(Havok_TypeLibrary* lib, const char *name);
 
-void HavokTypeLib_copy_from_tag_file(HavokTypeLib *lib, TagFile *tf);
+void HavokTypeLib_copy_from_tag_file(Havok_TypeLibrary *lib, TagFile *tf);
 
-void HavokTypeLib_generate_code(HavokTypeLib *lib, const String *namespace, FILE *header_output,
+void HavokTypeLib_generate_code(Havok_TypeLibrary *lib, const String *namespace, FILE *header_output,
                                 const String *header_relative_path, FILE *impl_output);
 
 #endif //APEXPREDATOR_HAVOK_CODEGEN_H

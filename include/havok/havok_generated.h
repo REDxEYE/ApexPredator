@@ -9,6 +9,7 @@
 /* primitive unsigned_long_long 0x682CDC2F
 size: 8 alignment: 8 template args: 0 */
 #define hkBaseObject_HASH 0xA4ED6609
+// Record
 typedef /*alignas(8)*/ struct hkBaseObject {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -22,12 +23,15 @@ size: 1 alignment: 1 template args: 0 */
 /* primitive unsigned_int 0xE9578A9A
 size: 4 alignment: 4 template args: 0 */
 #define hkUint32_HASH 0xC0F0E088
+// Primitive with parent
 typedef unsigned_int hkUint32; // size: 4 alignment 4 
 
 #define hkFlags_hkPropertyFlags__Enum_hkUint32_HASH 0xC722EE28
+// Primitive with parent
 typedef hkUint32 hkFlags_hkPropertyFlags__Enum_hkUint32; // size: 4 alignment 4 
 
 #define hkPropertyDesc_HASH 0x9BB7B519
+// Record
 typedef /*alignas(8)*/ struct hkPropertyDesc {
     // hkPropertyDesc members
     hkReflect__Type* type; // offset: 0, flags: 32, size: 8
@@ -38,6 +42,7 @@ typedef /*alignas(8)*/ struct hkPropertyDesc {
 static_assert(sizeof(hkPropertyDesc)==24, "Invalid size for hkPropertyDesc");
 
 #define hkPtrAndInt_hkPropertyDesc_unsigned_int_1_HASH 0xF6D5C69F
+// Record
 typedef /*alignas(8)*/ struct hkPtrAndInt_hkPropertyDesc_unsigned_int_1 {
     // hkPtrAndInt_hkPropertyDesc_unsigned_int_1 members
     hkPropertyDesc* ptrAndInt; // offset: 0, flags: 36, size: 8
@@ -45,6 +50,7 @@ typedef /*alignas(8)*/ struct hkPtrAndInt_hkPropertyDesc_unsigned_int_1 {
 static_assert(sizeof(hkPtrAndInt_hkPropertyDesc_unsigned_int_1)==8, "Invalid size for hkPtrAndInt_hkPropertyDesc_unsigned_int_1");
 
 #define hkPropertyId_HASH 0xE8A9A57F
+// Record
 typedef /*alignas(8)*/ struct hkPropertyId {
     // hkPropertyId members
     hkPtrAndInt_hkPropertyDesc_unsigned_int_1 desc; // offset: 0, flags: 37, size: 8
@@ -52,6 +58,7 @@ typedef /*alignas(8)*/ struct hkPropertyId {
 static_assert(sizeof(hkPropertyId)==8, "Invalid size for hkPropertyId");
 
 #define hkReflect__QualifiedType_hkReflect__Type_HASH 0xB7321059
+// Record
 typedef /*alignas(8)*/ struct hkReflect__QualifiedType_hkReflect__Type {
     // hkReflect__QualifiedType_hkReflect__Type members
     hkReflect__Type* type; // offset: 0, flags: 36, size: 8
@@ -61,9 +68,11 @@ static_assert(sizeof(hkReflect__QualifiedType_hkReflect__Type)==8, "Invalid size
 /* primitive unsigned_char 0xCBFBEA58
 size: 1 alignment: 1 template args: 0 */
 #define hkUintReal_HASH 0x04FFA5FE
+// Primitive with parent
 typedef unsigned_int hkUintReal; // size: 4 alignment 4 
 
 #define hkReflect__Any_HASH 0xE1104999
+// Record
 typedef /*alignas(16)*/ struct hkReflect__Any {
     // hkReflect__Any members
     hkReflect__QualifiedType_hkReflect__Type type; // offset: 0, flags: 36, size: 8
@@ -74,6 +83,7 @@ typedef /*alignas(16)*/ struct hkReflect__Any {
 static_assert(sizeof(hkReflect__Any)==32, "Invalid size for hkReflect__Any");
 
 #define hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void_HASH 0x919E7D19
+// Record
 typedef /*alignas(16)*/ struct hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void {
     // hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void members
     hkPropertyId _0; // offset: 0, flags: 32, size: 8
@@ -83,22 +93,25 @@ typedef /*alignas(16)*/ struct hkTuple_hkPropertyId_hkReflect__Any_void_void_voi
 static_assert(sizeof(hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void)==48, "Invalid size for hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void");
 
 #define hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_HASH 0xE5250B59
+// Primitive with parent
 typedef hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any; // size: 48 alignment 16 
 
 /* primitive int 0xB2B563B5
 size: 4 alignment: 4 template args: 0 */
-#define hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator_HASH 0x47FA5A47
-typedef /*alignas(8)*/ struct hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator {
-    // hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator members
+#define hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator_HASH 0x47FA5A47
+// Record
+typedef /*alignas(8)*/ struct hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator {
+    // hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator members
     hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any* m_data; // offset: 0, flags: 34, size: 8
     int m_size; // offset: 8, flags: 34, size: 4
     int m_capacityAndFlags; // offset: 12, flags: 34, size: 4
-} hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator;
-static_assert(sizeof(hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator");
+} hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator;
+static_assert(sizeof(hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator");
 
 /* primitive void 0x09F52327
 size: 0 alignment: 0 template args: 0 */
 #define hkHashMapDetail__Index_HASH 0x59433997
+// Record
 typedef /*alignas(8)*/ struct hkHashMapDetail__Index {
     // hkHashMapDetail__Index members
     void* entries; // offset: 0, flags: 32, size: 8
@@ -107,18 +120,21 @@ typedef /*alignas(8)*/ struct hkHashMapDetail__Index {
 } hkHashMapDetail__Index;
 static_assert(sizeof(hkHashMapDetail__Index)==16, "Invalid size for hkHashMapDetail__Index");
 
-#define hkHashBase_hkHashMapDetail__MapTuple_HASH 0x06B8FA4D
-typedef /*alignas(8)*/ struct hkHashBase_hkHashMapDetail__MapTuple {
-    // hkHashBase_hkHashMapDetail__MapTuple members
-    hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator items; // offset: 0, flags: 34, size: 16
+#define hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_HASH 0x06B8FA4D
+// Record
+typedef /*alignas(8)*/ struct hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any {
+    // hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any members
+    hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator items; // offset: 0, flags: 34, size: 16
     hkHashMapDetail__Index index; // offset: 16, flags: 35, size: 16
-} hkHashBase_hkHashMapDetail__MapTuple;
-static_assert(sizeof(hkHashBase_hkHashMapDetail__MapTuple)==32, "Invalid size for hkHashBase_hkHashMapDetail__MapTuple");
+} hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any;
+static_assert(sizeof(hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any)==32, "Invalid size for hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any");
 
 #define hkHashMap_hkPropertyId_hkReflect__Any_HASH 0x947F9530
-typedef hkHashBase_hkHashMapDetail__MapTuple hkHashMap_hkPropertyId_hkReflect__Any; // size: 32 alignment 8 
+// Primitive with parent
+typedef hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any hkHashMap_hkPropertyId_hkReflect__Any; // size: 32 alignment 8 
 
 #define hkDefaultPropertyBag_HASH 0xD3707717
+// Record
 typedef /*alignas(8)*/ struct hkDefaultPropertyBag {
     // hkDefaultPropertyBag members
     hkHashMap_hkPropertyId_hkReflect__Any propertyMap; // offset: 0, flags: 34, size: 32
@@ -127,6 +143,7 @@ typedef /*alignas(8)*/ struct hkDefaultPropertyBag {
 static_assert(sizeof(hkDefaultPropertyBag)==64, "Invalid size for hkDefaultPropertyBag");
 
 #define hkPropertyBag_HASH 0x1C378877
+// Record
 typedef /*alignas(8)*/ struct hkPropertyBag {
     // hkPropertyBag members
     hkDefaultPropertyBag* bag; // offset: 0, flags: 35, size: 8
@@ -136,9 +153,11 @@ static_assert(sizeof(hkPropertyBag)==8, "Invalid size for hkPropertyBag");
 /* primitive unsigned_short 0x32D84E3A
 size: 2 alignment: 2 template args: 0 */
 #define hkUint16_HASH 0x48B962E2
+// Primitive with parent
 typedef unsigned_short hkUint16; // size: 2 alignment 2 
 
 #define hkReferencedObject_HASH 0xB8672297
+// Record
 typedef /*alignas(8)*/ struct hkReferencedObject {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -153,6 +172,7 @@ static_assert(sizeof(hkReferencedObject)==24, "Invalid size for hkReferencedObje
 /* primitive hkReflect__Detail__Opaque 0xE53819AC
 size: 0 alignment: 0 template args: 0 */
 #define hkStringPtr_HASH 0x0BBFA3EE
+// Record
 typedef /*alignas(8)*/ struct hkStringPtr {
     // hkStringPtr members
     char* stringAndFlag; // offset: 0, flags: 36, size: 8
@@ -160,15 +180,19 @@ typedef /*alignas(8)*/ struct hkStringPtr {
 static_assert(sizeof(hkStringPtr)==8, "Invalid size for hkStringPtr");
 
 #define hknpMaterial__TriggerType_HASH 0xAA0ABABC
+// Enum
 typedef uint32 hknpMaterial__TriggerType;
 
 #define hkUint8_HASH 0x54D065A2
+// Primitive with parent
 typedef unsigned_char hkUint8; // size: 1 alignment 1 
 
 #define hknpMaterial__TriggerType_hkUint8_HASH 0xFE75F328
+// Enum
 typedef hkUint8 hknpMaterial__TriggerType_hkUint8;
 
 #define hkUFloat8_HASH 0x5A6550CC
+// Record
 typedef /*alignas(1)*/ struct hkUFloat8 {
     // hkUFloat8 members
     hkUint8 value; // offset: 0, flags: 32, size: 1
@@ -178,9 +202,11 @@ static_assert(sizeof(hkUFloat8)==1, "Invalid size for hkUFloat8");
 /* primitive short 0xDB235D3D
 size: 2 alignment: 2 template args: 0 */
 #define hkInt16_HASH 0x2AB05781
+// Primitive with parent
 typedef short hkInt16; // size: 2 alignment 2 
 
 #define hkHalf16_HASH 0xFF22E787
+// Record
 typedef /*alignas(2)*/ struct hkHalf16 {
     // hkHalf16 members
     hkInt16 value; // offset: 0, flags: 36, size: 2
@@ -188,29 +214,37 @@ typedef /*alignas(2)*/ struct hkHalf16 {
 static_assert(sizeof(hkHalf16)==2, "Invalid size for hkHalf16");
 
 #define hknpMaterial__CombinePolicy_HASH 0x807E770C
+// Enum
 typedef uint32 hknpMaterial__CombinePolicy;
 
 #define hknpMaterial__CombinePolicy_hkUint8_HASH 0xA30F5C90
+// Enum
 typedef hkUint8 hknpMaterial__CombinePolicy_hkUint8;
 
 /* primitive float 0x4E0A188B
 size: 4 alignment: 4 template args: 0 */
 #define hkReal_HASH 0xFFC567C2
+// Primitive with parent
 typedef float hkReal; // size: 4 alignment 4 
 
 #define hknpMaterial__MassChangerCategory_HASH 0x5A471A80
+// Enum
 typedef uint32 hknpMaterial__MassChangerCategory;
 
 #define hknpMaterial__MassChangerCategory_hkUint8_HASH 0xC6FA3834
+// Enum
 typedef hkUint8 hknpMaterial__MassChangerCategory_hkUint8;
 
 #define hknpSurfaceVelocity_HASH 0xCBEA9955
+// Primitive with parent
 typedef hkReferencedObject hknpSurfaceVelocity; // size: 24 alignment 8 
 
 #define hkUint64_HASH 0x8436B0ED
+// Primitive with parent
 typedef unsigned_long_long hkUint64; // size: 8 alignment 8 
 
 #define hkBool_HASH 0x3807AECD
+// Record
 typedef /*alignas(1)*/ struct hkBool {
     // hkBool members
     char bool__; // offset: 0, flags: 36, size: 1
@@ -218,6 +252,7 @@ typedef /*alignas(1)*/ struct hkBool {
 static_assert(sizeof(hkBool)==1, "Invalid size for hkBool");
 
 #define hknpMaterial_HASH 0xFA7575C2
+// Record
 typedef /*alignas(16)*/ struct hknpMaterial {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -257,30 +292,35 @@ typedef /*alignas(16)*/ struct hknpMaterial {
 static_assert(sizeof(hknpMaterial)==112, "Invalid size for hknpMaterial");
 
 #define hkFreeListArrayElement_hknpMaterial_HASH 0x2A9E27EE
+// Primitive with parent
 typedef hknpMaterial hkFreeListArrayElement_hknpMaterial; // size: 112 alignment 16 
 
-#define hkArray_hkFreeListArrayElement_hkContainerHeapAllocator_HASH 0x9A45FEFA
-typedef /*alignas(8)*/ struct hkArray_hkFreeListArrayElement_hkContainerHeapAllocator {
-    // hkArray_hkFreeListArrayElement_hkContainerHeapAllocator members
+#define hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator_HASH 0x9A45FEFA
+// Record
+typedef /*alignas(8)*/ struct hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator {
+    // hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator members
     hkFreeListArrayElement_hknpMaterial* m_data; // offset: 0, flags: 34, size: 8
     int m_size; // offset: 8, flags: 34, size: 4
     int m_capacityAndFlags; // offset: 12, flags: 34, size: 4
-} hkArray_hkFreeListArrayElement_hkContainerHeapAllocator;
-static_assert(sizeof(hkArray_hkFreeListArrayElement_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkFreeListArrayElement_hkContainerHeapAllocator");
+} hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator;
+static_assert(sizeof(hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator");
 
 #define hkInt32_HASH 0xA062CC27
+// Primitive with parent
 typedef int hkInt32; // size: 4 alignment 4 
 
 #define hkFreeListArray_hknpMotionProperties_8_HASH 0xAFF4AD8C
+// Record
 typedef /*alignas(8)*/ struct hkFreeListArray_hknpMotionProperties_8 {
     // hkFreeListArray_hknpMotionProperties_8 members
-    hkArray_hkFreeListArrayElement_hkContainerHeapAllocator elements; // offset: 0, flags: 34, size: 16
+    hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator elements; // offset: 0, flags: 34, size: 16
     hkInt32 firstFree; // offset: 16, flags: 34, size: 4
     uint8 _padding_end[4]; // final padding
 } hkFreeListArray_hknpMotionProperties_8;
 static_assert(sizeof(hkFreeListArray_hknpMotionProperties_8)==24, "Invalid size for hkFreeListArray_hknpMotionProperties_8");
 
 #define hknpMotionPropertiesLibrary_HASH 0x017F8416
+// Record
 typedef /*alignas(8)*/ struct hknpMotionPropertiesLibrary {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -298,6 +338,7 @@ typedef /*alignas(8)*/ struct hknpMotionPropertiesLibrary {
 static_assert(sizeof(hknpMotionPropertiesLibrary)==72, "Invalid size for hknpMotionPropertiesLibrary");
 
 #define hkaiStreamingSet__GraphConnection_HASH 0xB4A9069D
+// Record
 typedef /*alignas(4)*/ struct hkaiStreamingSet__GraphConnection {
     // hkaiStreamingSet__GraphConnection members
     int aNodeIndex; // offset: 0, flags: 32, size: 4
@@ -310,6 +351,7 @@ typedef /*alignas(4)*/ struct hkaiStreamingSet__GraphConnection {
 static_assert(sizeof(hkaiStreamingSet__GraphConnection)==20, "Invalid size for hkaiStreamingSet__GraphConnection");
 
 #define hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator_HASH 0x01BBAB95
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator {
     // hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator members
     hkaiStreamingSet__GraphConnection* m_data; // offset: 0, flags: 34, size: 8
@@ -323,9 +365,11 @@ size: 1 alignment: 1 template args: 0 */
 /* primitive HavokVector4 0xE8BB7FA7
 size: 16 alignment: 16 template args: 0 */
 #define hkVector4f_HASH 0x4309B234
+// Primitive with parent
 typedef HavokVector4 hkVector4f; // size: 16 alignment 16 
 
 #define hkMatrix4f_HASH 0x34D88D47
+// Record
 typedef /*alignas(16)*/ struct hkMatrix4f {
     // hkMatrix4f members
     hkVector4f col0; // offset: 0, flags: 34, size: 16
@@ -336,9 +380,11 @@ typedef /*alignas(16)*/ struct hkMatrix4f {
 static_assert(sizeof(hkMatrix4f)==64, "Invalid size for hkMatrix4f");
 
 #define hkMatrix4_HASH 0xEB803009
+// Primitive with parent
 typedef hkMatrix4f hkMatrix4; // size: 64 alignment 16 
 
 #define hkRefVariant_HASH 0x6AD557D8
+// Record
 typedef /*alignas(8)*/ struct hkRefVariant {
     // hkRefVariant members
     hkReferencedObject* ptr; // offset: 0, flags: 36, size: 8
@@ -346,6 +392,7 @@ typedef /*alignas(8)*/ struct hkRefVariant {
 static_assert(sizeof(hkRefVariant)==8, "Invalid size for hkRefVariant");
 
 #define hkaBoneAttachment_HASH 0x89368EF6
+// Record
 typedef /*alignas(16)*/ struct hkaBoneAttachment {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -365,6 +412,7 @@ typedef /*alignas(16)*/ struct hkaBoneAttachment {
 static_assert(sizeof(hkaBoneAttachment)==128, "Invalid size for hkaBoneAttachment");
 
 #define hkRefPtr_hkaBoneAttachment_HASH 0x02D6E435
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkaBoneAttachment {
     // hkRefPtr_hkaBoneAttachment members
     hkaBoneAttachment* ptr; // offset: 0, flags: 36, size: 8
@@ -372,9 +420,11 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkaBoneAttachment {
 static_assert(sizeof(hkRefPtr_hkaBoneAttachment)==8, "Invalid size for hkRefPtr_hkaBoneAttachment");
 
 #define hkaiIndex_hkInt32_HASH 0xF63119EE
+// Primitive with parent
 typedef hkInt32 hkaiIndex_hkInt32; // size: 4 alignment 4 
 
 #define hkaiFaceEdgeIndexPair_HASH 0xF926982B
+// Record
 typedef /*alignas(4)*/ struct hkaiFaceEdgeIndexPair {
     // hkaiFaceEdgeIndexPair members
     hkaiIndex_hkInt32 faceIndex; // offset: 0, flags: 32, size: 4
@@ -383,6 +433,7 @@ typedef /*alignas(4)*/ struct hkaiFaceEdgeIndexPair {
 static_assert(sizeof(hkaiFaceEdgeIndexPair)==8, "Invalid size for hkaiFaceEdgeIndexPair");
 
 #define hkaiStreamingSet__NavMeshConnection_HASH 0x7B2CAFC4
+// Record
 typedef /*alignas(4)*/ struct hkaiStreamingSet__NavMeshConnection {
     // hkaiStreamingSet__NavMeshConnection members
     hkaiFaceEdgeIndexPair aFaceEdgeIndex; // offset: 0, flags: 32, size: 8
@@ -391,6 +442,7 @@ typedef /*alignas(4)*/ struct hkaiStreamingSet__NavMeshConnection {
 static_assert(sizeof(hkaiStreamingSet__NavMeshConnection)==16, "Invalid size for hkaiStreamingSet__NavMeshConnection");
 
 #define hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator_HASH 0xFC14EC6A
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator {
     // hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator members
     hkaiStreamingSet__NavMeshConnection* m_data; // offset: 0, flags: 34, size: 8
@@ -400,6 +452,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaiStreamingSet__NavMeshConnection_hkCont
 static_assert(sizeof(hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator");
 
 #define hkaiStreamingSet__VolumeConnection_HASH 0xE41E4B36
+// Record
 typedef /*alignas(4)*/ struct hkaiStreamingSet__VolumeConnection {
     // hkaiStreamingSet__VolumeConnection members
     hkaiIndex_hkInt32 aCellIndex; // offset: 0, flags: 32, size: 4
@@ -408,6 +461,7 @@ typedef /*alignas(4)*/ struct hkaiStreamingSet__VolumeConnection {
 static_assert(sizeof(hkaiStreamingSet__VolumeConnection)==8, "Invalid size for hkaiStreamingSet__VolumeConnection");
 
 #define hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator_HASH 0x49327487
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator {
     // hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator members
     hkaiStreamingSet__VolumeConnection* m_data; // offset: 0, flags: 34, size: 8
@@ -417,9 +471,11 @@ typedef /*alignas(8)*/ struct hkArray_hkaiStreamingSet__VolumeConnection_hkConta
 static_assert(sizeof(hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator");
 
 #define hkVector4_HASH 0xEF293640
+// Primitive with parent
 typedef hkVector4f hkVector4; // size: 16 alignment 16 
 
 #define hkAabb_HASH 0xE971568A
+// Record
 typedef /*alignas(16)*/ struct hkAabb {
     // hkAabb members
     hkVector4 min; // offset: 0, flags: 32, size: 16
@@ -428,6 +484,7 @@ typedef /*alignas(16)*/ struct hkAabb {
 static_assert(sizeof(hkAabb)==32, "Invalid size for hkAabb");
 
 #define hkArray_hkAabb_hkContainerHeapAllocator_HASH 0xF892E20A
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkAabb_hkContainerHeapAllocator {
     // hkArray_hkAabb_hkContainerHeapAllocator members
     hkAabb* m_data; // offset: 0, flags: 34, size: 8
@@ -437,6 +494,7 @@ typedef /*alignas(8)*/ struct hkArray_hkAabb_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkAabb_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkAabb_hkContainerHeapAllocator");
 
 #define hkaiStreamingSet_HASH 0x6D03E81A
+// Record
 typedef /*alignas(8)*/ struct hkaiStreamingSet {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -457,6 +515,7 @@ typedef /*alignas(8)*/ struct hkaiStreamingSet {
 static_assert(sizeof(hkaiStreamingSet)==112, "Invalid size for hkaiStreamingSet");
 
 #define hkRefPtr_hkaiStreamingSet_HASH 0x031086EE
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkaiStreamingSet {
     // hkRefPtr_hkaiStreamingSet members
     hkaiStreamingSet* ptr; // offset: 0, flags: 36, size: 8
@@ -464,12 +523,15 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkaiStreamingSet {
 static_assert(sizeof(hkRefPtr_hkaiStreamingSet)==8, "Invalid size for hkRefPtr_hkaiStreamingSet");
 
 #define hkaAnimation__AnimationType_HASH 0x6D3B1C8C
+// Enum
 typedef uint32 hkaAnimation__AnimationType;
 
 #define hkaAnimation__AnimationType_hkInt32_HASH 0x053FBA35
+// Enum
 typedef hkInt32 hkaAnimation__AnimationType_hkInt32;
 
 #define hkArray_hkInt16_hkContainerHeapAllocator_HASH 0x3C434B9F
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkInt16_hkContainerHeapAllocator {
     // hkArray_hkInt16_hkContainerHeapAllocator members
     hkInt16* m_data; // offset: 0, flags: 34, size: 8
@@ -479,6 +541,7 @@ typedef /*alignas(8)*/ struct hkArray_hkInt16_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkInt16_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkInt16_hkContainerHeapAllocator");
 
 #define hkMeshBoneIndexMapping_HASH 0xC386E975
+// Record
 typedef /*alignas(8)*/ struct hkMeshBoneIndexMapping {
     // hkMeshBoneIndexMapping members
     hkArray_hkInt16_hkContainerHeapAllocator mapping; // offset: 0, flags: 32, size: 16
@@ -486,6 +549,7 @@ typedef /*alignas(8)*/ struct hkMeshBoneIndexMapping {
 static_assert(sizeof(hkMeshBoneIndexMapping)==16, "Invalid size for hkMeshBoneIndexMapping");
 
 #define hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator_HASH 0x069095C1
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator {
     // hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator members
     hkMeshBoneIndexMapping* m_data; // offset: 0, flags: 34, size: 8
@@ -495,9 +559,11 @@ typedef /*alignas(8)*/ struct hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllo
 static_assert(sizeof(hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator");
 
 #define hkxMaterial__TextureType_HASH 0x06A4E879
+// Enum
 typedef uint32 hkxMaterial__TextureType;
 
 #define hkGeometry__Triangle_HASH 0x07777C3F
+// Record
 typedef /*alignas(4)*/ struct hkGeometry__Triangle {
     // hkGeometry__Triangle members
     int a; // offset: 0, flags: 32, size: 4
@@ -508,12 +574,15 @@ typedef /*alignas(4)*/ struct hkGeometry__Triangle {
 static_assert(sizeof(hkGeometry__Triangle)==16, "Invalid size for hkGeometry__Triangle");
 
 #define hkxVertexDescription__DataUsage_HASH 0x66AC12B4
+// Enum
 typedef uint32 hkxVertexDescription__DataUsage;
 
 #define hkxVertexDescription__DataUsage_hkUint16_HASH 0xA90917C9
+// Enum
 typedef hkUint16 hkxVertexDescription__DataUsage_hkUint16;
 
 #define hkxVertexAnimation__UsageMap_HASH 0x077BE577
+// Record
 typedef /*alignas(2)*/ struct hkxVertexAnimation__UsageMap {
     // hkxVertexAnimation__UsageMap members
     hkxVertexDescription__DataUsage_hkUint16 use; // offset: 0, flags: 32, size: 2
@@ -522,19 +591,22 @@ typedef /*alignas(2)*/ struct hkxVertexAnimation__UsageMap {
 } hkxVertexAnimation__UsageMap;
 static_assert(sizeof(hkxVertexAnimation__UsageMap)==4, "Invalid size for hkxVertexAnimation__UsageMap");
 
-#define hkaiPackedKey__hkaiIndex_hkaiIndex_HASH 0xDAFA9A6F
-typedef unsigned_int hkaiPackedKey__hkaiIndex_hkaiIndex; // size: 4 alignment 4 
+#define hkaiPackedKey__hkaiIndex_hkInt32_hkaiIndex_hkInt32_HASH 0xDAFA9A6F
+// Primitive with parent
+typedef unsigned_int hkaiPackedKey__hkaiIndex_hkInt32_hkaiIndex_hkInt32; // size: 4 alignment 4 
 
 #define hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8_HASH 0xF7C40608
+// Primitive with parent
 typedef hkUint8 hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8; // size: 1 alignment 1 
 
 #define hkaiNavMesh__Edge_HASH 0xB3347C86
+// Record
 typedef /*alignas(4)*/ struct hkaiNavMesh__Edge {
     // hkaiNavMesh__Edge members
     hkaiIndex_hkInt32 a; // offset: 0, flags: 32, size: 4
     hkaiIndex_hkInt32 b; // offset: 4, flags: 32, size: 4
-    hkaiPackedKey__hkaiIndex_hkaiIndex oppositeEdge; // offset: 8, flags: 32, size: 4
-    hkaiPackedKey__hkaiIndex_hkaiIndex oppositeFace; // offset: 12, flags: 32, size: 4
+    hkaiPackedKey__hkaiIndex_hkInt32_hkaiIndex_hkInt32 oppositeEdge; // offset: 8, flags: 32, size: 4
+    hkaiPackedKey__hkaiIndex_hkInt32_hkaiIndex_hkInt32 oppositeFace; // offset: 12, flags: 32, size: 4
     hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8 flags; // offset: 16, flags: 32, size: 1
     hkUint8 paddingByte; // offset: 17, flags: 33, size: 1
     hkHalf16 userEdgeCost; // offset: 18, flags: 32, size: 2
@@ -542,6 +614,7 @@ typedef /*alignas(4)*/ struct hkaiNavMesh__Edge {
 static_assert(sizeof(hkaiNavMesh__Edge)==20, "Invalid size for hkaiNavMesh__Edge");
 
 #define hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator_HASH 0x09F2C1A5
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator {
     // hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator members
     hkaiNavMesh__Edge* m_data; // offset: 0, flags: 34, size: 8
@@ -551,6 +624,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator
 static_assert(sizeof(hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator");
 
 #define hkaSkeleton__Partition_HASH 0x607C1A8E
+// Record
 typedef /*alignas(8)*/ struct hkaSkeleton__Partition {
     // hkaSkeleton__Partition members
     hkStringPtr name; // offset: 0, flags: 32, size: 8
@@ -561,6 +635,7 @@ typedef /*alignas(8)*/ struct hkaSkeleton__Partition {
 static_assert(sizeof(hkaSkeleton__Partition)==16, "Invalid size for hkaSkeleton__Partition");
 
 #define hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator_HASH 0x0A08F869
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator {
     // hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator members
     hkaSkeleton__Partition* m_data; // offset: 0, flags: 34, size: 8
@@ -570,17 +645,21 @@ typedef /*alignas(8)*/ struct hkArray_hkaSkeleton__Partition_hkContainerHeapAllo
 static_assert(sizeof(hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator");
 
 #define hkaAnimationBinding__BlendHint_HASH 0x88450055
+// Enum
 typedef uint32 hkaAnimationBinding__BlendHint;
 
 /* primitive signed_char 0x40F05FF3
 size: 1 alignment: 1 template args: 0 */
 #define hkInt8_HASH 0xEFB473B4
+// Primitive with parent
 typedef signed_char hkInt8; // size: 1 alignment 1 
 
 #define hkaAnimationBinding__BlendHint_hkInt8_HASH 0x0AA8F38E
+// Enum
 typedef hkInt8 hkaAnimationBinding__BlendHint_hkInt8;
 
 #define hkHandle_hkUint32_1073741823_HASH 0x0CA6D844
+// Record
 typedef /*alignas(4)*/ struct hkHandle_hkUint32_1073741823 {
     // hkHandle_hkUint32_1073741823 members
     hkUint32 value; // offset: 0, flags: 34, size: 4
@@ -588,6 +667,7 @@ typedef /*alignas(4)*/ struct hkHandle_hkUint32_1073741823 {
 static_assert(sizeof(hkHandle_hkUint32_1073741823)==4, "Invalid size for hkHandle_hkUint32_1073741823");
 
 #define hkaiNavMeshClearanceCache__McpDataInteger_HASH 0x89AC06B2
+// Record
 typedef /*alignas(1)*/ struct hkaiNavMeshClearanceCache__McpDataInteger {
     // hkaiNavMeshClearanceCache__McpDataInteger members
     hkUint8 interpolant; // offset: 0, flags: 32, size: 1
@@ -596,6 +676,7 @@ typedef /*alignas(1)*/ struct hkaiNavMeshClearanceCache__McpDataInteger {
 static_assert(sizeof(hkaiNavMeshClearanceCache__McpDataInteger)==2, "Invalid size for hkaiNavMeshClearanceCache__McpDataInteger");
 
 #define hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator_HASH 0x0CF8BD30
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator {
     // hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator members
     hkaiNavMeshClearanceCache__McpDataInteger* m_data; // offset: 0, flags: 34, size: 8
@@ -605,15 +686,19 @@ typedef /*alignas(8)*/ struct hkArray_hkaiNavMeshClearanceCache__McpDataInteger_
 static_assert(sizeof(hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator");
 
 #define hkxVertexDescription__DataType_HASH 0x0D908C11
+// Enum
 typedef uint32 hkxVertexDescription__DataType;
 
 #define hkpConstraintAtom__AtomType_HASH 0x71FE7EB9
+// Enum
 typedef uint32 hkpConstraintAtom__AtomType;
 
 #define hkpConstraintAtom__AtomType_hkUint16_HASH 0xAABF6050
+// Enum
 typedef hkUint16 hkpConstraintAtom__AtomType_hkUint16;
 
 #define hkpConstraintAtom_HASH 0x20E8465E
+// Record
 typedef /*alignas(16)*/ struct hkpConstraintAtom {
     // hkpConstraintAtom members
     hkpConstraintAtom__AtomType_hkUint16 type; // offset: 0, flags: 32, size: 2
@@ -625,9 +710,11 @@ static_assert(sizeof(hkpConstraintAtom)==16, "Invalid size for hkpConstraintAtom
 typedef float hkRotationImpl_float[12];
 
 #define hkRotationf_HASH 0x6A4D2D9A
+// Primitive with parent
 typedef hkRotationImpl_float hkRotationf; // size: 48 alignment 16 
 
 #define hkTransformf_HASH 0xD3AA90B5
+// Record
 typedef /*alignas(16)*/ struct hkTransformf {
     // hkTransformf members
     hkRotationf rotation; // offset: 0, flags: 34, size: 48
@@ -636,9 +723,11 @@ typedef /*alignas(16)*/ struct hkTransformf {
 static_assert(sizeof(hkTransformf)==64, "Invalid size for hkTransformf");
 
 #define hkTransform_HASH 0x352519BB
+// Primitive with parent
 typedef hkTransformf hkTransform; // size: 64 alignment 16 
 
 #define hkpSetLocalTransformsConstraintAtom_HASH 0x0EAE68CD
+// Record
 typedef /*alignas(16)*/ struct hkpSetLocalTransformsConstraintAtom {
     // hkpConstraintAtom members
     hkpConstraintAtom__AtomType_hkUint16 type; // offset: 0, flags: 32, size: 2
@@ -650,6 +739,7 @@ typedef /*alignas(16)*/ struct hkpSetLocalTransformsConstraintAtom {
 static_assert(sizeof(hkpSetLocalTransformsConstraintAtom)==144, "Invalid size for hkpSetLocalTransformsConstraintAtom");
 
 #define hkaBone_HASH 0x5398B77C
+// Record
 typedef /*alignas(8)*/ struct hkaBone {
     // hkaBone members
     hkStringPtr name; // offset: 0, flags: 32, size: 8
@@ -659,6 +749,7 @@ typedef /*alignas(8)*/ struct hkaBone {
 static_assert(sizeof(hkaBone)==16, "Invalid size for hkaBone");
 
 #define hkArray_hkaBone_hkContainerHeapAllocator_HASH 0xB238B5B4
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaBone_hkContainerHeapAllocator {
     // hkArray_hkaBone_hkContainerHeapAllocator members
     hkaBone* m_data; // offset: 0, flags: 34, size: 8
@@ -668,6 +759,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaBone_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkaBone_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaBone_hkContainerHeapAllocator");
 
 #define hkQuaternionf_HASH 0x5C166977
+// Record
 typedef /*alignas(16)*/ struct hkQuaternionf {
     // hkQuaternionf members
     hkVector4f vec; // offset: 0, flags: 32, size: 16
@@ -675,6 +767,7 @@ typedef /*alignas(16)*/ struct hkQuaternionf {
 static_assert(sizeof(hkQuaternionf)==16, "Invalid size for hkQuaternionf");
 
 #define hkQsTransformf_HASH 0xAD660A82
+// Record
 typedef /*alignas(16)*/ struct hkQsTransformf {
     // hkQsTransformf members
     hkVector4f translation; // offset: 0, flags: 32, size: 16
@@ -684,9 +777,11 @@ typedef /*alignas(16)*/ struct hkQsTransformf {
 static_assert(sizeof(hkQsTransformf)==48, "Invalid size for hkQsTransformf");
 
 #define hkQsTransform_HASH 0x5515BF3D
+// Primitive with parent
 typedef hkQsTransformf hkQsTransform; // size: 48 alignment 16 
 
 #define hkArray_hkQsTransform_hkContainerHeapAllocator_HASH 0xB8D605DF
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkQsTransform_hkContainerHeapAllocator {
     // hkArray_hkQsTransform_hkContainerHeapAllocator members
     hkQsTransform* m_data; // offset: 0, flags: 34, size: 8
@@ -696,6 +791,7 @@ typedef /*alignas(8)*/ struct hkArray_hkQsTransform_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkQsTransform_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkQsTransform_hkContainerHeapAllocator");
 
 #define hkArray_hkReal_hkContainerHeapAllocator_HASH 0xE84876EB
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkReal_hkContainerHeapAllocator {
     // hkArray_hkReal_hkContainerHeapAllocator members
     hkReal* m_data; // offset: 0, flags: 34, size: 8
@@ -705,6 +801,7 @@ typedef /*alignas(8)*/ struct hkArray_hkReal_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkReal_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkReal_hkContainerHeapAllocator");
 
 #define hkArray_hkStringPtr_hkContainerHeapAllocator_HASH 0x464108B2
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkStringPtr_hkContainerHeapAllocator {
     // hkArray_hkStringPtr_hkContainerHeapAllocator members
     hkStringPtr* m_data; // offset: 0, flags: 34, size: 8
@@ -714,9 +811,11 @@ typedef /*alignas(8)*/ struct hkArray_hkStringPtr_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkStringPtr_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkStringPtr_hkContainerHeapAllocator");
 
 #define hkLocalFrame_HASH 0x8D51F006
+// Primitive with parent
 typedef hkReferencedObject hkLocalFrame; // size: 24 alignment 8 
 
 #define hkRefPtr_hkLocalFrame_HASH 0x94C3BB5F
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkLocalFrame {
     // hkRefPtr_hkLocalFrame members
     hkLocalFrame* ptr; // offset: 0, flags: 36, size: 8
@@ -724,6 +823,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkLocalFrame {
 static_assert(sizeof(hkRefPtr_hkLocalFrame)==8, "Invalid size for hkRefPtr_hkLocalFrame");
 
 #define hkaSkeleton__LocalFrameOnBone_HASH 0x95C04023
+// Record
 typedef /*alignas(8)*/ struct hkaSkeleton__LocalFrameOnBone {
     // hkaSkeleton__LocalFrameOnBone members
     hkRefPtr_hkLocalFrame localFrame; // offset: 0, flags: 32, size: 8
@@ -733,6 +833,7 @@ typedef /*alignas(8)*/ struct hkaSkeleton__LocalFrameOnBone {
 static_assert(sizeof(hkaSkeleton__LocalFrameOnBone)==16, "Invalid size for hkaSkeleton__LocalFrameOnBone");
 
 #define hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator_HASH 0x6D5C2237
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator {
     // hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator members
     hkaSkeleton__LocalFrameOnBone* m_data; // offset: 0, flags: 34, size: 8
@@ -742,6 +843,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerH
 static_assert(sizeof(hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator");
 
 #define hkaSkeleton_HASH 0xA0349615
+// Record
 typedef /*alignas(8)*/ struct hkaSkeleton {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -763,22 +865,25 @@ typedef /*alignas(8)*/ struct hkaSkeleton {
 static_assert(sizeof(hkaSkeleton)==144, "Invalid size for hkaSkeleton");
 
 #define hkRefPtr_hkaSkeleton_HASH 0x8B00BDD7
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkaSkeleton {
     // hkRefPtr_hkaSkeleton members
     hkaSkeleton* ptr; // offset: 0, flags: 36, size: 8
 } hkRefPtr_hkaSkeleton;
 static_assert(sizeof(hkRefPtr_hkaSkeleton)==8, "Invalid size for hkRefPtr_hkaSkeleton");
 
-#define hkArray_hkRefPtr_hkContainerHeapAllocator_HASH 0xCACE7A49
-typedef /*alignas(8)*/ struct hkArray_hkRefPtr_hkContainerHeapAllocator {
-    // hkArray_hkRefPtr_hkContainerHeapAllocator members
+#define hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator_HASH 0xCACE7A49
+// Record
+typedef /*alignas(8)*/ struct hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator {
+    // hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator members
     hkRefPtr_hkaSkeleton* m_data; // offset: 0, flags: 34, size: 8
     int m_size; // offset: 8, flags: 34, size: 4
     int m_capacityAndFlags; // offset: 12, flags: 34, size: 4
-} hkArray_hkRefPtr_hkContainerHeapAllocator;
-static_assert(sizeof(hkArray_hkRefPtr_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkRefPtr_hkContainerHeapAllocator");
+} hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator;
+static_assert(sizeof(hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator");
 
 #define hkxMesh_HASH 0x32A04237
+// Record
 typedef /*alignas(8)*/ struct hkxMesh {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -788,12 +893,13 @@ typedef /*alignas(8)*/ struct hkxMesh {
     hkUint16 refCount; // offset: 18, flags: 37, size: 2
     // hkxMesh members
     uint8 _padding_sections[4]; // inter-member padding
-    hkArray_hkRefPtr_hkContainerHeapAllocator sections; // offset: 24, flags: 32, size: 16
-    hkArray_hkRefPtr_hkContainerHeapAllocator userChannelInfos; // offset: 40, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator sections; // offset: 24, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator userChannelInfos; // offset: 40, flags: 32, size: 16
 } hkxMesh;
 static_assert(sizeof(hkxMesh)==56, "Invalid size for hkxMesh");
 
 #define hkRefPtr_hkxMesh_HASH 0x5F5046E7
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkxMesh {
     // hkRefPtr_hkxMesh members
     hkxMesh* ptr; // offset: 0, flags: 36, size: 8
@@ -801,6 +907,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkxMesh {
 static_assert(sizeof(hkRefPtr_hkxMesh)==8, "Invalid size for hkRefPtr_hkxMesh");
 
 #define hkaMeshBinding__Mapping_HASH 0x57A6B4F7
+// Record
 typedef /*alignas(8)*/ struct hkaMeshBinding__Mapping {
     // hkaMeshBinding__Mapping members
     hkArray_hkInt16_hkContainerHeapAllocator mapping; // offset: 0, flags: 32, size: 16
@@ -808,6 +915,7 @@ typedef /*alignas(8)*/ struct hkaMeshBinding__Mapping {
 static_assert(sizeof(hkaMeshBinding__Mapping)==16, "Invalid size for hkaMeshBinding__Mapping");
 
 #define hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator_HASH 0xBABC52BE
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator {
     // hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator members
     hkaMeshBinding__Mapping* m_data; // offset: 0, flags: 34, size: 8
@@ -817,6 +925,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaMeshBinding__Mapping_hkContainerHeapAll
 static_assert(sizeof(hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator");
 
 #define hkArray_hkTransform_hkContainerHeapAllocator_HASH 0xF9390889
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkTransform_hkContainerHeapAllocator {
     // hkArray_hkTransform_hkContainerHeapAllocator members
     hkTransform* m_data; // offset: 0, flags: 34, size: 8
@@ -826,6 +935,7 @@ typedef /*alignas(8)*/ struct hkArray_hkTransform_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkTransform_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkTransform_hkContainerHeapAllocator");
 
 #define hkaMeshBinding_HASH 0xC0550816
+// Record
 typedef /*alignas(8)*/ struct hkaMeshBinding {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -845,15 +955,19 @@ typedef /*alignas(8)*/ struct hkaMeshBinding {
 static_assert(sizeof(hkaMeshBinding)==88, "Invalid size for hkaMeshBinding");
 
 #define hkxMaterial__Transparency_HASH 0x3E1B5332
+// Enum
 typedef uint32 hkxMaterial__Transparency;
 
 #define hkxMaterial__Transparency_hkUint8_HASH 0x0FACB3A9
+// Enum
 typedef hkUint8 hkxMaterial__Transparency_hkUint8;
 
 #define hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16_HASH 0x0FCC79A8
+// Primitive with parent
 typedef hkUint16 hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16; // size: 2 alignment 2 
 
 #define hkRefPtr_hkReferencedObject_HASH 0x521FF0C9
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkReferencedObject {
     // hkRefPtr_hkReferencedObject members
     hkReferencedObject* ptr; // offset: 0, flags: 36, size: 8
@@ -861,6 +975,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkReferencedObject {
 static_assert(sizeof(hkRefPtr_hkReferencedObject)==8, "Invalid size for hkRefPtr_hkReferencedObject");
 
 #define hkRefCountedProperties__Entry_HASH 0x83A51493
+// Record
 typedef /*alignas(8)*/ struct hkRefCountedProperties__Entry {
     // hkRefCountedProperties__Entry members
     hkRefPtr_hkReferencedObject object; // offset: 0, flags: 32, size: 8
@@ -871,6 +986,7 @@ typedef /*alignas(8)*/ struct hkRefCountedProperties__Entry {
 static_assert(sizeof(hkRefCountedProperties__Entry)==16, "Invalid size for hkRefCountedProperties__Entry");
 
 #define hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator_HASH 0x31EAC97D
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator {
     // hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator members
     hkRefCountedProperties__Entry* m_data; // offset: 0, flags: 34, size: 8
@@ -880,6 +996,7 @@ typedef /*alignas(8)*/ struct hkArray_hkRefCountedProperties__Entry_hkContainerH
 static_assert(sizeof(hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator");
 
 #define hkRefCountedProperties_HASH 0x100CF9F9
+// Record
 typedef /*alignas(8)*/ struct hkRefCountedProperties {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -894,6 +1011,7 @@ typedef /*alignas(8)*/ struct hkRefCountedProperties {
 static_assert(sizeof(hkRefCountedProperties)==40, "Invalid size for hkRefCountedProperties");
 
 #define hkRootLevelContainer__NamedVariant_HASH 0x4FD6CAA0
+// Record
 typedef /*alignas(8)*/ struct hkRootLevelContainer__NamedVariant {
     // hkRootLevelContainer__NamedVariant members
     hkStringPtr name; // offset: 0, flags: 36, size: 8
@@ -903,6 +1021,7 @@ typedef /*alignas(8)*/ struct hkRootLevelContainer__NamedVariant {
 static_assert(sizeof(hkRootLevelContainer__NamedVariant)==24, "Invalid size for hkRootLevelContainer__NamedVariant");
 
 #define hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator_HASH 0x77278F14
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator {
     // hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator members
     hkRootLevelContainer__NamedVariant* m_data; // offset: 0, flags: 34, size: 8
@@ -912,6 +1031,7 @@ typedef /*alignas(8)*/ struct hkArray_hkRootLevelContainer__NamedVariant_hkConta
 static_assert(sizeof(hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator");
 
 #define hkRootLevelContainer_HASH 0x10BB2BE3
+// Record
 typedef /*alignas(8)*/ struct hkRootLevelContainer {
     // hkRootLevelContainer members
     hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator namedVariants; // offset: 0, flags: 32, size: 16
@@ -919,6 +1039,7 @@ typedef /*alignas(8)*/ struct hkRootLevelContainer {
 static_assert(sizeof(hkRootLevelContainer)==16, "Invalid size for hkRootLevelContainer");
 
 #define hkaiDirectedGraphExplicitCost__Node_HASH 0x954456FC
+// Record
 typedef /*alignas(4)*/ struct hkaiDirectedGraphExplicitCost__Node {
     // hkaiDirectedGraphExplicitCost__Node members
     int startEdgeIndex; // offset: 0, flags: 32, size: 4
@@ -927,18 +1048,23 @@ typedef /*alignas(4)*/ struct hkaiDirectedGraphExplicitCost__Node {
 static_assert(sizeof(hkaiDirectedGraphExplicitCost__Node)==8, "Invalid size for hkaiDirectedGraphExplicitCost__Node");
 
 #define hknpShapeType__Enum_HASH 0x322EBBF8
+// Enum
 typedef uint32 hknpShapeType__Enum;
 
 #define hknpShapeType__Enum_hkUint8_HASH 0x12E355F0
+// Enum
 typedef hkUint8 hknpShapeType__Enum_hkUint8;
 
 #define hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_HASH 0xC3F6A72B
+// Enum
 typedef uint32 hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum;
 
 #define hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8_HASH 0xB473E93C
+// Enum
 typedef hkInt8 hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8;
 
 #define hkaAnimatedReferenceFrame_HASH 0xEE25AB30
+// Record
 typedef /*alignas(8)*/ struct hkaAnimatedReferenceFrame {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -954,6 +1080,7 @@ typedef /*alignas(8)*/ struct hkaAnimatedReferenceFrame {
 static_assert(sizeof(hkaAnimatedReferenceFrame)==32, "Invalid size for hkaAnimatedReferenceFrame");
 
 #define hkRefPtr_hkaAnimatedReferenceFrame_HASH 0x4819EB67
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkaAnimatedReferenceFrame {
     // hkRefPtr_hkaAnimatedReferenceFrame members
     hkaAnimatedReferenceFrame* ptr; // offset: 0, flags: 36, size: 8
@@ -961,6 +1088,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkaAnimatedReferenceFrame {
 static_assert(sizeof(hkRefPtr_hkaAnimatedReferenceFrame)==8, "Invalid size for hkRefPtr_hkaAnimatedReferenceFrame");
 
 #define hkaAnnotationTrack__Annotation_HASH 0x26EDD7EA
+// Record
 typedef /*alignas(8)*/ struct hkaAnnotationTrack__Annotation {
     // hkaAnnotationTrack__Annotation members
     hkReal time; // offset: 0, flags: 32, size: 4
@@ -970,6 +1098,7 @@ typedef /*alignas(8)*/ struct hkaAnnotationTrack__Annotation {
 static_assert(sizeof(hkaAnnotationTrack__Annotation)==16, "Invalid size for hkaAnnotationTrack__Annotation");
 
 #define hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator_HASH 0x3D1C400F
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator {
     // hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator members
     hkaAnnotationTrack__Annotation* m_data; // offset: 0, flags: 34, size: 8
@@ -979,6 +1108,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaAnnotationTrack__Annotation_hkContainer
 static_assert(sizeof(hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator");
 
 #define hkaAnnotationTrack_HASH 0x787C0794
+// Record
 typedef /*alignas(8)*/ struct hkaAnnotationTrack {
     // hkaAnnotationTrack members
     hkStringPtr trackName; // offset: 0, flags: 32, size: 8
@@ -987,6 +1117,7 @@ typedef /*alignas(8)*/ struct hkaAnnotationTrack {
 static_assert(sizeof(hkaAnnotationTrack)==24, "Invalid size for hkaAnnotationTrack");
 
 #define hkArray_hkaAnnotationTrack_hkContainerHeapAllocator_HASH 0x584AF649
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaAnnotationTrack_hkContainerHeapAllocator {
     // hkArray_hkaAnnotationTrack_hkContainerHeapAllocator members
     hkaAnnotationTrack* m_data; // offset: 0, flags: 34, size: 8
@@ -996,6 +1127,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaAnnotationTrack_hkContainerHeapAllocato
 static_assert(sizeof(hkArray_hkaAnnotationTrack_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaAnnotationTrack_hkContainerHeapAllocator");
 
 #define hkaAnimation_HASH 0x12F6E0DF
+// Record
 typedef /*alignas(8)*/ struct hkaAnimation {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1015,15 +1147,19 @@ typedef /*alignas(8)*/ struct hkaAnimation {
 static_assert(sizeof(hkaAnimation)==64, "Invalid size for hkaAnimation");
 
 #define hkFlags_hknpShape__FlagsEnum_hkUint16_HASH 0xEBA33AF8
+// Primitive with parent
 typedef hkUint16 hkFlags_hknpShape__FlagsEnum_hkUint16; // size: 2 alignment 2 
 
 #define hknpCollisionDispatchType__Enum_HASH 0x14938DB8
+// Enum
 typedef uint32 hknpCollisionDispatchType__Enum;
 
 #define hknpCollisionDispatchType__Enum_hkUint8_HASH 0x9AE4F30D
+// Enum
 typedef hkUint8 hknpCollisionDispatchType__Enum_hkUint8;
 
 #define hkRefPtr_hkRefCountedProperties_HASH 0x40242BE5
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkRefCountedProperties {
     // hkRefPtr_hkRefCountedProperties members
     hkRefCountedProperties* ptr; // offset: 0, flags: 36, size: 8
@@ -1031,6 +1167,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkRefCountedProperties {
 static_assert(sizeof(hkRefPtr_hkRefCountedProperties)==8, "Invalid size for hkRefPtr_hkRefCountedProperties");
 
 #define hknpShape_HASH 0xFED3FCD6
+// Record
 typedef /*alignas(16)*/ struct hknpShape {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1053,6 +1190,7 @@ typedef /*alignas(16)*/ struct hknpShape {
 static_assert(sizeof(hknpShape)==64, "Invalid size for hknpShape");
 
 #define hkArray_hkUint16_hkContainerHeapAllocator_HASH 0xB4ADD99B
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkUint16_hkContainerHeapAllocator {
     // hkArray_hkUint16_hkContainerHeapAllocator members
     hkUint16* m_data; // offset: 0, flags: 34, size: 8
@@ -1062,6 +1200,7 @@ typedef /*alignas(8)*/ struct hkArray_hkUint16_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkUint16_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkUint16_hkContainerHeapAllocator");
 
 #define hknpSparseCompactMap_hkUint16_HASH 0xD42F657C
+// Record
 typedef /*alignas(8)*/ struct hknpSparseCompactMap_hkUint16 {
     // hknpSparseCompactMap_hkUint16 members
     hkUint32 secondaryKeyMask; // offset: 0, flags: 32, size: 4
@@ -1072,6 +1211,7 @@ typedef /*alignas(8)*/ struct hknpSparseCompactMap_hkUint16 {
 static_assert(sizeof(hknpSparseCompactMap_hkUint16)==40, "Invalid size for hknpSparseCompactMap_hkUint16");
 
 #define hknpCompositeShape_HASH 0x131C3F94
+// Record
 typedef /*alignas(16)*/ struct hknpCompositeShape {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1102,12 +1242,15 @@ static_assert(sizeof(hknpCompositeShape)==128, "Invalid size for hknpCompositeSh
 /* primitive hknpBodyQuality__FlagsEnum 0x145552A6
 size: 4 alignment: 4 template args: 0 */
 #define hkpConstraintMotor__MotorType_HASH 0xDD98E39D
+// Enum
 typedef uint32 hkpConstraintMotor__MotorType;
 
 #define hkpConstraintMotor__MotorType_hkInt8_HASH 0xBA7D2121
+// Enum
 typedef hkInt8 hkpConstraintMotor__MotorType_hkInt8;
 
 #define hkpConstraintMotor_HASH 0xB5C58BA9
+// Record
 typedef /*alignas(8)*/ struct hkpConstraintMotor {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1123,6 +1266,7 @@ typedef /*alignas(8)*/ struct hkpConstraintMotor {
 static_assert(sizeof(hkpConstraintMotor)==32, "Invalid size for hkpConstraintMotor");
 
 #define hkpLimitedForceConstraintMotor_HASH 0x3A3A18CD
+// Record
 typedef /*alignas(8)*/ struct hkpLimitedForceConstraintMotor {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1141,6 +1285,7 @@ typedef /*alignas(8)*/ struct hkpLimitedForceConstraintMotor {
 static_assert(sizeof(hkpLimitedForceConstraintMotor)==40, "Invalid size for hkpLimitedForceConstraintMotor");
 
 #define hkpPositionConstraintMotor_HASH 0x149C54E7
+// Record
 typedef /*alignas(8)*/ struct hkpPositionConstraintMotor {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1164,6 +1309,7 @@ typedef /*alignas(8)*/ struct hkpPositionConstraintMotor {
 static_assert(sizeof(hkpPositionConstraintMotor)==56, "Invalid size for hkpPositionConstraintMotor");
 
 #define hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator_HASH 0x151F3C24
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator {
     // hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator members
     hkxVertexAnimation__UsageMap* m_data; // offset: 0, flags: 34, size: 8
@@ -1173,6 +1319,7 @@ typedef /*alignas(8)*/ struct hkArray_hkxVertexAnimation__UsageMap_hkContainerHe
 static_assert(sizeof(hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator");
 
 #define hkArray_hkVector4_hkContainerHeapAllocator_HASH 0x8EC74C73
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkVector4_hkContainerHeapAllocator {
     // hkArray_hkVector4_hkContainerHeapAllocator members
     hkVector4* m_data; // offset: 0, flags: 34, size: 8
@@ -1182,6 +1329,7 @@ typedef /*alignas(8)*/ struct hkArray_hkVector4_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkVector4_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkVector4_hkContainerHeapAllocator");
 
 #define hkArray_hkGeometry__Triangle_hkContainerHeapAllocator_HASH 0xA362C6F2
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkGeometry__Triangle_hkContainerHeapAllocator {
     // hkArray_hkGeometry__Triangle_hkContainerHeapAllocator members
     hkGeometry__Triangle* m_data; // offset: 0, flags: 34, size: 8
@@ -1191,6 +1339,7 @@ typedef /*alignas(8)*/ struct hkArray_hkGeometry__Triangle_hkContainerHeapAlloca
 static_assert(sizeof(hkArray_hkGeometry__Triangle_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkGeometry__Triangle_hkContainerHeapAllocator");
 
 #define hkGeometry_HASH 0x15394790
+// Record
 typedef /*alignas(8)*/ struct hkGeometry {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1206,6 +1355,7 @@ typedef /*alignas(8)*/ struct hkGeometry {
 static_assert(sizeof(hkGeometry)==56, "Invalid size for hkGeometry");
 
 #define hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator_HASH 0x1551013D
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator {
     // hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator members
     hkaiDirectedGraphExplicitCost__Node* m_data; // offset: 0, flags: 34, size: 8
@@ -1215,6 +1365,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaiDirectedGraphExplicitCost__Node_hkCont
 static_assert(sizeof(hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator");
 
 #define hkViewPtr_hknpShape_HASH 0x7415F6C4
+// Record
 typedef /*alignas(8)*/ struct hkViewPtr_hknpShape {
     // hkViewPtr_hknpShape members
     hknpShape* ptr; // offset: 0, flags: 36, size: 8
@@ -1222,9 +1373,11 @@ typedef /*alignas(8)*/ struct hkViewPtr_hknpShape {
 static_assert(sizeof(hkViewPtr_hknpShape)==8, "Invalid size for hkViewPtr_hknpShape");
 
 #define hkQuaternion_HASH 0xF5351F6E
+// Primitive with parent
 typedef hkQuaternionf hkQuaternion; // size: 16 alignment 16 
 
 #define hknpMassDistribution_HASH 0x8BE54FE1
+// Record
 typedef /*alignas(16)*/ struct hknpMassDistribution {
     // hknpMassDistribution members
     hkVector4 centerOfMassAndVolume; // offset: 0, flags: 32, size: 16
@@ -1234,6 +1387,7 @@ typedef /*alignas(16)*/ struct hknpMassDistribution {
 static_assert(sizeof(hknpMassDistribution)==48, "Invalid size for hknpMassDistribution");
 
 #define hknpRefMassDistribution_HASH 0x38753B9F
+// Record
 typedef /*alignas(16)*/ struct hknpRefMassDistribution {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1248,6 +1402,7 @@ typedef /*alignas(16)*/ struct hknpRefMassDistribution {
 static_assert(sizeof(hknpRefMassDistribution)==80, "Invalid size for hknpRefMassDistribution");
 
 #define hkRefPtr_hknpRefMassDistribution_HASH 0x5649C3E2
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpRefMassDistribution {
     // hkRefPtr_hknpRefMassDistribution members
     hknpRefMassDistribution* ptr; // offset: 0, flags: 36, size: 8
@@ -1255,6 +1410,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpRefMassDistribution {
 static_assert(sizeof(hkRefPtr_hknpRefMassDistribution)==8, "Invalid size for hkRefPtr_hknpRefMassDistribution");
 
 #define hknpBodyId_HASH 0xC1839A94
+// Record
 typedef /*alignas(4)*/ struct hknpBodyId {
     // hknpBodyId members
     hkUint32 serialAndIndex; // offset: 0, flags: 34, size: 4
@@ -1262,6 +1418,7 @@ typedef /*alignas(4)*/ struct hknpBodyId {
 static_assert(sizeof(hknpBodyId)==4, "Invalid size for hknpBodyId");
 
 #define hknpBodyCinfo_HASH 0xAD3AECDE
+// Record
 typedef /*alignas(16)*/ struct hknpBodyCinfo {
     // hknpBodyCinfo members
     hkViewPtr_hknpShape shape; // offset: 0, flags: 32, size: 8
@@ -1294,6 +1451,7 @@ typedef /*alignas(16)*/ struct hknpBodyCinfo {
 static_assert(sizeof(hknpBodyCinfo)==160, "Invalid size for hknpBodyCinfo");
 
 #define hknpPhysicsSystemData__bodyCinfoWithAttachment_HASH 0x1A2AFFE5
+// Record
 typedef /*alignas(16)*/ struct hknpPhysicsSystemData__bodyCinfoWithAttachment {
     // hknpBodyCinfo members
     hkViewPtr_hknpShape shape; // offset: 0, flags: 32, size: 8
@@ -1329,6 +1487,7 @@ typedef /*alignas(16)*/ struct hknpPhysicsSystemData__bodyCinfoWithAttachment {
 static_assert(sizeof(hknpPhysicsSystemData__bodyCinfoWithAttachment)==176, "Invalid size for hknpPhysicsSystemData__bodyCinfoWithAttachment");
 
 #define hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator_HASH 0x165B8824
+// Record
 typedef /*alignas(8)*/ struct hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator {
     // hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator members
     hknpPhysicsSystemData__bodyCinfoWithAttachment* m_data; // offset: 0, flags: 34, size: 8
@@ -1338,15 +1497,19 @@ typedef /*alignas(8)*/ struct hkArray_hknpPhysicsSystemData__bodyCinfoWithAttach
 static_assert(sizeof(hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator");
 
 #define hkxMaterial__UVMappingAlgorithm_HASH 0xCE00C132
+// Enum
 typedef uint32 hkxMaterial__UVMappingAlgorithm;
 
 #define hkxMaterial__UVMappingAlgorithm_hkUint32_HASH 0x178C22AA
+// Enum
 typedef hkUint32 hkxMaterial__UVMappingAlgorithm_hkUint32;
 
 #define hkxVertexDescription__DataType_hkUint16_HASH 0x181904EF
+// Enum
 typedef hkUint16 hkxVertexDescription__DataType_hkUint16;
 
 #define hkcdStaticTree__Codec3Axis_HASH 0xA3ECD4D2
+// Record
 typedef /*alignas(1)*/ struct hkcdStaticTree__Codec3Axis {
     // hkcdStaticTree__Codec3Axis members
     hkUint8 xyz[3]; // offset: 0, flags: 32, size: 3, hash: 0xC7F5486D
@@ -1354,6 +1517,7 @@ typedef /*alignas(1)*/ struct hkcdStaticTree__Codec3Axis {
 static_assert(sizeof(hkcdStaticTree__Codec3Axis)==3, "Invalid size for hkcdStaticTree__Codec3Axis");
 
 #define hkcdStaticTree__Codec3Axis6_HASH 0x694D0BD0
+// Record
 typedef /*alignas(2)*/ struct hkcdStaticTree__Codec3Axis6 {
     // hkcdStaticTree__Codec3Axis members
     hkUint8 xyz[3]; // offset: 0, flags: 32, size: 3, hash: 0xC7F5486D
@@ -1364,9 +1528,11 @@ typedef /*alignas(2)*/ struct hkcdStaticTree__Codec3Axis6 {
 static_assert(sizeof(hkcdStaticTree__Codec3Axis6)==6, "Invalid size for hkcdStaticTree__Codec3Axis6");
 
 #define hkUlong_HASH 0xC9EED3A1
+// Primitive with parent
 typedef unsigned_long_long hkUlong; // size: 8 alignment 8 
 
 #define hkpConstraintData_HASH 0x1D3FF5D0
+// Record
 typedef /*alignas(8)*/ struct hkpConstraintData {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1383,9 +1549,11 @@ static_assert(sizeof(hkpConstraintData)==32, "Invalid size for hkpConstraintData
 /* primitive hknpConstraint__FlagsEnum 0x1D5334C4
 size: 4 alignment: 4 template args: 0 */
 #define hknpBroadPhaseConfig_HASH 0x95088D15
+// Primitive with parent
 typedef hkReferencedObject hknpBroadPhaseConfig; // size: 24 alignment 8 
 
 #define hkaSkeletonMapperData__ChainMapping_HASH 0x45B2AE3C
+// Record
 typedef /*alignas(16)*/ struct hkaSkeletonMapperData__ChainMapping {
     // hkaSkeletonMapperData__ChainMapping members
     hkInt16 startBoneA; // offset: 0, flags: 32, size: 2
@@ -1401,9 +1569,11 @@ static_assert(sizeof(hkaSkeletonMapperData__ChainMapping)==112, "Invalid size fo
 /* primitive hknpShapeTagCodec__Hints 0x1DF2AB3B
 size: 4 alignment: 4 template args: 0 */
 #define hknpExternMeshShapeGeometry_HASH 0x3F604F35
+// Primitive with parent
 typedef hkReferencedObject hknpExternMeshShapeGeometry; // size: 24 alignment 8 
 
 #define hknpMotionProperties_HASH 0x29608F73
+// Record
 typedef /*alignas(16)*/ struct hknpMotionProperties {
     // hknpMotionProperties members
     hkUint32 isExclusive; // offset: 0, flags: 32, size: 4
@@ -1431,9 +1601,11 @@ typedef /*alignas(16)*/ struct hknpMotionProperties {
 static_assert(sizeof(hknpMotionProperties)==64, "Invalid size for hknpMotionProperties");
 
 #define hkFreeListArrayElement_hknpMotionProperties_HASH 0x1E02C540
+// Primitive with parent
 typedef hknpMotionProperties hkFreeListArrayElement_hknpMotionProperties; // size: 64 alignment 16 
 
 #define hkaSkeletonMapperData__PartitionMappingRange_HASH 0x1F3F18B8
+// Record
 typedef /*alignas(4)*/ struct hkaSkeletonMapperData__PartitionMappingRange {
     // hkaSkeletonMapperData__PartitionMappingRange members
     int startMappingIndex; // offset: 0, flags: 32, size: 4
@@ -1442,6 +1614,7 @@ typedef /*alignas(4)*/ struct hkaSkeletonMapperData__PartitionMappingRange {
 static_assert(sizeof(hkaSkeletonMapperData__PartitionMappingRange)==8, "Invalid size for hkaSkeletonMapperData__PartitionMappingRange");
 
 #define hkcdDynamicTree__Codec32_HASH 0x51302517
+// Record
 typedef /*alignas(16)*/ struct hkcdDynamicTree__Codec32 {
     // hkcdDynamicTree__Codec32 members
     hkAabb aabb; // offset: 0, flags: 34, size: 32
@@ -1449,6 +1622,7 @@ typedef /*alignas(16)*/ struct hkcdDynamicTree__Codec32 {
 static_assert(sizeof(hkcdDynamicTree__Codec32)==32, "Invalid size for hkcdDynamicTree__Codec32");
 
 #define hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator_HASH 0x92E74E2D
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator {
     // hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator members
     hkcdDynamicTree__Codec32* m_data; // offset: 0, flags: 34, size: 8
@@ -1458,6 +1632,7 @@ typedef /*alignas(8)*/ struct hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAl
 static_assert(sizeof(hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator");
 
 #define hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32_HASH 0xF43EF1D3
+// Record
 typedef /*alignas(8)*/ struct hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32 {
     // hkcdDynamicTree__AnisotropicMetric members
     // hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32 members
@@ -1468,28 +1643,32 @@ typedef /*alignas(8)*/ struct hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree_
 static_assert(sizeof(hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32)==24, "Invalid size for hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32");
 
 #define hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_HASH 0xB93BA14E
+// Primitive with parent
 typedef hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32 hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32; // size: 24 alignment 8 
 
-#define hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_HASH 0x9D6FA20F
-typedef /*alignas(8)*/ struct hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage {
+#define hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_HASH 0x9D6FA20F
+// Record
+typedef /*alignas(8)*/ struct hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 {
     // hkcdDynamicTree__AnisotropicMetric members
     // hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32 members
     hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator nodes; // offset: 0, flags: 32, size: 16
     unsigned_short firstFree; // offset: 16, flags: 32, size: 2
     // hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 members
-    // hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage members
+    // hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 members
     uint8 _padding_numLeaves[6]; // inter-member padding
     hkUint32 numLeaves; // offset: 24, flags: 32, size: 4
     hkUint32 path; // offset: 28, flags: 32, size: 4
     unsigned_short root; // offset: 32, flags: 32, size: 2
     uint8 _padding_end[6]; // final padding
-} hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage;
-static_assert(sizeof(hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage)==40, "Invalid size for hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage");
+} hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32;
+static_assert(sizeof(hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32)==40, "Invalid size for hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32");
 
 #define hknpDynamicCompoundShapeTree_HASH 0xD0D486EA
-typedef hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage hknpDynamicCompoundShapeTree; // size: 40 alignment 8 
+// Primitive with parent
+typedef hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 hknpDynamicCompoundShapeTree; // size: 40 alignment 8 
 
 #define hknpDynamicCompoundShapeData_HASH 0x20D6E9A4
+// Record
 typedef /*alignas(8)*/ struct hknpDynamicCompoundShapeData {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1504,6 +1683,7 @@ typedef /*alignas(8)*/ struct hknpDynamicCompoundShapeData {
 static_assert(sizeof(hknpDynamicCompoundShapeData)==64, "Invalid size for hknpDynamicCompoundShapeData");
 
 #define hkxAttribute_HASH 0xB7327AB7
+// Record
 typedef /*alignas(8)*/ struct hkxAttribute {
     // hkxAttribute members
     hkStringPtr name; // offset: 0, flags: 32, size: 8
@@ -1512,6 +1692,7 @@ typedef /*alignas(8)*/ struct hkxAttribute {
 static_assert(sizeof(hkxAttribute)==16, "Invalid size for hkxAttribute");
 
 #define hkArray_hkxAttribute_hkContainerHeapAllocator_HASH 0xE2F1C136
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkxAttribute_hkContainerHeapAllocator {
     // hkArray_hkxAttribute_hkContainerHeapAllocator members
     hkxAttribute* m_data; // offset: 0, flags: 34, size: 8
@@ -1521,6 +1702,7 @@ typedef /*alignas(8)*/ struct hkArray_hkxAttribute_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkxAttribute_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkxAttribute_hkContainerHeapAllocator");
 
 #define hkxAttributeGroup_HASH 0xB77C4E21
+// Record
 typedef /*alignas(8)*/ struct hkxAttributeGroup {
     // hkxAttributeGroup members
     hkStringPtr name; // offset: 0, flags: 32, size: 8
@@ -1529,6 +1711,7 @@ typedef /*alignas(8)*/ struct hkxAttributeGroup {
 static_assert(sizeof(hkxAttributeGroup)==24, "Invalid size for hkxAttributeGroup");
 
 #define hkArray_hkxAttributeGroup_hkContainerHeapAllocator_HASH 0x21D0B990
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkxAttributeGroup_hkContainerHeapAllocator {
     // hkArray_hkxAttributeGroup_hkContainerHeapAllocator members
     hkxAttributeGroup* m_data; // offset: 0, flags: 34, size: 8
@@ -1538,6 +1721,7 @@ typedef /*alignas(8)*/ struct hkArray_hkxAttributeGroup_hkContainerHeapAllocator
 static_assert(sizeof(hkArray_hkxAttributeGroup_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkxAttributeGroup_hkContainerHeapAllocator");
 
 #define hkpSetupStabilizationAtom_HASH 0x21D5B9AE
+// Record
 typedef /*alignas(16)*/ struct hkpSetupStabilizationAtom {
     // hkpConstraintAtom members
     hkpConstraintAtom__AtomType_hkUint16 type; // offset: 0, flags: 32, size: 2
@@ -1551,12 +1735,15 @@ typedef /*alignas(16)*/ struct hkpSetupStabilizationAtom {
 static_assert(sizeof(hkpSetupStabilizationAtom)==16, "Invalid size for hkpSetupStabilizationAtom");
 
 #define hkaiAnnotatedStreamingSet__Side_HASH 0xE6E0651A
+// Enum
 typedef uint32 hkaiAnnotatedStreamingSet__Side;
 
 #define hkaiAnnotatedStreamingSet__Side_hkUint8_HASH 0xBBA05363
+// Enum
 typedef hkUint8 hkaiAnnotatedStreamingSet__Side_hkUint8;
 
 #define hkaiAnnotatedStreamingSet_HASH 0xC93646DD
+// Record
 typedef /*alignas(8)*/ struct hkaiAnnotatedStreamingSet {
     // hkaiAnnotatedStreamingSet members
     hkaiAnnotatedStreamingSet__Side_hkUint8 side; // offset: 0, flags: 32, size: 1
@@ -1566,6 +1753,7 @@ typedef /*alignas(8)*/ struct hkaiAnnotatedStreamingSet {
 static_assert(sizeof(hkaiAnnotatedStreamingSet)==16, "Invalid size for hkaiAnnotatedStreamingSet");
 
 #define hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator_HASH 0x2348FFB8
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator {
     // hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator members
     hkaiAnnotatedStreamingSet* m_data; // offset: 0, flags: 34, size: 8
@@ -1575,6 +1763,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapA
 static_assert(sizeof(hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator");
 
 #define hkArray_unsigned_int_hkContainerHeapAllocator_HASH 0x2F923C9D
+// Record
 typedef /*alignas(8)*/ struct hkArray_unsigned_int_hkContainerHeapAllocator {
     // hkArray_unsigned_int_hkContainerHeapAllocator members
     unsigned_int* m_data; // offset: 0, flags: 34, size: 8
@@ -1584,6 +1773,7 @@ typedef /*alignas(8)*/ struct hkArray_unsigned_int_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_unsigned_int_hkContainerHeapAllocator)==16, "Invalid size for hkArray_unsigned_int_hkContainerHeapAllocator");
 
 #define hkArray_hkUint32_hkContainerHeapAllocator_HASH 0xDB8A31A3
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkUint32_hkContainerHeapAllocator {
     // hkArray_hkUint32_hkContainerHeapAllocator members
     hkUint32* m_data; // offset: 0, flags: 34, size: 8
@@ -1593,6 +1783,7 @@ typedef /*alignas(8)*/ struct hkArray_hkUint32_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkUint32_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkUint32_hkContainerHeapAllocator");
 
 #define hkArray_hkUint8_hkContainerHeapAllocator_HASH 0x9CD19D4F
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkUint8_hkContainerHeapAllocator {
     // hkArray_hkUint8_hkContainerHeapAllocator members
     hkUint8* m_data; // offset: 0, flags: 34, size: 8
@@ -1602,6 +1793,7 @@ typedef /*alignas(8)*/ struct hkArray_hkUint8_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkUint8_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkUint8_hkContainerHeapAllocator");
 
 #define hkxVertexBuffer__VertexData_HASH 0xEB674BA1
+// Record
 typedef /*alignas(8)*/ struct hkxVertexBuffer__VertexData {
     // hkxVertexBuffer__VertexData members
     hkArray_unsigned_int_hkContainerHeapAllocator vectorData; // offset: 0, flags: 32, size: 16
@@ -1619,6 +1811,7 @@ typedef /*alignas(8)*/ struct hkxVertexBuffer__VertexData {
 static_assert(sizeof(hkxVertexBuffer__VertexData)==104, "Invalid size for hkxVertexBuffer__VertexData");
 
 #define hkxVertexDescription__ElementDecl_HASH 0xDD0D0CA5
+// Record
 typedef /*alignas(8)*/ struct hkxVertexDescription__ElementDecl {
     // hkxVertexDescription__ElementDecl members
     hkUint32 byteOffset; // offset: 0, flags: 32, size: 4
@@ -1632,6 +1825,7 @@ typedef /*alignas(8)*/ struct hkxVertexDescription__ElementDecl {
 static_assert(sizeof(hkxVertexDescription__ElementDecl)==24, "Invalid size for hkxVertexDescription__ElementDecl");
 
 #define hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator_HASH 0x889FE6AB
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator {
     // hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator members
     hkxVertexDescription__ElementDecl* m_data; // offset: 0, flags: 34, size: 8
@@ -1641,6 +1835,7 @@ typedef /*alignas(8)*/ struct hkArray_hkxVertexDescription__ElementDecl_hkContai
 static_assert(sizeof(hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator");
 
 #define hkxVertexDescription_HASH 0x2E4BFD1B
+// Record
 typedef /*alignas(8)*/ struct hkxVertexDescription {
     // hkxVertexDescription members
     hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator decls; // offset: 0, flags: 32, size: 16
@@ -1648,6 +1843,7 @@ typedef /*alignas(8)*/ struct hkxVertexDescription {
 static_assert(sizeof(hkxVertexDescription)==16, "Invalid size for hkxVertexDescription");
 
 #define hkxVertexBuffer_HASH 0x7854546B
+// Record
 typedef /*alignas(8)*/ struct hkxVertexBuffer {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1663,6 +1859,7 @@ typedef /*alignas(8)*/ struct hkxVertexBuffer {
 static_assert(sizeof(hkxVertexBuffer)==144, "Invalid size for hkxVertexBuffer");
 
 #define hkRefPtr_hkxVertexBuffer_HASH 0x4B9CD60F
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkxVertexBuffer {
     // hkRefPtr_hkxVertexBuffer members
     hkxVertexBuffer* ptr; // offset: 0, flags: 36, size: 8
@@ -1670,6 +1867,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkxVertexBuffer {
 static_assert(sizeof(hkRefPtr_hkxVertexBuffer)==8, "Invalid size for hkRefPtr_hkxVertexBuffer");
 
 #define hkxAttributeHolder_HASH 0x6D5E84D4
+// Record
 typedef /*alignas(8)*/ struct hkxAttributeHolder {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1684,9 +1882,11 @@ typedef /*alignas(8)*/ struct hkxAttributeHolder {
 static_assert(sizeof(hkxAttributeHolder)==40, "Invalid size for hkxAttributeHolder");
 
 #define hkxMaterial__TextureType_hkInt32_HASH 0x864DDBF9
+// Enum
 typedef hkInt32 hkxMaterial__TextureType_hkInt32;
 
 #define hkxMaterial__TextureStage_HASH 0xCBB9F29B
+// Record
 typedef /*alignas(8)*/ struct hkxMaterial__TextureStage {
     // hkxMaterial__TextureStage members
     hkRefVariant texture; // offset: 0, flags: 32, size: 8
@@ -1696,6 +1896,7 @@ typedef /*alignas(8)*/ struct hkxMaterial__TextureStage {
 static_assert(sizeof(hkxMaterial__TextureStage)==16, "Invalid size for hkxMaterial__TextureStage");
 
 #define hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator_HASH 0x79253DEC
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator {
     // hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator members
     hkxMaterial__TextureStage* m_data; // offset: 0, flags: 34, size: 8
@@ -1705,6 +1906,7 @@ typedef /*alignas(8)*/ struct hkArray_hkxMaterial__TextureStage_hkContainerHeapA
 static_assert(sizeof(hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator");
 
 #define hkxMaterial__Property_HASH 0xFFA5F2DB
+// Record
 typedef /*alignas(4)*/ struct hkxMaterial__Property {
     // hkxMaterial__Property members
     hkUint32 key; // offset: 0, flags: 32, size: 4
@@ -1713,6 +1915,7 @@ typedef /*alignas(4)*/ struct hkxMaterial__Property {
 static_assert(sizeof(hkxMaterial__Property)==8, "Invalid size for hkxMaterial__Property");
 
 #define hkArray_hkxMaterial__Property_hkContainerHeapAllocator_HASH 0x9AF3A508
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkxMaterial__Property_hkContainerHeapAllocator {
     // hkArray_hkxMaterial__Property_hkContainerHeapAllocator members
     hkxMaterial__Property* m_data; // offset: 0, flags: 34, size: 8
@@ -1722,6 +1925,7 @@ typedef /*alignas(8)*/ struct hkArray_hkxMaterial__Property_hkContainerHeapAlloc
 static_assert(sizeof(hkArray_hkxMaterial__Property_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkxMaterial__Property_hkContainerHeapAllocator");
 
 #define hkxMaterial_HASH 0x7A06A251
+// Record
 typedef /*alignas(16)*/ struct hkxMaterial {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1739,7 +1943,7 @@ typedef /*alignas(16)*/ struct hkxMaterial {
     hkVector4 ambientColor; // offset: 80, flags: 32, size: 16
     hkVector4 specularColor; // offset: 96, flags: 32, size: 16
     hkVector4 emissiveColor; // offset: 112, flags: 32, size: 16
-    hkArray_hkRefPtr_hkContainerHeapAllocator subMaterials; // offset: 128, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator subMaterials; // offset: 128, flags: 32, size: 16
     hkRefVariant extraData; // offset: 144, flags: 32, size: 8
     hkReal uvMapScale[2]; // offset: 152, flags: 32, size: 8, hash: 0x7EDF83AA
     hkReal uvMapOffset[2]; // offset: 160, flags: 32, size: 8, hash: 0x7EDF83AA
@@ -1756,6 +1960,7 @@ typedef /*alignas(16)*/ struct hkxMaterial {
 static_assert(sizeof(hkxMaterial)==224, "Invalid size for hkxMaterial");
 
 #define hkRefPtr_hkxMaterial_HASH 0xB76C984D
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkxMaterial {
     // hkRefPtr_hkxMaterial members
     hkxMaterial* ptr; // offset: 0, flags: 36, size: 8
@@ -1763,6 +1968,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkxMaterial {
 static_assert(sizeof(hkRefPtr_hkxMaterial)==8, "Invalid size for hkRefPtr_hkxMaterial");
 
 #define hkArray_hkRefVariant_hkContainerHeapAllocator_HASH 0xD4279FE6
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkRefVariant_hkContainerHeapAllocator {
     // hkArray_hkRefVariant_hkContainerHeapAllocator members
     hkRefVariant* m_data; // offset: 0, flags: 34, size: 8
@@ -1772,6 +1978,7 @@ typedef /*alignas(8)*/ struct hkArray_hkRefVariant_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkRefVariant_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkRefVariant_hkContainerHeapAllocator");
 
 #define hkArray_float_hkContainerHeapAllocator_HASH 0x392D925B
+// Record
 typedef /*alignas(8)*/ struct hkArray_float_hkContainerHeapAllocator {
     // hkArray_float_hkContainerHeapAllocator members
     float* m_data; // offset: 0, flags: 34, size: 8
@@ -1781,6 +1988,7 @@ typedef /*alignas(8)*/ struct hkArray_float_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_float_hkContainerHeapAllocator)==16, "Invalid size for hkArray_float_hkContainerHeapAllocator");
 
 #define hkxMeshSection_HASH 0x23DAF45B
+// Record
 typedef /*alignas(8)*/ struct hkxMeshSection {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1791,16 +1999,17 @@ typedef /*alignas(8)*/ struct hkxMeshSection {
     // hkxMeshSection members
     uint8 _padding_vertexBuffer[4]; // inter-member padding
     hkRefPtr_hkxVertexBuffer vertexBuffer; // offset: 24, flags: 32, size: 8
-    hkArray_hkRefPtr_hkContainerHeapAllocator indexBuffers; // offset: 32, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator indexBuffers; // offset: 32, flags: 32, size: 16
     hkRefPtr_hkxMaterial material; // offset: 48, flags: 32, size: 8
     hkArray_hkRefVariant_hkContainerHeapAllocator userChannels; // offset: 56, flags: 32, size: 16
-    hkArray_hkRefPtr_hkContainerHeapAllocator vertexAnimations; // offset: 72, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator vertexAnimations; // offset: 72, flags: 32, size: 16
     hkArray_float_hkContainerHeapAllocator linearKeyFrameHints; // offset: 88, flags: 32, size: 16
     hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator boneMatrixMap; // offset: 104, flags: 32, size: 16
 } hkxMeshSection;
 static_assert(sizeof(hkxMeshSection)==120, "Invalid size for hkxMeshSection");
 
 #define hkRelArray_hkVector4_HASH 0x23FDEA35
+// Record
 typedef /*alignas(2)*/ struct hkRelArray_hkVector4 {
     // hkRelArray_hkVector4 members
     hkUint16 size; // offset: 0, flags: 34, size: 2
@@ -1809,6 +2018,7 @@ typedef /*alignas(2)*/ struct hkRelArray_hkVector4 {
 static_assert(sizeof(hkRelArray_hkVector4)==4, "Invalid size for hkRelArray_hkVector4");
 
 #define hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator_HASH 0x24EED82B
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator {
     // hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator members
     hkcdStaticTree__Codec3Axis6* m_data; // offset: 0, flags: 34, size: 8
@@ -1818,6 +2028,7 @@ typedef /*alignas(8)*/ struct hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHea
 static_assert(sizeof(hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator");
 
 #define hkpAngFrictionConstraintAtom_HASH 0x2552FE7B
+// Record
 typedef /*alignas(16)*/ struct hkpAngFrictionConstraintAtom {
     // hkpConstraintAtom members
     hkpConstraintAtom__AtomType_hkUint16 type; // offset: 0, flags: 32, size: 2
@@ -1832,6 +2043,7 @@ typedef /*alignas(16)*/ struct hkpAngFrictionConstraintAtom {
 static_assert(sizeof(hkpAngFrictionConstraintAtom)==16, "Invalid size for hkpAngFrictionConstraintAtom");
 
 #define hkArray_hkInt32_hkContainerHeapAllocator_HASH 0x25649495
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkInt32_hkContainerHeapAllocator {
     // hkArray_hkInt32_hkContainerHeapAllocator members
     hkInt32* m_data; // offset: 0, flags: 34, size: 8
@@ -1841,6 +2053,7 @@ typedef /*alignas(8)*/ struct hkArray_hkInt32_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hkInt32_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkInt32_hkContainerHeapAllocator");
 
 #define hkRelArray_hkVector4f_HASH 0x256A6820
+// Record
 typedef /*alignas(2)*/ struct hkRelArray_hkVector4f {
     // hkRelArray_hkVector4f members
     hkUint16 size; // offset: 0, flags: 34, size: 2
@@ -1849,9 +2062,11 @@ typedef /*alignas(2)*/ struct hkRelArray_hkVector4f {
 static_assert(sizeof(hkRelArray_hkVector4f)==4, "Invalid size for hkRelArray_hkVector4f");
 
 #define hknpConstraintId_HASH 0x25E975EE
+// Primitive with parent
 typedef hkHandle_hkUint32_1073741823 hknpConstraintId; // size: 4 alignment 4 
 
 #define hkArray_int_hkContainerHeapAllocator_HASH 0x26BEDEA0
+// Record
 typedef /*alignas(8)*/ struct hkArray_int_hkContainerHeapAllocator {
     // hkArray_int_hkContainerHeapAllocator members
     int* m_data; // offset: 0, flags: 34, size: 8
@@ -1861,18 +2076,21 @@ typedef /*alignas(8)*/ struct hkArray_int_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_int_hkContainerHeapAllocator)==16, "Invalid size for hkArray_int_hkContainerHeapAllocator");
 
 #define hkFreeListArray_hknpShapeInstance_8_HASH 0x26CF3519
+// Record
 typedef /*alignas(8)*/ struct hkFreeListArray_hknpShapeInstance_8 {
     // hkFreeListArray_hknpShapeInstance_8 members
-    hkArray_hkFreeListArrayElement_hkContainerHeapAllocator elements; // offset: 0, flags: 34, size: 16
+    hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator elements; // offset: 0, flags: 34, size: 16
     hkInt32 firstFree; // offset: 16, flags: 34, size: 4
     uint8 _padding_end[4]; // final padding
 } hkFreeListArray_hknpShapeInstance_8;
 static_assert(sizeof(hkFreeListArray_hknpShapeInstance_8)==24, "Invalid size for hkFreeListArray_hknpShapeInstance_8");
 
 #define hkFlags_hknpBodyQuality__FlagsEnum_hkUint32_HASH 0x6E1FCC0E
+// Primitive with parent
 typedef hkUint32 hkFlags_hknpBodyQuality__FlagsEnum_hkUint32; // size: 4 alignment 4 
 
 #define hknpBodyQuality_HASH 0xA028DAE7
+// Record
 typedef /*alignas(8)*/ struct hknpBodyQuality {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1890,6 +2108,7 @@ typedef /*alignas(8)*/ struct hknpBodyQuality {
 static_assert(sizeof(hknpBodyQuality)==40, "Invalid size for hknpBodyQuality");
 
 #define hknpBodyQualityLibrary_HASH 0xF3256357
+// Record
 typedef /*alignas(16)*/ struct hknpBodyQualityLibrary {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1905,6 +2124,7 @@ typedef /*alignas(16)*/ struct hknpBodyQualityLibrary {
 static_assert(sizeof(hknpBodyQualityLibrary)==1312, "Invalid size for hknpBodyQualityLibrary");
 
 #define hkRefPtr_hknpBodyQualityLibrary_HASH 0x26EAAF76
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpBodyQualityLibrary {
     // hkRefPtr_hknpBodyQualityLibrary members
     hknpBodyQualityLibrary* ptr; // offset: 0, flags: 36, size: 8
@@ -1912,6 +2132,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpBodyQualityLibrary {
 static_assert(sizeof(hkRefPtr_hknpBodyQualityLibrary)==8, "Invalid size for hkRefPtr_hknpBodyQualityLibrary");
 
 #define hkaiNavMeshClearanceCache_HASH 0x58BDBAE0
+// Record
 typedef /*alignas(8)*/ struct hkaiNavMeshClearanceCache {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1937,6 +2158,7 @@ typedef /*alignas(8)*/ struct hkaiNavMeshClearanceCache {
 static_assert(sizeof(hkaiNavMeshClearanceCache)==120, "Invalid size for hkaiNavMeshClearanceCache");
 
 #define hkRefPtr_hkaiNavMeshClearanceCache_HASH 0xEE98BEBB
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkaiNavMeshClearanceCache {
     // hkRefPtr_hkaiNavMeshClearanceCache members
     hkaiNavMeshClearanceCache* ptr; // offset: 0, flags: 36, size: 8
@@ -1944,6 +2166,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkaiNavMeshClearanceCache {
 static_assert(sizeof(hkRefPtr_hkaiNavMeshClearanceCache)==8, "Invalid size for hkRefPtr_hkaiNavMeshClearanceCache");
 
 #define hkaiNavMeshClearanceCacheSeeding__CacheData_HASH 0x5CC07902
+// Record
 typedef /*alignas(8)*/ struct hkaiNavMeshClearanceCacheSeeding__CacheData {
     // hkaiNavMeshClearanceCacheSeeding__CacheData members
     hkUlong id; // offset: 0, flags: 32, size: 8
@@ -1954,6 +2177,7 @@ typedef /*alignas(8)*/ struct hkaiNavMeshClearanceCacheSeeding__CacheData {
 static_assert(sizeof(hkaiNavMeshClearanceCacheSeeding__CacheData)==24, "Invalid size for hkaiNavMeshClearanceCacheSeeding__CacheData");
 
 #define hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator_HASH 0x277E908F
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator {
     // hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator members
     hkaiNavMeshClearanceCacheSeeding__CacheData* m_data; // offset: 0, flags: 34, size: 8
@@ -1963,6 +2187,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaiNavMeshClearanceCacheSeeding__CacheDat
 static_assert(sizeof(hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator");
 
 #define hkaiNavMeshClearanceCacheSeeding__CacheDataSet_HASH 0x2792877F
+// Record
 typedef /*alignas(8)*/ struct hkaiNavMeshClearanceCacheSeeding__CacheDataSet {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -1977,6 +2202,7 @@ typedef /*alignas(8)*/ struct hkaiNavMeshClearanceCacheSeeding__CacheDataSet {
 static_assert(sizeof(hkaiNavMeshClearanceCacheSeeding__CacheDataSet)==40, "Invalid size for hkaiNavMeshClearanceCacheSeeding__CacheDataSet");
 
 #define hkaSkeletonMapperData__SimpleMapping_HASH 0x29B49FCC
+// Record
 typedef /*alignas(16)*/ struct hkaSkeletonMapperData__SimpleMapping {
     // hkaSkeletonMapperData__SimpleMapping members
     hkInt16 boneA; // offset: 0, flags: 32, size: 2
@@ -1987,6 +2213,7 @@ typedef /*alignas(16)*/ struct hkaSkeletonMapperData__SimpleMapping {
 static_assert(sizeof(hkaSkeletonMapperData__SimpleMapping)==64, "Invalid size for hkaSkeletonMapperData__SimpleMapping");
 
 #define hkcdFourAabb_HASH 0x464C4E2B
+// Record
 typedef /*alignas(16)*/ struct hkcdFourAabb {
     // hkcdFourAabb members
     hkVector4 lx; // offset: 0, flags: 32, size: 16
@@ -1999,6 +2226,7 @@ typedef /*alignas(16)*/ struct hkcdFourAabb {
 static_assert(sizeof(hkcdFourAabb)==96, "Invalid size for hkcdFourAabb");
 
 #define hkcdSimdTree__Node_HASH 0x4C8B1593
+// Record
 typedef /*alignas(16)*/ struct hkcdSimdTree__Node {
     // hkcdFourAabb members
     hkVector4 lx; // offset: 0, flags: 32, size: 16
@@ -2013,6 +2241,7 @@ typedef /*alignas(16)*/ struct hkcdSimdTree__Node {
 static_assert(sizeof(hkcdSimdTree__Node)==112, "Invalid size for hkcdSimdTree__Node");
 
 #define hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator_HASH 0x2B6B6131
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator {
     // hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator members
     hkcdSimdTree__Node* m_data; // offset: 0, flags: 34, size: 8
@@ -2022,6 +2251,7 @@ typedef /*alignas(8)*/ struct hkArray_hkcdSimdTree__Node_hkContainerHeapAllocato
 static_assert(sizeof(hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator");
 
 #define hknpConvexShape_HASH 0x30665A1C
+// Record
 typedef /*alignas(16)*/ struct hknpConvexShape {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2047,6 +2277,7 @@ typedef /*alignas(16)*/ struct hknpConvexShape {
 static_assert(sizeof(hknpConvexShape)==80, "Invalid size for hknpConvexShape");
 
 #define hkcdSimdTree_HASH 0x35403F7F
+// Record
 typedef /*alignas(8)*/ struct hkcdSimdTree {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2056,6 +2287,7 @@ typedef /*alignas(8)*/ struct hkcdSimdTree {
 static_assert(sizeof(hkcdSimdTree)==24, "Invalid size for hkcdSimdTree");
 
 #define hkRefPtr_hkGeometry_HASH 0x7CCDB1EB
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkGeometry {
     // hkRefPtr_hkGeometry members
     hkGeometry* ptr; // offset: 0, flags: 36, size: 8
@@ -2063,6 +2295,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkGeometry {
 static_assert(sizeof(hkRefPtr_hkGeometry)==8, "Invalid size for hkRefPtr_hkGeometry");
 
 #define hknpMorphExternMesh_HASH 0x365B60FE
+// Record
 typedef /*alignas(8)*/ struct hknpMorphExternMesh {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2081,6 +2314,7 @@ typedef /*alignas(8)*/ struct hknpMorphExternMesh {
 static_assert(sizeof(hknpMorphExternMesh)==72, "Invalid size for hknpMorphExternMesh");
 
 #define hkaDefaultAnimatedReferenceFrame_HASH 0x37DD60F5
+// Record
 typedef /*alignas(16)*/ struct hkaDefaultAnimatedReferenceFrame {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2103,40 +2337,47 @@ typedef /*alignas(16)*/ struct hkaDefaultAnimatedReferenceFrame {
 static_assert(sizeof(hkaDefaultAnimatedReferenceFrame)==96, "Invalid size for hkaDefaultAnimatedReferenceFrame");
 
 #define hknpCollisionFilter__Type_HASH 0xD9659B88
+// Enum
 typedef uint32 hknpCollisionFilter__Type;
 
 #define hknpCollisionFilter__Type_hkUint8_HASH 0x3808B747
+// Enum
 typedef hkUint8 hknpCollisionFilter__Type_hkUint8;
 
 #define hkaiDirectedGraphExplicitCost__Edge_HASH 0xC3134F91
+// Record
 typedef /*alignas(4)*/ struct hkaiDirectedGraphExplicitCost__Edge {
     // hkaiDirectedGraphExplicitCost__Edge members
     hkHalf16 cost; // offset: 0, flags: 32, size: 2
     hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16 flags; // offset: 2, flags: 32, size: 2
-    hkaiPackedKey__hkaiIndex_hkaiIndex target; // offset: 4, flags: 34, size: 4
+    hkaiPackedKey__hkaiIndex_hkInt32_hkaiIndex_hkInt32 target; // offset: 4, flags: 34, size: 4
 } hkaiDirectedGraphExplicitCost__Edge;
 static_assert(sizeof(hkaiDirectedGraphExplicitCost__Edge)==8, "Invalid size for hkaiDirectedGraphExplicitCost__Edge");
 
 #define hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_HASH 0x4C0B30F3
+// Record
 typedef /*alignas(8)*/ struct hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 {
     // hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 members
     hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator nodes; // offset: 0, flags: 32, size: 16
 } hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6;
 static_assert(sizeof(hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6)==16, "Invalid size for hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6");
 
-#define hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_HASH 0x836B2321
-typedef /*alignas(16)*/ struct hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage {
+#define hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_HASH 0x836B2321
+// Record
+typedef /*alignas(16)*/ struct hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 {
     // hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 members
     hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator nodes; // offset: 0, flags: 32, size: 16
-    // hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage members
+    // hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 members
     hkAabb domain; // offset: 16, flags: 32, size: 32
-} hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage;
-static_assert(sizeof(hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage)==48, "Invalid size for hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage");
+} hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6;
+static_assert(sizeof(hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6)==48, "Invalid size for hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6");
 
 #define hkcdStaticAabbTree__Impl_HASH 0x3CFEF82A
-typedef hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage hkcdStaticAabbTree__Impl; // size: 48 alignment 16 
+// Primitive with parent
+typedef hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 hkcdStaticAabbTree__Impl; // size: 48 alignment 16 
 
 #define hkRelArray_hknpConvexPolytopeShape__Face_HASH 0x3D7962A4
+// Record
 typedef /*alignas(2)*/ struct hkRelArray_hknpConvexPolytopeShape__Face {
     // hkRelArray_hknpConvexPolytopeShape__Face members
     hkUint16 size; // offset: 0, flags: 34, size: 2
@@ -2145,6 +2386,7 @@ typedef /*alignas(2)*/ struct hkRelArray_hknpConvexPolytopeShape__Face {
 static_assert(sizeof(hkRelArray_hknpConvexPolytopeShape__Face)==4, "Invalid size for hkRelArray_hknpConvexPolytopeShape__Face");
 
 #define hkRefPtr_hkxMeshSection_HASH 0x3F934ABE
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkxMeshSection {
     // hkRefPtr_hkxMeshSection members
     hkxMeshSection* ptr; // offset: 0, flags: 36, size: 8
@@ -2152,6 +2394,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkxMeshSection {
 static_assert(sizeof(hkRefPtr_hkxMeshSection)==8, "Invalid size for hkRefPtr_hkxMeshSection");
 
 #define hkRefPtr_hknpShape_HASH 0x4A24B73A
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpShape {
     // hkRefPtr_hknpShape members
     hknpShape* ptr; // offset: 0, flags: 36, size: 8
@@ -2159,6 +2402,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpShape {
 static_assert(sizeof(hkRefPtr_hknpShape)==8, "Invalid size for hkRefPtr_hknpShape");
 
 #define hknpShapeInstance_HASH 0xA7C5FD51
+// Record
 typedef /*alignas(16)*/ struct hknpShapeInstance {
     // hknpShapeInstance members
     hkTransform transform; // offset: 0, flags: 34, size: 64
@@ -2172,9 +2416,11 @@ typedef /*alignas(16)*/ struct hknpShapeInstance {
 static_assert(sizeof(hknpShapeInstance)==128, "Invalid size for hknpShapeInstance");
 
 #define hkFreeListArrayElement_hknpShapeInstance_HASH 0x3FCD1E2A
+// Primitive with parent
 typedef hknpShapeInstance hkFreeListArrayElement_hknpShapeInstance; // size: 128 alignment 16 
 
 #define hkpAngMotorConstraintAtom_HASH 0x94915E47
+// Record
 typedef /*alignas(16)*/ struct hkpAngMotorConstraintAtom {
     // hkpConstraintAtom members
     hkpConstraintAtom__AtomType_hkUint16 type; // offset: 0, flags: 32, size: 2
@@ -2191,6 +2437,7 @@ typedef /*alignas(16)*/ struct hkpAngMotorConstraintAtom {
 static_assert(sizeof(hkpAngMotorConstraintAtom)==32, "Invalid size for hkpAngMotorConstraintAtom");
 
 #define hkpAngLimitConstraintAtom_HASH 0x9EF82B8A
+// Record
 typedef /*alignas(16)*/ struct hkpAngLimitConstraintAtom {
     // hkpConstraintAtom members
     hkpConstraintAtom__AtomType_hkUint16 type; // offset: 0, flags: 32, size: 2
@@ -2208,6 +2455,7 @@ typedef /*alignas(16)*/ struct hkpAngLimitConstraintAtom {
 static_assert(sizeof(hkpAngLimitConstraintAtom)==32, "Invalid size for hkpAngLimitConstraintAtom");
 
 #define hkp2dAngConstraintAtom_HASH 0x87C26FB8
+// Record
 typedef /*alignas(16)*/ struct hkp2dAngConstraintAtom {
     // hkpConstraintAtom members
     hkpConstraintAtom__AtomType_hkUint16 type; // offset: 0, flags: 32, size: 2
@@ -2218,12 +2466,15 @@ typedef /*alignas(16)*/ struct hkp2dAngConstraintAtom {
 static_assert(sizeof(hkp2dAngConstraintAtom)==16, "Invalid size for hkp2dAngConstraintAtom");
 
 #define hkpConstraintAtom__SolvingMethod_HASH 0xA0A0A580
+// Enum
 typedef uint32 hkpConstraintAtom__SolvingMethod;
 
 #define hkpConstraintAtom__SolvingMethod_hkUint8_HASH 0xDE50C328
+// Enum
 typedef hkUint8 hkpConstraintAtom__SolvingMethod_hkUint8;
 
 #define hkpBallSocketConstraintAtom_HASH 0xBC5C1D0F
+// Record
 typedef /*alignas(16)*/ struct hkpBallSocketConstraintAtom {
     // hkpConstraintAtom members
     hkpConstraintAtom__AtomType_hkUint16 type; // offset: 0, flags: 32, size: 2
@@ -2239,6 +2490,7 @@ typedef /*alignas(16)*/ struct hkpBallSocketConstraintAtom {
 static_assert(sizeof(hkpBallSocketConstraintAtom)==16, "Invalid size for hkpBallSocketConstraintAtom");
 
 #define hkpLimitedHingeConstraintData__Atoms_HASH 0x4295C589
+// Record
 typedef /*alignas(16)*/ struct hkpLimitedHingeConstraintData__Atoms {
     // hkpLimitedHingeConstraintData__Atoms members
     hkpSetLocalTransformsConstraintAtom transforms; // offset: 0, flags: 32, size: 144
@@ -2252,6 +2504,7 @@ typedef /*alignas(16)*/ struct hkpLimitedHingeConstraintData__Atoms {
 static_assert(sizeof(hkpLimitedHingeConstraintData__Atoms)==272, "Invalid size for hkpLimitedHingeConstraintData__Atoms");
 
 #define hkArray_hknpMaterial_hkContainerHeapAllocator_HASH 0x42CA1E34
+// Record
 typedef /*alignas(8)*/ struct hkArray_hknpMaterial_hkContainerHeapAllocator {
     // hkArray_hknpMaterial_hkContainerHeapAllocator members
     hknpMaterial* m_data; // offset: 0, flags: 34, size: 8
@@ -2261,6 +2514,7 @@ typedef /*alignas(8)*/ struct hkArray_hknpMaterial_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_hknpMaterial_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hknpMaterial_hkContainerHeapAllocator");
 
 #define hkRefPtr_hkpConstraintData_HASH 0xB115D631
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkpConstraintData {
     // hkRefPtr_hkpConstraintData members
     hkpConstraintData* ptr; // offset: 0, flags: 36, size: 8
@@ -2268,12 +2522,15 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkpConstraintData {
 static_assert(sizeof(hkRefPtr_hkpConstraintData)==8, "Invalid size for hkRefPtr_hkpConstraintData");
 
 #define hkFlags_hknpConstraint__FlagsEnum_hkUint16_HASH 0xDA5CB818
+// Primitive with parent
 typedef hkUint16 hkFlags_hknpConstraint__FlagsEnum_hkUint16; // size: 2 alignment 2 
 
 #define hknpConstraintGroupId_HASH 0xB7A6E197
+// Primitive with parent
 typedef hkHandle_hkUint32_1073741823 hknpConstraintGroupId; // size: 4 alignment 4 
 
 #define hknpConstraintCinfo_HASH 0x46D76420
+// Record
 typedef /*alignas(8)*/ struct hknpConstraintCinfo {
     // hknpConstraintCinfo members
     hkRefPtr_hkpConstraintData constraintData; // offset: 0, flags: 32, size: 8
@@ -2288,6 +2545,7 @@ typedef /*alignas(8)*/ struct hknpConstraintCinfo {
 static_assert(sizeof(hknpConstraintCinfo)==40, "Invalid size for hknpConstraintCinfo");
 
 #define hknpCompoundShapeBase__VelocityInfo_HASH 0x46DFB9CC
+// Record
 typedef /*alignas(16)*/ struct hknpCompoundShapeBase__VelocityInfo {
     // hknpCompoundShapeBase__VelocityInfo members
     hkVector4 linearVelocity; // offset: 0, flags: 32, size: 16
@@ -2296,15 +2554,17 @@ typedef /*alignas(16)*/ struct hknpCompoundShapeBase__VelocityInfo {
 static_assert(sizeof(hknpCompoundShapeBase__VelocityInfo)==32, "Invalid size for hknpCompoundShapeBase__VelocityInfo");
 
 #define hkFreeListArray_hknpMaterial_8_HASH 0xA55CA339
+// Record
 typedef /*alignas(8)*/ struct hkFreeListArray_hknpMaterial_8 {
     // hkFreeListArray_hknpMaterial_8 members
-    hkArray_hkFreeListArrayElement_hkContainerHeapAllocator elements; // offset: 0, flags: 34, size: 16
+    hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator elements; // offset: 0, flags: 34, size: 16
     hkInt32 firstFree; // offset: 16, flags: 34, size: 4
     uint8 _padding_end[4]; // final padding
 } hkFreeListArray_hknpMaterial_8;
 static_assert(sizeof(hkFreeListArray_hknpMaterial_8)==24, "Invalid size for hkFreeListArray_hknpMaterial_8");
 
 #define hknpMaterialLibrary_HASH 0xB0BF617B
+// Record
 typedef /*alignas(8)*/ struct hknpMaterialLibrary {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2322,6 +2582,7 @@ typedef /*alignas(8)*/ struct hknpMaterialLibrary {
 static_assert(sizeof(hknpMaterialLibrary)==72, "Invalid size for hknpMaterialLibrary");
 
 #define hkRefPtr_hknpMaterialLibrary_HASH 0xE8046DFE
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpMaterialLibrary {
     // hkRefPtr_hknpMaterialLibrary members
     hknpMaterialLibrary* ptr; // offset: 0, flags: 36, size: 8
@@ -2329,6 +2590,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpMaterialLibrary {
 static_assert(sizeof(hkRefPtr_hknpMaterialLibrary)==8, "Invalid size for hkRefPtr_hknpMaterialLibrary");
 
 #define hkRefPtr_hknpMotionPropertiesLibrary_HASH 0x94EC4703
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpMotionPropertiesLibrary {
     // hkRefPtr_hknpMotionPropertiesLibrary members
     hknpMotionPropertiesLibrary* ptr; // offset: 0, flags: 36, size: 8
@@ -2336,6 +2598,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpMotionPropertiesLibrary {
 static_assert(sizeof(hkRefPtr_hknpMotionPropertiesLibrary)==8, "Invalid size for hkRefPtr_hknpMotionPropertiesLibrary");
 
 #define hkRefPtr_hknpBroadPhaseConfig_HASH 0xC0B344A3
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpBroadPhaseConfig {
     // hkRefPtr_hknpBroadPhaseConfig members
     hknpBroadPhaseConfig* ptr; // offset: 0, flags: 36, size: 8
@@ -2343,6 +2606,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpBroadPhaseConfig {
 static_assert(sizeof(hkRefPtr_hknpBroadPhaseConfig)==8, "Invalid size for hkRefPtr_hknpBroadPhaseConfig");
 
 #define hknpCollisionFilter_HASH 0x78A55BAB
+// Record
 typedef /*alignas(8)*/ struct hknpCollisionFilter {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2358,6 +2622,7 @@ typedef /*alignas(8)*/ struct hknpCollisionFilter {
 static_assert(sizeof(hknpCollisionFilter)==32, "Invalid size for hknpCollisionFilter");
 
 #define hkRefPtr_hknpCollisionFilter_HASH 0xCF6974EC
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpCollisionFilter {
     // hkRefPtr_hknpCollisionFilter members
     hknpCollisionFilter* ptr; // offset: 0, flags: 36, size: 8
@@ -2365,15 +2630,19 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpCollisionFilter {
 static_assert(sizeof(hkRefPtr_hknpCollisionFilter)==8, "Invalid size for hkRefPtr_hknpCollisionFilter");
 
 #define hkFlags_hknpShapeTagCodec__Hints_hkUint32_HASH 0xA14D9DF6
+// Primitive with parent
 typedef hkUint32 hkFlags_hknpShapeTagCodec__Hints_hkUint32; // size: 4 alignment 4 
 
 #define hknpShapeTagCodec__Type_HASH 0x930DDBBE
+// Enum
 typedef uint32 hknpShapeTagCodec__Type;
 
 #define hknpShapeTagCodec__Type_hkUint8_HASH 0xA72741AE
+// Enum
 typedef hkUint8 hknpShapeTagCodec__Type_hkUint8;
 
 #define hknpShapeTagCodec_HASH 0xEDA7BA98
+// Record
 typedef /*alignas(8)*/ struct hknpShapeTagCodec {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2390,6 +2659,7 @@ typedef /*alignas(8)*/ struct hknpShapeTagCodec {
 static_assert(sizeof(hknpShapeTagCodec)==32, "Invalid size for hknpShapeTagCodec");
 
 #define hkRefPtr_hknpShapeTagCodec_HASH 0x798FFA2A
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpShapeTagCodec {
     // hkRefPtr_hknpShapeTagCodec members
     hknpShapeTagCodec* ptr; // offset: 0, flags: 36, size: 8
@@ -2397,6 +2667,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpShapeTagCodec {
 static_assert(sizeof(hkRefPtr_hknpShapeTagCodec)==8, "Invalid size for hkRefPtr_hknpShapeTagCodec");
 
 #define hknpLodManagerCinfo_HASH 0xAE650BB5
+// Record
 typedef /*alignas(4)*/ struct hknpLodManagerCinfo {
     // hknpLodManagerCinfo members
     hkBool registerDefaultConfig; // offset: 0, flags: 32, size: 1
@@ -2412,6 +2683,7 @@ typedef /*alignas(4)*/ struct hknpLodManagerCinfo {
 static_assert(sizeof(hknpLodManagerCinfo)==24, "Invalid size for hknpLodManagerCinfo");
 
 #define hknpWorldCinfo_HASH 0xB2EA762C
+// Record
 typedef /*alignas(16)*/ struct hknpWorldCinfo {
     // hknpWorldCinfo members
     hkInt32 bodyBufferCapacity; // offset: 0, flags: 32, size: 4
@@ -2465,6 +2737,7 @@ typedef /*alignas(16)*/ struct hknpWorldCinfo {
 static_assert(sizeof(hknpWorldCinfo)==272, "Invalid size for hknpWorldCinfo");
 
 #define hknpRefWorldCinfo_HASH 0x6D06693E
+// Record
 typedef /*alignas(16)*/ struct hknpRefWorldCinfo {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2479,6 +2752,7 @@ typedef /*alignas(16)*/ struct hknpRefWorldCinfo {
 static_assert(sizeof(hknpRefWorldCinfo)==304, "Invalid size for hknpRefWorldCinfo");
 
 #define hkpLimitedHingeConstraintData_HASH 0x4A06CF7C
+// Record
 typedef /*alignas(16)*/ struct hkpLimitedHingeConstraintData {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2495,6 +2769,7 @@ typedef /*alignas(16)*/ struct hkpLimitedHingeConstraintData {
 static_assert(sizeof(hkpLimitedHingeConstraintData)==304, "Invalid size for hkpLimitedHingeConstraintData");
 
 #define hknpShapeSignals_HASH 0x4A698AC6
+// Record
 typedef /*alignas(8)*/ struct hknpShapeSignals {
     // hknpShapeSignals members
     hkReflect__Detail__Opaque* shapeMutated; // offset: 0, flags: 33, size: 8
@@ -2503,6 +2778,7 @@ typedef /*alignas(8)*/ struct hknpShapeSignals {
 static_assert(sizeof(hknpShapeSignals)==16, "Invalid size for hknpShapeSignals");
 
 #define hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator_HASH 0x4E4602CB
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator {
     // hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator members
     hkaiDirectedGraphExplicitCost__Edge* m_data; // offset: 0, flags: 34, size: 8
@@ -2512,6 +2788,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaiDirectedGraphExplicitCost__Edge_hkCont
 static_assert(sizeof(hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator");
 
 #define hknpExternMeshShape_HASH 0x5275A685
+// Record
 typedef /*alignas(16)*/ struct hknpExternMeshShape {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2543,6 +2820,7 @@ typedef /*alignas(16)*/ struct hknpExternMeshShape {
 static_assert(sizeof(hknpExternMeshShape)==144, "Invalid size for hknpExternMeshShape");
 
 #define hknpConvexPolytopeShape__Connectivity__Edge_HASH 0x628599DB
+// Record
 typedef /*alignas(2)*/ struct hknpConvexPolytopeShape__Connectivity__Edge {
     // hknpConvexPolytopeShape__Connectivity__Edge members
     hkUint16 faceIndex; // offset: 0, flags: 32, size: 2
@@ -2552,6 +2830,7 @@ typedef /*alignas(2)*/ struct hknpConvexPolytopeShape__Connectivity__Edge {
 static_assert(sizeof(hknpConvexPolytopeShape__Connectivity__Edge)==4, "Invalid size for hknpConvexPolytopeShape__Connectivity__Edge");
 
 #define hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator_HASH 0x58915410
+// Record
 typedef /*alignas(8)*/ struct hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator {
     // hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator members
     hknpConvexPolytopeShape__Connectivity__Edge* m_data; // offset: 0, flags: 34, size: 8
@@ -2561,6 +2840,7 @@ typedef /*alignas(8)*/ struct hkArray_hknpConvexPolytopeShape__Connectivity__Edg
 static_assert(sizeof(hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator");
 
 #define hkArray_hknpConstraintCinfo_hkContainerHeapAllocator_HASH 0x5B1B2944
+// Record
 typedef /*alignas(8)*/ struct hkArray_hknpConstraintCinfo_hkContainerHeapAllocator {
     // hkArray_hknpConstraintCinfo_hkContainerHeapAllocator members
     hknpConstraintCinfo* m_data; // offset: 0, flags: 34, size: 8
@@ -2570,6 +2850,7 @@ typedef /*alignas(8)*/ struct hkArray_hknpConstraintCinfo_hkContainerHeapAllocat
 static_assert(sizeof(hkArray_hknpConstraintCinfo_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hknpConstraintCinfo_hkContainerHeapAllocator");
 
 #define hkArray_hknpMotionProperties_hkContainerHeapAllocator_HASH 0xB5AFE850
+// Record
 typedef /*alignas(8)*/ struct hkArray_hknpMotionProperties_hkContainerHeapAllocator {
     // hkArray_hknpMotionProperties_hkContainerHeapAllocator members
     hknpMotionProperties* m_data; // offset: 0, flags: 34, size: 8
@@ -2579,6 +2860,7 @@ typedef /*alignas(8)*/ struct hkArray_hknpMotionProperties_hkContainerHeapAlloca
 static_assert(sizeof(hkArray_hknpMotionProperties_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hknpMotionProperties_hkContainerHeapAllocator");
 
 #define hknpPhysicsSystemData_HASH 0x6611062B
+// Record
 typedef /*alignas(8)*/ struct hknpPhysicsSystemData {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2592,12 +2874,13 @@ typedef /*alignas(8)*/ struct hknpPhysicsSystemData {
     hkArray_hknpMotionProperties_hkContainerHeapAllocator motionProperties; // offset: 40, flags: 32, size: 16
     hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator bodyCinfos; // offset: 56, flags: 32, size: 16
     hkArray_hknpConstraintCinfo_hkContainerHeapAllocator constraintCinfos; // offset: 72, flags: 32, size: 16
-    hkArray_hkRefPtr_hkContainerHeapAllocator referencedObjects; // offset: 88, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator referencedObjects; // offset: 88, flags: 32, size: 16
     hkStringPtr name; // offset: 104, flags: 32, size: 8
 } hknpPhysicsSystemData;
 static_assert(sizeof(hknpPhysicsSystemData)==112, "Invalid size for hknpPhysicsSystemData");
 
 #define hkRefPtr_hknpPhysicsSystemData_HASH 0x5DDDE39E
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpPhysicsSystemData {
     // hkRefPtr_hknpPhysicsSystemData members
     hknpPhysicsSystemData* ptr; // offset: 0, flags: 36, size: 8
@@ -2605,6 +2888,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpPhysicsSystemData {
 static_assert(sizeof(hkRefPtr_hknpPhysicsSystemData)==8, "Invalid size for hkRefPtr_hknpPhysicsSystemData");
 
 #define hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator_HASH 0xCCDA9FAA
+// Record
 typedef /*alignas(8)*/ struct hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator {
     // hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator members
     hknpCompoundShapeBase__VelocityInfo* m_data; // offset: 0, flags: 34, size: 8
@@ -2614,6 +2898,7 @@ typedef /*alignas(8)*/ struct hkArray_hknpCompoundShapeBase__VelocityInfo_hkCont
 static_assert(sizeof(hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator");
 
 #define hknpCompoundShapeBase_HASH 0x6418293F
+// Record
 typedef /*alignas(16)*/ struct hknpCompoundShapeBase {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2652,6 +2937,7 @@ typedef /*alignas(16)*/ struct hknpCompoundShapeBase {
 static_assert(sizeof(hknpCompoundShapeBase)==240, "Invalid size for hknpCompoundShapeBase");
 
 #define hkPackedVector3_HASH 0x96F7FC13
+// Record
 typedef /*alignas(8)*/ struct hkPackedVector3 {
     // hkPackedVector3 members
     hkInt16 values[4]; // offset: 0, flags: 32, size: 8, hash: 0x315693D6
@@ -2659,6 +2945,7 @@ typedef /*alignas(8)*/ struct hkPackedVector3 {
 static_assert(sizeof(hkPackedVector3)==8, "Invalid size for hkPackedVector3");
 
 #define hkCompressedMassProperties_HASH 0x69F0CC1C
+// Record
 typedef /*alignas(8)*/ struct hkCompressedMassProperties {
     // hkCompressedMassProperties members
     hkPackedVector3 centerOfMass; // offset: 0, flags: 32, size: 8
@@ -2670,6 +2957,7 @@ typedef /*alignas(8)*/ struct hkCompressedMassProperties {
 static_assert(sizeof(hkCompressedMassProperties)==32, "Invalid size for hkCompressedMassProperties");
 
 #define hknpShapeMassProperties_HASH 0x6B6145CD
+// Record
 typedef /*alignas(8)*/ struct hknpShapeMassProperties {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2686,6 +2974,7 @@ static_assert(sizeof(hknpShapeMassProperties)==56, "Invalid size for hknpShapeMa
 /* primitive hkaiDirectedGraphExplicitCost__EdgeBits 0x6F526BF6
 size: 4 alignment: 4 template args: 0 */
 #define hkxVertexAnimation_HASH 0xAB77D77B
+// Record
 typedef /*alignas(8)*/ struct hkxVertexAnimation {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2704,6 +2993,7 @@ typedef /*alignas(8)*/ struct hkxVertexAnimation {
 static_assert(sizeof(hkxVertexAnimation)==208, "Invalid size for hkxVertexAnimation");
 
 #define hkRefPtr_hkxVertexAnimation_HASH 0x7130CD56
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkxVertexAnimation {
     // hkRefPtr_hkxVertexAnimation members
     hkxVertexAnimation* ptr; // offset: 0, flags: 36, size: 8
@@ -2711,6 +3001,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkxVertexAnimation {
 static_assert(sizeof(hkRefPtr_hkxVertexAnimation)==8, "Invalid size for hkRefPtr_hkxVertexAnimation");
 
 #define hknpConvexPolytopeShape__Connectivity_HASH 0x7C427EAF
+// Record
 typedef /*alignas(8)*/ struct hknpConvexPolytopeShape__Connectivity {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2726,6 +3017,7 @@ typedef /*alignas(8)*/ struct hknpConvexPolytopeShape__Connectivity {
 static_assert(sizeof(hknpConvexPolytopeShape__Connectivity)==56, "Invalid size for hknpConvexPolytopeShape__Connectivity");
 
 #define SPartShapeInfo_HASH 0xF3A5ADBF
+// Record
 typedef /*alignas(4)*/ struct SPartShapeInfo {
     // SPartShapeInfo members
     int partIndex; // offset: 0, flags: 32, size: 4
@@ -2736,6 +3028,7 @@ typedef /*alignas(4)*/ struct SPartShapeInfo {
 static_assert(sizeof(SPartShapeInfo)==16, "Invalid size for SPartShapeInfo");
 
 #define hkArray_SPartShapeInfo_hkContainerHeapAllocator_HASH 0x84D1A056
+// Record
 typedef /*alignas(8)*/ struct hkArray_SPartShapeInfo_hkContainerHeapAllocator {
     // hkArray_SPartShapeInfo_hkContainerHeapAllocator members
     SPartShapeInfo* m_data; // offset: 0, flags: 34, size: 8
@@ -2745,6 +3038,7 @@ typedef /*alignas(8)*/ struct hkArray_SPartShapeInfo_hkContainerHeapAllocator {
 static_assert(sizeof(hkArray_SPartShapeInfo_hkContainerHeapAllocator)==16, "Invalid size for hkArray_SPartShapeInfo_hkContainerHeapAllocator");
 
 #define hkRefPtr_hkaMeshBinding_HASH 0x85245145
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkaMeshBinding {
     // hkRefPtr_hkaMeshBinding members
     hkaMeshBinding* ptr; // offset: 0, flags: 36, size: 8
@@ -2752,6 +3046,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkaMeshBinding {
 static_assert(sizeof(hkRefPtr_hkaMeshBinding)==8, "Invalid size for hkRefPtr_hkaMeshBinding");
 
 #define hkRefPtr_hkaAnimation_HASH 0x87C5AA69
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkaAnimation {
     // hkRefPtr_hkaAnimation members
     hkaAnimation* ptr; // offset: 0, flags: 36, size: 8
@@ -2761,6 +3056,7 @@ static_assert(sizeof(hkRefPtr_hkaAnimation)==8, "Invalid size for hkRefPtr_hkaAn
 /* primitive hkContainerHeapAllocator 0x87FC4ACA
 size: 1 alignment: 1 template args: 0 */
 #define hknpPhysicsSceneData_HASH 0x8917FA5A
+// Record
 typedef /*alignas(8)*/ struct hknpPhysicsSceneData {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2770,12 +3066,13 @@ typedef /*alignas(8)*/ struct hknpPhysicsSceneData {
     hkUint16 refCount; // offset: 18, flags: 37, size: 2
     // hknpPhysicsSceneData members
     uint8 _padding_systemDatas[4]; // inter-member padding
-    hkArray_hkRefPtr_hkContainerHeapAllocator systemDatas; // offset: 24, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator systemDatas; // offset: 24, flags: 32, size: 16
     hknpRefWorldCinfo* worldCinfo; // offset: 40, flags: 34, size: 8
 } hknpPhysicsSceneData;
 static_assert(sizeof(hknpPhysicsSceneData)==48, "Invalid size for hknpPhysicsSceneData");
 
 #define hkcdStaticAabbTree_HASH 0x8CC6A613
+// Record
 typedef /*alignas(8)*/ struct hkcdStaticAabbTree {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2792,12 +3089,15 @@ typedef /*alignas(8)*/ struct hkcdStaticAabbTree {
 static_assert(sizeof(hkcdStaticAabbTree)==40, "Invalid size for hkcdStaticAabbTree");
 
 #define hkaSkeletonMapperData__MappingType_HASH 0xCBD14628
+// Enum
 typedef uint32 hkaSkeletonMapperData__MappingType;
 
 #define hkaSkeletonMapperData__MappingType_hkInt32_HASH 0x8D77A91F
+// Enum
 typedef hkInt32 hkaSkeletonMapperData__MappingType_hkInt32;
 
 #define hkRelArray_hkUint8_HASH 0x9286F370
+// Record
 typedef /*alignas(2)*/ struct hkRelArray_hkUint8 {
     // hkRelArray_hkUint8 members
     hkUint16 size; // offset: 0, flags: 34, size: 2
@@ -2806,6 +3106,7 @@ typedef /*alignas(2)*/ struct hkRelArray_hkUint8 {
 static_assert(sizeof(hkRelArray_hkUint8)==4, "Invalid size for hkRelArray_hkUint8");
 
 #define hknpCompoundShape_HASH 0x93CF736C
+// Record
 typedef /*alignas(16)*/ struct hknpCompoundShape {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2849,6 +3150,7 @@ static_assert(sizeof(hknpCompoundShape)==256, "Invalid size for hknpCompoundShap
 /* primitive hkaiNavMesh__EdgeFlagBits 0x942B0DEB
 size: 4 alignment: 4 template args: 0 */
 #define hkaAnimationBinding_HASH 0xBCBFCA8E
+// Record
 typedef /*alignas(8)*/ struct hkaAnimationBinding {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2869,12 +3171,15 @@ typedef /*alignas(8)*/ struct hkaAnimationBinding {
 static_assert(sizeof(hkaAnimationBinding)==96, "Invalid size for hkaAnimationBinding");
 
 #define hkxIndexBuffer__IndexType_HASH 0xCA5D1A1C
+// Enum
 typedef uint32 hkxIndexBuffer__IndexType;
 
 #define hkxIndexBuffer__IndexType_hkInt8_HASH 0x98819BCB
+// Enum
 typedef hkInt8 hkxIndexBuffer__IndexType_hkInt8;
 
 #define hkxMesh__UserChannelInfo_HASH 0xA67A10AF
+// Record
 typedef /*alignas(8)*/ struct hkxMesh__UserChannelInfo {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2892,6 +3197,7 @@ typedef /*alignas(8)*/ struct hkxMesh__UserChannelInfo {
 static_assert(sizeof(hkxMesh__UserChannelInfo)==56, "Invalid size for hkxMesh__UserChannelInfo");
 
 #define hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator_HASH 0xF3178B25
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator {
     // hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator members
     hkaSkeletonMapperData__PartitionMappingRange* m_data; // offset: 0, flags: 34, size: 8
@@ -2901,6 +3207,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaSkeletonMapperData__PartitionMappingRan
 static_assert(sizeof(hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator");
 
 #define hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator_HASH 0xABA69642
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator {
     // hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator members
     hkaSkeletonMapperData__SimpleMapping* m_data; // offset: 0, flags: 34, size: 8
@@ -2910,6 +3217,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaSkeletonMapperData__SimpleMapping_hkCon
 static_assert(sizeof(hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator");
 
 #define hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator_HASH 0xCA7E511B
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator {
     // hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator members
     hkaSkeletonMapperData__ChainMapping* m_data; // offset: 0, flags: 34, size: 8
@@ -2919,6 +3227,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaSkeletonMapperData__ChainMapping_hkCont
 static_assert(sizeof(hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator");
 
 #define hkaSkeletonMapperData_HASH 0xF2E54CFA
+// Record
 typedef /*alignas(16)*/ struct hkaSkeletonMapperData {
     // hkaSkeletonMapperData members
     hkRefPtr_hkaSkeleton skeletonA; // offset: 0, flags: 32, size: 8
@@ -2938,6 +3247,7 @@ typedef /*alignas(16)*/ struct hkaSkeletonMapperData {
 static_assert(sizeof(hkaSkeletonMapperData)==176, "Invalid size for hkaSkeletonMapperData");
 
 #define hkaSkeletonMapper_HASH 0x9EA62998
+// Record
 typedef /*alignas(16)*/ struct hkaSkeletonMapper {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2952,6 +3262,7 @@ typedef /*alignas(16)*/ struct hkaSkeletonMapper {
 static_assert(sizeof(hkaSkeletonMapper)==208, "Invalid size for hkaSkeletonMapper");
 
 #define hknpRagdollData_HASH 0xA1E85089
+// Record
 typedef /*alignas(8)*/ struct hknpRagdollData {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -2965,7 +3276,7 @@ typedef /*alignas(8)*/ struct hknpRagdollData {
     hkArray_hknpMotionProperties_hkContainerHeapAllocator motionProperties; // offset: 40, flags: 32, size: 16
     hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator bodyCinfos; // offset: 56, flags: 32, size: 16
     hkArray_hknpConstraintCinfo_hkContainerHeapAllocator constraintCinfos; // offset: 72, flags: 32, size: 16
-    hkArray_hkRefPtr_hkContainerHeapAllocator referencedObjects; // offset: 88, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator referencedObjects; // offset: 88, flags: 32, size: 16
     hkStringPtr name; // offset: 104, flags: 32, size: 8
     // hknpRagdollData members
     hkRefPtr_hkaSkeleton skeleton; // offset: 112, flags: 32, size: 8
@@ -2974,6 +3285,7 @@ typedef /*alignas(8)*/ struct hknpRagdollData {
 static_assert(sizeof(hknpRagdollData)==136, "Invalid size for hknpRagdollData");
 
 #define hknpConvexPolytopeShape__Face_HASH 0xA6A93752
+// Record
 typedef /*alignas(2)*/ struct hknpConvexPolytopeShape__Face {
     // hknpConvexPolytopeShape__Face members
     hkUint16 firstIndex; // offset: 0, flags: 32, size: 2
@@ -2983,6 +3295,7 @@ typedef /*alignas(2)*/ struct hknpConvexPolytopeShape__Face {
 static_assert(sizeof(hknpConvexPolytopeShape__Face)==4, "Invalid size for hknpConvexPolytopeShape__Face");
 
 #define hkaiNavMesh__Face_HASH 0xDAF49E0E
+// Record
 typedef /*alignas(4)*/ struct hkaiNavMesh__Face {
     // hkaiNavMesh__Face members
     hkaiIndex_hkInt32 startEdgeIndex; // offset: 0, flags: 32, size: 4
@@ -2995,6 +3308,7 @@ typedef /*alignas(4)*/ struct hkaiNavMesh__Face {
 static_assert(sizeof(hkaiNavMesh__Face)==16, "Invalid size for hkaiNavMesh__Face");
 
 #define hkxIndexBuffer_HASH 0xB4A2D44D
+// Record
 typedef /*alignas(8)*/ struct hkxIndexBuffer {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3014,6 +3328,7 @@ typedef /*alignas(8)*/ struct hkxIndexBuffer {
 static_assert(sizeof(hkxIndexBuffer)==72, "Invalid size for hkxIndexBuffer");
 
 #define hkRefPtr_hknpConvexPolytopeShape__Connectivity_HASH 0xE25CBBC2
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hknpConvexPolytopeShape__Connectivity {
     // hkRefPtr_hknpConvexPolytopeShape__Connectivity members
     hknpConvexPolytopeShape__Connectivity* ptr; // offset: 0, flags: 36, size: 8
@@ -3021,6 +3336,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hknpConvexPolytopeShape__Connectivity {
 static_assert(sizeof(hkRefPtr_hknpConvexPolytopeShape__Connectivity)==8, "Invalid size for hkRefPtr_hknpConvexPolytopeShape__Connectivity");
 
 #define hknpConvexPolytopeShape_HASH 0xE1870007
+// Record
 typedef /*alignas(16)*/ struct hknpConvexPolytopeShape {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3053,6 +3369,7 @@ typedef /*alignas(16)*/ struct hknpConvexPolytopeShape {
 static_assert(sizeof(hknpConvexPolytopeShape)==112, "Invalid size for hknpConvexPolytopeShape");
 
 #define hknpBoxShape_HASH 0xB55140EB
+// Record
 typedef /*alignas(16)*/ struct hknpBoxShape {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3087,6 +3404,7 @@ typedef /*alignas(16)*/ struct hknpBoxShape {
 static_assert(sizeof(hknpBoxShape)==176, "Invalid size for hknpBoxShape");
 
 #define hkaiDirectedGraphExplicitCost_HASH 0xB7E33436
+// Record
 typedef /*alignas(8)*/ struct hkaiDirectedGraphExplicitCost {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3108,6 +3426,7 @@ typedef /*alignas(8)*/ struct hkaiDirectedGraphExplicitCost {
 static_assert(sizeof(hkaiDirectedGraphExplicitCost)==128, "Invalid size for hkaiDirectedGraphExplicitCost");
 
 #define hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator_HASH 0xF86E63B6
+// Record
 typedef /*alignas(8)*/ struct hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator {
     // hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator members
     hkaiNavMesh__Face* m_data; // offset: 0, flags: 34, size: 8
@@ -3117,6 +3436,7 @@ typedef /*alignas(8)*/ struct hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator
 static_assert(sizeof(hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator)==16, "Invalid size for hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator");
 
 #define hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet_HASH 0xFED96CAB
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet {
     // hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet members
     hkaiNavMeshClearanceCacheSeeding__CacheDataSet* ptr; // offset: 0, flags: 36, size: 8
@@ -3124,6 +3444,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDa
 static_assert(sizeof(hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet)==8, "Invalid size for hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet");
 
 #define hkaiNavMesh_HASH 0xBCF7C531
+// Record
 typedef /*alignas(16)*/ struct hkaiNavMesh {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3155,6 +3476,7 @@ static_assert(sizeof(hkaiNavMesh)==208, "Invalid size for hkaiNavMesh");
 /* primitive hknpShape__FlagsEnum 0xC52EF3ED
 size: 4 alignment: 4 template args: 0 */
 #define hkRefPtr_hkaAnimationBinding_HASH 0xC9D52541
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkaAnimationBinding {
     // hkRefPtr_hkaAnimationBinding members
     hkaAnimationBinding* ptr; // offset: 0, flags: 36, size: 8
@@ -3162,6 +3484,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkaAnimationBinding {
 static_assert(sizeof(hkRefPtr_hkaAnimationBinding)==8, "Invalid size for hkRefPtr_hkaAnimationBinding");
 
 #define hkRefPtr_hkxMesh__UserChannelInfo_HASH 0xCDD37839
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkxMesh__UserChannelInfo {
     // hkRefPtr_hkxMesh__UserChannelInfo members
     hkxMesh__UserChannelInfo* ptr; // offset: 0, flags: 36, size: 8
@@ -3169,6 +3492,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkxMesh__UserChannelInfo {
 static_assert(sizeof(hkRefPtr_hkxMesh__UserChannelInfo)==8, "Invalid size for hkRefPtr_hkxMesh__UserChannelInfo");
 
 #define hkaAnimationContainer_HASH 0xD017E2F4
+// Record
 typedef /*alignas(8)*/ struct hkaAnimationContainer {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3178,15 +3502,16 @@ typedef /*alignas(8)*/ struct hkaAnimationContainer {
     hkUint16 refCount; // offset: 18, flags: 37, size: 2
     // hkaAnimationContainer members
     uint8 _padding_skeletons[4]; // inter-member padding
-    hkArray_hkRefPtr_hkContainerHeapAllocator skeletons; // offset: 24, flags: 32, size: 16
-    hkArray_hkRefPtr_hkContainerHeapAllocator animations; // offset: 40, flags: 32, size: 16
-    hkArray_hkRefPtr_hkContainerHeapAllocator bindings; // offset: 56, flags: 32, size: 16
-    hkArray_hkRefPtr_hkContainerHeapAllocator attachments; // offset: 72, flags: 32, size: 16
-    hkArray_hkRefPtr_hkContainerHeapAllocator skins; // offset: 88, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator skeletons; // offset: 24, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator animations; // offset: 40, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator bindings; // offset: 56, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator attachments; // offset: 72, flags: 32, size: 16
+    hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator skins; // offset: 88, flags: 32, size: 16
 } hkaAnimationContainer;
 static_assert(sizeof(hkaAnimationContainer)==104, "Invalid size for hkaAnimationContainer");
 
 #define hkaSplineCompressedAnimation_HASH 0xD640A594
+// Record
 typedef /*alignas(8)*/ struct hkaSplineCompressedAnimation {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3224,6 +3549,7 @@ static_assert(sizeof(hkaSplineCompressedAnimation)==184, "Invalid size for hkaSp
 /* primitive hkPropertyFlags__Enum 0xE3B98FE5
 size: 4 alignment: 4 template args: 0 */
 #define hkRefPtr_hkxIndexBuffer_HASH 0xE7F89D01
+// Record
 typedef /*alignas(8)*/ struct hkRefPtr_hkxIndexBuffer {
     // hkRefPtr_hkxIndexBuffer members
     hkxIndexBuffer* ptr; // offset: 0, flags: 36, size: 8
@@ -3231,6 +3557,7 @@ typedef /*alignas(8)*/ struct hkRefPtr_hkxIndexBuffer {
 static_assert(sizeof(hkRefPtr_hkxIndexBuffer)==8, "Invalid size for hkRefPtr_hkxIndexBuffer");
 
 #define hknpCapsuleShape_HASH 0xEA9D1FA6
+// Record
 typedef /*alignas(16)*/ struct hknpCapsuleShape {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3266,6 +3593,7 @@ typedef /*alignas(16)*/ struct hknpCapsuleShape {
 static_assert(sizeof(hknpCapsuleShape)==144, "Invalid size for hknpCapsuleShape");
 
 #define CPfxPartIndexProperty_HASH 0xEAD12477
+// Record
 typedef /*alignas(8)*/ struct CPfxPartIndexProperty {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3281,6 +3609,7 @@ typedef /*alignas(8)*/ struct CPfxPartIndexProperty {
 static_assert(sizeof(CPfxPartIndexProperty)==32, "Invalid size for CPfxPartIndexProperty");
 
 #define hknpExternMeshShapeData_HASH 0xEB47A174
+// Record
 typedef /*alignas(16)*/ struct hknpExternMeshShapeData {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3290,7 +3619,7 @@ typedef /*alignas(16)*/ struct hknpExternMeshShapeData {
     hkUint16 refCount; // offset: 18, flags: 37, size: 2
     // hknpExternMeshShapeData members
     uint8 _padding_aabbTree[12]; // inter-member padding
-    hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage aabbTree; // offset: 32, flags: 32, size: 48
+    hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 aabbTree; // offset: 32, flags: 32, size: 48
     hkcdSimdTree simdTree; // offset: 80, flags: 32, size: 24
     hkReflect__Detail__Opaque* buildContext; // offset: 104, flags: 33, size: 8
     hkBool hasBuildContext; // offset: 112, flags: 32, size: 1
@@ -3299,6 +3628,7 @@ typedef /*alignas(16)*/ struct hknpExternMeshShapeData {
 static_assert(sizeof(hknpExternMeshShapeData)==128, "Invalid size for hknpExternMeshShapeData");
 
 #define CPfxBreakableShapeCollection_HASH 0xEB61F307
+// Record
 typedef /*alignas(8)*/ struct CPfxBreakableShapeCollection {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3318,6 +3648,7 @@ typedef /*alignas(8)*/ struct CPfxBreakableShapeCollection {
 static_assert(sizeof(CPfxBreakableShapeCollection)==96, "Invalid size for CPfxBreakableShapeCollection");
 
 #define CPfxFloatShapeProperty_HASH 0xFA7E53F7
+// Record
 typedef /*alignas(8)*/ struct CPfxFloatShapeProperty {
     // hkBaseObject members
     unsigned_long_long unk_member; // offset: 0, flags: 0, size: 8
@@ -3333,1142 +3664,1085 @@ typedef /*alignas(8)*/ struct CPfxFloatShapeProperty {
 static_assert(sizeof(CPfxFloatShapeProperty)==32, "Invalid size for CPfxFloatShapeProperty");
 
 #endif //HAVOK_TYPES_GUARD
-void hknpMotionPropertiesLibrary_read(const TagFile *tf, const HavokTypeLib* lib, hknpMotionPropertiesLibrary *obj, const uint8* src);
-void hknpMotionPropertiesLibrary_print(const hknpMotionPropertiesLibrary *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpMotionPropertiesLibrary_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpMotionPropertiesLibrary *obj, const uint8* src);
+void hknpMotionPropertiesLibrary_print(const hknpMotionPropertiesLibrary *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpMotionPropertiesLibrary_free(hknpMotionPropertiesLibrary *obj);
 
-void hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator_print(const hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator_print(const hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator_free(hkArray_hkaiStreamingSet__GraphConnection_hkContainerHeapAllocator *obj);
 
-void hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hkUint8 *obj, const uint8* src);
-void hkUint8_print(const hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void Array_30_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hkUint8 *obj, const uint8* src);
-void Array_30_hkUint8_print(const hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void Array_1_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hkUint8 *obj, const uint8* src);
-void Array_1_hkUint8_print(const hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRefPtr_hkaBoneAttachment_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkaBoneAttachment *obj, const uint8* src);
-void hkRefPtr_hkaBoneAttachment_print(const hkRefPtr_hkaBoneAttachment *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUint8 *obj, const uint8* src);
+void hkUint8_print(const hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void Array_30_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUint8 *obj, const uint8* src);
+void Array_30_hkUint8_print(const hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void Array_1_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUint8 *obj, const uint8* src);
+void Array_1_hkUint8_print(const hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRefPtr_hkaBoneAttachment_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkaBoneAttachment *obj, const uint8* src);
+void hkRefPtr_hkaBoneAttachment_print(const hkRefPtr_hkaBoneAttachment *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkaBoneAttachment_free(hkRefPtr_hkaBoneAttachment *obj);
 
-void hkRefPtr_hkaiStreamingSet_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkaiStreamingSet *obj, const uint8* src);
-void hkRefPtr_hkaiStreamingSet_print(const hkRefPtr_hkaiStreamingSet *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkaiStreamingSet_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkaiStreamingSet *obj, const uint8* src);
+void hkRefPtr_hkaiStreamingSet_print(const hkRefPtr_hkaiStreamingSet *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkaiStreamingSet_free(hkRefPtr_hkaiStreamingSet *obj);
 
-void hkUintReal_read(const TagFile *tf, const HavokTypeLib* lib, hkUintReal *obj, const uint8* src);
-void hkUintReal_print(const hkUintReal *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkInt32_read(const TagFile *tf, const HavokTypeLib* lib, hkInt32 *obj, const uint8* src);
-void hkInt32_print(const hkInt32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaAnimation__AnimationType_hkInt32_read(const TagFile *tf, const HavokTypeLib* lib, hkaAnimation__AnimationType_hkInt32 *obj, const uint8* src);
-void hkaAnimation__AnimationType_hkInt32_print(const hkaAnimation__AnimationType_hkInt32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator_print(const hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkUintReal_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUintReal *obj, const uint8* src);
+void hkUintReal_print(const hkUintReal *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkInt32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkInt32 *obj, const uint8* src);
+void hkInt32_print(const hkInt32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaAnimation__AnimationType_hkInt32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaAnimation__AnimationType_hkInt32 *obj, const uint8* src);
+void hkaAnimation__AnimationType_hkInt32_print(const hkaAnimation__AnimationType_hkInt32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator_print(const hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator_free(hkArray_hkMeshBoneIndexMapping_hkContainerHeapAllocator *obj);
 
-void hkHashBase_hkHashMapDetail__MapTuple_read(const TagFile *tf, const HavokTypeLib* lib, hkHashBase_hkHashMapDetail__MapTuple *obj, const uint8* src);
-void hkHashBase_hkHashMapDetail__MapTuple_print(const hkHashBase_hkHashMapDetail__MapTuple *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkHashBase_hkHashMapDetail__MapTuple_free(hkHashBase_hkHashMapDetail__MapTuple *obj);
+void hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any *obj, const uint8* src);
+void hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_print(const hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_free(hkHashBase_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any *obj);
 
-void hkGeometry__Triangle_read(const TagFile *tf, const HavokTypeLib* lib, hkGeometry__Triangle *obj, const uint8* src);
-void hkGeometry__Triangle_print(const hkGeometry__Triangle *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkGeometry__Triangle_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkGeometry__Triangle *obj, const uint8* src);
+void hkGeometry__Triangle_print(const hkGeometry__Triangle *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkGeometry__Triangle_free(hkGeometry__Triangle *obj);
 
-void hkxVertexAnimation__UsageMap_read(const TagFile *tf, const HavokTypeLib* lib, hkxVertexAnimation__UsageMap *obj, const uint8* src);
-void hkxVertexAnimation__UsageMap_print(const hkxVertexAnimation__UsageMap *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxVertexAnimation__UsageMap_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxVertexAnimation__UsageMap *obj, const uint8* src);
+void hkxVertexAnimation__UsageMap_print(const hkxVertexAnimation__UsageMap *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxVertexAnimation__UsageMap_free(hkxVertexAnimation__UsageMap *obj);
 
-void hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator_print(const hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator_print(const hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator_free(hkArray_hkaiNavMesh__Edge_hkContainerHeapAllocator *obj);
 
-void hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator_print(const hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator_print(const hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator_free(hkArray_hkaSkeleton__Partition_hkContainerHeapAllocator *obj);
 
-void hkInt8_read(const TagFile *tf, const HavokTypeLib* lib, hkInt8 *obj, const uint8* src);
-void hkInt8_print(const hkInt8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaAnimationBinding__BlendHint_hkInt8_read(const TagFile *tf, const HavokTypeLib* lib, hkaAnimationBinding__BlendHint_hkInt8 *obj, const uint8* src);
-void hkaAnimationBinding__BlendHint_hkInt8_print(const hkaAnimationBinding__BlendHint_hkInt8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkStringPtr_read(const TagFile *tf, const HavokTypeLib* lib, hkStringPtr *obj, const uint8* src);
-void hkStringPtr_print(const hkStringPtr *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkInt8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkInt8 *obj, const uint8* src);
+void hkInt8_print(const hkInt8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaAnimationBinding__BlendHint_hkInt8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaAnimationBinding__BlendHint_hkInt8 *obj, const uint8* src);
+void hkaAnimationBinding__BlendHint_hkInt8_print(const hkaAnimationBinding__BlendHint_hkInt8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkStringPtr_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkStringPtr *obj, const uint8* src);
+void hkStringPtr_print(const hkStringPtr *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkStringPtr_free(hkStringPtr *obj);
 
-void hkHandle_hkUint32_1073741823_read(const TagFile *tf, const HavokTypeLib* lib, hkHandle_hkUint32_1073741823 *obj, const uint8* src);
-void hkHandle_hkUint32_1073741823_print(const hkHandle_hkUint32_1073741823 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkHandle_hkUint32_1073741823_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkHandle_hkUint32_1073741823 *obj, const uint8* src);
+void hkHandle_hkUint32_1073741823_print(const hkHandle_hkUint32_1073741823 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkHandle_hkUint32_1073741823_free(hkHandle_hkUint32_1073741823 *obj);
 
-void hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator_print(const hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator_print(const hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator_free(hkArray_hkaiNavMeshClearanceCache__McpDataInteger_hkContainerHeapAllocator *obj);
 
-void hkpSetLocalTransformsConstraintAtom_read(const TagFile *tf, const HavokTypeLib* lib, hkpSetLocalTransformsConstraintAtom *obj, const uint8* src);
-void hkpSetLocalTransformsConstraintAtom_print(const hkpSetLocalTransformsConstraintAtom *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpSetLocalTransformsConstraintAtom_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpSetLocalTransformsConstraintAtom *obj, const uint8* src);
+void hkpSetLocalTransformsConstraintAtom_print(const hkpSetLocalTransformsConstraintAtom *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpSetLocalTransformsConstraintAtom_free(hkpSetLocalTransformsConstraintAtom *obj);
 
-void hkxMaterial__Transparency_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hkxMaterial__Transparency_hkUint8 *obj, const uint8* src);
-void hkxMaterial__Transparency_hkUint8_print(const hkxMaterial__Transparency_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkUint16_read(const TagFile *tf, const HavokTypeLib* lib, hkUint16 *obj, const uint8* src);
-void hkUint16_print(const hkUint16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16_read(const TagFile *tf, const HavokTypeLib* lib, hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16 *obj, const uint8* src);
-void hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16_print(const hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRefCountedProperties_read(const TagFile *tf, const HavokTypeLib* lib, hkRefCountedProperties *obj, const uint8* src);
-void hkRefCountedProperties_print(const hkRefCountedProperties *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxMaterial__Transparency_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxMaterial__Transparency_hkUint8 *obj, const uint8* src);
+void hkxMaterial__Transparency_hkUint8_print(const hkxMaterial__Transparency_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkUint16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUint16 *obj, const uint8* src);
+void hkUint16_print(const hkUint16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16 *obj, const uint8* src);
+void hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16_print(const hkFlags_hkaiDirectedGraphExplicitCost__EdgeBits_hkUint16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRefCountedProperties_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefCountedProperties *obj, const uint8* src);
+void hkRefCountedProperties_print(const hkRefCountedProperties *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefCountedProperties_free(hkRefCountedProperties *obj);
 
-void hkRootLevelContainer_read(const TagFile *tf, const HavokTypeLib* lib, hkRootLevelContainer *obj, const uint8* src);
-void hkRootLevelContainer_print(const hkRootLevelContainer *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRootLevelContainer_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRootLevelContainer *obj, const uint8* src);
+void hkRootLevelContainer_print(const hkRootLevelContainer *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRootLevelContainer_free(hkRootLevelContainer *obj);
 
-void hknpShapeType__Enum_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hknpShapeType__Enum_hkUint8 *obj, const uint8* src);
-void hknpShapeType__Enum_hkUint8_print(const hknpShapeType__Enum_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaAnimation_read(const TagFile *tf, const HavokTypeLib* lib, hkaAnimation *obj, const uint8* src);
-void hkaAnimation_print(const hkaAnimation *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpShapeType__Enum_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpShapeType__Enum_hkUint8 *obj, const uint8* src);
+void hknpShapeType__Enum_hkUint8_print(const hknpShapeType__Enum_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaAnimation_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaAnimation *obj, const uint8* src);
+void hkaAnimation_print(const hkaAnimation *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaAnimation_free(hkaAnimation *obj);
 
-void hknpCompositeShape_read(const TagFile *tf, const HavokTypeLib* lib, hknpCompositeShape *obj, const uint8* src);
-void hknpCompositeShape_print(const hknpCompositeShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpCompositeShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpCompositeShape *obj, const uint8* src);
+void hknpCompositeShape_print(const hknpCompositeShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpCompositeShape_free(hknpCompositeShape *obj);
 
-void hkpPositionConstraintMotor_read(const TagFile *tf, const HavokTypeLib* lib, hkpPositionConstraintMotor *obj, const uint8* src);
-void hkpPositionConstraintMotor_print(const hkpPositionConstraintMotor *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpPositionConstraintMotor_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpPositionConstraintMotor *obj, const uint8* src);
+void hkpPositionConstraintMotor_print(const hkpPositionConstraintMotor *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpPositionConstraintMotor_free(hkpPositionConstraintMotor *obj);
 
-void hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator_print(const hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator_print(const hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator_free(hkArray_hkxVertexAnimation__UsageMap_hkContainerHeapAllocator *obj);
 
-void hkGeometry_read(const TagFile *tf, const HavokTypeLib* lib, hkGeometry *obj, const uint8* src);
-void hkGeometry_print(const hkGeometry *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkGeometry_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkGeometry *obj, const uint8* src);
+void hkGeometry_print(const hkGeometry *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkGeometry_free(hkGeometry *obj);
 
-void hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator_print(const hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator_print(const hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator_free(hkArray_hkaiDirectedGraphExplicitCost__Node_hkContainerHeapAllocator *obj);
 
-void hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator_print(const hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator_print(const hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator_free(hkArray_hknpPhysicsSystemData__bodyCinfoWithAttachment_hkContainerHeapAllocator *obj);
 
-void hkUint32_read(const TagFile *tf, const HavokTypeLib* lib, hkUint32 *obj, const uint8* src);
-void hkUint32_print(const hkUint32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkxMaterial__UVMappingAlgorithm_hkUint32_read(const TagFile *tf, const HavokTypeLib* lib, hkxMaterial__UVMappingAlgorithm_hkUint32 *obj, const uint8* src);
-void hkxMaterial__UVMappingAlgorithm_hkUint32_print(const hkxMaterial__UVMappingAlgorithm_hkUint32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkxVertexDescription__DataType_hkUint16_read(const TagFile *tf, const HavokTypeLib* lib, hkxVertexDescription__DataType_hkUint16 *obj, const uint8* src);
-void hkxVertexDescription__DataType_hkUint16_print(const hkxVertexDescription__DataType_hkUint16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hknpPhysicsSystemData__bodyCinfoWithAttachment_read(const TagFile *tf, const HavokTypeLib* lib, hknpPhysicsSystemData__bodyCinfoWithAttachment *obj, const uint8* src);
-void hknpPhysicsSystemData__bodyCinfoWithAttachment_print(const hknpPhysicsSystemData__bodyCinfoWithAttachment *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkUint32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUint32 *obj, const uint8* src);
+void hkUint32_print(const hkUint32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkxMaterial__UVMappingAlgorithm_hkUint32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxMaterial__UVMappingAlgorithm_hkUint32 *obj, const uint8* src);
+void hkxMaterial__UVMappingAlgorithm_hkUint32_print(const hkxMaterial__UVMappingAlgorithm_hkUint32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkxVertexDescription__DataType_hkUint16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxVertexDescription__DataType_hkUint16 *obj, const uint8* src);
+void hkxVertexDescription__DataType_hkUint16_print(const hkxVertexDescription__DataType_hkUint16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hknpPhysicsSystemData__bodyCinfoWithAttachment_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpPhysicsSystemData__bodyCinfoWithAttachment *obj, const uint8* src);
+void hknpPhysicsSystemData__bodyCinfoWithAttachment_print(const hknpPhysicsSystemData__bodyCinfoWithAttachment *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpPhysicsSystemData__bodyCinfoWithAttachment_free(hknpPhysicsSystemData__bodyCinfoWithAttachment *obj);
 
-void hkPropertyBag_read(const TagFile *tf, const HavokTypeLib* lib, hkPropertyBag *obj, const uint8* src);
-void hkPropertyBag_print(const hkPropertyBag *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkPropertyBag_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkPropertyBag *obj, const uint8* src);
+void hkPropertyBag_print(const hkPropertyBag *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkPropertyBag_free(hkPropertyBag *obj);
 
-void hkpConstraintData_read(const TagFile *tf, const HavokTypeLib* lib, hkpConstraintData *obj, const uint8* src);
-void hkpConstraintData_print(const hkpConstraintData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpConstraintData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpConstraintData *obj, const uint8* src);
+void hkpConstraintData_print(const hkpConstraintData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpConstraintData_free(hkpConstraintData *obj);
 
-void hknpMotionProperties_read(const TagFile *tf, const HavokTypeLib* lib, hknpMotionProperties *obj, const uint8* src);
-void hknpMotionProperties_print(const hknpMotionProperties *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpMotionProperties_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpMotionProperties *obj, const uint8* src);
+void hknpMotionProperties_print(const hknpMotionProperties *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpMotionProperties_free(hknpMotionProperties *obj);
 
-void hkFreeListArrayElement_hknpMotionProperties_read(const TagFile *tf, const HavokTypeLib* lib, hkFreeListArrayElement_hknpMotionProperties *obj, const uint8* src);
-void hkFreeListArrayElement_hknpMotionProperties_print(const hkFreeListArrayElement_hknpMotionProperties *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaSkeletonMapperData__PartitionMappingRange_read(const TagFile *tf, const HavokTypeLib* lib, hkaSkeletonMapperData__PartitionMappingRange *obj, const uint8* src);
-void hkaSkeletonMapperData__PartitionMappingRange_print(const hkaSkeletonMapperData__PartitionMappingRange *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFreeListArrayElement_hknpMotionProperties_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFreeListArrayElement_hknpMotionProperties *obj, const uint8* src);
+void hkFreeListArrayElement_hknpMotionProperties_print(const hkFreeListArrayElement_hknpMotionProperties *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaSkeletonMapperData__PartitionMappingRange_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSkeletonMapperData__PartitionMappingRange *obj, const uint8* src);
+void hkaSkeletonMapperData__PartitionMappingRange_print(const hkaSkeletonMapperData__PartitionMappingRange *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaSkeletonMapperData__PartitionMappingRange_free(hkaSkeletonMapperData__PartitionMappingRange *obj);
 
-void hknpDynamicCompoundShapeData_read(const TagFile *tf, const HavokTypeLib* lib, hknpDynamicCompoundShapeData *obj, const uint8* src);
-void hknpDynamicCompoundShapeData_print(const hknpDynamicCompoundShapeData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpDynamicCompoundShapeData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpDynamicCompoundShapeData *obj, const uint8* src);
+void hknpDynamicCompoundShapeData_print(const hknpDynamicCompoundShapeData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpDynamicCompoundShapeData_free(hknpDynamicCompoundShapeData *obj);
 
-void hkpConstraintAtom_read(const TagFile *tf, const HavokTypeLib* lib, hkpConstraintAtom *obj, const uint8* src);
-void hkpConstraintAtom_print(const hkpConstraintAtom *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpConstraintAtom_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpConstraintAtom *obj, const uint8* src);
+void hkpConstraintAtom_print(const hkpConstraintAtom *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpConstraintAtom_free(hkpConstraintAtom *obj);
 
-void hkArray_hkxAttributeGroup_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkxAttributeGroup_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkxAttributeGroup_hkContainerHeapAllocator_print(const hkArray_hkxAttributeGroup_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkxAttributeGroup_hkContainerHeapAllocator_print(const hkArray_hkxAttributeGroup_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkxAttributeGroup_hkContainerHeapAllocator_free(hkArray_hkxAttributeGroup_hkContainerHeapAllocator *obj);
 
-void hkpSetupStabilizationAtom_read(const TagFile *tf, const HavokTypeLib* lib, hkpSetupStabilizationAtom *obj, const uint8* src);
-void hkpSetupStabilizationAtom_print(const hkpSetupStabilizationAtom *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpSetupStabilizationAtom_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpSetupStabilizationAtom *obj, const uint8* src);
+void hkpSetupStabilizationAtom_print(const hkpSetupStabilizationAtom *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpSetupStabilizationAtom_free(hkpSetupStabilizationAtom *obj);
 
-void hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator_print(const hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator_print(const hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator_free(hkArray_hkaiAnnotatedStreamingSet_hkContainerHeapAllocator *obj);
 
-void hkxMeshSection_read(const TagFile *tf, const HavokTypeLib* lib, hkxMeshSection *obj, const uint8* src);
-void hkxMeshSection_print(const hkxMeshSection *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxMeshSection_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxMeshSection *obj, const uint8* src);
+void hkxMeshSection_print(const hkxMeshSection *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxMeshSection_free(hkxMeshSection *obj);
 
-void hkRelArray_hkVector4_read(const TagFile *tf, const HavokTypeLib* lib, hkRelArray_hkVector4 *obj, const uint8* src);
-void hkRelArray_hkVector4_print(const hkRelArray_hkVector4 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRelArray_hkVector4_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRelArray_hkVector4 *obj, const uint8* src);
+void hkRelArray_hkVector4_print(const hkRelArray_hkVector4 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRelArray_hkVector4_free(hkRelArray_hkVector4 *obj);
 
-void hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator_print(const hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator_print(const hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator_free(hkArray_hkcdStaticTree__Codec3Axis6_hkContainerHeapAllocator *obj);
 
-void hkpAngFrictionConstraintAtom_read(const TagFile *tf, const HavokTypeLib* lib, hkpAngFrictionConstraintAtom *obj, const uint8* src);
-void hkpAngFrictionConstraintAtom_print(const hkpAngFrictionConstraintAtom *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpAngFrictionConstraintAtom_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpAngFrictionConstraintAtom *obj, const uint8* src);
+void hkpAngFrictionConstraintAtom_print(const hkpAngFrictionConstraintAtom *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpAngFrictionConstraintAtom_free(hkpAngFrictionConstraintAtom *obj);
 
-void hkArray_hkInt32_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkInt32_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkInt32_hkContainerHeapAllocator_print(const hkArray_hkInt32_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkInt32_hkContainerHeapAllocator_print(const hkArray_hkInt32_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkInt32_hkContainerHeapAllocator_free(hkArray_hkInt32_hkContainerHeapAllocator *obj);
 
-void hkRelArray_hkVector4f_read(const TagFile *tf, const HavokTypeLib* lib, hkRelArray_hkVector4f *obj, const uint8* src);
-void hkRelArray_hkVector4f_print(const hkRelArray_hkVector4f *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRelArray_hkVector4f_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRelArray_hkVector4f *obj, const uint8* src);
+void hkRelArray_hkVector4f_print(const hkRelArray_hkVector4f *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRelArray_hkVector4f_free(hkRelArray_hkVector4f *obj);
 
-void hknpConstraintId_read(const TagFile *tf, const HavokTypeLib* lib, hknpConstraintId *obj, const uint8* src);
-void hknpConstraintId_print(const hknpConstraintId *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_int_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_int_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_int_hkContainerHeapAllocator_print(const hkArray_int_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpConstraintId_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpConstraintId *obj, const uint8* src);
+void hknpConstraintId_print(const hknpConstraintId *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_int_hkContainerHeapAllocator_print(const hkArray_int_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_int_hkContainerHeapAllocator_free(hkArray_int_hkContainerHeapAllocator *obj);
 
-void hkFreeListArray_hknpShapeInstance_8_read(const TagFile *tf, const HavokTypeLib* lib, hkFreeListArray_hknpShapeInstance_8 *obj, const uint8* src);
-void hkFreeListArray_hknpShapeInstance_8_print(const hkFreeListArray_hknpShapeInstance_8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFreeListArray_hknpShapeInstance_8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFreeListArray_hknpShapeInstance_8 *obj, const uint8* src);
+void hkFreeListArray_hknpShapeInstance_8_print(const hkFreeListArray_hknpShapeInstance_8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkFreeListArray_hknpShapeInstance_8_free(hkFreeListArray_hknpShapeInstance_8 *obj);
 
-void hkRefPtr_hknpBodyQualityLibrary_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpBodyQualityLibrary *obj, const uint8* src);
-void hkRefPtr_hknpBodyQualityLibrary_print(const hkRefPtr_hknpBodyQualityLibrary *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hknpBodyQualityLibrary_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpBodyQualityLibrary *obj, const uint8* src);
+void hkRefPtr_hknpBodyQualityLibrary_print(const hkRefPtr_hknpBodyQualityLibrary *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpBodyQualityLibrary_free(hkRefPtr_hknpBodyQualityLibrary *obj);
 
-void hkaAnnotationTrack__Annotation_read(const TagFile *tf, const HavokTypeLib* lib, hkaAnnotationTrack__Annotation *obj, const uint8* src);
-void hkaAnnotationTrack__Annotation_print(const hkaAnnotationTrack__Annotation *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaAnnotationTrack__Annotation_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaAnnotationTrack__Annotation *obj, const uint8* src);
+void hkaAnnotationTrack__Annotation_print(const hkaAnnotationTrack__Annotation *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaAnnotationTrack__Annotation_free(hkaAnnotationTrack__Annotation *obj);
 
-void hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator_print(const hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator_print(const hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator_free(hkArray_hkaiNavMeshClearanceCacheSeeding__CacheData_hkContainerHeapAllocator *obj);
 
-void hkaiNavMeshClearanceCacheSeeding__CacheDataSet_read(const TagFile *tf, const HavokTypeLib* lib, hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj, const uint8* src);
-void hkaiNavMeshClearanceCacheSeeding__CacheDataSet_print(const hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiNavMeshClearanceCacheSeeding__CacheDataSet_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj, const uint8* src);
+void hkaiNavMeshClearanceCacheSeeding__CacheDataSet_print(const hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiNavMeshClearanceCacheSeeding__CacheDataSet_free(hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj);
 
-void hknpBodyQuality_read(const TagFile *tf, const HavokTypeLib* lib, hknpBodyQuality *obj, const uint8* src);
-void hknpBodyQuality_print(const hknpBodyQuality *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpBodyQuality_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpBodyQuality *obj, const uint8* src);
+void hknpBodyQuality_print(const hknpBodyQuality *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpBodyQuality_free(hknpBodyQuality *obj);
 
-void Array_32_hknpBodyQuality_read(const TagFile *tf, const HavokTypeLib* lib, hknpBodyQuality *obj, const uint8* src);
-void Array_32_hknpBodyQuality_print(const hknpBodyQuality *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaSkeletonMapperData__SimpleMapping_read(const TagFile *tf, const HavokTypeLib* lib, hkaSkeletonMapperData__SimpleMapping *obj, const uint8* src);
-void hkaSkeletonMapperData__SimpleMapping_print(const hkaSkeletonMapperData__SimpleMapping *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void Array_32_hknpBodyQuality_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpBodyQuality *obj, const uint8* src);
+void Array_32_hknpBodyQuality_print(const hknpBodyQuality *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaSkeletonMapperData__SimpleMapping_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSkeletonMapperData__SimpleMapping *obj, const uint8* src);
+void hkaSkeletonMapperData__SimpleMapping_print(const hkaSkeletonMapperData__SimpleMapping *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaSkeletonMapperData__SimpleMapping_free(hkaSkeletonMapperData__SimpleMapping *obj);
 
-void hknpMaterial_read(const TagFile *tf, const HavokTypeLib* lib, hknpMaterial *obj, const uint8* src);
-void hknpMaterial_print(const hknpMaterial *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpMaterial_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpMaterial *obj, const uint8* src);
+void hknpMaterial_print(const hknpMaterial *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpMaterial_free(hknpMaterial *obj);
 
-void hkFreeListArrayElement_hknpMaterial_read(const TagFile *tf, const HavokTypeLib* lib, hkFreeListArrayElement_hknpMaterial *obj, const uint8* src);
-void hkFreeListArrayElement_hknpMaterial_print(const hkFreeListArrayElement_hknpMaterial *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkInt16_read(const TagFile *tf, const HavokTypeLib* lib, hkInt16 *obj, const uint8* src);
-void hkInt16_print(const hkInt16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void Array_4_hkUint32_read(const TagFile *tf, const HavokTypeLib* lib, hkUint32 *obj, const uint8* src);
-void Array_4_hkUint32_print(const hkUint32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator_print(const hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFreeListArrayElement_hknpMaterial_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFreeListArrayElement_hknpMaterial *obj, const uint8* src);
+void hkFreeListArrayElement_hknpMaterial_print(const hkFreeListArrayElement_hknpMaterial *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkInt16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkInt16 *obj, const uint8* src);
+void hkInt16_print(const hkInt16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void Array_4_hkUint32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUint32 *obj, const uint8* src);
+void Array_4_hkUint32_print(const hkUint32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator_print(const hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator_free(hkArray_hkcdSimdTree__Node_hkContainerHeapAllocator *obj);
 
-void hkxVertexDescription_read(const TagFile *tf, const HavokTypeLib* lib, hkxVertexDescription *obj, const uint8* src);
-void hkxVertexDescription_print(const hkxVertexDescription *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxVertexDescription_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxVertexDescription *obj, const uint8* src);
+void hkxVertexDescription_print(const hkxVertexDescription *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxVertexDescription_free(hkxVertexDescription *obj);
 
-void hkArray_unsigned_int_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_unsigned_int_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_unsigned_int_hkContainerHeapAllocator_print(const hkArray_unsigned_int_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_unsigned_int_hkContainerHeapAllocator_print(const hkArray_unsigned_int_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_unsigned_int_hkContainerHeapAllocator_free(hkArray_unsigned_int_hkContainerHeapAllocator *obj);
 
-void hknpConvexShape_read(const TagFile *tf, const HavokTypeLib* lib, hknpConvexShape *obj, const uint8* src);
-void hknpConvexShape_print(const hknpConvexShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpConvexShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpConvexShape *obj, const uint8* src);
+void hknpConvexShape_print(const hknpConvexShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpConvexShape_free(hknpConvexShape *obj);
 
-void Array_4_hkInt16_read(const TagFile *tf, const HavokTypeLib* lib, hkInt16 *obj, const uint8* src);
-void Array_4_hkInt16_print(const hkInt16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator_print(const hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void Array_4_hkInt16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkInt16 *obj, const uint8* src);
+void Array_4_hkInt16_print(const hkInt16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator_print(const hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator_free(hkArray_hkRefCountedProperties__Entry_hkContainerHeapAllocator *obj);
 
-void hkxMesh_read(const TagFile *tf, const HavokTypeLib* lib, hkxMesh *obj, const uint8* src);
-void hkxMesh_print(const hkxMesh *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxMesh_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxMesh *obj, const uint8* src);
+void hkxMesh_print(const hkxMesh *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxMesh_free(hkxMesh *obj);
 
-void hkMatrix4f_read(const TagFile *tf, const HavokTypeLib* lib, hkMatrix4f *obj, const uint8* src);
-void hkMatrix4f_print(const hkMatrix4f *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkMatrix4f_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkMatrix4f *obj, const uint8* src);
+void hkMatrix4f_print(const hkMatrix4f *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkMatrix4f_free(hkMatrix4f *obj);
 
-void hkTransformf_read(const TagFile *tf, const HavokTypeLib* lib, hkTransformf *obj, const uint8* src);
-void hkTransformf_print(const hkTransformf *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkTransformf_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkTransformf *obj, const uint8* src);
+void hkTransformf_print(const hkTransformf *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkTransformf_free(hkTransformf *obj);
 
-void hkTransform_read(const TagFile *tf, const HavokTypeLib* lib, hkTransform *obj, const uint8* src);
-void hkTransform_print(const hkTransform *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkcdSimdTree_read(const TagFile *tf, const HavokTypeLib* lib, hkcdSimdTree *obj, const uint8* src);
-void hkcdSimdTree_print(const hkcdSimdTree *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkTransform_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkTransform *obj, const uint8* src);
+void hkTransform_print(const hkTransform *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkcdSimdTree_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdSimdTree *obj, const uint8* src);
+void hkcdSimdTree_print(const hkcdSimdTree *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkcdSimdTree_free(hkcdSimdTree *obj);
 
-void hknpMorphExternMesh_read(const TagFile *tf, const HavokTypeLib* lib, hknpMorphExternMesh *obj, const uint8* src);
-void hknpMorphExternMesh_print(const hknpMorphExternMesh *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpMorphExternMesh_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpMorphExternMesh *obj, const uint8* src);
+void hknpMorphExternMesh_print(const hknpMorphExternMesh *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpMorphExternMesh_free(hknpMorphExternMesh *obj);
 
-void hkaDefaultAnimatedReferenceFrame_read(const TagFile *tf, const HavokTypeLib* lib, hkaDefaultAnimatedReferenceFrame *obj, const uint8* src);
-void hkaDefaultAnimatedReferenceFrame_print(const hkaDefaultAnimatedReferenceFrame *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaDefaultAnimatedReferenceFrame_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaDefaultAnimatedReferenceFrame *obj, const uint8* src);
+void hkaDefaultAnimatedReferenceFrame_print(const hkaDefaultAnimatedReferenceFrame *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaDefaultAnimatedReferenceFrame_free(hkaDefaultAnimatedReferenceFrame *obj);
 
-void hkBool_read(const TagFile *tf, const HavokTypeLib* lib, hkBool *obj, const uint8* src);
-void hkBool_print(const hkBool *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkBool_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkBool *obj, const uint8* src);
+void hkBool_print(const hkBool *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkBool_free(hkBool *obj);
 
-void hknpCollisionFilter__Type_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hknpCollisionFilter__Type_hkUint8 *obj, const uint8* src);
-void hknpCollisionFilter__Type_hkUint8_print(const hknpCollisionFilter__Type_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hknpRefMassDistribution_read(const TagFile *tf, const HavokTypeLib* lib, hknpRefMassDistribution *obj, const uint8* src);
-void hknpRefMassDistribution_print(const hknpRefMassDistribution *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpCollisionFilter__Type_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpCollisionFilter__Type_hkUint8 *obj, const uint8* src);
+void hknpCollisionFilter__Type_hkUint8_print(const hknpCollisionFilter__Type_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hknpRefMassDistribution_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpRefMassDistribution *obj, const uint8* src);
+void hknpRefMassDistribution_print(const hknpRefMassDistribution *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpRefMassDistribution_free(hknpRefMassDistribution *obj);
 
-void hkArray_float_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_float_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_float_hkContainerHeapAllocator_print(const hkArray_float_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_float_hkContainerHeapAllocator_print(const hkArray_float_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_float_hkContainerHeapAllocator_free(hkArray_float_hkContainerHeapAllocator *obj);
 
-void hkpLimitedForceConstraintMotor_read(const TagFile *tf, const HavokTypeLib* lib, hkpLimitedForceConstraintMotor *obj, const uint8* src);
-void hkpLimitedForceConstraintMotor_print(const hkpLimitedForceConstraintMotor *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpLimitedForceConstraintMotor_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpLimitedForceConstraintMotor *obj, const uint8* src);
+void hkpLimitedForceConstraintMotor_print(const hkpLimitedForceConstraintMotor *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpLimitedForceConstraintMotor_free(hkpLimitedForceConstraintMotor *obj);
 
-void hkArray_hkInt16_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkInt16_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkInt16_hkContainerHeapAllocator_print(const hkArray_hkInt16_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkInt16_hkContainerHeapAllocator_print(const hkArray_hkInt16_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkInt16_hkContainerHeapAllocator_free(hkArray_hkInt16_hkContainerHeapAllocator *obj);
 
-void hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_read(const TagFile *tf, const HavokTypeLib* lib, hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage *obj, const uint8* src);
-void hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_print(const hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_free(hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage *obj);
+void hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 *obj, const uint8* src);
+void hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_print(const hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_free(hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 *obj);
 
-void hkcdStaticAabbTree__Impl_read(const TagFile *tf, const HavokTypeLib* lib, hkcdStaticAabbTree__Impl *obj, const uint8* src);
-void hkcdStaticAabbTree__Impl_print(const hkcdStaticAabbTree__Impl *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator_print(const hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdStaticAabbTree__Impl_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdStaticAabbTree__Impl *obj, const uint8* src);
+void hkcdStaticAabbTree__Impl_print(const hkcdStaticAabbTree__Impl *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator_print(const hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator_free(hkArray_hkaAnnotationTrack__Annotation_hkContainerHeapAllocator *obj);
 
-void hkRelArray_hknpConvexPolytopeShape__Face_read(const TagFile *tf, const HavokTypeLib* lib, hkRelArray_hknpConvexPolytopeShape__Face *obj, const uint8* src);
-void hkRelArray_hknpConvexPolytopeShape__Face_print(const hkRelArray_hknpConvexPolytopeShape__Face *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRelArray_hknpConvexPolytopeShape__Face_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRelArray_hknpConvexPolytopeShape__Face *obj, const uint8* src);
+void hkRelArray_hknpConvexPolytopeShape__Face_print(const hkRelArray_hknpConvexPolytopeShape__Face *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRelArray_hknpConvexPolytopeShape__Face_free(hkRelArray_hknpConvexPolytopeShape__Face *obj);
 
-void hkReferencedObject_read(const TagFile *tf, const HavokTypeLib* lib, hkReferencedObject *obj, const uint8* src);
-void hkReferencedObject_print(const hkReferencedObject *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkReferencedObject_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkReferencedObject *obj, const uint8* src);
+void hkReferencedObject_print(const hkReferencedObject *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkReferencedObject_free(hkReferencedObject *obj);
 
-void hknpExternMeshShapeGeometry_read(const TagFile *tf, const HavokTypeLib* lib, hknpExternMeshShapeGeometry *obj, const uint8* src);
-void hknpExternMeshShapeGeometry_print(const hknpExternMeshShapeGeometry *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRefPtr_hkxMeshSection_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkxMeshSection *obj, const uint8* src);
-void hkRefPtr_hkxMeshSection_print(const hkRefPtr_hkxMeshSection *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpExternMeshShapeGeometry_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpExternMeshShapeGeometry *obj, const uint8* src);
+void hknpExternMeshShapeGeometry_print(const hknpExternMeshShapeGeometry *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRefPtr_hkxMeshSection_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkxMeshSection *obj, const uint8* src);
+void hkRefPtr_hkxMeshSection_print(const hkRefPtr_hkxMeshSection *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkxMeshSection_free(hkRefPtr_hkxMeshSection *obj);
 
-void hknpShapeInstance_read(const TagFile *tf, const HavokTypeLib* lib, hknpShapeInstance *obj, const uint8* src);
-void hknpShapeInstance_print(const hknpShapeInstance *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpShapeInstance_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpShapeInstance *obj, const uint8* src);
+void hknpShapeInstance_print(const hknpShapeInstance *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpShapeInstance_free(hknpShapeInstance *obj);
 
-void hkFreeListArrayElement_hknpShapeInstance_read(const TagFile *tf, const HavokTypeLib* lib, hkFreeListArrayElement_hknpShapeInstance *obj, const uint8* src);
-void hkFreeListArrayElement_hknpShapeInstance_print(const hkFreeListArrayElement_hknpShapeInstance *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRefPtr_hkRefCountedProperties_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkRefCountedProperties *obj, const uint8* src);
-void hkRefPtr_hkRefCountedProperties_print(const hkRefPtr_hkRefCountedProperties *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFreeListArrayElement_hknpShapeInstance_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFreeListArrayElement_hknpShapeInstance *obj, const uint8* src);
+void hkFreeListArrayElement_hknpShapeInstance_print(const hkFreeListArrayElement_hknpShapeInstance *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRefPtr_hkRefCountedProperties_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkRefCountedProperties *obj, const uint8* src);
+void hkRefPtr_hkRefCountedProperties_print(const hkRefPtr_hkRefCountedProperties *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkRefCountedProperties_free(hkRefPtr_hkRefCountedProperties *obj);
 
-void hkpLimitedHingeConstraintData__Atoms_read(const TagFile *tf, const HavokTypeLib* lib, hkpLimitedHingeConstraintData__Atoms *obj, const uint8* src);
-void hkpLimitedHingeConstraintData__Atoms_print(const hkpLimitedHingeConstraintData__Atoms *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpLimitedHingeConstraintData__Atoms_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpLimitedHingeConstraintData__Atoms *obj, const uint8* src);
+void hkpLimitedHingeConstraintData__Atoms_print(const hkpLimitedHingeConstraintData__Atoms *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpLimitedHingeConstraintData__Atoms_free(hkpLimitedHingeConstraintData__Atoms *obj);
 
-void hkArray_hknpMaterial_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hknpMaterial_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hknpMaterial_hkContainerHeapAllocator_print(const hkArray_hknpMaterial_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hknpMaterial_hkContainerHeapAllocator_print(const hkArray_hknpMaterial_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hknpMaterial_hkContainerHeapAllocator_free(hkArray_hknpMaterial_hkContainerHeapAllocator *obj);
 
-void hkVector4f_read(const TagFile *tf, const HavokTypeLib* lib, hkVector4f *obj, const uint8* src);
-void hkVector4f_print(const hkVector4f *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaSkeletonMapperData__ChainMapping_read(const TagFile *tf, const HavokTypeLib* lib, hkaSkeletonMapperData__ChainMapping *obj, const uint8* src);
-void hkaSkeletonMapperData__ChainMapping_print(const hkaSkeletonMapperData__ChainMapping *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkVector4f_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkVector4f *obj, const uint8* src);
+void hkVector4f_print(const hkVector4f *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaSkeletonMapperData__ChainMapping_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSkeletonMapperData__ChainMapping *obj, const uint8* src);
+void hkaSkeletonMapperData__ChainMapping_print(const hkaSkeletonMapperData__ChainMapping *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaSkeletonMapperData__ChainMapping_free(hkaSkeletonMapperData__ChainMapping *obj);
 
-void hkArray_hkStringPtr_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkStringPtr_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkStringPtr_hkContainerHeapAllocator_print(const hkArray_hkStringPtr_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkStringPtr_hkContainerHeapAllocator_print(const hkArray_hkStringPtr_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkStringPtr_hkContainerHeapAllocator_free(hkArray_hkStringPtr_hkContainerHeapAllocator *obj);
 
-void hkcdFourAabb_read(const TagFile *tf, const HavokTypeLib* lib, hkcdFourAabb *obj, const uint8* src);
-void hkcdFourAabb_print(const hkcdFourAabb *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdFourAabb_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdFourAabb *obj, const uint8* src);
+void hkcdFourAabb_print(const hkcdFourAabb *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkcdFourAabb_free(hkcdFourAabb *obj);
 
-void hknpConstraintCinfo_read(const TagFile *tf, const HavokTypeLib* lib, hknpConstraintCinfo *obj, const uint8* src);
-void hknpConstraintCinfo_print(const hknpConstraintCinfo *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpConstraintCinfo_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpConstraintCinfo *obj, const uint8* src);
+void hknpConstraintCinfo_print(const hknpConstraintCinfo *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpConstraintCinfo_free(hknpConstraintCinfo *obj);
 
-void hknpCompoundShapeBase__VelocityInfo_read(const TagFile *tf, const HavokTypeLib* lib, hknpCompoundShapeBase__VelocityInfo *obj, const uint8* src);
-void hknpCompoundShapeBase__VelocityInfo_print(const hknpCompoundShapeBase__VelocityInfo *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpCompoundShapeBase__VelocityInfo_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpCompoundShapeBase__VelocityInfo *obj, const uint8* src);
+void hknpCompoundShapeBase__VelocityInfo_print(const hknpCompoundShapeBase__VelocityInfo *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpCompoundShapeBase__VelocityInfo_free(hknpCompoundShapeBase__VelocityInfo *obj);
 
-void hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator_print(const hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator_free(hkArray_hkHashMapDetail__MapTuple_hkContainerHeapAllocator *obj);
+void hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator_print(const hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator_free(hkArray_hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_hkContainerHeapAllocator *obj);
 
-void hkRefPtr_hkaAnimatedReferenceFrame_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkaAnimatedReferenceFrame *obj, const uint8* src);
-void hkRefPtr_hkaAnimatedReferenceFrame_print(const hkRefPtr_hkaAnimatedReferenceFrame *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkaAnimatedReferenceFrame_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkaAnimatedReferenceFrame *obj, const uint8* src);
+void hkRefPtr_hkaAnimatedReferenceFrame_print(const hkRefPtr_hkaAnimatedReferenceFrame *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkaAnimatedReferenceFrame_free(hkRefPtr_hkaAnimatedReferenceFrame *obj);
 
-void hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator_print(const hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator_print(const hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator_free(hkArray_hkaiStreamingSet__VolumeConnection_hkContainerHeapAllocator *obj);
 
-void hkpLimitedHingeConstraintData_read(const TagFile *tf, const HavokTypeLib* lib, hkpLimitedHingeConstraintData *obj, const uint8* src);
-void hkpLimitedHingeConstraintData_print(const hkpLimitedHingeConstraintData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpLimitedHingeConstraintData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpLimitedHingeConstraintData *obj, const uint8* src);
+void hkpLimitedHingeConstraintData_print(const hkpLimitedHingeConstraintData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpLimitedHingeConstraintData_free(hkpLimitedHingeConstraintData *obj);
 
-void hkRefPtr_hknpShape_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpShape *obj, const uint8* src);
-void hkRefPtr_hknpShape_print(const hkRefPtr_hknpShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hknpShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpShape *obj, const uint8* src);
+void hkRefPtr_hknpShape_print(const hkRefPtr_hknpShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpShape_free(hkRefPtr_hknpShape *obj);
 
-void hknpShapeSignals_read(const TagFile *tf, const HavokTypeLib* lib, hknpShapeSignals *obj, const uint8* src);
-void hknpShapeSignals_print(const hknpShapeSignals *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpShapeSignals_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpShapeSignals *obj, const uint8* src);
+void hknpShapeSignals_print(const hknpShapeSignals *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpShapeSignals_free(hknpShapeSignals *obj);
 
-void hkRefPtr_hkxVertexBuffer_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkxVertexBuffer *obj, const uint8* src);
-void hkRefPtr_hkxVertexBuffer_print(const hkRefPtr_hkxVertexBuffer *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkxVertexBuffer_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkxVertexBuffer *obj, const uint8* src);
+void hkRefPtr_hkxVertexBuffer_print(const hkRefPtr_hkxVertexBuffer *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkxVertexBuffer_free(hkRefPtr_hkxVertexBuffer *obj);
 
-void hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_read(const TagFile *tf, const HavokTypeLib* lib, hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 *obj, const uint8* src);
-void hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_print(const hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 *obj, const uint8* src);
+void hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_print(const hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_free(hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6 *obj);
 
-void hkcdSimdTree__Node_read(const TagFile *tf, const HavokTypeLib* lib, hkcdSimdTree__Node *obj, const uint8* src);
-void hkcdSimdTree__Node_print(const hkcdSimdTree__Node *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdSimdTree__Node_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdSimdTree__Node *obj, const uint8* src);
+void hkcdSimdTree__Node_print(const hkcdSimdTree__Node *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkcdSimdTree__Node_free(hkcdSimdTree__Node *obj);
 
-void hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator_print(const hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator_print(const hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator_free(hkArray_hkaiDirectedGraphExplicitCost__Edge_hkContainerHeapAllocator *obj);
 
-void hkRootLevelContainer__NamedVariant_read(const TagFile *tf, const HavokTypeLib* lib, hkRootLevelContainer__NamedVariant *obj, const uint8* src);
-void hkRootLevelContainer__NamedVariant_print(const hkRootLevelContainer__NamedVariant *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRootLevelContainer__NamedVariant_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRootLevelContainer__NamedVariant *obj, const uint8* src);
+void hkRootLevelContainer__NamedVariant_print(const hkRootLevelContainer__NamedVariant *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRootLevelContainer__NamedVariant_free(hkRootLevelContainer__NamedVariant *obj);
 
-void hkcdDynamicTree__Codec32_read(const TagFile *tf, const HavokTypeLib* lib, hkcdDynamicTree__Codec32 *obj, const uint8* src);
-void hkcdDynamicTree__Codec32_print(const hkcdDynamicTree__Codec32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdDynamicTree__Codec32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdDynamicTree__Codec32 *obj, const uint8* src);
+void hkcdDynamicTree__Codec32_print(const hkcdDynamicTree__Codec32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkcdDynamicTree__Codec32_free(hkcdDynamicTree__Codec32 *obj);
 
-void hkRefPtr_hkReferencedObject_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkReferencedObject *obj, const uint8* src);
-void hkRefPtr_hkReferencedObject_print(const hkRefPtr_hkReferencedObject *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkReferencedObject_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkReferencedObject *obj, const uint8* src);
+void hkRefPtr_hkReferencedObject_print(const hkRefPtr_hkReferencedObject *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkReferencedObject_free(hkRefPtr_hkReferencedObject *obj);
 
-void hknpExternMeshShape_read(const TagFile *tf, const HavokTypeLib* lib, hknpExternMeshShape *obj, const uint8* src);
-void hknpExternMeshShape_print(const hknpExternMeshShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpExternMeshShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpExternMeshShape *obj, const uint8* src);
+void hknpExternMeshShape_print(const hknpExternMeshShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpExternMeshShape_free(hknpExternMeshShape *obj);
 
-void hkaBone_read(const TagFile *tf, const HavokTypeLib* lib, hkaBone *obj, const uint8* src);
-void hkaBone_print(const hkaBone *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaBone_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaBone *obj, const uint8* src);
+void hkaBone_print(const hkaBone *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaBone_free(hkaBone *obj);
 
-void hkQsTransformf_read(const TagFile *tf, const HavokTypeLib* lib, hkQsTransformf *obj, const uint8* src);
-void hkQsTransformf_print(const hkQsTransformf *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkQsTransformf_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkQsTransformf *obj, const uint8* src);
+void hkQsTransformf_print(const hkQsTransformf *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkQsTransformf_free(hkQsTransformf *obj);
 
-void hkQsTransform_read(const TagFile *tf, const HavokTypeLib* lib, hkQsTransform *obj, const uint8* src);
-void hkQsTransform_print(const hkQsTransform *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRefPtr_hknpRefMassDistribution_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpRefMassDistribution *obj, const uint8* src);
-void hkRefPtr_hknpRefMassDistribution_print(const hkRefPtr_hknpRefMassDistribution *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkQsTransform_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkQsTransform *obj, const uint8* src);
+void hkQsTransform_print(const hkQsTransform *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRefPtr_hknpRefMassDistribution_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpRefMassDistribution *obj, const uint8* src);
+void hkRefPtr_hknpRefMassDistribution_print(const hkRefPtr_hknpRefMassDistribution *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpRefMassDistribution_free(hkRefPtr_hknpRefMassDistribution *obj);
 
-void hkaMeshBinding__Mapping_read(const TagFile *tf, const HavokTypeLib* lib, hkaMeshBinding__Mapping *obj, const uint8* src);
-void hkaMeshBinding__Mapping_print(const hkaMeshBinding__Mapping *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaMeshBinding__Mapping_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaMeshBinding__Mapping *obj, const uint8* src);
+void hkaMeshBinding__Mapping_print(const hkaMeshBinding__Mapping *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaMeshBinding__Mapping_free(hkaMeshBinding__Mapping *obj);
 
-void hkArray_hkaAnnotationTrack_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaAnnotationTrack_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaAnnotationTrack_hkContainerHeapAllocator_print(const hkArray_hkaAnnotationTrack_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaAnnotationTrack_hkContainerHeapAllocator_print(const hkArray_hkaAnnotationTrack_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaAnnotationTrack_hkContainerHeapAllocator_free(hkArray_hkaAnnotationTrack_hkContainerHeapAllocator *obj);
 
-void hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator_print(const hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator_print(const hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator_free(hkArray_hknpConvexPolytopeShape__Connectivity__Edge_hkContainerHeapAllocator *obj);
 
-void hkaiNavMeshClearanceCache_read(const TagFile *tf, const HavokTypeLib* lib, hkaiNavMeshClearanceCache *obj, const uint8* src);
-void hkaiNavMeshClearanceCache_print(const hkaiNavMeshClearanceCache *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiNavMeshClearanceCache_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiNavMeshClearanceCache *obj, const uint8* src);
+void hkaiNavMeshClearanceCache_print(const hkaiNavMeshClearanceCache *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiNavMeshClearanceCache_free(hkaiNavMeshClearanceCache *obj);
 
-void hkHashMapDetail__Index_read(const TagFile *tf, const HavokTypeLib* lib, hkHashMapDetail__Index *obj, const uint8* src);
-void hkHashMapDetail__Index_print(const hkHashMapDetail__Index *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkHashMapDetail__Index_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkHashMapDetail__Index *obj, const uint8* src);
+void hkHashMapDetail__Index_print(const hkHashMapDetail__Index *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkHashMapDetail__Index_free(hkHashMapDetail__Index *obj);
 
-void hkUFloat8_read(const TagFile *tf, const HavokTypeLib* lib, hkUFloat8 *obj, const uint8* src);
-void hkUFloat8_print(const hkUFloat8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkUFloat8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUFloat8 *obj, const uint8* src);
+void hkUFloat8_print(const hkUFloat8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkUFloat8_free(hkUFloat8 *obj);
 
-void hkArray_hknpConstraintCinfo_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hknpConstraintCinfo_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hknpConstraintCinfo_hkContainerHeapAllocator_print(const hkArray_hknpConstraintCinfo_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hknpConstraintCinfo_hkContainerHeapAllocator_print(const hkArray_hknpConstraintCinfo_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hknpConstraintCinfo_hkContainerHeapAllocator_free(hkArray_hknpConstraintCinfo_hkContainerHeapAllocator *obj);
 
-void hkQuaternionf_read(const TagFile *tf, const HavokTypeLib* lib, hkQuaternionf *obj, const uint8* src);
-void hkQuaternionf_print(const hkQuaternionf *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkQuaternionf_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkQuaternionf *obj, const uint8* src);
+void hkQuaternionf_print(const hkQuaternionf *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkQuaternionf_free(hkQuaternionf *obj);
 
-void hkaiNavMeshClearanceCacheSeeding__CacheData_read(const TagFile *tf, const HavokTypeLib* lib, hkaiNavMeshClearanceCacheSeeding__CacheData *obj, const uint8* src);
-void hkaiNavMeshClearanceCacheSeeding__CacheData_print(const hkaiNavMeshClearanceCacheSeeding__CacheData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiNavMeshClearanceCacheSeeding__CacheData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiNavMeshClearanceCacheSeeding__CacheData *obj, const uint8* src);
+void hkaiNavMeshClearanceCacheSeeding__CacheData_print(const hkaiNavMeshClearanceCacheSeeding__CacheData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiNavMeshClearanceCacheSeeding__CacheData_free(hkaiNavMeshClearanceCacheSeeding__CacheData *obj);
 
-void hkRefPtr_hknpPhysicsSystemData_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpPhysicsSystemData *obj, const uint8* src);
-void hkRefPtr_hknpPhysicsSystemData_print(const hkRefPtr_hknpPhysicsSystemData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hknpPhysicsSystemData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpPhysicsSystemData *obj, const uint8* src);
+void hkRefPtr_hknpPhysicsSystemData_print(const hkRefPtr_hknpPhysicsSystemData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpPhysicsSystemData_free(hkRefPtr_hknpPhysicsSystemData *obj);
 
-void hkRefPtr_hkxMesh_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkxMesh *obj, const uint8* src);
-void hkRefPtr_hkxMesh_print(const hkRefPtr_hkxMesh *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkxMesh_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkxMesh *obj, const uint8* src);
+void hkRefPtr_hkxMesh_print(const hkRefPtr_hkxMesh *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkxMesh_free(hkRefPtr_hkxMesh *obj);
 
-void hkaSkeleton__Partition_read(const TagFile *tf, const HavokTypeLib* lib, hkaSkeleton__Partition *obj, const uint8* src);
-void hkaSkeleton__Partition_print(const hkaSkeleton__Partition *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaSkeleton__Partition_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSkeleton__Partition *obj, const uint8* src);
+void hkaSkeleton__Partition_print(const hkaSkeleton__Partition *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaSkeleton__Partition_free(hkaSkeleton__Partition *obj);
 
-void hknpConvexPolytopeShape__Connectivity__Edge_read(const TagFile *tf, const HavokTypeLib* lib, hknpConvexPolytopeShape__Connectivity__Edge *obj, const uint8* src);
-void hknpConvexPolytopeShape__Connectivity__Edge_print(const hknpConvexPolytopeShape__Connectivity__Edge *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpConvexPolytopeShape__Connectivity__Edge_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpConvexPolytopeShape__Connectivity__Edge *obj, const uint8* src);
+void hknpConvexPolytopeShape__Connectivity__Edge_print(const hknpConvexPolytopeShape__Connectivity__Edge *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpConvexPolytopeShape__Connectivity__Edge_free(hknpConvexPolytopeShape__Connectivity__Edge *obj);
 
-void hknpCompoundShapeBase_read(const TagFile *tf, const HavokTypeLib* lib, hknpCompoundShapeBase *obj, const uint8* src);
-void hknpCompoundShapeBase_print(const hknpCompoundShapeBase *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpCompoundShapeBase_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpCompoundShapeBase *obj, const uint8* src);
+void hknpCompoundShapeBase_print(const hknpCompoundShapeBase *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpCompoundShapeBase_free(hknpCompoundShapeBase *obj);
 
-void hknpPhysicsSystemData_read(const TagFile *tf, const HavokTypeLib* lib, hknpPhysicsSystemData *obj, const uint8* src);
-void hknpPhysicsSystemData_print(const hknpPhysicsSystemData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpPhysicsSystemData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpPhysicsSystemData *obj, const uint8* src);
+void hknpPhysicsSystemData_print(const hknpPhysicsSystemData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpPhysicsSystemData_free(hknpPhysicsSystemData *obj);
 
-void hkcdStaticTree__Codec3Axis6_read(const TagFile *tf, const HavokTypeLib* lib, hkcdStaticTree__Codec3Axis6 *obj, const uint8* src);
-void hkcdStaticTree__Codec3Axis6_print(const hkcdStaticTree__Codec3Axis6 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdStaticTree__Codec3Axis6_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdStaticTree__Codec3Axis6 *obj, const uint8* src);
+void hkcdStaticTree__Codec3Axis6_print(const hkcdStaticTree__Codec3Axis6 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkcdStaticTree__Codec3Axis6_free(hkcdStaticTree__Codec3Axis6 *obj);
 
-void hkCompressedMassProperties_read(const TagFile *tf, const HavokTypeLib* lib, hkCompressedMassProperties *obj, const uint8* src);
-void hkCompressedMassProperties_print(const hkCompressedMassProperties *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkCompressedMassProperties_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkCompressedMassProperties *obj, const uint8* src);
+void hkCompressedMassProperties_print(const hkCompressedMassProperties *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkCompressedMassProperties_free(hkCompressedMassProperties *obj);
 
-void hkRotationImpl_float_read(const TagFile *tf, const HavokTypeLib* lib, hkRotationImpl_float *obj, const uint8* src);
-void hkRotationImpl_float_print(const hkRotationImpl_float *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRotationf_read(const TagFile *tf, const HavokTypeLib* lib, hkRotationf *obj, const uint8* src);
-void hkRotationf_print(const hkRotationf *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRefVariant_read(const TagFile *tf, const HavokTypeLib* lib, hkRefVariant *obj, const uint8* src);
-void hkRefVariant_print(const hkRefVariant *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRotationImpl_float_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRotationImpl_float *obj, const uint8* src);
+void hkRotationImpl_float_print(const hkRotationImpl_float *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRotationf_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRotationf *obj, const uint8* src);
+void hkRotationf_print(const hkRotationf *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRefVariant_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefVariant *obj, const uint8* src);
+void hkRefVariant_print(const hkRefVariant *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefVariant_free(hkRefVariant *obj);
 
-void hknpShapeMassProperties_read(const TagFile *tf, const HavokTypeLib* lib, hknpShapeMassProperties *obj, const uint8* src);
-void hknpShapeMassProperties_print(const hknpShapeMassProperties *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpShapeMassProperties_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpShapeMassProperties *obj, const uint8* src);
+void hknpShapeMassProperties_print(const hknpShapeMassProperties *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpShapeMassProperties_free(hknpShapeMassProperties *obj);
 
-void hkaiStreamingSet_read(const TagFile *tf, const HavokTypeLib* lib, hkaiStreamingSet *obj, const uint8* src);
-void hkaiStreamingSet_print(const hkaiStreamingSet *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiStreamingSet_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiStreamingSet *obj, const uint8* src);
+void hkaiStreamingSet_print(const hkaiStreamingSet *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiStreamingSet_free(hkaiStreamingSet *obj);
 
-void hknpRefWorldCinfo_read(const TagFile *tf, const HavokTypeLib* lib, hknpRefWorldCinfo *obj, const uint8* src);
-void hknpRefWorldCinfo_print(const hknpRefWorldCinfo *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpRefWorldCinfo_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpRefWorldCinfo *obj, const uint8* src);
+void hknpRefWorldCinfo_print(const hknpRefWorldCinfo *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpRefWorldCinfo_free(hknpRefWorldCinfo *obj);
 
-void hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator_print(const hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator_print(const hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator_free(hkArray_hkaSkeleton__LocalFrameOnBone_hkContainerHeapAllocator *obj);
 
-void hkxAttributeHolder_read(const TagFile *tf, const HavokTypeLib* lib, hkxAttributeHolder *obj, const uint8* src);
-void hkxAttributeHolder_print(const hkxAttributeHolder *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxAttributeHolder_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxAttributeHolder *obj, const uint8* src);
+void hkxAttributeHolder_print(const hkxAttributeHolder *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxAttributeHolder_free(hkxAttributeHolder *obj);
 
-void hkFlags_hknpBodyQuality__FlagsEnum_hkUint32_read(const TagFile *tf, const HavokTypeLib* lib, hkFlags_hknpBodyQuality__FlagsEnum_hkUint32 *obj, const uint8* src);
-void hkFlags_hknpBodyQuality__FlagsEnum_hkUint32_print(const hkFlags_hknpBodyQuality__FlagsEnum_hkUint32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRefPtr_hkxVertexAnimation_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkxVertexAnimation *obj, const uint8* src);
-void hkRefPtr_hkxVertexAnimation_print(const hkRefPtr_hkxVertexAnimation *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFlags_hknpBodyQuality__FlagsEnum_hkUint32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFlags_hknpBodyQuality__FlagsEnum_hkUint32 *obj, const uint8* src);
+void hkFlags_hknpBodyQuality__FlagsEnum_hkUint32_print(const hkFlags_hknpBodyQuality__FlagsEnum_hkUint32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRefPtr_hkxVertexAnimation_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkxVertexAnimation *obj, const uint8* src);
+void hkRefPtr_hkxVertexAnimation_print(const hkRefPtr_hkxVertexAnimation *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkxVertexAnimation_free(hkRefPtr_hkxVertexAnimation *obj);
 
-void hkViewPtr_hknpShape_read(const TagFile *tf, const HavokTypeLib* lib, hkViewPtr_hknpShape *obj, const uint8* src);
-void hkViewPtr_hknpShape_print(const hkViewPtr_hknpShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkViewPtr_hknpShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkViewPtr_hknpShape *obj, const uint8* src);
+void hkViewPtr_hknpShape_print(const hkViewPtr_hknpShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkViewPtr_hknpShape_free(hkViewPtr_hknpShape *obj);
 
-void hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator_print(const hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator_print(const hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator_free(hkArray_hkRootLevelContainer__NamedVariant_hkContainerHeapAllocator *obj);
 
-void hkxVertexBuffer_read(const TagFile *tf, const HavokTypeLib* lib, hkxVertexBuffer *obj, const uint8* src);
-void hkxVertexBuffer_print(const hkxVertexBuffer *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxVertexBuffer_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxVertexBuffer *obj, const uint8* src);
+void hkxVertexBuffer_print(const hkxVertexBuffer *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxVertexBuffer_free(hkxVertexBuffer *obj);
 
-void hkaAnnotationTrack_read(const TagFile *tf, const HavokTypeLib* lib, hkaAnnotationTrack *obj, const uint8* src);
-void hkaAnnotationTrack_print(const hkaAnnotationTrack *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaAnnotationTrack_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaAnnotationTrack *obj, const uint8* src);
+void hkaAnnotationTrack_print(const hkaAnnotationTrack *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaAnnotationTrack_free(hkaAnnotationTrack *obj);
 
-void hknpCollisionFilter_read(const TagFile *tf, const HavokTypeLib* lib, hknpCollisionFilter *obj, const uint8* src);
-void hknpCollisionFilter_print(const hknpCollisionFilter *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpCollisionFilter_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpCollisionFilter *obj, const uint8* src);
+void hknpCollisionFilter_print(const hknpCollisionFilter *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpCollisionFilter_free(hknpCollisionFilter *obj);
 
-void hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator_print(const hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator_print(const hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator_free(hkArray_hkxMaterial__TextureStage_hkContainerHeapAllocator *obj);
 
-void hkRefPtr_hknpShapeTagCodec_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpShapeTagCodec *obj, const uint8* src);
-void hkRefPtr_hknpShapeTagCodec_print(const hkRefPtr_hknpShapeTagCodec *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hknpShapeTagCodec_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpShapeTagCodec *obj, const uint8* src);
+void hkRefPtr_hknpShapeTagCodec_print(const hkRefPtr_hknpShapeTagCodec *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpShapeTagCodec_free(hkRefPtr_hknpShapeTagCodec *obj);
 
-void hkxMaterial_read(const TagFile *tf, const HavokTypeLib* lib, hkxMaterial *obj, const uint8* src);
-void hkxMaterial_print(const hkxMaterial *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxMaterial_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxMaterial *obj, const uint8* src);
+void hkxMaterial_print(const hkxMaterial *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxMaterial_free(hkxMaterial *obj);
 
-void hkaiStreamingSet__NavMeshConnection_read(const TagFile *tf, const HavokTypeLib* lib, hkaiStreamingSet__NavMeshConnection *obj, const uint8* src);
-void hkaiStreamingSet__NavMeshConnection_print(const hkaiStreamingSet__NavMeshConnection *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiStreamingSet__NavMeshConnection_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiStreamingSet__NavMeshConnection *obj, const uint8* src);
+void hkaiStreamingSet__NavMeshConnection_print(const hkaiStreamingSet__NavMeshConnection *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiStreamingSet__NavMeshConnection_free(hkaiStreamingSet__NavMeshConnection *obj);
 
-void hknpConvexPolytopeShape__Connectivity_read(const TagFile *tf, const HavokTypeLib* lib, hknpConvexPolytopeShape__Connectivity *obj, const uint8* src);
-void hknpConvexPolytopeShape__Connectivity_print(const hknpConvexPolytopeShape__Connectivity *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpConvexPolytopeShape__Connectivity_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpConvexPolytopeShape__Connectivity *obj, const uint8* src);
+void hknpConvexPolytopeShape__Connectivity_print(const hknpConvexPolytopeShape__Connectivity *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpConvexPolytopeShape__Connectivity_free(hknpConvexPolytopeShape__Connectivity *obj);
 
-void hkRefPtr_hkGeometry_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkGeometry *obj, const uint8* src);
-void hkRefPtr_hkGeometry_print(const hkRefPtr_hkGeometry *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkGeometry_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkGeometry *obj, const uint8* src);
+void hkRefPtr_hkGeometry_print(const hkRefPtr_hkGeometry *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkGeometry_free(hkRefPtr_hkGeometry *obj);
 
-void Array_4_short_read(const TagFile *tf, const HavokTypeLib* lib, short *obj, const uint8* src);
-void Array_4_short_print(const short *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkReal_read(const TagFile *tf, const HavokTypeLib* lib, hkReal *obj, const uint8* src);
-void hkReal_print(const hkReal *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void Array_2_hkReal_read(const TagFile *tf, const HavokTypeLib* lib, hkReal *obj, const uint8* src);
-void Array_2_hkReal_print(const hkReal *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRefCountedProperties__Entry_read(const TagFile *tf, const HavokTypeLib* lib, hkRefCountedProperties__Entry *obj, const uint8* src);
-void hkRefCountedProperties__Entry_print(const hkRefCountedProperties__Entry *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void Array_4_short_read(const TagFile *tf, const Havok_TypeLibrary* lib, short *obj, const uint8* src);
+void Array_4_short_print(const short *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkReal_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkReal *obj, const uint8* src);
+void hkReal_print(const hkReal *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void Array_2_hkReal_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkReal *obj, const uint8* src);
+void Array_2_hkReal_print(const hkReal *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRefCountedProperties__Entry_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefCountedProperties__Entry *obj, const uint8* src);
+void hkRefCountedProperties__Entry_print(const hkRefCountedProperties__Entry *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefCountedProperties__Entry_free(hkRefCountedProperties__Entry *obj);
 
-void hkUint64_read(const TagFile *tf, const HavokTypeLib* lib, hkUint64 *obj, const uint8* src);
-void hkUint64_print(const hkUint64 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_SPartShapeInfo_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_SPartShapeInfo_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_SPartShapeInfo_hkContainerHeapAllocator_print(const hkArray_SPartShapeInfo_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkUint64_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUint64 *obj, const uint8* src);
+void hkUint64_print(const hkUint64 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_SPartShapeInfo_hkContainerHeapAllocator_print(const hkArray_SPartShapeInfo_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_SPartShapeInfo_hkContainerHeapAllocator_free(hkArray_SPartShapeInfo_hkContainerHeapAllocator *obj);
 
-void hkRefPtr_hkaMeshBinding_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkaMeshBinding *obj, const uint8* src);
-void hkRefPtr_hkaMeshBinding_print(const hkRefPtr_hkaMeshBinding *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkaMeshBinding_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkaMeshBinding *obj, const uint8* src);
+void hkRefPtr_hkaMeshBinding_print(const hkRefPtr_hkaMeshBinding *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkaMeshBinding_free(hkRefPtr_hkaMeshBinding *obj);
 
-void hkxMaterial__TextureType_hkInt32_read(const TagFile *tf, const HavokTypeLib* lib, hkxMaterial__TextureType_hkInt32 *obj, const uint8* src);
-void hkxMaterial__TextureType_hkInt32_print(const hkxMaterial__TextureType_hkInt32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkp2dAngConstraintAtom_read(const TagFile *tf, const HavokTypeLib* lib, hkp2dAngConstraintAtom *obj, const uint8* src);
-void hkp2dAngConstraintAtom_print(const hkp2dAngConstraintAtom *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxMaterial__TextureType_hkInt32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxMaterial__TextureType_hkInt32 *obj, const uint8* src);
+void hkxMaterial__TextureType_hkInt32_print(const hkxMaterial__TextureType_hkInt32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkp2dAngConstraintAtom_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkp2dAngConstraintAtom *obj, const uint8* src);
+void hkp2dAngConstraintAtom_print(const hkp2dAngConstraintAtom *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkp2dAngConstraintAtom_free(hkp2dAngConstraintAtom *obj);
 
-void hkRefPtr_hkaAnimation_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkaAnimation *obj, const uint8* src);
-void hkRefPtr_hkaAnimation_print(const hkRefPtr_hkaAnimation *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkaAnimation_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkaAnimation *obj, const uint8* src);
+void hkRefPtr_hkaAnimation_print(const hkRefPtr_hkaAnimation *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkaAnimation_free(hkRefPtr_hkaAnimation *obj);
 
-void hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator_print(const hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator_print(const hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator_free(hkArray_hkxVertexDescription__ElementDecl_hkContainerHeapAllocator *obj);
 
-void hknpPhysicsSceneData_read(const TagFile *tf, const HavokTypeLib* lib, hknpPhysicsSceneData *obj, const uint8* src);
-void hknpPhysicsSceneData_print(const hknpPhysicsSceneData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpPhysicsSceneData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpPhysicsSceneData *obj, const uint8* src);
+void hknpPhysicsSceneData_print(const hknpPhysicsSceneData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpPhysicsSceneData_free(hknpPhysicsSceneData *obj);
 
-void hkaBoneAttachment_read(const TagFile *tf, const HavokTypeLib* lib, hkaBoneAttachment *obj, const uint8* src);
-void hkaBoneAttachment_print(const hkaBoneAttachment *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaBoneAttachment_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaBoneAttachment *obj, const uint8* src);
+void hkaBoneAttachment_print(const hkaBoneAttachment *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaBoneAttachment_free(hkaBoneAttachment *obj);
 
-void hkaiNavMeshClearanceCache__McpDataInteger_read(const TagFile *tf, const HavokTypeLib* lib, hkaiNavMeshClearanceCache__McpDataInteger *obj, const uint8* src);
-void hkaiNavMeshClearanceCache__McpDataInteger_print(const hkaiNavMeshClearanceCache__McpDataInteger *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiNavMeshClearanceCache__McpDataInteger_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiNavMeshClearanceCache__McpDataInteger *obj, const uint8* src);
+void hkaiNavMeshClearanceCache__McpDataInteger_print(const hkaiNavMeshClearanceCache__McpDataInteger *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiNavMeshClearanceCache__McpDataInteger_free(hkaiNavMeshClearanceCache__McpDataInteger *obj);
 
-void hkRefPtr_hkaSkeleton_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkaSkeleton *obj, const uint8* src);
-void hkRefPtr_hkaSkeleton_print(const hkRefPtr_hkaSkeleton *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkaSkeleton_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkaSkeleton *obj, const uint8* src);
+void hkRefPtr_hkaSkeleton_print(const hkRefPtr_hkaSkeleton *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkaSkeleton_free(hkRefPtr_hkaSkeleton *obj);
 
-void hknpMassDistribution_read(const TagFile *tf, const HavokTypeLib* lib, hknpMassDistribution *obj, const uint8* src);
-void hknpMassDistribution_print(const hknpMassDistribution *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpMassDistribution_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpMassDistribution *obj, const uint8* src);
+void hknpMassDistribution_print(const hknpMassDistribution *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpMassDistribution_free(hknpMassDistribution *obj);
 
-void hkcdStaticAabbTree_read(const TagFile *tf, const HavokTypeLib* lib, hkcdStaticAabbTree *obj, const uint8* src);
-void hkcdStaticAabbTree_print(const hkcdStaticAabbTree *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdStaticAabbTree_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdStaticAabbTree *obj, const uint8* src);
+void hkcdStaticAabbTree_print(const hkcdStaticAabbTree *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkcdStaticAabbTree_free(hkcdStaticAabbTree *obj);
 
-void hkLocalFrame_read(const TagFile *tf, const HavokTypeLib* lib, hkLocalFrame *obj, const uint8* src);
-void hkLocalFrame_print(const hkLocalFrame *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaSkeletonMapperData__MappingType_hkInt32_read(const TagFile *tf, const HavokTypeLib* lib, hkaSkeletonMapperData__MappingType_hkInt32 *obj, const uint8* src);
-void hkaSkeletonMapperData__MappingType_hkInt32_print(const hkaSkeletonMapperData__MappingType_hkInt32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkVector4_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkVector4_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkVector4_hkContainerHeapAllocator_print(const hkArray_hkVector4_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkLocalFrame_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkLocalFrame *obj, const uint8* src);
+void hkLocalFrame_print(const hkLocalFrame *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaSkeletonMapperData__MappingType_hkInt32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSkeletonMapperData__MappingType_hkInt32 *obj, const uint8* src);
+void hkaSkeletonMapperData__MappingType_hkInt32_print(const hkaSkeletonMapperData__MappingType_hkInt32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkVector4_hkContainerHeapAllocator_print(const hkArray_hkVector4_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkVector4_hkContainerHeapAllocator_free(hkArray_hkVector4_hkContainerHeapAllocator *obj);
 
-void hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void_read(const TagFile *tf, const HavokTypeLib* lib, hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void *obj, const uint8* src);
-void hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void_print(const hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void *obj, const uint8* src);
+void hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void_print(const hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void_free(hkTuple_hkPropertyId_hkReflect__Any_void_void_void_void_void_void *obj);
 
-void hkRelArray_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hkRelArray_hkUint8 *obj, const uint8* src);
-void hkRelArray_hkUint8_print(const hkRelArray_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRelArray_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRelArray_hkUint8 *obj, const uint8* src);
+void hkRelArray_hkUint8_print(const hkRelArray_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRelArray_hkUint8_free(hkRelArray_hkUint8 *obj);
 
-void hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator_print(const hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator_print(const hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator_free(hkArray_hkcdDynamicTree__Codec32_hkContainerHeapAllocator *obj);
 
-void hknpCompoundShape_read(const TagFile *tf, const HavokTypeLib* lib, hknpCompoundShape *obj, const uint8* src);
-void hknpCompoundShape_print(const hknpCompoundShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpCompoundShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpCompoundShape *obj, const uint8* src);
+void hknpCompoundShape_print(const hknpCompoundShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpCompoundShape_free(hknpCompoundShape *obj);
 
-void hkHashMap_hkPropertyId_hkReflect__Any_read(const TagFile *tf, const HavokTypeLib* lib, hkHashMap_hkPropertyId_hkReflect__Any *obj, const uint8* src);
-void hkHashMap_hkPropertyId_hkReflect__Any_print(const hkHashMap_hkPropertyId_hkReflect__Any *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkpAngMotorConstraintAtom_read(const TagFile *tf, const HavokTypeLib* lib, hkpAngMotorConstraintAtom *obj, const uint8* src);
-void hkpAngMotorConstraintAtom_print(const hkpAngMotorConstraintAtom *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkHashMap_hkPropertyId_hkReflect__Any_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkHashMap_hkPropertyId_hkReflect__Any *obj, const uint8* src);
+void hkHashMap_hkPropertyId_hkReflect__Any_print(const hkHashMap_hkPropertyId_hkReflect__Any *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkpAngMotorConstraintAtom_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpAngMotorConstraintAtom *obj, const uint8* src);
+void hkpAngMotorConstraintAtom_print(const hkpAngMotorConstraintAtom *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpAngMotorConstraintAtom_free(hkpAngMotorConstraintAtom *obj);
 
-void hkRefPtr_hkLocalFrame_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkLocalFrame *obj, const uint8* src);
-void hkRefPtr_hkLocalFrame_print(const hkRefPtr_hkLocalFrame *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkLocalFrame_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkLocalFrame *obj, const uint8* src);
+void hkRefPtr_hkLocalFrame_print(const hkRefPtr_hkLocalFrame *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkLocalFrame_free(hkRefPtr_hkLocalFrame *obj);
 
-void hkRefPtr_hknpMotionPropertiesLibrary_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpMotionPropertiesLibrary *obj, const uint8* src);
-void hkRefPtr_hknpMotionPropertiesLibrary_print(const hkRefPtr_hknpMotionPropertiesLibrary *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hknpMotionPropertiesLibrary_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpMotionPropertiesLibrary *obj, const uint8* src);
+void hkRefPtr_hknpMotionPropertiesLibrary_print(const hkRefPtr_hknpMotionPropertiesLibrary *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpMotionPropertiesLibrary_free(hkRefPtr_hknpMotionPropertiesLibrary *obj);
 
-void hknpBroadPhaseConfig_read(const TagFile *tf, const HavokTypeLib* lib, hknpBroadPhaseConfig *obj, const uint8* src);
-void hknpBroadPhaseConfig_print(const hknpBroadPhaseConfig *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaiDirectedGraphExplicitCost__Node_read(const TagFile *tf, const HavokTypeLib* lib, hkaiDirectedGraphExplicitCost__Node *obj, const uint8* src);
-void hkaiDirectedGraphExplicitCost__Node_print(const hkaiDirectedGraphExplicitCost__Node *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpBroadPhaseConfig_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpBroadPhaseConfig *obj, const uint8* src);
+void hknpBroadPhaseConfig_print(const hknpBroadPhaseConfig *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaiDirectedGraphExplicitCost__Node_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiDirectedGraphExplicitCost__Node *obj, const uint8* src);
+void hkaiDirectedGraphExplicitCost__Node_print(const hkaiDirectedGraphExplicitCost__Node *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiDirectedGraphExplicitCost__Node_free(hkaiDirectedGraphExplicitCost__Node *obj);
 
-void hkaSkeleton__LocalFrameOnBone_read(const TagFile *tf, const HavokTypeLib* lib, hkaSkeleton__LocalFrameOnBone *obj, const uint8* src);
-void hkaSkeleton__LocalFrameOnBone_print(const hkaSkeleton__LocalFrameOnBone *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaSkeleton__LocalFrameOnBone_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSkeleton__LocalFrameOnBone *obj, const uint8* src);
+void hkaSkeleton__LocalFrameOnBone_print(const hkaSkeleton__LocalFrameOnBone *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaSkeleton__LocalFrameOnBone_free(hkaSkeleton__LocalFrameOnBone *obj);
 
-void hkPackedVector3_read(const TagFile *tf, const HavokTypeLib* lib, hkPackedVector3 *obj, const uint8* src);
-void hkPackedVector3_print(const hkPackedVector3 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkPackedVector3_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkPackedVector3 *obj, const uint8* src);
+void hkPackedVector3_print(const hkPackedVector3 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkPackedVector3_free(hkPackedVector3 *obj);
 
-void hkxIndexBuffer__IndexType_hkInt8_read(const TagFile *tf, const HavokTypeLib* lib, hkxIndexBuffer__IndexType_hkInt8 *obj, const uint8* src);
-void hkxIndexBuffer__IndexType_hkInt8_print(const hkxIndexBuffer__IndexType_hkInt8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkFreeListArrayElement_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkFreeListArrayElement_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkFreeListArrayElement_hkContainerHeapAllocator_print(const hkArray_hkFreeListArrayElement_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkFreeListArrayElement_hkContainerHeapAllocator_free(hkArray_hkFreeListArrayElement_hkContainerHeapAllocator *obj);
+void hkxIndexBuffer__IndexType_hkInt8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxIndexBuffer__IndexType_hkInt8 *obj, const uint8* src);
+void hkxIndexBuffer__IndexType_hkInt8_print(const hkxIndexBuffer__IndexType_hkInt8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator_print(const hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator_free(hkArray_hkFreeListArrayElement_hknpMaterial_hkContainerHeapAllocator *obj);
 
-void hknpCollisionDispatchType__Enum_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hknpCollisionDispatchType__Enum_hkUint8 *obj, const uint8* src);
-void hknpCollisionDispatchType__Enum_hkUint8_print(const hknpCollisionDispatchType__Enum_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkxMaterial__Property_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkxMaterial__Property_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkxMaterial__Property_hkContainerHeapAllocator_print(const hkArray_hkxMaterial__Property_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpCollisionDispatchType__Enum_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpCollisionDispatchType__Enum_hkUint8 *obj, const uint8* src);
+void hknpCollisionDispatchType__Enum_hkUint8_print(const hknpCollisionDispatchType__Enum_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkxMaterial__Property_hkContainerHeapAllocator_print(const hkArray_hkxMaterial__Property_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkxMaterial__Property_hkContainerHeapAllocator_free(hkArray_hkxMaterial__Property_hkContainerHeapAllocator *obj);
 
-void hkPropertyDesc_read(const TagFile *tf, const HavokTypeLib* lib, hkPropertyDesc *obj, const uint8* src);
-void hkPropertyDesc_print(const hkPropertyDesc *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkPropertyDesc_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkPropertyDesc *obj, const uint8* src);
+void hkPropertyDesc_print(const hkPropertyDesc *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkPropertyDesc_free(hkPropertyDesc *obj);
 
-void hkArray_hkUint8_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkUint8_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkUint8_hkContainerHeapAllocator_print(const hkArray_hkUint8_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkUint8_hkContainerHeapAllocator_print(const hkArray_hkUint8_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkUint8_hkContainerHeapAllocator_free(hkArray_hkUint8_hkContainerHeapAllocator *obj);
 
-void hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_read(const TagFile *tf, const HavokTypeLib* lib, hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage *obj, const uint8* src);
-void hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_print(const hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_free(hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage *obj);
+void hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 *obj, const uint8* src);
+void hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_print(const hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_free(hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 *obj);
 
-void hkaSkeletonMapper_read(const TagFile *tf, const HavokTypeLib* lib, hkaSkeletonMapper *obj, const uint8* src);
-void hkaSkeletonMapper_print(const hkaSkeletonMapper *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaSkeletonMapper_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSkeletonMapper *obj, const uint8* src);
+void hkaSkeletonMapper_print(const hkaSkeletonMapper *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaSkeletonMapper_free(hkaSkeletonMapper *obj);
 
-void hkpAngLimitConstraintAtom_read(const TagFile *tf, const HavokTypeLib* lib, hkpAngLimitConstraintAtom *obj, const uint8* src);
-void hkpAngLimitConstraintAtom_print(const hkpAngLimitConstraintAtom *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpAngLimitConstraintAtom_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpAngLimitConstraintAtom *obj, const uint8* src);
+void hkpAngLimitConstraintAtom_print(const hkpAngLimitConstraintAtom *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpAngLimitConstraintAtom_free(hkpAngLimitConstraintAtom *obj);
 
-void hkaSkeleton_read(const TagFile *tf, const HavokTypeLib* lib, hkaSkeleton *obj, const uint8* src);
-void hkaSkeleton_print(const hkaSkeleton *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaSkeleton_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSkeleton *obj, const uint8* src);
+void hkaSkeleton_print(const hkaSkeleton *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaSkeleton_free(hkaSkeleton *obj);
 
-void hkFlags_hknpShapeTagCodec__Hints_hkUint32_read(const TagFile *tf, const HavokTypeLib* lib, hkFlags_hknpShapeTagCodec__Hints_hkUint32 *obj, const uint8* src);
-void hkFlags_hknpShapeTagCodec__Hints_hkUint32_print(const hkFlags_hknpShapeTagCodec__Hints_hkUint32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hknpRagdollData_read(const TagFile *tf, const HavokTypeLib* lib, hknpRagdollData *obj, const uint8* src);
-void hknpRagdollData_print(const hknpRagdollData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFlags_hknpShapeTagCodec__Hints_hkUint32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFlags_hknpShapeTagCodec__Hints_hkUint32 *obj, const uint8* src);
+void hkFlags_hknpShapeTagCodec__Hints_hkUint32_print(const hkFlags_hknpShapeTagCodec__Hints_hkUint32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hknpRagdollData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpRagdollData *obj, const uint8* src);
+void hknpRagdollData_print(const hknpRagdollData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpRagdollData_free(hknpRagdollData *obj);
 
-void hknpMaterial__CombinePolicy_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hknpMaterial__CombinePolicy_hkUint8 *obj, const uint8* src);
-void hknpMaterial__CombinePolicy_hkUint8_print(const hknpMaterial__CombinePolicy_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkGeometry__Triangle_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkGeometry__Triangle_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkGeometry__Triangle_hkContainerHeapAllocator_print(const hkArray_hkGeometry__Triangle_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpMaterial__CombinePolicy_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpMaterial__CombinePolicy_hkUint8 *obj, const uint8* src);
+void hknpMaterial__CombinePolicy_hkUint8_print(const hknpMaterial__CombinePolicy_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkGeometry__Triangle_hkContainerHeapAllocator_print(const hkArray_hkGeometry__Triangle_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkGeometry__Triangle_hkContainerHeapAllocator_free(hkArray_hkGeometry__Triangle_hkContainerHeapAllocator *obj);
 
-void hkcdStaticTree__Codec3Axis_read(const TagFile *tf, const HavokTypeLib* lib, hkcdStaticTree__Codec3Axis *obj, const uint8* src);
-void hkcdStaticTree__Codec3Axis_print(const hkcdStaticTree__Codec3Axis *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdStaticTree__Codec3Axis_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdStaticTree__Codec3Axis *obj, const uint8* src);
+void hkcdStaticTree__Codec3Axis_print(const hkcdStaticTree__Codec3Axis *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkcdStaticTree__Codec3Axis_free(hkcdStaticTree__Codec3Axis *obj);
 
-void hkBaseObject_read(const TagFile *tf, const HavokTypeLib* lib, hkBaseObject *obj, const uint8* src);
-void hkBaseObject_print(const hkBaseObject *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkBaseObject_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkBaseObject *obj, const uint8* src);
+void hkBaseObject_print(const hkBaseObject *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkBaseObject_free(hkBaseObject *obj);
 
-void hkFreeListArray_hknpMaterial_8_read(const TagFile *tf, const HavokTypeLib* lib, hkFreeListArray_hknpMaterial_8 *obj, const uint8* src);
-void hkFreeListArray_hknpMaterial_8_print(const hkFreeListArray_hknpMaterial_8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFreeListArray_hknpMaterial_8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFreeListArray_hknpMaterial_8 *obj, const uint8* src);
+void hkFreeListArray_hknpMaterial_8_print(const hkFreeListArray_hknpMaterial_8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkFreeListArray_hknpMaterial_8_free(hkFreeListArray_hknpMaterial_8 *obj);
 
-void hkxMesh__UserChannelInfo_read(const TagFile *tf, const HavokTypeLib* lib, hkxMesh__UserChannelInfo *obj, const uint8* src);
-void hkxMesh__UserChannelInfo_print(const hkxMesh__UserChannelInfo *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxMesh__UserChannelInfo_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxMesh__UserChannelInfo *obj, const uint8* src);
+void hkxMesh__UserChannelInfo_print(const hkxMesh__UserChannelInfo *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxMesh__UserChannelInfo_free(hkxMesh__UserChannelInfo *obj);
 
-void hknpConvexPolytopeShape__Face_read(const TagFile *tf, const HavokTypeLib* lib, hknpConvexPolytopeShape__Face *obj, const uint8* src);
-void hknpConvexPolytopeShape__Face_print(const hknpConvexPolytopeShape__Face *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpConvexPolytopeShape__Face_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpConvexPolytopeShape__Face *obj, const uint8* src);
+void hknpConvexPolytopeShape__Face_print(const hknpConvexPolytopeShape__Face *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpConvexPolytopeShape__Face_free(hknpConvexPolytopeShape__Face *obj);
 
-void hknpShapeTagCodec__Type_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hknpShapeTagCodec__Type_hkUint8 *obj, const uint8* src);
-void hknpShapeTagCodec__Type_hkUint8_print(const hknpShapeTagCodec__Type_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkxVertexDescription__DataUsage_hkUint16_read(const TagFile *tf, const HavokTypeLib* lib, hkxVertexDescription__DataUsage_hkUint16 *obj, const uint8* src);
-void hkxVertexDescription__DataUsage_hkUint16_print(const hkxVertexDescription__DataUsage_hkUint16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkpConstraintAtom__AtomType_hkUint16_read(const TagFile *tf, const HavokTypeLib* lib, hkpConstraintAtom__AtomType_hkUint16 *obj, const uint8* src);
-void hkpConstraintAtom__AtomType_hkUint16_print(const hkpConstraintAtom__AtomType_hkUint16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkxVertexAnimation_read(const TagFile *tf, const HavokTypeLib* lib, hkxVertexAnimation *obj, const uint8* src);
-void hkxVertexAnimation_print(const hkxVertexAnimation *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpShapeTagCodec__Type_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpShapeTagCodec__Type_hkUint8 *obj, const uint8* src);
+void hknpShapeTagCodec__Type_hkUint8_print(const hknpShapeTagCodec__Type_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkxVertexDescription__DataUsage_hkUint16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxVertexDescription__DataUsage_hkUint16 *obj, const uint8* src);
+void hkxVertexDescription__DataUsage_hkUint16_print(const hkxVertexDescription__DataUsage_hkUint16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkpConstraintAtom__AtomType_hkUint16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpConstraintAtom__AtomType_hkUint16 *obj, const uint8* src);
+void hkpConstraintAtom__AtomType_hkUint16_print(const hkpConstraintAtom__AtomType_hkUint16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkxVertexAnimation_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxVertexAnimation *obj, const uint8* src);
+void hkxVertexAnimation_print(const hkxVertexAnimation *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxVertexAnimation_free(hkxVertexAnimation *obj);
 
-void hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator_print(const hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator_print(const hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator_free(hkArray_hkaSkeletonMapperData__SimpleMapping_hkContainerHeapAllocator *obj);
 
-void hknpBodyCinfo_read(const TagFile *tf, const HavokTypeLib* lib, hknpBodyCinfo *obj, const uint8* src);
-void hknpBodyCinfo_print(const hknpBodyCinfo *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpBodyCinfo_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpBodyCinfo *obj, const uint8* src);
+void hknpBodyCinfo_print(const hknpBodyCinfo *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpBodyCinfo_free(hknpBodyCinfo *obj);
 
-void hknpLodManagerCinfo_read(const TagFile *tf, const HavokTypeLib* lib, hknpLodManagerCinfo *obj, const uint8* src);
-void hknpLodManagerCinfo_print(const hknpLodManagerCinfo *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpLodManagerCinfo_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpLodManagerCinfo *obj, const uint8* src);
+void hknpLodManagerCinfo_print(const hknpLodManagerCinfo *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpLodManagerCinfo_free(hknpLodManagerCinfo *obj);
 
-void hkFreeListArray_hknpMotionProperties_8_read(const TagFile *tf, const HavokTypeLib* lib, hkFreeListArray_hknpMotionProperties_8 *obj, const uint8* src);
-void hkFreeListArray_hknpMotionProperties_8_print(const hkFreeListArray_hknpMotionProperties_8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFreeListArray_hknpMotionProperties_8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFreeListArray_hknpMotionProperties_8 *obj, const uint8* src);
+void hkFreeListArray_hknpMotionProperties_8_print(const hkFreeListArray_hknpMotionProperties_8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkFreeListArray_hknpMotionProperties_8_free(hkFreeListArray_hknpMotionProperties_8 *obj);
 
-void hknpMaterialLibrary_read(const TagFile *tf, const HavokTypeLib* lib, hknpMaterialLibrary *obj, const uint8* src);
-void hknpMaterialLibrary_print(const hknpMaterialLibrary *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpMaterialLibrary_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpMaterialLibrary *obj, const uint8* src);
+void hknpMaterialLibrary_print(const hknpMaterialLibrary *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpMaterialLibrary_free(hknpMaterialLibrary *obj);
 
-void hkRefPtr_hkpConstraintData_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkpConstraintData *obj, const uint8* src);
-void hkRefPtr_hkpConstraintData_print(const hkRefPtr_hkpConstraintData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkpConstraintData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkpConstraintData *obj, const uint8* src);
+void hkRefPtr_hkpConstraintData_print(const hkRefPtr_hkpConstraintData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkpConstraintData_free(hkRefPtr_hkpConstraintData *obj);
 
-void hkArray_hkaBone_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaBone_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaBone_hkContainerHeapAllocator_print(const hkArray_hkaBone_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaBone_hkContainerHeapAllocator_print(const hkArray_hkaBone_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaBone_hkContainerHeapAllocator_free(hkArray_hkaBone_hkContainerHeapAllocator *obj);
 
-void hknpWorldCinfo_read(const TagFile *tf, const HavokTypeLib* lib, hknpWorldCinfo *obj, const uint8* src);
-void hknpWorldCinfo_print(const hknpWorldCinfo *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpWorldCinfo_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpWorldCinfo *obj, const uint8* src);
+void hknpWorldCinfo_print(const hknpWorldCinfo *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpWorldCinfo_free(hknpWorldCinfo *obj);
 
-void hkaiNavMesh__Edge_read(const TagFile *tf, const HavokTypeLib* lib, hkaiNavMesh__Edge *obj, const uint8* src);
-void hkaiNavMesh__Edge_print(const hkaiNavMesh__Edge *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiNavMesh__Edge_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiNavMesh__Edge *obj, const uint8* src);
+void hkaiNavMesh__Edge_print(const hkaiNavMesh__Edge *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiNavMesh__Edge_free(hkaiNavMesh__Edge *obj);
 
-void hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8_read(const TagFile *tf, const HavokTypeLib* lib, hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8 *obj, const uint8* src);
-void hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8_print(const hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkxIndexBuffer_read(const TagFile *tf, const HavokTypeLib* lib, hkxIndexBuffer *obj, const uint8* src);
-void hkxIndexBuffer_print(const hkxIndexBuffer *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8 *obj, const uint8* src);
+void hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8_print(const hkaAnimatedReferenceFrame__hkaReferenceFrameTypeEnum_hkInt8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkxIndexBuffer_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxIndexBuffer *obj, const uint8* src);
+void hkxIndexBuffer_print(const hkxIndexBuffer *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxIndexBuffer_free(hkxIndexBuffer *obj);
 
-void hkaiStreamingSet__GraphConnection_read(const TagFile *tf, const HavokTypeLib* lib, hkaiStreamingSet__GraphConnection *obj, const uint8* src);
-void hkaiStreamingSet__GraphConnection_print(const hkaiStreamingSet__GraphConnection *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiStreamingSet__GraphConnection_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiStreamingSet__GraphConnection *obj, const uint8* src);
+void hkaiStreamingSet__GraphConnection_print(const hkaiStreamingSet__GraphConnection *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiStreamingSet__GraphConnection_free(hkaiStreamingSet__GraphConnection *obj);
 
-void hkArray_hkUint16_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkUint16_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkUint16_hkContainerHeapAllocator_print(const hkArray_hkUint16_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkUint16_hkContainerHeapAllocator_print(const hkArray_hkUint16_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkUint16_hkContainerHeapAllocator_free(hkArray_hkUint16_hkContainerHeapAllocator *obj);
 
-void hknpBoxShape_read(const TagFile *tf, const HavokTypeLib* lib, hknpBoxShape *obj, const uint8* src);
-void hknpBoxShape_print(const hknpBoxShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpBoxShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpBoxShape *obj, const uint8* src);
+void hknpBoxShape_print(const hknpBoxShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpBoxShape_free(hknpBoxShape *obj);
 
-void hkArray_hknpMotionProperties_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hknpMotionProperties_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hknpMotionProperties_hkContainerHeapAllocator_print(const hkArray_hknpMotionProperties_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hknpMotionProperties_hkContainerHeapAllocator_print(const hkArray_hknpMotionProperties_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hknpMotionProperties_hkContainerHeapAllocator_free(hkArray_hknpMotionProperties_hkContainerHeapAllocator *obj);
 
-void hkpConstraintMotor_read(const TagFile *tf, const HavokTypeLib* lib, hkpConstraintMotor *obj, const uint8* src);
-void hkpConstraintMotor_print(const hkpConstraintMotor *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpConstraintMotor_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpConstraintMotor *obj, const uint8* src);
+void hkpConstraintMotor_print(const hkpConstraintMotor *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpConstraintMotor_free(hkpConstraintMotor *obj);
 
-void hkReflect__QualifiedType_hkReflect__Type_read(const TagFile *tf, const HavokTypeLib* lib, hkReflect__QualifiedType_hkReflect__Type *obj, const uint8* src);
-void hkReflect__QualifiedType_hkReflect__Type_print(const hkReflect__QualifiedType_hkReflect__Type *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkReflect__QualifiedType_hkReflect__Type_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkReflect__QualifiedType_hkReflect__Type *obj, const uint8* src);
+void hkReflect__QualifiedType_hkReflect__Type_print(const hkReflect__QualifiedType_hkReflect__Type *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkReflect__QualifiedType_hkReflect__Type_free(hkReflect__QualifiedType_hkReflect__Type *obj);
 
-void hkxAttribute_read(const TagFile *tf, const HavokTypeLib* lib, hkxAttribute *obj, const uint8* src);
-void hkxAttribute_print(const hkxAttribute *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxAttribute_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxAttribute *obj, const uint8* src);
+void hkxAttribute_print(const hkxAttribute *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxAttribute_free(hkxAttribute *obj);
 
-void hkRefPtr_hkxMaterial_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkxMaterial *obj, const uint8* src);
-void hkRefPtr_hkxMaterial_print(const hkRefPtr_hkxMaterial *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkxMaterial_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkxMaterial *obj, const uint8* src);
+void hkRefPtr_hkxMaterial_print(const hkRefPtr_hkxMaterial *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkxMaterial_free(hkRefPtr_hkxMaterial *obj);
 
-void hkxAttributeGroup_read(const TagFile *tf, const HavokTypeLib* lib, hkxAttributeGroup *obj, const uint8* src);
-void hkxAttributeGroup_print(const hkxAttributeGroup *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxAttributeGroup_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxAttributeGroup *obj, const uint8* src);
+void hkxAttributeGroup_print(const hkxAttributeGroup *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxAttributeGroup_free(hkxAttributeGroup *obj);
 
-void hknpConstraintGroupId_read(const TagFile *tf, const HavokTypeLib* lib, hknpConstraintGroupId *obj, const uint8* src);
-void hknpConstraintGroupId_print(const hknpConstraintGroupId *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaiDirectedGraphExplicitCost_read(const TagFile *tf, const HavokTypeLib* lib, hkaiDirectedGraphExplicitCost *obj, const uint8* src);
-void hkaiDirectedGraphExplicitCost_print(const hkaiDirectedGraphExplicitCost *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpConstraintGroupId_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpConstraintGroupId *obj, const uint8* src);
+void hknpConstraintGroupId_print(const hknpConstraintGroupId *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaiDirectedGraphExplicitCost_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiDirectedGraphExplicitCost *obj, const uint8* src);
+void hkaiDirectedGraphExplicitCost_print(const hkaiDirectedGraphExplicitCost *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiDirectedGraphExplicitCost_free(hkaiDirectedGraphExplicitCost *obj);
 
-void hkArray_hkQsTransform_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkQsTransform_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkQsTransform_hkContainerHeapAllocator_print(const hkArray_hkQsTransform_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkQsTransform_hkContainerHeapAllocator_print(const hkArray_hkQsTransform_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkQsTransform_hkContainerHeapAllocator_free(hkArray_hkQsTransform_hkContainerHeapAllocator *obj);
 
-void hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32_read(const TagFile *tf, const HavokTypeLib* lib, hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32 *obj, const uint8* src);
-void hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32_print(const hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32 *obj, const uint8* src);
+void hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32_print(const hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32_free(hkcdDynamicTree__DynamicStorage_0_hkcdDynamicTree__AnisotropicMetric_hkcdDynamicTree__Codec32 *obj);
 
-void hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_read(const TagFile *tf, const HavokTypeLib* lib, hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 *obj, const uint8* src);
-void hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_print(const hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkpConstraintMotor__MotorType_hkInt8_read(const TagFile *tf, const HavokTypeLib* lib, hkpConstraintMotor__MotorType_hkInt8 *obj, const uint8* src);
-void hkpConstraintMotor__MotorType_hkInt8_print(const hkpConstraintMotor__MotorType_hkInt8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator_print(const hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 *obj, const uint8* src);
+void hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_print(const hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkpConstraintMotor__MotorType_hkInt8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpConstraintMotor__MotorType_hkInt8 *obj, const uint8* src);
+void hkpConstraintMotor__MotorType_hkInt8_print(const hkpConstraintMotor__MotorType_hkInt8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator_print(const hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator_free(hkArray_hkaMeshBinding__Mapping_hkContainerHeapAllocator *obj);
 
-void hkaiAnnotatedStreamingSet__Side_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hkaiAnnotatedStreamingSet__Side_hkUint8 *obj, const uint8* src);
-void hkaiAnnotatedStreamingSet__Side_hkUint8_print(const hkaiAnnotatedStreamingSet__Side_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkpBallSocketConstraintAtom_read(const TagFile *tf, const HavokTypeLib* lib, hkpBallSocketConstraintAtom *obj, const uint8* src);
-void hkpBallSocketConstraintAtom_print(const hkpBallSocketConstraintAtom *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiAnnotatedStreamingSet__Side_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiAnnotatedStreamingSet__Side_hkUint8 *obj, const uint8* src);
+void hkaiAnnotatedStreamingSet__Side_hkUint8_print(const hkaiAnnotatedStreamingSet__Side_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkpBallSocketConstraintAtom_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpBallSocketConstraintAtom *obj, const uint8* src);
+void hkpBallSocketConstraintAtom_print(const hkpBallSocketConstraintAtom *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkpBallSocketConstraintAtom_free(hkpBallSocketConstraintAtom *obj);
 
-void hkaAnimationBinding_read(const TagFile *tf, const HavokTypeLib* lib, hkaAnimationBinding *obj, const uint8* src);
-void hkaAnimationBinding_print(const hkaAnimationBinding *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaAnimationBinding_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaAnimationBinding *obj, const uint8* src);
+void hkaAnimationBinding_print(const hkaAnimationBinding *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaAnimationBinding_free(hkaAnimationBinding *obj);
 
-void hkaiNavMesh_read(const TagFile *tf, const HavokTypeLib* lib, hkaiNavMesh *obj, const uint8* src);
-void hkaiNavMesh_print(const hkaiNavMesh *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiNavMesh_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiNavMesh *obj, const uint8* src);
+void hkaiNavMesh_print(const hkaiNavMesh *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiNavMesh_free(hkaiNavMesh *obj);
 
-void hkaMeshBinding_read(const TagFile *tf, const HavokTypeLib* lib, hkaMeshBinding *obj, const uint8* src);
-void hkaMeshBinding_print(const hkaMeshBinding *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaMeshBinding_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaMeshBinding *obj, const uint8* src);
+void hkaMeshBinding_print(const hkaMeshBinding *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaMeshBinding_free(hkaMeshBinding *obj);
 
-void hkRefPtr_hknpBroadPhaseConfig_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpBroadPhaseConfig *obj, const uint8* src);
-void hkRefPtr_hknpBroadPhaseConfig_print(const hkRefPtr_hknpBroadPhaseConfig *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hknpBroadPhaseConfig_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpBroadPhaseConfig *obj, const uint8* src);
+void hkRefPtr_hknpBroadPhaseConfig_print(const hkRefPtr_hknpBroadPhaseConfig *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpBroadPhaseConfig_free(hkRefPtr_hknpBroadPhaseConfig *obj);
 
-void hknpBodyId_read(const TagFile *tf, const HavokTypeLib* lib, hknpBodyId *obj, const uint8* src);
-void hknpBodyId_print(const hknpBodyId *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpBodyId_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpBodyId *obj, const uint8* src);
+void hknpBodyId_print(const hknpBodyId *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpBodyId_free(hknpBodyId *obj);
 
-void hkaiDirectedGraphExplicitCost__Edge_read(const TagFile *tf, const HavokTypeLib* lib, hkaiDirectedGraphExplicitCost__Edge *obj, const uint8* src);
-void hkaiDirectedGraphExplicitCost__Edge_print(const hkaiDirectedGraphExplicitCost__Edge *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiDirectedGraphExplicitCost__Edge_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiDirectedGraphExplicitCost__Edge *obj, const uint8* src);
+void hkaiDirectedGraphExplicitCost__Edge_print(const hkaiDirectedGraphExplicitCost__Edge *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiDirectedGraphExplicitCost__Edge_free(hkaiDirectedGraphExplicitCost__Edge *obj);
 
-void hkMeshBoneIndexMapping_read(const TagFile *tf, const HavokTypeLib* lib, hkMeshBoneIndexMapping *obj, const uint8* src);
-void hkMeshBoneIndexMapping_print(const hkMeshBoneIndexMapping *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkMeshBoneIndexMapping_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkMeshBoneIndexMapping *obj, const uint8* src);
+void hkMeshBoneIndexMapping_print(const hkMeshBoneIndexMapping *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkMeshBoneIndexMapping_free(hkMeshBoneIndexMapping *obj);
 
-void Array_4_hkUintReal_read(const TagFile *tf, const HavokTypeLib* lib, hkUintReal *obj, const uint8* src);
-void Array_4_hkUintReal_print(const hkUintReal *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hknpMaterial__MassChangerCategory_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hknpMaterial__MassChangerCategory_hkUint8 *obj, const uint8* src);
-void hknpMaterial__MassChangerCategory_hkUint8_print(const hknpMaterial__MassChangerCategory_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkFlags_hkPropertyFlags__Enum_hkUint32_read(const TagFile *tf, const HavokTypeLib* lib, hkFlags_hkPropertyFlags__Enum_hkUint32 *obj, const uint8* src);
-void hkFlags_hkPropertyFlags__Enum_hkUint32_print(const hkFlags_hkPropertyFlags__Enum_hkUint32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void Array_3_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hkUint8 *obj, const uint8* src);
-void Array_3_hkUint8_print(const hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaiAnnotatedStreamingSet_read(const TagFile *tf, const HavokTypeLib* lib, hkaiAnnotatedStreamingSet *obj, const uint8* src);
-void hkaiAnnotatedStreamingSet_print(const hkaiAnnotatedStreamingSet *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void Array_4_hkUintReal_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUintReal *obj, const uint8* src);
+void Array_4_hkUintReal_print(const hkUintReal *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hknpMaterial__MassChangerCategory_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpMaterial__MassChangerCategory_hkUint8 *obj, const uint8* src);
+void hknpMaterial__MassChangerCategory_hkUint8_print(const hknpMaterial__MassChangerCategory_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkFlags_hkPropertyFlags__Enum_hkUint32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFlags_hkPropertyFlags__Enum_hkUint32 *obj, const uint8* src);
+void hkFlags_hkPropertyFlags__Enum_hkUint32_print(const hkFlags_hkPropertyFlags__Enum_hkUint32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void Array_3_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUint8 *obj, const uint8* src);
+void Array_3_hkUint8_print(const hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaiAnnotatedStreamingSet_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiAnnotatedStreamingSet *obj, const uint8* src);
+void hkaiAnnotatedStreamingSet_print(const hkaiAnnotatedStreamingSet *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiAnnotatedStreamingSet_free(hkaiAnnotatedStreamingSet *obj);
 
-void hkRefPtr_hkaAnimationBinding_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkaAnimationBinding *obj, const uint8* src);
-void hkRefPtr_hkaAnimationBinding_print(const hkRefPtr_hkaAnimationBinding *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkaAnimationBinding_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkaAnimationBinding *obj, const uint8* src);
+void hkRefPtr_hkaAnimationBinding_print(const hkRefPtr_hkaAnimationBinding *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkaAnimationBinding_free(hkRefPtr_hkaAnimationBinding *obj);
 
-void hkUlong_read(const TagFile *tf, const HavokTypeLib* lib, hkUlong *obj, const uint8* src);
-void hkUlong_print(const hkUlong *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator_print(const hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkUlong_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkUlong *obj, const uint8* src);
+void hkUlong_print(const hkUlong *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator_print(const hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator_free(hkArray_hkaSkeletonMapperData__ChainMapping_hkContainerHeapAllocator *obj);
 
-void hkArray_hkRefPtr_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkRefPtr_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkRefPtr_hkContainerHeapAllocator_print(const hkArray_hkRefPtr_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkRefPtr_hkContainerHeapAllocator_free(hkArray_hkRefPtr_hkContainerHeapAllocator *obj);
+void hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator_print(const hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator_free(hkArray_hkRefPtr_hkaSkeleton_hkContainerHeapAllocator *obj);
 
-void hkxMaterial__TextureStage_read(const TagFile *tf, const HavokTypeLib* lib, hkxMaterial__TextureStage *obj, const uint8* src);
-void hkxMaterial__TextureStage_print(const hkxMaterial__TextureStage *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxMaterial__TextureStage_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxMaterial__TextureStage *obj, const uint8* src);
+void hkxMaterial__TextureStage_print(const hkxMaterial__TextureStage *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxMaterial__TextureStage_free(hkxMaterial__TextureStage *obj);
 
-void hknpSurfaceVelocity_read(const TagFile *tf, const HavokTypeLib* lib, hknpSurfaceVelocity *obj, const uint8* src);
-void hknpSurfaceVelocity_print(const hknpSurfaceVelocity *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator_print(const hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpSurfaceVelocity_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpSurfaceVelocity *obj, const uint8* src);
+void hknpSurfaceVelocity_print(const hknpSurfaceVelocity *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator_print(const hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator_free(hkArray_hknpCompoundShapeBase__VelocityInfo_hkContainerHeapAllocator *obj);
 
-void hkRefPtr_hkxMesh__UserChannelInfo_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkxMesh__UserChannelInfo *obj, const uint8* src);
-void hkRefPtr_hkxMesh__UserChannelInfo_print(const hkRefPtr_hkxMesh__UserChannelInfo *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkxMesh__UserChannelInfo_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkxMesh__UserChannelInfo *obj, const uint8* src);
+void hkRefPtr_hkxMesh__UserChannelInfo_print(const hkRefPtr_hkxMesh__UserChannelInfo *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkxMesh__UserChannelInfo_free(hkRefPtr_hkxMesh__UserChannelInfo *obj);
 
-void hkRefPtr_hknpCollisionFilter_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpCollisionFilter *obj, const uint8* src);
-void hkRefPtr_hknpCollisionFilter_print(const hkRefPtr_hknpCollisionFilter *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hknpCollisionFilter_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpCollisionFilter *obj, const uint8* src);
+void hkRefPtr_hknpCollisionFilter_print(const hkRefPtr_hknpCollisionFilter *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpCollisionFilter_free(hkRefPtr_hknpCollisionFilter *obj);
 
-void hkaAnimationContainer_read(const TagFile *tf, const HavokTypeLib* lib, hkaAnimationContainer *obj, const uint8* src);
-void hkaAnimationContainer_print(const hkaAnimationContainer *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaAnimationContainer_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaAnimationContainer *obj, const uint8* src);
+void hkaAnimationContainer_print(const hkaAnimationContainer *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaAnimationContainer_free(hkaAnimationContainer *obj);
 
-void hknpDynamicCompoundShapeTree_read(const TagFile *tf, const HavokTypeLib* lib, hknpDynamicCompoundShapeTree *obj, const uint8* src);
-void hknpDynamicCompoundShapeTree_print(const hknpDynamicCompoundShapeTree *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkDefaultPropertyBag_read(const TagFile *tf, const HavokTypeLib* lib, hkDefaultPropertyBag *obj, const uint8* src);
-void hkDefaultPropertyBag_print(const hkDefaultPropertyBag *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpDynamicCompoundShapeTree_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpDynamicCompoundShapeTree *obj, const uint8* src);
+void hknpDynamicCompoundShapeTree_print(const hknpDynamicCompoundShapeTree *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkDefaultPropertyBag_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkDefaultPropertyBag *obj, const uint8* src);
+void hkDefaultPropertyBag_print(const hkDefaultPropertyBag *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkDefaultPropertyBag_free(hkDefaultPropertyBag *obj);
 
-void hkArray_hkRefVariant_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkRefVariant_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkRefVariant_hkContainerHeapAllocator_print(const hkArray_hkRefVariant_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkRefVariant_hkContainerHeapAllocator_print(const hkArray_hkRefVariant_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkRefVariant_hkContainerHeapAllocator_free(hkArray_hkRefVariant_hkContainerHeapAllocator *obj);
 
-void hknpSparseCompactMap_hkUint16_read(const TagFile *tf, const HavokTypeLib* lib, hknpSparseCompactMap_hkUint16 *obj, const uint8* src);
-void hknpSparseCompactMap_hkUint16_print(const hknpSparseCompactMap_hkUint16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpSparseCompactMap_hkUint16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpSparseCompactMap_hkUint16 *obj, const uint8* src);
+void hknpSparseCompactMap_hkUint16_print(const hknpSparseCompactMap_hkUint16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpSparseCompactMap_hkUint16_free(hknpSparseCompactMap_hkUint16 *obj);
 
-void hkaSplineCompressedAnimation_read(const TagFile *tf, const HavokTypeLib* lib, hkaSplineCompressedAnimation *obj, const uint8* src);
-void hkaSplineCompressedAnimation_print(const hkaSplineCompressedAnimation *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaSplineCompressedAnimation_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSplineCompressedAnimation *obj, const uint8* src);
+void hkaSplineCompressedAnimation_print(const hkaSplineCompressedAnimation *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaSplineCompressedAnimation_free(hkaSplineCompressedAnimation *obj);
 
-void hkFlags_hknpConstraint__FlagsEnum_hkUint16_read(const TagFile *tf, const HavokTypeLib* lib, hkFlags_hknpConstraint__FlagsEnum_hkUint16 *obj, const uint8* src);
-void hkFlags_hknpConstraint__FlagsEnum_hkUint16_print(const hkFlags_hknpConstraint__FlagsEnum_hkUint16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaiNavMesh__Face_read(const TagFile *tf, const HavokTypeLib* lib, hkaiNavMesh__Face *obj, const uint8* src);
-void hkaiNavMesh__Face_print(const hkaiNavMesh__Face *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFlags_hknpConstraint__FlagsEnum_hkUint16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFlags_hknpConstraint__FlagsEnum_hkUint16 *obj, const uint8* src);
+void hkFlags_hknpConstraint__FlagsEnum_hkUint16_print(const hkFlags_hknpConstraint__FlagsEnum_hkUint16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaiNavMesh__Face_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiNavMesh__Face *obj, const uint8* src);
+void hkaiNavMesh__Face_print(const hkaiNavMesh__Face *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiNavMesh__Face_free(hkaiNavMesh__Face *obj);
 
-void hkaiPackedKey__hkaiIndex_hkaiIndex_read(const TagFile *tf, const HavokTypeLib* lib, hkaiPackedKey__hkaiIndex_hkaiIndex *obj, const uint8* src);
-void hkaiPackedKey__hkaiIndex_hkaiIndex_print(const hkaiPackedKey__hkaiIndex_hkaiIndex *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkUint32_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkUint32_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkUint32_hkContainerHeapAllocator_print(const hkArray_hkUint32_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiPackedKey__hkaiIndex_hkInt32_hkaiIndex_hkInt32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiPackedKey__hkaiIndex_hkInt32_hkaiIndex_hkInt32 *obj, const uint8* src);
+void hkaiPackedKey__hkaiIndex_hkInt32_hkaiIndex_hkInt32_print(const hkaiPackedKey__hkaiIndex_hkInt32_hkaiIndex_hkInt32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkUint32_hkContainerHeapAllocator_print(const hkArray_hkUint32_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkUint32_hkContainerHeapAllocator_free(hkArray_hkUint32_hkContainerHeapAllocator *obj);
 
-void hkxVertexDescription__ElementDecl_read(const TagFile *tf, const HavokTypeLib* lib, hkxVertexDescription__ElementDecl *obj, const uint8* src);
-void hkxVertexDescription__ElementDecl_print(const hkxVertexDescription__ElementDecl *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxVertexDescription__ElementDecl_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxVertexDescription__ElementDecl *obj, const uint8* src);
+void hkxVertexDescription__ElementDecl_print(const hkxVertexDescription__ElementDecl *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxVertexDescription__ElementDecl_free(hkxVertexDescription__ElementDecl *obj);
 
-void hkpConstraintAtom__SolvingMethod_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hkpConstraintAtom__SolvingMethod_hkUint8 *obj, const uint8* src);
-void hkpConstraintAtom__SolvingMethod_hkUint8_print(const hkpConstraintAtom__SolvingMethod_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkReflect__Any_read(const TagFile *tf, const HavokTypeLib* lib, hkReflect__Any *obj, const uint8* src);
-void hkReflect__Any_print(const hkReflect__Any *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkpConstraintAtom__SolvingMethod_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkpConstraintAtom__SolvingMethod_hkUint8 *obj, const uint8* src);
+void hkpConstraintAtom__SolvingMethod_hkUint8_print(const hkpConstraintAtom__SolvingMethod_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkReflect__Any_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkReflect__Any *obj, const uint8* src);
+void hkReflect__Any_print(const hkReflect__Any *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkReflect__Any_free(hkReflect__Any *obj);
 
-void hknpConvexPolytopeShape_read(const TagFile *tf, const HavokTypeLib* lib, hknpConvexPolytopeShape *obj, const uint8* src);
-void hknpConvexPolytopeShape_print(const hknpConvexPolytopeShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpConvexPolytopeShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpConvexPolytopeShape *obj, const uint8* src);
+void hknpConvexPolytopeShape_print(const hknpConvexPolytopeShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpConvexPolytopeShape_free(hknpConvexPolytopeShape *obj);
 
-void hkRefPtr_hknpConvexPolytopeShape__Connectivity_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpConvexPolytopeShape__Connectivity *obj, const uint8* src);
-void hkRefPtr_hknpConvexPolytopeShape__Connectivity_print(const hkRefPtr_hknpConvexPolytopeShape__Connectivity *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hknpConvexPolytopeShape__Connectivity_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpConvexPolytopeShape__Connectivity *obj, const uint8* src);
+void hkRefPtr_hknpConvexPolytopeShape__Connectivity_print(const hkRefPtr_hknpConvexPolytopeShape__Connectivity *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpConvexPolytopeShape__Connectivity_free(hkRefPtr_hknpConvexPolytopeShape__Connectivity *obj);
 
-void hkArray_hkxAttribute_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkxAttribute_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkxAttribute_hkContainerHeapAllocator_print(const hkArray_hkxAttribute_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkxAttribute_hkContainerHeapAllocator_print(const hkArray_hkxAttribute_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkxAttribute_hkContainerHeapAllocator_free(hkArray_hkxAttribute_hkContainerHeapAllocator *obj);
 
-void hkaiStreamingSet__VolumeConnection_read(const TagFile *tf, const HavokTypeLib* lib, hkaiStreamingSet__VolumeConnection *obj, const uint8* src);
-void hkaiStreamingSet__VolumeConnection_print(const hkaiStreamingSet__VolumeConnection *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiStreamingSet__VolumeConnection_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiStreamingSet__VolumeConnection *obj, const uint8* src);
+void hkaiStreamingSet__VolumeConnection_print(const hkaiStreamingSet__VolumeConnection *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiStreamingSet__VolumeConnection_free(hkaiStreamingSet__VolumeConnection *obj);
 
-void hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_read(const TagFile *tf, const HavokTypeLib* lib, hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any *obj, const uint8* src);
-void hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_print(const hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkRefPtr_hkxIndexBuffer_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkxIndexBuffer *obj, const uint8* src);
-void hkRefPtr_hkxIndexBuffer_print(const hkRefPtr_hkxIndexBuffer *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any *obj, const uint8* src);
+void hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_print(const hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkRefPtr_hkxIndexBuffer_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkxIndexBuffer *obj, const uint8* src);
+void hkRefPtr_hkxIndexBuffer_print(const hkRefPtr_hkxIndexBuffer *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkxIndexBuffer_free(hkRefPtr_hkxIndexBuffer *obj);
 
-void hkRefPtr_hknpMaterialLibrary_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hknpMaterialLibrary *obj, const uint8* src);
-void hkRefPtr_hknpMaterialLibrary_print(const hkRefPtr_hknpMaterialLibrary *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hknpMaterialLibrary_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hknpMaterialLibrary *obj, const uint8* src);
+void hkRefPtr_hknpMaterialLibrary_print(const hkRefPtr_hknpMaterialLibrary *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hknpMaterialLibrary_free(hkRefPtr_hknpMaterialLibrary *obj);
 
-void hkArray_hkReal_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkReal_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkReal_hkContainerHeapAllocator_print(const hkArray_hkReal_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkReal_hkContainerHeapAllocator_print(const hkArray_hkReal_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkReal_hkContainerHeapAllocator_free(hkArray_hkReal_hkContainerHeapAllocator *obj);
 
-void hkPropertyId_read(const TagFile *tf, const HavokTypeLib* lib, hkPropertyId *obj, const uint8* src);
-void hkPropertyId_print(const hkPropertyId *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkPropertyId_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkPropertyId *obj, const uint8* src);
+void hkPropertyId_print(const hkPropertyId *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkPropertyId_free(hkPropertyId *obj);
 
-void hkAabb_read(const TagFile *tf, const HavokTypeLib* lib, hkAabb *obj, const uint8* src);
-void hkAabb_print(const hkAabb *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkAabb_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkAabb *obj, const uint8* src);
+void hkAabb_print(const hkAabb *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkAabb_free(hkAabb *obj);
 
-void hknpCapsuleShape_read(const TagFile *tf, const HavokTypeLib* lib, hknpCapsuleShape *obj, const uint8* src);
-void hknpCapsuleShape_print(const hknpCapsuleShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpCapsuleShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpCapsuleShape *obj, const uint8* src);
+void hknpCapsuleShape_print(const hknpCapsuleShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpCapsuleShape_free(hknpCapsuleShape *obj);
 
-void CPfxPartIndexProperty_read(const TagFile *tf, const HavokTypeLib* lib, CPfxPartIndexProperty *obj, const uint8* src);
-void CPfxPartIndexProperty_print(const CPfxPartIndexProperty *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void CPfxPartIndexProperty_read(const TagFile *tf, const Havok_TypeLibrary* lib, CPfxPartIndexProperty *obj, const uint8* src);
+void CPfxPartIndexProperty_print(const CPfxPartIndexProperty *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void CPfxPartIndexProperty_free(CPfxPartIndexProperty *obj);
 
-void hknpExternMeshShapeData_read(const TagFile *tf, const HavokTypeLib* lib, hknpExternMeshShapeData *obj, const uint8* src);
-void hknpExternMeshShapeData_print(const hknpExternMeshShapeData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpExternMeshShapeData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpExternMeshShapeData *obj, const uint8* src);
+void hknpExternMeshShapeData_print(const hknpExternMeshShapeData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpExternMeshShapeData_free(hknpExternMeshShapeData *obj);
 
-void CPfxBreakableShapeCollection_read(const TagFile *tf, const HavokTypeLib* lib, CPfxBreakableShapeCollection *obj, const uint8* src);
-void CPfxBreakableShapeCollection_print(const CPfxBreakableShapeCollection *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void CPfxBreakableShapeCollection_read(const TagFile *tf, const Havok_TypeLibrary* lib, CPfxBreakableShapeCollection *obj, const uint8* src);
+void CPfxBreakableShapeCollection_print(const CPfxBreakableShapeCollection *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void CPfxBreakableShapeCollection_free(CPfxBreakableShapeCollection *obj);
 
-void hkxVertexBuffer__VertexData_read(const TagFile *tf, const HavokTypeLib* lib, hkxVertexBuffer__VertexData *obj, const uint8* src);
-void hkxVertexBuffer__VertexData_print(const hkxVertexBuffer__VertexData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxVertexBuffer__VertexData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxVertexBuffer__VertexData *obj, const uint8* src);
+void hkxVertexBuffer__VertexData_print(const hkxVertexBuffer__VertexData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxVertexBuffer__VertexData_free(hkxVertexBuffer__VertexData *obj);
 
-void hkMatrix4_read(const TagFile *tf, const HavokTypeLib* lib, hkMatrix4 *obj, const uint8* src);
-void hkMatrix4_print(const hkMatrix4 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkFlags_hknpShape__FlagsEnum_hkUint16_read(const TagFile *tf, const HavokTypeLib* lib, hkFlags_hknpShape__FlagsEnum_hkUint16 *obj, const uint8* src);
-void hkFlags_hknpShape__FlagsEnum_hkUint16_print(const hkFlags_hknpShape__FlagsEnum_hkUint16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hknpShapeTagCodec_read(const TagFile *tf, const HavokTypeLib* lib, hknpShapeTagCodec *obj, const uint8* src);
-void hknpShapeTagCodec_print(const hknpShapeTagCodec *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkMatrix4_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkMatrix4 *obj, const uint8* src);
+void hkMatrix4_print(const hkMatrix4 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkFlags_hknpShape__FlagsEnum_hkUint16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFlags_hknpShape__FlagsEnum_hkUint16 *obj, const uint8* src);
+void hkFlags_hknpShape__FlagsEnum_hkUint16_print(const hkFlags_hknpShape__FlagsEnum_hkUint16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hknpShapeTagCodec_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpShapeTagCodec *obj, const uint8* src);
+void hknpShapeTagCodec_print(const hknpShapeTagCodec *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpShapeTagCodec_free(hknpShapeTagCodec *obj);
 
-void hkaAnimatedReferenceFrame_read(const TagFile *tf, const HavokTypeLib* lib, hkaAnimatedReferenceFrame *obj, const uint8* src);
-void hkaAnimatedReferenceFrame_print(const hkaAnimatedReferenceFrame *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaAnimatedReferenceFrame_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaAnimatedReferenceFrame *obj, const uint8* src);
+void hkaAnimatedReferenceFrame_print(const hkaAnimatedReferenceFrame *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaAnimatedReferenceFrame_free(hkaAnimatedReferenceFrame *obj);
 
-void hkRefPtr_hkaiNavMeshClearanceCache_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkaiNavMeshClearanceCache *obj, const uint8* src);
-void hkRefPtr_hkaiNavMeshClearanceCache_print(const hkRefPtr_hkaiNavMeshClearanceCache *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkaiNavMeshClearanceCache_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkaiNavMeshClearanceCache *obj, const uint8* src);
+void hkRefPtr_hkaiNavMeshClearanceCache_print(const hkRefPtr_hkaiNavMeshClearanceCache *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkaiNavMeshClearanceCache_free(hkRefPtr_hkaiNavMeshClearanceCache *obj);
 
-void hkVector4_read(const TagFile *tf, const HavokTypeLib* lib, hkVector4 *obj, const uint8* src);
-void hkVector4_print(const hkVector4 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaSkeletonMapperData_read(const TagFile *tf, const HavokTypeLib* lib, hkaSkeletonMapperData *obj, const uint8* src);
-void hkaSkeletonMapperData_print(const hkaSkeletonMapperData *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkVector4_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkVector4 *obj, const uint8* src);
+void hkVector4_print(const hkVector4 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaSkeletonMapperData_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaSkeletonMapperData *obj, const uint8* src);
+void hkaSkeletonMapperData_print(const hkaSkeletonMapperData *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaSkeletonMapperData_free(hkaSkeletonMapperData *obj);
 
-void hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator_print(const hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator_print(const hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator_free(hkArray_hkaSkeletonMapperData__PartitionMappingRange_hkContainerHeapAllocator *obj);
 
-void hknpBodyQualityLibrary_read(const TagFile *tf, const HavokTypeLib* lib, hknpBodyQualityLibrary *obj, const uint8* src);
-void hknpBodyQualityLibrary_print(const hknpBodyQualityLibrary *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpBodyQualityLibrary_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpBodyQualityLibrary *obj, const uint8* src);
+void hknpBodyQualityLibrary_print(const hknpBodyQualityLibrary *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpBodyQualityLibrary_free(hknpBodyQualityLibrary *obj);
 
-void SPartShapeInfo_read(const TagFile *tf, const HavokTypeLib* lib, SPartShapeInfo *obj, const uint8* src);
-void SPartShapeInfo_print(const SPartShapeInfo *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void SPartShapeInfo_read(const TagFile *tf, const Havok_TypeLibrary* lib, SPartShapeInfo *obj, const uint8* src);
+void SPartShapeInfo_print(const SPartShapeInfo *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void SPartShapeInfo_free(SPartShapeInfo *obj);
 
-void hkQuaternion_read(const TagFile *tf, const HavokTypeLib* lib, hkQuaternion *obj, const uint8* src);
-void hkQuaternion_print(const hkQuaternion *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkaiIndex_hkInt32_read(const TagFile *tf, const HavokTypeLib* lib, hkaiIndex_hkInt32 *obj, const uint8* src);
-void hkaiIndex_hkInt32_print(const hkaiIndex_hkInt32 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkPtrAndInt_hkPropertyDesc_unsigned_int_1_read(const TagFile *tf, const HavokTypeLib* lib, hkPtrAndInt_hkPropertyDesc_unsigned_int_1 *obj, const uint8* src);
-void hkPtrAndInt_hkPropertyDesc_unsigned_int_1_print(const hkPtrAndInt_hkPropertyDesc_unsigned_int_1 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkQuaternion_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkQuaternion *obj, const uint8* src);
+void hkQuaternion_print(const hkQuaternion *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkaiIndex_hkInt32_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiIndex_hkInt32 *obj, const uint8* src);
+void hkaiIndex_hkInt32_print(const hkaiIndex_hkInt32 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkPtrAndInt_hkPropertyDesc_unsigned_int_1_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkPtrAndInt_hkPropertyDesc_unsigned_int_1 *obj, const uint8* src);
+void hkPtrAndInt_hkPropertyDesc_unsigned_int_1_print(const hkPtrAndInt_hkPropertyDesc_unsigned_int_1 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkPtrAndInt_hkPropertyDesc_unsigned_int_1_free(hkPtrAndInt_hkPropertyDesc_unsigned_int_1 *obj);
 
-void hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8 *obj, const uint8* src);
-void hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8_print(const hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator_print(const hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8 *obj, const uint8* src);
+void hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8_print(const hkFlags_hkaiNavMesh__EdgeFlagBits_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator_print(const hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator_free(hkArray_hkaiNavMesh__Face_hkContainerHeapAllocator *obj);
 
-void hkArray_hkAabb_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkAabb_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkAabb_hkContainerHeapAllocator_print(const hkArray_hkAabb_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkAabb_hkContainerHeapAllocator_print(const hkArray_hkAabb_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkAabb_hkContainerHeapAllocator_free(hkArray_hkAabb_hkContainerHeapAllocator *obj);
 
-void hkaiFaceEdgeIndexPair_read(const TagFile *tf, const HavokTypeLib* lib, hkaiFaceEdgeIndexPair *obj, const uint8* src);
-void hkaiFaceEdgeIndexPair_print(const hkaiFaceEdgeIndexPair *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkaiFaceEdgeIndexPair_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkaiFaceEdgeIndexPair *obj, const uint8* src);
+void hkaiFaceEdgeIndexPair_print(const hkaiFaceEdgeIndexPair *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkaiFaceEdgeIndexPair_free(hkaiFaceEdgeIndexPair *obj);
 
-void hkArray_hkTransform_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkTransform_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkTransform_hkContainerHeapAllocator_print(const hkArray_hkTransform_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkTransform_hkContainerHeapAllocator_print(const hkArray_hkTransform_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkTransform_hkContainerHeapAllocator_free(hkArray_hkTransform_hkContainerHeapAllocator *obj);
 
-void CPfxFloatShapeProperty_read(const TagFile *tf, const HavokTypeLib* lib, CPfxFloatShapeProperty *obj, const uint8* src);
-void CPfxFloatShapeProperty_print(const CPfxFloatShapeProperty *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void CPfxFloatShapeProperty_read(const TagFile *tf, const Havok_TypeLibrary* lib, CPfxFloatShapeProperty *obj, const uint8* src);
+void CPfxFloatShapeProperty_print(const CPfxFloatShapeProperty *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void CPfxFloatShapeProperty_free(CPfxFloatShapeProperty *obj);
 
-void hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator_read(const TagFile *tf, const HavokTypeLib* lib, hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator *obj, const uint8* src);
-void hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator_print(const hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator_print(const hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator_free(hkArray_hkaiStreamingSet__NavMeshConnection_hkContainerHeapAllocator *obj);
 
-void hknpMaterial__TriggerType_hkUint8_read(const TagFile *tf, const HavokTypeLib* lib, hknpMaterial__TriggerType_hkUint8 *obj, const uint8* src);
-void hknpMaterial__TriggerType_hkUint8_print(const hknpMaterial__TriggerType_hkUint8 *obj, const HavokTypeLib* lib, JsonContext *ctx);
-void hknpShape_read(const TagFile *tf, const HavokTypeLib* lib, hknpShape *obj, const uint8* src);
-void hknpShape_print(const hknpShape *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hknpMaterial__TriggerType_hkUint8_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpMaterial__TriggerType_hkUint8 *obj, const uint8* src);
+void hknpMaterial__TriggerType_hkUint8_print(const hknpMaterial__TriggerType_hkUint8 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
+void hknpShape_read(const TagFile *tf, const Havok_TypeLibrary* lib, hknpShape *obj, const uint8* src);
+void hknpShape_print(const hknpShape *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hknpShape_free(hknpShape *obj);
 
-void hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet_read(const TagFile *tf, const HavokTypeLib* lib, hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj, const uint8* src);
-void hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet_print(const hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj, const uint8* src);
+void hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet_print(const hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet_free(hkRefPtr_hkaiNavMeshClearanceCacheSeeding__CacheDataSet *obj);
 
-void hkHalf16_read(const TagFile *tf, const HavokTypeLib* lib, hkHalf16 *obj, const uint8* src);
-void hkHalf16_print(const hkHalf16 *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkHalf16_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkHalf16 *obj, const uint8* src);
+void hkHalf16_print(const hkHalf16 *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkHalf16_free(hkHalf16 *obj);
 
-void hkxMaterial__Property_read(const TagFile *tf, const HavokTypeLib* lib, hkxMaterial__Property *obj, const uint8* src);
-void hkxMaterial__Property_print(const hkxMaterial__Property *obj, const HavokTypeLib* lib, JsonContext *ctx);
+void hkxMaterial__Property_read(const TagFile *tf, const Havok_TypeLibrary* lib, hkxMaterial__Property *obj, const uint8* src);
+void hkxMaterial__Property_print(const hkxMaterial__Property *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);
 void hkxMaterial__Property_free(hkxMaterial__Property *obj);
 
-void HAVOK_TYPES_register_functions(HavokTypeLib* lib);
+void HAVOK_TYPES_register_functions(Havok_TypeLibrary* lib);

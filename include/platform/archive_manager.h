@@ -20,7 +20,7 @@ bool ArchiveManager_get_file(ArchiveManager *manager, const String *path, Memory
 
 bool ArchiveManager_get_file_by_hash(ArchiveManager *manager, uint32 path, MemoryBuffer *mb);
 
-bool ArchiveManager_has_file(const ArchiveManager *manager, String *path);
+bool ArchiveManager_has_file(const ArchiveManager *manager, const String *path);
 
 bool ArchiveManager_has_file_by_hash(const ArchiveManager *manager, uint32 hash);
 
