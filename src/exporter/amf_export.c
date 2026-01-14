@@ -6,6 +6,7 @@
 #include "exporter/common_export.h"
 #include "exporter/ddsc_export.h"
 #include "havok/havok_codegen.h"
+#include "platform/texture_ops.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
 
@@ -486,31 +487,52 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                     const String *normal_path = DM_get(&lib->hash_strings, amf_material->Textures.items[1]);
                     const String *orm_path = DM_get(&lib->hash_strings, amf_material->Textures.items[2]);
                     const String *emission_path = DM_get(&lib->hash_strings, amf_material->Textures.items[4]);
+                    Texture *diffuse_texture = NULL;
+                    Texture *normal_texture = NULL;
+                    Texture *orm_texture = NULL;
+                    Texture *emission_texture = NULL;
 
-                    if (diffuse_path != NULL && diffuse_path->size>0) {
-                        Texture *diffuse_texture = convert_ddsc(archive_manager, diffuse_path);
-                        GLTFContext_material_set_diffuse_texture_from_data(context, diffuse_path, material_id, diffuse_texture);
+                    if (diffuse_path != NULL && diffuse_path->size > 0) {
+                        diffuse_texture = convert_ddsc(archive_manager, diffuse_path);
+                        GLTFContext_material_set_diffuse_texture_from_data(
+                            context, diffuse_path, material_id, diffuse_texture);
+                    }
+                    if (normal_path != NULL && normal_path->size > 0) {
+                        normal_texture = convert_ddsc(archive_manager, normal_path);
+                        GLTFContext_material_set_normal_from_data(context, normal_path, material_id, normal_texture);
+                    }
+                    if (orm_path != NULL && orm_path->size > 0) {
+                        orm_texture = convert_ddsc(archive_manager, orm_path);
+                        GLTFContext_material_set_roughness_metallic_from_data(
+                            context, orm_path, material_id, orm_texture);
+                    }
+                    if (emission_path != NULL && emission_path->size > 0) {
+                        emission_texture = convert_ddsc(archive_manager, emission_path);
+                        if (constants->UseEmissive && !constants->EmissiveTextureHasColor && diffuse_texture != NULL) {
+                            Texture *new_emission_texture = TextureOps_multiply(diffuse_texture, emission_texture);
+                            if (new_emission_texture != NULL) {
+                                Texture_free(emission_texture);
+                                emission_texture = new_emission_texture;
+                            }
+                        }
+                        GLTFContext_material_set_emissive_from_data(context, emission_path, material_id,
+                                                                    emission_texture);
+                    }
+
+                    if (diffuse_texture != NULL) {
                         Texture_free(diffuse_texture);
                     }
-                    if (normal_path != NULL && normal_path->size>0) {
-                        Texture *normal_texture = convert_ddsc(archive_manager, normal_path);
-
-                        GLTFContext_material_set_normal_from_data(context, normal_path, material_id, normal_texture);
+                    if (normal_texture != NULL) {
                         Texture_free(normal_texture);
                     }
-                    if (orm_path != NULL && orm_path->size>0) {
-                        Texture *orm_texture = convert_ddsc(archive_manager, orm_path);
-                        GLTFContext_material_set_roughness_metallic_from_data(context, orm_path, material_id, orm_texture);
+                    if (orm_texture != NULL) {
                         Texture_free(orm_texture);
                     }
-                    if (emission_path != NULL && emission_path->size>0) {
-                        Texture *emission_texture = convert_ddsc(archive_manager, emission_path);
-                        GLTFContext_material_set_emissive_from_data(context, emission_path, material_id, emission_texture);
+                    if (emission_texture != NULL) {
                         Texture_free(emission_texture);
                     }
                 }
-            }
-            else {
+            } else {
                 printf("Unsupported material render block: %s\n", String_data(render_block_id));
                 continue;
             }
@@ -535,9 +557,10 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         return model_root_node_id;
     }
 
-    const GL_ID mesh_root_node = export_adf_file(context, archive_manager, lib, havok_lib, hash_string(mesh_path), mesh_path,
-                                           &mb,
-                                           export_path);
+    const GL_ID mesh_root_node = export_adf_file(context, archive_manager, lib, havok_lib, hash_string(mesh_path),
+                                                 mesh_path,
+                                                 &mb,
+                                                 export_path);
     GLTFContext_node_set_parent(context, mesh_root_node, model_root_node_id);
 
     mb.close(&mb);

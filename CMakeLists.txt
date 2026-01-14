@@ -49,6 +49,7 @@ add_executable(ApexPredator
         src/exporter/ddsc_export.c
         src/exporter/epe_export.c
         src/exporter/havok_export.c
+        src/platform/texture_ops.c
 )
 
 add_executable(AdfTypeGenerator
