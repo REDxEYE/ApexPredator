@@ -4,8 +4,13 @@
 #define APEXPREDATOR_DDSC_EXPORT_H
 #include "apex/adf/sti.h"
 #include "platform/archive_manager.h"
+#include "platform/texture.h"
 
-void export_ddsc(ArchiveManager *archive_manager, STI_TypeLibrary *lib, uint32 hash, MemoryBuffer *mb,
+Texture* convert_ddsc(ArchiveManager* archive_manager, const String* path);
+
+String* export_ddsc_to_file(ArchiveManager *archive_manager, const String *path, const String *export_path);
+
+void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
                  const String *path,
                  const String *export_path);
 

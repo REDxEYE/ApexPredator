@@ -66,6 +66,10 @@ void String_init(String *string, uint32 size) {
 }
 
 String *String_from_cstr(String *string, const char *str) {
+    if (str==NULL) {
+        String_init(string, 0);
+        return string;
+    }
     const size_t len = strlen(str);
     assert(len<UINT32_MAX && "Input CStr is to long");
     String_init(string, len);
@@ -74,6 +78,21 @@ String *String_from_cstr(String *string, const char *str) {
     string->size = len;
 
     return string;
+}
+
+bool String_ends_with(const String *string, const String *suffix) {
+    if (suffix->size > string->size) {
+        return false;
+    }
+    return memcmp(string->buffer + string->size - suffix->size, suffix->buffer, suffix->size) == 0;
+}
+
+bool String_cends_with(const String *string, const char *suffix) {
+    size_t suffix_len = strlen(suffix);
+    if (suffix_len > string->size) {
+        return false;
+    }
+    return memcmp(string->buffer + string->size - suffix_len, suffix, suffix_len) == 0;
 }
 
 const char *String_data(const String *string) {
@@ -87,7 +106,7 @@ const char *String_data(const String *string) {
     return string->buffer;
 }
 
-void String_append_cstr(String *string, char *str) {
+void String_append_cstr(String *string, const char *str) {
     if (!str) return;
     uint32 str_len = (uint32) strlen(str);
     String_append_cstr2(string, str, str_len);
@@ -183,6 +202,28 @@ void String_append_format(String *string, const char *fmt, ...) {
     vsnprintf(string->buffer + string->size, string->capacity - string->size, fmt, args);
     va_end(args);
     string->size += needed;
+}
+
+void String_prepend_format(String *string, const char *fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    const int needed = vsnprintf(NULL, 0, fmt, args);
+    va_end(args);
+    if (needed < 0) {
+        return;
+    }
+    if (string->size + needed + 1 > string->capacity) {
+        String_resize(string, string->size + needed);
+    }
+
+    memmove(string->buffer + needed, string->buffer, string->size);
+
+    const char tmp_char = string->buffer[0];
+    va_start(args, fmt);
+    vsnprintf(string->buffer, needed + 1, fmt, args);
+    va_end(args);
+    string->buffer[needed] = tmp_char;
+    string->size += needed+1;
 }
 
 bool String_equals(const String *string, const String *other) {

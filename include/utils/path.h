@@ -12,6 +12,12 @@ typedef String Path;
 
 DYNAMIC_ARRAY_STRUCT(Path, Path);
 
+void Path_normalize_native(Path* path);
+void Path_normalize_posix(Path* path);
+void Path_normalize_windows(Path* path);
+void Path_replace_invalid_fs_chars(Path* filename, char replacement);
+
+void Path_get_parent(const Path *path, Path *out_parent);
 
 int Path_ensure_dirs(const Path *path);
 
@@ -44,6 +50,7 @@ void Path_convert_to_wsl(Path *out, Path *in);
 void Path_rglob(const Path *path, const String *ext, DynamicArray_Path* out);
 
 void Path_remove_extension(const Path* path, Path* extensionless);
+void Path_replace_extension(const Path* path, const char* new_extension, Path* out);
 
 void Path_filename(const Path* path, Path* filename);
 

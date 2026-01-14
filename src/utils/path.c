@@ -156,6 +156,97 @@ static void Path__append_normalized(Path *base, const char *component, uint32_t 
     }
 }
 
+void Path_normalize_native(Path *path) {
+    const char *s = String_data(path);
+    uint32_t len = path->size;
+    if (len == 0) return;
+
+    String normalized = {0};
+    String_init(&normalized, len);
+
+    for (uint32_t i = 0; i < len; ++i) {
+        char c = s[i];
+        if (Path__is_sep(c)) c = PATH_NATIVE_SEP;
+        String_append_cstr2(&normalized, &c, 1);
+    }
+
+    String_free(path);
+    *path = normalized;
+}
+
+void Path_normalize_posix(Path *path) {
+    const char *s = String_data(path);
+    uint32_t len = path->size;
+    if (len == 0) return;
+
+    String normalized = {0};
+    String_init(&normalized, len);
+
+    for (uint32_t i = 0; i < len; ++i) {
+        char c = s[i];
+        if (Path__is_sep(c)) c = '/';
+        String_append_cstr2(&normalized, &c, 1);
+    }
+
+    String_free(path);
+    *path = normalized;
+}
+
+void Path_normalize_windows(Path *path) {
+    const char *s = String_data(path);
+    uint32_t len = path->size;
+    if (len == 0) return;
+
+    String normalized = {0};
+    String_init(&normalized, len);
+
+    for (uint32_t i = 0; i < len; ++i) {
+        char c = s[i];
+        if (Path__is_sep(c)) c = '\\';
+        String_append_cstr2(&normalized, &c, 1);
+    }
+
+    String_free(path);
+    *path = normalized;
+}
+
+void Path_replace_invalid_fs_chars(Path *filename, const char replacement) {
+    char *s = filename->buffer;
+    const uint32_t len = filename->size;
+    if (len == 0) return;
+
+    for (uint32_t i = 0; i < len; ++i) {
+        char c = s[i];
+        if (c < 32 || c == '<' || c == '>' || c == '|' || c == '"' || c == '?' || c == '*' || c == ':' || c=='/' || c=='\\') {
+            c = replacement;
+        }
+        s[i] = c;
+    }
+}
+
+void Path_get_parent(const Path *path, Path *out_parent) {
+    const char *s = String_data(path);
+    const uint32_t len = path->size;
+    if (len == 0) {
+        String_resize(out_parent, 0);
+        return;
+    }
+
+    int32_t last_sep = -1;
+    for (int32_t i = (int32_t) len - 1; i >= 0; --i) {
+        if (Path__is_sep(s[i])) {
+            last_sep = i;
+            break;
+        }
+    }
+    if (last_sep < 0) {
+        String_resize(out_parent, 0);
+        return;
+    }
+    String_init(out_parent, last_sep);
+    String_append_format(out_parent, "%.*s", (int) last_sep, s);
+}
+
 /*
  Ensures all directories in the given path exist. Treats a trailing separator
  as a directory. Returns 0 on success, -1 on error (errno set).
@@ -352,6 +443,36 @@ void Path_remove_extension(const Path *path, Path *extensionless) {
         String_copy_from(extensionless, path);
     } else {
         String_append_cstr2(extensionless, s, (uint32_t) last_dot);
+    }
+}
+
+void Path_replace_extension(const Path *path, const char *new_extension, Path *out) {
+    const size_t ext_size = new_extension ? strlen(new_extension) : 0;
+    const char *s = String_data(path);
+    int32_t last_dot = -1;
+    for (int32_t i = (int32_t) path->size - 1; i >= 0; --i) {
+        if (s[i] == '.') {
+            last_dot = i;
+            break;
+        }
+        if (Path__is_sep(s[i])) {
+            break;
+        }
+    }
+    if (last_dot < 0) {
+        String_init(out, path->size + (uint32_t) ext_size + 1);
+        String_copy_from(out, path);
+        if (new_extension && new_extension[0] != '\0') {
+            String_append_cstr(out, ".");
+            String_append_cstr(out, new_extension);
+        }
+    } else {
+        String_init(out, last_dot + (uint32_t) ext_size + 1);
+        String_append_cstr2(out, s, (uint32_t) last_dot);
+        if (new_extension && new_extension[0] != '\0') {
+            String_append_cstr(out, ".");
+            String_append_cstr(out, new_extension);
+        }
     }
 }
 

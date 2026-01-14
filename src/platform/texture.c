@@ -7,7 +7,15 @@
 #include "utils/path.h"
 #include "utils/stb_image_write.h"
 
-void Texture_init(Texture *texture, int32 width, int32 height, int32 depth, uint16 bpc, uint16 channel_count) {
+Texture *Texture_new() {
+    Texture *texture = malloc(sizeof(Texture));
+    memset(texture, 0, sizeof(Texture));
+    texture->heap_allocated = 1;
+    return texture;
+}
+
+void Texture_init(Texture *texture, const int32 width, const int32 height, const int32 depth,
+                  const uint16 bpc, const uint16 channel_count) {
     texture->width = width;
     texture->height = height;
     texture->depth = depth;
@@ -17,7 +25,8 @@ void Texture_init(Texture *texture, int32 width, int32 height, int32 depth, uint
     texture->data_size = 0;
 }
 
-void Texture__decode_texture(Texture *texture, const uint8 *input, uint32 input_size, DDSDXGIFormat format) {
+void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 input_size,
+                             const DDSDXGIFormat format) {
     const uint32 expected_size = texture->width * texture->height * texture->depth * texture->channel_count * texture->
                                  bpc;
     if (texture->data == NULL || texture->data_size != expected_size) {
@@ -263,15 +272,61 @@ void Texture_save(const Texture *texture, const String *path_without_ext) {
     }
 }
 
+unsigned char *stbi_write_png_to_mem(const unsigned char *pixels, int stride_bytes, int x, int y, int n, int *out_len);
+
+void *Texture_write_png_to_memory(const Texture *texture, uint32 *channel_count, size_t *out_size) {
+    if (out_size == NULL) {
+        printf("[ERROR]: out_size pointer is NULL\n");
+        assert(false && "out_size pointer is NULL");
+        return NULL;
+    }
+    if (texture->data == NULL || texture->data_size == 0) {
+        printf("[WARNING]: Texture data is empty, cannot write to memory\n");
+        return NULL;
+    }
+    if (texture->bpc != 1) {
+        printf("[ERROR]: Unsupported bpc for PNG output: %d\n", texture->bpc);
+        assert(false && "Unsupported bpc for PNG output");
+        return NULL;
+    }
+    if (texture->is_float) {
+        printf("[ERROR]: Cannot write float texture to PNG format\n");
+        assert(false && "Cannot write float texture to PNG format");
+        return NULL;
+    }
+
+    const int32 comp = (int32) texture->channel_count;
+    if (comp < 1 || comp > 4) {
+        printf("[ERROR]: Unsupported channel count for PNG output: %d\n", texture->channel_count);
+        assert(false && "Unsupported channel count for PNG output");
+        return NULL;
+    }
+    uint8 *png_data = NULL;
+    const int32 stride = texture->width * texture->channel_count * texture->bpc;
+    int32 png_size = 0;
+    png_data = stbi_write_png_to_mem(texture->data, stride, texture->width, texture->height, comp, &png_size);
+    if (channel_count) {
+        *channel_count = texture->channel_count;
+    }
+    *out_size = png_size;
+
+    return png_data;
+}
+
 void Texture_free(Texture *texture) {
     if (texture->data) {
         free(texture->data);
         texture->data = NULL;
     }
     texture->data_size = 0;
+
+    if (texture->heap_allocated) {
+        free(texture);
+    }
 }
 
-uint32 Texture_calculate_mip_size(uint32 mip, uint32 width, uint32 height, DDSDXGIFormat format) {
+uint32 Texture_calculate_mip_size(const uint32 mip, const uint32 width, const uint32 height,
+                                  const DDSDXGIFormat format) {
     uint32 mip_width = width >> mip;
     uint32 mip_height = height >> mip;
     if (mip_width == 0) mip_width = 1;

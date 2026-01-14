@@ -8,6 +8,7 @@
 
 #include "int_def.h"
 #include "platform/common_arrays.h"
+#include "platform/texture.h"
 #include "utils/dynamic_array.h"
 #include "utils/string.h"
 
@@ -24,9 +25,15 @@ DYNAMIC_ARRAY_STRUCT(cgltf_buffer_view, cgltf_buffer_view);
 DYNAMIC_ARRAY_STRUCT(cgltf_attribute, cgltf_attribute);
 
 DYNAMIC_ARRAY_STRUCT(cgltf_material, cgltf_material);
+DYNAMIC_ARRAY_STRUCT(cgltf_texture, cgltf_texture);
+DYNAMIC_ARRAY_STRUCT(cgltf_image, cgltf_image);
 DYNAMIC_ARRAY_STRUCT(cgltf_skin, cgltf_skin);
+DYNAMIC_ARRAY_STRUCT(DynamicArray_uint8, data_buffer);
 
 DYNAMIC_ARRAY_STRUCT(uint32, rootNodeIds);
+
+typedef struct { uint32_t v; } D_ID;
+typedef struct { void* v; } TagD_ID;
 
 typedef struct { uint32_t v; } GL_ID;
 typedef struct { void* v; } TagGL_ID;
@@ -34,6 +41,7 @@ typedef struct { void* v; } TagGL_ID;
 #define INVALID_GL_ID (GL_ID){UINT32_MAX}
 
 #define IS_VALID_GL_ID(gl_id) ((gl_id).v != UINT32_MAX)
+#define IS_VALID_D_ID(d_id)  ((d_id).v != UINT32_MAX)
 
 DYNAMIC_ARRAY_STRUCT(GL_ID, GL_ID);
 #define MAX_GLTFCONTEXT_SKIN_STACK_DEPTH 64
@@ -52,14 +60,20 @@ typedef struct GLTFContext {
     DynamicArray_cgltf_buffer_view buffer_views;
     DynamicArray_rootNodeIds scene_node_ids;
     DynamicArray_cgltf_material materials;
+    DynamicArray_cgltf_texture textures;
+    DynamicArray_cgltf_image images;
 
     DynamicArray_GL_ID skin_stack;
+
+    DynamicArray_data_buffer raw_buffers;
 
     bool finalized;
 } GLTFContext;
 
-static inline TagGL_ID gltf_tag_index(GL_ID idx) { return (TagGL_ID){(void*)(uintptr_t)(idx.v + 1u)}; }
+static inline TagGL_ID gltf_tag_index(const GL_ID idx) { return (TagGL_ID){(void*)(uintptr_t)(idx.v + 1u)}; }
 static inline GL_ID gltf_untag_index(void *p) { return (GL_ID){((uintptr_t) p) - 1u}; }
+static inline TagD_ID gltf_tag_data_id(const D_ID id) { return (TagD_ID){(void*)(uintptr_t)(id.v + 1u)}; }
+static inline D_ID gltf_untag_data_id(const char *p) { return (D_ID){((uintptr_t) p) - 1u}; }
 
 char *GLTFContext_dupe_cstring(const char *name);
 
@@ -123,9 +137,44 @@ void GLTFContext_primitive_set_attribute_accessor(GLTFContext *ctx, GL_ID mesh_i
 
 bool GLTFContext_write_and_free(GLTFContext *ctx);
 
-GL_ID GLTFContext_add_material(GLTFContext *ctx, const char *name_opt);
+GL_ID GLTFContext_image_new(GLTFContext *ctx, const char *name_opt);
 
-GL_ID GLTFContext_find_material_by_name(GLTFContext *ctx, const char *name);
+void GLTFContext_image_set_mimetype(const GLTFContext *ctx, GL_ID image_id, const char *mimetype);
+
+// void GLTFContext_image_set_base64_data(GLTFContext *ctx, GL_ID image_id, const void *data, uint32 data_size);
+
+// void GLTFContext_image_set_url(GLTFContext *ctx, GL_ID image_id, const char *url);
+
+void GLTFContext_image_set_buffer_view(const GLTFContext *ctx, GL_ID image_id, GL_ID buffer_view_id);
+
+// void GLTFContext_image_set_data(const GLTFContext *ctx,  GL_ID image_id, D_ID data_id);
+
+GL_ID GLTFContext_texture_new(GLTFContext *ctx, const char *name_opt);
+
+GL_ID GLTFContext_texture_new_with_image(GLTFContext *ctx, const char *name_opt, GL_ID image_id);
+
+GL_ID GLTFContext_material_new(GLTFContext *ctx, const char *name_opt);
+
+bool GLTFContext_material_diffuse_present(const GLTFContext *ctx, GL_ID material_id);
+
+void GLTFContext_material_set_diffuse_texture_from_data(GLTFContext *ctx, const String* original_path,
+                                                               GL_ID material_id,
+                                                               const Texture *texture);
+
+void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const String* original_path,
+                                                     GL_ID material_id,
+                                                     const Texture *texture);
+
+void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, const String* original_path,
+                                                           GL_ID material_id,
+                                                           const Texture *texture);
+
+
+void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const String* original_path,
+                                                           GL_ID material_id,
+                                                           const Texture *texture);
+
+GL_ID GLTFContext_material_find_by_name(GLTFContext *ctx, const char *name);
 
 GL_ID GLTFContext_create_skin(GLTFContext *context, const char *name, uint32 joint_count);
 

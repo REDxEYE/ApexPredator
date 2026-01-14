@@ -4,6 +4,7 @@
 #include "apex/adf/adf.h"
 #include "exporter/adf_export.h"
 #include "exporter/common_export.h"
+#include "exporter/ddsc_export.h"
 #include "havok/havok_codegen.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
@@ -119,7 +120,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                 AmfSubMesh *sub_mesh = DA_at(&mesh->SubMeshes, sub_mesh_id);
                 String *material_name = DM_get(&lib->hash_strings, sub_mesh->SubMeshId);
 
-                GL_ID material_id = GLTFContext_find_material_by_name(context, String_data(material_name));
+                GL_ID material_id = GLTFContext_material_find_by_name(context, String_data(material_name));
 
                 cgltf_primitive *primitive = GLTFContext_mesh_get_primitive(context, gl_mesh_id, sub_mesh_id);
                 if (material_id.v != UINT32_MAX) {
@@ -325,7 +326,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                                         uint8 *vertex_data = (uint8 *) (raw_vertex_buffer_data + i * stream_stride);
                                         for (int j = 0; j < 4; ++j) {
                                             int16 bone_index = bone_lookup->items[vertex_data[j]];
-                                            ((uint16 *) bone_index_data)[i * 4 + j] = (uint16) bone_index ;
+                                            ((uint16 *) bone_index_data)[i * 4 + j] = (uint16) bone_index;
                                         }
                                     }
                                     break;
@@ -440,9 +441,9 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                        const String *path, const uint32 path_hash, const String *export_path) {
     assert(context!=NULL && "context must be initialized");
 
-    String model_export_path = {};
-    String model_without_ext = {};
-    String model_name = {};
+    String model_export_path = {0};
+    String model_without_ext = {0};
+    String model_name = {0};
     if (path == NULL) {
         String_init(&model_without_ext, 64);
         String_append_format(&model_without_ext, "0x%08X", path_hash);
@@ -455,19 +456,73 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
     Path_join(&model_export_path, export_path);
     Path_join(&model_export_path, &model_without_ext);
 
-    GL_ID model_root_node_id = GLTFContext_node_add(context, String_data(&model_name));
+    const GL_ID model_root_node_id = GLTFContext_node_add(context, String_data(&model_name));
     String_free(&model_name);
 
     for (int mat_id = 0; mat_id < amf_model->Materials.count; ++mat_id) {
         const AmfMaterial *amf_material = &amf_model->Materials.items[mat_id];
         const String *material_name = DM_get(&lib->hash_strings, amf_material->Name);
-        GLTFContext_add_material(context, String_data(material_name));
-        for (int tex_id = 0; tex_id < amf_material->Textures.count; ++tex_id) {
-            const String *tex_path = DM_get(&lib->hash_strings, amf_material->Textures.items[tex_id]);
-            if (tex_path->size == 0) {
-                break;
+        GL_ID material_id = GLTFContext_material_find_by_name(context, String_data(material_name));
+        if (!IS_VALID_GL_ID(material_id)) {
+            material_id = GLTFContext_material_new(context, String_data(material_name));
+            const String *render_block_id = DM_get(&lib->hash_strings, amf_material->RenderBlockId);
+            if (String_cequals(render_block_id, "GeneralR2")) {
+                if (amf_material->Attributes.type_hash != STI_TYPE_HASH_GeneralR2Constants) {
+                    printf("Unsupported GeneralR2 material attribute type: %08X\n", amf_material->Attributes.type_hash);
+                    continue;
+                }
+                const GeneralR2Constants *constants = amf_material->Attributes.data;
+                cgltf_material *mat = &context->materials.items[material_id.v];
+                mat->has_pbr_metallic_roughness = true;
+                mat->pbr_metallic_roughness.base_color_factor[0] = 1.0f;
+                mat->pbr_metallic_roughness.base_color_factor[1] = 1.0f;
+                mat->pbr_metallic_roughness.base_color_factor[2] = 1.0f;
+                mat->pbr_metallic_roughness.base_color_factor[3] = 1.0f;
+                mat->pbr_metallic_roughness.metallic_factor = 1.0f;
+                mat->pbr_metallic_roughness.roughness_factor = 1.0f;
+
+                if (amf_material->Textures.count >= 3) {
+                    const String *diffuse_path = DM_get(&lib->hash_strings, amf_material->Textures.items[0]);
+                    const String *normal_path = DM_get(&lib->hash_strings, amf_material->Textures.items[1]);
+                    const String *orm_path = DM_get(&lib->hash_strings, amf_material->Textures.items[2]);
+                    const String *emission_path = DM_get(&lib->hash_strings, amf_material->Textures.items[4]);
+
+                    if (diffuse_path != NULL && diffuse_path->size>0) {
+                        Texture *diffuse_texture = convert_ddsc(archive_manager, diffuse_path);
+                        GLTFContext_material_set_diffuse_texture_from_data(context, diffuse_path, material_id, diffuse_texture);
+                        Texture_free(diffuse_texture);
+                    }
+                    if (normal_path != NULL && normal_path->size>0) {
+                        Texture *normal_texture = convert_ddsc(archive_manager, normal_path);
+
+                        GLTFContext_material_set_normal_from_data(context, normal_path, material_id, normal_texture);
+                        Texture_free(normal_texture);
+                    }
+                    if (orm_path != NULL && orm_path->size>0) {
+                        Texture *orm_texture = convert_ddsc(archive_manager, orm_path);
+                        GLTFContext_material_set_roughness_metallic_from_data(context, orm_path, material_id, orm_texture);
+                        Texture_free(orm_texture);
+                    }
+                    if (emission_path != NULL && emission_path->size>0) {
+                        Texture *emission_texture = convert_ddsc(archive_manager, emission_path);
+                        GLTFContext_material_set_emissive_from_data(context, emission_path, material_id, emission_texture);
+                        Texture_free(emission_texture);
+                    }
+                }
             }
-            export_file(context, archive_manager, lib, havok_lib, tex_path, hash_string(tex_path), export_path);
+            else {
+                printf("Unsupported material render block: %s\n", String_data(render_block_id));
+                continue;
+            }
+            printf("Material %s -> %s\n", String_data(material_name), String_data(render_block_id));
+            for (int tex_id = 0; tex_id < amf_material->Textures.count; ++tex_id) {
+                const uint32 texture_hash = amf_material->Textures.items[tex_id];
+                const String *tex_path = DM_get(&lib->hash_strings, texture_hash);
+                if (tex_path->size == 0) {
+                    continue;
+                }
+                printf("\tSlot %i -> %s\n", tex_id, String_data(tex_path));
+            }
         }
     }
 
@@ -480,7 +535,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         return model_root_node_id;
     }
 
-    GL_ID mesh_root_node = export_adf_file(context, archive_manager, lib, havok_lib, hash_string(mesh_path), mesh_path,
+    const GL_ID mesh_root_node = export_adf_file(context, archive_manager, lib, havok_lib, hash_string(mesh_path), mesh_path,
                                            &mb,
                                            export_path);
     GLTFContext_node_set_parent(context, mesh_root_node, model_root_node_id);

@@ -43,7 +43,7 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
         // Archive_print_files((Archive *) sarc);
         AAFArchive_free(&aaf_archive);
     } else if (memcmp(mb.data, AVTX_MAGIC, 4) == 0) {
-        export_ddsc(archive_manager, lib, hash, &mb, path, export_path);
+        export_ddsc(archive_manager, hash, &mb, path, export_path);
     } else if (memcmp(mb.data, RTPC_MAGIC, 4) == 0) {
         RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) &mb);
         // RuntimeNode_print(root_node, stdout, 0);

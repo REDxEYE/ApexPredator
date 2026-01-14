@@ -29,7 +29,7 @@ String *String_from_cstr(String *string, const char *str);
 
 const char *String_data(const String *string);
 
-void String_append_cstr(String *string, char *str);
+void String_append_cstr(String *string, const char *str);
 
 void String_append_cstr2(String *string, const char *str, uint32 size);
 
@@ -50,9 +50,13 @@ void String_move_from(String *string, String *other);
 void String_format(String *string, const char *fmt, ...);
 
 void String_append_format(String *string, const char *fmt, ...);
+void String_prepend_format(String *string, const char *fmt, ...);
 
 bool String_equals(const String *string, const String *other);
 bool String_cequals(const String *string, const char* other);
+bool String_ends_with(const String *string, const String *suffix);
+bool String_cends_with(const String *string, const char *suffix);
+
 
 static inline String *String_move(String *string) {
     string->can_be_moved = 1;

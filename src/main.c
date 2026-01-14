@@ -42,21 +42,16 @@ int main(int argc, const char *argv[]) {
 
 
     String_from_cstr(&file_path, argv[2]);
-    String_from_cstr(&file_path, "editor/entities/characters/machines/dreadnought/drea_classb_load01.ee");
+    Path_normalize_posix(&file_path);
+    // String_from_cstr(&file_path, "editor/entities/characters/machines/dreadnought/drea_classb_load01.ee");
     export_file(&context, &manager, &lib, &havok_lib, &file_path, hash_string(&file_path), &export_path);
-    String_from_cstr(&file_path, "editor/entities/characters/machines/dreadnought/drea_classb_load01.epe");
-    export_file(&context, &manager, &lib, &havok_lib, &file_path, hash_string(&file_path), &export_path);
-    if (argc >= 4) {
-        String_from_cstr(&file_path, argv[3]);
-        export_file(&context, &manager, &lib, &havok_lib, &file_path, hash_string(&file_path), &export_path);
+    if (String_cends_with(&file_path, ".ee")) {
+        String epe_path = {0};
+        Path_replace_extension(&file_path, "epe", &epe_path);
+        export_file(&context, &manager, &lib, &havok_lib, &epe_path, hash_string(&epe_path), &export_path);
     }
-    // String_from_cstr(&file_path, "animations/skeletons/characters/dreadnought.bsk");
-    // export_file(&context, &manager, &lib, &havok_lib, &file_path, hash_string(&file_path), &export_path);
 
     GLTFContext_write_and_free(&context);
-
-    // String_from_cstr(&file_path, "models/characters/machines/hunter/hunter_base_prototype.modelc");
-    // export_file(&manager, &lib, &file_path, hash_string(&file_path), &export_path);
 
     ArchiveManager_free(&manager);
     STI_TypeLibrary_free(&lib);

@@ -48,17 +48,22 @@ typedef enum  {
 typedef struct {
     int32 width, height, depth;
     uint32 bpc:5;
-    uint32 channel_count:5;
+    uint32 channel_count:4;
+    uint32 heap_allocated:1;
     uint32 is_float;
     uint8* data;
     uint32 data_size;
 }Texture;
+
+Texture* Texture_new();
 
 void Texture_init(Texture* texture, int32 width, int32 height, int32 depth, uint16 bpc, uint16 channel_count);
 
 void Texture_from_dxgi(Texture* texture, DDSDXGIFormat format, int32 width, int32 height, int32 depth, const uint8* input, uint32 input_size);
 
 void Texture_save(const Texture* texture, const String* path_without_ext);
+
+void* Texture_write_png_to_memory(const Texture* texture, uint32* channel_count, size_t* out_size);
 
 void Texture_free(Texture* texture);
 
