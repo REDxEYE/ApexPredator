@@ -54,6 +54,7 @@ bool visit_ptpc_nodes(RuntimeNode * runtime_node, Context * ctx) {
         RuntimeNode* child_node = DA_at(&runtime_node->children, i);
         visit_ptpc_nodes(child_node, ctx);
     }
+    return true;
 }
 
 bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {

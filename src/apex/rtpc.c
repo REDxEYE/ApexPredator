@@ -49,7 +49,7 @@ RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
         printf("[ERROR]: Failed to read RTPC header\n");
         exit(1);
     }
-    if (header.version != 3) {
+    if (header.version < 1 || header.version > 3) {
         printf("[ERROR]: Unsupported RTPC version: %u\n", header.version);
         return NULL;
     }
@@ -295,10 +295,10 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         printf("[ERROR]: Failed to seek to node data offset: %u\n", header.data_offset);
         exit(1);
     }
-    RuntimeProp tmp={0};
+    RuntimeProp tmp = {0};
     for (int i = 0; i < header.prop_count; ++i) {
         RuntimeProp__from_buffer(&tmp, buffer);
-        if (tmp.type!=PROP_TYPE_NONE) {
+        if (tmp.type != PROP_TYPE_NONE) {
             RuntimeProp *prop = DA_append_get(&node->props);
             RuntimeProp__move_to(&tmp, prop);
         }
@@ -763,11 +763,11 @@ void RuntimeProp_emit_json(const RuntimeProp *prop, String *out, const uint32 in
             break;
         case PROP_TYPE_VEC3:
             String_append_format(out, "[%f, %f, %f]", prop->value.vec3_value[0], prop->value.vec3_value[1],
-                    prop->value.vec3_value[2]);
+                                 prop->value.vec3_value[2]);
             break;
         case PROP_TYPE_VEC4:
             String_append_format(out, "[%f, %f, %f, %f]", prop->value.vec4_value[0], prop->value.vec4_value[1],
-                    prop->value.vec4_value[2], prop->value.vec4_value[3]);
+                                 prop->value.vec4_value[2], prop->value.vec4_value[3]);
             break;
         case PROP_TYPE_MAT3X3:
             String_append_cstr(out, "[");

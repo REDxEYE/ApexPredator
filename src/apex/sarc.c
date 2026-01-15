@@ -16,7 +16,7 @@ static const String internal_sarc_name_ = {
 };
 
 bool SArchive__has_file(const SArchive *archive, const String *path) {
-    uint32 hash = hash_string(path);
+    const uint32 hash = hash_string(path);
     return DM_get(&archive->entries, hash) != NULL;
 }
 
@@ -29,7 +29,7 @@ bool SArchive__get_file_by_hash(SArchive *archive, uint32 hash, MemoryBuffer *ou
 void SArchive__free(SArchive *archive);
 
 bool SArchive__get_file(SArchive *archive, const String *path, MemoryBuffer *out) {
-    uint32 hash = hash_string(path);
+    const uint32 hash = hash_string(path);
     return SArchive__get_file_by_hash(archive, hash, out);
 }
 
