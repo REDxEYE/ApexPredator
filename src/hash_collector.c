@@ -4,129 +4,95 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "apex/rtpc.h"
+#include "apex/sarc.h"
+#include "apex/aaf/aaf.h"
 #include "utils/dynamic_array.h"
 #include "utils/string.h"
 #include "utils/path.h"
-#include "utils/buffer/buffer.h"
-
-#include "apex/package/tab.h"
 #include "apex/adf/adf.h"
+#include "apex/adf/adf_types.h"
 #include "apex/package/tab_archive.h"
-#include "apex/adf/builtin_adf.h"
-#include "apex/package/archives.h"
-#include "utils/lookup3.h"
+#include "havok/havok_codegen.h"
+#include "havok/havok_generated.h"
+#include "utils/hash_helper.h"
+#include "utils/sqlite_wrapper.h"
 
-#ifdef WIN32
-#include <Windows.h>
+typedef struct Context {
+    kvdb_t *db;
+    STI_TypeLibrary *sti_lib;
+    Havok_TypeLibrary *havok_lib;
+} Context;
 
-void find_tab_files(const char *dir, DynamicArray_String *tab_files) {
-    char search_path[MAX_PATH];
-    snprintf(search_path, MAX_PATH, "%s\\*", dir);
+bool visit_adf_file(Context *ctx, MemoryBuffer *mb) {
+    ADF adf = {0};
+    ADF_from_buffer(&adf, (Buffer *) mb, ctx->sti_lib);
+    for (int i = 0; i < adf.header.instance_count; ++i) {
+        const ADFInstance *instance = DA_at(&adf.instances, i);
+        void *instance_data = ADF_read_instance(&adf, ctx->sti_lib, instance, mb);
+        // if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
+        //     TerrainPatch* ter = instance_data;
+        //     ADF_print_instance(ctx->sti_lib, instance, instance_data, 0);
+        // }
 
-    WIN32_FIND_DATAA fd;
-    HANDLE hFind = FindFirstFileA(search_path, &fd);
-    if (hFind == INVALID_HANDLE_VALUE) return;
+        ADF_free_instance(ctx->sti_lib, instance, instance_data);
+    }
+    ADF_free(&adf);
+    return true;
+}
 
-    do {
-        if (strcmp(fd.cFileName, ".") == 0 || strcmp(fd.cFileName, "..") == 0) continue;
+bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
+    // if (memcmp(mb->data, ADF_MAGIC, 4) == 0) {
+    //     visit_adf_file(ctx, mb);
+    // }
+    if (memcmp(mb->data, AAF_MAGIC, 4) == 0) {
+        AAFArchive aaf_archive = {0};
+        AAFArchive_from_buffer(&aaf_archive, (Buffer *) mb);
+        MemoryBuffer *section_buffer = MemoryBuffer_new();
+        if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
+            printf("[ERROR]: Failed to get AAF section 0\n");
+            return false;
+        }
 
-        char full_path[MAX_PATH];
-        snprintf(full_path, MAX_PATH, "%s\\%s", dir, fd.cFileName);
+        SArchive *sarc = SArchive_new((Buffer *) section_buffer); // sarc is now owner of buffer
 
-        if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-            find_tab_files(full_path, tab_files);
-        } else {
-            const char *ext = strrchr(fd.cFileName, '.');
-            if (ext && strcmp(ext, ".tab") == 0) {
-                String *tmp = DA_append_get(tab_files);
-                String_from_cstr(tmp, full_path);
+        for (int i = 0; i < sarc->entries.values.count; ++i) {
+            const SArcEntry *entry = DA_at(&sarc->entries.values, i);
+            kv_put_u32(ctx->db, entry->hash, String_data(&entry->name));
+            MemoryBuffer file_mb = {0};
+            if (Archive_get_file_by_hash((Archive *) sarc, entry->hash, &file_mb)) {
+                visit_archive_file(ctx, &file_mb);
+                file_mb.close(&file_mb);
             }
         }
-    } while (FindNextFileA(hFind, &fd));
-    FindClose(hFind);
+        Archive_free((Archive *) sarc);
+        AAFArchive_free(&aaf_archive);
+    }else if (memcmp(mb->data, RTPC_MAGIC, 4) == 0) {
+        RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) &mb);
+        // RuntimeNode_print(root_node, stdout, 0);
+        // String epe_json = {0};
+        // String_init(&epe_json, 8192);
+        // RuntimeNode_emit_json(root_node, &epe_json, 0);
+        // printf("%s\n", String_data(&epe_json));
+        // output_node_id = export_epe(context, archive_manager, lib, havok_lib, root_node, hash, path, export_path);
+        RuntimeNode_free(root_node);
+    }
+    return true;
 }
 
-#else
-#include <dirent.h>
-#include <sys/stat.h>
-#include <limits.h>
-#include <string.h>
-#include <stdio.h>
-
-static int is_dir_path(const char *fullpath, const struct dirent *ent) {
-
-
-
-// Use d_type if available and reliable; otherwise lstat
-#ifdef DT_DIR
-if (ent&& ent->d_type!= DT_UNKNOWN) {
-        return ent->d_type == DT_DIR;
+bool visit_all_files(const Archive *ar, const ArchiveEntry *ae, void *ctx) {
+    MemoryBuffer mb = {0};
+    if (ae->path!=NULL) {
+        kv_put_u32(((Context *) ctx)->db, ae->path_hash, String_data(ae->path));
     }
-#endif
-struct stat st;
-    if (lstat(fullpath, &st)== 0) {
-        return S_ISDIR(st.st_mode);
-    }
-    return 0;
+    Archive_get_file_by_hash((Archive *) ar, ae->path_hash, &mb);
+    printf("Visiting file: %08X from archive %s\n", ae->path_hash, String_data(Archive_get_name(ar)));
+    visit_archive_file(ctx, &mb);
+    mb.close(&mb);
+
+    return true;
 }
 
-void find_tab_files(const char *dir, DynamicArray_String *tab_files) {
-    DIR *d = opendir(dir);
-    if (!d) return;
-
-    struct dirent *ent;
-    char full_path[PATH_MAX];
-
-    while ((ent = readdir(d)) != NULL) {
-        const char *name = ent->d_name;
-
-        if (name[0] == '.' && (name[1] == '\0' || (name[1] == '.' && name[2] == '\0')))
-            continue;
-
-        int n = snprintf(full_path, sizeof full_path, "%s/%s", dir, name);
-        if (n < 0 || (size_t) n >= sizeof full_path)
-            continue; // path too long, skip
-
-        if (is_dir_path(full_path, ent)) {
-            find_tab_files(full_path, tab_files);
-        } else {
-            const char *ext = strrchr(name, '.');
-            if (ext && strcmp(ext, ".tab") == 0) {
-                String_from_cstr(DA_append_get(tab_files), full_path);
-            }
-        }
-    }
-    closedir(d);
-}
-
-#endif
-
-// void collect_hash_strings(Archives* archives, DynamicArray_ArchiveEntryInfo *all_entries, STI_TypeLibrary *lib) {
-//     Archive ar = {0};
-//     ADF adf = {0};
-//     FILE *hash_file = fopen("./../hashes.txt", "w");
-//     for (int i = 0; i < all_tabs->count; ++i) {
-//         String *tab_path = DA_at(all_tabs, i);
-//         printf("Processing types from %s\n", String_data(tab_path));
-//         Archive_open(&ar, tab_path);
-//
-//         for (int i = 0; i < ar.entries.count; ++i) {
-//             TabEntry *entry = DA_at(&ar.entries, i);
-//             MemoryBuffer mb = {0};
-//             if (!Archive_get_data(&ar, entry->hash, &mb)) {
-//                 printf("File not found\n");
-//                 continue;
-//             }
-//             if (mb.data[0] == ' ' && mb.data[1] == 'F' && mb.data[2] == 'D' && mb.data[3] == 'A') {
-//                 ADF_from_buffer(&adf, (Buffer *) &mb, lib);
-//                 ADF_free(&adf);
-//             }
-//             mb.close(&mb);
-//         }
-//         Archive_free(&ar);
-//     }
-//     fclose(hash_file);
-// }
 
 int main(int argc, const char *argv[]) {
     if (argc < 2) {
@@ -134,9 +100,9 @@ int main(int argc, const char *argv[]) {
         return 0;
     }
 
-    DynamicInsertOnlyIntMap_HashString known_strings = {0};
-    DM_init(&known_strings, String, 1024);
-    //Read strings from "strings_procmon.txt"
+    kvdb_t *db = NULL;
+    if (kv_open(&db, "./../hashes.db") != KV_OK) return 1;
+
     FILE *f = fopen("./../strings_procmon.txt", "r");
     if (f) {
         char line[1024];
@@ -148,52 +114,43 @@ int main(int argc, const char *argv[]) {
             }
             String *tmp = String_new_from_cstr(line);
             uint32 hash = hash_string(tmp);
-            if (DM_get(&known_strings, hash) == NULL) {
-                String *slot = DM_insert(&known_strings, hash);
-                String_move_from(slot, String_move(tmp));
-            }
-            free(tmp);
+            kv_put_u32(db, hash, String_data(tmp));
+            String_free(tmp);
         }
         fclose(f);
     }
 
+    ArchiveManager archive_manager = {0};
+    ArchiveManager_init(&archive_manager);
+
     String tmp = {0};
     String game_root = {0};
     String_from_cstr(&tmp, argv[1]);
-    Archives archives = {0};
     Path_convert_to_wsl(&game_root, &tmp);
-    Archives_init(&archives, &game_root);
-
-    DynamicArray_ArchiveEntryInfo *all_entries = Archives_get_all_entries(&archives);
+    TabArchives_init(&archive_manager, &game_root);
 
     STI_TypeLibrary lib = {0};
     STI_TypeLibrary_init(&lib);
+    Havok_TypeLibrary havok_lib = {0};
+    HavokTypeLib_init(&havok_lib);
 
-    f = fopen("./../archive_info.csv", "w");
-    fprintf(f, "archive_name,hash,filename,size\n");
-    for (int i = 0; i < all_entries->count; ++i) {
-        if ((i & 100) == 0)
-            printf("Processing %i/%i\r", i + 1, all_entries->count);
-        String *filename = String_new(16);
-        String *found_hash = DM_get(&known_strings, all_entries->items[i].info->hash);
-        Path_filename(&all_entries->items[i].archive->arc_path, filename);
-        fprintf(f, "%s", String_data(filename));
-        free(filename);
+    STI_ADF_TYPES_register_functions(&lib);
+    HAVOK_TYPES_register_functions(&havok_lib);
 
-        if (found_hash != NULL) {
-            fprintf(f, ",0x%08X,%s,%u\n", all_entries->items[i].info->hash, String_data(found_hash),
-                    all_entries->items[i].info->size);
-        } else {
-            fprintf(f, ",0x%08X,<NOT_FOUND>,%u\n", all_entries->items[i].info->hash, all_entries->items[i].info->size);
-        }
-    }
-    fclose(f);
+    Context context = {
+        .db = db,
+        .sti_lib = &lib,
+        .havok_lib = &havok_lib
+    };
 
-    // collect_hash_strings(all_entries, &lib);
+    ArchiveManager_foreach_file(&archive_manager, visit_all_files, &context);
 
     STI_TypeLibrary_free(&lib);
+    HavokTypeLib_free(&havok_lib);
+
+    kv_close(db);
+
     String_free(&game_root);
     String_free(&tmp);
-    DA_free(all_entries);
     return 0;
 }

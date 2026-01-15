@@ -9,22 +9,22 @@
 DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(charPtr, charPtr);
 
 const static DynamicInsertOnlyIntMap_charPtr names_map = {
-        .keys = {
-                .items = (uint64*)STI_ADF_TYPES_hash_strings_hash,
-                .item_size = 8,
-                .capacity = sizeof(STI_ADF_TYPES_hash_strings_hash) / sizeof(uint64),
-                .statically_allocated = 1,
-                .heap_allocated = 0,
-                .count = sizeof(STI_ADF_TYPES_hash_strings_hash) / sizeof(uint64),
-        },
-        .values = {
-                .items = (const char **) STI_ADF_TYPES_hash_strings_string,
-                .item_size = 8,
-                .capacity = sizeof(STI_ADF_TYPES_hash_strings_string) / sizeof(char *),
-                .statically_allocated = 1,
-                .heap_allocated = 0,
-                .count = sizeof(STI_ADF_TYPES_hash_strings_string) / sizeof(char *),
-        },
+    .keys = {
+        .items = (uint64 *) STI_ADF_TYPES_hash_strings_hash,
+        .item_size = 8,
+        .capacity = sizeof(STI_ADF_TYPES_hash_strings_hash) / sizeof(uint64),
+        .statically_allocated = 1,
+        .heap_allocated = 0,
+        .count = sizeof(STI_ADF_TYPES_hash_strings_hash) / sizeof(uint64),
+    },
+    .values = {
+        .items = (char **) STI_ADF_TYPES_hash_strings_string,
+        .item_size = 8,
+        .capacity = sizeof(STI_ADF_TYPES_hash_strings_string) / sizeof(char *),
+        .statically_allocated = 1,
+        .heap_allocated = 0,
+        .count = sizeof(STI_ADF_TYPES_hash_strings_string) / sizeof(char *),
+    },
 };
 
 
