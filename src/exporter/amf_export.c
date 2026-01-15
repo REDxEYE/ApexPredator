@@ -436,6 +436,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
     return mesh_root_node_id;
 }
 
+bool export_textures = true;
 
 GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
                        Havok_TypeLibrary *havok_lib, const AmfModel *amf_model,
@@ -467,7 +468,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         if (!IS_VALID_GL_ID(material_id)) {
             material_id = GLTFContext_material_new(context, String_data(material_name));
             const String *render_block_id = DM_get(&lib->hash_strings, amf_material->RenderBlockId);
-            if (String_cequals(render_block_id, "GeneralR2")) {
+            if (String_cequals(render_block_id, "GeneralR2") && export_textures) {
                 if (amf_material->Attributes.type_hash != STI_TYPE_HASH_GeneralR2Constants) {
                     printf("Unsupported GeneralR2 material attribute type: %08X\n", amf_material->Attributes.type_hash);
                     continue;
@@ -506,9 +507,9 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                         GLTFContext_material_set_roughness_metallic_from_data(
                             context, orm_path, material_id, orm_texture);
                     }
-                    if (emission_path != NULL && emission_path->size > 0) {
+                    if (emission_path != NULL && emission_path->size > 0 && constants->UseEmissive) {
                         emission_texture = convert_ddsc(archive_manager, emission_path);
-                        if (constants->UseEmissive && !constants->EmissiveTextureHasColor && diffuse_texture != NULL) {
+                        if (!constants->EmissiveTextureHasColor && diffuse_texture != NULL) {
                             Texture *new_emission_texture = TextureOps_multiply(diffuse_texture, emission_texture);
                             if (new_emission_texture != NULL) {
                                 Texture_free(emission_texture);
@@ -517,6 +518,31 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                         }
                         GLTFContext_material_set_emissive_from_data(context, emission_path, material_id,
                                                                     emission_texture);
+                    }
+
+                    if (constants->UseAlbedoDetail) {
+                        const String *albedo_detail_path = DM_get(&lib->hash_strings, amf_material->Textures.items[5]);
+                        Texture *albedo_detail = convert_ddsc(archive_manager, albedo_detail_path);
+                        String* texture_save_path = GLTFContext_data_path(context);
+                        const uint32 hash = hash_string(albedo_detail_path);
+                        String tex_name = {0};
+                        Path_filename(albedo_detail_path, &tex_name);
+                        String_append_format(texture_save_path, "/%s_%08X", String_data(&tex_name), hash);
+                        String_free(&tex_name);
+                        Texture_save(albedo_detail, texture_save_path);
+                        String_free(texture_save_path);
+                    }
+                    if (constants->UseNormalDetail) {
+                        const String *normal_detail_path = DM_get(&lib->hash_strings, amf_material->Textures.items[6]);
+                        Texture *normal_detail = convert_ddsc(archive_manager, normal_detail_path);
+                        String* texture_save_path = GLTFContext_data_path(context);
+                        const uint32 hash = hash_string(normal_detail_path);
+                        String tex_name = {0};
+                        Path_filename(normal_detail_path, &tex_name);
+                        String_append_format(texture_save_path, "/%s_%08X", String_data(&tex_name), hash);
+                        String_free(&tex_name);
+                        Texture_save(normal_detail, texture_save_path);
+                        String_free(texture_save_path);
                     }
 
                     if (diffuse_texture != NULL) {

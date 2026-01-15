@@ -395,6 +395,17 @@ void GLTFContext_free(GLTFContext *ctx) {
     free(ctx->data);
 }
 
+String * GLTFContext_data_path(const GLTFContext *ctx) {
+    String *data_dir = String_new(64);
+    Path_get_parent(&ctx->save_path, data_dir);
+    String gltf_name = {0};
+    Path_filename(&ctx->save_path, &gltf_name);
+    String_append_format(data_dir, "/%s_data", String_data(&gltf_name));
+    Path_ensure_dirs(data_dir);
+    String_free(&gltf_name);
+    return data_dir;
+}
+
 GL_ID GLTFContext_create_buffer(GLTFContext *ctx, const void *data, uint32 data_size, const char *name) {
     cgltf_buffer *buffer = DA_append_get(&ctx->buffers);
     buffer->size = data_size;
@@ -586,6 +597,28 @@ GL_ID GLTFContext_image_new(GLTFContext *ctx, const char *name_opt) {
     return (GL_ID){ctx->images.count - 1};
 }
 
+GL_ID GLTFContext_image_from_data(GLTFContext *ctx, const String *original_path, const Texture *texture) {
+    const uint32 hash = hash_string(original_path);
+    String tex_name = {0};
+    Path_filename(original_path, &tex_name);
+
+    String unique_name = {0};
+    String_format(&unique_name, "%s_%08X.png", String_data(&tex_name), hash);
+
+    const GL_ID image_id = GLTFContext_image_new(ctx, String_data(&unique_name));
+    cgltf_image *img = &ctx->images.items[image_id.v];
+    img->mime_type = GLTFContext_dupe_cstring("image/png");
+
+    size_t data_size = 0;
+    uint32 channel_count = 0;
+    uint8 *data = Texture_write_png_to_memory(texture, &channel_count, &data_size);
+    const GL_ID buffer_view = GLTFContext_create_buffer_and_view(ctx, data, data_size, String_data(&unique_name),
+                                                                 cgltf_buffer_view_type_invalid, 0, 0);
+    free(data);
+    img->buffer_view = gltf_tag_index(buffer_view).v;
+    return image_id;
+}
+
 void GLTFContext_image_set_mimetype(const GLTFContext *ctx, const GL_ID image_id, const char *mimetype) {
     cgltf_image *img = &ctx->images.items[image_id.v];
     img->mime_type = GLTFContext_dupe_cstring(mimetype);
@@ -595,38 +628,6 @@ void GLTFContext_image_set_buffer_view(const GLTFContext *ctx, const GL_ID image
     cgltf_image *img = &ctx->images.items[image_id.v];
     img->buffer_view = gltf_tag_index(buffer_view_id).v;
 }
-
-// void GLTFContext_image_set_data(const GLTFContext *ctx, const GL_ID image_id, const D_ID data_id) {
-//     cgltf_image *img = &ctx->images.items[image_id.v];
-//     img->uri = gltf_tag_data_id(data_id);
-// }
-
-// void GLTFContext_image_set_base64_data(const GLTFContext *ctx, const GL_ID image_id, const void *data, const uint32 data_size) {
-//     cgltf_image *img = &ctx->images.items[image_id.v];
-//
-//     String buffer_uri = {0};
-//     String_from_cstr(&buffer_uri, "data:");
-//     String_append_cstr(&buffer_uri, img->mime_type);
-//     String_append_cstr(&buffer_uri, ";base64,");
-//     const size_t encoded_size = base64_encoded_size(data_size);
-//     char *base64_data = calloc(1, encoded_size + 1);
-//     const size_t actual_size = base64_encode(data, data_size, base64_data);
-//     assert(actual_size <= encoded_size);
-//     String_append_cstr(&buffer_uri, base64_data);
-//     img->uri = String_detach(String_move(&buffer_uri));
-//     String_free(&buffer_uri);
-//     free(base64_data);
-// }
-
-// void GLTFContext_image_set_url(GLTFContext *ctx, const GL_ID image_id, const char *url) {
-//     cgltf_image *img = &ctx->images.items[image_id.v];
-//     img->uri = GLTFContext_dupe_cstring(url);
-// }
-//
-// void GLTFContext_image_set_buffer_view(GLTFContext *ctx, GL_ID image_id, GL_ID buffer_view_id) {
-//     cgltf_image *img = &ctx->images.items[image_id.v];
-//     img->buffer_view = gltf_tag_index(buffer_view_id).v;
-// }
 
 GL_ID GLTFContext_texture_new(GLTFContext *ctx, const char *name_opt) {
     cgltf_texture *tex = DA_append_get(&ctx->textures);
@@ -707,6 +708,7 @@ void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const String *o
     const GL_ID tex_id = gltf_texture_from_texture(ctx, original_path, texture);
     cgltf_material *mat = &ctx->materials.items[material_id.v];
     mat->normal_texture.texture = gltf_tag_index(tex_id).v;
+    mat->normal_texture.scale = 1.0f;
 }
 
 void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, const String *original_path,
@@ -730,6 +732,7 @@ void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const String 
     const GL_ID tex_id = gltf_texture_from_texture(ctx, original_path, texture);
     cgltf_material *mat = &ctx->materials.items[material_id.v];
     mat->emissive_texture.texture = gltf_tag_index(tex_id).v;
+    mat->emissive_strength.emissive_strength = 1.0f;
 }
 
 GL_ID GLTFContext_material_find_by_name(GLTFContext *ctx, const char *name) {

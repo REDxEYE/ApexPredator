@@ -79,7 +79,7 @@ void RuntimeNode_init(RuntimeNode *node, String *name) {
         String_init(&node->name, 64);
     }
     DA_init(&node->props, RuntimeProp, 4);
-    DA_init(&node->children, RuntimeNode, 4);
+    DA_init(&node->children, RuntimeNode, 1);
 }
 
 RuntimeProp *RuntimeNode_get_prop(RuntimeNode *node, const char *name) {

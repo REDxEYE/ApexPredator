@@ -118,7 +118,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
             const uint32 block_count = blocks_wide * blocks_high;
             for (int i = 0; i < block_count; ++i) {
                 bcdec_bc3(input + i * 16,
-                          texture->data + (i % blocks_wide) * 4 * 4 + (i / blocks_wide) * 4,
+                          texture->data + (i % blocks_wide) * 4 * 4 + (i / blocks_wide) * 4 * texture->width * 4,
                           texture->width * 4);
             }
             break;
@@ -237,6 +237,7 @@ void Texture_from_dxgi(Texture *texture, DDSDXGIFormat format, int32 width, int3
     const uint32 expected_size = width * height * depth * target_channels * target_bpc;
     texture->data = malloc(expected_size);
     texture->data_size = expected_size;
+
     Texture__decode_texture(texture, input, input_size, format);
 }
 

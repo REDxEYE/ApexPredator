@@ -87,6 +87,8 @@ void GLTFContext_finalize(GLTFContext *ctx);
 
 void GLTFContext_free(GLTFContext *ctx);
 
+String* GLTFContext_data_path(const GLTFContext* ctx);
+
 GL_ID GLTFContext_create_buffer(GLTFContext *ctx, const void *data, uint32 data_size, const char *name);
 
 GL_ID GLTFContext_create_buffer_and_view(
@@ -138,6 +140,8 @@ void GLTFContext_primitive_set_attribute_accessor(GLTFContext *ctx, GL_ID mesh_i
 bool GLTFContext_write_and_free(GLTFContext *ctx);
 
 GL_ID GLTFContext_image_new(GLTFContext *ctx, const char *name_opt);
+
+GL_ID GLTFContext_image_from_data(GLTFContext *ctx, const String *original_path, const Texture *texture);
 
 void GLTFContext_image_set_mimetype(const GLTFContext *ctx, GL_ID image_id, const char *mimetype);
 

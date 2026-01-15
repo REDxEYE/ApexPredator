@@ -358,11 +358,11 @@ GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI
     GL_ID output_node_id = INVALID_GL_ID;
 
     for (int instanceId = 0; instanceId < adf.header.instance_count; instanceId++) {
-        ADFInstance *instance = DA_at(&adf.instances, instanceId);
+        const ADFInstance *instance = DA_at(&adf.instances, instanceId);
         void *instance_data = ADF_read_instance(&adf, lib, instance, mb);
 
         if (instance->type_hash == STI_TYPE_HASH_StreamPatchFileHeader) {
-            StreamPatchFileHeader *ph = instance_data;
+            const StreamPatchFileHeader *ph = instance_data;
             tile_x = ph->PatchPositionX;
             tile_y = ph->PatchPositionZ;
             lod = ph->PatchLod;
@@ -374,7 +374,7 @@ GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI
                                               export_path);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfMeshHeader) {
             instanceId++;
-            ADFInstance *mesh_buffers_instance = DA_at(&adf.instances, instanceId);
+            const ADFInstance *mesh_buffers_instance = DA_at(&adf.instances, instanceId);
             AmfMeshBuffers *mesh_buffers = ADF_read_instance(&adf, lib, mesh_buffers_instance, mb);
 
             // ADF_print_instance(lib, instance, instance_data, 0);
