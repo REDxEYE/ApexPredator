@@ -89,7 +89,6 @@ add_executable(StringHasher
 )
 
 add_executable(HashBruteforce
-        src/hash_bruteforce.c
         src/utils/lookup3.c
 )
 
@@ -108,7 +107,6 @@ target_include_directories(AdfTypeGenerator PUBLIC include external/zlib externa
 target_include_directories(HavokTypeGenerator PUBLIC include external/zlib external/cgltf external/tinycpng/include)
 target_include_directories(HashCollector PUBLIC include external/zlib external/cgltf external/tinycpng/include)
 target_include_directories(StringHasher PUBLIC include)
-target_include_directories(HashBruteforce PUBLIC include)
 
 target_link_libraries(ApexPredator PUBLIC libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
 target_link_libraries(HashCollector PUBLIC libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
