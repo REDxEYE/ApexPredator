@@ -14,8 +14,6 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
     DM_init(&lib->name_hash_to_type, uint32, 64);
     DM_init(&lib->types, STI_Type, 64);
     DM_init(&lib->object_functions, STI_ObjectMethods, 64);
-    DM_init(&lib->hash_strings, String, 64);
-
     String tmp = {0};
 
     //s8 = 0x580D0A62
@@ -185,11 +183,6 @@ void STI_TypeLibrary_free(STI_TypeLibrary *lib) {
     DM_free(&lib->object_functions);
     DM_free(&lib->name_hash_to_type);
     DA_free(&lib->exported_hashes);
-
-    for (int i = 0; i < lib->hash_strings.keys.count; ++i) {
-        String_free(&lib->hash_strings.values.items[i]);
-    }
-    DM_free(&lib->hash_strings);
 }
 
 void STI_Type_free(STI_Type *type) {

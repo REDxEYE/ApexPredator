@@ -1,9 +1,10 @@
 // Created by RED on 12.01.2026.
 
 #include "exporter/amf_export.h"
+
+#include "apex/hashes.h"
 #include "apex/adf/adf.h"
 #include "exporter/adf_export.h"
-#include "exporter/common_export.h"
 #include "exporter/ddsc_export.h"
 #include "havok/havok_codegen.h"
 #include "platform/texture_ops.h"
@@ -33,7 +34,8 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
     // hires fix
     {
         MemoryBuffer hi_res_buffer = {0};
-        String *hi_res_path_full = DM_get(&lib->hash_strings, header->HighLodPath);
+        // String *hi_res_path_full = DM_get(&lib->hash_strings, header->HighLodPath);
+        const String *hi_res_path_full = find_name32(header->HighLodPath);
         if (String_find_subcstring(hi_res_path_full, "intermediate/") != UINT32_MAX) {
             String hi_res_path = {0};
 
@@ -94,7 +96,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
             String_free(&lod_name);
 
             AmfMesh *mesh = DA_at(&lod_group->Meshes, mesh_id);
-            String *mesh_type_name = DM_get(&lib->hash_strings, mesh->MeshTypeId);
+            const String *mesh_type_name = find_name32(mesh->MeshTypeId);
             uint32 vertex_count = mesh->VertexCount;
             uint32 index_buffer_index = mesh->IndexBufferIndex;
             if (index_buffer_index > all_index_buffer.count) {
@@ -119,7 +121,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
             bool has_bone_data = false;
             for (int sub_mesh_id = 0; sub_mesh_id < mesh->SubMeshes.count; ++sub_mesh_id) {
                 AmfSubMesh *sub_mesh = DA_at(&mesh->SubMeshes, sub_mesh_id);
-                String *material_name = DM_get(&lib->hash_strings, sub_mesh->SubMeshId);
+                const String *material_name = find_name32(sub_mesh->SubMeshId);
 
                 GL_ID material_id = GLTFContext_material_find_by_name(context, String_data(material_name));
 
@@ -463,11 +465,11 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
 
     for (int mat_id = 0; mat_id < amf_model->Materials.count; ++mat_id) {
         const AmfMaterial *amf_material = &amf_model->Materials.items[mat_id];
-        const String *material_name = DM_get(&lib->hash_strings, amf_material->Name);
+        const String *material_name = find_name32(amf_material->Name);
         GL_ID material_id = GLTFContext_material_find_by_name(context, String_data(material_name));
         if (!IS_VALID_GL_ID(material_id)) {
             material_id = GLTFContext_material_new(context, String_data(material_name));
-            const String *render_block_id = DM_get(&lib->hash_strings, amf_material->RenderBlockId);
+            const String *render_block_id = find_name32(amf_material->RenderBlockId);
             if (String_cequals(render_block_id, "GeneralR2") && export_textures) {
                 if (amf_material->Attributes.type_hash != STI_TYPE_HASH_GeneralR2Constants) {
                     printf("Unsupported GeneralR2 material attribute type: %08X\n", amf_material->Attributes.type_hash);
@@ -484,10 +486,10 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                 mat->pbr_metallic_roughness.roughness_factor = 1.0f;
 
                 if (amf_material->Textures.count >= 3) {
-                    const String *diffuse_path = DM_get(&lib->hash_strings, amf_material->Textures.items[0]);
-                    const String *normal_path = DM_get(&lib->hash_strings, amf_material->Textures.items[1]);
-                    const String *orm_path = DM_get(&lib->hash_strings, amf_material->Textures.items[2]);
-                    const String *emission_path = DM_get(&lib->hash_strings, amf_material->Textures.items[4]);
+                    const String *diffuse_path = find_name32(amf_material->Textures.items[0]);
+                    const String *normal_path = find_name32(amf_material->Textures.items[1]);
+                    const String *orm_path = find_name32(amf_material->Textures.items[2]);
+                    const String *emission_path = find_name32(amf_material->Textures.items[4]);
                     Texture *diffuse_texture = NULL;
                     Texture *normal_texture = NULL;
                     Texture *orm_texture = NULL;
@@ -521,7 +523,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                     }
 
                     if (constants->UseAlbedoDetail) {
-                        const String *albedo_detail_path = DM_get(&lib->hash_strings, amf_material->Textures.items[5]);
+                        const String *albedo_detail_path = find_name32(amf_material->Textures.items[5]);
                         Texture *albedo_detail = convert_ddsc(archive_manager, albedo_detail_path);
                         String* texture_save_path = GLTFContext_data_path(context);
                         const uint32 hash = hash_string(albedo_detail_path);
@@ -533,7 +535,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                         String_free(texture_save_path);
                     }
                     if (constants->UseNormalDetail) {
-                        const String *normal_detail_path = DM_get(&lib->hash_strings, amf_material->Textures.items[6]);
+                        const String *normal_detail_path = find_name32(amf_material->Textures.items[6]);
                         Texture *normal_detail = convert_ddsc(archive_manager, normal_detail_path);
                         String* texture_save_path = GLTFContext_data_path(context);
                         const uint32 hash = hash_string(normal_detail_path);
@@ -565,7 +567,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
             printf("Material %s -> %s\n", String_data(material_name), String_data(render_block_id));
             for (int tex_id = 0; tex_id < amf_material->Textures.count; ++tex_id) {
                 const uint32 texture_hash = amf_material->Textures.items[tex_id];
-                const String *tex_path = DM_get(&lib->hash_strings, texture_hash);
+                const String *tex_path = find_name32(texture_hash);
                 if (tex_path->size == 0) {
                     continue;
                 }
@@ -574,7 +576,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         }
     }
 
-    const String *mesh_path = DM_get(&lib->hash_strings, amf_model->Mesh);
+    const String *mesh_path = find_name32(amf_model->Mesh);
 
 
     MemoryBuffer mb = {0};

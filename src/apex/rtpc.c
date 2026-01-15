@@ -51,7 +51,7 @@ RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
     }
     if (header.version != 3) {
         printf("[ERROR]: Unsupported RTPC version: %u\n", header.version);
-        exit(1);
+        return NULL;
     }
 
     RuntimeNode *root_node = RuntimeNode_new(NULL);
@@ -82,12 +82,12 @@ void RuntimeNode_init(RuntimeNode *node, String *name) {
     DA_init(&node->children, RuntimeNode, 1);
 }
 
-RuntimeProp *RuntimeNode_get_prop(RuntimeNode *node, const char *name) {
-    uint32 hash = hash_cstring(name);
+RuntimeProp *RuntimeNode_get_prop(const RuntimeNode *node, const char *name) {
+    const uint32 hash = hash_cstring(name);
     return RuntimeNode_get_prop_by_hash(node, hash);
 }
 
-RuntimeProp *RuntimeNode_get_prop_by_hash(RuntimeNode *node, uint32 hash) {
+RuntimeProp *RuntimeNode_get_prop_by_hash(const RuntimeNode *node, const uint32 hash) {
     for (uint32 i = 0; i < node->props.count; ++i) {
         RuntimeProp *prop = DA_at(&node->props, i);
         if (prop->name_hash == hash) {
@@ -97,23 +97,23 @@ RuntimeProp *RuntimeNode_get_prop_by_hash(RuntimeNode *node, uint32 hash) {
     return NULL;
 }
 
-uint32 RuntimeNode_get_prop_by_hash_u32(RuntimeNode *node, uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
+uint32 RuntimeNode_get_prop_by_hash_u32(const RuntimeNode *node, const uint32 hash) {
+    const RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_U32) {
         return 0;
     }
     return prop->value.uint32_value;
 }
 
-float32 RuntimeNode_get_prop_by_hash_f32(RuntimeNode *node, uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
+float32 RuntimeNode_get_prop_by_hash_f32(const RuntimeNode *node, const uint32 hash) {
+    const RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_F32) {
         return 0.0f;
     }
     return prop->value.float32_value;
 }
 
-String *RuntimeNode_get_prop_by_hash_str(RuntimeNode *node, uint32 hash) {
+String *RuntimeNode_get_prop_by_hash_str(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_STR) {
         return NULL;
@@ -121,7 +121,7 @@ String *RuntimeNode_get_prop_by_hash_str(RuntimeNode *node, uint32 hash) {
     return &prop->value.string_value;
 }
 
-float32 *RuntimeNode_get_prop_by_hash_vec2(RuntimeNode *node, uint32 hash) {
+float32 *RuntimeNode_get_prop_by_hash_vec2(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_VEC2) {
         return NULL;
@@ -129,7 +129,7 @@ float32 *RuntimeNode_get_prop_by_hash_vec2(RuntimeNode *node, uint32 hash) {
     return prop->value.vec2_value;
 }
 
-float32 *RuntimeNode_get_prop_by_hash_vec3(RuntimeNode *node, uint32 hash) {
+float32 *RuntimeNode_get_prop_by_hash_vec3(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_VEC3) {
         return NULL;
@@ -137,7 +137,7 @@ float32 *RuntimeNode_get_prop_by_hash_vec3(RuntimeNode *node, uint32 hash) {
     return prop->value.vec3_value;
 }
 
-float32 *RuntimeNode_get_prop_by_hash_vec4(RuntimeNode *node, uint32 hash) {
+float32 *RuntimeNode_get_prop_by_hash_vec4(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_VEC4) {
         return NULL;
@@ -145,7 +145,7 @@ float32 *RuntimeNode_get_prop_by_hash_vec4(RuntimeNode *node, uint32 hash) {
     return prop->value.vec4_value;
 }
 
-float32 *RuntimeNode_get_prop_by_hash_mat3x3(RuntimeNode *node, uint32 hash) {
+float32 *RuntimeNode_get_prop_by_hash_mat3x3(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_MAT3X3) {
         return NULL;
@@ -153,7 +153,7 @@ float32 *RuntimeNode_get_prop_by_hash_mat3x3(RuntimeNode *node, uint32 hash) {
     return prop->value.matrix33_value;
 }
 
-float32 *RuntimeNode_get_prop_by_hash_mat4x4(RuntimeNode *node, uint32 hash) {
+float32 *RuntimeNode_get_prop_by_hash_mat4x4(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_MAT4X4) {
         return NULL;
@@ -161,7 +161,7 @@ float32 *RuntimeNode_get_prop_by_hash_mat4x4(RuntimeNode *node, uint32 hash) {
     return prop->value.matrix44_value;
 }
 
-DynamicArray_uint32 *RuntimeNode_get_prop_by_hash_array_u32(RuntimeNode *node, uint32 hash) {
+DynamicArray_uint32 *RuntimeNode_get_prop_by_hash_array_u32(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_ARRAY_U32) {
         return NULL;
@@ -169,7 +169,7 @@ DynamicArray_uint32 *RuntimeNode_get_prop_by_hash_array_u32(RuntimeNode *node, u
     return &prop->value.uint32_array_value;
 }
 
-DynamicArray_float32 *RuntimeNode_get_prop_by_hash_array_f32(RuntimeNode *node, uint32 hash) {
+DynamicArray_float32 *RuntimeNode_get_prop_by_hash_array_f32(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_ARRAY_F32) {
         return NULL;
@@ -177,7 +177,7 @@ DynamicArray_float32 *RuntimeNode_get_prop_by_hash_array_f32(RuntimeNode *node, 
     return &prop->value.float32_array_value;
 }
 
-DynamicArray_uint8 *RuntimeNode_get_prop_by_hash_array_u8(RuntimeNode *node, uint32 hash) {
+DynamicArray_uint8 *RuntimeNode_get_prop_by_hash_array_u8(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_ARRAY_U8) {
         return NULL;
@@ -185,15 +185,15 @@ DynamicArray_uint8 *RuntimeNode_get_prop_by_hash_array_u8(RuntimeNode *node, uin
     return &prop->value.uint8_array_value;
 }
 
-uint64 RuntimeNode_get_prop_by_hash_objid(RuntimeNode *node, uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
+uint64 RuntimeNode_get_prop_by_hash_objid(const RuntimeNode *node, const uint32 hash) {
+    const RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_OBJID) {
         return 0;
     }
     return prop->value.objid_value;
 }
 
-DynamicArray_uint64 *RuntimeNode_get_prop_by_hash_event(RuntimeNode *node, uint32 hash) {
+DynamicArray_uint64 *RuntimeNode_get_prop_by_hash_event(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_EVENT) {
         return NULL;
@@ -201,69 +201,69 @@ DynamicArray_uint64 *RuntimeNode_get_prop_by_hash_event(RuntimeNode *node, uint3
     return &prop->value.event_value;
 }
 
-uint32 RuntimeNode_get_prop_u32(RuntimeNode *node, const char *name) {
+uint32 RuntimeNode_get_prop_u32(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_u32(node, hash_cstring(name));
 }
 
-float32 RuntimeNode_get_prop_f32(RuntimeNode *node, const char *name) {
+float32 RuntimeNode_get_prop_f32(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_f32(node, hash_cstring(name));
 }
 
-String *RuntimeNode_get_prop_str(RuntimeNode *node, const char *name) {
+String *RuntimeNode_get_prop_str(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_str(node, hash_cstring(name));
 }
 
-float32 *RuntimeNode_get_prop_vec2(RuntimeNode *node, const char *name) {
+float32 *RuntimeNode_get_prop_vec2(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_vec2(node, hash_cstring(name));
 }
 
-float32 *RuntimeNode_get_prop_vec3(RuntimeNode *node, const char *name) {
+float32 *RuntimeNode_get_prop_vec3(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_vec3(node, hash_cstring(name));
 }
 
-float32 *RuntimeNode_get_prop_vec4(RuntimeNode *node, const char *name) {
+float32 *RuntimeNode_get_prop_vec4(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_vec4(node, hash_cstring(name));
 }
 
-float32 *RuntimeNode_get_prop_mat3x3(RuntimeNode *node, const char *name) {
+float32 *RuntimeNode_get_prop_mat3x3(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_mat3x3(node, hash_cstring(name));
 }
 
-float32 *RuntimeNode_get_prop_mat4x4(RuntimeNode *node, const char *name) {
+float32 *RuntimeNode_get_prop_mat4x4(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_mat4x4(node, hash_cstring(name));
 }
 
-DynamicArray_uint32 *RuntimeNode_get_prop_array_u32(RuntimeNode *node, const char *name) {
+DynamicArray_uint32 *RuntimeNode_get_prop_array_u32(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_array_u32(node, hash_cstring(name));
 }
 
-DynamicArray_float32 *RuntimeNode_get_prop_array_f32(RuntimeNode *node, const char *name) {
+DynamicArray_float32 *RuntimeNode_get_prop_array_f32(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_array_f32(node, hash_cstring(name));
 }
 
-DynamicArray_uint8 *RuntimeNode_get_prop_array_u8(RuntimeNode *node, const char *name) {
+DynamicArray_uint8 *RuntimeNode_get_prop_array_u8(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_array_u8(node, hash_cstring(name));
 }
 
-uint64 RuntimeNode_get_prop_objid(RuntimeNode *node, const char *name) {
+uint64 RuntimeNode_get_prop_objid(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_objid(node, hash_cstring(name));
 }
 
-DynamicArray_uint64 *RuntimeNode_get_prop_event(RuntimeNode *node, const char *name) {
+DynamicArray_uint64 *RuntimeNode_get_prop_event(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_event(node, hash_cstring(name));
 }
 
-bool RuntimeNode_has_prop(RuntimeNode *node, const char *name) {
+bool RuntimeNode_has_prop(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop(node, name) != NULL;
 }
 
-void RuntimeNode_print(RuntimeNode *node, FILE *output, uint32 indent) {
+void RuntimeNode_print(const RuntimeNode *node, FILE *output, const uint32 indent) {
     for (uint32 i = 0; i < indent; ++i) {
         fputc(' ', output);
     }
     fprintf(output, "Node: \"%s\" (0x%08X)\n", String_data(&node->name), node->name_hash);
     for (uint32 i = 0; i < node->props.count; ++i) {
-        RuntimeProp *prop = DA_at(&node->props, i);
+        const RuntimeProp *prop = DA_at(&node->props, i);
         if (prop->type == PROP_TYPE_NONE)continue;
         RuntimeProp_print(prop, output, indent + 2);
     }
@@ -280,7 +280,7 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         exit(1);
     }
 
-    RuntimeNode_init(node, find_name(header.name_hash));
+    RuntimeNode_init(node, find_name32(header.name_hash));
 
 
     node->name_hash = header.name_hash;
@@ -350,7 +350,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
     }
     RuntimeProp_init(prop, header.prop_type);
     prop->name_hash = header.name_hash;
-    String_move_from(&prop->name, String_move(find_name(header.name_hash)));
+    String_move_from(&prop->name, String_move(find_name32(header.name_hash)));
     switch (prop->type) {
         case PROP_TYPE_NONE: {
             // Nothing to read
@@ -513,7 +513,7 @@ void RuntimeNode_free(RuntimeNode *node) {
         free(node);
 }
 
-void RuntimeProp_init(RuntimeProp *prop, PropType type) {
+void RuntimeProp_init(RuntimeProp *prop, const PropType type) {
     prop->type = type;
     String_init(&prop->name, 16);
     switch (type) {
@@ -560,7 +560,7 @@ void RuntimeProp_init(RuntimeProp *prop, PropType type) {
     }
 }
 
-void RuntimeProp_print(RuntimeProp *prop, FILE *output, uint32 indent) {
+void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 indent) {
     for (uint32 i = 0; i < indent; ++i) {
         fputc(' ', output);
     }
@@ -572,7 +572,7 @@ void RuntimeProp_print(RuntimeProp *prop, FILE *output, uint32 indent) {
             break;
         }
         case PROP_TYPE_U32: {
-            const String *name_value = find_name(prop->value.uint32_value);
+            const String *name_value = find_name32(prop->value.uint32_value);
             if (name_value != NULL) {
                 fprintf(output, "\"%s\" (0x%08X)\n", String_data(name_value), prop->value.uint32_value);
             } else {
@@ -737,12 +737,12 @@ void RuntimeProp_free(RuntimeProp *prop) {
     memset(&prop->value, 0, sizeof(prop->value));
 }
 
-static void print_indent(String *out, uint32 indent) {
+static void print_indent(String *out, const uint32 indent) {
     String_resize(out, out->size + indent);
     memset(out->buffer + out->size, ' ', indent);
 }
 
-void RuntimeProp_emit_json(RuntimeProp *prop, String *out, uint32 indent) {
+void RuntimeProp_emit_json(const RuntimeProp *prop, String *out, const uint32 indent) {
     print_indent(out, indent);
     String_append_format(out, "\"%s\": ", String_data(&prop->name));
     switch (prop->type) {
@@ -845,7 +845,7 @@ void RuntimeProp_emit_json(RuntimeProp *prop, String *out, uint32 indent) {
     }
 }
 
-void RuntimeNode_emit_json(RuntimeNode *node, String *out, uint32 indent) {
+void RuntimeNode_emit_json(const RuntimeNode *node, String *out, const uint32 indent) {
     print_indent(out, indent);
     String_append_cstr(out, "{\n");
     print_indent(out, indent + 2);

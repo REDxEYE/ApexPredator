@@ -2,6 +2,7 @@
 
 #include "exporter/epe_export.h"
 
+#include "apex/hashes.h"
 #include "exporter/havok_export.h"
 #include "exporter/adf_export.h"
 #include "exporter/common_export.h"
@@ -171,7 +172,7 @@ void handle_CRigidObject(GLTFContext *context, ArchiveManager *archive_manager, 
                          Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
                          const String *export_path, const GL_ID parent_gltf_node) {
     const uint32 model_filename_hash = RuntimeNode_get_prop_u32(node, "filename");
-    const String* model_filename = DM_get(&lib->hash_strings, model_filename_hash); // Could be null
+    const String* model_filename = find_name32(model_filename_hash); // Could be null
     const String *node_name_hash = &node->name;
     if (model_filename_hash == 0) {
         printf("[ERROR]: Failed to get model property for CRigidObject\n");

@@ -46,33 +46,36 @@ static kv_status_t prepare_stmt(kvdb_t *db, sqlite3_stmt **out, const char *sql)
 
 static kv_status_t db_init(kvdb_t *db) {
     kv_status_t st = exec_sql(db,
-                              "PRAGMA journal_mode=WAL;"
-                              "PRAGMA synchronous=NORMAL;"
-                              "PRAGMA foreign_keys=ON;"
+                             "PRAGMA journal_mode = WAL;"
+                             "PRAGMA synchronous = NORMAL;"
+                             "PRAGMA temp_store = MEMORY;"
+                             "PRAGMA cache_size = -20000;"
+                             "PRAGMA foreign_keys=ON;"
     );
     if (st != KV_OK) return st;
 
     st = exec_sql(db,
-        "CREATE TABLE IF NOT EXISTS kv ("
-        "  k INTEGER PRIMARY KEY,"
-        "  v TEXT NOT NULL"
-        ");"
+                  "CREATE TABLE IF NOT EXISTS kv ("
+                  "k INTEGER NOT NULL,"
+                  "v TEXT NOT NULL,"
+                  "PRIMARY KEY(k)"
+                  ") WITHOUT ROWID;"
     );
     if (st != KV_OK) return st;
 
     st = prepare_stmt(db, &db->st_put,
-        "INSERT INTO kv(k, v) VALUES(?1, ?2) "
-        "ON CONFLICT(k) DO UPDATE SET v=excluded.v;"
+                      "INSERT INTO kv(k, v) VALUES(?1, ?2) "
+                      "ON CONFLICT(k) DO UPDATE SET v=excluded.v;"
     );
     if (st != KV_OK) return st;
 
     st = prepare_stmt(db, &db->st_get,
-        "SELECT v FROM kv WHERE k=?1;"
+                      "SELECT v FROM kv WHERE k=?1;"
     );
     if (st != KV_OK) return st;
 
     st = prepare_stmt(db, &db->st_del,
-        "DELETE FROM kv WHERE k=?1;"
+                      "DELETE FROM kv WHERE k=?1;"
     );
     if (st != KV_OK) return st;
 
@@ -83,12 +86,12 @@ kv_status_t kv_open(kvdb_t **out_db, const char *path) {
     if (!out_db || !path) return KV_EINVAL;
     *out_db = NULL;
 
-    kvdb_t *db = (kvdb_t *)calloc(1, sizeof(kvdb_t));
+    kvdb_t *db = (kvdb_t *) calloc(1, sizeof(kvdb_t));
     if (!db) return KV_ENOMEM;
 
     const int rc = sqlite3_open_v2(path, &db->db,
-                            SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
-                            NULL);
+                                   SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
+                                   NULL);
     if (rc != SQLITE_OK) {
         const kv_status_t st = set_err(db, rc, db->db ? sqlite3_errmsg(db->db) : "sqlite3_open_v2 failed");
         if (db->db) sqlite3_close(db->db);
@@ -120,8 +123,8 @@ void kv_close(kvdb_t *db) {
 }
 
 static kv_status_t bind_u64(kvdb_t *db, sqlite3_stmt *st, int idx, const uint64_t key) {
-    if (key > (uint64_t)INT64_MAX) return KV_EINVAL;
-    const int rc = sqlite3_bind_int64(st, idx, (sqlite3_int64)key);
+    if (key > (uint64_t) INT64_MAX) return KV_EINVAL;
+    const int rc = sqlite3_bind_int64(st, idx, (sqlite3_int64) key);
     if (rc != SQLITE_OK) return set_err(db, rc, sqlite3_errmsg(db->db));
     return KV_OK;
 }
@@ -158,9 +161,9 @@ kv_status_t kv_get_u64(kvdb_t *db, const uint64_t key, char **out_value) {
     if (rc == SQLITE_ROW) {
         const unsigned char *txt = sqlite3_column_text(db->st_get, 0);
         const int n = sqlite3_column_bytes(db->st_get, 0);
-        char *s = (char *)malloc((size_t)n + 1);
+        char *s = (char *) malloc((size_t) n + 1);
         if (!s) return KV_ENOMEM;
-        memcpy(s, txt ? (const char *)txt : "", (size_t)n);
+        memcpy(s, txt ? (const char *) txt : "", (size_t) n);
         s[n] = '\0';
         *out_value = s;
         return KV_OK;
@@ -187,13 +190,15 @@ kv_status_t kv_del_u64(kvdb_t *db, const uint64_t key) {
 }
 
 kv_status_t kv_put_u32(kvdb_t *db, const uint32_t key, const char *value) {
-    return kv_put_u64(db, (uint64_t)key, value);
+    return kv_put_u64(db, (uint64_t) key, value);
 }
+
 kv_status_t kv_get_u32(kvdb_t *db, const uint32_t key, char **out_value) {
-    return kv_get_u64(db, (uint64_t)key, out_value);
+    return kv_get_u64(db, (uint64_t) key, out_value);
 }
+
 kv_status_t kv_del_u32(kvdb_t *db, const uint32_t key) {
-    return kv_del_u64(db, (uint64_t)key);
+    return kv_del_u64(db, (uint64_t) key);
 }
 
 const char *kv_last_error(const kvdb_t *db) {

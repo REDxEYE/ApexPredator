@@ -46,6 +46,10 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
         export_ddsc(archive_manager, hash, &mb, path, export_path);
     } else if (memcmp(mb.data, RTPC_MAGIC, 4) == 0) {
         RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) &mb);
+        if (root_node==NULL) {
+            return INVALID_GL_ID;
+        }
+
         // RuntimeNode_print(root_node, stdout, 0);
         // String epe_json = {0};
         // String_init(&epe_json, 8192);

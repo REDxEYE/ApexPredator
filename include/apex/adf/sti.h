@@ -128,8 +128,6 @@ typedef struct STI_TypeLibrary{
     STI_NameHasToTypeHash name_hash_to_type;
     DynamicArray_STI_exportedHashes exported_hashes;
     STI_FunctionDict object_functions;
-
-    DynamicInsertOnlyIntMap_HashString hash_strings;
 } STI_TypeLibrary;
 
 void STI_TypeLibrary_init(STI_TypeLibrary *lib);

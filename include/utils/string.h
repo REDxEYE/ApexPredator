@@ -98,7 +98,7 @@ static inline char *String_detach(String *string) {
     return buffer;
 }
 
-static inline uint32 String_find_subcstring(String *string, const char *sub) {
+static inline uint32 String_find_subcstring(const String *string, const char *sub) {
     char *found = strstr(string->buffer, sub);
     return found ? (uint32) (found - string->buffer) : UINT32_MAX;
 }

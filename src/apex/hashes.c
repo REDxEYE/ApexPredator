@@ -2,71 +2,77 @@
 
 #include "apex/hashes.h"
 #include "apex/adf/adf_types.h"
-#include "utils/dynamic_array.h"
-#include "utils/dynamic_insert_only_map.h"
 #include "platform/common_arrays.h"
+#include "utils/sqlite_wrapper.h"
 
-DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(charPtr, charPtr);
+static kvdb_t *hash_db;
 
-const static DynamicInsertOnlyIntMap_charPtr names_map = {
-    .keys = {
-        .items = (uint64 *) STI_ADF_TYPES_hash_strings_hash,
-        .item_size = 8,
-        .capacity = sizeof(STI_ADF_TYPES_hash_strings_hash) / sizeof(uint64),
-        .statically_allocated = 1,
-        .heap_allocated = 0,
-        .count = sizeof(STI_ADF_TYPES_hash_strings_hash) / sizeof(uint64),
-    },
-    .values = {
-        .items = (char **) STI_ADF_TYPES_hash_strings_string,
-        .item_size = 8,
-        .capacity = sizeof(STI_ADF_TYPES_hash_strings_string) / sizeof(char *),
-        .statically_allocated = 1,
-        .heap_allocated = 0,
-        .count = sizeof(STI_ADF_TYPES_hash_strings_string) / sizeof(char *),
-    },
-};
-
-
-typedef struct {
-    uint32 hash;
-    const char *name;
-} KnownHashToName;
-
-DYNAMIC_ARRAY_STRUCT(KnownHashToName, KnownHashToName);
-
-const static KnownHashToName names2[] = {
-#include "apex/hashes.inc"
-};
-
-const static uint32 names2_len = sizeof(names2) / sizeof(names2[0]);
-
-String *find_name(uint32 key) {
-    const char *real_name = NULL;
-    // hashes are sorted, use binary search
-    int left = 0;
-    int right = names2_len - 1;
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (names2[mid].hash == key) {
-            real_name = names2[mid].name;
-            break;
-        } else if (names2[mid].hash < key) {
-            left = mid + 1;
-        } else {
-            right = mid - 1;
+void init_hashes() {
+    if (hash_db == NULL) {
+        if (kv_open(&hash_db, "./../hashes.db") != KV_OK) {
+            fprintf(stderr, "Failed to open hashes database\n");
+            exit(1);
         }
     }
+}
 
-    if (real_name == NULL) {
-        void **res = (DM_get(&names_map, key));
-        real_name = res != NULL ? *res : NULL;
+kvdb_t *get_hash_db() {
+    if (hash_db == NULL) {
+        init_hashes();
     }
-    if (real_name != NULL) {
-        return String_new_from_cstr(real_name);
-    }
-    String *tmp = String_new(64);
-    String_append_format(tmp, "0x%08X", key);
+    return hash_db;
+}
 
+String *find_name32(const uint32 key) {
+    init_hashes();
+    char *value = NULL;
+    const kv_status_t status = kv_get_u32(hash_db, key, &value);
+    if (status == KV_NOTFOUND) {
+        String *tmp = String_new(64);
+        String_append_format(tmp, "0x%08X", key);
+    }
+    String *tmp = String_new_from_cstr(value);
     return tmp;
+}
+
+String * find_name64(uint64 key) {
+    init_hashes();
+    char *value = NULL;
+    const kv_status_t status = kv_get_u64(hash_db, key, &value);
+    if (status == KV_NOTFOUND) {
+        String *tmp = String_new(64);
+        String_append_format(tmp, "0x%016lX", (unsigned long long)key);
+    }
+    String *tmp = String_new_from_cstr(value);
+    return tmp;
+}
+
+bool check_hash32_presence(const uint32 key) {
+    init_hashes();
+    char *stored_value = NULL;
+    const kv_status_t status = kv_get_u32(hash_db, key, &stored_value);
+    if (status == KV_NOTFOUND) {
+        return false;
+    }
+    return true;
+}
+
+bool check_hash64_presence(const uint64 key) {
+    init_hashes();
+    char *stored_value = NULL;
+    const kv_status_t status = kv_get_u64(hash_db, key, &stored_value);
+    if (status == KV_NOTFOUND) {
+        return false;
+    }
+    return true;
+}
+
+void store_hash32_name(uint32 key, const String *value) {
+    init_hashes();
+    kv_put_u32(hash_db, key, String_data(value));
+}
+
+void store_hash64_name(uint64 key, const String *value) {
+    init_hashes();
+    kv_put_u64(hash_db, key, String_data(value));
 }

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "apex/hashes.h"
 #include "apex/rtpc.h"
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
@@ -41,6 +42,20 @@ bool visit_adf_file(Context *ctx, MemoryBuffer *mb) {
     return true;
 }
 
+bool visit_ptpc_nodes(RuntimeNode * runtime_node, Context * ctx) {
+    for (int i = 0; i < runtime_node->props.count; ++i) {
+        const RuntimeProp *prop = DA_at(&runtime_node->props, i);
+        if (prop->type == PROP_TYPE_STR) {
+            const String* value = &prop->value.string_value;
+            kv_put_u32(ctx->db, hash_string(value), String_data(value));
+        }
+    }
+    for (int i = 0; i < runtime_node->children.count; ++i) {
+        RuntimeNode* child_node = DA_at(&runtime_node->children, i);
+        visit_ptpc_nodes(child_node, ctx);
+    }
+}
+
 bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
     // if (memcmp(mb->data, ADF_MAGIC, 4) == 0) {
     //     visit_adf_file(ctx, mb);
@@ -68,14 +83,11 @@ bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
         Archive_free((Archive *) sarc);
         AAFArchive_free(&aaf_archive);
     }else if (memcmp(mb->data, RTPC_MAGIC, 4) == 0) {
-        RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) &mb);
-        // RuntimeNode_print(root_node, stdout, 0);
-        // String epe_json = {0};
-        // String_init(&epe_json, 8192);
-        // RuntimeNode_emit_json(root_node, &epe_json, 0);
-        // printf("%s\n", String_data(&epe_json));
-        // output_node_id = export_epe(context, archive_manager, lib, havok_lib, root_node, hash, path, export_path);
-        RuntimeNode_free(root_node);
+        RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) mb);
+        if (root_node!=NULL){
+            visit_ptpc_nodes(root_node, ctx);
+            RuntimeNode_free(root_node);
+        }
     }
     return true;
 }
@@ -100,8 +112,7 @@ int main(int argc, const char *argv[]) {
         return 0;
     }
 
-    kvdb_t *db = NULL;
-    if (kv_open(&db, "./../hashes.db") != KV_OK) return 1;
+    kvdb_t *db = get_hash_db();
 
     FILE *f = fopen("./../strings_procmon.txt", "r");
     if (f) {
@@ -110,7 +121,6 @@ int main(int argc, const char *argv[]) {
             size_t len = strlen(line);
             if (len > 0 && line[len - 1] == '\n') {
                 line[len - 1] = '\0';
-                len--;
             }
             String *tmp = String_new_from_cstr(line);
             uint32 hash = hash_string(tmp);
@@ -119,6 +129,40 @@ int main(int argc, const char *argv[]) {
         }
         fclose(f);
     }
+    f = fopen("./../file_locations.txt", "r");
+    if (f) {
+        char line[1024];
+        while (fgets(line, sizeof(line), f)) {
+            size_t len = strlen(line);
+            if (len > 0 && line[len - 1] == '\n') {
+                line[len - 1] = '\0';
+            }
+            String *tmp = String_new_from_cstr(line);
+            uint32 hash = hash_string(tmp);
+            kv_put_u32(db, hash, String_data(tmp));
+            String_free(tmp);
+        }
+        fclose(f);
+    }
+
+    // const uint64 sti_hash_count = sizeof(STI_ADF_TYPES_hash_strings_hash)/sizeof(uint64);
+    // for (int i = 0; i < sti_hash_count; ++i) {
+    //     uint32 hash = (uint32)STI_ADF_TYPES_hash_strings_hash[i];
+    //     const char* str = STI_ADF_TYPES_hash_strings_string[i];
+    //     kv_put_u32(db, hash, str);
+    // }
+    //
+    // typedef struct {
+    //     uint32 hash;
+    //     const char *name;
+    // } KnownHashToName;
+    //
+    // extern KnownHashToName names2[];
+    // extern uint32 names2_len;
+    //
+    // for (int i = 0; i < names2_len; ++i) {
+    //     kv_put_u32(db, names2[i].hash, names2[i].name);
+    // }
 
     ArchiveManager archive_manager = {0};
     ArchiveManager_init(&archive_manager);

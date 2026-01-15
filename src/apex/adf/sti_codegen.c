@@ -583,13 +583,6 @@ void STI_generate_register_function(STI_TypeLibrary *lib, const String *namespac
                 string_data, string_data, string_data, string_data);
     }
 
-    fprintf(output, "for(uint32 ___i=0;___i<%i;___i++) {\n", lib->hash_strings.keys.count);
-    fprintf(output, "    const char* str = STI_%s_hash_strings_string[___i];\n", String_data(namespace));
-    fprintf(output, "    uint64 hash =     STI_%s_hash_strings_hash[___i];\n", String_data(namespace));
-    fprintf(output, "    String* slot = DM_insert(&lib->hash_strings, hash);\n");
-    fprintf(output, "    if(slot) String_from_cstr(slot, str);\n");
-    fprintf(output, "}\n");
-
     fprintf(output, "}\n\n");
     String_free(&type_name);
 }
@@ -757,24 +750,5 @@ void STI_TypeLibrary_generate_types(STI_TypeLibrary *lib, const String *namespac
         STI_generate_print_function(lib, type, impl_output, false);
     }
     STI_generate_register_function(lib, namespace, impl_output);
-
-    fprintf(header_output, "extern const char*  STI_%s_hash_strings_string[%i];\n\n", String_data(namespace),
-            lib->hash_strings.keys.count);
-    fprintf(header_output, "extern const uint64 STI_%s_hash_strings_hash[%i];\n\n", String_data(namespace),
-            lib->hash_strings.keys.count);
-    fprintf(impl_output, "const char* STI_%s_hash_strings_string[%i] = {", String_data(namespace),
-            lib->hash_strings.keys.count);
-    for (int i = 0; i < lib->hash_strings.keys.count; ++i) {
-        if (i % 10 == 0)fprintf(impl_output, "\n");
-        fprintf(impl_output, "\"%s\", ", String_data(&lib->hash_strings.values.items[i]));
-    }
-    fprintf(impl_output, "\n};\n");
-    fprintf(impl_output, "const uint64 STI_%s_hash_strings_hash[%i] = {", String_data(namespace),
-            lib->hash_strings.keys.count);
-    for (int i = 0; i < lib->hash_strings.keys.count; ++i) {
-        if (i % 10 == 0)fprintf(impl_output, "\n");
-        fprintf(impl_output, "%lu, ", lib->hash_strings.keys.items[i]);
-    }
-    fprintf(impl_output, "\n};\n");
     fprintf(header_output, "#endif //%s_GUARD\n", String_data(namespace));
 }

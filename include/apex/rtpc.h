@@ -83,49 +83,49 @@ RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer);
 RuntimeNode *RuntimeNode_new(String *name);
 
 void RuntimeNode_init(RuntimeNode *node, String *name);
-RuntimeProp* RuntimeNode_get_prop(RuntimeNode* node, const char* name);
-RuntimeProp* RuntimeNode_get_prop_by_hash(RuntimeNode* node, uint32 hash);
+RuntimeProp* RuntimeNode_get_prop(const RuntimeNode* node, const char* name);
+RuntimeProp* RuntimeNode_get_prop_by_hash(const RuntimeNode* node, uint32 hash);
 
 // Shortcut getters for RuntimeProp values. All return NULL when prop not found. Please use RuntimeNode_has_prop to check if prop exist
-uint32 RuntimeNode_get_prop_u32(RuntimeNode* node, const char* name);
-float32 RuntimeNode_get_prop_f32(RuntimeNode* node, const char* name);
-String* RuntimeNode_get_prop_str(RuntimeNode* node, const char* name);
-float32* RuntimeNode_get_prop_vec2(RuntimeNode* node, const char* name);
-float32* RuntimeNode_get_prop_vec3(RuntimeNode* node, const char* name);
-float32* RuntimeNode_get_prop_vec4(RuntimeNode* node, const char* name);
-float32* RuntimeNode_get_prop_mat3x3(RuntimeNode* node, const char* name);
-float32* RuntimeNode_get_prop_mat4x4(RuntimeNode* node, const char* name);
-DynamicArray_uint32* RuntimeNode_get_prop_array_u32(RuntimeNode* node, const char* name);
-DynamicArray_float32* RuntimeNode_get_prop_array_f32(RuntimeNode* node, const char* name);
-DynamicArray_uint8* RuntimeNode_get_prop_array_u8(RuntimeNode* node, const char* name);
-uint64 RuntimeNode_get_prop_objid(RuntimeNode* node, const char* name);
-DynamicArray_uint64* RuntimeNode_get_prop_event(RuntimeNode* node, const char* name);
+uint32 RuntimeNode_get_prop_u32(const RuntimeNode* node, const char* name);
+float32 RuntimeNode_get_prop_f32(const RuntimeNode* node, const char* name);
+String* RuntimeNode_get_prop_str(const RuntimeNode* node, const char* name);
+float32* RuntimeNode_get_prop_vec2(const RuntimeNode* node, const char* name);
+float32* RuntimeNode_get_prop_vec3(const RuntimeNode* node, const char* name);
+float32* RuntimeNode_get_prop_vec4(const RuntimeNode* node, const char* name);
+float32* RuntimeNode_get_prop_mat3x3(const RuntimeNode* node, const char* name);
+float32* RuntimeNode_get_prop_mat4x4(const RuntimeNode* node, const char* name);
+DynamicArray_uint32* RuntimeNode_get_prop_array_u32(const RuntimeNode* node, const char* name);
+DynamicArray_float32* RuntimeNode_get_prop_array_f32(const RuntimeNode* node, const char* name);
+DynamicArray_uint8* RuntimeNode_get_prop_array_u8(const RuntimeNode* node, const char* name);
+uint64 RuntimeNode_get_prop_objid(const RuntimeNode* node, const char* name);
+DynamicArray_uint64* RuntimeNode_get_prop_event(const RuntimeNode* node, const char* name);
 
-uint32 RuntimeNode_get_prop_by_hash_u32(RuntimeNode* node, uint32 hash);
-float32 RuntimeNode_get_prop_by_hash_f32(RuntimeNode* node, uint32 hash);
-String* RuntimeNode_get_prop_by_hash_str(RuntimeNode* node, uint32 hash);
-float32* RuntimeNode_get_prop_by_hash_vec2(RuntimeNode* node, uint32 hash);
-float32* RuntimeNode_get_prop_by_hash_vec3(RuntimeNode* node, uint32 hash);
-float32* RuntimeNode_get_prop_by_hash_vec4(RuntimeNode* node, uint32 hash);
-float32* RuntimeNode_get_prop_by_hash_mat3x3(RuntimeNode* node, uint32 hash);
-float32* RuntimeNode_get_prop_by_hash_mat4x4(RuntimeNode* node, uint32 hash);
-DynamicArray_uint32* RuntimeNode_get_prop_by_hash_array_u32(RuntimeNode* node, uint32 hash);
-DynamicArray_float32* RuntimeNode_get_prop_by_hash_array_f32(RuntimeNode* node, uint32 hash);
-DynamicArray_uint8* RuntimeNode_get_prop_by_hash_array_u8(RuntimeNode* node, uint32 hash);
-uint64 RuntimeNode_get_prop_by_hash_objid(RuntimeNode* node, uint32 hash);
-DynamicArray_uint64* RuntimeNode_get_prop_by_hash_event(RuntimeNode* node, uint32 hash);
-bool RuntimeNode_has_prop(RuntimeNode *node, const char *name);
+uint32 RuntimeNode_get_prop_by_hash_u32(const RuntimeNode* node, uint32 hash);
+float32 RuntimeNode_get_prop_by_hash_f32(const RuntimeNode* node, uint32 hash);
+String* RuntimeNode_get_prop_by_hash_str(const RuntimeNode* node, uint32 hash);
+float32* RuntimeNode_get_prop_by_hash_vec2(const RuntimeNode* node, uint32 hash);
+float32* RuntimeNode_get_prop_by_hash_vec3(const RuntimeNode* node, uint32 hash);
+float32* RuntimeNode_get_prop_by_hash_vec4(const RuntimeNode* node, uint32 hash);
+float32* RuntimeNode_get_prop_by_hash_mat3x3(const RuntimeNode* node, uint32 hash);
+float32* RuntimeNode_get_prop_by_hash_mat4x4(const RuntimeNode* node, uint32 hash);
+DynamicArray_uint32* RuntimeNode_get_prop_by_hash_array_u32(const RuntimeNode* node, uint32 hash);
+DynamicArray_float32* RuntimeNode_get_prop_by_hash_array_f32(const RuntimeNode* node, uint32 hash);
+DynamicArray_uint8* RuntimeNode_get_prop_by_hash_array_u8(const RuntimeNode* node, uint32 hash);
+uint64 RuntimeNode_get_prop_by_hash_objid(const RuntimeNode* node, uint32 hash);
+DynamicArray_uint64* RuntimeNode_get_prop_by_hash_event(const RuntimeNode* node, uint32 hash);
+bool RuntimeNode_has_prop(const RuntimeNode *node, const char *name);
 
 
-void RuntimeNode_print(RuntimeNode* node, FILE* output, uint32 indent);
-void RuntimeNode_emit_json(RuntimeNode *node, String *out, uint32 indent);
+void RuntimeNode_print(const RuntimeNode* node, FILE* output, uint32 indent);
+void RuntimeNode_emit_json(const RuntimeNode *node, String *out, uint32 indent);
 
 void RuntimeNode_free(RuntimeNode *node);
 
 void RuntimeProp_init(RuntimeProp *prop, PropType type);
 
-void RuntimeProp_print(RuntimeProp* prop, FILE* output, uint32 indent);
-void RuntimeProp_emit_json(RuntimeProp *prop, String *out, uint32 indent);
+void RuntimeProp_print(const RuntimeProp* prop, FILE* output, uint32 indent);
+void RuntimeProp_emit_json(const RuntimeProp *prop, String *out, uint32 indent);
 
 void RuntimeProp_free(RuntimeProp* prop);
 

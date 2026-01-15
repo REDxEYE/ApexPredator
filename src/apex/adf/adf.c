@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "apex/hashes.h"
 #include "utils/common.h"
 #include "utils/buffer/memory_buffer.h"
 
@@ -100,10 +101,10 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
         buffer->read_cstring(buffer, &hash_tmp);
         uint64 string_hash = 0;
         buffer->read_uint64(buffer, &string_hash);
-        if (DA_contains(&lib->hash_strings.keys, &string_hash, compare_hashes64)) {
+        if (check_hash64_presence(string_hash)) {
             continue;
         }
-        String_copy_from(DM_insert(&lib->hash_strings, string_hash), &hash_tmp);
+        store_hash64_name(string_hash, &hash_tmp);
     }
     String_free(&hash_tmp);
 
