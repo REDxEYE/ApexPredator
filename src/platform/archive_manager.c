@@ -18,7 +18,7 @@ bool ArchiveManager_get_file(ArchiveManager *manager, const String *path, Memory
         Archive *ar = manager->archives.items[i];
         if (Archive_get_file_by_hash(ar, hash, mb)) {
             // printf("[INFO]: File \"%s\" found in archive \"%s\"\n", String_data(path),
-                   // String_data(Archive_get_name(ar)));
+            // String_data(Archive_get_name(ar)));
             return true;
         }
     }
@@ -64,6 +64,17 @@ void ArchiveManager_get_all_entries(const ArchiveManager *manager, DynamicArray_
     for (uint32 i = 0; i < manager->archives.count; ++i) {
         const Archive *ar = manager->archives.items[i];
         Archive_get_all_entries(ar, entries);
+    }
+}
+
+void ArchiveManager_foreach_file(const ArchiveManager *manager,
+                                 const foreach_callback callback,
+                                 void *user_data) {
+    for (uint32 i = 0; i < manager->archives.count; ++i) {
+        const Archive *ar = manager->archives.items[i];
+        if (!Archive_foreach_file(ar, callback, user_data)) {
+            break;
+        }
     }
 }
 

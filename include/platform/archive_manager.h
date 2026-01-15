@@ -26,6 +26,8 @@ bool ArchiveManager_has_file_by_hash(const ArchiveManager *manager, uint32 hash)
 
 void ArchiveManager_get_all_entries(const ArchiveManager* manager, DynamicArray_ArchiveEntry* entries);
 
+void ArchiveManager_foreach_file(const ArchiveManager *manager, foreach_callback callback, void *user_data);
+
 void ArchiveManager_free(ArchiveManager *manager);
 
 #endif //APEXPREDATOR_ARCHIVE_MANAGER_H

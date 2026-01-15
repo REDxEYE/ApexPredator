@@ -121,4 +121,23 @@ static inline void Archive_print_files(const Archive *archive) {
     }
 }
 
+typedef bool (*foreach_callback)(const Archive *archive, const ArchiveEntry *entry, void *user_data);
+
+static inline bool Archive_foreach_file(const Archive* archive, const foreach_callback callback, void* user_data) {
+    assert(archive!=NULL);
+    DynamicArray_ArchiveEntry entries = {0};
+    DA_init(&entries, ArchiveEntry, 16);
+    Archive_get_all_entries(archive, &entries);
+    for (size_t i = 0; i < entries.count; ++i) {
+        const ArchiveEntry* entry = &entries.items[i];
+        if (!callback(archive, entry, user_data)) {
+            DA_free(&entries);
+            return false;
+        }
+    }
+    DA_free(&entries);
+    return true;
+}
+
+
 #endif //APEXPREDATOR_ARCHIVE_H

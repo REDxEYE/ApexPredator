@@ -28,7 +28,7 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
     GL_ID output_node_id = INVALID_GL_ID;
 
     if (memcmp(mb.data, ADF_MAGIC, 4) == 0) {
-        output_node_id = export_adf_file(context, archive_manager, lib, havok_lib, hash, path, &mb, export_path);
+        output_node_id = export_adf_file_from_buffer(context, archive_manager, lib, havok_lib, hash, path, &mb, export_path);
     } else if (memcmp(mb.data, AAF_MAGIC, 4) == 0) {
         AAFArchive aaf_archive = {0};
         AAFArchive_from_buffer(&aaf_archive, (Buffer *) &mb);

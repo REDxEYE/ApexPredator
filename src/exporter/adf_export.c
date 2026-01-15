@@ -43,9 +43,9 @@ bool decompress_data(const CompressedData *data, MemoryBuffer *mb) {
 
     switch (compressed_header->comp_type) {
         case zstd: {
-            size_t zstd_res = ZSTD_decompress(mb->data, mb->size, compressed_data,
+            const size_t zstd_res = ZSTD_decompress(mb->data, mb->size, compressed_data,
                                               data->Data.count - sizeof(CompressedHeader));
-            ZSTD_ErrorCode error = ZSTD_isError(zstd_res);
+            const ZSTD_ErrorCode error = ZSTD_isError(zstd_res);
             if (error != ZSTD_error_no_error) {
                 printf("ZSTD decompression error: %s\n", ZSTD_getErrorName(error));
                 assert(false && "ZSTD decompression failed");
@@ -343,6 +343,24 @@ void export_terrain_patch(const String *export_path, TerrainPatch *patch, uint32
 }
 
 GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
+                              Havok_TypeLibrary *havok_lib, const String *path, const uint32 path_hash, const String *export_path) {
+    if (!ArchiveManager_has_file_by_hash(archive_manager, path_hash)) {
+        printf("File not found\n");
+        return INVALID_GL_ID;
+    }
+
+    MemoryBuffer mb = {0};
+    if (!ArchiveManager_get_file_by_hash(archive_manager, path_hash, &mb)) {
+        printf("File not found\n");
+        return INVALID_GL_ID;
+    }
+
+    const GL_ID result =  export_adf_file_from_buffer(context, archive_manager, lib, havok_lib, path_hash, path, &mb, export_path);
+    mb.close(&mb);
+    return result;
+}
+
+GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
                       Havok_TypeLibrary *havok_lib, const uint32 path_hash, const String *path, MemoryBuffer *mb, const String *export_path) {
     assert(context!=NULL && "context must be initialized");
 

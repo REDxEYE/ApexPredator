@@ -6,6 +6,7 @@
 
 #include "utils/path.h"
 #include "utils/stb_image_write.h"
+#include "tinycpng/public/library.h"
 
 Texture *Texture_new() {
     Texture *texture = malloc(sizeof(Texture));
@@ -303,13 +304,24 @@ void *Texture_write_png_to_memory(const Texture *texture, uint32 *channel_count,
         return NULL;
     }
     uint8 *png_data = NULL;
-    const int32 stride = texture->width * texture->channel_count * texture->bpc;
-    int32 png_size = 0;
-    png_data = stbi_write_png_to_mem(texture->data, stride, texture->width, texture->height, comp, &png_size);
-    if (channel_count) {
-        *channel_count = texture->channel_count;
+    PNGWriteConfig config = {0};
+    PNGWriteConfig_default(&config);
+    PNGFile file = {0};
+    png_from_data(texture->data, texture->data_size, texture->width, texture->height, comp, 8, &file);
+
+    MemoryFile memory_file = {0};
+    UserIO io = {.read_func = memory_file_read, .write_func = memory_file_write, .user_file = &memory_file};
+
+    png_write(&io, &config, &file);
+    png_free(&file);
+
+    *out_size = memory_file.size;
+    if (channel_count!=NULL) {
+        *channel_count = comp;
     }
-    *out_size = png_size;
+    png_data = malloc(memory_file.size);
+    memcpy(png_data, memory_file.data, memory_file.size);
+    MemoryFile_free(&memory_file);
 
     return png_data;
 }

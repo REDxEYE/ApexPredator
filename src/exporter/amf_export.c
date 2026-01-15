@@ -583,7 +583,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         return model_root_node_id;
     }
 
-    const GL_ID mesh_root_node = export_adf_file(context, archive_manager, lib, havok_lib, hash_string(mesh_path),
+    const GL_ID mesh_root_node = export_adf_file_from_buffer(context, archive_manager, lib, havok_lib, hash_string(mesh_path),
                                                  mesh_path,
                                                  &mb,
                                                  export_path);
