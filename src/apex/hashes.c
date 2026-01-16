@@ -28,8 +28,9 @@ String *find_name32(const uint32 key) {
     char *value = NULL;
     const kv_status_t status = kv_get_u32(hash_db, key, &value);
     if (status == KV_NOTFOUND) {
-        String *tmp = String_new(64);
-        String_append_format(tmp, "0x%08X", key);
+        return NULL;
+        // String *tmp = String_new(64);
+        // String_append_format(tmp, "0x%08X", key);
     }
     String *tmp = String_new_from_cstr(value);
     return tmp;
@@ -40,8 +41,9 @@ String * find_name64(uint64 key) {
     char *value = NULL;
     const kv_status_t status = kv_get_u64(hash_db, key, &value);
     if (status == KV_NOTFOUND) {
-        String *tmp = String_new(64);
-        String_append_format(tmp, "0x%016lX", (unsigned long long)key);
+        return NULL;
+        // String *tmp = String_new(64);
+        // String_append_format(tmp, "0x%016lX", (unsigned long long)key);
     }
     String *tmp = String_new_from_cstr(value);
     return tmp;

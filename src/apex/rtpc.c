@@ -350,7 +350,14 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
     }
     RuntimeProp_init(prop, header.prop_type);
     prop->name_hash = header.name_hash;
-    String_move_from(&prop->name, String_move(find_name32(header.name_hash)));
+    String *found_name = find_name32(header.name_hash);
+    if (found_name == NULL) {
+        String tmp_name = {0};
+        String_format(&tmp_name, "0x%08X", prop->name_hash);
+        String_move_from(&prop->name, String_move(&tmp_name));
+    } else {
+        String_move_from(&prop->name, String_move(found_name));
+    }
     switch (prop->type) {
         case PROP_TYPE_NONE: {
             // Nothing to read

@@ -47,6 +47,8 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                 if (instance->type_hash == STI_TYPE_HASH_AmfMeshBuffers) {
                     hi_res_buffers = ADF_read_instance(&hi_res_adf, lib, instance, &hi_res_buffer);
                     hi_res_free_fn = ((STI_ObjectMethods *) DM_get(&lib->object_functions, instance->type_hash))->free;
+                }else {
+                    printf("Unexpected hi-res mesh buffers type: %08X\n", instance->type_hash);
                 }
                 ADF_free(&hi_res_adf);
                 String_free(&hi_res_path);
@@ -96,6 +98,12 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
             String_free(&lod_name);
 
             AmfMesh *mesh = DA_at(&lod_group->Meshes, mesh_id);
+            if (mesh->MeshProperties.type_hash==STI_TYPE_HASH_GeneralMeshConstants) {
+                // GeneralMeshConstants* constants = (GeneralMeshConstants*)mesh->MeshProperties.data;
+            }else{
+                printf("Unsupported mesh prop type: %08X\n", mesh->MeshProperties.type_hash);
+            }
+
             const String *mesh_type_name = find_name32(mesh->MeshTypeId);
             uint32 vertex_count = mesh->VertexCount;
             uint32 index_buffer_index = mesh->IndexBufferIndex;
@@ -118,7 +126,6 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
             GL_ID gl_mesh_id = GLTFContext_mesh_add(context, String_data(mesh_type_name), mesh->SubMeshes.count);
             GLTFContext_node_set_mesh(context, gl_node_id, gl_mesh_id);
 
-            bool has_bone_data = false;
             for (int sub_mesh_id = 0; sub_mesh_id < mesh->SubMeshes.count; ++sub_mesh_id) {
                 AmfSubMesh *sub_mesh = DA_at(&mesh->SubMeshes, sub_mesh_id);
                 const String *material_name = find_name32(sub_mesh->SubMeshId);
@@ -317,7 +324,6 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                         case AmfUsage_BoneIndex: {
                             data_type = cgltf_type_vec4;
                             comp_type = cgltf_component_type_r_16u;
-                            has_bone_data = true;
                             normalized = false;
                             stride = 4 * sizeof(uint16);
                             String_from_cstr(&attr_name, "JOINTS_0");
@@ -416,9 +422,15 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                     free(attribute_data);
                 }
             }
-            GL_ID current_skin = GLTFContext_current_skin(context);
-            if (has_bone_data && IS_VALID_GL_ID(current_skin))
-                GLTFContext_node_set_skin(context, gl_node_id, current_skin);
+            if (mesh->MeshProperties.type_hash==STI_TYPE_HASH_GeneralMeshConstants) {
+                const GeneralMeshConstants* constants = (GeneralMeshConstants*)mesh->MeshProperties.data;
+                if (constants->IsSkinnedMesh) {
+                    GL_ID current_skin = GLTFContext_current_skin(context);
+                    if (IS_VALID_GL_ID(current_skin)) {
+                        GLTFContext_node_set_skin(context, gl_node_id, current_skin);
+                    }
+                }
+            }
         }
     }
 
@@ -577,7 +589,6 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
     }
 
     const String *mesh_path = find_name32(amf_model->Mesh);
-
 
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file(archive_manager, mesh_path, &mb)) {

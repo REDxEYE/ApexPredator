@@ -67,8 +67,8 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
         const HAVOK_ObjectMethods *type_methods = DM_get(&havok_lib->object_functions, type_hash);
         void *item_obj = (void *) malloc(item_type->size * item->count);
         type_methods->read(&tag_file, havok_lib, item_obj, &tag_file.data.items[item->offset]);
-        JsonContext ctx;
-        jsonInit(&ctx, stdout);
+        // JsonContext ctx;
+        // jsonInit(&ctx, stdout);
         // type_methods->print(item_obj, havok_lib, &ctx);
         if (strcmp(String_data(&item_type->name), "hkRootLevelContainer") == 0) {
             hkRootLevelContainer *root_level_container = (hkRootLevelContainer *) item_obj;

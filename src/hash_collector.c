@@ -28,40 +28,39 @@ typedef struct Context {
 bool visit_adf_file(Context *ctx, MemoryBuffer *mb) {
     ADF adf = {0};
     ADF_from_buffer(&adf, (Buffer *) mb, ctx->sti_lib);
-    for (int i = 0; i < adf.header.instance_count; ++i) {
-        const ADFInstance *instance = DA_at(&adf.instances, i);
-        void *instance_data = ADF_read_instance(&adf, ctx->sti_lib, instance, mb);
-        // if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
-        //     TerrainPatch* ter = instance_data;
-        //     ADF_print_instance(ctx->sti_lib, instance, instance_data, 0);
-        // }
-
-        ADF_free_instance(ctx->sti_lib, instance, instance_data);
-    }
+    // for (int i = 0; i < adf.header.instance_count; ++i) {
+    //     const ADFInstance *instance = DA_at(&adf.instances, i);
+    //     void *instance_data = ADF_read_instance(&adf, ctx->sti_lib, instance, mb);
+    //     // if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
+    //     //     TerrainPatch* ter = instance_data;
+    //     //     ADF_print_instance(ctx->sti_lib, instance, instance_data, 0);
+    //     // }
+    //
+    //     ADF_free_instance(ctx->sti_lib, instance, instance_data);
+    // }
     ADF_free(&adf);
     return true;
 }
 
-bool visit_ptpc_nodes(RuntimeNode * runtime_node, Context * ctx) {
+bool visit_ptpc_nodes(RuntimeNode *runtime_node, Context *ctx) {
     for (int i = 0; i < runtime_node->props.count; ++i) {
         const RuntimeProp *prop = DA_at(&runtime_node->props, i);
         if (prop->type == PROP_TYPE_STR) {
-            const String* value = &prop->value.string_value;
+            const String *value = &prop->value.string_value;
             kv_put_u32(ctx->db, hash_string(value), String_data(value));
         }
     }
     for (int i = 0; i < runtime_node->children.count; ++i) {
-        RuntimeNode* child_node = DA_at(&runtime_node->children, i);
+        RuntimeNode *child_node = DA_at(&runtime_node->children, i);
         visit_ptpc_nodes(child_node, ctx);
     }
     return true;
 }
 
 bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
-    // if (memcmp(mb->data, ADF_MAGIC, 4) == 0) {
-    //     visit_adf_file(ctx, mb);
-    // }
-    if (memcmp(mb->data, AAF_MAGIC, 4) == 0) {
+    if (memcmp(mb->data, ADF_MAGIC, 4) == 0) {
+        visit_adf_file(ctx, mb);
+    } else if (memcmp(mb->data, AAF_MAGIC, 4) == 0) {
         AAFArchive aaf_archive = {0};
         AAFArchive_from_buffer(&aaf_archive, (Buffer *) mb);
         MemoryBuffer *section_buffer = MemoryBuffer_new();
@@ -83,23 +82,39 @@ bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
         }
         Archive_free((Archive *) sarc);
         AAFArchive_free(&aaf_archive);
-    }else if (memcmp(mb->data, RTPC_MAGIC, 4) == 0) {
+    } else if (memcmp(mb->data, RTPC_MAGIC, 4) == 0) {
         RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) mb);
-        if (root_node!=NULL){
+        if (root_node != NULL) {
             visit_ptpc_nodes(root_node, ctx);
             RuntimeNode_free(root_node);
         }
+    } else if (memcmp(mb->data, "TAG0", 4) == 0) {
+        TagFile tag_file = {0};
+        TagFile_from_buffer(&tag_file, (Buffer *) &mb);
+        for (int i = 0; i < tag_file.types.count; ++i) {
+            const HKTagType *tf_type = DA_at(&tag_file.types, i);
+            kv_put_u32(ctx->db, hash_string(&tf_type->name), String_data(&tf_type->name));
+            for (int j = 0; j < tf_type->members.count; ++j) {
+                const HKTagTypeMember *tf_member = DA_at(&tf_type->members, j);
+                kv_put_u32(ctx->db, hash_string(&tf_member->name), String_data(&tf_member->name));
+            }
+        }
+        TagFile_free(&tag_file);
     }
     return true;
 }
 
 bool visit_all_files(const Archive *ar, const ArchiveEntry *ae, void *ctx) {
     MemoryBuffer mb = {0};
-    if (ae->path!=NULL) {
+    if (ae->path != NULL) {
         kv_put_u32(((Context *) ctx)->db, ae->path_hash, String_data(ae->path));
     }
     Archive_get_file_by_hash((Archive *) ar, ae->path_hash, &mb);
-    printf("Visiting file: %08X from archive %s\n", ae->path_hash, String_data(Archive_get_name(ar)));
+    const String *name = find_name32(ae->path_hash);
+    if (name != NULL)
+        printf("Visiting %s from archive %s\n", String_data(name), String_data(Archive_get_name(ar)));
+    else
+        printf("Visiting file: %08X from archive %s\n", ae->path_hash, String_data(Archive_get_name(ar)));
     visit_archive_file(ctx, &mb);
     mb.close(&mb);
 

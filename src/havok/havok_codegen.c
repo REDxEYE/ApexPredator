@@ -177,7 +177,7 @@ HavokType *HavokTypeLib__register_type(Havok_TypeLibrary *lib, const HKTagType *
 
 HavokType *HavokTypeLib__register_type(Havok_TypeLibrary *lib, const HKTagType *tf_type) {
     String *full_tf_type_name = Havok_full_tag_type_name(tf_type);
-    uint64 type_hash = hash_string(full_tf_type_name);
+    const uint64 type_hash = hash_string(full_tf_type_name);
     if (DA_contains(&lib->exported_hashes, &type_hash, compare_hashes64)) {
         String_free(full_tf_type_name);
         return DM_get(&lib->types, type_hash);
