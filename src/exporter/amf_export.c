@@ -547,6 +547,16 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                         emission_texture = convert_ddsc(archive_manager, emission_path);
                         if (!constants->EmissiveTextureHasColor && diffuse_texture != NULL) {
                             Texture *new_emission_texture = TextureOps_multiply(diffuse_texture, emission_texture);
+
+                            String* texture_save_path = GLTFContext_data_path(context);
+                            const uint32 hash = hash_string(emission_path);
+                            String tex_name = {0};
+                            Path_filename(emission_path, &tex_name);
+                            String_append_format(texture_save_path, "/%s_%08X", String_data(&tex_name), hash);
+                            String_free(&tex_name);
+                            Texture_save(emission_texture, texture_save_path);
+                            String_free(texture_save_path);
+
                             if (new_emission_texture != NULL) {
                                 Texture_free(emission_texture);
                                 emission_texture = new_emission_texture;
