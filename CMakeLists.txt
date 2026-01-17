@@ -89,9 +89,6 @@ add_executable(StringHasher
         src/utils/lookup3.c
 )
 
-add_executable(HashBruteforce
-        src/utils/lookup3.c
-)
 
 if (UNIX)
     target_compile_options(ApexPredator PRIVATE -fms-extensions)

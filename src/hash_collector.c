@@ -16,6 +16,7 @@
 #include "apex/package/tab_archive.h"
 #include "havok/havok_codegen.h"
 #include "havok/havok_generated.h"
+#include "platform/logger.h"
 #include "utils/hash_helper.h"
 #include "utils/sqlite_wrapper.h"
 

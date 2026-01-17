@@ -367,12 +367,13 @@ GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI
 GL_ID export_stream_path_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, ADF *adf, const MemoryBuffer* adf_buffer, const String *export_path) {
     const ADFInstance *path_file_header_instance = DA_at(&adf->instances, 0);
     StreamPatchFileHeader *path_file_header = ADF_read_instance(adf, lib, path_file_header_instance, adf_buffer);
-    const ADFInstance *patch_block_header_instance = DA_at(&adf->instances, 1);
-    StreamPatchBlockHeader* patch_block_header = ADF_read_instance(adf, lib, patch_block_header_instance, adf_buffer);
+    // const ADFInstance *patch_block_header_instance = DA_at(&adf->instances, 1);
+    // StreamPatchBlockHeader* patch_block_header = ADF_read_instance(adf, lib, patch_block_header_instance, adf_buffer);
 
-    for (int i = 2; i < adf->instances.count; ++i) {
+    for (int i = 1; i < adf->instances.count; ++i) {
         const ADFInstance *patch_instance = DA_at(&adf->instances, i);
         void* instance_data = ADF_read_instance(adf, lib, patch_instance, adf_buffer);
+        printf("Instance %i\n", i);
         ADF_print_instance(lib, patch_instance, instance_data, 0);
         printf("\n");
         ADF_free_instance(lib, patch_instance, instance_data);
@@ -380,7 +381,7 @@ GL_ID export_stream_path_file(GLTFContext *context, ArchiveManager *archive_mana
 
 
     ADF_free_instance(lib, path_file_header_instance, path_file_header);
-    ADF_free_instance(lib, patch_block_header_instance, patch_block_header);
+    // ADF_free_instance(lib, patch_block_header_instance, patch_block_header);
     return INVALID_GL_ID;
 }
 
@@ -423,6 +424,7 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
                     String_free(&chunk_patch_path);
                     break;
                 }
+                break;
             }
             ADF_free_instance(lib, instance, (void*)world_settings);
         }else if (instance->type_hash==STI_TYPE_HASH_StreamPatchFileHeader){

@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "apex/hashes.h"
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
 #include "utils/dynamic_array.h"
@@ -13,6 +14,7 @@
 #include "apex/adf/adf.h"
 #include "apex/package/tab_archive.h"
 #include "apex/adf/builtin_adf.h"
+#include "platform/logger.h"
 #include "utils/hash_helper.h"
 
 void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
@@ -140,7 +142,7 @@ void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
         String_from_cstr(&str, extra_strings[i]);
         uint32 hash = hash_string(&str);
 
-        String* slot = DM_insert(&lib->hash_strings, (uint64)hash);
+        String* slot = find_name64((uint64)hash);
         String_move_from(slot, String_move(&str));
         String_free(&str);
     }
