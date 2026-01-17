@@ -6,6 +6,7 @@
 #include <errno.h>
 
 #include "utils/path.h"
+#include "platform/logger.h"
 
 
 #include <stdarg.h>
@@ -317,22 +318,22 @@ void Path_join_format(Path *base, const char *fmt, ...) {
 }
 
 void Path_convert_to_wsl(Path *out, Path *in) {
-#ifdef WIN32
+// #ifdef WIN32
     String_copy_from(out, in);
-#else
-    String_init(out, in->size + 10);
-    char *buffer = out->buffer;
-
-    char drive = in->buffer[0];
-    snprintf(buffer, out->capacity, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in->buffer + 2);
-    // Fix slashes
-    for (int i = 0; i < out->capacity; ++i) {
-        if (buffer[i] == '\\') {
-            buffer[i] = '/';
-        }
-    }
-    out->size = strlen(String_data(out));
-#endif
+// #else
+//     String_init(out, in->size + 10);
+//     char *buffer = out->buffer;
+//
+//     char drive = in->buffer[0];
+//     snprintf(buffer, out->capacity, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in->buffer + 2);
+//     // Fix slashes
+//     for (int i = 0; i < out->capacity; ++i) {
+//         if (buffer[i] == '\\') {
+//             buffer[i] = '/';
+//         }
+//     }
+//     out->size = strlen(String_data(out));
+// #endif
 }
 
 void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *tab_files);
@@ -374,9 +375,6 @@ void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *ta
 #include <stdio.h>
 
 static int is_dir_path(const char *fullpath, const struct dirent *ent) {
-
-
-
 // Use d_type if available and reliable; otherwise lstat
 #ifdef DT_DIR
 if (ent&& ent->d_type!= DT_UNKNOWN) {
@@ -406,7 +404,7 @@ void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *ta
         int n = snprintf(full_path, sizeof full_path, "%s/%s", dir, name);
         if (n < 0 || (size_t) n >= sizeof full_path)
             continue; // path too long, skip
-
+        GLog_info("Visiting: %s", full_path);
         if (is_dir_path(full_path, ent)) {
             find_files_by_ext(full_path, ext, tab_files);
         } else {
