@@ -3,28 +3,21 @@
 #include "../../include/exporter/ddsc_export.h"
 
 #include "apex/avtx.h"
+#include "platform/logger.h"
 #include "platform/texture.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
 
-void export_ddsc_to_memory(ArchiveManager *archive_manager, const String *path, MemoryBuffer *out_mb) {
-    if (path==NULL) {
-        printf("Cannot export textures without name!\n");
-        return;
-    }
-    assert(false && "TODO: Implement");
-}
-
 String* export_ddsc_to_file(ArchiveManager *archive_manager, const String *path, const String *export_path) {
     if (path==NULL) {
-        printf("Cannot export textures without name!\n");
+        GLog_Error("Cannot export textures without name!");
         return NULL;
     }
 
 
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file_by_hash(archive_manager, hash_string(path), &mb)) {
-        printf("Texture file not found\n");
+        GLog_Error("Texture file not found");
         return NULL;
     }
 
@@ -50,18 +43,18 @@ String* export_ddsc_to_file(ArchiveManager *archive_manager, const String *path,
 Texture* convert_ddsc(ArchiveManager* archive_manager, const String *path) {
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file(archive_manager, path, &mb)) {
-        printf("File not found\n");
+        GLog_Error("File not found");
         return NULL;
     }
     AVTXHeader header;
     mb.read(&mb, &header, sizeof(header), NULL);
 
     if (strncmp(header.ident, "AVTX", 4) != 0) {
-        printf("[ERROR]: Invalid AVTX texture format\n");
+        GLog_Error("Invalid AVTX texture format");
         exit(1);
     }
     if (header.version != 1) {
-        printf("[ERROR]: Unsupported AVTX version: %d\n", header.version);
+        GLog_Error("Unsupported AVTX version: %d", header.version);
         exit(1);
     }
     Texture* texture = Texture_new();
@@ -89,7 +82,7 @@ Texture* convert_ddsc(ArchiveManager* archive_manager, const String *path) {
         compressed_data = malloc(largest_mip_size);
         atx_buffer.read(&atx_buffer, compressed_data, largest_mip_size, &actual_body_size);
         if (actual_body_size < largest_mip_size) {
-            printf("[ERROR]: Failed to read AVTX texture data, expected size: %u, actual size: %u\n", header.body_size,
+            GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.body_size,
                    actual_body_size);
             free(compressed_data);
             Texture_free(texture);
@@ -102,7 +95,7 @@ Texture* convert_ddsc(ArchiveManager* archive_manager, const String *path) {
         compressed_data = malloc(header.body_size);
         mb.read(&mb, compressed_data, header.body_size, &actual_body_size);
         if (actual_body_size != header.body_size) {
-            printf("[ERROR]: Failed to read AVTX texture data, expected size: %u, actual size: %u\n", header.body_size,
+            GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.body_size,
                    actual_body_size);
             free(compressed_data);
             Texture_free(texture);
@@ -120,7 +113,7 @@ Texture* convert_ddsc(ArchiveManager* archive_manager, const String *path) {
 void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
                  const String *path, const String *export_path) {
     if (path==NULL) {
-        printf("Cannot export textures without name!\n");
+        GLog_Error("Cannot export textures without name!");
         return;
     }
     String texture_export_path = {};
@@ -142,11 +135,11 @@ void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
     AVTXHeader header;
     mb->read(mb, &header, sizeof(header), NULL);
     if (strncmp(header.ident, "AVTX", 4) != 0) {
-        printf("[ERROR]: Invalid AVTX texture format\n");
+        GLog_Error("Invalid AVTX texture format");
         exit(1);
     }
     if (header.version != 1) {
-        printf("[ERROR]: Unsupported AVTX version: %d\n", header.version);
+        GLog_Error("Unsupported AVTX version: %d", header.version);
         exit(1);
     }
     uint32 actual_body_size = 0;
@@ -169,7 +162,7 @@ void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
         compressed_data = malloc(largest_mip_size);
         atx_buffer.read(&atx_buffer, compressed_data, largest_mip_size, &actual_body_size);
         if (actual_body_size < largest_mip_size) {
-            printf("[ERROR]: Failed to read AVTX texture data, expected size: %u, actual size: %u\n", header.body_size,
+            GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.body_size,
                    actual_body_size);
             free(compressed_data);
             exit(1);
@@ -181,7 +174,7 @@ void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
         compressed_data = malloc(header.body_size);
         mb->read(mb, compressed_data, header.body_size, &actual_body_size);
         if (actual_body_size != header.body_size) {
-            printf("[ERROR]: Failed to read AVTX texture data, expected size: %u, actual size: %u\n", header.body_size,
+            GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.body_size,
                    actual_body_size);
             free(compressed_data);
             exit(1);

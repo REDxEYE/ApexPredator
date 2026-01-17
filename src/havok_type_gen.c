@@ -10,7 +10,7 @@
 
 #include "apex/package/tab_archive.h"
 #include "havok/havok_codegen.h"
-#include "utils/hash_helper.h"
+#include "platform/logger.h"
 
 void process_havok_file(Havok_TypeLibrary* lib, Buffer* buffer) {
     TagFile tag_file={0};
@@ -31,7 +31,7 @@ void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
         ArchiveEntry *entry = DA_at(&all_entries, i);
         MemoryBuffer mb = {0};
         if (!ArchiveManager_get_file_by_hash(archive_manager, entry->path_hash, &mb)) {
-            printf("File not found\n");
+            GLog_Error("File not found");
             return;
         }
 
@@ -40,7 +40,7 @@ void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
             AAFArchive_from_buffer(&aaf_archive, (Buffer *) &mb);
             MemoryBuffer *section_buffer = MemoryBuffer_new();
             if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
-                printf("[ERROR]: Failed to get AAF section %i\n", i);
+                GLog_Error("Failed to get AAF section %i", i);
                 return;
             }
             if (section_buffer->data[4] == 'S' && section_buffer->data[5] == 'A' &&

@@ -1,28 +1,44 @@
 // Created by RED on 12.01.2026.
 
-#include "../../include/exporter/common_export.h"
+#include "exporter/common_export.h"
 
-#include "../../include/exporter/adf_export.h"
 #include "apex/avtx.h"
+#include "apex/hashes.h"
 #include "apex/rtpc.h"
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
 #include "apex/adf/adf.h"
+#include "exporter/adf_export.h"
 #include "exporter/ddsc_export.h"
 #include "exporter/epe_export.h"
 #include "exporter/havok_export.h"
-#include "havok/havok_generated.h"
 #include "utils/path.h"
+#include "platform/logger.h"
 
 
 GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, Havok_TypeLibrary *havok_lib,
                   const String *path,
                   uint32 hash, const String *export_path) {
-    assert(context!=NULL && "context must be initialized");
+    if (context==NULL) {
+        GLog_Error("GLTF context is not initialized!");
+        assert(context!=NULL && "context must be initialized");
+        exit(1);
+    }
+
 
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file_by_hash(archive_manager, hash, &mb)) {
-        printf("File not found\n");
+        if (path!=NULL) {
+            GLog_Error("File \"%s\" not found", String_data(path));
+            return INVALID_GL_ID;
+        }
+        String* file_name = find_name32(hash);
+        if (file_name!=NULL) {
+            GLog_Error("File \"%s\" not found", String_data(file_name));
+            String_free(file_name);
+            return INVALID_GL_ID;
+        }
+        GLog_Error("File not found");
         return INVALID_GL_ID;
     }
     GL_ID output_node_id = INVALID_GL_ID;
@@ -34,7 +50,7 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
         AAFArchive_from_buffer(&aaf_archive, (Buffer *) &mb);
         MemoryBuffer *section_buffer = MemoryBuffer_new();
         if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
-            printf("[ERROR]: Failed to get AAF section 0\n");
+            GLog_Error("Failed to get AAF section 0");
             return INVALID_GL_ID;
         }
 
@@ -89,7 +105,7 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
             String_append_cstr(&bsk_export_path, ".gltf");
             GLTFContext_set_save_path(context, &bsk_export_path);
         } else {
-            printf("Unhandled havok type: %s\n", String_data(&item_type->name));
+            GLog_Warning("Unhandled havok type: %s", String_data(&item_type->name));
         }
         // type_methods->free(item_obj, havok_lib);
         TagFile_free(&tag_file);
@@ -101,7 +117,7 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
         FILE *f = fopen(String_data(&unk_file_export_path), "wb");
         fwrite(mb.data, 1, mb.size, f);
         fclose(f);
-        printf("Unhandled file \"%s\" been written to file: \"%s\"", String_data(path),
+        GLog_Warning("Unhandled file \"%s\" been written to file: \"%s\"", String_data(path),
                String_data(&unk_file_export_path));
     }
     mb.close(&mb);

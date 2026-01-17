@@ -61,6 +61,7 @@ SET(CommonFiles
         src/exporter/havok_export.c
         src/platform/texture_ops.c
         src/utils/sqlite_wrapper.c
+        src/platform/logger.c
 )
 
 add_executable(ApexPredator

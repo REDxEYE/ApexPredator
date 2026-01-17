@@ -4,10 +4,10 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "apex/hashes.h"
+#include "platform/logger.h"
 #include "utils/common.h"
 #include "utils/buffer/memory_buffer.h"
 
@@ -78,7 +78,7 @@ bool read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
             break;
         }
         default: {
-            printf("Unknown type %i\n", typedef_->type);
+            GLog_Error("Unknown type %i", typedef_->type);
             assert(false && "Unknown type");
         };
     }
@@ -156,7 +156,7 @@ void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance 
     // printf("Instance: %s, type %s\n", String_data(&adf->strings.items[instance->name_id]),
     //        type ? String_data(&type->name) : "UNKNOWN");
     if (type == NULL) {
-        printf("Unknown type hash %08X for instance %s\n", instance->type_hash,
+        GLog_Error("Unknown type hash %08X for instance %s", instance->type_hash,
                String_data(&adf->strings.items[instance->name_id]));
         return NULL;
     }
@@ -165,7 +165,7 @@ void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance 
 
     STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
     if (object_methods == NULL) {
-        printf("No read function for type hash %08X (%s)\n", instance->type_hash, String_data(&type->name));
+        GLog_Error("No read function for type hash %08X (%s)", instance->type_hash, String_data(&type->name));
         return NULL;
     }
     MemoryBuffer_allocate(&instance_memory, instance->size);
@@ -174,7 +174,7 @@ void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance 
     void *instance_data = calloc(object_methods->size, 1);
 
     if (!object_methods->read((Buffer *) &instance_memory, lib, instance_data)) {
-        printf("Failed to read instance %s of type %s\n", String_data(&adf->strings.items[instance->name_id]),
+        GLog_Error("Failed to read instance %s of type %s", String_data(&adf->strings.items[instance->name_id]),
                String_data(&type->name));
         object_methods->free(instance_data, lib);
         instance_memory.close(&instance_memory);

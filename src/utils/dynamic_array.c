@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "platform/logger.h"
+
 #define NULL_ITEM_CHECK  assert(da->items!=NULL && "Uninitialized dynamic array")
 
 DynamicArray__Base * DA_new_(uint32 item_size, uint32 initial_capacity) {
@@ -20,7 +22,7 @@ DynamicArray__Base * DA_new_(uint32 item_size, uint32 initial_capacity) {
 void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity) {
     if (da->items!=NULL) {
         if (da->statically_allocated) {
-            printf("[ERROR]: Trying to reinitialize statically allocated dynamic array\n");
+            GLog_Error("Trying to reinitialize statically allocated dynamic array");
             exit(1);
         }
         free(da->items);

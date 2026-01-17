@@ -65,7 +65,7 @@ bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
         AAFArchive_from_buffer(&aaf_archive, (Buffer *) mb);
         MemoryBuffer *section_buffer = MemoryBuffer_new();
         if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
-            printf("[ERROR]: Failed to get AAF section 0\n");
+            GLog_Error("Failed to get AAF section 0");
             return false;
         }
 

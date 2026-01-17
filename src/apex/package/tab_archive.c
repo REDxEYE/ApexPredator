@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include "platform/logger.h"
 #include "utils/hash_helper.h"
 
 bool TabArchive__has_file(const TabArchive *ar, const String *path);
@@ -50,7 +51,7 @@ void TabArchive__init_interface(TabArchive *ar) {
 TabArchive *TabArchive_new(String *path) {
     TabArchive *ar = malloc(sizeof(TabArchive));
     if (ar == NULL) {
-        printf("Failed to allocate memory for TabArchive\n");
+        GLog_Error("Failed to allocate memory for TabArchive");
         exit(1);
     }
     memset(ar, 0, sizeof(TabArchive));
@@ -68,7 +69,7 @@ void TabArchive__open(TabArchive *ar, String *path) {
 
     FileBuffer tab_buffer = {0};
     if (FileBuffer_open_read(&tab_buffer, String_data(path)) != BUFFER_SUCCESS) {
-        printf("Failed to open tab file %s\n", String_data(path));
+        GLog_Error("Failed to open tab file %s", String_data(path));
         return;
     }
     DM_init(&ar->entries, TabEntry, 128);
@@ -82,7 +83,7 @@ void TabArchive__open(TabArchive *ar, String *path) {
     for (int i = 0; i < entry_count; i++) {
         error = tab_buffer.read(&tab_buffer, &entry, sizeof(TabEntry), NULL);
         if (error < BUFFER_FAILED) {
-            printf("Failed to read entry %d\n", i);
+            GLog_Error("Failed to read entry %d", i);
             return;
         }
         *(TabEntry *) DM_insert(&ar->entries, entry.hash) = entry;

@@ -8,6 +8,7 @@
 #include "utils/string.h"
 
 #include "assert.h"
+#include "platform/logger.h"
 #include "platform/texture.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
@@ -17,7 +18,7 @@ char *GLTFContext_dupe_cstring(const char *name) {
     const size_t len = strlen(name);
     char *dup = malloc(len + 1);
     if (dup == NULL) {
-        fprintf(stderr, "[ERROR]: GLTFContext_dupe_cstring: failed to allocate memory, bailing out!\n");
+        GLog_Error("GLTFContext_dupe_cstring: failed to allocate memory, bailing out!");
         exit(1);
     }
     memcpy(dup, name, len + 1);
@@ -70,7 +71,7 @@ void GLTFContext_set_save_cpath(GLTFContext *ctx, const char *path) {
 void GLTFContext_finalize(GLTFContext *ctx) {
     // move arrays into cgltf_data
     if (ctx->finalized) {
-        printf("[ERROR]: GLTFContext_finalize: already finalized\n");
+        GLog_Error("GLTFContext_finalize: already finalized");
         exit(1);
     }
     ctx->finalized = true;
@@ -249,7 +250,7 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
     bool ok;
     if (ctx->meshes.count > 0 || ctx->nodes.count > 0) {
         if (ctx->save_path.size == 0) {
-            printf("[ERROR]: GLTFContext_write_and_free: no save path set\n");
+            GLog_Error("GLTFContext_write_and_free: no save path set");
             exit(1);
         }
         GLTFContext_finalize(ctx);
@@ -305,7 +306,7 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
 
                         FILE *f = fopen(String_data(&buffer_path), "wb");
                         if (f == NULL) {
-                            printf("[ERROR]: GLTFContext_write_and_free: failed to open buffer file for writing: %s\n",
+                            GLog_Error("GLTFContext_write_and_free: failed to open buffer file for writing: %s",
                                    String_data(&buffer_path));
                             exit(1);
                         }
@@ -322,7 +323,7 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
             }
         }
         ctx->options.type = cgltf_file_type_gltf;
-        printf("[INFO]: GLTF save path: %s\n", String_data(&ctx->save_path));
+        GLog_Info("[INFO]: GLTF save path: %s", String_data(&ctx->save_path));
         ok = (cgltf_write_file(&ctx->options, String_data(&ctx->save_path), ctx->data) == cgltf_result_success);
     } else {
         ok = true;
@@ -856,7 +857,7 @@ GL_ID GLTFContext_skin_find_bone_by_name(const GLTFContext *context, const GL_ID
 
 void GLTFContext_push_skin(GLTFContext *context, const GL_ID skin_id) {
     if (context->skin_stack.count >= MAX_GLTFCONTEXT_SKIN_STACK_DEPTH) {
-        printf("[ERROR]: GLTFContext_push_skin: skin stack overflow\n");
+        GLog_Error("GLTFContext_push_skin: skin stack overflow");
         exit(1);
     }
     context->skin_stack.items[context->skin_stack.count++] = skin_id;
@@ -864,7 +865,7 @@ void GLTFContext_push_skin(GLTFContext *context, const GL_ID skin_id) {
 
 void GLTFContext_pop_skin(GLTFContext *context) {
     if (context->skin_stack.count == 0) {
-        printf("[ERROR]: GLTFContext_pop_skin: skin stack underflow\n");
+        GLog_Error("GLTFContext_pop_skin: skin stack underflow");
         exit(1);
     }
     context->skin_stack.count--;

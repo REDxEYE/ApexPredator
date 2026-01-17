@@ -3,6 +3,7 @@
 #include "apex/hashes.h"
 #include "apex/adf/adf_types.h"
 #include "platform/common_arrays.h"
+#include "platform/logger.h"
 #include "utils/sqlite_wrapper.h"
 
 static kvdb_t *hash_db;
@@ -10,7 +11,7 @@ static kvdb_t *hash_db;
 void init_hashes() {
     if (hash_db == NULL) {
         if (kv_open(&hash_db, "./../hashes.db") != KV_OK) {
-            fprintf(stderr, "Failed to open hashes database\n");
+            GLog_Error("Failed to open hashes database");
             exit(1);
         }
     }

@@ -5,17 +5,18 @@
 #include <math.h>
 
 #include "platform/common_arrays.h"
+#include "platform/logger.h"
 #include "utils/buffer/memory_buffer.h"
 #include "utils/endian.h"
 
 TagHeader expect_tag(Buffer *buffer, const char *expected_ident) {
     TagHeader header;
     if (!TagHeader_from_buffer(&header, buffer)) {
-        printf("[ERROR]: Failed to read tag header\n");
+        GLog_Error("Failed to read tag header");
         exit(1);
     }
     if (memcmp(header.ident, expected_ident, 4) != 0) {
-        printf("[ERROR]: Expected tag %.4s but got %.4s\n", expected_ident, header.ident);
+        GLog_Error("Expected tag %.4s but got %.4s", expected_ident, header.ident);
         FILE *tmp = fopen("weird_file.tag", "wb");
         buffer->set_position(buffer, 0, BUFFER_ORIGIN_START);
         uint8 buf[1024];
@@ -144,7 +145,7 @@ int32 read_compressed_int3(Buffer *buffer) {
     int32 resultInt = 0;
 
     if (buffer->read(buffer, &firstInt, 1, NULL) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to read first byte\n");
+        GLog_Error("Failed to read first byte");
         return -1;
     }
 
@@ -154,17 +155,17 @@ int32 read_compressed_int3(Buffer *buffer) {
 
     if (flag3) {
         if (buffer->read(buffer, &resultInt, 4, NULL) != BUFFER_SUCCESS) {
-            printf("[ERROR]: Failed to read compressed int\n");
+            GLog_Error("Failed to read compressed int");
             return -1;
         }
         resultInt |= (firstInt & 0xf) << 4;
     } else if (flag2) {
-        printf("[ERROR]: Unhandled int compression : 0xC0!\n");
+        GLog_Error("Unhandled int compression : 0xC0!");
         return -1;
     } else if (flag1) {
         uint8 secondInt;
         if (buffer->read(buffer, &secondInt, 1, NULL) != BUFFER_SUCCESS) {
-            printf("[ERROR]: Failed to read second byte\n");
+            GLog_Error("Failed to read second byte");
             return -1;
         }
         resultInt = secondInt | (((int32) firstInt & 0xf) << 8);
@@ -178,7 +179,7 @@ int32 read_compressed_int3(Buffer *buffer) {
 uint32 read_compressed_int2(Buffer *buffer) {
     uint8 b0;
     if (buffer->read(buffer, &b0, 1, NULL) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to read first byte\n");
+        GLog_Error("Failed to read first byte");
         return -1;
     }
     if ((b0 & 0x80) == 0) {
@@ -191,7 +192,7 @@ uint32 read_compressed_int2(Buffer *buffer) {
 
     if (b0_shift3 >= 0x10 && b0_shift3 <= 0x17) {
         if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS) {
-            printf("[ERROR]: Failed to read second byte\n");
+            GLog_Error("Failed to read second byte");
             return -1;
         }
         result = ((b0 << 8) | b1) & 0x3fff;
@@ -200,7 +201,7 @@ uint32 read_compressed_int2(Buffer *buffer) {
     if (b0_shift3 >= 0x18 && b0_shift3 <= 0x1B) {
         if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
             buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS) {
-            printf("[ERROR]: Failed to read bytes\n");
+            GLog_Error("Failed to read bytes");
             return -1;
         }
         result = ((b0 << 16) | (b1 << 8) | b2) & 0x1fffff;
@@ -209,7 +210,7 @@ uint32 read_compressed_int2(Buffer *buffer) {
 
     if ((b0 & 0xc0) == 0x80) {
         if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS) {
-            printf("[ERROR]: Failed to read second byte\n");
+            GLog_Error("Failed to read second byte");
             return -1;
         }
         result = ((b0 & 0x3f) << 8) | b1;
@@ -218,7 +219,7 @@ uint32 read_compressed_int2(Buffer *buffer) {
     if ((b0 & 0xe0) == 0xc0) {
         if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
             buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS) {
-            printf("[ERROR]: Failed to read bytes\n");
+            GLog_Error("Failed to read bytes");
             return -1;
         }
         result = ((b0 & 0x1f) << 16) | (b1 << 8) | b2;
@@ -228,13 +229,13 @@ uint32 read_compressed_int2(Buffer *buffer) {
         if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
             buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS ||
             buffer->read(buffer, &b3, 1, NULL) != BUFFER_SUCCESS) {
-            printf("[ERROR]: Failed to read bytes\n");
+            GLog_Error("Failed to read bytes");
             return -1;
         }
         result = ((b0 & 0x0f) << 24) | (b1 << 16) | (b2 << 8) | b3;
         return result;
     }
-    printf("[ERROR]: Unsupported packed value: 0x%02x\n", b0);
+    GLog_Error("Unsupported packed value: 0x%02x", b0);
     return -1;
 }
 
@@ -408,7 +409,7 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
             break;
         }
         default: {
-            printf("[ERROR]: Unsupported data type: %s\n", HKTAGTYPE_NAMES[type->data_type]);
+            GLog_Error("Unsupported data type: %s", HKTAGTYPE_NAMES[type->data_type]);
             exit(1);
         };
     }
@@ -437,7 +438,7 @@ bool SkipChunk_from_buffer(Buffer *buffer) {
 bool SDKVTag_from_buffer(TagFile *tf, Buffer *buffer) {
     const TagHeader type_header = expect_tag(buffer, "SDKV");
     if (type_header.size - 8 < 8) {
-        printf("[ERROR]: Invalid SDKV tag size: %d\n", type_header.size);
+        GLog_Error("Invalid SDKV tag size: %d", type_header.size);
         return false;
     }
     if (buffer->read(buffer, tf->ver, 8, NULL) != BUFFER_SUCCESS)return false;
@@ -465,7 +466,7 @@ bool Strings_from_buffer(const TagHeader *header, DynamicArray_String *strings, 
 
 #define CHECK_RANGE(index, da, message)  \
     if (index < 0 || index >= (int64) da->count) { \
-        printf("[ERROR]: "message": %lli\n", index); \
+        GLog_Error(""message": %lli", index); \
         return false; \
     }
 
@@ -473,7 +474,7 @@ bool read_type_identity(MemoryBuffer *mb, DynamicArray_HKTagType *types, const D
     Buffer *buffer = (Buffer *) mb;
     const uint32 type_count = read_compressed_int(buffer);
     if (type_count == 0) {
-        printf("[ERROR]: Type count is zero\n");
+        GLog_Error("Type count is zero");
         exit(1);
     }
     DA_init(types, HKTagType, type_count);
@@ -493,12 +494,12 @@ bool read_type_identity(MemoryBuffer *mb, DynamicArray_HKTagType *types, const D
             HKTagTemplateArgument_init(arg, &class_names->items[template_name_id]);
             if (arg->is_class) {
                 if (template_type_id == 0) {
-                    printf("[ERROR]: Template type id cannot be zero\n");
+                    GLog_Error("Template type id cannot be zero");
                     return false;
                 }
 
                 if (template_type_id < 0 || template_type_id >= (int32) types->count) {
-                    printf("[ERROR]: ""Invalid template arg type id"": %lli\n", template_type_id);
+                    GLog_Error("""Invalid template arg type id"": %lli", template_type_id);
                     return false;
                 }
                 HKTagType *template_type = &types->items[template_type_id];
@@ -506,7 +507,7 @@ bool read_type_identity(MemoryBuffer *mb, DynamicArray_HKTagType *types, const D
             } else if (arg->is_number) {
                 arg->number = template_type_id;
             } else {
-                printf("[ERROR]: Unsupported template arg type\n");
+                GLog_Error("Unsupported template arg type");
                 return false;
             }
         }
@@ -517,7 +518,7 @@ bool read_type_identity(MemoryBuffer *mb, DynamicArray_HKTagType *types, const D
     if (buffer_remaining > 0) {
         uint64 buffer_size;
         buffer->getsize(buffer, &buffer_size);
-        printf("[ERROR]: TNAM did not read entire buffer, expected %lld but got %lld\n", buffer_size,
+        GLog_Error("TNAM did not read entire buffer, expected %lld but got %lld", buffer_size,
                buffer_size - buffer_remaining);
         return false;
     }
@@ -529,7 +530,7 @@ bool read_type_body(MemoryBuffer *mb, const DynamicArray_HKTagType *types, const
     BufferError error;
     while (Buffer_remaining(buffer, &error) > 0) {
         if (error != BUFFER_SUCCESS) {
-            printf("[ERROR]: Failed to get remaining size of TBOD data\n");
+            GLog_Error("Failed to get remaining size of TBOD data");
             return false;
         }
         const int64 type_id = read_compressed_int(buffer);
@@ -607,7 +608,7 @@ bool read_type_hashes(MemoryBuffer *mb, const DynamicArray_HKTagType *types) {
         const int64 type_id = read_compressed_int(buffer);
         uint32 hash;
         if (buffer->read_uint32(buffer, &hash) != BUFFER_SUCCESS) {
-            printf("[ERROR]: Failed to read type hash\n");
+            GLog_Error("Failed to read type hash");
             return false;
         }
         CHECK_RANGE(type_id, types, "Invalid type id in THSH");
@@ -622,7 +623,7 @@ const TagHeader tag_header = expect_tag(buffer, tag_name);\
 MemoryBuffer_allocate(slice_buffer, tag_header.size - 8);\
 Buffer *body_buffer = (Buffer *) slice_buffer;\
 if (buffer->read(buffer, slice_buffer->data, tag_header.size - 8, NULL) != BUFFER_SUCCESS) {\
-    printf("[ERROR]: Failed to read TBOD buffer\n");\
+    GLog_Error("Failed to read TBOD buffer");\
     goto FAIL_EXIT_LABEL;\
 }\
 }
@@ -640,7 +641,7 @@ bool TYPETag_from_buffer(TagFile *tf, Buffer *buffer) {
 
     CHUNK_SLICE(buffer, body_slice, "TNAM", FAILED);
     if (!read_type_identity(body_slice, &tf->types, &class_names)) {
-        printf("[ERROR]: Failed to read TNAM data\n");
+        GLog_Error("Failed to read TNAM data");
         goto FAILED;
     }
 
@@ -649,13 +650,13 @@ bool TYPETag_from_buffer(TagFile *tf, Buffer *buffer) {
 
     CHUNK_SLICE(buffer, body_slice, "TBOD", FAILED);
     if (!read_type_body(body_slice, &tf->types, &member_names)) {
-        printf("[ERROR]: Failed to read TBOD data\n");
+        GLog_Error("Failed to read TBOD data");
         goto FAILED;
     }
 
     CHUNK_SLICE(buffer, body_slice, "THSH", FAILED);
     if (!read_type_hashes(body_slice, &tf->types)) {
-        printf("[ERROR]: Failed to read type hashes\n");
+        GLog_Error(": Failed to read type hashes");
         goto FAILED;
     }
     // printf("i, Type Name, flags, size, align, format, Data Type\n");
@@ -684,7 +685,7 @@ bool IndexTag_from_buffer(TagFile *tf, Buffer *buffer) {
     TagHeader_from_buffer(&index_header, buffer);
 
     if (memcmp(index_header.ident, "INDX", 4) != 0) {
-        printf("[ERROR]: Invalid INDX tag ident: %.4s\n", index_header.ident);
+        GLog_Error(": Invalid INDX tag ident: %.4s", index_header.ident);
         exit(1);
     }
     MemoryBuffer *mb = MemoryBuffer_new();
@@ -709,7 +710,7 @@ bool TAG0Tag_from_buffer(TagFile *tf, Buffer *buffer) {
     expect_tag(buffer, "TAG0");
 
     if (!SDKVTag_from_buffer(tf, buffer)) {
-        printf("[ERROR]: Failed to read SDKV tag\n");
+        GLog_Error(": Failed to read SDKV tag");
         return false;
     }
     if (!DATATag_from_buffer(tf, buffer)) {

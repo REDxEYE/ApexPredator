@@ -6,6 +6,8 @@
 #include "apex/adf/adf.h"
 #include "apex/adf/adf_types.h"
 #include "exporter/amf_export.h"
+#include "platform/logger.h"
+#include "utils/hash_helper.h"
 #include "utils/path.h"
 #include "utils/stb_image_write.h"
 #include "utils/buffer/file_buffer.h"
@@ -44,10 +46,10 @@ bool decompress_data(const CompressedData *data, MemoryBuffer *mb) {
     switch (compressed_header->comp_type) {
         case zstd: {
             const size_t zstd_res = ZSTD_decompress(mb->data, mb->size, compressed_data,
-                                              data->Data.count - sizeof(CompressedHeader));
+                                                    data->Data.count - sizeof(CompressedHeader));
             const ZSTD_ErrorCode error = ZSTD_isError(zstd_res);
             if (error != ZSTD_error_no_error) {
-                printf("ZSTD decompression error: %s\n", ZSTD_getErrorName(error));
+                GLog_Error("ZSTD decompression error: %s", ZSTD_getErrorName(error));
                 assert(false && "ZSTD decompression failed");
                 return false;
             }
@@ -55,7 +57,7 @@ bool decompress_data(const CompressedData *data, MemoryBuffer *mb) {
         }
         break;
         default:
-            printf("Unsupported compression type: %d\n", compressed_header->comp_type);
+            GLog_Error("Unsupported compression type: %d", compressed_header->comp_type);
             assert(false && "Unsupported compression type");
             return false;
     }
@@ -73,10 +75,10 @@ void export_terrain_texture(const String *export_path, const TerrainTexture *tex
     Path_ensure_dirs(&texture_path);
     Path_join_format(&texture_path, "%s.png", type);
     const float32 pixel_size = (float32) texture->Data.UncompressedSize / (
-                             (float32) texture->Width * texture->Height);
-    printf("%s : width: %i, height: %i, size: %i, pixel size: %f\n", String_data(&texture_path), texture->Width,
-           texture->Height, texture->Data.UncompressedSize,
-           pixel_size);
+                                   (float32) texture->Width * texture->Height);
+    GLog_Info("%s : width: %i, height: %i, size: %i, pixel size: %f", String_data(&texture_path), texture->Width,
+              texture->Height, texture->Data.UncompressedSize,
+              pixel_size);
 
 
     MemoryBuffer decompressed_buffer = {0};
@@ -343,26 +345,53 @@ void export_terrain_patch(const String *export_path, TerrainPatch *patch, uint32
 }
 
 GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                              Havok_TypeLibrary *havok_lib, const String *path, const uint32 path_hash, const String *export_path) {
+                      Havok_TypeLibrary *havok_lib, const String *path, const uint32 path_hash,
+                      const String *export_path) {
     if (!ArchiveManager_has_file_by_hash(archive_manager, path_hash)) {
-        printf("File not found\n");
+        GLog_error("File not found\n");
         return INVALID_GL_ID;
     }
 
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file_by_hash(archive_manager, path_hash, &mb)) {
-        printf("File not found\n");
+        GLog_error("File not found\n");
         return INVALID_GL_ID;
     }
 
-    const GL_ID result =  export_adf_file_from_buffer(context, archive_manager, lib, havok_lib, path_hash, path, &mb, export_path);
+    const GL_ID result = export_adf_file_from_buffer(context, archive_manager, lib, havok_lib, path_hash, path, &mb,
+                                                     export_path);
     mb.close(&mb);
     return result;
 }
 
+GL_ID export_stream_path_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, ADF *adf, const MemoryBuffer* adf_buffer, const String *export_path) {
+    const ADFInstance *path_file_header_instance = DA_at(&adf->instances, 0);
+    StreamPatchFileHeader *path_file_header = ADF_read_instance(adf, lib, path_file_header_instance, adf_buffer);
+    const ADFInstance *patch_block_header_instance = DA_at(&adf->instances, 1);
+    StreamPatchBlockHeader* patch_block_header = ADF_read_instance(adf, lib, patch_block_header_instance, adf_buffer);
+
+    for (int i = 2; i < adf->instances.count; ++i) {
+        const ADFInstance *patch_instance = DA_at(&adf->instances, i);
+        void* instance_data = ADF_read_instance(adf, lib, patch_instance, adf_buffer);
+        ADF_print_instance(lib, patch_instance, instance_data, 0);
+        printf("\n");
+        ADF_free_instance(lib, patch_instance, instance_data);
+    }
+
+
+    ADF_free_instance(lib, path_file_header_instance, path_file_header);
+    ADF_free_instance(lib, patch_block_header_instance, patch_block_header);
+    return INVALID_GL_ID;
+}
+
 GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                      Havok_TypeLibrary *havok_lib, const uint32 path_hash, const String *path, MemoryBuffer *mb, const String *export_path) {
-    assert(context!=NULL && "context must be initialized");
+                                  Havok_TypeLibrary *havok_lib, const uint32 path_hash, const String *path,
+                                  MemoryBuffer *mb, const String *export_path) {
+    if (context == NULL) {
+        GLog_Error("GLTF context is not initialized!");
+        assert(context!=NULL && "context must be initialized");
+        exit(1);
+    }
 
     ADF adf = {0};
     ADF_from_buffer(&adf, (Buffer *) mb, lib);
@@ -377,42 +406,72 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
 
     for (int instanceId = 0; instanceId < adf.header.instance_count; instanceId++) {
         const ADFInstance *instance = DA_at(&adf.instances, instanceId);
-        void *instance_data = ADF_read_instance(&adf, lib, instance, mb);
-
-        if (instance->type_hash == STI_TYPE_HASH_StreamPatchFileHeader) {
-            const StreamPatchFileHeader *ph = instance_data;
-            tile_x = ph->PatchPositionX;
-            tile_y = ph->PatchPositionZ;
-            lod = ph->PatchLod;
-        } else if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
-            export_terrain_patch(&mesh_export_path, instance_data, tile_x, tile_y, lod);
+        if (instance->type_hash == STI_TYPE_HASH_WorldSettings) {
+            const WorldSettings *world_settings = ADF_read_instance(&adf, lib, instance, mb);
+;
+            // const uint32 base_lod = world_settings->PatchBaseLod;
+            const uint32 base_lod = 12;
+            const uint32 lod_size = 1 << base_lod;
+            const uint32 world_x_size_in_chunks = world_settings->WorldSize[0] / lod_size;
+            const uint32 world_y_size_in_chunks = world_settings->WorldSize[2] / lod_size;
+            for (int x = 0; x < world_x_size_in_chunks; ++x) {
+                for (int y = 0; y < world_y_size_in_chunks; ++y) {
+                    String chunk_patch_path = {0};
+                    String_format(&chunk_patch_path, "terrain/hp/patches/patch_%02i_%02i_%02i.streampatch", base_lod, x, y);
+                    export_adf_file(context, archive_manager, lib, havok_lib, &chunk_patch_path,
+                                    hash_string(&chunk_patch_path), export_path);
+                    String_free(&chunk_patch_path);
+                    break;
+                }
+            }
+            ADF_free_instance(lib, instance, (void*)world_settings);
+        }else if (instance->type_hash==STI_TYPE_HASH_StreamPatchFileHeader){
+            output_node_id = export_stream_path_file(context, archive_manager, lib, &adf, mb, export_path);
+            break;
+        // }
+        // if (instance->type_hash == STI_TYPE_HASH_StreamPatchFileHeader) {
+        //     const StreamPatchFileHeader *ph = instance_data;
+        //     tile_x = ph->PatchPositionX;
+        //     tile_y = ph->PatchPositionZ;
+        //     lod = ph->PatchLod;
+        // } else if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
+        //     export_terrain_patch(&mesh_export_path, instance_data, tile_x, tile_y, lod);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfModel) {
             // ADF_print_instance(lib, instance, instance_data, 0);
-            output_node_id = export_amf_model(context, archive_manager, lib, havok_lib, instance_data, path, path_hash,
+            assert(adf.instances.count==1 && "ADF with AmfModel should have only one instance");
+            const AmfModel *model = ADF_read_instance(&adf, lib, instance, mb);
+            output_node_id = export_amf_model(context, archive_manager, lib, havok_lib, model, path, path_hash,
                                               export_path);
+            ADF_free_instance(lib, instance, (void*)model);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfMeshHeader) {
+            assert(adf.instances.count==2 && "ADF with AmfMeshHeader should have only two instances");
             instanceId++;
+            const AmfMeshHeader *mesh_header = ADF_read_instance(&adf, lib, instance, mb);
             const ADFInstance *mesh_buffers_instance = DA_at(&adf.instances, instanceId);
-            AmfMeshBuffers *mesh_buffers = ADF_read_instance(&adf, lib, mesh_buffers_instance, mb);
+            const AmfMeshBuffers *mesh_buffers = ADF_read_instance(&adf, lib, mesh_buffers_instance, mb);
 
             // ADF_print_instance(lib, instance, instance_data, 0);
             // ADF_print_instance(lib, mesh_buffers_instance, mesh_buffers, 0);
 
             output_node_id = export_amf_mesh(context, archive_manager, lib, &mesh_export_path, path_hash, path,
-                                             instance_data,
-                                             mesh_buffers);
-            ADF_free_instance(lib, mesh_buffers_instance, mesh_buffers);
+                                             mesh_header, mesh_buffers);
+            ADF_free_instance(lib, instance, (void*)mesh_header);
+            ADF_free_instance(lib, mesh_buffers_instance, (void*)mesh_buffers);
         } else {
+            void *instance_data = ADF_read_instance(&adf, lib, instance, mb);
             String unk_file_export_path = {};
             Path_join(&unk_file_export_path, export_path);
             Path_join(&unk_file_export_path, path);
+            String_append_format(&unk_file_export_path, "_%08X", instance->type_hash);
             Path_ensure_parent_dirs(&unk_file_export_path);
             FILE *f = fopen(String_data(&unk_file_export_path), "wb");
             fwrite(mb->data + instance->offset, 1, instance->size, f);
             fclose(f);
             ADF_print_instance(lib, instance, instance_data, 0);
+            printf("\n");
+            ADF_free_instance(lib, instance, instance_data);
         }
-        ADF_free_instance(lib, instance, instance_data);
+
     }
 
     ADF_free(&adf);

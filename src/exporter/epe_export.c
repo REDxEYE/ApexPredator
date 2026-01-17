@@ -6,6 +6,7 @@
 #include "exporter/havok_export.h"
 #include "exporter/adf_export.h"
 #include "exporter/common_export.h"
+#include "platform/logger.h"
 #include "utils/path.h"
 
 void add_extras(const GLTFContext *context, const RuntimeNode *node, const GL_ID output_node) {
@@ -73,7 +74,7 @@ void handle_CCharacter(GLTFContext *context, ArchiveManager *archive_manager, ST
     const String *skeleton_filename = RuntimeNode_get_prop_by_hash_str(node, 0x26FA86FE);
     const String *node_name_hash = &node->name;
     if (model_filename == NULL) {
-        printf("[ERROR]: Failed to get model property for CCharacter\n");
+        GLog_Error("Failed to get model property for CCharacter");
         return;
     }
 
@@ -99,7 +100,7 @@ void handle_CCharacter(GLTFContext *context, ArchiveManager *archive_manager, ST
     if (IS_VALID_GL_ID(parent_gltf_node))
         GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
     else {
-        printf("Invalid parent setup: %s\n", String_data(node_name_hash));
+        GLog_Warning("Invalid parent setup: %s", String_data(node_name_hash));
     }
 
     process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
@@ -112,7 +113,7 @@ void handle_CSecondaryMotionAttachment(GLTFContext *context, ArchiveManager *arc
     const String *model_filename = RuntimeNode_get_prop_str(node, "model");
     const String *skeleton_filename = RuntimeNode_get_prop_by_hash_str(node, 0x26FA86FE);
     if (model_filename == NULL) {
-        printf("[ERROR]: Failed to get model property for CSecondaryMotionAttachment\n");
+        GLog_Error("Failed to get model property for CSecondaryMotionAttachment");
         return;
     }
     String skeleton_bsk_name = {0};
@@ -129,7 +130,7 @@ void handle_CSecondaryMotionAttachment(GLTFContext *context, ArchiveManager *arc
         GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
     else {
         const String *node_name_hash = &node->name;
-        printf("Invalid parent setup: %s\n", String_data(node_name_hash));
+        GLog_Warning("Invalid parent setup: %s", String_data(node_name_hash));
     }
     process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
     GLTFContext_pop_skin(context);
@@ -162,7 +163,7 @@ void handle_CDamageableCharacterPart(GLTFContext *context, ArchiveManager *archi
     } else if (IS_VALID_GL_ID(parent_gltf_node))
         GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
     else {
-        printf("Invalid parent setup: %s\n", String_data(node_name_hash));
+        GLog_Warning("Invalid parent setup: %s", String_data(node_name_hash));
     }
 
     process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
@@ -175,7 +176,7 @@ void handle_CRigidObject(GLTFContext *context, ArchiveManager *archive_manager, 
     const String* model_filename = find_name32(model_filename_hash); // Could be null
     const String *node_name_hash = &node->name;
     if (model_filename_hash == 0) {
-        printf("[ERROR]: Failed to get model property for CRigidObject\n");
+        GLog_Error("Failed to get model property for CRigidObject");
         return;
     }
     GL_ID output_node = export_adf_file(context, archive_manager, lib, havok_lib, model_filename, model_filename_hash, export_path);
@@ -185,7 +186,7 @@ void handle_CRigidObject(GLTFContext *context, ArchiveManager *archive_manager, 
         if (IS_VALID_GL_ID(parent_gltf_node))
             GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
         else {
-            printf("Invalid parent setup: %s\n", String_data(node_name_hash));
+            GLog_Warning("Invalid parent setup: %s", String_data(node_name_hash));
         }
     }else {
         output_node = GLTFContext_node_add(
@@ -203,7 +204,7 @@ void handle_CSkeletalAnimatedObject(GLTFContext *context, ArchiveManager *archiv
     const String* skeleton_filename = RuntimeNode_get_prop_by_hash_str(node, 0x26fa86fe);
 
     if (model_filename == NULL) {
-        printf("[ERROR]: Failed to get model property for CSkeletalAnimatedObject\n");
+        GLog_Error("Failed to get model property for CSkeletalAnimatedObject");
         return;
     }
 
@@ -230,7 +231,7 @@ void handle_CSkeletalAnimatedObject(GLTFContext *context, ArchiveManager *archiv
         GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
     else {
         const String *node_name_hash = &node->name;
-        printf("Invalid parent setup: %s\n", String_data(node_name_hash));
+        GLog_Warning("Invalid parent setup: %s", String_data(node_name_hash));
     }
 
     process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
@@ -261,13 +262,13 @@ void handle_CBoneAttachment(GLTFContext *context, ArchiveManager *archive_manage
             GLTFContext_node_set_matrix(context, output_node, (float *) node_global_matrix);
             GLTFContext_node_set_parent(context, output_node, parent_bone_id);
         }else {
-            printf("Parent bone not found: %s\n", String_data(parent_bone_name));
+            GLog_Warning("Parent bone not found: %s", String_data(parent_bone_name));
             GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
         }
     } else if (IS_VALID_GL_ID(parent_gltf_node))
         GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
     else {
-        printf("Invalid parent setup: %s\n", String_data(node_name_hash));
+        GLog_Warning("Invalid parent setup: %s", String_data(node_name_hash));
     }
 
     process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
@@ -288,7 +289,7 @@ void handle_default(GLTFContext *context, ArchiveManager *archive_manager, STI_T
     if (IS_VALID_GL_ID(parent_gltf_node))
         GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
     else {
-        printf("Invalid parent setup: %s\n", String_data(node_name_hash));
+        GLog_Warning("Invalid parent setup: %s", String_data(node_name_hash));
     }
 
     DA_FORI(node->children, i) {
@@ -302,13 +303,18 @@ void handle_default(GLTFContext *context, ArchiveManager *archive_manager, STI_T
 void process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
                       Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
                       const String *export_path, const GL_ID parent_gltf_node) {
-    assert(context!=NULL && "context must be initialized");
+    if (context==NULL) {
+        GLog_Error("GLTF context is not initialized!");
+        assert(context!=NULL && "context must be initialized");
+        exit(1);
+    }
+
     if (!RuntimeNode_has_prop(node, "_class")) {
         return;
     }
     const String *class_name = RuntimeNode_get_prop_str(node, "_class");
     if (class_name == NULL) {
-        printf("[ERROR]: Failed to get _class property\n");
+        GLog_Error("Failed to get _class property");
         exit(1);
     }
     if (String_cequals(class_name, "CCharacter")) {
@@ -333,7 +339,7 @@ GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_Type
                  const String *export_path) {
     assert(context!=NULL && "context must be initialized");
     if (path == NULL) {
-        printf("[ERROR]: Path is NULL\n");
+        GLog_Error("Path is NULL");
         exit(1);
     }
     String epe_export_path = {};

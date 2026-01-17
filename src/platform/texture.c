@@ -4,6 +4,7 @@
 #include "bcdec.h"
 #include <assert.h>
 
+#include "platform/logger.h"
 #include "utils/path.h"
 #include "utils/stb_image_write.h"
 #include "tinycpng/public/library.h"
@@ -57,7 +58,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
         case DXGI_FORMAT_B8G8R8X8_TYPELESS:
         case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB: {
             if (input_size < expected_size) {
-                printf("[ERROR]: Unexpected input size: %u, expected: %u\n", input_size, expected_size);
+                GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_size);
                 assert(false && "Unexpected input size");
                 exit(1);
             }
@@ -72,7 +73,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
             const uint32 blocks_high = (texture->height + 3) / 4;
             const uint32 expected_compressed_size = blocks_wide * blocks_high * block_size;
             if (input_size < expected_compressed_size) {
-                printf("[ERROR]: Unexpected input size: %u, expected: %u\n", input_size, expected_compressed_size);
+                GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 assert(false && "Unexpected input size");
                 exit(1);
             }
@@ -92,7 +93,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
             const uint32 blocks_high = (texture->height + 3) / 4;
             const uint32 expected_compressed_size = blocks_wide * blocks_high * block_size;
             if (input_size < expected_compressed_size) {
-                printf("[ERROR]: Unexpected input size: %u, expected: %u\n", input_size, expected_compressed_size);
+                GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 assert(false && "Unexpected input size");
                 exit(1);
             }
@@ -112,7 +113,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
             const uint32 blocks_high = (texture->height + 3) / 4;
             const uint32 expected_compressed_size = blocks_wide * blocks_high * block_size;
             if (input_size < expected_compressed_size) {
-                printf("[ERROR]: Unexpected input size: %u, expected: %u\n", input_size, expected_compressed_size);
+                GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 assert(false && "Unexpected input size");
                 exit(1);
             }
@@ -132,7 +133,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
             const uint32 blocks_high = (texture->height + 3) / 4;
             const uint32 expected_compressed_size = blocks_wide * blocks_high * block_size;
             if (input_size < expected_compressed_size) {
-                printf("[ERROR]: Unexpected input size: %u, expected: %u\n", input_size, expected_compressed_size);
+                GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 assert(false && "Unexpected input size");
                 exit(1);
             }
@@ -151,7 +152,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
             const uint32 blocks_high = (texture->height + 3) / 4;
             const uint32 expected_compressed_size = blocks_wide * blocks_high * block_size;
             if (input_size < expected_compressed_size) {
-                printf("[ERROR]: Unexpected input size: %u, expected: %u\n", input_size, expected_compressed_size);
+                GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 assert(false && "Unexpected input size");
                 exit(1);
             }
@@ -164,7 +165,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
             break;
         }
         default: {
-            printf("[ERROR]: Unsupported DXGI format: %d\n", format);
+            GLog_Error("Unsupported DXGI format: %d", format);
             assert(false && "Unsupported DXGI format");
             exit(1);
         }
@@ -229,7 +230,7 @@ void Texture_from_dxgi(Texture *texture, DDSDXGIFormat format, int32 width, int3
             target_bpc = 1;
             break;
         default:
-            printf("[ERROR]: Unsupported DXGI format: %d\n", format);
+            GLog_Error("Unsupported DXGI format: %d", format);
             assert(false && "Unsupported DXGI format");
             exit(1);
     }
@@ -244,7 +245,7 @@ void Texture_from_dxgi(Texture *texture, DDSDXGIFormat format, int32 width, int3
 
 void Texture_save(const Texture *texture, const String *path_without_ext) {
     if (texture->data == NULL || texture->data_size == 0) {
-        printf("[WARNING]: Texture data is empty, skipping save\n");
+        GLog_Warning("Texture data is empty, skipping save");
         return;
     }
     String path_png = {};
@@ -257,7 +258,7 @@ void Texture_save(const Texture *texture, const String *path_without_ext) {
     } else {
         int32 comp = texture->channel_count;
         if (comp != 1 && comp != 2 && comp != 3 && comp != 4) {
-            printf("[ERROR]: Unsupported channel count: %d\n", texture->channel_count);
+            GLog_Error("Unsupported channel count: %d", texture->channel_count);
             assert(false && "Unsupported channel count");
             exit(1);
         }
@@ -266,7 +267,7 @@ void Texture_save(const Texture *texture, const String *path_without_ext) {
             String_append_cstr(&path_png, ".png");
             stbi_write_png(String_data(&path_png), texture->width, texture->height, comp, texture->data, stride);
         } else {
-            printf("[ERROR]: Unsupported bpc: %d\n", texture->bpc);
+            GLog_Error("Unsupported bpc: %d", texture->bpc);
             assert(false && "Unsupported bpc");
             exit(1);
         }
@@ -278,28 +279,28 @@ unsigned char *stbi_write_png_to_mem(const unsigned char *pixels, int stride_byt
 
 void *Texture_write_png_to_memory(const Texture *texture, uint32 *channel_count, size_t *out_size) {
     if (out_size == NULL) {
-        printf("[ERROR]: out_size pointer is NULL\n");
+        GLog_Error("out_size pointer is NULL");
         assert(false && "out_size pointer is NULL");
         return NULL;
     }
     if (texture->data == NULL || texture->data_size == 0) {
-        printf("[WARNING]: Texture data is empty, cannot write to memory\n");
+        GLog_Warning("Texture data is empty, cannot write to memory");
         return NULL;
     }
     if (texture->bpc != 1) {
-        printf("[ERROR]: Unsupported bpc for PNG output: %d\n", texture->bpc);
+        GLog_Error("Unsupported bpc for PNG output: %d", texture->bpc);
         assert(false && "Unsupported bpc for PNG output");
         return NULL;
     }
     if (texture->is_float) {
-        printf("[ERROR]: Cannot write float texture to PNG format\n");
+        GLog_Error("Cannot write float texture to PNG format");
         assert(false && "Cannot write float texture to PNG format");
         return NULL;
     }
 
     const int32 comp = (int32) texture->channel_count;
     if (comp < 1 || comp > 4) {
-        printf("[ERROR]: Unsupported channel count for PNG output: %d\n", texture->channel_count);
+        GLog_Error("Unsupported channel count for PNG output: %d", texture->channel_count);
         assert(false && "Unsupported channel count for PNG output");
         return NULL;
     }
@@ -316,7 +317,7 @@ void *Texture_write_png_to_memory(const Texture *texture, uint32 *channel_count,
     png_free(&file);
 
     *out_size = memory_file.size;
-    if (channel_count!=NULL) {
+    if (channel_count != NULL) {
         *channel_count = comp;
     }
     png_data = malloc(memory_file.size);
@@ -403,7 +404,7 @@ uint32 Texture_calculate_mip_size(const uint32 mip, const uint32 width, const ui
             return blocks_wide * blocks_high * 16;
         }
         default:
-            printf("[ERROR]: Unsupported DXGI format: %d\n", format);
+            GLog_Error("Unsupported DXGI format: %d", format);
             assert(false && "Unsupported DXGI format");
             exit(1);
     }

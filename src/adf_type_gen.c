@@ -80,7 +80,7 @@ void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
             AAFArchive_from_buffer(&aaf_archive, (Buffer *) &mb);
             MemoryBuffer *section_buffer = MemoryBuffer_new();
             if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
-                printf("[ERROR]: Failed to get AAF section %i\n", i);
+                GLog_Error("Failed to get AAF section %i", i);
                 return;
             }
             if (section_buffer->data[4] == 'S' && section_buffer->data[5] == 'A' &&

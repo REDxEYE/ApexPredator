@@ -7,6 +7,8 @@
 
 #include "utils/lookup3.h"
 #include "apex/adf/sti.h"
+
+#include "platform/logger.h"
 #include "utils/string.h"
 
 
@@ -145,12 +147,12 @@ STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType meta_type,
                 return type;
             }
 
-            printf("Warning: Name collision for type name %s (hash %08X)\n", String_data(&type->name), name_hash);
+            GLog_Warning("Name collision for type name %s (hash %08X)", String_data(&type->name), name_hash);
             String_append_cstr(&type->name, "_2");
             init_tmp = 0;
             hashlittle2(String_data(&type->name), type->name.size, &name_hash, &init_tmp);
             if (DM_get(&lib->name_hash_to_type, name_hash) != NULL) {
-                printf("Error: Second name collision for type name %s (hash %08X)\n", String_data(&type->name),
+                GLog_Error("Second name collision for type name %s (hash %08X)", String_data(&type->name),
                        name_hash);
                 exit(1);
             }
@@ -209,7 +211,7 @@ void STI_Type_free(STI_Type *type) {
             break;
         }
         default: {
-            printf("Unknown type %i\n", type->type);
+            GLog_Error("Unknown type %i", type->type);
             assert(false && "Unknown type");
         };
     }
@@ -236,7 +238,7 @@ void STI_Type_init(STI_Type *type, STI_MetaType meta_type) {
             break;
         }
         default: {
-            printf("Unknown type %i\n", meta_type);
+            GLog_Error("Unknown type %i", meta_type);
             assert(false && "Should not reach");
         };
     }

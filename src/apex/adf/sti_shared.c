@@ -6,6 +6,7 @@
 
 #include "apex/hashes.h"
 #include "apex/adf/sti.h"
+#include "platform/logger.h"
 
 bool read_STI_int8(Buffer *buffer, STI_TypeLibrary *lib, STI_int8 *out) {
     return buffer->read_int8(buffer, out) == BUFFER_SUCCESS;
@@ -64,13 +65,13 @@ bool read_STI_String(Buffer *buffer, STI_TypeLibrary *lib, STI_String *out) {
 }
 
 bool read_STI_Deferred(Buffer *buffer, STI_TypeLibrary *lib, STI_Deferred *out) {
-    bool res = buffer->read(buffer, out, 16, NULL) == BUFFER_SUCCESS;
+    const bool res = buffer->read(buffer, out, 16, NULL) == BUFFER_SUCCESS;
     if (out->offset == 0 && out->type_hash == 0) {
         return true;
     }
-    STI_Type *inner_type = DM_get(&lib->types, out->type_hash);
+    const STI_Type *inner_type = DM_get(&lib->types, out->type_hash);
     if (inner_type == NULL) {
-        printf("Unknown deferred type hash 0x%08X\n", out->type_hash);
+        GLog_Error("Unknown deferred type hash 0x%08X", out->type_hash);
         return false;
     }
     out->data = malloc(inner_type->info.size);
@@ -79,11 +80,11 @@ bool read_STI_Deferred(Buffer *buffer, STI_TypeLibrary *lib, STI_Deferred *out) 
     buffer->set_position(buffer, out->offset, BUFFER_ORIGIN_START);
     STI_ObjectMethods *methods = DM_get(&lib->object_functions, out->type_hash);
     if (methods == NULL) {
-        printf("No read function for deferred type hash 0x%08X\n", out->type_hash);
+        GLog_Error("No read function for deferred type hash 0x%08X", out->type_hash);
         return false;
     }
     if (!methods->read(buffer, lib, out->data)) {
-        printf("Failed to read deferred type hash 0x%08X\n", out->type_hash);
+        GLog_Error("Failed to read deferred type hash 0x%08X", out->type_hash);
         return false;
     }
 
@@ -99,14 +100,14 @@ void free_STI_Deferred(STI_Deferred *obj, STI_TypeLibrary *lib) {
     if (obj->offset == 0 && obj->type_hash == 0) {
         return;
     }
-    STI_Type *inner_type = DM_get(&lib->types, obj->type_hash);
+    const STI_Type *inner_type = DM_get(&lib->types, obj->type_hash);
     if (inner_type == NULL) {
-        printf("Unknown deferred type hash 0x%08X\n", obj->type_hash);
+        GLog_Error("Unknown deferred type hash 0x%08X", obj->type_hash);
         exit(1);
     }
-    STI_ObjectMethods *methods = DM_get(&lib->object_functions, obj->type_hash);
+    const STI_ObjectMethods *methods = DM_get(&lib->object_functions, obj->type_hash);
     if (methods == NULL) {
-        printf("No free function for deferred type hash 0x%08X\n", obj->type_hash);
+        GLog_Error("No free function for deferred type hash 0x%08X", obj->type_hash);
         exit(1);
     }
     methods->free(obj->data, lib);
@@ -190,14 +191,14 @@ void print_STI_Deferred(const STI_Deferred *obj, STI_TypeLibrary *lib, FILE *han
         return;
     }
 
-    STI_Type *inner_type = DM_get(&lib->types, obj->type_hash);
+   const STI_Type *inner_type = DM_get(&lib->types, obj->type_hash);
     if (inner_type == NULL) {
-        printf("Unknown deferred type hash 0x%08X\n", obj->type_hash);
+        GLog_Error("Unknown deferred type hash 0x%08X", obj->type_hash);
         exit(1);
     }
-    STI_ObjectMethods *methods = DM_get(&lib->object_functions, obj->type_hash);
+    const STI_ObjectMethods *methods = DM_get(&lib->object_functions, obj->type_hash);
     if (methods == NULL) {
-        printf("No print function for deferred type hash 0x%08X\n", obj->type_hash);
+        GLog_Error("No print function for deferred type hash 0x%08X", obj->type_hash);
         exit(1);
     }
     methods->print(obj->data, lib, handle, indent);

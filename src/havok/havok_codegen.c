@@ -2,6 +2,7 @@
 
 #include "havok/havok_codegen.h"
 #include "havok/tag_file/havok_tag_types.h"
+#include "platform/logger.h"
 #include "utils/common.h"
 #include "utils/hash_helper.h"
 
@@ -129,18 +130,18 @@ void register_alias(Havok_TypeLibrary *lib, const char *havok_name, const char *
     uint32 havok_type_hash = hash_cstring(havok_name);
     HavokType *havok_type = DM_get(&lib->types, havok_type_hash);
     if (havok_type == NULL) {
-        printf("[WARN]: Cannot register alias %s for unknown type %s\n", real_name, havok_name);
+        GLog_Warning("Cannot register alias %s for unknown type %s", real_name, havok_name);
         return;
     }
     if (havok_type->parent_hash != 0) {
-        printf("[WARN]: Cannot register alias %s for type %s with parent\n", real_name, havok_name);
+        GLog_Warning("Cannot register alias %s for type %s with parent", real_name, havok_name);
         return;
     }
 
     uint32 real_type_hash = hash_cstring(real_name);
     HavokType *real_type = DM_get(&lib->types, real_type_hash);
     if (real_type != NULL) {
-        printf("[WARN]: Cannot register alias %s for already existing type %s\n", real_name, havok_name);
+        GLog_Warning("Cannot register alias %s for already existing type %s", real_name, havok_name);
         return;
     }
     havok_type->parent_hash = real_type_hash;
@@ -200,7 +201,7 @@ HavokType *HavokTypeLib__register_type(Havok_TypeLibrary *lib, const HKTagType *
     if (existing_type != NULL) {
         String *existing_full_name = Havok_full_type_name(lib, existing_type);
         if (!String_equals(existing_full_name, full_tf_type_name)) {
-            printf("[WARN]: Duplicate type hash for type %s/%s\n", String_data(full_tf_type_name),
+            GLog_Warning("Duplicate type hash for type %s/%s", String_data(full_tf_type_name),
                    String_data(existing_full_name));
             String_free(full_tf_type_name);
             String_free(existing_full_name);
@@ -286,7 +287,7 @@ HavokType *HavokTypeLib__register_type(Havok_TypeLibrary *lib, const HKTagType *
             new_member->type_hash = hash_string(member_type_full_name);
             String_free(member_type_full_name);
         } else {
-            printf("[ERROR]: Member %s has NULL type\n", String_data(&tf_member->name));
+            GLog_Error("Member %s has NULL type", String_data(&tf_member->name));
         }
     }
 
@@ -345,7 +346,7 @@ void generate_members(const Havok_TypeLibrary *lib, const HavokType *record_type
         String *member_full_name = Havok_full_type_name(lib, member_type);
         if (member_type->is_array) {
             if (member_type->template_arguments.count != 0) {
-                printf("[ERROR]: Unsupported dynamic array member type for member %s of type %s\n",
+                GLog_Error("Unsupported dynamic array member type for member %s of type %s",
                        String_data(&member->name), String_data(full_name));
                 exit(1);
             }
@@ -470,7 +471,7 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
                     break;
                 }
                 default: {
-                    printf("[ERROR]: Unsupported enum size %d for type %s\n", type->size, String_data(full_name));
+                    GLog_Error("Unsupported enum size %d for type %s", type->size, String_data(full_name));
                     exit(1);
                 }
             }
@@ -500,7 +501,7 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
     }
     if (type->is_ptr) {
         if (type->template_arguments.count != 1) {
-            printf("[ERROR]: Unsupported pointer type %s without template argument\n", String_data(full_name));
+            GLog_Error("Unsupported pointer type %s without template argument", String_data(full_name));
             exit(1);
         }
         const HavokTemplateArgument *inner_type_arg = &type->template_arguments.items[0];
@@ -519,7 +520,7 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
     ) {
         // Very special case for now
         if (type->template_arguments.count != 1) {
-            printf("[ERROR]: Unsupported array type %s without template argument\n", String_data(full_name));
+            GLog_Error("Unsupported array type %s without template argument", String_data(full_name));
             exit(1);
         }
         const HavokTemplateArgument *inner_type_arg = &type->template_arguments.items[0];
@@ -548,7 +549,7 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
         return;
     }
 
-    printf("[WARN]: Skipping non-struct type %s\n", String_data(full_name));
+    GLog_Warning("Skipping non-struct type %s", String_data(full_name));
 
     String_free(full_name);
 }
@@ -925,7 +926,7 @@ void generate_function_table(const Havok_TypeLibrary *lib, FILE *header_output, 
                         break;
                     }
                     default: {
-                        printf("[ERROR]: Unsupported enum size %d for type %s\n", type->size, String_data(full_name));
+                        GLog_Error("Unsupported enum size %d for type %s", type->size, String_data(full_name));
                         exit(1);
                     }
                 }

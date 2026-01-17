@@ -2,6 +2,7 @@
 
 #include "apex/sarc.h"
 
+#include "platform/logger.h"
 #include "utils/hash_helper.h"
 
 void SArchive__from_buffer(SArchive *archive, Buffer *buffer);
@@ -39,7 +40,7 @@ bool SArchive__get_file_by_hash(SArchive *archive, uint32 hash, MemoryBuffer *ou
     uint64 buffer_size = 0;
     if (archive->buffer->getsize(archive->buffer, &buffer_size) != BUFFER_SUCCESS)return false;
     if (entry->offset + entry->size > buffer_size) {
-        printf("[ERROR]: Invalid SARC entry size\n");
+        GLog_Error("Invalid SARC entry size");
         return false;
     }
     MemoryBuffer_allocate(out, entry->size);
@@ -47,7 +48,7 @@ bool SArchive__get_file_by_hash(SArchive *archive, uint32 hash, MemoryBuffer *ou
     uint32 actuallyRead = 0;
     archive->buffer->read(archive->buffer, out->data, entry->size, &actuallyRead);
     if (actuallyRead != entry->size) {
-        printf("[ERROR]: Failed to read SARC entry data, expected size: %u, actual size: %u\n", entry->size,
+        GLog_Error("Failed to read SARC entry data, expected size: %u, actual size: %u", entry->size,
                actuallyRead);
         out->close(out);
         return false;
@@ -78,8 +79,8 @@ void SArchive_print_files(SArchive *archive) {
     DA_init(&entries, ArchiveEntry, 16);
     SArchive__get_all_entries(archive, &entries);
     for (int i = 0; i < entries.count; ++i) {
-        ArchiveEntry *entry = DA_at(&entries, i);
-        printf("File: %s, Size: %u, Hash: 0x%08X\n", String_data(entry->path), entry->size,
+        const ArchiveEntry *entry = DA_at(&entries, i);
+        GLog_Info("File: %s, Size: %u, Hash: 0x%08X", String_data(entry->path), entry->size,
                entry->path_hash);
     }
     DA_free(&entries);
@@ -99,7 +100,7 @@ void SArchive__init_interface(SArchive *archive) {
 SArchive *SArchive_new(Buffer *buffer) {
     SArchive *archive = malloc(sizeof(SArchive));
     if (archive == NULL) {
-        printf("[ERROR]: Failed to allocate memory\n");
+        GLog_Error("Failed to allocate memory");
         exit(1);
     }
     memset(archive, 0, sizeof(SArchive));
@@ -113,11 +114,11 @@ void SArchive__from_buffer(SArchive *archive, Buffer *buffer) {
     archive->buffer = buffer;
     buffer->read(buffer, &archive->header, sizeof(SArcHeader), NULL);
     if (memcmp(archive->header.ident, "SARC", 4) != 0) {
-        printf("Invalid SARC magic\n");
+        GLog_Error("Invalid SARC magic");
         return;
     }
     if (archive->header.version2 == 2) {
-        printf("[ERROR] SARC version 2 is not supported\n");
+        GLog_Error(" SARC version 2 is not supported");
         exit(1);
     } else if (archive->header.version2 == 3) {
         uint32 strings_size = 0;
@@ -136,7 +137,7 @@ void SArchive__from_buffer(SArchive *archive, Buffer *buffer) {
             buffer->read_uint32(buffer, &entry.hash);
             buffer->read_uint32(buffer, &entry.ext_hash);
             if (hash_string(&entry.name) != entry.hash) {
-                printf("[ERROR]: SARC entry hash mismatch for file %s, expected: %08X, actual: %08X\n",
+                GLog_Error("SARC entry hash mismatch for file %s, expected: %08X, actual: %08X",
                        String_data(&entry.name), entry.hash, hash_string(&entry.name));
                 exit(1);
             }

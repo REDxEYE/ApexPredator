@@ -2,6 +2,7 @@
 
 #include "platform/archive_manager.h"
 
+#include "platform/logger.h"
 #include "utils/hash_helper.h"
 
 void ArchiveManager_init(ArchiveManager *manager) {
@@ -22,7 +23,7 @@ bool ArchiveManager_get_file(ArchiveManager *manager, const String *path, Memory
             return true;
         }
     }
-    printf("[ERROR]: File \"%s\" not found in any archive\n", String_data(path));
+    GLog_Error("File \"%s\" not found in any archive", String_data(path));
     return false;
 }
 
@@ -34,7 +35,7 @@ bool ArchiveManager_get_file_by_hash(ArchiveManager *manager, const uint32 path,
             return true;
         }
     }
-    printf("[ERROR]: File with hash %08X not found in any archive\n", path);
+    GLog_Error("File with hash %08X not found in any archive", path);
     return false;
 }
 

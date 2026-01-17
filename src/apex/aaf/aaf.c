@@ -1,16 +1,18 @@
 // Created by RED on 01.10.2025.
 
 #include "apex/aaf/aaf.h"
+
+#include "platform/logger.h"
 #include "utils/zlib_wrapper.h"
 
 void AAFArchive_from_buffer(AAFArchive *archive, Buffer *buffer) {
     buffer->read(buffer, &archive->header, sizeof(AAFHeader), NULL);
     if (strncmp(archive->header.ident, "AAF", 3) != 0) {
-        printf("[ERROR]: Invalid AAF format\n");
+        GLog_Error("Invalid AAF format");
         exit(1);
     }
     if (archive->header.version != 1) {
-        printf("[ERROR]: Unsupported AAF version: %d\n", archive->header.version);
+        GLog_Error("Unsupported AAF version: %d", archive->header.version);
         exit(1);
     }
     DA_init(&archive->sections, AAFSection, archive->header.section_count);
@@ -22,7 +24,7 @@ void AAFArchive_from_buffer(AAFArchive *archive, Buffer *buffer) {
         AAFSection *entry = DA_append_get(&archive->sections);
         buffer->read(buffer, &entry->header, sizeof(AAFSectionHeader), NULL);
         if (memcmp(entry->header.magic,"EWAM",4)!=0) {
-            printf("[ERROR]: Invalid AAF section magic\n");
+            GLog_Error("Invalid AAF section magic");
             exit(1);
         }
         MemoryBuffer_allocate(&entry->buffer, entry->header.compressed_size);
@@ -31,7 +33,7 @@ void AAFArchive_from_buffer(AAFArchive *archive, Buffer *buffer) {
         entry_offset+=entry->header.total_size;
     }
     if (total_size != archive->header.uncompressed_size) {
-        printf("[ERROR]: AAF archive uncompressed size mismatch, expected: %u, actual: %llu\n",
+        GLog_Error("AAF archive uncompressed size mismatch, expected: %u, actual: %llu",
                archive->header.uncompressed_size, total_size);
         exit(1);
     }
@@ -50,7 +52,7 @@ bool AAFArchive_get_data(AAFArchive *archive, MemoryBuffer *out) {
         int res = inflate_exact_raw(section->buffer.data, section->buffer.size, out->data + offset,
                                     section->header.uncompressed_size, NULL, NULL);
         if (res != Z_OK) {
-            printf("[ERROR]: Failed to decompress AAF section %u, zlib error: %d\n", index, res);
+            GLog_Error("Failed to decompress AAF section %u, zlib error: %d", index, res);
             out->close(out);
             return false;
         }

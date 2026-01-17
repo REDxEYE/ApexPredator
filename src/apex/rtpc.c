@@ -4,6 +4,7 @@
 #include "apex/rtpc.h"
 
 #include "apex/hashes.h"
+#include "platform/logger.h"
 
 #pragma pack(push, 1)
 typedef struct {
@@ -46,11 +47,11 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer);
 RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
     RTPCHeader header;
     if (buffer->read(buffer, &header, sizeof(RTPCHeader), NULL) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to read RTPC header\n");
+        GLog_Error("Failed to read RTPC header");
         exit(1);
     }
     if (header.version < 1 || header.version > 3) {
-        printf("[ERROR]: Unsupported RTPC version: %u\n", header.version);
+        GLog_Error("Unsupported RTPC version: %u", header.version);
         return NULL;
     }
 
@@ -63,7 +64,7 @@ RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
 RuntimeNode *RuntimeNode_new(String *name) {
     RuntimeNode *node = malloc(sizeof(RuntimeNode));
     if (node == NULL) {
-        printf("[ERROR]: Failed to allocate memory\n");
+        GLog_Error("Failed to allocate memory");
         exit(1);
     }
     memset(node, 0, sizeof(RuntimeNode));
@@ -276,7 +277,7 @@ void RuntimeNode_print(const RuntimeNode *node, FILE *output, const uint32 inden
 void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
     RuntimeNodeHeader header;
     if (buffer->read(buffer, &header, sizeof(RuntimeNodeHeader), NULL) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to read RTPC root node header\n");
+        GLog_Error("Failed to read RTPC root node header");
         exit(1);
     }
 
@@ -288,11 +289,11 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
     DA_reserve(&node->children, header.child_count);
     int64 orig_pos;
     if (buffer->get_position(buffer, &orig_pos) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to get current buffer position\n");
+        GLog_Error("Failed to get current buffer position");
         exit(1);
     }
     if (buffer->set_position(buffer, header.data_offset, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to seek to node data offset: %u\n", header.data_offset);
+        GLog_Error("Failed to seek to node data offset: %u", header.data_offset);
         exit(1);
     }
     RuntimeProp tmp = {0};
@@ -306,11 +307,11 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
     // Align buffer position to 4
     int64 pos;
     if (buffer->get_position(buffer, &pos) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to get current buffer position\n");
+        GLog_Error("Failed to get current buffer position");
         exit(1);
     }
     if (buffer->set_position(buffer, (pos + 3) & ~3, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to align buffer position after reading RTPC properties\n");
+        GLog_Error("Failed to align buffer position after reading RTPC properties");
         exit(1);
     }
     for (int i = 0; i < header.child_count; ++i) {
@@ -319,7 +320,7 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
     }
 
     if (buffer->set_position(buffer, orig_pos, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to return back\n");
+        GLog_Error("Failed to return back");
         exit(1);
     }
 }
@@ -328,16 +329,16 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
     do{\
         int64 orig_offset;\
         if(buffer->get_position(buffer, &orig_offset)!=BUFFER_SUCCESS){\
-            printf("[ERROR]: Failed to get current buffer position\n");\
+            GLog_Error("Failed to get current buffer position");\
             exit(1);\
         }\
         if (buffer->set_position(buffer, offset, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {\
-            printf("[ERROR]: Failed to seek to RTPC property data at offset: %u\n", offset);\
+            GLog_Error("Failed to seek to RTPC property data at offset: %u", offset);\
             exit(1);\
         }\
         {body}\
         if(buffer->set_position(buffer, orig_offset, BUFFER_ORIGIN_START)!=BUFFER_SUCCESS) {\
-            printf("[ERROR]: Failed to restore buffer position after reading RTPC property value\n");\
+            GLog_Error("Failed to restore buffer position after reading RTPC property value");\
             exit(1);\
         }\
     }while(0)
@@ -345,7 +346,7 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
 void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
     RuntimePropHeader header;
     if (buffer->read(buffer, &header, sizeof(RuntimePropHeader), NULL) != BUFFER_SUCCESS) {
-        printf("[ERROR]: Failed to read RTPC property header\n");
+        GLog_Error("Failed to read RTPC property header");
         exit(1);
     }
     RuntimeProp_init(prop, header.prop_type);
@@ -374,7 +375,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
         case PROP_TYPE_STR: {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read_cstring(buffer, &prop->value.string_value)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC string property value\n");
+                             GLog_Error("Failed to read RTPC string property value");
                              exit(1);
                              }});
             break;
@@ -382,7 +383,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
         case PROP_TYPE_VEC2: {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec2_value, 4*2, NULL)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC vec2 property value\n");
+                             GLog_Error("Failed to read RTPC vec2 property value");
                              exit(1);
                              }});
             break;
@@ -390,7 +391,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
         case PROP_TYPE_VEC3: {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec3_value, 4*3, NULL)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC vec3 property value\n");
+                             GLog_Error("Failed to read RTPC vec3 property value");
                              exit(1);
                              }});
             break;
@@ -398,7 +399,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
         case PROP_TYPE_VEC4: {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec4_value, 4*4, NULL)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC vec4 property value\n");
+                             GLog_Error("Failed to read RTPC vec4 property value");
                              exit(1);
                              }});
             break;
@@ -406,7 +407,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
         case PROP_TYPE_MAT3X3: {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec4_value, 4*9, NULL)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC MAT3X3 property value\n");
+                             GLog_Error("Failed to read RTPC MAT3X3 property value");
                              exit(1);
                              }});
             break;
@@ -414,7 +415,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
         case PROP_TYPE_MAT4X4: {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec4_value, 4*16, NULL)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC MAT4X4 property value\n");
+                             GLog_Error("Failed to read RTPC MAT4X4 property value");
                              exit(1);
                              }});
             break;
@@ -423,7 +424,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              uint32 array_size;
                              if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC u32 array size\n");
+                             GLog_Error("Failed to read RTPC u32 array size");
                              exit(1);
                              }
                              DA_reserve(&prop->value.uint32_array_value, array_size);
@@ -431,7 +432,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              if (array_size>0)
                              if (buffer->read(buffer, prop->value.uint32_array_value.items, 4*array_size, NULL)!=
                                  BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC ARRAY_U32 property value\n");
+                             GLog_Error("Failed to read RTPC ARRAY_U32 property value");
                              exit(1);
                              }});
             break;
@@ -440,7 +441,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              uint32 array_size;
                              if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC u32 array size\n");
+                             GLog_Error("Failed to read RTPC u32 array size");
                              exit(1);
                              }
                              DA_reserve(&prop->value.float32_array_value, array_size);
@@ -448,7 +449,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              if (array_size>0)
                              if (buffer->read(buffer, prop->value.float32_array_value.items, 4*array_size, NULL)!=
                                  BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC ARRAY_F32 property value\n");
+                             GLog_Error("Failed to read RTPC ARRAY_F32 property value");
                              exit(1);
                              }});
             break;
@@ -457,7 +458,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              uint32 array_size;
                              if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC u32 array size\n");
+                             GLog_Error("Failed to read RTPC u32 array size");
                              exit(1);
                              }
                              DA_reserve(&prop->value.uint8_array_value, array_size);
@@ -465,7 +466,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              if (array_size>0)
                              if (buffer->read(buffer, prop->value.uint8_array_value.items, array_size, NULL)!=
                                  BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC ARRAY_U8 property value\n");
+                             GLog_Error("Failed to read RTPC ARRAY_U8 property value");
                              exit(1);
                              }});
             break;

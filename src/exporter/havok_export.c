@@ -1,6 +1,6 @@
 // Created by RED on 12.01.2026.
 
-#include "../../include/exporter/havok_export.h"
+#include "exporter/havok_export.h"
 
 mat4 IDENTITY_MAT = GLM_MAT4_IDENTITY_INIT;
 

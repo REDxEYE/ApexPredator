@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "platform/logger.h"
+
 static BufferError MemoryBuffer__set_position(MemoryBuffer *fb, int64 position, BufferPositionOrigin origin) {
     uint64 new_position = 0;
     switch (origin) {
@@ -103,7 +105,7 @@ BufferError MemoryBuffer__init(MemoryBuffer* mb) {
 MemoryBuffer * MemoryBuffer_new() {
     MemoryBuffer *mb = malloc(sizeof(MemoryBuffer));
     if (!mb) {
-        printf("[ERROR]: Out of memory\n");
+        GLog_Error("Out of memory");
         exit(1);
     }
     memset(mb, 0, sizeof(MemoryBuffer));

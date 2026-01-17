@@ -11,10 +11,12 @@
 
 #include "exporter/amf_export.h"
 #include "exporter/common_export.h"
+#include "../include/platform/logger.h"
 
 int main(int argc, const char *argv[]) {
     if (argc < 3) {
         printf("USAGE: %s <path_to_game_root> <path_to_file> [extra_path]\n", argv[0]);
+        GLog_Error("Not enough arguments provided.");
         return 0;
     }
     ArchiveManager manager = {0};

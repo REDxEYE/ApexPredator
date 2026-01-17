@@ -7,19 +7,27 @@
 #include "exporter/adf_export.h"
 #include "exporter/ddsc_export.h"
 #include "havok/havok_codegen.h"
+#include "platform/logger.h"
 #include "platform/texture_ops.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
 
 
 GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, String *export_path,
-                      uint32 path_hash, const String *path, AmfMeshHeader *header, AmfMeshBuffers *mesh_buffers) {
+                      uint32 path_hash, const String *path, const AmfMeshHeader *header, const AmfMeshBuffers *mesh_buffers) {
     String mesh_name = {0};
     if (path != NULL) {
         Path_filename(path, &mesh_name);
     } else {
-        String_from_cstr(&mesh_name, "mesh_");
-        String_append_format(&mesh_name, "%08X", path_hash);
+        String* tmp_name = find_name32(path_hash);
+        if (tmp_name != NULL) {
+            Path_filename(&mesh_name, tmp_name);
+            String_free(tmp_name);
+        }else {
+            String_from_cstr(&mesh_name, "mesh_");
+            String_append_format(&mesh_name, "%08X", path_hash);
+
+        }
     }
     GL_ID mesh_root_node_id = GLTFContext_node_add(context, String_data(&mesh_name));
 
@@ -48,7 +56,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                     hi_res_buffers = ADF_read_instance(&hi_res_adf, lib, instance, &hi_res_buffer);
                     hi_res_free_fn = ((STI_ObjectMethods *) DM_get(&lib->object_functions, instance->type_hash))->free;
                 }else {
-                    printf("Unexpected hi-res mesh buffers type: %08X\n", instance->type_hash);
+                    GLog_Warning("Unexpected hi-res mesh buffers type: %08X", instance->type_hash);
                 }
                 ADF_free(&hi_res_adf);
                 String_free(&hi_res_path);
@@ -78,7 +86,6 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
         }
     }
 
-
     String mesh_export_path = {};
     String mesh_without_ext = {};
     Path_remove_extension(path, &mesh_without_ext);
@@ -90,6 +97,8 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
     for (uint32 lod_id = header->LodGroups.count - 1; lod_id < header->LodGroups.count; ++lod_id) {
         AmfLodGroup *lod_group = DA_at(&header->LodGroups, lod_id);
         for (int mesh_id = 0; mesh_id < lod_group->Meshes.count; ++mesh_id) {
+            AmfMesh *mesh = DA_at(&lod_group->Meshes, mesh_id);
+            // String* mesh_type = find_name32(mesh->MeshTypeId);
             String_init(&lod_name, 64);
             String_copy_from(&lod_name, &mesh_name);
             String_append_format(&lod_name, "_lod_%i_mesh_%i", lod_id, mesh_id);
@@ -97,11 +106,10 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
             GLTFContext_node_set_parent(context, gl_node_id, mesh_root_node_id);
             String_free(&lod_name);
 
-            AmfMesh *mesh = DA_at(&lod_group->Meshes, mesh_id);
             if (mesh->MeshProperties.type_hash==STI_TYPE_HASH_GeneralMeshConstants) {
                 // GeneralMeshConstants* constants = (GeneralMeshConstants*)mesh->MeshProperties.data;
             }else{
-                printf("Unsupported mesh prop type: %08X\n", mesh->MeshProperties.type_hash);
+                GLog_Warning("Unsupported mesh prop type: %08X", mesh->MeshProperties.type_hash);
             }
 
             const String *mesh_type_name = find_name32(mesh->MeshTypeId);
@@ -119,9 +127,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
             DynamicArray_STI_int16 *bone_lookup = &mesh->BoneIndexLookup;
             DynamicArray_AmfStreamAttribute *amf_attributes = &mesh->StreamAttributes;
 
-
             AmfBuffer *usedIndexBuffer = DA_at(&all_index_buffer, index_buffer_index);
-
 
             GL_ID gl_mesh_id = GLTFContext_mesh_add(context, String_data(mesh_type_name), mesh->SubMeshes.count);
             GLTFContext_node_set_mesh(context, gl_node_id, gl_mesh_id);
@@ -133,7 +139,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                 GL_ID material_id = GLTFContext_material_find_by_name(context, String_data(material_name));
 
                 cgltf_primitive *primitive = GLTFContext_mesh_get_primitive(context, gl_mesh_id, sub_mesh_id);
-                if (material_id.v != UINT32_MAX) {
+                if (IS_VALID_GL_ID(material_id)) {
                     GLTFContext_primitive_set_material(context, gl_mesh_id, sub_mesh_id, material_id);
                 }
                 primitive->type = cgltf_primitive_type_triangles;
@@ -209,7 +215,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                                     break;
                                 }
                                 default: {
-                                    printf("Unsupported position attribute format:%d\n", amf_attribute->Format);
+                                    GLog_Error("Unsupported position attribute format:%d", amf_attribute->Format);
                                     exit(1);
                                 }
                             }
@@ -237,7 +243,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                                     break;
                                 }
                                 default: {
-                                    printf("Unsupported texcoord attribute format:%d\n", amf_attribute->Format);
+                                    GLog_Error("Unsupported texcoord attribute format:%d", amf_attribute->Format);
                                     exit(1);
                                 }
                             }
@@ -278,7 +284,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                                     break;
                                 }
                                 default: {
-                                    printf("Unsupported normal attribute format:%d\n", amf_attribute->Format);
+                                    GLog_Error("Unsupported normal attribute format:%d", amf_attribute->Format);
                                     exit(1);
                                 }
                             }
@@ -315,7 +321,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                                     break;
                                 }
                                 default: {
-                                    printf("Unsupported color attribute format:%d\n", amf_attribute->Format);
+                                    GLog_Error("Unsupported color attribute format:%d", amf_attribute->Format);
                                     exit(1);
                                 }
                             }
@@ -341,7 +347,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                                     break;
                                 }
                                 default: {
-                                    printf("Unsupported bone index attribute format:%d\n", amf_attribute->Format);
+                                    GLog_Error("Unsupported bone index attribute format:%d", amf_attribute->Format);
                                     exit(1);
                                 }
                             }
@@ -395,14 +401,14 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                                     break;
                                 }
                                 default: {
-                                    printf("Unsupported bone weight attribute format:%d\n", amf_attribute->Format);
+                                    GLog_Error("Unsupported bone weight attribute format:%d", amf_attribute->Format);
                                     exit(1);
                                 }
                             }
                             break;
                         }
                         default: {
-                            printf("Unsupported attribute usage: %d\n", amf_attribute->Usage);
+                            GLog_Warning("Unsupported attribute usage: %d", amf_attribute->Usage);
                             continue;
                             // exit(1);
                         }
@@ -455,7 +461,12 @@ bool export_textures = true;
 GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
                        Havok_TypeLibrary *havok_lib, const AmfModel *amf_model,
                        const String *path, const uint32 path_hash, const String *export_path) {
-    assert(context!=NULL && "context must be initialized");
+    if (context==NULL) {
+        GLog_Error("GLTF context is not initialized!");
+        assert(context!=NULL && "context must be initialized");
+        exit(1);
+    }
+
 
     String model_export_path = {0};
     String model_without_ext = {0};
@@ -482,9 +493,20 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         if (!IS_VALID_GL_ID(material_id)) {
             material_id = GLTFContext_material_new(context, String_data(material_name));
             const String *render_block_id = find_name32(amf_material->RenderBlockId);
+
+            GLog_Info("Material %s -> %s", String_data(material_name), String_data(render_block_id));
+            for (int tex_id = 0; tex_id < amf_material->Textures.count; ++tex_id) {
+                const uint32 texture_hash = amf_material->Textures.items[tex_id];
+                const String *tex_path = find_name32(texture_hash);
+                if (tex_path->size == 0) {
+                    continue;
+                }
+                GLog_Info("\tSlot %i -> %s", tex_id, String_data(tex_path));
+            }
+
             if (String_cequals(render_block_id, "GeneralR2") && export_textures) {
                 if (amf_material->Attributes.type_hash != STI_TYPE_HASH_GeneralR2Constants) {
-                    printf("Unsupported GeneralR2 material attribute type: %08X\n", amf_material->Attributes.type_hash);
+                    GLog_Warning("Unsupported GeneralR2 material attribute type: %08X", amf_material->Attributes.type_hash);
                     continue;
                 }
                 const GeneralR2Constants *constants = amf_material->Attributes.data;
@@ -573,17 +595,8 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                     }
                 }
             } else {
-                printf("Unsupported material render block: %s\n", String_data(render_block_id));
+                GLog_Warning("Unsupported material render block: %s", String_data(render_block_id));
                 continue;
-            }
-            printf("Material %s -> %s\n", String_data(material_name), String_data(render_block_id));
-            for (int tex_id = 0; tex_id < amf_material->Textures.count; ++tex_id) {
-                const uint32 texture_hash = amf_material->Textures.items[tex_id];
-                const String *tex_path = find_name32(texture_hash);
-                if (tex_path->size == 0) {
-                    continue;
-                }
-                printf("\tSlot %i -> %s\n", tex_id, String_data(tex_path));
             }
         }
     }
@@ -592,7 +605,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
 
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file(archive_manager, mesh_path, &mb)) {
-        printf("File not found\n");
+        GLog_Error("File not found");
         return model_root_node_id;
     }
 

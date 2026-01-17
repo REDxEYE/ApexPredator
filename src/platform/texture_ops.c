@@ -4,6 +4,8 @@
 
 #include <assert.h>
 
+#include "platform/logger.h"
+
 Texture* multiply_4c_by_1c(const Texture* a, const Texture* b) {
     // Fast path
     if (a->width == b->width && a->height == b->height) {
@@ -35,7 +37,7 @@ Texture* multiply_4c_by_1c(const Texture* a, const Texture* b) {
         }
         return result;
     }
-    // Slow path for textures where resolution differs by factor of 2, aspect ration must match
+    // Slow path for textures where resolution differs by factor of 2, aspect ratio must match
     float aspect_a = (float) a->width / (float) a->height;
     float aspect_b = (float) b->width / (float) b->height;
     if (aspect_a == aspect_b) {
@@ -80,8 +82,7 @@ Texture* multiply_4c_by_1c(const Texture* a, const Texture* b) {
             return result;
         }
     }
-    printf(
-        "[ERROR]: Unsupported texture multiplication due to mismatched resolutions and aspect ratio: %dx%d x %dx%d\n",
+    GLog_Error("Unsupported texture multiplication due to mismatched resolutions and aspect ratio: %dx%d x %dx%d",
         a->width, a->height, b->width, b->height);
     return NULL;
 }
@@ -163,8 +164,7 @@ Texture *multiply_3c_by_1c(const Texture *a, const Texture *b) {
             return result;
         }
     }
-    printf(
-        "[ERROR]: Unsupported texture multiplication due to mismatched resolutions and aspect ratio: %dx%d x %dx%d\n",
+    GLog_Error("Unsupported texture multiplication due to mismatched resolutions and aspect ratio: %dx%d x %dx%d",
         a->width, a->height, b->width, b->height);
     return NULL;
 }
@@ -173,7 +173,7 @@ Texture *TextureOps_multiply(const Texture *texture_a, const Texture *texture_b)
     if (texture_a->bpc != texture_b->bpc ||
         texture_a->is_float != texture_b->is_float ||
         texture_a->depth != texture_b->depth) {
-        printf("[ERROR]: Unsupported texture multiplication due to mismatched properties\n");
+        GLog_Error("Unsupported texture multiplication due to mismatched properties");
         return NULL;
     }
     const Texture *tex_a;
@@ -192,7 +192,7 @@ Texture *TextureOps_multiply(const Texture *texture_a, const Texture *texture_b)
         return multiply_3c_by_1c(tex_a, tex_b);
     }
 
-    printf("[ERROR]: Unsupported texture multiplication channel counts: %d x %d\n",
+    GLog_Error("Unsupported texture multiplication channel counts: %d x %d",
            texture_a->channel_count, texture_b->channel_count);
     return NULL;
 }

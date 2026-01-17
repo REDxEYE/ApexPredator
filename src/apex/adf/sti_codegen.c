@@ -7,6 +7,7 @@
 #include "utils/common.h"
 #include "utils/lookup3.h"
 #include "apex/adf/sti.h"
+#include "platform/logger.h"
 #include "utils/string.h"
 
 
@@ -78,7 +79,7 @@ void STI_get_type_name(const STI_TypeLibrary *lib, const STI_Type *type, String 
                     break;
                 }
                 default: {
-                    printf("Unknown string hash size %i\n", type->type);
+                    GLog_Error("Unknown string hash size %i", type->type);
                     assert(false && "Unknown string hash size");
                 }
             }
@@ -86,7 +87,7 @@ void STI_get_type_name(const STI_TypeLibrary *lib, const STI_Type *type, String 
             break;
         }
         default: {
-            printf("Unknown type %i\n", type->type);
+            GLog_Error("Unknown type %i", type->type);
             assert(false && "Unknown type");
         };
     }
