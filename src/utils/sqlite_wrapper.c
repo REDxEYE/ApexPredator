@@ -2,10 +2,11 @@
 
 #include "utils/sqlite_wrapper.h"
 
-
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "platform/memory_profiling.h"
 
 struct kvdb {
     sqlite3 *db;
@@ -86,7 +87,7 @@ kv_status_t kv_open(kvdb_t **out_db, const char *path) {
     if (!out_db || !path) return KV_EINVAL;
     *out_db = NULL;
 
-    kvdb_t *db = (kvdb_t *) calloc(1, sizeof(kvdb_t));
+    kvdb_t *db = (kvdb_t *) mp_calloc(1, sizeof(kvdb_t));
     if (!db) return KV_ENOMEM;
 
     const int rc = sqlite3_open_v2(path, &db->db,
@@ -95,7 +96,7 @@ kv_status_t kv_open(kvdb_t **out_db, const char *path) {
     if (rc != SQLITE_OK) {
         const kv_status_t st = set_err(db, rc, db->db ? sqlite3_errmsg(db->db) : "sqlite3_open_v2 failed");
         if (db->db) sqlite3_close(db->db);
-        free(db);
+        mp_free(db);
         return st;
     }
 
@@ -119,7 +120,7 @@ void kv_close(kvdb_t *db) {
     if (db->last_err) sqlite3_free(db->last_err);
 
     if (db->db) sqlite3_close(db->db);
-    free(db);
+    mp_free(db);
 }
 
 static kv_status_t bind_u64(kvdb_t *db, sqlite3_stmt *st, int idx, const uint64_t key) {
@@ -161,7 +162,7 @@ kv_status_t kv_get_u64(kvdb_t *db, const uint64_t key, char **out_value) {
     if (rc == SQLITE_ROW) {
         const unsigned char *txt = sqlite3_column_text(db->st_get, 0);
         const int n = sqlite3_column_bytes(db->st_get, 0);
-        char *s = (char *) malloc((size_t) n + 1);
+        char *s = mp_malloc((size_t) n + 1);
         if (!s) return KV_ENOMEM;
         memcpy(s, txt ? (const char *) txt : "", (size_t) n);
         s[n] = '\0';

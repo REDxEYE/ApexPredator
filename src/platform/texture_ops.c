@@ -5,6 +5,7 @@
 #include <assert.h>
 
 #include "platform/logger.h"
+#include "platform/memory_profiling.h"
 
 Texture* multiply_4c_by_1c(const Texture* a, const Texture* b) {
     // Fast path
@@ -15,7 +16,7 @@ Texture* multiply_4c_by_1c(const Texture* a, const Texture* b) {
         const uint32 a_pixel_size = a->channel_count * a->bpc;
         const uint32 b_pixel_size = b->channel_count * b->bpc;
         const uint32 result_pixel_size = result->channel_count * result->bpc;
-        result->data = malloc(pixel_count * result_pixel_size);
+        result->data = mp_malloc(pixel_count * result_pixel_size);
         result->data_size = pixel_count * result_pixel_size;
 
         for (uint32 i = 0; i < pixel_count; ++i) {
@@ -52,7 +53,7 @@ Texture* multiply_4c_by_1c(const Texture* a, const Texture* b) {
             const uint32 hires_pixel_size = hires->channel_count * hires->bpc;
             const uint32 lowres_pixel_size = lowres->channel_count * lowres->bpc;
             const uint32 result_pixel_size = result->channel_count * result->bpc;
-            result->data = malloc(pixel_count * result_pixel_size);
+            result->data = mp_malloc(pixel_count * result_pixel_size);
             result->data_size = pixel_count * result_pixel_size;
 
             for (uint32 y = 0; y < hires->height; ++y) {
@@ -96,7 +97,7 @@ Texture *multiply_3c_by_1c(const Texture *a, const Texture *b) {
         const uint32 a_pixel_size = a->channel_count * a->bpc;
         const uint32 b_pixel_size = b->channel_count * b->bpc;
         const uint32 result_pixel_size = result->channel_count * result->bpc;
-        result->data = malloc(pixel_count * result_pixel_size);
+        result->data = mp_malloc(pixel_count * result_pixel_size);
         result->data_size = pixel_count * result_pixel_size;
 
         for (uint32 i = 0; i < pixel_count; ++i) {
@@ -134,7 +135,7 @@ Texture *multiply_3c_by_1c(const Texture *a, const Texture *b) {
             const uint32 hires_pixel_size = hires->channel_count * hires->bpc;
             const uint32 lowres_pixel_size = lowres->channel_count * lowres->bpc;
             const uint32 result_pixel_size = result->channel_count * result->bpc;
-            result->data = malloc(pixel_count * result_pixel_size);
+            result->data = mp_malloc(pixel_count * result_pixel_size);
             result->data_size = pixel_count * result_pixel_size;
 
             for (uint32 y = 0; y < hires->height; ++y) {

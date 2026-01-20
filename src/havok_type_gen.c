@@ -15,7 +15,7 @@
 void process_havok_file(Havok_TypeLibrary* lib, Buffer* buffer) {
     TagFile tag_file={0};
     TagFile_from_buffer(&tag_file, buffer);
-    HavokTypeLib_copy_from_tag_file(lib, &tag_file);
+    Havok_TypeLibrary_copy_from_tag_file(lib, &tag_file);
     TagFile_free(&tag_file);
 }
 
@@ -91,7 +91,7 @@ void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
     String header_rel_path = {};
     String_append_cstr(&header_rel_path, "havok/havok_generated.h");
 
-    HavokTypeLib_generate_code(lib, &namespace, header_file, &header_rel_path, impl_file);
+    Havok_TypeLibrary_generate_code(lib, &namespace, header_file, &header_rel_path, impl_file);
 
     String_free(&header_rel_path);
     String_free(&namespace);
@@ -109,7 +109,7 @@ int main(int argc, const char *argv[]) {
     Havok_TypeLibrary lib = {0};
     String tmp = {0};
     String game_root = {0};
-    HavokTypeLib_init(&lib);
+    Havok_TypeLibrary_init(&lib);
 
     ArchiveManager manager = {0};
     ArchiveManager_init(&manager);
@@ -120,7 +120,7 @@ int main(int argc, const char *argv[]) {
     collect_types(&manager, &lib);
 
     ArchiveManager_free(&manager);
-    HavokTypeLib_free(&lib);
+    Havok_TypeLibrary_free(&lib);
     String_free(&game_root);
     String_free(&tmp);
     return 0;

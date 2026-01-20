@@ -3,6 +3,7 @@
 #include "apex/sarc.h"
 
 #include "platform/logger.h"
+#include "platform/memory_profiling.h"
 #include "utils/hash_helper.h"
 
 void SArchive__from_buffer(SArchive *archive, Buffer *buffer);
@@ -98,7 +99,7 @@ void SArchive__init_interface(SArchive *archive) {
 }
 
 SArchive *SArchive_new(Buffer *buffer) {
-    SArchive *archive = malloc(sizeof(SArchive));
+    SArchive *archive = mp_malloc(sizeof(SArchive));
     if (archive == NULL) {
         GLog_Error("Failed to allocate memory");
         exit(1);
@@ -123,7 +124,7 @@ void SArchive__from_buffer(SArchive *archive, Buffer *buffer) {
     } else if (archive->header.version2 == 3) {
         uint32 strings_size = 0;
         buffer->read_uint32(buffer, &strings_size);
-        char *strings_memory = malloc(strings_size);
+        char *strings_memory = mp_malloc(strings_size);
         archive->strings = strings_memory;
         buffer->read(buffer, strings_memory, strings_size, NULL);
         uint32 entry_count = (archive->header.dir_block_len - 4/* strings_size int */ - strings_size) / 20;
@@ -155,7 +156,7 @@ void SArchive__free(SArchive *archive) {
     DM_free(&archive->entries);
     archive->buffer->close(archive->buffer);
     if (archive->strings) {
-        free(archive->strings);
+        mp_free(archive->strings);
         archive->strings = NULL;
     }
 }

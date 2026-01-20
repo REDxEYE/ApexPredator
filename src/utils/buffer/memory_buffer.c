@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "platform/logger.h"
+#include "platform/memory_profiling.h"
 
 static BufferError MemoryBuffer__set_position(MemoryBuffer *fb, int64 position, BufferPositionOrigin origin) {
     uint64 new_position = 0;
@@ -74,14 +75,14 @@ static BufferError MemoryBuffer__get_size(MemoryBuffer *fb, uint64 *size) {
 
 static BufferError MemoryBuffer__close(MemoryBuffer *fb) {
     if (fb->data) {
-        free(fb->data);
+        mp_free(fb->data);
         fb->data = NULL;
     }
     fb->size = 0;
     fb->capacity = 0;
     fb->position = 0;
     if (fb->heap_allocated) {
-        free(fb);
+        mp_free(fb);
     }
     return BUFFER_SUCCESS;
 }
@@ -103,7 +104,7 @@ BufferError MemoryBuffer__init(MemoryBuffer* mb) {
 }
 
 MemoryBuffer * MemoryBuffer_new() {
-    MemoryBuffer *mb = malloc(sizeof(MemoryBuffer));
+    MemoryBuffer *mb = mp_malloc(sizeof(MemoryBuffer));
     if (!mb) {
         GLog_Error("Out of memory");
         exit(1);
@@ -114,21 +115,24 @@ MemoryBuffer * MemoryBuffer_new() {
     return mb;
 }
 
-BufferError MemoryBuffer_allocate(MemoryBuffer *mb, int64 size) {
+BufferError MemoryBuffer_allocate(MemoryBuffer *mb, const int64 size) {
+    TracyCZoneN(ctx, "MemoryBuffer_allocate", 1);
     if (mb->data) {
-        free(mb->data);
+        mp_free(mb->data);
     }
     MemoryBuffer__init(mb);
-    mb->data = (uint8 *) malloc(size);
+    mb->data = (uint8 *) mp_malloc(size);
     memset(mb->data, 0, size);
     if (!mb->data) {
         mb->size = 0;
         mb->capacity = 0;
         mb->position = 0;
+        TracyCZoneEnd(ctx);
         return BUFFER_FAILED;
     }
     mb->size = size;
     mb->capacity = size;
     mb->position = 0;
+    TracyCZoneEnd(ctx);
     return BUFFER_SUCCESS;
 }

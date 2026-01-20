@@ -33,6 +33,12 @@ typedef enum {
     PROP_TYPE_UNK_16 = 16,
 } PropType;
 
+typedef struct Event{
+    uint32 a;
+    uint32 b;
+}Event;
+
+DYNAMIC_ARRAY_STRUCT(Event,Event);
 
 typedef struct RuntimeProp {
     String name;
@@ -53,7 +59,7 @@ typedef struct RuntimeProp {
             DynamicArray_float32 float32_array_value;
             DynamicArray_uint8 uint8_array_value;
             uint64 objid_value;
-            DynamicArray_uint64 event_value;
+            DynamicArray_Event event_value;
             uint64 unk15_value;
             uint64 unk16_value;
         };
@@ -99,7 +105,7 @@ DynamicArray_uint32* RuntimeNode_get_prop_array_u32(const RuntimeNode* node, con
 DynamicArray_float32* RuntimeNode_get_prop_array_f32(const RuntimeNode* node, const char* name);
 DynamicArray_uint8* RuntimeNode_get_prop_array_u8(const RuntimeNode* node, const char* name);
 uint64 RuntimeNode_get_prop_objid(const RuntimeNode* node, const char* name);
-DynamicArray_uint64* RuntimeNode_get_prop_event(const RuntimeNode* node, const char* name);
+DynamicArray_Event* RuntimeNode_get_prop_event(const RuntimeNode* node, const char* name);
 
 uint32 RuntimeNode_get_prop_by_hash_u32(const RuntimeNode* node, uint32 hash);
 float32 RuntimeNode_get_prop_by_hash_f32(const RuntimeNode* node, uint32 hash);
@@ -113,7 +119,7 @@ DynamicArray_uint32* RuntimeNode_get_prop_by_hash_array_u32(const RuntimeNode* n
 DynamicArray_float32* RuntimeNode_get_prop_by_hash_array_f32(const RuntimeNode* node, uint32 hash);
 DynamicArray_uint8* RuntimeNode_get_prop_by_hash_array_u8(const RuntimeNode* node, uint32 hash);
 uint64 RuntimeNode_get_prop_by_hash_objid(const RuntimeNode* node, uint32 hash);
-DynamicArray_uint64* RuntimeNode_get_prop_by_hash_event(const RuntimeNode* node, uint32 hash);
+DynamicArray_Event* RuntimeNode_get_prop_by_hash_event(const RuntimeNode* node, uint32 hash);
 bool RuntimeNode_has_prop(const RuntimeNode *node, const char *name);
 
 

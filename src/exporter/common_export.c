@@ -14,6 +14,7 @@
 #include "exporter/havok_export.h"
 #include "utils/path.h"
 #include "platform/logger.h"
+#include "platform/memory_profiling.h"
 
 
 GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, Havok_TypeLibrary *havok_lib,
@@ -76,12 +77,12 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
     } else if (memcmp(mb.data + 4, "TAG0", 4) == 0) {
         TagFile tag_file = {0};
         TagFile_from_buffer(&tag_file, (Buffer *) &mb);
-        HavokTypeLib_copy_from_tag_file(havok_lib, &tag_file);
+        Havok_TypeLibrary_copy_from_tag_file(havok_lib, &tag_file);
         const HKItem *item = &tag_file.items.items[1];
         const uint32 type_hash = hash_string(&tag_file.types.items[item->type].name);
         const HavokType *item_type = DM_get(&havok_lib->types, type_hash);
         const HAVOK_ObjectMethods *type_methods = DM_get(&havok_lib->object_functions, type_hash);
-        void *item_obj = (void *) malloc(item_type->size * item->count);
+        void *item_obj = (void *) mp_malloc(item_type->size * item->count);
         type_methods->read(&tag_file, havok_lib, item_obj, &tag_file.data.items[item->offset]);
         // JsonContext ctx;
         // jsonInit(&ctx, stdout);
@@ -107,7 +108,7 @@ GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager, STI_Typ
         } else {
             GLog_Warning("Unhandled havok type: %s", String_data(&item_type->name));
         }
-        // type_methods->free(item_obj, havok_lib);
+        type_methods->free(item_obj, havok_lib);
         TagFile_free(&tag_file);
     } else {
         String unk_file_export_path = {};

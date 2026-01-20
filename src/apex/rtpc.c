@@ -5,6 +5,7 @@
 
 #include "apex/hashes.h"
 #include "platform/logger.h"
+#include "platform/memory_profiling.h"
 
 #pragma pack(push, 1)
 typedef struct {
@@ -62,7 +63,7 @@ RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
 }
 
 RuntimeNode *RuntimeNode_new(String *name) {
-    RuntimeNode *node = malloc(sizeof(RuntimeNode));
+    RuntimeNode *node = mp_malloc(sizeof(RuntimeNode));
     if (node == NULL) {
         GLog_Error("Failed to allocate memory");
         exit(1);
@@ -194,7 +195,7 @@ uint64 RuntimeNode_get_prop_by_hash_objid(const RuntimeNode *node, const uint32 
     return prop->value.objid_value;
 }
 
-DynamicArray_uint64 *RuntimeNode_get_prop_by_hash_event(const RuntimeNode *node, const uint32 hash) {
+DynamicArray_Event *RuntimeNode_get_prop_by_hash_event(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_EVENT) {
         return NULL;
@@ -250,7 +251,7 @@ uint64 RuntimeNode_get_prop_objid(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_objid(node, hash_cstring(name));
 }
 
-DynamicArray_uint64 *RuntimeNode_get_prop_event(const RuntimeNode *node, const char *name) {
+DynamicArray_Event *RuntimeNode_get_prop_event(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_event(node, hash_cstring(name));
 }
 
@@ -358,6 +359,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
         String_move_from(&prop->name, String_move(&tmp_name));
     } else {
         String_move_from(&prop->name, String_move(found_name));
+        String_free(found_name);
     }
     switch (prop->type) {
         case PROP_TYPE_NONE: {
@@ -518,7 +520,7 @@ void RuntimeNode_free(RuntimeNode *node) {
     String_free(&node->name);
     node->name_hash = 0;
     if (node->heap_allocated)
-        free(node);
+        mp_free(node);
 }
 
 void RuntimeProp_init(RuntimeProp *prop, const PropType type) {
@@ -681,7 +683,7 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
             if (count > 32) count = 32;
             for (int i = 0; i < count; ++i) {
                 if (i > 0) fprintf(output, ", ");
-                fprintf(output, "0x%016llX", prop->value.event_value.items[i]);
+                fprintf(output, "0x%08X, 0x%08X", prop->value.event_value.items[i].a, prop->value.event_value.items[i].b);
             }
             if (prop->value.event_value.count > 32) {
                 fprintf(output, ", ... (%u total)", prop->value.event_value.count);

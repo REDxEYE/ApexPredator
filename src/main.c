@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "apex/adf/adf_types.h"
 #include "apex/package/tab_archive.h"
+#include "dictBuilder/cover.h"
 #include "havok/havok_codegen.h"
 #include "havok/havok_generated.h"
 #include "platform/archive_manager.h"
@@ -11,20 +12,33 @@
 
 #include "exporter/amf_export.h"
 #include "exporter/common_export.h"
-#include "../include/platform/logger.h"
+#include "platform/logger.h"
+#include "platform/memory_tracker.h"
+
+#include "tracy/TracyC.h"
 
 int main(int argc, const char *argv[]) {
+    mp_init();
     if (argc < 3) {
         printf("USAGE: %s <path_to_game_root> <path_to_file> [extra_path]\n", argv[0]);
         GLog_Error("Not enough arguments provided.");
+        mp_shutdown();
         return 0;
     }
+    while (!TracyCIsConnected) {
+        Sleep(100);   /* Windows */
+        printf("\rWaiting for tracy;");
+        /* or usleep(10000) on POSIX */
+    }
+    printf("\n");
+
+    TracyCZoneN(ctx, "App", 1);
     ArchiveManager manager = {0};
     ArchiveManager_init(&manager);
 
     STI_TypeLibrary lib = {0};
     Havok_TypeLibrary havok_lib = {0};
-    HavokTypeLib_init(&havok_lib);
+    Havok_TypeLibrary_init(&havok_lib);
     STI_TypeLibrary_init(&lib);
     STI_ADF_TYPES_register_functions(&lib);
     HAVOK_TYPES_register_functions(&havok_lib);
@@ -57,11 +71,13 @@ int main(int argc, const char *argv[]) {
 
     ArchiveManager_free(&manager);
     STI_TypeLibrary_free(&lib);
-    HavokTypeLib_free(&havok_lib);
+    Havok_TypeLibrary_free(&havok_lib);
     String_free(&ar_path);
     String_free(&tmp);
     String_free(&game_root);
     String_free(&export_path);
     String_free(&file_path);
+    TracyCZoneEnd(ctx);
+    mp_shutdown();
     return 0;
 }

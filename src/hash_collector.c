@@ -193,7 +193,7 @@ int main(int argc, const char *argv[]) {
     STI_TypeLibrary lib = {0};
     STI_TypeLibrary_init(&lib);
     Havok_TypeLibrary havok_lib = {0};
-    HavokTypeLib_init(&havok_lib);
+    Havok_TypeLibrary_init(&havok_lib);
 
     STI_ADF_TYPES_register_functions(&lib);
     HAVOK_TYPES_register_functions(&havok_lib);
@@ -207,7 +207,7 @@ int main(int argc, const char *argv[]) {
     ArchiveManager_foreach_file(&archive_manager, visit_all_files, &context);
 
     STI_TypeLibrary_free(&lib);
-    HavokTypeLib_free(&havok_lib);
+    Havok_TypeLibrary_free(&havok_lib);
 
     kv_close(db);
 

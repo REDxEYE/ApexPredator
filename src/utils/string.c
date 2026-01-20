@@ -8,20 +8,22 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#include "platform/memory_profiling.h"
+
 void String_free(String *string) {
     if (string->buffer != NULL && !string->statically_allocated) {
-        free(string->buffer);
+        mp_free(string->buffer);
         string->buffer = NULL;
     }
     string->size = 0;
     string->capacity = 0;
     if (string->heap_allocated) {
-        free(string);
+        mp_free(string);
     }
 }
 
 String * String_new(uint32 size) {
-    String *string = malloc(sizeof(String));
+    String *string = mp_malloc(sizeof(String));
     memset(string, 0, sizeof(String));
     string->heap_allocated = 1;
     String_init(string, size);
@@ -29,14 +31,14 @@ String * String_new(uint32 size) {
 }
 
 String * String_new_from_cstr(const char *str) {
-    String *string = malloc(sizeof(String));
+    String *string = mp_malloc(sizeof(String));
     memset(string, 0, sizeof(String));
     string->heap_allocated = 1;
     return String_from_cstr(string, str);
 }
 
 String * String_new_from_str(const String *other) {
-    String *string = malloc(sizeof(String));
+    String *string = mp_malloc(sizeof(String));
     memset(string, 0, sizeof(String));
     string->heap_allocated = 1;
     String_copy_from(string, other);
@@ -60,7 +62,7 @@ void String_init(String *string, uint32 size) {
         return;
     }
     string->size = 0;
-    string->buffer = (char *) malloc(size + 1);
+    string->buffer = (char *) mp_malloc(size + 1);
     string->capacity = size + 1;
     memset(string->buffer, 0, string->capacity);
 }
@@ -95,6 +97,14 @@ bool String_cends_with(const String *string, const char *suffix) {
     return memcmp(string->buffer + string->size - suffix_len, suffix, suffix_len) == 0;
 }
 
+bool String_cstarts_with(const String *string, const char *prefix) {
+    size_t prefix_len = strlen(prefix);
+    if (prefix_len > string->size) {
+        return false;
+    }
+    return memcmp(string->buffer, prefix, prefix_len) == 0;
+}
+
 const char *String_data(const String *string) {
     if (string->can_be_moved) {
         printf("Warning, using string that can be moved\n");
@@ -115,7 +125,7 @@ void String_append_cstr(String *string, const char *str) {
 void String_resize(String *string, uint32_t size) {
     uint32_t new_capacity = size + 1;
     if (new_capacity > string->capacity) {
-        char *p = realloc(string->buffer, new_capacity);
+        char *p = mp_realloc(string->buffer, new_capacity);
         assert(p && "Out of memory");
         string->buffer = p;
         string->capacity = new_capacity;
@@ -151,7 +161,7 @@ void String_sub_string(const String *string, uint32 start, int32 size, String *o
 }
 
 int32 String_find_chr(const String *string, char chr) {
-    char *found = strchr(string->buffer, chr);
+    const char *found = strchr(string->buffer, chr);
     return found ? (int32) (found - string->buffer) : -1;
 }
 
@@ -160,7 +170,6 @@ void String_move_from(String *string, String *other) {
         String_steal(string, other);
         return;
     }
-
     String_copy_from(string, other);
 }
 

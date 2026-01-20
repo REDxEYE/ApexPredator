@@ -34,6 +34,7 @@ String *find_name32(const uint32 key) {
         // String_append_format(tmp, "0x%08X", key);
     }
     String *tmp = String_new_from_cstr(value);
+    mp_free(value);
     return tmp;
 }
 
@@ -47,6 +48,7 @@ String * find_name64(uint64 key) {
         // String_append_format(tmp, "0x%016lX", (unsigned long long)key);
     }
     String *tmp = String_new_from_cstr(value);
+    mp_free(value);
     return tmp;
 }
 
@@ -57,6 +59,7 @@ bool check_hash32_presence(const uint32 key) {
     if (status == KV_NOTFOUND) {
         return false;
     }
+    mp_free(stored_value);
     return true;
 }
 
@@ -67,15 +70,16 @@ bool check_hash64_presence(const uint64 key) {
     if (status == KV_NOTFOUND) {
         return false;
     }
+    mp_free(stored_value);
     return true;
 }
 
-void store_hash32_name(uint32 key, const String *value) {
+void store_hash32_name(const uint32 key, const String *value) {
     init_hashes();
     kv_put_u32(hash_db, key, String_data(value));
 }
 
-void store_hash64_name(uint64 key, const String *value) {
+void store_hash64_name(const uint64 key, const String *value) {
     init_hashes();
     kv_put_u64(hash_db, key, String_data(value));
 }

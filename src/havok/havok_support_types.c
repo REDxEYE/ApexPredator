@@ -2,6 +2,7 @@
 #include "havok/havok_support_types.h"
 
 #include "platform/logger.h"
+#include "platform/memory_profiling.h"
 
 void HavokVector4_read(const TagFile *tf, const Havok_TypeLibrary *lib, HavokVector4 *obj, const uint8 *src) {
     memcpy(obj, src, sizeof(HavokVector4));
@@ -123,6 +124,12 @@ void hkReflect__Detail__Opaque_print(const hkReflect__Detail__Opaque *obj, const
     exit(1);
 }
 
+void hkReflect__Detail__Opaque_free(const hkReflect__Detail__Opaque *obj, const Havok_TypeLibrary *lib) {
+    (void) obj;
+    printf("Not implemented!");
+    exit(1);
+}
+
 void hkReflect__Type_read(const TagFile *tf, const Havok_TypeLibrary *lib, hkReflect__Type*obj, const uint8 *src) {
     (void) tf;
     (void) obj;
@@ -177,7 +184,7 @@ void read_ptr(const TagFile *tf, const Havok_TypeLibrary *lib, void **dst, const
         GLog_Error("No methods for type hash 0x%08X", type_hash);
         exit(1);
     }
-    uint8 *out = *dst = malloc(item_type->size * item->count);
+    uint8 *out = *dst = mp_malloc(item_type->size * item->count);
     for (int i = 0; i < item->count; ++i) {
         item_methods->read(tf, lib, out + (i * item_type->size), tf->data.items + item->offset + (i * item_type->size));
     }
@@ -199,7 +206,7 @@ void hkArray_read(const TagFile *tf, const Havok_TypeLibrary *lib, void *dst, co
 void hkArray_print(const void *obj, const Havok_TypeLibrary *lib, JsonContext *ctx, const char *type_name) {
     const hkArray *array = (hkArray *) obj;
     jsonBeginArray(ctx);
-    const HavokType* type = HavokTypeLib_find_by_name((Havok_TypeLibrary*)lib, type_name);
+    const HavokType* type = Havok_TypeLibrary_find_by_name((Havok_TypeLibrary*)lib, type_name);
     const HAVOK_ObjectMethods *methods = DM_get(&lib->object_functions, hash_cstring(type_name));
     if (methods==NULL || methods->print==NULL) {
         GLog_Error("No print methods for hkArray of type %s", type_name);

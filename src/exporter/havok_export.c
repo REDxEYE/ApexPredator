@@ -57,5 +57,8 @@ GL_ID export_skeleton(GLTFContext *context, const hkaSkeleton *skeleton, Havok_T
     }
 
     GLTFContext_skin_set_joint_inverse_matrices(context, skin_id, &inverse_matrices);
+    DA_free(&bone_ids);
+    DA_free(&inverse_matrices);
+    DA_free(&global_matrices);
     return skin_id;
 }

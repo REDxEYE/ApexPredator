@@ -7,13 +7,13 @@
 #include "int_def.h"
 #include <string.h>
 
-void DM_init_(DynamicInsertOnlyIntMap__Base *dm, uint32 item_size, uint32 initial_capacity) {
+void DM_init_(DynamicInsertOnlyIntMap__Base *dm, const uint32 item_size, const uint32 initial_capacity) {
     DA_init(&dm->keys, uint64, initial_capacity);
     DA_init_(&dm->values, item_size, initial_capacity);
 }
 
 // Binary search for exact point, or insertion point
-uint32 DM__find_slot(const DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
+uint32 DM__find_slot(const DynamicInsertOnlyIntMap__Base *dm, const uint64 key) {
     uint32 left = 0;
     uint32 right = dm->keys.count;
     while (left < right) {
@@ -32,14 +32,14 @@ uint32 DM__find_slot(const DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
 }
 
 
-static inline void DA_ensure_capacity(DynamicArray__Base* a, uint32 need) {
+static inline void DA_ensure_capacity(DynamicArray__Base* a, const uint32 need) {
     if (a->capacity >= need) return;
     uint32 new_cap = a->capacity ? (a->capacity * 2) : 8;
     if (new_cap < need) new_cap = need;
     DA_reserve(a, new_cap); /* must not change count */
 }
 
-void **DM__sorted_insert(DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
+void **DM__sorted_insert(DynamicInsertOnlyIntMap__Base *dm, const uint64 key) {
     uint32 target_slot = DM__find_slot(dm, key);
 
     if (target_slot >= dm->keys.count) {
@@ -75,11 +75,11 @@ void **DM__sorted_insert(DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
     return value_slot;
 }
 
-void *DM_insert_(DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
+void *DM_insert_(DynamicInsertOnlyIntMap__Base *dm, const uint64 key) {
     return DM__sorted_insert(dm, key);
 }
 
-void *DM_get_(const DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
+void *DM_get_(const DynamicInsertOnlyIntMap__Base *dm, const uint64 key) {
     const uint32 slot = DM__find_slot(dm, key);
     if (slot < dm->keys.count && dm->keys.items[slot] == key) {
         return (char *) dm->values.items + slot * dm->values.item_size;
@@ -87,7 +87,7 @@ void *DM_get_(const DynamicInsertOnlyIntMap__Base *dm, uint64 key) {
     return NULL;
 }
 
-void * DM_get_value_(const DynamicInsertOnlyIntMap__Base *dm, uint32 index) {
+void * DM_get_value_(const DynamicInsertOnlyIntMap__Base *dm, const uint32 index) {
     if (index < dm->values.count) {
         return (char *) dm->values.items + index * dm->values.item_size;
     }

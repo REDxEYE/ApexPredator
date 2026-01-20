@@ -13,6 +13,7 @@
 
 
 void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
+    TracyCZoneN(ctx, "STI_TypeLibrary_init", 1);
     DM_init(&lib->name_hash_to_type, uint32, 64);
     DM_init(&lib->types, STI_Type, 64);
     DM_init(&lib->object_functions, STI_ObjectMethods, 64);
@@ -127,6 +128,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
     type->info.name_id = UINT64_MAX;
 
     String_free(&tmp);
+    TracyCZoneEnd(ctx);
 }
 
 STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType meta_type, uint32 type_hash, String *name) {
@@ -176,6 +178,7 @@ const STI_Type *STI_TypeLibrary_get_type(const STI_TypeLibrary *lib, const uint3
 }
 
 void STI_TypeLibrary_free(STI_TypeLibrary *lib) {
+    TracyCZoneN(ctx, "STI_TypeLibrary_free", 1);
     for (int i = 0; i < DM_count(&lib->types); ++i) {
         STI_Type *type = DM_get_value(&lib->types, i);
         STI_Type_free(type);
@@ -185,6 +188,7 @@ void STI_TypeLibrary_free(STI_TypeLibrary *lib) {
     DM_free(&lib->object_functions);
     DM_free(&lib->name_hash_to_type);
     DA_free(&lib->exported_hashes);
+    TracyCZoneEnd(ctx);
 }
 
 void STI_Type_free(STI_Type *type) {
@@ -217,7 +221,7 @@ void STI_Type_free(STI_Type *type) {
     }
 }
 
-void STI_Type_init(STI_Type *type, STI_MetaType meta_type) {
+void STI_Type_init(STI_Type *type, const STI_MetaType meta_type) {
     type->type = meta_type;
     switch (meta_type) {
         case STI_Structure: {

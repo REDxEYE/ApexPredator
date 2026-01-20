@@ -8,7 +8,7 @@
 
 Texture* convert_ddsc(ArchiveManager* archive_manager, const String* path);
 
-String* export_ddsc_to_file(ArchiveManager *archive_manager, const String *path, const String *export_path);
+String* export_ddsc_to_file(const ArchiveManager *archive_manager, const String *path, const String *export_path);
 
 void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
                  const String *path,

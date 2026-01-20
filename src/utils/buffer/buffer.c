@@ -7,6 +7,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "platform/memory_profiling.h"
+
 #define CALL_AND_CHECK_ERROR(func, buffer, err_ptr) \
 ({ \
 uint8 _ret = func_call(buffer, err_ptr); \
@@ -154,12 +156,12 @@ static BufferError Buffer__write_string(Buffer* fb, uint32 size, String* string)
     }
     if (string->size < size) {
         uint32 to_write = size - string->size;
-        char *zeros = calloc(to_write, 1);
+        char *zeros = mp_calloc(to_write, 1);
         if (!zeros) {
             return BUFFER_FAILED;
         }
         err = fb->write(fb, zeros, to_write, NULL);
-        free(zeros);
+        mp_free(zeros);
         if (err < BUFFER_SUCCESS) {
             return err;
         }

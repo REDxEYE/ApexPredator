@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "int_def.h"
+#include "platform/memory_profiling.h"
 
 typedef struct String {
     char *buffer;
@@ -56,6 +57,7 @@ bool String_equals(const String *string, const String *other);
 bool String_cequals(const String *string, const char* other);
 bool String_ends_with(const String *string, const String *suffix);
 bool String_cends_with(const String *string, const char *suffix);
+bool String_cstarts_with(const String *string, const char *prefix);
 
 
 static inline String *String_move(String *string) {
@@ -76,7 +78,7 @@ static inline String *String_steal(String *string, String *other) {
     char *buffer = other->buffer;
     other->buffer = NULL;
     if (string->buffer != NULL) {
-        free(string->buffer);
+        mp_free(string->buffer);
     }
     string->buffer = buffer;
     string->size = other->size;
@@ -99,7 +101,7 @@ static inline char *String_detach(String *string) {
 }
 
 static inline uint32 String_find_subcstring(const String *string, const char *sub) {
-    char *found = strstr(string->buffer, sub);
+    const char *found = strstr(string->buffer, sub);
     return found ? (uint32) (found - string->buffer) : UINT32_MAX;
 }
 

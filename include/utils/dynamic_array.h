@@ -36,11 +36,11 @@ void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity)
 void DA_append_(DynamicArray__Base *da, const void *element);
 void* DA_append_get_(DynamicArray__Base *da);
 void DA_reserve_(DynamicArray__Base *da, uint32 needed_capacity);
-void *DA_at_(DynamicArray__Base *da, uint32 index);
+void *DA_at_(const DynamicArray__Base *da, uint32 index);
 void DA_free_(DynamicArray__Base *da);
 bool DA_contains_(DynamicArray__Base* da, const void* element, DA_compare_fn compare_fn);
 void* DA_detach_buffer_(DynamicArray__Base* da);
-void* DA_get_buffer_(DynamicArray__Base* da);
+void* DA_get_buffer_(const DynamicArray__Base* da);
 
 
 #define DA_FORI(da, i_name) \

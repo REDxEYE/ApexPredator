@@ -1,6 +1,6 @@
 // Created by RED on 12.01.2026.
 
-#include "../../include/exporter/ddsc_export.h"
+#include "exporter/ddsc_export.h"
 
 #include "apex/avtx.h"
 #include "platform/logger.h"
@@ -8,12 +8,14 @@
 #include "utils/hash_helper.h"
 #include "utils/path.h"
 
-String* export_ddsc_to_file(ArchiveManager *archive_manager, const String *path, const String *export_path) {
+#include "platform/memory_profiling.h"
+#include "tracy/TracyC.h"
+
+String* export_ddsc_to_file(const ArchiveManager *archive_manager, const String *path, const String *export_path) {
     if (path==NULL) {
         GLog_Error("Cannot export textures without name!");
         return NULL;
     }
-
 
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file_by_hash(archive_manager, hash_string(path), &mb)) {
@@ -41,9 +43,11 @@ String* export_ddsc_to_file(ArchiveManager *archive_manager, const String *path,
 }
 
 Texture* convert_ddsc(ArchiveManager* archive_manager, const String *path) {
+    TracyCZoneN(ctx, "convert_ddsc", 1);
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file(archive_manager, path, &mb)) {
         GLog_Error("File not found");
+        TracyCZoneEnd(ctx);
         return NULL;
     }
     AVTXHeader header;
@@ -51,11 +55,13 @@ Texture* convert_ddsc(ArchiveManager* archive_manager, const String *path) {
 
     if (strncmp(header.ident, "AVTX", 4) != 0) {
         GLog_Error("Invalid AVTX texture format");
-        exit(1);
+        mb.close(&mb);
+        return NULL;
     }
     if (header.version != 1) {
         GLog_Error("Unsupported AVTX version: %d", header.version);
-        exit(1);
+        mb.close(&mb);
+        return NULL;
     }
     Texture* texture = Texture_new();
     uint32 actual_body_size = 0;
@@ -74,38 +80,45 @@ Texture* convert_ddsc(ArchiveManager* archive_manager, const String *path) {
         ArchiveManager_get_file(archive_manager, &atx_path, &atx_buffer);
         if (atx_buffer.size==0) {
             Texture_free(texture);
+            mb.close(&mb);
+            TracyCZoneEnd(ctx);
             return NULL;
         }
 
         const int64 largest_mip_size = Texture_calculate_mip_size(0, header.width, header.height, header.format);
         atx_buffer.set_position(&atx_buffer, -largest_mip_size, BUFFER_ORIGIN_END);
-        compressed_data = malloc(largest_mip_size);
+        compressed_data = mp_malloc(largest_mip_size);
         atx_buffer.read(&atx_buffer, compressed_data, largest_mip_size, &actual_body_size);
         if (actual_body_size < largest_mip_size) {
             GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.body_size,
                    actual_body_size);
-            free(compressed_data);
+            mp_free(compressed_data);
             Texture_free(texture);
+            mb.close(&mb);
+            TracyCZoneEnd(ctx);
             return NULL;
         }
         atx_buffer.close(&atx_buffer);
         String_free(&atx_path);
     } else {
         mb.set_position(&mb, header.header_size, BUFFER_ORIGIN_START);
-        compressed_data = malloc(header.body_size);
+        compressed_data = mp_malloc(header.body_size);
         mb.read(&mb, compressed_data, header.body_size, &actual_body_size);
         if (actual_body_size != header.body_size) {
             GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.body_size,
                    actual_body_size);
-            free(compressed_data);
+            mp_free(compressed_data);
             Texture_free(texture);
+            mb.close(&mb);
+            TracyCZoneEnd(ctx);
             return NULL;
         }
     }
     Texture_from_dxgi(texture, header.format, header.width, header.height, header.depth, compressed_data,
                       actual_body_size);
-    free(compressed_data);
-
+    mp_free(compressed_data);
+    mb.close(&mb);
+    TracyCZoneEnd(ctx);
     return texture;
 
 }
@@ -159,30 +172,30 @@ void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
 
         const int64 largest_mip_size = Texture_calculate_mip_size(0, header.width, header.height, header.format);
         atx_buffer.set_position(&atx_buffer, -largest_mip_size, BUFFER_ORIGIN_END);
-        compressed_data = malloc(largest_mip_size);
+        compressed_data = mp_malloc(largest_mip_size);
         atx_buffer.read(&atx_buffer, compressed_data, largest_mip_size, &actual_body_size);
         if (actual_body_size < largest_mip_size) {
             GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.body_size,
                    actual_body_size);
-            free(compressed_data);
+            mp_free(compressed_data);
             exit(1);
         }
         atx_buffer.close(&atx_buffer);
         String_free(&atx_path);
     } else {
         mb->set_position(mb, header.header_size, BUFFER_ORIGIN_START);
-        compressed_data = malloc(header.body_size);
+        compressed_data = mp_malloc(header.body_size);
         mb->read(mb, compressed_data, header.body_size, &actual_body_size);
         if (actual_body_size != header.body_size) {
             GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.body_size,
                    actual_body_size);
-            free(compressed_data);
+            mp_free(compressed_data);
             exit(1);
         }
     }
     Texture_from_dxgi(&tex, header.format, header.width, header.height, header.depth, compressed_data,
                       actual_body_size);
-    free(compressed_data);
+    mp_free(compressed_data);
 
     Texture_save(&tex, &texture_export_path);
     String_free(&texture_export_path);

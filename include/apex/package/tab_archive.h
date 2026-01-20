@@ -23,10 +23,11 @@ typedef struct {
     String arc_path;
     DynamicInsertOnlyIntMap_TabEntryMap entries;
 } TabArchive;
-TabArchive* TabArchive_new(String* path);
+TabArchive* TabArchive_new(const String* path);
 
 static inline void TabArchives_init(ArchiveManager *manager, const String *game_root) {
-    DynamicArray_Path archive_paths = {};
+    TracyCZoneN(ctx, "TabArchives_init", 1);
+    DynamicArray_Path archive_paths = {0};
 
     Path_rglob(game_root, &tab_ext, &archive_paths);
     for (uint32 i = 0; i < archive_paths.count; ++i) {
@@ -37,6 +38,7 @@ static inline void TabArchives_init(ArchiveManager *manager, const String *game_
     DA_free_with_inner(&archive_paths, {
                        String_free(it);
                        });
+    TracyCZoneEnd(ctx);
 }
 
 

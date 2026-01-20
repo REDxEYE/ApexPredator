@@ -177,6 +177,7 @@ void FileBuffer_init(FileBuffer *fb) {
     fb->read = (BufferReadFn) FileBuffer__read;
     fb->write = (BufferWriteFn) FileBuffer__write;
     fb->close = (BufferCloseFn) FileBuffer__close;
+    fb->hFile = INVALID_HANDLE_VALUE;
 }
 
 BufferError FileBuffer_open_read(FileBuffer *fb, const char *path) {

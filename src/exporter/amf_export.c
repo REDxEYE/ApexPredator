@@ -11,6 +11,7 @@
 #include "platform/texture_ops.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
+#include "platform/memory_profiling.h"
 
 
 GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, String *export_path,
@@ -182,7 +183,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                             String_from_cstr(&attr_name, "POSITION");
                             float32 packing_data = *(float32 *) amf_attribute->PackingData;
 
-                            attribute_data = malloc(vertex_count * 3 * 4);
+                            attribute_data = mp_malloc(vertex_count * 3 * 4);
                             float32 *positions_data = attribute_data;
                             switch (amf_attribute->Format) {
                                 case AmfFormat_R16G16B16_SNORM: {
@@ -231,7 +232,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                             uv_count++;
                             float32 *packing_data = (float32 *) amf_attribute->PackingData;
 
-                            attribute_data = malloc(vertex_count * 2 * 8);
+                            attribute_data = mp_malloc(vertex_count * 2 * 8);
                             float32 *uv_data = attribute_data;
                             switch (amf_attribute->Format) {
                                 case AmfFormat_R16G16_SNORM: {
@@ -256,7 +257,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                             stride = 12;
                             String_from_cstr(&attr_name, "NORMAL");
 
-                            attribute_data = malloc(vertex_count * 3 * 4);
+                            attribute_data = mp_malloc(vertex_count * 3 * 4);
                             float32 *normals_data = attribute_data;
                             switch (amf_attribute->Format) {
                                 case AmfFormat_R32_UNIT_VEC_AS_FLOAT: {
@@ -297,7 +298,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                             stride = 4;
                             String_from_cstr(&attr_name, "_COLOR_0");
 
-                            attribute_data = malloc(vertex_count * 4);
+                            attribute_data = mp_malloc(vertex_count * 4);
                             uint8 *color_data = attribute_data;
                             switch (amf_attribute->Format) {
                                 case AmfFormat_R32_R8G8B8A8_UNORM_AS_FLOAT: {
@@ -333,7 +334,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                             normalized = false;
                             stride = 4 * sizeof(uint16);
                             String_from_cstr(&attr_name, "JOINTS_0");
-                            attribute_data = malloc(vertex_count * 4 * sizeof(uint16));
+                            attribute_data = mp_malloc(vertex_count * 4 * sizeof(uint16));
                             uint8 *bone_index_data = attribute_data;
                             switch (amf_attribute->Format) {
                                 case AmfFormat_R8G8B8A8_UINT: {
@@ -359,7 +360,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                             normalized = false;
                             stride = 4 * sizeof(float32);
                             String_from_cstr(&attr_name, "WEIGHTS_0");
-                            attribute_data = malloc(vertex_count * 4 * sizeof(float32));
+                            attribute_data = mp_malloc(vertex_count * 4 * sizeof(float32));
                             float32 *bone_weight_data = attribute_data;
                             switch (amf_attribute->Format) {
                                 case AmfFormat_R8G8B8A8_UNORM: {
@@ -425,7 +426,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                     GLTFContext_primitive_set_attribute_accessor(context, gl_mesh_id, sub_mesh_id, attr_id,
                                                                  buffer_view_id, String_data(&attr_name));
                     String_free(&attr_name);
-                    free(attribute_data);
+                    mp_free(attribute_data);
                 }
             }
             if (mesh->MeshProperties.type_hash==STI_TYPE_HASH_GeneralMeshConstants) {
@@ -448,7 +449,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
 
     if (hi_res_buffers != NULL) {
         hi_res_free_fn(hi_res_buffers, lib);
-        free(hi_res_buffers);
+        mp_free(hi_res_buffers);
     }
     DA_free(&all_index_buffer);
     DA_free(&all_vertex_buffer);
@@ -488,17 +489,18 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
 
     for (int mat_id = 0; mat_id < amf_model->Materials.count; ++mat_id) {
         const AmfMaterial *amf_material = &amf_model->Materials.items[mat_id];
-        const String *material_name = find_name32(amf_material->Name);
+        String *material_name = find_name32(amf_material->Name);
         GL_ID material_id = GLTFContext_material_find_by_name(context, String_data(material_name));
         if (!IS_VALID_GL_ID(material_id)) {
             material_id = GLTFContext_material_new(context, String_data(material_name));
-            const String *render_block_id = find_name32(amf_material->RenderBlockId);
+            String *render_block_id = find_name32(amf_material->RenderBlockId);
 
             GLog_Info("Material %s -> %s", String_data(material_name), String_data(render_block_id));
             for (int tex_id = 0; tex_id < amf_material->Textures.count; ++tex_id) {
                 const uint32 texture_hash = amf_material->Textures.items[tex_id];
-                const String *tex_path = find_name32(texture_hash);
+                String *tex_path = find_name32(texture_hash);
                 if (tex_path->size == 0) {
+                    String_free(tex_path);
                     continue;
                 }
                 GLog_Info("\tSlot %i -> %s", tex_id, String_data(tex_path));
@@ -606,9 +608,13 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                 }
             } else {
                 GLog_Warning("Unsupported material render block: %s", String_data(render_block_id));
+                String_free(material_name);
+                String_free(render_block_id);
                 continue;
             }
+            String_free(render_block_id);
         }
+        String_free(material_name);
     }
 
     const String *mesh_path = find_name32(amf_model->Mesh);

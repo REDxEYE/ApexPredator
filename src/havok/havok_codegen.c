@@ -6,7 +6,6 @@
 #include "utils/common.h"
 #include "utils/hash_helper.h"
 
-
 String *Havok_full_tag_type_name(const HKTagType *type) {
     String *full_name = String_new(16);
     if (type->name.buffer[0] == 'T' && type->name.buffer[1] == '*') {
@@ -95,39 +94,8 @@ String *Havok_full_type_name(const Havok_TypeLibrary *lib, const HavokType *type
     return full_name;
 }
 
-void HavokTemplateArgument_free(HavokTemplateArgument *arg) {
-    String_free(&arg->name);
-    arg->type_hash = 0;
-    arg->number = 0;
-    arg->is_number = 0;
-    arg->is_class = 0;
-}
-
-void HavokRecordMember_free(HavokRecordMember *member) {
-    String_free(&member->name);
-    member->type_hash = 0;
-    member->flags = 0;
-    member->offset = 0;
-}
-
-void HavokType_init(HavokType *type) {
-    String_init(&type->name, 32);
-    type->hash = 0;
-    type->parent_hash = 0;
-    type->size = 0;
-    type->align = 0;
-    DA_init(&type->template_arguments, HavokTemplateArgument, 4);
-    DA_init(&type->members, HavokRecordMember, 8);
-}
-
-void HavokType_free(HavokType *type) {
-    String_free(&type->name);
-    DA_free_with_inner(&type->template_arguments, {HavokTemplateArgument_free(it);});
-    DA_free_with_inner(&type->members, {HavokRecordMember_free(it);});
-}
-
 void register_alias(Havok_TypeLibrary *lib, const char *havok_name, const char *real_name) {
-    uint32 havok_type_hash = hash_cstring(havok_name);
+    const uint32 havok_type_hash = hash_cstring(havok_name);
     HavokType *havok_type = DM_get(&lib->types, havok_type_hash);
     if (havok_type == NULL) {
         GLog_Warning("Cannot register alias %s for unknown type %s", real_name, havok_name);
@@ -138,8 +106,8 @@ void register_alias(Havok_TypeLibrary *lib, const char *havok_name, const char *
         return;
     }
 
-    uint32 real_type_hash = hash_cstring(real_name);
-    HavokType *real_type = DM_get(&lib->types, real_type_hash);
+    const uint32 real_type_hash = hash_cstring(real_name);
+    const HavokType *real_type = DM_get(&lib->types, real_type_hash);
     if (real_type != NULL) {
         GLog_Warning("Cannot register alias %s for already existing type %s", real_name, havok_name);
         return;
@@ -152,165 +120,6 @@ void register_alias(Havok_TypeLibrary *lib, const char *havok_name, const char *
     new_type->size = havok_type->size;
     new_type->align = havok_type->align;
     new_type->is_primitive = true;
-}
-
-void HavokTypeLib_init(Havok_TypeLibrary *lib) {
-    DM_init(&lib->types, HavokType, 1024);
-    DA_init(&lib->exported_hashes, uint64, 1024);
-    DM_init(&lib->object_functions, HAVOK_ObjectMethods, 1024);
-}
-
-void HavokTypeLib_free(Havok_TypeLibrary *lib) {
-    for (int i = 0; i < lib->types.values.count; ++i) {
-        HavokType *type = DA_at(&lib->types.values, i);
-        HavokType_free(type);
-    }
-    DM_free(&lib->types);
-    DA_free(&lib->object_functions);
-}
-
-HavokType *HavokTypeLib_find_by_name(Havok_TypeLibrary *lib, const char *name) {
-    uint64 type_hash = hash_cstring(name);
-    return DM_get(&lib->types, type_hash);
-}
-
-HavokType *HavokTypeLib__register_type(Havok_TypeLibrary *lib, const HKTagType *tf_type);
-
-HavokType *HavokTypeLib__register_type(Havok_TypeLibrary *lib, const HKTagType *tf_type) {
-    String *full_tf_type_name = Havok_full_tag_type_name(tf_type);
-    const uint64 type_hash = hash_string(full_tf_type_name);
-    if (DA_contains(&lib->exported_hashes, &type_hash, compare_hashes64)) {
-        String_free(full_tf_type_name);
-        return DM_get(&lib->types, type_hash);
-    }
-
-    if (tf_type->parent != NULL) {
-        HavokTypeLib__register_type(lib, tf_type->parent);
-    }
-
-
-    DA_FORI(tf_type->template_args, i) {
-        const HKTagTemplateArgument *tf_arg = &tf_type->template_args.items[i];
-        if (tf_arg->is_class) {
-            assert(tf_arg->type != NULL);
-            HavokTypeLib__register_type(lib, tf_arg->type);
-        }
-    }
-
-    HavokType *existing_type = DM_get(&lib->types, type_hash);
-    if (existing_type != NULL) {
-        String *existing_full_name = Havok_full_type_name(lib, existing_type);
-        if (!String_equals(existing_full_name, full_tf_type_name)) {
-            GLog_Warning("Duplicate type hash for type %s/%s", String_data(full_tf_type_name),
-                   String_data(existing_full_name));
-            String_free(full_tf_type_name);
-            String_free(existing_full_name);
-            exit(1);
-        }
-        String_free(full_tf_type_name);
-        String_free(existing_full_name);
-        return existing_type;
-    }
-    String_free(full_tf_type_name);
-
-    if (tf_type->data_type == HKTYPE_POINTER && tf_type->name.buffer[0] == 'T') {
-        assert(tf_type->members.count==0 && "Pointer type cannot have members");
-    }
-
-    DA_FORI(tf_type->members, j) {
-        const HKTagTypeMember *tf_member = &tf_type->members.items[j];
-        if (tf_member->type != NULL) {
-            HavokTypeLib__register_type(lib, tf_member->type);
-        }
-    }
-    bool is_enum = false;
-    if (String_cequals(&tf_type->name, "hkEnum")) {
-        is_enum = true;
-        // Enums first template arg is it's actual type. It needs to be processed and treated as enum;
-        const HKTagTemplateArgument *enum_type_arg = &tf_type->template_args.items[0];
-        HavokType *inner_enum_type = HavokTypeLib__register_type(lib, enum_type_arg->type);
-        inner_enum_type->is_enum = true;
-    }
-
-    HavokType *new_type = DM_insert(&lib->types, type_hash);
-    HavokType_init(new_type);
-    String_copy_from(&new_type->name, &tf_type->name);
-    new_type->hash = type_hash;
-    new_type->size = tf_type->size;
-    new_type->align = tf_type->align;
-    new_type->is_enum = is_enum;
-
-    if (tf_type->members.count > 0) {
-        new_type->is_record = 1;
-    } else if (tf_type->data_type == HKTYPE_POINTER) {
-        new_type->is_ptr = 1;
-    } else if (tf_type->data_type == HKTYPE_ARRAY) {
-        if (String_cequals(&tf_type->name, "T[N]")) {
-            new_type->is_fixed_array = 1;
-        } else {
-            new_type->is_array = 1;
-        }
-    } else {
-        new_type->is_primitive = 1;
-    }
-    if (tf_type->parent != NULL) {
-        String *parent_full_name = Havok_full_tag_type_name(tf_type->parent);
-        new_type->parent_hash = hash_string(parent_full_name);
-        String_free(parent_full_name);
-    }
-    DA_reserve(&new_type->template_arguments, tf_type->template_args.count);
-    DA_FORI(tf_type->template_args, j) {
-        const HKTagTemplateArgument *tf_arg = &tf_type->template_args.items[j];
-        HavokTemplateArgument *new_arg = DA_append_get(&new_type->template_arguments);
-        String_copy_from(&new_arg->name, &tf_arg->name);
-        new_arg->is_class = tf_arg->is_class;
-        new_arg->is_number = tf_arg->is_number;
-        new_arg->number = tf_arg->number;
-        if (tf_arg->is_class) {
-            assert(tf_arg->type != NULL);
-            String *arg_full_name = Havok_full_tag_type_name(tf_arg->type);
-            new_arg->type_hash = hash_string(arg_full_name);
-            String_free(arg_full_name);
-        }
-    }
-    DA_FORI(tf_type->members, j) {
-        const HKTagTypeMember *tf_member = &tf_type->members.items[j];
-        HavokRecordMember *new_member = DA_append_get(&new_type->members);
-        String_copy_from(&new_member->name, &tf_member->name);
-        if (String_cequals(&new_member->name, "bool")) {
-            String_from_cstr(&new_member->name, "bool__");
-        }
-        new_member->flags = tf_member->flags;
-        new_member->offset = tf_member->offset;
-        if (tf_member->type != NULL) {
-            String *member_type_full_name = Havok_full_tag_type_name(tf_member->type);
-            new_member->type_hash = hash_string(member_type_full_name);
-            String_free(member_type_full_name);
-        } else {
-            GLog_Error("Member %s has NULL type", String_data(&tf_member->name));
-        }
-    }
-
-    if (new_type->parent_hash != 0) {
-        const HavokType *parent_type = DM_get(&lib->types, new_type->parent_hash);
-        if (new_type->size == 0) {
-            new_type->size = parent_type->size;
-        }
-        if (new_type->align == 0) {
-            new_type->align = parent_type->align;
-        }
-    }
-
-    DA_append(&lib->exported_hashes, &type_hash);
-    return new_type;
-}
-
-void HavokTypeLib_copy_from_tag_file(Havok_TypeLibrary *lib, TagFile *tf) {
-    DA_FORI(tf->types, i) {
-        if (i == 0)continue;
-        const HKTagType *tf_type = DA_at(&tf->types, i);
-        HavokTypeLib__register_type(lib, tf_type);
-    }
 }
 
 static uint32 indent = 0;
@@ -345,11 +154,11 @@ void generate_members(const Havok_TypeLibrary *lib, const HavokType *record_type
 
         String *member_full_name = Havok_full_type_name(lib, member_type);
         if (member_type->is_array) {
-            if (member_type->template_arguments.count != 0) {
-                GLog_Error("Unsupported dynamic array member type for member %s of type %s",
-                       String_data(&member->name), String_data(full_name));
-                exit(1);
-            }
+            // if (member_type->template_arguments.count != 0) {
+            //     GLog_Error("Unsupported dynamic array member type for member %s of type %s",
+            //            String_data(&member->name), String_data(full_name));
+            //     exit(1);
+            // }
             fprintf(header_output, "    %s %s; // offset: %d, flags: %d, size: %d\n",
                     String_data(member_full_name),
                     String_data(&member->name), member->offset, member->flags,
@@ -564,14 +373,14 @@ void generate_function_forward_defs(const Havok_TypeLibrary *lib, const HavokTyp
     if (type->is_record) {
         if (strcmp(String_data(&type->name), "hkArray") != 0) {
             fprintf(header_output,
-                    "void %s_read(const TagFile *tf, const HavokTypeLib* lib, %s *obj, const uint8* src);\n",
+                    "void %s_read(const TagFile *tf, const Havok_TypeLibrary* lib, %s *obj, const uint8* src);\n",
                     String_data(full_name),
                     String_data(full_name));
         }
 
-        fprintf(header_output, "void %s_print(const %s *obj, const HavokTypeLib* lib, JsonContext *ctx);\n",
+        fprintf(header_output, "void %s_print(const %s *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);\n",
                 String_data(full_name), String_data(full_name));
-        fprintf(header_output, "void %s_free(%s *obj);\n", String_data(full_name), String_data(full_name));
+        fprintf(header_output, "void %s_free(%s *obj, const Havok_TypeLibrary* lib);\n", String_data(full_name), String_data(full_name));
         fprintf(header_output, "\n");
     } else if (type->is_primitive) {
         if (type->parent_hash != 0) {
@@ -579,10 +388,10 @@ void generate_function_forward_defs(const Havok_TypeLibrary *lib, const HavokTyp
             generate_function_forward_defs(lib, parent_type, header_output);
             String *parent_full_name = Havok_full_type_name(lib, parent_type);
             fprintf(header_output,
-                    "void %s_read(const TagFile *tf, const HavokTypeLib* lib, %s *obj, const uint8* src);\n",
+                    "void %s_read(const TagFile *tf, const Havok_TypeLibrary* lib, %s *obj, const uint8* src);\n",
                     String_data(full_name),
                     String_data(full_name));
-            fprintf(header_output, "void %s_print(const %s *obj, const HavokTypeLib* lib, JsonContext *ctx);\n",
+            fprintf(header_output, "void %s_print(const %s *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);\n",
                     String_data(full_name), String_data(full_name));
             String_free(parent_full_name);
         }
@@ -593,10 +402,10 @@ void generate_function_forward_defs(const Havok_TypeLibrary *lib, const HavokTyp
         String *inner_full_name = Havok_full_type_name(lib, inner_type);
         assert(inner_type!=NULL);
         generate_function_forward_defs(lib, inner_type, header_output);
-        fprintf(header_output, "void %s_read(const TagFile *tf, const HavokTypeLib* lib, %s *obj, const uint8* src);\n",
+        fprintf(header_output, "void %s_read(const TagFile *tf, const Havok_TypeLibrary* lib, %s *obj, const uint8* src);\n",
                 String_data(full_name),
                 String_data(full_name));
-        fprintf(header_output, "void %s_print(const %s *obj, const HavokTypeLib* lib, JsonContext *ctx);\n",
+        fprintf(header_output, "void %s_print(const %s *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);\n",
                 String_data(full_name), String_data(full_name));
         String_free(inner_full_name);
     } else if (type->is_fixed_array) {
@@ -606,10 +415,10 @@ void generate_function_forward_defs(const Havok_TypeLibrary *lib, const HavokTyp
         assert(inner_type!=NULL);
         generate_function_forward_defs(lib, inner_type, header_output);
         String *inner_full_name = Havok_full_type_name(lib, inner_type);
-        fprintf(header_output, "void %s_read(const TagFile *tf, const HavokTypeLib* lib, %s *obj, const uint8* src);\n",
+        fprintf(header_output, "void %s_read(const TagFile *tf, const Havok_TypeLibrary* lib, %s *obj, const uint8* src);\n",
                 String_data(full_name),
                 String_data(inner_full_name));
-        fprintf(header_output, "void %s_print(const %s *obj, const HavokTypeLib* lib, JsonContext *ctx);\n",
+        fprintf(header_output, "void %s_print(const %s *obj, const Havok_TypeLibrary* lib, JsonContext *ctx);\n",
                 String_data(full_name), String_data(inner_full_name));
         String_free(inner_full_name);
     }
@@ -671,7 +480,7 @@ void generate_read_function_body(const Havok_TypeLibrary *lib, const HavokType *
             return;
         }
 
-        fprintf(impl_output, "void %s_read(const TagFile *tf, const HavokTypeLib* lib, %s *obj, const uint8* src) {\n",
+        fprintf(impl_output, "void %s_read(const TagFile *tf, const Havok_TypeLibrary* lib, %s *obj, const uint8* src) {\n",
                 String_data(full_name),
                 String_data(full_name));
 
@@ -717,7 +526,7 @@ void generate_read_function_body(const Havok_TypeLibrary *lib, const HavokType *
         const HavokType *inner_type = DM_get(&lib->types, inner_type_arg->type_hash);
         assert(inner_type!=NULL);
         String *inner_full_name = Havok_full_type_name(lib, inner_type);
-        fprintf(impl_output, "void %s_read(const TagFile *tf, const HavokTypeLib* lib, %s *obj, const uint8* src) {\n",
+        fprintf(impl_output, "void %s_read(const TagFile *tf, const Havok_TypeLibrary* lib, %s *obj, const uint8* src) {\n",
                 String_data(full_name), String_data(inner_full_name));
         fprintf(impl_output, "    memcpy(obj, src, %i);\n", type->size);
         fprintf(impl_output, "}\n");
@@ -730,7 +539,7 @@ void generate_read_function_body(const Havok_TypeLibrary *lib, const HavokType *
         generate_function_forward_defs(lib, inner_type, impl_output);
         const uint32 item_count = type->size / inner_type->size;
         String *inner_full_name = Havok_full_type_name(lib, inner_type);
-        fprintf(impl_output, "void %s_read(const TagFile *tf, const HavokTypeLib* lib, %s *obj, const uint8* src) {\n",
+        fprintf(impl_output, "void %s_read(const TagFile *tf, const Havok_TypeLibrary* lib, %s *obj, const uint8* src) {\n",
                 String_data(full_name),
                 String_data(full_name));
         fprintf(impl_output, "    for (uint32 i = 0; i < %u; ++i) {\n", item_count);
@@ -742,8 +551,6 @@ void generate_read_function_body(const Havok_TypeLibrary *lib, const HavokType *
     }
     String_free(full_name);
 }
-
-void generate_print_function_body(const Havok_TypeLibrary *lib, const HavokType *type, FILE *impl_output);
 
 void generate_type_print_body(const Havok_TypeLibrary *lib, const HavokType *type, FILE *impl_output) {
     if (type->is_record) {
@@ -790,6 +597,48 @@ void generate_type_print_body(const Havok_TypeLibrary *lib, const HavokType *typ
     }
 }
 
+void generate_free_function_body(const Havok_TypeLibrary *lib, const HavokType *type, FILE *impl_output) {
+    String *full_name = Havok_full_type_name(lib, type);
+    if (type->is_record) {
+        fprintf(impl_output, "void %s_free(%s *obj, const Havok_TypeLibrary* lib) {\n",
+                String_data(full_name),
+                String_data(full_name));
+
+        if (type->parent_hash != 0) {
+            const HavokType *parent_type = DM_get(&lib->types, type->parent_hash);
+            const HavokType* top_type = parent_type;
+            while (top_type!=NULL && top_type->is_primitive) {
+                top_type = DM_get(&lib->types, top_type->parent_hash);
+            }
+            if (top_type!=NULL){
+                String *parent_full_name = Havok_full_type_name(lib, top_type);
+                fprintf(impl_output, "    %s_free((%s*)obj, lib);\n", String_data(parent_full_name),
+                        String_data(parent_full_name));
+                String_free(parent_full_name);
+            }
+        }
+
+        DA_FORI(type->members, i) {
+            const HavokRecordMember *member = &type->members.items[i];
+            const HavokType *member_type = DM_get(&lib->types, member->type_hash);
+            if (member_type->is_ptr) {
+                const HavokType *inner_type = DM_get(&lib->types, member_type->template_arguments.items[0].type_hash);
+                String *inner_full_name = Havok_full_type_name(lib, inner_type);
+                if (inner_full_name->buffer[inner_full_name->size - 1] == '*') {
+                    inner_full_name->size--;
+                    String_append_cstr(inner_full_name, "_Ptr");
+                }
+                fprintf(impl_output, "    %s_free(obj->%s, lib);\n",
+                        String_data(inner_full_name),
+                        String_data(&member->name));
+                String_free(inner_full_name);
+            }
+        }
+        fprintf(impl_output, "}\n");
+    }
+    String_free(full_name);
+}
+
 void generate_print_function_body(const Havok_TypeLibrary *lib, const HavokType *type, FILE *impl_output) {
     String *full_type_name = Havok_full_type_name(lib, type);
     if (String_cequals(&type->name, "hkRotationImpl")) {
@@ -799,7 +648,7 @@ void generate_print_function_body(const Havok_TypeLibrary *lib, const HavokType 
         assert(inner_type!=NULL);
         String *inner_full_name = Havok_full_type_name(lib, inner_type);
         const uint32 item_count = type->size / inner_type->size;
-        fprintf(impl_output, "void %s_print(const %s *obj, const HavokTypeLib* lib, JsonContext *ctx){\n",
+        fprintf(impl_output, "void %s_print(const %s *obj, const Havok_TypeLibrary* lib, JsonContext *ctx){\n",
                 String_data(full_type_name),
                 String_data(full_type_name));
         fprintf(impl_output, "    if(obj==NULL){jsonValueNull(ctx); return;}\n");
@@ -811,7 +660,7 @@ void generate_print_function_body(const Havok_TypeLibrary *lib, const HavokType 
         fprintf(impl_output, "}\n\n");
         String_free(inner_full_name);
     } else if (type->is_record) {
-        fprintf(impl_output, "void %s_print(const %s *obj, const HavokTypeLib* lib, JsonContext *ctx){\n",
+        fprintf(impl_output, "void %s_print(const %s *obj, const Havok_TypeLibrary* lib, JsonContext *ctx){\n",
                 String_data(full_type_name), String_data(full_type_name));
         fprintf(impl_output, "    if(obj==NULL){jsonValueNull(ctx); return;}\n");
         if (strcmp(String_data(&type->name), "hkArray") == 0) {
@@ -831,7 +680,7 @@ void generate_print_function_body(const Havok_TypeLibrary *lib, const HavokType 
             String_free(full_type_name);
             return;
         }
-        fprintf(impl_output, "void %s_print(const %s *obj, const HavokTypeLib* lib, JsonContext *ctx){\n",
+        fprintf(impl_output, "void %s_print(const %s *obj, const Havok_TypeLibrary* lib, JsonContext *ctx){\n",
                 String_data(full_type_name), String_data(full_type_name));
         fprintf(impl_output, "    if(obj==NULL){jsonValueNull(ctx); return;}\n");
         const HavokType *parent_type = DM_get(&lib->types, type->parent_hash);
@@ -846,7 +695,7 @@ void generate_print_function_body(const Havok_TypeLibrary *lib, const HavokType 
         assert(inner_type!=NULL);
         String *inner_full_name = Havok_full_type_name(lib, inner_type);
         const uint32 item_count = type->template_arguments.items[0].number;
-        fprintf(impl_output, "void %s_print(const %s *obj, const HavokTypeLib* lib, JsonContext *ctx){\n",
+        fprintf(impl_output, "void %s_print(const %s *obj, const Havok_TypeLibrary* lib, JsonContext *ctx){\n",
                 String_data(full_type_name),
                 String_data(inner_full_name));
         fprintf(impl_output, "    if(obj==NULL){jsonValueNull(ctx); return;}\n");
@@ -864,8 +713,8 @@ void generate_print_function_body(const Havok_TypeLibrary *lib, const HavokType 
 }
 
 void generate_function_table(const Havok_TypeLibrary *lib, FILE *header_output, FILE *impl_output) {
-    fprintf(header_output, "void HAVOK_TYPES_register_functions(HavokTypeLib* lib);\n");
-    fprintf(impl_output, "void HAVOK_TYPES_register_functions(HavokTypeLib* lib){\n");
+    fprintf(header_output, "void HAVOK_TYPES_register_functions(Havok_TypeLibrary* lib);\n");
+    fprintf(impl_output, "void HAVOK_TYPES_register_functions(Havok_TypeLibrary* lib){\n");
     DA_FORI(lib->types.values, i) {
         const HavokType *type = &lib->types.values.items[i];
         if (type->is_ptr) {
@@ -950,17 +799,17 @@ void generate_function_table(const Havok_TypeLibrary *lib, FILE *header_output, 
     fprintf(impl_output, "}\n");
 }
 
-void HavokTypeLib_generate_code(Havok_TypeLibrary *lib, const String *namespace, FILE *header_output,
+void Havok_TypeLibrary_generate_code(Havok_TypeLibrary *lib, const String *namespace, FILE *header_output,
                                 const String *header_relative_path, FILE *impl_output) {
     DA_init(&lib->exported_hashes, uint64, lib->types.values.count);
 
     register_alias(lib, "hkVector4f", "HavokVector4");
 
-    HavokType *tmp = HavokTypeLib_find_by_name(lib, "hkVector4f");
-    HavokType *uint64_type = HavokTypeLib_find_by_name(lib, "unsigned_long_long");
+    HavokType *tmp = Havok_TypeLibrary_find_by_name(lib, "hkVector4f");
+    const HavokType *uint64_type = Havok_TypeLibrary_find_by_name(lib, "unsigned_long_long");
     tmp->is_array = false;
     tmp->is_primitive = true;
-    tmp = HavokTypeLib_find_by_name(lib, "hkBaseObject");
+    tmp = Havok_TypeLibrary_find_by_name(lib, "hkBaseObject");
     tmp->hash = hash_string(&tmp->name);
     tmp->is_record = true;
     tmp->is_primitive = false;
@@ -971,8 +820,8 @@ void HavokTypeLib_generate_code(Havok_TypeLibrary *lib, const String *namespace,
     fake_member.type_hash = uint64_type->hash;
     DA_append(&tmp->members, &fake_member);
 
-    const HavokType *charPtr = HavokTypeLib_find_by_name(lib, "char");
-    tmp = HavokTypeLib_find_by_name(lib, "const_char*");
+    const HavokType *charPtr = Havok_TypeLibrary_find_by_name(lib, "char");
+    tmp = Havok_TypeLibrary_find_by_name(lib, "const_char*");
     String_from_cstr(&tmp->name, "T*");
     tmp->is_ptr = true;
     tmp->is_primitive = false;
@@ -997,9 +846,11 @@ void HavokTypeLib_generate_code(Havok_TypeLibrary *lib, const String *namespace,
 
     DA_init(&lib->exported_hashes, uint64, lib->types.values.count);
     DA_FORI(lib->types.values, i) {
-        generate_function_forward_defs(lib, &lib->types.values.items[i], header_output);
-        generate_read_function_body(lib, &lib->types.values.items[i], impl_output);
-        generate_print_function_body(lib, &lib->types.values.items[i], impl_output);
+        const HavokType *type = &lib->types.values.items[i];
+        generate_function_forward_defs(lib, type, header_output);
+        generate_read_function_body(lib, type, impl_output);
+        generate_print_function_body(lib, type, impl_output);
+        generate_free_function_body(lib, type, impl_output);
     }
 
     generate_function_table(lib, header_output, impl_output);

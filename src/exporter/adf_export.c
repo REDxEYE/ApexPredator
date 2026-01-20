@@ -3,8 +3,10 @@
 #include "exporter/adf_export.h"
 
 #include "zstd.h"
+#include "apex/hashes.h"
 #include "apex/adf/adf.h"
 #include "apex/adf/adf_types.h"
+#include "cglm/affine-pre.h"
 #include "exporter/amf_export.h"
 #include "platform/logger.h"
 #include "utils/hash_helper.h"
@@ -31,8 +33,6 @@ typedef struct {
 
 static_assert(sizeof(VertexPosNorm) == 12, "VertexPosNorm size mismatch");
 
-float32 lod_sizes[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 42.666666666f * 2, 42.66635f, 42.666666666f / 2, 42.666666666f / 4};
-float32 lod_offsets[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 4.5f, 24.f, 96.f, 384.f};
 
 #pragma pack(pop)
 
@@ -65,50 +65,75 @@ bool decompress_data(const CompressedData *data, MemoryBuffer *mb) {
     return true;
 }
 
-void export_terrain_texture(const String *export_path, const TerrainTexture *texture, const char *type) {
-    if (texture->Width == 0 || texture->Height == 0 || texture->Data.UncompressedSize == 0) {
-        return;
+Texture *export_terrain_texture(const TerrainTexture *terrain_texture, uint32 expected_channels,
+                                const String *dump_path) {
+    if (terrain_texture->Width == 0 || terrain_texture->Height == 0 || terrain_texture->Data.UncompressedSize == 0) {
+        return NULL;
     }
 
-    String texture_path = {};
-    String_copy_from(&texture_path, export_path);
-    Path_ensure_dirs(&texture_path);
-    Path_join_format(&texture_path, "%s.png", type);
-    const float32 pixel_size = (float32) texture->Data.UncompressedSize / (
-                                   (float32) texture->Width * texture->Height);
-    GLog_Info("%s : width: %i, height: %i, size: %i, pixel size: %f", String_data(&texture_path), texture->Width,
-              texture->Height, texture->Data.UncompressedSize,
-              pixel_size);
+    const float32 pixel_size = (float32) terrain_texture->Data.UncompressedSize / (
+                                   (float32) terrain_texture->Width * terrain_texture->Height);
+    // GLog_Info("width: %i, height: %i, size: %i, pixel size: %f",
+    //           terrain_texture->Width,
+    //           terrain_texture->Height, terrain_texture->Data.UncompressedSize,
+    //           pixel_size);
 
 
     MemoryBuffer decompressed_buffer = {0};
-    decompress_data(&texture->Data, &decompressed_buffer);
+    decompress_data(&terrain_texture->Data, &decompressed_buffer);
 
-    switch (texture->BlockCompressionType) {
-        case E_BLOCKCOMPRESSIONTYPE_BC7:
-        case E_BLOCKCOMPRESSIONTYPE_BC3: {
-            assert(false && "BCn not supported yet");
-            break;
-        }
-        case E_BLOCKCOMPRESSIONTYPE_NONE: {
-            stbi_write_png(String_data(&texture_path), texture->Width, texture->Height, (int32) pixel_size,
-                           decompressed_buffer.data, 0);
+    // if (dump_path != NULL) {
+    //     String texture_path = {0};
+    //     String_copy_from(&texture_path, dump_path);
+    //     Path_ensure_parent_dirs(&texture_path);
+    //     String_append_cstr(&texture_path, ".raw");
+    //     FileBuffer file_buffer = {0};
+    //     if (FileBuffer_open_write(&file_buffer, String_data(&texture_path)) == BUFFER_SUCCESS) {
+    //         uint32 written = 0;
+    //         file_buffer.write(&file_buffer, decompressed_buffer.data, decompressed_buffer.size, &written);
+    //         file_buffer.close(&file_buffer);
+    //     } else {
+    //         GLog_Error("Failed to open file for writing: %s", String_data(&texture_path));
+    //     }
+    //     String_free(&texture_path);
+    // }
+
+    Texture *texture = Texture_new();
+    DDSDXGIFormat fmt = DXGI_FORMAT_B8G8R8A8_UNORM;
+    if (terrain_texture->BlockCompressionType == E_BLOCKCOMPRESSIONTYPE_NONE) {
+        if (expected_channels == 1 && pixel_size == 1) {
+            fmt = DXGI_FORMAT_R8_UNORM;
+        } else if (expected_channels == 1 && pixel_size == 2) {
+            fmt = DXGI_FORMAT_R16_UNORM;
+        } else if (expected_channels == 2 && pixel_size == 4) {
+            fmt = DXGI_FORMAT_R16G16_UNORM;
+        } else if (expected_channels == 3 && pixel_size == 3) {
+            fmt = DXGI_FORMAT_CUSTOM_R8G8B8_UNORM;
+        } else if (expected_channels == 4 && pixel_size == 4) {
+            fmt = DXGI_FORMAT_R8G8B8A8_UNORM;
+        } else {
+            GLog_Error("Unsupported terrain texture format with %i channels and pixel size %f", expected_channels,
+                       pixel_size);
+            return NULL;
         }
     }
 
-    String texture_raw_path = {};
-    String_copy_from(&texture_raw_path, export_path);
-    Path_ensure_dirs(&texture_raw_path);
-    Path_join_format(&texture_raw_path, "%s.texture", type);
+    switch (terrain_texture->BlockCompressionType) {
+        case E_BLOCKCOMPRESSIONTYPE_BC7:
+            fmt = DXGI_FORMAT_BC7_UNORM;
+            break;
+        case E_BLOCKCOMPRESSIONTYPE_BC3:
+            fmt = DXGI_FORMAT_BC3_UNORM;
+            break;
+        case E_BLOCKCOMPRESSIONTYPE_NONE:
+            break;
+    }
 
-    FileBuffer file_buffer = {0};
-    assert(FileBuffer_open_write(&file_buffer, String_data(&texture_raw_path))==BUFFER_SUCCESS);
-    file_buffer.write(&file_buffer, decompressed_buffer.data, decompressed_buffer.size, NULL);
-    file_buffer.close(&file_buffer);
 
+    Texture_from_dxgi(texture, fmt, terrain_texture->Width, terrain_texture->Height, 1, decompressed_buffer.data,
+                      decompressed_buffer.size);
     decompressed_buffer.close(&decompressed_buffer);
-    String_free(&texture_path);
-    String_free(&texture_raw_path);
+    return texture;
 }
 
 // void export_terrain_mesh(String *export_path, TerrainMesh *mesh, uint32 tile_x, uint32 tile_y, uint32 lod) {
@@ -206,7 +231,7 @@ void export_terrain_texture(const String *export_path, const TerrainTexture *tex
 //     file_buffer.close(&file_buffer);
 //
 //     cgltf_options gltf_options = {0};
-//     cgltf_data *gltf_data = malloc(sizeof(cgltf_data));
+//     cgltf_data *gltf_data = mp_malloc(sizeof(cgltf_data));
 //     memset(gltf_data, 0, sizeof(cgltf_data));
 //     gltf_data->asset.generator = "ApexPredator via cgltf";
 //     gltf_data->asset.version = "2.0";
@@ -302,7 +327,7 @@ void export_terrain_texture(const String *export_path, const TerrainTexture *tex
 //
 //     gltf_data->buffer_views_count = gl_buffer_views.count;
 //     gltf_data->buffer_views = DA_get_buffer(&gl_buffer_views);
-//     gltf_data->scenes = malloc(sizeof(cgltf_scene));
+//     gltf_data->scenes = mp_malloc(sizeof(cgltf_scene));
 //     gltf_data->scenes_count = 1;
 //     gltf_data->scenes[0].nodes = calloc(1, sizeof(cgltf_node *));
 //     gltf_data->scenes[0].nodes[0] = gl_node;
@@ -328,21 +353,22 @@ void export_terrain_texture(const String *export_path, const TerrainTexture *tex
 //     DA_free(&uvs);
 // }
 
-void export_terrain_patch(const String *export_path, TerrainPatch *patch, uint32 x, uint32 y, uint32 lod) {
-    String tile_export_path = {};
-    String_copy_from(&tile_export_path, export_path);
-    // Path_join_format(&tile_export_path, "terrain_patch_%d_%d", x, y);
-    // export_terrain_mesh(&tile_export_path, &patch->TerrainMesh, x, y, lod);
-    // export_terrain_texture(&tile_export_path, &patch->TerrainDisplacementTexture, "displacement");
-    // export_terrain_texture(&tile_export_path, &patch->TerrainNormalTexture, "normal");
-    // export_terrain_texture(&tile_export_path, &patch->TerrainTriangleMapTexture, "triangle_map");
-    // export_terrain_texture(&tile_export_path, &patch->TerrainMaterialDuplexTexture, "material_duplex");
-    // export_terrain_texture(&tile_export_path, &patch->TerrainColorTexture, "color");
-    // export_terrain_texture(&tile_export_path, &patch->TerrainQualityTexture, "quality");
-    // export_terrain_texture(&tile_export_path, &patch->TerrainIndirectionTexture, "indirection");
-    // export_terrain_texture(&tile_export_path, &patch->TerrainSSDFAtlas, "ssdf_atlas");
-    String_free(&tile_export_path);
-}
+
+// void export_terrain_patch(const String *export_path, TerrainPatch *patch, uint32 x, uint32 y, uint32 lod) {
+//     String tile_export_path = {};
+//     String_copy_from(&tile_export_path, export_path);
+//     // Path_join_format(&tile_export_path, "terrain_patch_%d_%d", x, y);
+//     // export_terrain_mesh(&tile_export_path, &patch->TerrainMesh, x, y, lod);
+//     // export_terrain_texture(&tile_export_path, &patch->TerrainDisplacementTexture, "displacement");
+//     // export_terrain_texture(&tile_export_path, &patch->TerrainNormalTexture, "normal");
+//     // export_terrain_texture(&tile_export_path, &patch->TerrainTriangleMapTexture, "triangle_map");
+//     // export_terrain_texture(&tile_export_path, &patch->TerrainMaterialDuplexTexture, "material_duplex");
+//     // export_terrain_texture(&tile_export_path, &patch->TerrainColorTexture, "color");
+//     // export_terrain_texture(&tile_export_path, &patch->TerrainQualityTexture, "quality");
+//     // export_terrain_texture(&tile_export_path, &patch->TerrainIndirectionTexture, "indirection");
+//     // export_terrain_texture(&tile_export_path, &patch->TerrainSSDFAtlas, "ssdf_atlas");
+//     String_free(&tile_export_path);
+// }
 
 GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
                       Havok_TypeLibrary *havok_lib, const String *path, const uint32 path_hash,
@@ -364,7 +390,277 @@ GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI
     return result;
 }
 
-GL_ID export_stream_path_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, ADF *adf, const MemoryBuffer* adf_buffer, const String *export_path) {
+void export_terrain_patch(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
+                          const StreamPatchBlockHeader *header, const TerrainPatch *terrain_patch,
+                          const String *export_path) {
+    const uint32 patch_x_pos = header->PatchPositionX;
+    const uint32 patch_z_pos = header->PatchPositionZ;
+    const TerrainMesh *terrain_mesh = &terrain_patch->TerrainMesh;
+
+    MemoryBuffer vertices1_buffer = {0};
+    decompress_data(&terrain_mesh->Vertices, &vertices1_buffer);
+    MemoryBuffer vertices2_buffer = {0};
+    decompress_data(&terrain_mesh->Vertices2, &vertices2_buffer);
+
+    MemoryBuffer indices_buffer = {0};
+    decompress_data(&terrain_mesh->Indices, &indices_buffer);
+
+    String patch_name = {0};
+    String_format(&patch_name, "terrain_patch_%02i_%02i_lod_%02i", patch_x_pos, patch_z_pos, header->PatchLod);
+    const GL_ID mesh_id = GLTFContext_mesh_add(context, String_data(&patch_name), 1);
+
+    assert(vertices1_buffer.size%8==0);
+    assert(vertices2_buffer.size%12==0);
+    assert(indices_buffer.size%6==0);
+    const uint32 vertex_count = vertices1_buffer.size / sizeof(VertexID_UV);
+
+    DynamicArray_float32 positions = {0};
+    DA_init(&positions, float32, vertex_count*3);
+    DynamicArray_float32 normals = {0};
+    DA_init(&normals, float32, vertex_count*3);
+    DynamicArray_float32 uv = {0};
+    DA_init(&uv, float32, vertex_count*2);
+
+    DynamicArray_uint32 indices = {0};
+    DA_init(&indices, uint32, indices_buffer.size/2);
+
+    // vec3 bbox_min = {0};
+    // vec3 bbox_max = {0};
+
+    int16 uv_dims[2] = {0};
+    uv_dims[0] = (int16) terrain_patch->TerrainDisplacementTexture.Width;
+    uv_dims[1] = (int16) terrain_patch->TerrainDisplacementTexture.Height;
+    if (terrain_patch->DisplacementDownsampled) {
+        uv_dims[0] *= 2;
+        uv_dims[1] *= 2;
+    }
+
+    VertexID_UV *id_uv = (VertexID_UV *) vertices1_buffer.data;
+    VertexPosNorm *pos_norm = (VertexPosNorm *) vertices2_buffer.data;
+    // for (int i = 0; i < vertex_count; ++i) {
+    //     uint32 vert_id = id_uv[i].vertex_id;
+    //     uint16 *pos = pos_norm[vert_id].pos;
+    //
+    //     //Collect bbox size
+    //     if ((float32) pos[0] < bbox_min[0]) bbox_min[0] = pos[0];
+    //     if ((float32) pos[1] < bbox_min[1]) bbox_min[1] = pos[1];
+    //     if ((float32) pos[2] < bbox_min[2]) bbox_min[2] = pos[2];
+    //     if ((float32) pos[0] > bbox_max[0]) bbox_max[0] = pos[0];
+    //     if ((float32) pos[1] > bbox_max[1]) bbox_max[1] = pos[1];
+    //     if ((float32) pos[2] > bbox_max[2]) bbox_max[2] = pos[2];
+    // }
+    // vec3 patch_dims = {0};
+    // glm_vec3_sub(bbox_max, bbox_min, patch_dims);
+
+    for (int i = 0; i < vertex_count; ++i) {
+        uint32 vert_id = id_uv[i].vertex_id;
+        uint16 *pos = pos_norm[vert_id].pos;
+        uint8 *norm = &pos_norm[vert_id].mask_a;
+
+        float32 x = ((float32) (pos[0] - 8192) / 32768.f);
+        float32 y = ((float32) (pos[1] - 8192) / 32768.f) * 10.f;
+        float32 z = ((float32) (pos[2] - 8192) / 32768.f);
+        *(float32 *) (DA_append_get(&positions)) = x * 200.f;
+        *(float32 *) (DA_append_get(&positions)) = y * 200.f;
+        *(float32 *) (DA_append_get(&positions)) = z * 200.f;
+
+        float32 nx = ((float32) ((int8) norm[0]) / 127.f);
+        float32 ny = ((float32) ((int8) norm[1]) / 127.f);
+        float32 nz = ((float32) ((int8) norm[2]) / 127.f);
+        *(float32 *) (DA_append_get(&normals)) = nx;
+        *(float32 *) (DA_append_get(&normals)) = ny;
+        *(float32 *) (DA_append_get(&normals)) = nz;
+
+        const float32 half_pixel_x = 1.0f / uv_dims[0];
+        const float32 half_pixel_y = 1.0f / uv_dims[1];
+
+        *(float32 *) (DA_append_get(&uv)) = ((float32) id_uv[i].UV[0] / (float32) uv_dims[0]) + half_pixel_x;
+        *(float32 *) (DA_append_get(&uv)) = ((float32) id_uv[i].UV[1] / (float32) uv_dims[1]) + half_pixel_y;
+    }
+    for (int i = 0; i < indices_buffer.size / 2; ++i) {
+        uint16 index = ((uint16 *) indices_buffer.data)[i];
+        assert(index < vertex_count);
+        *(uint32 *) (DA_append_get(&indices)) = index;
+    }
+
+    GLTFContext_primitive_init_attributes(context, mesh_id, 0, 3);
+    GL_ID positions_accessor = GLTFContext_accessor_from_data(context,
+                                                              DA_get_buffer(&positions),
+                                                              positions.count * positions.item_size,
+                                                              positions.count / 3,
+                                                              "POSITIONS",
+                                                              cgltf_type_vec3,
+                                                              cgltf_component_type_r_32f,
+                                                              cgltf_buffer_view_type_vertices,
+                                                              false,
+                                                              12,
+                                                              0);
+    GLTFContext_primitive_set_attribute_accessor(context, mesh_id, 0, 0, positions_accessor, "POSITION");
+
+    GL_ID normals_accessor = GLTFContext_accessor_from_data(context,
+                                                            DA_get_buffer(&normals),
+                                                            normals.count * normals.item_size,
+                                                            normals.count / 3,
+                                                            "NORMALS",
+                                                            cgltf_type_vec3,
+                                                            cgltf_component_type_r_32f,
+                                                            cgltf_buffer_view_type_vertices,
+                                                            false,
+                                                            12,
+                                                            0);
+    GLTFContext_primitive_set_attribute_accessor(context, mesh_id, 0, 1, normals_accessor, "NORMAL");
+
+    GL_ID uv_accessor = GLTFContext_accessor_from_data(context,
+                                                       DA_get_buffer(&uv),
+                                                       uv.count * uv.item_size,
+                                                       uv.count / 2,
+                                                       "TEXCOORD_0",
+                                                       cgltf_type_vec2,
+                                                       cgltf_component_type_r_32f,
+                                                       cgltf_buffer_view_type_vertices,
+                                                       false,
+                                                       8,
+                                                       0);
+    GLTFContext_primitive_set_attribute_accessor(context, mesh_id, 0, 2, uv_accessor, "TEXCOORD_0");
+
+    GL_ID indices_accessor = GLTFContext_create_indices_accessor_from_data(
+        context,
+        DA_get_buffer(&indices),
+        indices.count * indices.item_size, indices.count, "indices",
+        cgltf_component_type_r_32u,
+        0);
+    GLTFContext_set_primitive_indices_accessor(context, mesh_id, 0, indices_accessor);
+
+    DA_free(&positions);
+    DA_free(&indices);
+    DA_free(&normals);
+    DA_free(&uv);
+    vertices1_buffer.close(&vertices1_buffer);
+    vertices2_buffer.close(&vertices2_buffer);
+    indices_buffer.close(&indices_buffer);
+
+    GL_ID patch_mesh_node = GLTFContext_node_add(context, String_data(&patch_name));
+    GLTFContext_node_set_mesh(context, patch_mesh_node, mesh_id);
+
+    mat4 patch_matrix;
+    glm_mat4_identity(patch_matrix);
+    glm_translate(patch_matrix, (vec3){(float32) patch_x_pos * 200.f, 0.0f, (float32) patch_z_pos * 200.f});
+    GLTFContext_node_set_matrix(context, patch_mesh_node, (float32 *) patch_matrix);
+
+    GL_ID material_id = GLTFContext_material_new(context, String_data(&patch_name));
+    GLTFContext_primitive_set_material(context, mesh_id, 0, material_id);
+
+    context->materials.items[material_id.v].pbr_metallic_roughness.metallic_factor = 0.f;
+    context->materials.items[material_id.v].pbr_metallic_roughness.roughness_factor = 1.f;
+
+
+    Texture *displacement_texture = export_terrain_texture(&terrain_patch->TerrainDisplacementTexture, 1, NULL);
+    if (displacement_texture != NULL) {
+        String patch_texture_name = {0};
+        String_copy_from(&patch_texture_name, &patch_name);
+        String_append_cstr(&patch_texture_name, "_disp");
+        String *texture_save_path = GLTFContext_data_path(context);
+        const uint32 hash = hash_string(&patch_texture_name);
+        String_append_format(texture_save_path, "/%s_%08X", String_data(&patch_texture_name), hash);
+        Texture_save(displacement_texture, texture_save_path);
+        Texture_free(displacement_texture);
+        String_free(&patch_texture_name);
+        String_free(texture_save_path);
+    }
+
+    Texture *color_texture = export_terrain_texture(&terrain_patch->TerrainColorTexture, 4, NULL);
+    if (color_texture != NULL) {
+        String patch_texture_name = {0};
+        String_copy_from(&patch_texture_name, &patch_name);
+        String_append_cstr(&patch_texture_name, "_color");
+        GLTFContext_material_set_diffuse_texture_from_data(context, &patch_texture_name, material_id, color_texture);
+        Texture_free(color_texture);
+        String_free(&patch_texture_name);
+    }
+
+    Texture *normal_texture = export_terrain_texture(&terrain_patch->TerrainNormalTexture, 4, NULL);
+    if (normal_texture != NULL) {
+        String patch_texture_name = {0};
+        String_copy_from(&patch_texture_name, &patch_name);
+        String_append_cstr(&patch_texture_name, "_normal");
+        GLTFContext_material_set_normal_from_data(context, &patch_texture_name, material_id, normal_texture);
+        Texture_free(normal_texture);
+        String_free(&patch_texture_name);
+    }
+    // String tmp_name = {0}; {
+    //     String *texture_save_path = GLTFContext_data_path(context);
+    //     String_copy_from(&tmp_name, texture_save_path);
+    //     Path_join(&tmp_name, &patch_name);
+    //     String_append_cstr(&tmp_name, "_duplex");
+    //     String_free(texture_save_path);
+    //     Path_normalize_native(&tmp_name);
+    // }
+
+    // Texture *duplex_texture = export_terrain_texture(&terrain_patch->TerrainMaterialDuplexTexture, 2, &tmp_name);
+    // String_free(&tmp_name);
+    // if (duplex_texture != NULL) {
+    //     String patch_texture_name = {0};
+    //     String_copy_from(&patch_texture_name, &patch_name);
+    //     String_append_cstr(&patch_texture_name, "_duplex");
+    //     String *texture_save_path = GLTFContext_data_path(context);
+    //     const uint32 hash = hash_string(&patch_texture_name);
+    //     String_append_format(texture_save_path, "/%s_%08X", String_data(&patch_texture_name), hash);
+    //     String_free(&patch_texture_name);
+    //     Texture_save(duplex_texture, texture_save_path);
+    //     String_free(texture_save_path);
+    //     Texture_free(duplex_texture);
+    //     // String patch_texture_name = {0};
+    //     // String_copy_from(&patch_texture_name, &patch_name);
+    //     // String_append_cstr(&patch_texture_name, "_duplex");
+    //     // GLTFContext_material_set_roughness_metallic_from_data(context, &patch_texture_name, material_id,
+    //     //                                                       duplex_texture);
+    // }
+
+
+    String_free(&patch_name);
+}
+
+void export_terrain_instances(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
+                              const StreamPatchBlockHeader *header, const InstanceDataPatch *instance_data_patch,
+                              const String *export_path) {
+    const uint32 patch_x_pos = header->PatchPositionX;
+    const uint32 patch_z_pos = header->PatchPositionZ;
+
+    const uint32 patch_size = 1 << header->PatchLod;
+
+    for (int i = 0; i < instance_data_patch->InstanceDataLayers.count; ++i) {
+        const InstanceDataLayer *instance_layer = DA_at(&instance_data_patch->InstanceDataLayers, i);
+        String *layer_name = find_name32(instance_layer->Name);
+        // uint32 used_type = 0;
+        if (layer_name == NULL) {
+            layer_name = String_new(16);
+            String_format(layer_name, "layer_%08X", instance_layer->Name);
+        }
+        for (int j = 0; j < instance_layer->Instances.count; ++j) {
+            const VegetationSystemInstance *veg_instance = DA_at(&instance_layer->Instances, j);
+            // if (used_type==0) {
+            //     used_type = veg_instance->NameHash;
+            // }else {
+            //     assert(used_type==veg_instance->NameHash);
+            // }
+            String instance_name = {0};
+            String_format(&instance_name, "instance_%s_%03i", String_data(layer_name), j);
+
+            const GL_ID instance_node = GLTFContext_node_add(context, String_data(&instance_name));
+            mat4 instance_matrix;
+            glm_mat4_identity(instance_matrix);
+            glm_translate(instance_matrix, (vec3){
+                              patch_x_pos * 50 + ((((float32) veg_instance->X / patch_size) * 0.93f) / 8.f),
+                              ((float32) (((veg_instance->Y) / patch_size) * 0.93f) / 32.f),
+                              patch_z_pos * 50 + ((((float32) veg_instance->Z / patch_size) * 0.93f) / 8.f)
+                          });
+            GLTFContext_node_set_matrix(context, instance_node, (float32 *) instance_matrix);
+        }
+    }
+}
+
+GL_ID export_stream_path_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, ADF *adf,
+                              const MemoryBuffer *adf_buffer, const String *export_path) {
     const ADFInstance *path_file_header_instance = DA_at(&adf->instances, 0);
     StreamPatchFileHeader *path_file_header = ADF_read_instance(adf, lib, path_file_header_instance, adf_buffer);
     // const ADFInstance *patch_block_header_instance = DA_at(&adf->instances, 1);
@@ -372,10 +668,31 @@ GL_ID export_stream_path_file(GLTFContext *context, ArchiveManager *archive_mana
 
     for (int i = 1; i < adf->instances.count; ++i) {
         const ADFInstance *patch_instance = DA_at(&adf->instances, i);
-        void* instance_data = ADF_read_instance(adf, lib, patch_instance, adf_buffer);
-        printf("Instance %i\n", i);
-        ADF_print_instance(lib, patch_instance, instance_data, 0);
-        printf("\n");
+        void *instance_data = ADF_read_instance(adf, lib, patch_instance, adf_buffer);
+
+        // printf("Instance %i\n", i);
+        // ADF_print_instance(lib, patch_instance, instance_data, 0);
+        // printf("\n");
+
+        if (patch_instance->type_hash == STI_TYPE_HASH_StreamPatchBlockHeader) {
+            const StreamPatchBlockHeader *block_header = instance_data;
+            const ADFInstance *block_data_instance = DA_at(&adf->instances, i+1);
+            const void *block_data = ADF_read_instance(adf, lib, block_data_instance, adf_buffer);
+            if (block_data_instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
+                const TerrainPatch *terrain_patch = (TerrainPatch *) block_data;
+                export_terrain_patch(context, archive_manager, lib, block_header, terrain_patch, export_path);
+                // printf("1111");
+                // } else if (block_data_instance->type_hash == STI_TYPE_HASH_InstanceDataPatch) {
+                //     const InstanceDataPatch *instance_data_patch = (InstanceDataPatch *) block_data;
+                //     export_terrain_instances(context, archive_manager, lib, block_header, instance_data_patch, export_path);
+            } else {
+                // ADF_print_instance(lib, block_data_instance, block_data, 0);
+            }
+            assert(block_data_instance->type_hash!=STI_TYPE_HASH_StreamPatchBlockHeader);
+            ADF_free_instance(lib, block_data_instance, (void *) block_data);
+            i++;
+        }
+        // printf("\n");
         ADF_free_instance(lib, patch_instance, instance_data);
     }
 
@@ -401,50 +718,56 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
     String_copy_from(&mesh_export_path, export_path);
     Path_ensure_dirs(&mesh_export_path);
 
-    uint32 tile_x = 0, tile_y = 0, lod = 0;
-
     GL_ID output_node_id = INVALID_GL_ID;
 
     for (int instanceId = 0; instanceId < adf.header.instance_count; instanceId++) {
         const ADFInstance *instance = DA_at(&adf.instances, instanceId);
         if (instance->type_hash == STI_TYPE_HASH_WorldSettings) {
-            const WorldSettings *world_settings = ADF_read_instance(&adf, lib, instance, mb);
-;
+            String terrain_export_path = {0};
+            String_copy_from(&terrain_export_path, export_path);
+            Path_join(&terrain_export_path, path);
+            String_append_cstr(&terrain_export_path, ".gltf");
+            Path_normalize_native(&terrain_export_path);
+            GLTFContext_set_save_path(context, &terrain_export_path);
+            String_free(&terrain_export_path);
+            const WorldSettings *world_settings = ADF_read_instance(&adf, lib, instance, mb);;
             // const uint32 base_lod = world_settings->PatchBaseLod;
-            const uint32 base_lod = 12;
+            const uint32 base_lod = 9;
             const uint32 lod_size = 1 << base_lod;
-            const uint32 world_x_size_in_chunks = world_settings->WorldSize[0] / lod_size;
-            const uint32 world_y_size_in_chunks = world_settings->WorldSize[2] / lod_size;
-            for (int x = 0; x < world_x_size_in_chunks; ++x) {
-                for (int y = 0; y < world_y_size_in_chunks; ++y) {
+            const uint32 world_x_size_in_chunks = 20; //world_settings->WorldSize[0] / lod_size;
+            const uint32 world_y_size_in_chunks = 20; //world_settings->WorldSize[2] / lod_size;
+            for (int x = 16; x < world_x_size_in_chunks; ++x) {
+                for (int y = 16; y < world_y_size_in_chunks; ++y) {
+                    GLog_Info("Exporting tile %02ix%02i at LOD %i", x, y, base_lod);
                     String chunk_patch_path = {0};
-                    String_format(&chunk_patch_path, "terrain/hp/patches/patch_%02i_%02i_%02i.streampatch", base_lod, x, y);
+                    String_format(&chunk_patch_path, "terrain/hp/patches/patch_%02i_%02i_%02i.streampatch", base_lod, x,
+                                  y);
                     export_adf_file(context, archive_manager, lib, havok_lib, &chunk_patch_path,
                                     hash_string(&chunk_patch_path), export_path);
                     String_free(&chunk_patch_path);
-                    break;
+                    // break;
                 }
-                break;
+                // break;
             }
-            ADF_free_instance(lib, instance, (void*)world_settings);
-        }else if (instance->type_hash==STI_TYPE_HASH_StreamPatchFileHeader){
+            ADF_free_instance(lib, instance, (void *) world_settings);
+        } else if (instance->type_hash == STI_TYPE_HASH_StreamPatchFileHeader) {
             output_node_id = export_stream_path_file(context, archive_manager, lib, &adf, mb, export_path);
             break;
-        // }
-        // if (instance->type_hash == STI_TYPE_HASH_StreamPatchFileHeader) {
-        //     const StreamPatchFileHeader *ph = instance_data;
-        //     tile_x = ph->PatchPositionX;
-        //     tile_y = ph->PatchPositionZ;
-        //     lod = ph->PatchLod;
-        // } else if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
-        //     export_terrain_patch(&mesh_export_path, instance_data, tile_x, tile_y, lod);
+            // }
+            // if (instance->type_hash == STI_TYPE_HASH_StreamPatchFileHeader) {
+            //     const StreamPatchFileHeader *ph = instance_data;
+            //     tile_x = ph->PatchPositionX;
+            //     tile_y = ph->PatchPositionZ;
+            //     lod = ph->PatchLod;
+            // } else if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
+            //     export_terrain_patch(&mesh_export_path, instance_data, tile_x, tile_y, lod);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfModel) {
             // ADF_print_instance(lib, instance, instance_data, 0);
             assert(adf.instances.count==1 && "ADF with AmfModel should have only one instance");
             const AmfModel *model = ADF_read_instance(&adf, lib, instance, mb);
             output_node_id = export_amf_model(context, archive_manager, lib, havok_lib, model, path, path_hash,
                                               export_path);
-            ADF_free_instance(lib, instance, (void*)model);
+            ADF_free_instance(lib, instance, (void *) model);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfMeshHeader) {
             assert(adf.instances.count==2 && "ADF with AmfMeshHeader should have only two instances");
             instanceId++;
@@ -457,8 +780,8 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
 
             output_node_id = export_amf_mesh(context, archive_manager, lib, &mesh_export_path, path_hash, path,
                                              mesh_header, mesh_buffers);
-            ADF_free_instance(lib, instance, (void*)mesh_header);
-            ADF_free_instance(lib, mesh_buffers_instance, (void*)mesh_buffers);
+            ADF_free_instance(lib, instance, (void *) mesh_header);
+            ADF_free_instance(lib, mesh_buffers_instance, (void *) mesh_buffers);
         } else {
             void *instance_data = ADF_read_instance(&adf, lib, instance, mb);
             String unk_file_export_path = {};
@@ -473,7 +796,6 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
             printf("\n");
             ADF_free_instance(lib, instance, instance_data);
         }
-
     }
 
     ADF_free(&adf);

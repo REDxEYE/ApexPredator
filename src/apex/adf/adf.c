@@ -1,5 +1,7 @@
 // Created by RED on 19.09.2025.
 
+#include "platform/memory_profiling.h"
+
 #include "apex/adf/adf.h"
 
 #include <assert.h>
@@ -10,6 +12,7 @@
 #include "platform/logger.h"
 #include "utils/common.h"
 #include "utils/buffer/memory_buffer.h"
+#include "tracy/TracyC.h"
 
 
 bool read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
@@ -89,8 +92,10 @@ bool read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
 }
 
 bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
+    TracyCZoneN(ctx, "ADF_from_buffer", 1);
     ADFHeader *header = &adf->header;
     if (buffer->read(buffer, header, sizeof(ADFHeader),NULL) != BUFFER_SUCCESS) {
+        TracyCZoneEnd(ctx);
         return false;
     }
     buffer->read_cstring(buffer, &adf->comment);
@@ -125,6 +130,7 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
         buffer->read(buffer, instance, sizeof(ADFInstance), NULL);
     }
 
+    TracyCZoneEnd(ctx);
     return true;
 }
 
@@ -146,51 +152,58 @@ void ADF_load_builtin_adf(STI_TypeLibrary *lib, const uint8 *data, int64 size) {
     emb.close(&emb);
 }
 
-ADFInstance *ADF_get_instance(ADF *adf, uint32 instance_id) {
+ADFInstance *ADF_get_instance(ADF *adf, const uint32 instance_id) {
     if (instance_id >= adf->instances.count) return NULL;
     return DA_at(&adf->instances, instance_id);
 }
 
 void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance *instance, const MemoryBuffer *mb) {
-    STI_Type *type = DM_get(&lib->types, instance->type_hash);
+    TracyCZoneN(ctx, "ADF_read_instance", 1);
+    const STI_Type *type = DM_get(&lib->types, instance->type_hash);
     // printf("Instance: %s, type %s\n", String_data(&adf->strings.items[instance->name_id]),
     //        type ? String_data(&type->name) : "UNKNOWN");
     if (type == NULL) {
         GLog_Error("Unknown type hash %08X for instance %s", instance->type_hash,
                String_data(&adf->strings.items[instance->name_id]));
+        TracyCZoneEnd(ctx);
         return NULL;
     }
 
     MemoryBuffer instance_memory = {0};
 
-    STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
+    const STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
     if (object_methods == NULL) {
         GLog_Error("No read function for type hash %08X (%s)", instance->type_hash, String_data(&type->name));
+        TracyCZoneEnd(ctx);
         return NULL;
     }
     MemoryBuffer_allocate(&instance_memory, instance->size);
     memcpy(instance_memory.data, mb->data + instance->offset, instance->size);
 
-    void *instance_data = calloc(object_methods->size, 1);
+    void *instance_data = mp_calloc(object_methods->size, 1);
 
     if (!object_methods->read((Buffer *) &instance_memory, lib, instance_data)) {
         GLog_Error("Failed to read instance %s of type %s", String_data(&adf->strings.items[instance->name_id]),
                String_data(&type->name));
         object_methods->free(instance_data, lib);
         instance_memory.close(&instance_memory);
-        free(instance_data);
+        mp_free(instance_data);
+        TracyCZoneEnd(ctx);
         return NULL;
     }
     instance_memory.close(&instance_memory);
+    TracyCZoneEnd(ctx);
     return instance_data;
 }
 
 void ADF_free_instance(STI_TypeLibrary *lib, const ADFInstance *instance, void *instance_data) {
+    TracyCZoneN(ctx, "ADF_free_instance", 1);
     const STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
     if (object_methods != NULL) {
         object_methods->free(instance_data, lib);
     }
-    free(instance_data);
+    mp_free(instance_data);
+    TracyCZoneEnd(ctx);
 }
 
 void ADF_print_instance(STI_TypeLibrary *lib, const ADFInstance *instance, const void *instance_data, int indent) {
