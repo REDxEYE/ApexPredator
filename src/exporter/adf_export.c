@@ -407,7 +407,7 @@ void export_terrain_patch(GLTFContext *context, ArchiveManager *archive_manager,
 
     String patch_name = {0};
     String_format(&patch_name, "terrain_patch_%02i_%02i_lod_%02i", patch_x_pos, patch_z_pos, header->PatchLod);
-    const GL_ID mesh_id = GLTFContext_mesh_add(context, String_data(&patch_name), 1);
+    const GL_ID mesh_id = GLTFContext_mesh_add(context, String_cstr(&patch_name), 1);
 
     assert(vertices1_buffer.size%8==0);
     assert(vertices2_buffer.size%12==0);
@@ -539,7 +539,7 @@ void export_terrain_patch(GLTFContext *context, ArchiveManager *archive_manager,
     vertices2_buffer.close(&vertices2_buffer);
     indices_buffer.close(&indices_buffer);
 
-    GL_ID patch_mesh_node = GLTFContext_node_add(context, String_data(&patch_name));
+    GL_ID patch_mesh_node = GLTFContext_node_add(context, String_cstr(&patch_name));
     GLTFContext_node_set_mesh(context, patch_mesh_node, mesh_id);
 
     mat4 patch_matrix;
@@ -547,7 +547,7 @@ void export_terrain_patch(GLTFContext *context, ArchiveManager *archive_manager,
     glm_translate(patch_matrix, (vec3){(float32) patch_x_pos * 200.f, 0.0f, (float32) patch_z_pos * 200.f});
     GLTFContext_node_set_matrix(context, patch_mesh_node, (float32 *) patch_matrix);
 
-    GL_ID material_id = GLTFContext_material_new(context, String_data(&patch_name));
+    GL_ID material_id = GLTFContext_material_new(context, String_cstr(&patch_name));
     GLTFContext_primitive_set_material(context, mesh_id, 0, material_id);
 
     context->materials.items[material_id.v].pbr_metallic_roughness.metallic_factor = 0.f;
@@ -561,7 +561,7 @@ void export_terrain_patch(GLTFContext *context, ArchiveManager *archive_manager,
         String_append_cstr(&patch_texture_name, "_disp");
         String *texture_save_path = GLTFContext_data_path(context);
         const uint32 hash = hash_string(&patch_texture_name);
-        String_append_format(texture_save_path, "/%s_%08X", String_data(&patch_texture_name), hash);
+        String_append_format(texture_save_path, "/%s_%08X", String_cstr(&patch_texture_name), hash);
         Texture_save(displacement_texture, texture_save_path);
         Texture_free(displacement_texture);
         String_free(&patch_texture_name);
@@ -578,15 +578,15 @@ void export_terrain_patch(GLTFContext *context, ArchiveManager *archive_manager,
         String_free(&patch_texture_name);
     }
 
-    Texture *normal_texture = export_terrain_texture(&terrain_patch->TerrainNormalTexture, 4, NULL);
-    if (normal_texture != NULL) {
-        String patch_texture_name = {0};
-        String_copy_from(&patch_texture_name, &patch_name);
-        String_append_cstr(&patch_texture_name, "_normal");
-        GLTFContext_material_set_normal_from_data(context, &patch_texture_name, material_id, normal_texture);
-        Texture_free(normal_texture);
-        String_free(&patch_texture_name);
-    }
+    // Texture *normal_texture = export_terrain_texture(&terrain_patch->TerrainNormalTexture, 4, NULL);
+    // if (normal_texture != NULL) {
+    //     String patch_texture_name = {0};
+    //     String_copy_from(&patch_texture_name, &patch_name);
+    //     String_append_cstr(&patch_texture_name, "_normal");
+    //     GLTFContext_material_set_normal_from_data(context, &patch_texture_name, material_id, normal_texture);
+    //     Texture_free(normal_texture);
+    //     String_free(&patch_texture_name);
+    // }
     // String tmp_name = {0}; {
     //     String *texture_save_path = GLTFContext_data_path(context);
     //     String_copy_from(&tmp_name, texture_save_path);
@@ -644,9 +644,9 @@ void export_terrain_instances(GLTFContext *context, ArchiveManager *archive_mana
             //     assert(used_type==veg_instance->NameHash);
             // }
             String instance_name = {0};
-            String_format(&instance_name, "instance_%s_%03i", String_data(layer_name), j);
+            String_format(&instance_name, "instance_%s_%03i", String_cstr(layer_name), j);
 
-            const GL_ID instance_node = GLTFContext_node_add(context, String_data(&instance_name));
+            const GL_ID instance_node = GLTFContext_node_add(context, String_cstr(&instance_name));
             mat4 instance_matrix;
             glm_mat4_identity(instance_matrix);
             glm_translate(instance_matrix, (vec3){
@@ -656,6 +656,7 @@ void export_terrain_instances(GLTFContext *context, ArchiveManager *archive_mana
                           });
             GLTFContext_node_set_matrix(context, instance_node, (float32 *) instance_matrix);
         }
+        String_free(layer_name);
     }
 }
 
@@ -734,10 +735,10 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
             // const uint32 base_lod = world_settings->PatchBaseLod;
             const uint32 base_lod = 9;
             const uint32 lod_size = 1 << base_lod;
-            const uint32 world_x_size_in_chunks = 20; //world_settings->WorldSize[0] / lod_size;
-            const uint32 world_y_size_in_chunks = 20; //world_settings->WorldSize[2] / lod_size;
-            for (int x = 16; x < world_x_size_in_chunks; ++x) {
-                for (int y = 16; y < world_y_size_in_chunks; ++y) {
+            const uint32 world_x_size_in_chunks = world_settings->WorldSize[0] / lod_size;
+            const uint32 world_y_size_in_chunks = world_settings->WorldSize[2] / lod_size;
+            for (int x = 0; x < world_x_size_in_chunks; ++x) {
+                for (int y = 0; y < world_y_size_in_chunks; ++y) {
                     GLog_Info("Exporting tile %02ix%02i at LOD %i", x, y, base_lod);
                     String chunk_patch_path = {0};
                     String_format(&chunk_patch_path, "terrain/hp/patches/patch_%02i_%02i_%02i.streampatch", base_lod, x,
@@ -789,7 +790,7 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
             Path_join(&unk_file_export_path, path);
             String_append_format(&unk_file_export_path, "_%08X", instance->type_hash);
             Path_ensure_parent_dirs(&unk_file_export_path);
-            FILE *f = fopen(String_data(&unk_file_export_path), "wb");
+            FILE *f = fopen(String_cstr(&unk_file_export_path), "wb");
             fwrite(mb->data + instance->offset, 1, instance->size, f);
             fclose(f);
             ADF_print_instance(lib, instance, instance_data, 0);

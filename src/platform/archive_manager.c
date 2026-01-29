@@ -27,7 +27,7 @@ bool ArchiveManager_get_file(const ArchiveManager *manager, const String *path, 
             return true;
         }
     }
-    GLog_Error("File \"%s\" not found in any archive", String_data(path));
+    GLog_Error("File \"%s\" not found in any archive", String_cstr(path));
     TracyCZoneEnd(ctx)
     return false;
 }

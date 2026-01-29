@@ -1,4 +1,4 @@
-// Created by RED on 30.09.2025.
+ // Created by RED on 30.09.2025.
 
 #ifndef APEXPREDATOR_TEXTURE_H
 #define APEXPREDATOR_TEXTURE_H
@@ -20,6 +20,12 @@ typedef enum  {
     DXGI_FORMAT_R8G8B8A8_SNORM              = 31,
     DXGI_FORMAT_R8G8B8A8_SINT               = 32,
 
+    DXGI_FORMAT_R16G16_UNORM                = 35,
+
+    DXGI_FORMAT_R16_UNORM                   = 56,
+
+    DXGI_FORMAT_R8_UNORM                    = 61,
+    
     DXGI_FORMAT_BC1_TYPELESS                = 70,
     DXGI_FORMAT_BC1_UNORM                   = 71,
     DXGI_FORMAT_BC1_UNORM_SRGB              = 72,
@@ -42,7 +48,12 @@ typedef enum  {
     DXGI_FORMAT_B8G8R8A8_UNORM_SRGB         = 91,
     DXGI_FORMAT_B8G8R8X8_TYPELESS           = 92,
     DXGI_FORMAT_B8G8R8X8_UNORM_SRGB         = 93,
-    DXGI_FORMAT_FORCE_UINT32         = 0x7FFFFFFF,
+
+    DXGI_FORMAT_BC7_UNORM                   = 98,
+
+    DXGI_FORMAT_CUSTOM_R8G8B8_UNORM               = 10001,
+
+    DXGI_FORMAT_FORCE_UINT32                = 0x7FFFFFFF,
 }DDSDXGIFormat;
 
 typedef struct {

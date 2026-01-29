@@ -7,7 +7,9 @@
 #include "utils/sqlite_wrapper.h"
 #include "utils/string.h"
 
+
 kvdb_t *get_hash_db();
+void close_hash_db();
 String *find_name32(uint32 key);
 String *find_name64(uint64 key);
 bool check_hash32_presence(uint32 key);

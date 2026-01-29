@@ -5,9 +5,9 @@
 mat4 IDENTITY_MAT = GLM_MAT4_IDENTITY_INIT;
 
 void build_matrix(mat4 out, const hkQsTransform *transform) {
-    HavokVector4 translation = transform->translation;
-    HavokVector4 rotation = transform->rotation.vec;
-    HavokVector4 scale = transform->scale;
+    hkVector4f translation = transform->translation;
+    hkVector4f rotation = transform->rotation.vec;
+    hkVector4f scale = transform->scale;
     glm_mat4_identity(out);
     glm_translate(out, &translation.x);
     glm_quat_rotate(out, &rotation.x, out);
@@ -15,7 +15,7 @@ void build_matrix(mat4 out, const hkQsTransform *transform) {
 }
 
 GL_ID export_skeleton(GLTFContext *context, const hkaSkeleton *skeleton, Havok_TypeLibrary *havok_lib) {
-    const GL_ID skeleton_root = GLTFContext_node_add(context, skeleton->name.stringAndFlag);
+    const GL_ID skeleton_root = GLTFContext_node_add(context, skeleton->name.m_data);
     const GL_ID skin_id = GLTFContext_create_skin(context, "root", skeleton->bones.m_size);
     GLTFContext_skin_set_skeleton(context, skin_id, skeleton_root);
 
@@ -28,7 +28,7 @@ GL_ID export_skeleton(GLTFContext *context, const hkaSkeleton *skeleton, Havok_T
 
     for (int i = 0; i < skeleton->bones.m_size; ++i) {
         const hkaBone *bone = &skeleton->bones.m_data[i];
-        const GL_ID bone_node = GLTFContext_node_add(context, bone->name.stringAndFlag);
+        const GL_ID bone_node = GLTFContext_node_add(context, bone->name.m_data);
         GLTFContext_skin_set_joint(context, skin_id, i, bone_node);
         DA_append(&bone_ids, &bone_node);
         const int16 bone_parent_id = skeleton->parentIndices.m_data[i];

@@ -345,7 +345,7 @@ void Texture_save(const Texture *texture, const String *path_without_ext) {
     Path_ensure_parent_dirs(&path_png);
     if (texture->bpc >= 2 && texture->is_float) {
         String_append_cstr(&path_png, ".hdr");
-        stbi_write_hdr(String_data(&path_png), texture->width, texture->height, texture->channel_count,
+        stbi_write_hdr(String_cstr(&path_png), texture->width, texture->height, texture->channel_count,
                        (float32 *) texture->data);
     } else {
         int32 comp = texture->channel_count;
@@ -368,7 +368,7 @@ void Texture_save(const Texture *texture, const String *path_without_ext) {
             png_from_data(texture->data, texture->data_size, texture->width, texture->height, comp, 8, &file);
             TracyCZoneEnd(ctx2);
 
-            FILE *file_handle = fopen(String_data(&path_png), "wb");
+            FILE *file_handle = fopen(String_cstr(&path_png), "wb");
             UserIO io = {.read_func = native_file_read, .write_func = native_file_write, .user_file = file_handle};
             TracyCZoneN(ctx3, "png_write", 1);
             png_write(&io, &config, &file);

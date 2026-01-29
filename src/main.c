@@ -1,13 +1,22 @@
 #include <stdio.h>
+
+
+
+#ifdef _WIN32
+#include "Windows.h"
+#else
+#include <unistd.h>
+#endif
+
+#include "havok/generated/havok_generated.h"
+#include "apex/hashes.h"
 #include "apex/adf/adf_types.h"
 #include "apex/package/tab_archive.h"
-#include "dictBuilder/cover.h"
 #include "havok/havok_codegen.h"
-#include "havok/havok_generated.h"
 #include "platform/archive_manager.h"
-#include "utils/string.h"
-#include "utils/path.h"
 #include "utils/hash_helper.h"
+#include "utils/path.h"
+#include "utils/string.h"
 #include "utils/gltf/cgltf_helper.h"
 
 #include "exporter/amf_export.h"
@@ -20,17 +29,20 @@
 int main(int argc, const char *argv[]) {
     mp_init();
     if (argc < 3) {
-        printf("USAGE: %s <path_to_game_root> <path_to_file> [extra_path]\n", argv[0]);
+        printf("USAGE: %s <path_to_game_root> <path_to_file> [extra_mount_path]\n", argv[0]);
         GLog_Error("Not enough arguments provided.");
         mp_shutdown();
         return 0;
     }
-    while (!TracyCIsConnected) {
-        Sleep(100);   /* Windows */
-        printf("\rWaiting for tracy;");
-        /* or usleep(10000) on POSIX */
-    }
-    printf("\n");
+//     while (!TracyCIsConnected) {
+// #ifdef _WIN32
+//         Sleep(100); /* Windows */
+// #else
+//         usleep(10000);
+// #endif
+//         printf("\rWaiting for tracy;");
+//     }
+//     printf("\n");
 
     TracyCZoneN(ctx, "App", 1);
     ArchiveManager manager = {0};
@@ -41,7 +53,7 @@ int main(int argc, const char *argv[]) {
     Havok_TypeLibrary_init(&havok_lib);
     STI_TypeLibrary_init(&lib);
     STI_ADF_TYPES_register_functions(&lib);
-    HAVOK_TYPES_register_functions(&havok_lib);
+    HAVOK_TYPES_register_functions();
 
 
     String tmp = {0};
@@ -56,6 +68,13 @@ int main(int argc, const char *argv[]) {
     GLTFContext context = {0};
     GLTFContext_init(&context, "root");
 
+    if (argc>3) {
+        String extra_path = {0};
+        String_from_cstr(&extra_path, argv[3]);
+        Path_normalize_posix(&extra_path);
+        export_file(&context, &manager, &lib, &havok_lib, &extra_path, hash_string(&extra_path), &export_path);
+        String_free(&extra_path);
+    }
 
     String_from_cstr(&file_path, argv[2]);
     Path_normalize_posix(&file_path);
@@ -65,7 +84,9 @@ int main(int argc, const char *argv[]) {
         String epe_path = {0};
         Path_replace_extension(&file_path, "epe", &epe_path);
         export_file(&context, &manager, &lib, &havok_lib, &epe_path, hash_string(&epe_path), &export_path);
+        String_free(&epe_path);
     }
+
 
     GLTFContext_write_and_free(&context);
 
@@ -77,7 +98,8 @@ int main(int argc, const char *argv[]) {
     String_free(&game_root);
     String_free(&export_path);
     String_free(&file_path);
+    DM_free(&HAVOK_TYPES_type_info);
     TracyCZoneEnd(ctx);
-    mp_shutdown();
+    close_hash_db();
     return 0;
 }

@@ -21,7 +21,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //s8 = 0x580D0A62
     STI_Type *type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_INT8,
-                                              String_move(String_from_cstr(&tmp, "int8")));
+                                              String_from_cstr(&tmp, "int8"));
     type->info.type = STI_Primitive;
     type->info.size = 1;
     type->info.alignment = 1;
@@ -30,7 +30,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //u8 = 0x0ca2821d
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_UINT8,
-                                    String_move(String_from_cstr(&tmp, "uint8")));
+                                    String_from_cstr(&tmp, "uint8"));
     type->info.type = STI_Primitive;
     type->info.size = 1;
     type->info.alignment = 1;
@@ -39,7 +39,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //s16 = 0xD13FCF93
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_INT16,
-                                    String_move(String_from_cstr(&tmp, "int16")));
+                                    String_from_cstr(&tmp, "int16"));
     type->info.type = STI_Primitive;
     type->info.size = 2;
     type->info.alignment = 2;
@@ -48,7 +48,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //u16 = 0x86d152bd
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_UINT16,
-                                    String_move(String_from_cstr(&tmp, "uint16")));
+                                    String_from_cstr(&tmp, "uint16"));
     type->info.type = STI_Primitive;
     type->info.size = 2;
     type->info.alignment = 2;
@@ -57,7 +57,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //s32 = 0x192fe633
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_INT32,
-                                    String_move(String_from_cstr(&tmp, "int32")));
+                                    String_from_cstr(&tmp, "int32"));
     type->info.type = STI_Primitive;
     type->info.size = 4;
     type->info.alignment = 4;
@@ -66,7 +66,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //u32 = 0x075e4e4f
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_UINT32,
-                                    String_move(String_from_cstr(&tmp, "uint32")));
+                                    String_from_cstr(&tmp, "uint32"));
     type->info.type = STI_Primitive;
     type->info.size = 4;
     type->info.alignment = 4;
@@ -75,7 +75,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //s64 = 0xAF41354F
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_INT64,
-                                    String_move(String_from_cstr(&tmp, "int64")));
+                                    String_from_cstr(&tmp, "int64"));
     type->info.type = STI_Primitive;
     type->info.size = 8;
     type->info.alignment = 8;
@@ -84,7 +84,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //u64 = 0xA139E01F
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_UINT64,
-                                    String_move(String_from_cstr(&tmp, "uint64")));
+                                    String_from_cstr(&tmp, "uint64"));
     type->info.type = STI_Primitive;
     type->info.size = 8;
     type->info.alignment = 8;
@@ -93,7 +93,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //f32 = 0x7515A207
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_FLOAT32,
-                                    String_move(String_from_cstr(&tmp, "float32")));
+                                    String_from_cstr(&tmp, "float32"));
     type->info.type = STI_Primitive;
     type->info.size = 4;
     type->info.alignment = 4;
@@ -102,7 +102,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //f64 = 0xC609F663
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_FLOAT64,
-                                    String_move(String_from_cstr(&tmp, "float64")));
+                                    String_from_cstr(&tmp, "float64"));
     type->info.type = STI_Primitive;
     type->info.size = 8;
     type->info.alignment = 8;
@@ -111,7 +111,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //string = 0x8955583E
     type = STI_TypeLibrary_new_type(lib, STI_Primitive, STI_TYPE_HASH_STRING,
-                                    String_move(String_from_cstr(&tmp, "String")));
+                                    String_from_cstr(&tmp, "String"));
     type->info.type = STI_Primitive;
     type->info.size = 16;
     type->info.alignment = 8;
@@ -120,7 +120,7 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //UnkSpecial = 0xDEFE88ED
     type = STI_TypeLibrary_new_type(lib, STI_DeferredType, STI_TYPE_HASH_UNK,
-                                    String_move(String_from_cstr(&tmp, "Deferred")));
+                                    String_from_cstr(&tmp, "Deferred"));
     type->info.type = STI_DeferredType;
     type->info.size = 16;
     type->info.alignment = 8;
@@ -139,7 +139,7 @@ STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType meta_type,
         String_move_from(&type->name, name);
         uint32 name_hash = 0;
         uint32 init_tmp = 0;
-        hashlittle2(String_data(&type->name), type->name.size, &name_hash, &init_tmp);
+        hashlittle2(String_cstr(&type->name), String_size(&type->name), &name_hash, &init_tmp);
 
         uint32 *other = DM_get(&lib->name_hash_to_type, name_hash);
 
@@ -149,12 +149,12 @@ STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType meta_type,
                 return type;
             }
 
-            GLog_Warning("Name collision for type name %s (hash %08X)", String_data(&type->name), name_hash);
+            GLog_Warning("Name collision for type name %s (hash %08X)", String_cstr(&type->name), name_hash);
             String_append_cstr(&type->name, "_2");
             init_tmp = 0;
-            hashlittle2(String_data(&type->name), type->name.size, &name_hash, &init_tmp);
+            hashlittle2(String_cstr(&type->name), String_size(&type->name), &name_hash, &init_tmp);
             if (DM_get(&lib->name_hash_to_type, name_hash) != NULL) {
-                GLog_Error("Second name collision for type name %s (hash %08X)", String_data(&type->name),
+                GLog_Error("Second name collision for type name %s (hash %08X)", String_cstr(&type->name),
                        name_hash);
                 exit(1);
             }

@@ -9,25 +9,28 @@
 #include "platform/archive_manager.h"
 #include "utils/string.h"
 #include "utils/dynamic_array.h"
-#include "utils/dynamic_insert_only_map.h"
+#include "utils/dynamic_map.h"
 #include "utils/path.h"
 
 DYNAMIC_ARRAY_STRUCT(TabEntry, TabEntry);
-DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(TabEntry, TabEntryMap);
-
-static const String tab_ext = {.buffer = ".tab", .size = 4, .capacity = 4, .statically_allocated = 1};
+DYNAMIC_INT_MAP_STRUCT(TabEntry, TabEntryMap);
 
 typedef struct {
     Archive;
     String tab_path;
     String arc_path;
-    DynamicInsertOnlyIntMap_TabEntryMap entries;
+    DynamicIntMap_TabEntryMap entries;
 } TabArchive;
 TabArchive* TabArchive_new(const String* path);
 
 static inline void TabArchives_init(ArchiveManager *manager, const String *game_root) {
     TracyCZoneN(ctx, "TabArchives_init", 1);
     DynamicArray_Path archive_paths = {0};
+
+    static String tab_ext = {0};
+    if (String_size(&tab_ext)==0) {
+        String_from_cstr(&tab_ext, ".tab");
+    }
 
     Path_rglob(game_root, &tab_ext, &archive_paths);
     for (uint32 i = 0; i < archive_paths.count; ++i) {

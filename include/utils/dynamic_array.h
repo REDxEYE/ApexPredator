@@ -29,7 +29,7 @@ enum {
         uint32 capacity;\
     }DynamicArray_##name
 
-typedef bool (*DA_compare_fn)(const void* a, const void* b);
+typedef bool (*DA_equal_fn)(const void* a, const void* b);
 
 DynamicArray__Base* DA_new_(uint32 item_size, uint32 initial_capacity);
 void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity);
@@ -38,7 +38,7 @@ void* DA_append_get_(DynamicArray__Base *da);
 void DA_reserve_(DynamicArray__Base *da, uint32 needed_capacity);
 void *DA_at_(const DynamicArray__Base *da, uint32 index);
 void DA_free_(DynamicArray__Base *da);
-bool DA_contains_(DynamicArray__Base* da, const void* element, DA_compare_fn compare_fn);
+bool DA_contains_(DynamicArray__Base* da, const void* element, DA_equal_fn equal_fn);
 void* DA_detach_buffer_(DynamicArray__Base* da);
 void* DA_get_buffer_(const DynamicArray__Base* da);
 
@@ -56,7 +56,7 @@ for (uint32 (i_name) = 0; (i_name) < (da)->count; (i_name)++)
 #define DA_reserve(da, new_size) DA_reserve_((DynamicArray__Base*)(da), new_size)
 #define DA_at(da, index) ((void*)DA_at_((DynamicArray__Base*)(da), index))
 #define DA_free(da) DA_free_((DynamicArray__Base*)(da))
-#define DA_contains(da, element, compare_fn) DA_contains_((DynamicArray__Base*)(da), element, (DA_compare_fn)compare_fn)
+#define DA_contains(da, element, equal_fn) DA_contains_((DynamicArray__Base*)(da), element, (DA_equal_fn)equal_fn)
 #define DA_free_with_inner(da, free_body)  \
     do{\
         for(int32 ___i = 0;___i<(da)->count;___i++){\

@@ -33,8 +33,17 @@ SET(ZLIB_ALIASES OFF CACHE BOOL "" FORCE)
 SET(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/tinycpng)
 
-add_library(AdfLib STATIC src/apex/adf/adf_types.c)
-add_library(HavokLib STATIC src/havok/havok_generated.c)
+add_library(AdfLib STATIC
+        src/apex/adf/adf_types.c
+        src/platform/memory_profiler.c
+        src/platform/memory_tracker.c
+)
+
+add_library(HavokLib STATIC
+        src/havok/generated/havok_generated.c
+        src/platform/memory_profiler.c
+        src/platform/memory_tracker.c
+)
 
 SET(CommonFiles
         src/apex/aaf/aaf.c
@@ -68,7 +77,7 @@ SET(CommonFiles
         src/utils/buffer/memory_buffer.c
         src/utils/common.c
         src/utils/dynamic_array.c
-        src/utils/dynamic_insert_only_map.c
+        src/utils/dynamic_map.c
         src/utils/gltf/cgltf_helper.c
         src/utils/hash_helper.c
         src/utils/json.c
@@ -85,7 +94,6 @@ SET(CommonFiles
 
 add_executable(ApexPredator
         src/main.c
-        src/havok/havok_generated.c
         ${CommonFiles}
 )
 
@@ -109,7 +117,6 @@ add_executable(HavokTypeGenerator
         src/apex/rtpc.c
         src/apex/sarc.c
         src/havok/havok_codegen.c
-        src/havok/havok_support_types.c
         src/havok/havok_types.c
         src/havok/tag_file/havok_tag_file.c
         src/havok/tag_file/havok_tag_types.c
@@ -125,7 +132,7 @@ add_executable(HavokTypeGenerator
         src/utils/buffer/memory_buffer.c
         src/utils/common.c
         src/utils/dynamic_array.c
-        src/utils/dynamic_insert_only_map.c
+        src/utils/dynamic_map.c
         src/utils/gltf/cgltf_helper.c
         src/utils/hash_helper.c
         src/utils/json.c
@@ -156,10 +163,18 @@ if (UNIX)
     target_compile_options(AdfTypeGenerator PRIVATE -fms-extensions)
     target_compile_options(HavokTypeGenerator PRIVATE -fms-extensions)
     target_compile_options(HashCollector PRIVATE -fms-extensions)
+
     target_link_libraries(ApexPredator PUBLIC m)
     target_link_libraries(AdfTypeGenerator PUBLIC m)
     target_link_libraries(HavokTypeGenerator PUBLIC m)
     target_link_libraries(HashCollector PUBLIC m)
+
+    target_link_options(AdfLib PRIVATE -rdynamic)
+    target_link_options(HavokLib PRIVATE -rdynamic)
+    target_link_options(ApexPredator PRIVATE -rdynamic)
+    target_link_options(AdfTypeGenerator PRIVATE -rdynamic)
+    target_link_options(HavokTypeGenerator PRIVATE -rdynamic)
+    target_link_options(HashCollector PRIVATE -rdynamic)
 else ()
     target_compile_options(AdfLib PRIVATE /bigobj)
     target_compile_options(HavokLib PRIVATE /bigobj)
@@ -176,7 +191,7 @@ target_include_directories(HashCollector PUBLIC include external/zlib external/c
 target_include_directories(StringHasher PUBLIC include)
 
 target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
-target_link_libraries(HashCollector PUBLIC libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
+target_link_libraries(HashCollector PUBLIC AdfLib HavokLib libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
 target_link_libraries(AdfTypeGenerator PUBLIC libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
 target_link_libraries(HavokTypeGenerator PUBLIC libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
 target_link_libraries(HavokLib PUBLIC cglm)

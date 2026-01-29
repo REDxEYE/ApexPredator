@@ -1,9 +1,8 @@
 // Created by RED on 12.10.2025.
 
-#ifndef APEXPREDATOR_HAVOK_TYPES_H
-#define APEXPREDATOR_HAVOK_TYPES_H
+#ifndef APEXPREDATOR_HAVOK_TAG_TYPES_H
+#define APEXPREDATOR_HAVOK_TAG_TYPES_H
 
-#include <assert.h>
 #include "int_def.h"
 #include "utils/string.h"
 #include "utils/dynamic_array.h"
@@ -20,7 +19,7 @@ typedef enum {
     Attribute = 0x80
 } HKTagFlags;
 
-typedef struct HKType HKTagType;
+typedef struct HKTagType HKTagType;
 
 typedef struct {
     String name;
@@ -59,23 +58,24 @@ void HKTagTemplateArgument_free(HKTagTemplateArgument *arg);
 
 typedef enum {
     HKTYPE_PRIMITIVE = 0,
-    HKTYPE_UNK1 = 1,
+    HKTYPE_OPAQUE = 1,
     HKTYPE_UNK2 = 2,
     HKTYPE_STRING = 3,
-    HKTYPE_UNK4 = 4,
-    HKTYPE_UNK5 = 5,
+    HKTYPE_BASIC = 4,
+    HKTYPE_FLOAT = 5,
     HKTYPE_POINTER = 6,
     HKTYPE_RECORD = 7,
     HKTYPE_ARRAY = 8,
 } HKTagDataType;
 
 static const char *HKTAGTYPE_NAMES[] = {
-    "PRIMITIVE", "UNK1", "UNK2", "STRING", "UNK4", "UNK5", "POINTER", "RECORD", "ARRAY"
+    "PRIMITIVE", "OPAQUE", "UNK2", "STRING", "BASIC", "FLOAT", "POINTER", "RECORD", "ARRAY"
 };
 
 
-typedef struct HKType {
+typedef struct HKTagType {
     String name;
+    String stable_name;
     DynamicArray_HKTagTemplateArgument template_args;
     DynamicArray_HKMember members;
     HKTagType *parent;
@@ -90,6 +90,10 @@ typedef struct HKType {
     HKTagDataType data_type;
 } HKTagType;
 
+const String *HKTagType_stable_name(HKTagType *tf_type);
+
+uint32 HKTagType_hash(HKTagType *type);
+
 void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent);
 
 DYNAMIC_ARRAY_STRUCT(HKTagType, HKTagType);
@@ -98,4 +102,4 @@ void HKTagType_init(HKTagType *type, const String *name);
 
 void HKTagType_free(HKTagType *type);
 
-#endif //APEXPREDATOR_HAVOK_TYPES_H
+#endif //APEXPREDATOR_HAVOK_TAG_TYPES_H

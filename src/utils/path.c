@@ -64,11 +64,10 @@ static uint32 Path__mkdir_start_index(const char *s, uint32 len) {
   Creates intermediate directories for the first upto_len bytes of s.
   Returns 0 on success, -1 on error (errno preserved).
 */
-static int Path__ensure_upto(const char *s, uint32 upto_len) {
+static int Path__ensure_upto(const char *s, const uint32 upto_len) {
     String cur = {0};
-    String_init(&cur, 0);
 
-    uint32 start = Path__mkdir_start_index(s, upto_len);
+    const uint32 start = Path__mkdir_start_index(s, upto_len);
     uint32 i = 0;
 
     if (start > 0) {
@@ -79,13 +78,13 @@ static int Path__ensure_upto(const char *s, uint32 upto_len) {
         char c = s[i++];
         if (Path__is_sep(c)) {
             char last = 0;
-            if (cur.size > 0) last = String_data(&cur)[cur.size - 1];
+            if (String_size(&cur) > 0) last = String_cstr(&cur)[String_size(&cur) - 1];
             if (last != PATH_NATIVE_SEP) {
                 char sep[1] = {PATH_NATIVE_SEP};
                 String_append_cstr2(&cur, sep, 1);
             }
-            if (cur.size >= start) {
-                char *p = cur.buffer;
+            if (String_size(&cur) >= start) {
+                char *p = String_data(&cur);
                 int r = PATH_MKDIR(p);
                 if (r != 0 && errno != EEXIST) {
                     int saved = errno;
@@ -94,16 +93,17 @@ static int Path__ensure_upto(const char *s, uint32 upto_len) {
                     return -1;
                 }
             }
-        } else {
+        }
+        else {
             String_append_cstr2(&cur, &c, 1);
         }
     }
 
-    if (cur.size > 0) {
-        char *p = cur.buffer;
-        int r = PATH_MKDIR(p);
+    if (String_size(&cur) > 0) {
+        const char *p = String_data(&cur);
+        const int r = PATH_MKDIR(p);
         if (r != 0 && errno != EEXIST) {
-            int saved = errno;
+            const int saved = errno;
             String_free(&cur);
             errno = saved;
             return -1;
@@ -130,7 +130,7 @@ static void Path__append_normalized(Path *base, const char *component, uint32_t 
     if (len == 0) return;
 
     if (Path__is_absolute(component, len)) {
-        String_resize(base, 0);
+        String_reserve(base, 0);
         for (uint32_t i = 0; i < len; ++i) {
             char c = component[i];
             if (Path__is_sep(c)) c = PATH_NATIVE_SEP;
@@ -142,8 +142,8 @@ static void Path__append_normalized(Path *base, const char *component, uint32_t 
     uint32_t i = 0;
     while (i < len && Path__is_sep(component[i])) i++;
 
-    if (base->size > 0) {
-        char last = String_data(base)[base->size - 1];
+    if (String_size(base) > 0) {
+        char last = String_cstr(base)[String_size(base) - 1];
         if (!Path__is_sep(last)) {
             char sep = PATH_NATIVE_SEP;
             String_append_cstr2(base, &sep, 1);
@@ -158,8 +158,8 @@ static void Path__append_normalized(Path *base, const char *component, uint32_t 
 }
 
 void Path_normalize_native(Path *path) {
-    const char *s = String_data(path);
-    uint32_t len = path->size;
+    const char *s = String_cstr(path);
+    uint32_t len = String_size(path);
     if (len == 0) return;
 
     String normalized = {0};
@@ -176,49 +176,39 @@ void Path_normalize_native(Path *path) {
 }
 
 void Path_normalize_posix(Path *path) {
-    const char *s = String_data(path);
-    uint32_t len = path->size;
+    // Normalize inplace
+    char *s = String_data(path);
+    const uint32_t len = String_size(path);
     if (len == 0) return;
-
-    String normalized = {0};
-    String_init(&normalized, len);
-
     for (uint32_t i = 0; i < len; ++i) {
         char c = s[i];
         if (Path__is_sep(c)) c = '/';
-        String_append_cstr2(&normalized, &c, 1);
+        s[i] = c;
     }
 
-    String_free(path);
-    *path = normalized;
 }
 
 void Path_normalize_windows(Path *path) {
-    const char *s = String_data(path);
-    uint32_t len = path->size;
+    // Normalize inplace
+    char *s = String_data(path);
+    const uint32_t len = String_size(path);
     if (len == 0) return;
-
-    String normalized = {0};
-    String_init(&normalized, len);
-
     for (uint32_t i = 0; i < len; ++i) {
         char c = s[i];
         if (Path__is_sep(c)) c = '\\';
-        String_append_cstr2(&normalized, &c, 1);
+        s[i] = c;
     }
-
-    String_free(path);
-    *path = normalized;
 }
 
 void Path_replace_invalid_fs_chars(Path *filename, const char replacement) {
-    char *s = filename->buffer;
-    const uint32_t len = filename->size;
+    char *s = String_data(filename);
+    const uint32_t len = String_size(filename);
     if (len == 0) return;
 
     for (uint32_t i = 0; i < len; ++i) {
         char c = s[i];
-        if (c < 32 || c == '<' || c == '>' || c == '|' || c == '"' || c == '?' || c == '*' || c == ':' || c=='/' || c=='\\') {
+        if (c < 32 || c == '<' || c == '>' || c == '|' || c == '"' || c == '?' || c == '*' || c == ':' || c == '/' || c
+            == '\\') {
             c = replacement;
         }
         s[i] = c;
@@ -226,10 +216,10 @@ void Path_replace_invalid_fs_chars(Path *filename, const char replacement) {
 }
 
 void Path_get_parent(const Path *path, Path *out_parent) {
-    const char *s = String_data(path);
-    const uint32_t len = path->size;
+    const char *s = String_cstr(path);
+    const uint32_t len = String_size(path);
     if (len == 0) {
-        String_resize(out_parent, 0);
+        String_reserve(out_parent, 0);
         return;
     }
 
@@ -241,7 +231,7 @@ void Path_get_parent(const Path *path, Path *out_parent) {
         }
     }
     if (last_sep < 0) {
-        String_resize(out_parent, 0);
+        String_reserve(out_parent, 0);
         return;
     }
     String_init(out_parent, last_sep);
@@ -253,8 +243,8 @@ void Path_get_parent(const Path *path, Path *out_parent) {
  as a directory. Returns 0 on success, -1 on error (errno set).
 */
 int Path_ensure_dirs(const Path *path) {
-    const char *s = String_data(path);
-    uint32_t len = path->size;
+    const char *s = String_cstr(path);
+    uint32_t len = String_size(path);
     if (len == 0) return 0;
 
     int trailing_sep = Path__is_sep(s[len - 1]) ? 1 : 0;
@@ -268,8 +258,8 @@ int Path_ensure_dirs(const Path *path) {
  component. Returns 0 on success, -1 on error (errno set).
 */
 int Path_ensure_parent_dirs(const Path *path) {
-    const char *s = String_data(path);
-    uint32_t len = path->size;
+    const char *s = String_cstr(path);
+    uint32_t len = String_size(path);
     if (len == 0) return 0;
 
     int32_t last_sep = -1;
@@ -289,8 +279,8 @@ int Path_ensure_parent_dirs(const Path *path) {
  handling absolute components as replacements.
 */
 void Path_join(Path *base, const String *component) {
-    const char *s = String_data(component);
-    uint32_t len = component->size;
+    const char *s = String_cstr(component);
+    uint32_t len = String_size(component);
     Path__append_normalized(base, s, len);
 }
 
@@ -318,22 +308,18 @@ void Path_join_format(Path *base, const char *fmt, ...) {
 }
 
 void Path_convert_to_wsl(Path *out, Path *in) {
-// #ifdef WIN32
+#ifndef WSL_ENV
     String_copy_from(out, in);
-// #else
-//     String_init(out, in->size + 10);
-//     char *buffer = out->buffer;
-//
-//     char drive = in->buffer[0];
-//     snprintf(buffer, out->capacity, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in->buffer + 2);
-//     // Fix slashes
-//     for (int i = 0; i < out->capacity; ++i) {
-//         if (buffer[i] == '\\') {
-//             buffer[i] = '/';
-//         }
-//     }
-//     out->size = strlen(String_data(out));
-// #endif
+#else
+    String_init(out, String_size(in) + 10);
+    const char *in_buffer = String_cstr(in);
+    const char drive = in_buffer[0];
+
+    String_format(out, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in_buffer + 2);
+
+    String_replace_char(out, "\\", '/');
+
+#endif
 }
 
 void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *tab_files);
@@ -356,9 +342,10 @@ void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *ta
 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             find_files_by_ext(full_path, ext, tab_files);
-        } else {
+        }
+        else {
             const char *file_ext = strrchr(fd.cFileName, '.');
-            if (file_ext && strcmp(file_ext, String_data(ext)) == 0) {
+            if (file_ext && strcmp(file_ext, String_cstr(ext)) == 0) {
                 String *tmp = DA_append_get(tab_files);
                 String_from_cstr(tmp, full_path);
             }
@@ -375,14 +362,14 @@ void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *ta
 #include <stdio.h>
 
 static int is_dir_path(const char *fullpath, const struct dirent *ent) {
-// Use d_type if available and reliable; otherwise lstat
+    // Use d_type if available and reliable; otherwise lstat
 #ifdef DT_DIR
-if (ent&& ent->d_type!= DT_UNKNOWN) {
+    if (ent && ent->d_type != DT_UNKNOWN) {
         return ent->d_type == DT_DIR;
     }
 #endif
-struct stat st;
-    if (lstat(fullpath, &st)== 0) {
+    struct stat st;
+    if (lstat(fullpath, &st) == 0) {
         return S_ISDIR(st.st_mode);
     }
     return 0;
@@ -407,9 +394,10 @@ void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *ta
         GLog_info("Visiting: %s", full_path);
         if (is_dir_path(full_path, ent)) {
             find_files_by_ext(full_path, ext, tab_files);
-        } else {
+        }
+        else {
             const char *file_ext = strrchr(name, '.');
-            if (file_ext && strcmp(file_ext, String_data(ext)) == 0) {
+            if (file_ext && strcmp(file_ext, String_cstr(ext)) == 0) {
                 String_from_cstr(DA_append_get(tab_files), full_path);
             }
         }
@@ -420,15 +408,15 @@ void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *ta
 
 void Path_rglob(const Path *path, const String *ext, DynamicArray_Path *out) {
     DA_init(out, Path, 1);
-    if (path->size == 0) return;
-    find_files_by_ext(String_data(path), ext, out);
+    if (String_size(path) == 0) return;
+    find_files_by_ext(String_cstr(path), ext, out);
 }
 
 void Path_remove_extension(const Path *path, Path *extensionless) {
-    String_init(extensionless, path->size);
-    const char *s = String_data(path);
+    String_init(extensionless, String_size(path));
+    const char *s = String_cstr(path);
     int32_t last_dot = -1;
-    for (int32_t i = (int32_t) path->size - 1; i >= 0; --i) {
+    for (int32_t i = (int32_t) String_size(path) - 1; i >= 0; --i) {
         if (s[i] == '.') {
             last_dot = i;
             break;
@@ -439,16 +427,17 @@ void Path_remove_extension(const Path *path, Path *extensionless) {
     }
     if (last_dot < 0) {
         String_copy_from(extensionless, path);
-    } else {
+    }
+    else {
         String_append_cstr2(extensionless, s, (uint32_t) last_dot);
     }
 }
 
 void Path_replace_extension(const Path *path, const char *new_extension, Path *out) {
     const size_t ext_size = new_extension ? strlen(new_extension) : 0;
-    const char *s = String_data(path);
+    const char *s = String_cstr(path);
     int32_t last_dot = -1;
-    for (int32_t i = (int32_t) path->size - 1; i >= 0; --i) {
+    for (int32_t i = (int32_t) String_size(path) - 1; i >= 0; --i) {
         if (s[i] == '.') {
             last_dot = i;
             break;
@@ -458,13 +447,14 @@ void Path_replace_extension(const Path *path, const char *new_extension, Path *o
         }
     }
     if (last_dot < 0) {
-        String_init(out, path->size + (uint32_t) ext_size + 1);
+        String_init(out, String_size(path) + (uint32_t) ext_size + 1);
         String_copy_from(out, path);
         if (new_extension && new_extension[0] != '\0') {
             String_append_cstr(out, ".");
             String_append_cstr(out, new_extension);
         }
-    } else {
+    }
+    else {
         String_init(out, last_dot + (uint32_t) ext_size + 1);
         String_append_cstr2(out, s, (uint32_t) last_dot);
         if (new_extension && new_extension[0] != '\0') {
@@ -475,10 +465,10 @@ void Path_replace_extension(const Path *path, const char *new_extension, Path *o
 }
 
 void Path_filename(const Path *path, Path *filename) {
-    String_init(filename, path->size);
-    const char *s = String_data(path);
+    String_init(filename, String_size(path));
+    const char *s = String_cstr(path);
     int32_t last_sep = -1;
-    for (int32_t i = (int32_t) path->size - 1; i >= 0; --i) {
+    for (int32_t i = (int32_t) String_size(path) - 1; i >= 0; --i) {
         if (Path__is_sep(s[i])) {
             last_sep = i;
             break;
@@ -486,14 +476,15 @@ void Path_filename(const Path *path, Path *filename) {
     }
     if (last_sep < 0) {
         String_copy_from(filename, path);
-    } else {
-        String_append_cstr2(filename, s + last_sep + 1, path->size - (uint32_t) last_sep - 1);
+    }
+    else {
+        String_append_cstr2(filename, s + last_sep + 1, String_size(path) - (uint32_t) last_sep - 1);
     }
 }
 
 bool Path_exists(const Path *path) {
-    if (path->size == 0) return false;
-    const char *s = String_data(path);
+    if (String_size(path) == 0) return false;
+    const char *s = String_cstr(path);
 #ifdef WIN32
     DWORD attrs = GetFileAttributesA(s);
     return attrs != INVALID_FILE_ATTRIBUTES;

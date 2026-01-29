@@ -17,6 +17,13 @@ void init_hashes() {
     }
 }
 
+void close_hash_db() {
+    if (hash_db != NULL) {
+        kv_close(hash_db);
+        hash_db = NULL;
+    }
+}
+
 kvdb_t *get_hash_db() {
     if (hash_db == NULL) {
         init_hashes();
@@ -26,29 +33,25 @@ kvdb_t *get_hash_db() {
 
 String *find_name32(const uint32 key) {
     init_hashes();
-    char *value = NULL;
-    const kv_status_t status = kv_get_u32(hash_db, key, &value);
-    if (status == KV_NOTFOUND) {
+    const char *value = NULL;
+    size_t value_len;
+    const kv_status_t status = kv_get_u32_view(hash_db, key, &value, &value_len);
+    if (status == KV_NOTFOUND || value==NULL) {
         return NULL;
-        // String *tmp = String_new(64);
-        // String_append_format(tmp, "0x%08X", key);
     }
-    String *tmp = String_new_from_cstr(value);
-    mp_free(value);
+    String *tmp = String_new_from_cstr2(value, value_len);
     return tmp;
 }
 
-String * find_name64(uint64 key) {
+String * find_name64(const uint64 key) {
     init_hashes();
-    char *value = NULL;
-    const kv_status_t status = kv_get_u64(hash_db, key, &value);
-    if (status == KV_NOTFOUND) {
+    const char *value = NULL;
+    size_t value_len;
+    const kv_status_t status = kv_get_u64_view(hash_db, key, &value, &value_len);
+    if (status == KV_NOTFOUND || value==NULL) {
         return NULL;
-        // String *tmp = String_new(64);
-        // String_append_format(tmp, "0x%016lX", (unsigned long long)key);
     }
-    String *tmp = String_new_from_cstr(value);
-    mp_free(value);
+    String *tmp = String_new_from_cstr2(value, value_len);
     return tmp;
 }
 
@@ -76,10 +79,10 @@ bool check_hash64_presence(const uint64 key) {
 
 void store_hash32_name(const uint32 key, const String *value) {
     init_hashes();
-    kv_put_u32(hash_db, key, String_data(value));
+    kv_put_u32(hash_db, key, String_cstr(value));
 }
 
 void store_hash64_name(const uint64 key, const String *value) {
     init_hashes();
-    kv_put_u64(hash_db, key, String_data(value));
+    kv_put_u64(hash_db, key, String_cstr(value));
 }

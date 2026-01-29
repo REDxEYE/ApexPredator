@@ -247,16 +247,16 @@ void hk_print_indent(FILE *out, uint32 indent) {
 }
 
 void print_type_variable(const HKTagType *type, FILE *out) {
-    fprintf(out, "%s", String_data(&type->name));
+    fprintf(out, "%s", String_cstr(&type->name));
     DA_FORI(type->template_args, j) {
         const HKTagTemplateArgument *arg = &type->template_args.items[j];
         if (arg->is_class) {
             assert(arg->type != NULL);
-            fprintf(out, "_%s", String_data(&arg->type->name));
+            fprintf(out, "_%s", String_cstr(&arg->type->name));
         } else if (arg->is_number) {
             fprintf(out, "_%u", arg->number);
         } else {
-            fprintf(out, "_%s", String_data(&arg->name));
+            fprintf(out, "_%s", String_cstr(&arg->name));
         }
     }
 }
@@ -270,13 +270,13 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
                 HKTAGTYPE_NAMES[type->data_type], type->format);
         if (type->parent != NULL) {
             hk_print_indent(out, indent + 4);
-            fprintf(out, "struct %s;\n", String_data(&type->parent->name));
+            fprintf(out, "struct %s;\n", String_cstr(&type->parent->name));
         }
         DA_FORI(type->members, i) {
             const HKTagTypeMember *member = &type->members.items[i];
             hk_print_indent(out, indent + 4);
             if (member->type == NULL) {
-                fprintf(out, "/* %s: UNKNOWN_TYPE */;\n", String_data(&member->name));
+                fprintf(out, "/* %s: UNKNOWN_TYPE */;\n", String_cstr(&member->name));
             } else {
                 if (member->type->template_args.count > 0) {
                     if (member->type->data_type == HKTYPE_ARRAY) {
@@ -286,35 +286,35 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
                         assert(inner_type->is_class && inner_type->type!=NULL);
                         if (size_arg->is_number) {
                             fprintf(out, "%s %s[%u]; // offset: %d, flags: %d, size: %d\n",
-                                    String_data(&inner_type->type->name),
-                                    String_data(&member->name), size_arg->number, member->offset, member->flags,
+                                    String_cstr(&inner_type->type->name),
+                                    String_cstr(&member->name), size_arg->number, member->offset, member->flags,
                                     member->type->size);
                         } else {
                             print_type_variable(member->type, out);
 
                             fprintf(out, " %s; // offset: %d, flags: %d, size: %d\n",
-                                    String_data(&member->name), member->offset,
+                                    String_cstr(&member->name), member->offset,
                                     member->flags, member->type->size);
                         }
                     } else {
                         if (member->type->data_type == HKTYPE_POINTER) {
                             fprintf(out, "ItemId %s_id; // offset: %d, flags: %d, size: %d\n",
                                     // String_data(&member->type->template_args.items[0].type->name),
-                                    String_data(&member->name), member->offset, member->flags, member->type->size);
+                                    String_cstr(&member->name), member->offset, member->flags, member->type->size);
                         } else {
-                            fprintf(out, "%s", String_data(&member->type->name));
+                            fprintf(out, "%s", String_cstr(&member->type->name));
                             for (uint32 j = 0; j < member->type->template_args.count; ++j) {
                                 const HKTagTemplateArgument *arg = &member->type->template_args.items[j];
                                 if (arg->is_class) {
                                     assert(arg->type != NULL);
-                                    fprintf(out, "_%s", String_data(&arg->type->name));
+                                    fprintf(out, "_%s", String_cstr(&arg->type->name));
                                 } else if (arg->is_number) {
                                     fprintf(out, "_%u", arg->number);
                                 } else {
-                                    fprintf(out, "_%s", String_data(&arg->name));
+                                    fprintf(out, "_%s", String_cstr(&arg->name));
                                 }
                             }
-                            fprintf(out, " %s; // offset: %d, flags: %d, size: %d\n", String_data(&member->name),
+                            fprintf(out, " %s; // offset: %d, flags: %d, size: %d\n", String_cstr(&member->name),
                                     member->offset, member->flags, member->type->size);
 
                             // fprintf(out, "/* %s: GENERIC_TYPE */; // offset: %d, flags: %d, size: %d\n",
@@ -322,8 +322,8 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
                         }
                     }
                 } else {
-                    fprintf(out, "%s %s; // offset: %d, flags: %d, size: %d\n", String_data(&member->type->name),
-                            String_data(&member->name), member->offset, member->flags, member->type->size);
+                    fprintf(out, "%s %s; // offset: %d, flags: %d, size: %d\n", String_cstr(&member->type->name),
+                            String_cstr(&member->name), member->offset, member->flags, member->type->size);
                 }
             }
         }
@@ -343,10 +343,10 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
         }
         case HKTYPE_RECORD: {
             if (type->parent != NULL) {
-                fprintf(out, "typedef struct %s %s; // Size: %d", String_data(&type->parent->name),
-                        String_data(&type->name), type->size);
+                fprintf(out, "typedef struct %s %s; // Size: %d", String_cstr(&type->parent->name),
+                        String_cstr(&type->name), type->size);
             } else {
-                fprintf(out, "typedef struct %s {\n", String_data(&type->name));
+                fprintf(out, "typedef struct %s {\n", String_cstr(&type->name));
                 hk_print_indent(out, indent + 4);
                 switch (type->size) {
                     case 1: {
@@ -363,7 +363,7 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
                     }
                 }
 
-                fprintf(out, "} %s; // Size: %d", String_data(&type->name), type->size);
+                fprintf(out, "} %s; // Size: %d", String_cstr(&type->name), type->size);
                 // fprintf(out, "/* EMPTY Record %s */", String_data(&type->name));
             }
             break;
@@ -372,10 +372,10 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
             // fprintf(out, "/* Simple string %s */", String_data(&type->name));
             break;
         }
-        case HKTYPE_UNK5:
+        case HKTYPE_FLOAT:
         case HKTYPE_PRIMITIVE: {
             if (type->parent != NULL) {
-                fprintf(out, "typedef %s ", String_data(&type->parent->name));
+                fprintf(out, "typedef %s ", String_cstr(&type->parent->name));
                 print_type_variable(type, out);
                 fprintf(out, ";");
             } else {
@@ -383,11 +383,11 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
             }
             break;
         }
-        case HKTYPE_UNK4: {
+        case HKTYPE_BASIC: {
             // fprintf(out, "/* UNK4 %s */", String_data(&type->name));
             break;
         }
-        case HKTYPE_UNK1: {
+        case HKTYPE_OPAQUE: {
             // fprintf(out, "/* UNK1 %s */", String_data(&type->name));
             break;
         }
@@ -458,7 +458,7 @@ bool Strings_from_buffer(const TagHeader *header, DynamicArray_String *strings, 
     while (strings_data_left > 0) {
         String *str = DA_append_get(strings);
         if (buffer->read_cstring(buffer, str) != BUFFER_SUCCESS)return false;
-        strings_data_left -= (str->size + 1);
+        strings_data_left -= (String_size(str) + 1);
     }
     Buffer_align(buffer, 4);
     return true;

@@ -6,7 +6,7 @@
 #include "platform/common_arrays.h"
 #include "utils/hash_helper.h"
 #include "utils/dynamic_array.h"
-#include "utils/dynamic_insert_only_map.h"
+#include "utils/dynamic_map.h"
 #include "utils/buffer/buffer.h"
 
 #define RTPC_MAGIC "RTPC"
@@ -68,11 +68,11 @@ typedef struct RuntimeProp {
 
 DYNAMIC_ARRAY_STRUCT(RuntimeProp, RuntimeProp);
 
-DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(RuntimeProp, RuntimeProp);
+DYNAMIC_INT_MAP_STRUCT(RuntimeProp, RuntimeProp);
 
 DYNAMIC_ARRAY_STRUCT(RuntimeNode, RuntimeNode);
 
-DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(RuntimeNode, RuntimeNode);
+DYNAMIC_INT_MAP_STRUCT(RuntimeNode, RuntimeNode);
 
 typedef struct RuntimeNode {
     String name;
@@ -86,9 +86,9 @@ typedef struct RuntimeNode {
 
 RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer);
 
-RuntimeNode *RuntimeNode_new(String *name);
+RuntimeNode *RuntimeNode_new(void);
 
-void RuntimeNode_init(RuntimeNode *node, String *name);
+void RuntimeNode_init(RuntimeNode *node);
 RuntimeProp* RuntimeNode_get_prop(const RuntimeNode* node, const char* name);
 RuntimeProp* RuntimeNode_get_prop_by_hash(const RuntimeNode* node, uint32 hash);
 

@@ -8,15 +8,6 @@
 
 void SArchive__from_buffer(SArchive *archive, Buffer *buffer);
 
-static const String internal_sarc_name_ = {
-    .buffer = "SARC",
-    .size = 4,
-    .capacity = 5,
-    .statically_allocated = 1,
-    .can_be_moved = 0,
-    .heap_allocated = 0
-};
-
 bool SArchive__has_file(const SArchive *archive, const String *path) {
     const uint32 hash = hash_string(path);
     return DM_get(&archive->entries, hash) != NULL;
@@ -58,12 +49,15 @@ bool SArchive__get_file_by_hash(SArchive *archive, uint32 hash, MemoryBuffer *ou
 }
 
 const String *SArchive__get_name(SArchive *archive) {
-    return &internal_sarc_name_;
+    static const char* name = "SARC";
+    static String name_s = {0};
+    String_from_cstr(&name_s, name);
+    return &name_s;
 }
 
 void SArchive__get_all_entries(const SArchive *archive, DynamicArray_ArchiveEntry *out) {
     for (int i = 0; i < archive->entries.values.count; ++i) {
-        SArcEntry *entry = DA_at(&archive->entries.values, i);
+        const SArcEntry *entry = DA_at(&archive->entries.values, i);
         if (entry->offset == 0) {
             continue;
         }
@@ -81,7 +75,7 @@ void SArchive_print_files(SArchive *archive) {
     SArchive__get_all_entries(archive, &entries);
     for (int i = 0; i < entries.count; ++i) {
         const ArchiveEntry *entry = DA_at(&entries, i);
-        GLog_Info("File: %s, Size: %u, Hash: 0x%08X", String_data(entry->path), entry->size,
+        GLog_Info("File: %s, Size: %u, Hash: 0x%08X", String_cstr(entry->path), entry->size,
                entry->path_hash);
     }
     DA_free(&entries);
@@ -139,7 +133,7 @@ void SArchive__from_buffer(SArchive *archive, Buffer *buffer) {
             buffer->read_uint32(buffer, &entry.ext_hash);
             if (hash_string(&entry.name) != entry.hash) {
                 GLog_Error("SARC entry hash mismatch for file %s, expected: %08X, actual: %08X",
-                       String_data(&entry.name), entry.hash, hash_string(&entry.name));
+                       String_cstr(&entry.name), entry.hash, hash_string(&entry.name));
                 exit(1);
             }
             SArcEntry *slot = DM_insert(&archive->entries, entry.hash);

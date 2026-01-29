@@ -15,22 +15,24 @@
 
 
 GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, String *export_path,
-                      uint32 path_hash, const String *path, const AmfMeshHeader *header, const AmfMeshBuffers *mesh_buffers) {
+                      uint32 path_hash, const String *path, const AmfMeshHeader *header,
+                      const AmfMeshBuffers *mesh_buffers) {
     String mesh_name = {0};
     if (path != NULL) {
         Path_filename(path, &mesh_name);
-    } else {
-        String* tmp_name = find_name32(path_hash);
+    }
+    else {
+        String *tmp_name = find_name32(path_hash);
         if (tmp_name != NULL) {
             Path_filename(&mesh_name, tmp_name);
             String_free(tmp_name);
-        }else {
+        }
+        else {
             String_from_cstr(&mesh_name, "mesh_");
             String_append_format(&mesh_name, "%08X", path_hash);
-
         }
     }
-    GL_ID mesh_root_node_id = GLTFContext_node_add(context, String_data(&mesh_name));
+    GL_ID mesh_root_node_id = GLTFContext_node_add(context, String_cstr(&mesh_name));
 
     DynamicArray_AmfBuffer all_vertex_buffer = {0};
     DA_init(&all_vertex_buffer, AmfBuffer, mesh_buffers->VertexBuffers.count);
@@ -43,26 +45,31 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
     // hires fix
     {
         MemoryBuffer hi_res_buffer = {0};
-        // String *hi_res_path_full = DM_get(&lib->hash_strings, header->HighLodPath);
-        const String *hi_res_path_full = find_name32(header->HighLodPath);
-        if (String_find_subcstring(hi_res_path_full, "intermediate/") != UINT32_MAX) {
-            String hi_res_path = {0};
+        String *hi_res_path_full = find_name32(header->HighLodPath);
+        if (hi_res_path_full != NULL) {
+            if (String_find_subcstring(hi_res_path_full, "intermediate/") != UINT32_MAX) {
+                String hi_res_path = {0};
 
-            String_from_cstr(&hi_res_path, String_data(hi_res_path_full) + strlen("intermediate/"));
-            if (ArchiveManager_get_file(archive_manager, &hi_res_path, &hi_res_buffer)) {
-                ADF hi_res_adf = {0};
-                ADF_from_buffer(&hi_res_adf, (Buffer *) &hi_res_buffer, lib);
-                ADFInstance *instance = ADF_get_instance(&hi_res_adf, 0);
-                if (instance->type_hash == STI_TYPE_HASH_AmfMeshBuffers) {
-                    hi_res_buffers = ADF_read_instance(&hi_res_adf, lib, instance, &hi_res_buffer);
-                    hi_res_free_fn = ((STI_ObjectMethods *) DM_get(&lib->object_functions, instance->type_hash))->free;
-                }else {
-                    GLog_Warning("Unexpected hi-res mesh buffers type: %08X", instance->type_hash);
+                String_from_cstr(&hi_res_path, String_cstr(hi_res_path_full) + strlen("intermediate/"));
+                if (ArchiveManager_get_file(archive_manager, &hi_res_path, &hi_res_buffer)) {
+                    ADF hi_res_adf = {0};
+                    ADF_from_buffer(&hi_res_adf, (Buffer *) &hi_res_buffer, lib);
+                    ADFInstance *instance = ADF_get_instance(&hi_res_adf, 0);
+                    if (instance->type_hash == STI_TYPE_HASH_AmfMeshBuffers) {
+                        hi_res_buffers = ADF_read_instance(&hi_res_adf, lib, instance, &hi_res_buffer);
+                        hi_res_free_fn = ((STI_ObjectMethods *) DM_get(&lib->object_functions, instance->type_hash))->
+                                free;
+                    }
+                    else {
+                        GLog_Warning("Unexpected hi-res mesh buffers type: %08X", instance->type_hash);
+                    }
+                    ADF_free(&hi_res_adf);
+                    String_free(&hi_res_path);
+                    hi_res_buffer.close(&hi_res_buffer);
                 }
-                ADF_free(&hi_res_adf);
                 String_free(&hi_res_path);
-                hi_res_buffer.close(&hi_res_buffer);
             }
+            String_free(hi_res_path_full);
         }
     }
 
@@ -87,12 +94,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
         }
     }
 
-    String mesh_export_path = {};
-    String mesh_without_ext = {};
-    Path_remove_extension(path, &mesh_without_ext);
-    Path_join(&mesh_export_path, export_path);
-    Path_join(&mesh_export_path, &mesh_without_ext);
-    String_append_cstr(&mesh_export_path, ".gltf");
+
 
     String lod_name = {0};
     for (uint32 lod_id = header->LodGroups.count - 1; lod_id < header->LodGroups.count; ++lod_id) {
@@ -103,17 +105,17 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
             String_init(&lod_name, 64);
             String_copy_from(&lod_name, &mesh_name);
             String_append_format(&lod_name, "_lod_%i_mesh_%i", lod_id, mesh_id);
-            GL_ID gl_node_id = GLTFContext_node_add(context, String_data(&lod_name));
+            GL_ID gl_node_id = GLTFContext_node_add(context, String_cstr(&lod_name));
             GLTFContext_node_set_parent(context, gl_node_id, mesh_root_node_id);
             String_free(&lod_name);
 
-            if (mesh->MeshProperties.type_hash==STI_TYPE_HASH_GeneralMeshConstants) {
+            if (mesh->MeshProperties.type_hash == STI_TYPE_HASH_GeneralMeshConstants) {
                 // GeneralMeshConstants* constants = (GeneralMeshConstants*)mesh->MeshProperties.data;
-            }else{
+            }
+            else {
                 GLog_Warning("Unsupported mesh prop type: %08X", mesh->MeshProperties.type_hash);
             }
 
-            const String *mesh_type_name = find_name32(mesh->MeshTypeId);
             uint32 vertex_count = mesh->VertexCount;
             uint32 index_buffer_index = mesh->IndexBufferIndex;
             if (index_buffer_index > all_index_buffer.count) {
@@ -130,14 +132,27 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
 
             AmfBuffer *usedIndexBuffer = DA_at(&all_index_buffer, index_buffer_index);
 
-            GL_ID gl_mesh_id = GLTFContext_mesh_add(context, String_data(mesh_type_name), mesh->SubMeshes.count);
+            String *mesh_type_name = find_name32(mesh->MeshTypeId);
+            if (mesh_type_name == NULL) {
+                mesh_type_name = String_new(64);
+                String_append_format(mesh_type_name, "mesh_%08X", mesh->MeshTypeId);
+            }
+            GL_ID gl_mesh_id = GLTFContext_mesh_add(context, String_cstr(mesh_type_name), mesh->SubMeshes.count);
+            String_free(mesh_type_name);
+
             GLTFContext_node_set_mesh(context, gl_node_id, gl_mesh_id);
 
             for (int sub_mesh_id = 0; sub_mesh_id < mesh->SubMeshes.count; ++sub_mesh_id) {
                 AmfSubMesh *sub_mesh = DA_at(&mesh->SubMeshes, sub_mesh_id);
-                const String *material_name = find_name32(sub_mesh->SubMeshId);
+                String *material_name = find_name32(sub_mesh->SubMeshId);
 
-                GL_ID material_id = GLTFContext_material_find_by_name(context, String_data(material_name));
+                if (material_name == NULL) {
+                    material_name = String_new(64);
+                    String_append_format(material_name, "material_%08X", sub_mesh->SubMeshId);
+                }
+
+                GL_ID material_id = GLTFContext_material_find_by_name(context, String_cstr(material_name));
+                String_free(material_name);
 
                 cgltf_primitive *primitive = GLTFContext_mesh_get_primitive(context, gl_mesh_id, sub_mesh_id);
                 if (IS_VALID_GL_ID(material_id)) {
@@ -164,7 +179,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                     bool normalized;
                     String attr_name = {0};
                     String_from_cstr(&attr_name, "_INVALID_ATTRIBUTE");
-                    void *attribute_data;
+                    void *attribute_data = NULL;
                     uint8 *raw_vertex_buffer_data =
                             all_vertex_buffer.items[stream_index].Data.items + vertex_buffer_offsets->items[
                                 amf_attribute->StreamIndex] + stream_offset;
@@ -200,7 +215,8 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                                             bbox_max[0] = x;
                                             bbox_max[1] = y;
                                             bbox_max[2] = z;
-                                        } else {
+                                        }
+                                        else {
                                             if (x < bbox_min[0]) bbox_min[0] = x;
                                             if (y < bbox_min[1]) bbox_min[1] = y;
                                             if (z < bbox_min[2]) bbox_min[2] = z;
@@ -410,6 +426,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                         }
                         default: {
                             GLog_Warning("Unsupported attribute usage: %d", amf_attribute->Usage);
+                            String_free(&attr_name);
                             continue;
                             // exit(1);
                         }
@@ -417,20 +434,21 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
 
                     GL_ID buffer_view_id = GLTFContext_accessor_from_data(context,
                                                                           attribute_data, vertex_count * stride,
-                                                                          vertex_count, String_data(&attr_name),
+                                                                          vertex_count, String_cstr(&attr_name),
                                                                           data_type, comp_type,
                                                                           cgltf_buffer_view_type_vertices, normalized,
                                                                           stride, 0);
                     if (use_bbox)
                         GLTFContext_accessor_set_minmax(context, buffer_view_id, bbox_min, bbox_max);
                     GLTFContext_primitive_set_attribute_accessor(context, gl_mesh_id, sub_mesh_id, attr_id,
-                                                                 buffer_view_id, String_data(&attr_name));
+                                                                 buffer_view_id, String_cstr(&attr_name));
                     String_free(&attr_name);
-                    mp_free(attribute_data);
+                    if (attribute_data != NULL)
+                        mp_free(attribute_data);
                 }
             }
-            if (mesh->MeshProperties.type_hash==STI_TYPE_HASH_GeneralMeshConstants) {
-                const GeneralMeshConstants* constants = (GeneralMeshConstants*)mesh->MeshProperties.data;
+            if (mesh->MeshProperties.type_hash == STI_TYPE_HASH_GeneralMeshConstants) {
+                const GeneralMeshConstants *constants = (GeneralMeshConstants *) mesh->MeshProperties.data;
                 if (constants->IsSkinnedMesh) {
                     GL_ID current_skin = GLTFContext_current_skin(context);
                     if (IS_VALID_GL_ID(current_skin)) {
@@ -441,10 +459,20 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
         }
     }
 
+    String_free(&mesh_name);
+
     context->options.type = cgltf_file_type_gltf;
+
+    String mesh_export_path = {};
+    String mesh_without_ext = {};
+    Path_remove_extension(path, &mesh_without_ext);
+    Path_join(&mesh_export_path, export_path);
+    Path_join(&mesh_export_path, &mesh_without_ext);
+    String_append_cstr(&mesh_export_path, ".gltf");
+    String_free(&mesh_without_ext);
+
     Path_ensure_parent_dirs(&mesh_export_path);
     GLTFContext_set_save_path(context, &mesh_export_path);
-
     String_free(&mesh_export_path);
 
     if (hi_res_buffers != NULL) {
@@ -457,12 +485,12 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
     return mesh_root_node_id;
 }
 
-bool export_textures = true;
+bool export_textures = false;
 
 GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
                        Havok_TypeLibrary *havok_lib, const AmfModel *amf_model,
                        const String *path, const uint32 path_hash, const String *export_path) {
-    if (context==NULL) {
+    if (context == NULL) {
         GLog_Error("GLTF context is not initialized!");
         assert(context!=NULL && "context must be initialized");
         exit(1);
@@ -477,38 +505,47 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         String_append_format(&model_without_ext, "0x%08X", path_hash);
         String_from_cstr(&model_name, "model_");
         String_append_format(&model_name, "%08X", path_hash);
-    } else {
+    }
+    else {
         Path_remove_extension(path, &model_without_ext);
         Path_filename(path, &model_name);
     }
     Path_join(&model_export_path, export_path);
     Path_join(&model_export_path, &model_without_ext);
 
-    const GL_ID model_root_node_id = GLTFContext_node_add(context, String_data(&model_name));
-    String_free(&model_name);
+    const GL_ID model_root_node_id = GLTFContext_node_add(context, String_cstr(&model_name));
 
     for (int mat_id = 0; mat_id < amf_model->Materials.count; ++mat_id) {
         const AmfMaterial *amf_material = &amf_model->Materials.items[mat_id];
         String *material_name = find_name32(amf_material->Name);
-        GL_ID material_id = GLTFContext_material_find_by_name(context, String_data(material_name));
+        if (material_name == NULL) {
+            material_name = String_new(64);
+            String_append_format(material_name, "material_%08X", amf_material->Name);
+        }
+        GL_ID material_id = GLTFContext_material_find_by_name(context, String_cstr(material_name));
         if (!IS_VALID_GL_ID(material_id)) {
-            material_id = GLTFContext_material_new(context, String_data(material_name));
+            material_id = GLTFContext_material_new(context, String_cstr(material_name));
             String *render_block_id = find_name32(amf_material->RenderBlockId);
+            if (render_block_id == NULL) {
+                render_block_id = String_new(64);
+                String_append_format(render_block_id, "render_block_%08X", amf_material->RenderBlockId);
+            }
 
-            GLog_Info("Material %s -> %s", String_data(material_name), String_data(render_block_id));
+            GLog_Info("Material %s -> %s", String_cstr(material_name), String_cstr(render_block_id));
             for (int tex_id = 0; tex_id < amf_material->Textures.count; ++tex_id) {
                 const uint32 texture_hash = amf_material->Textures.items[tex_id];
                 String *tex_path = find_name32(texture_hash);
-                if (tex_path->size == 0) {
-                    String_free(tex_path);
+                if (tex_path == NULL) {
                     continue;
                 }
-                GLog_Info("\tSlot %i -> %s", tex_id, String_data(tex_path));
+                GLog_Info("\tSlot %i -> %s", tex_id, String_cstr(tex_path));
+                String_free(tex_path);
             }
 
             if (String_cequals(render_block_id, "GeneralR2") && export_textures) {
                 if (amf_material->Attributes.type_hash != STI_TYPE_HASH_GeneralR2Constants) {
-                    GLog_Warning("Unsupported GeneralR2 material attribute type: %08X", amf_material->Attributes.type_hash);
+                    GLog_Warning("Unsupported GeneralR2 material attribute type: %08X",
+                                 amf_material->Attributes.type_hash);
                     continue;
                 }
                 const GeneralR2Constants *constants = amf_material->Attributes.data;
@@ -522,75 +559,86 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                 mat->pbr_metallic_roughness.roughness_factor = 1.0f;
 
                 if (amf_material->Textures.count >= 3) {
-                    const String *diffuse_path = find_name32(amf_material->Textures.items[0]);
-                    const String *normal_path = find_name32(amf_material->Textures.items[1]);
-                    const String *orm_path = find_name32(amf_material->Textures.items[2]);
-                    const String *emission_path = find_name32(amf_material->Textures.items[4]);
+                    String *diffuse_path = find_name32(amf_material->Textures.items[0]);
+                    String *normal_path = find_name32(amf_material->Textures.items[1]);
+                    String *orm_path = find_name32(amf_material->Textures.items[2]);
+
                     Texture *diffuse_texture = NULL;
                     Texture *normal_texture = NULL;
                     Texture *orm_texture = NULL;
                     Texture *emission_texture = NULL;
 
-                    if (diffuse_path != NULL && diffuse_path->size > 0) {
+                    if (diffuse_path != NULL) {
                         diffuse_texture = convert_ddsc(archive_manager, diffuse_path);
                         GLTFContext_material_set_diffuse_texture_from_data(
                             context, diffuse_path, material_id, diffuse_texture);
+                        String_free(diffuse_path);
                     }
-                    if (normal_path != NULL && normal_path->size > 0) {
+                    if (normal_path != NULL) {
                         normal_texture = convert_ddsc(archive_manager, normal_path);
                         GLTFContext_material_set_normal_from_data(context, normal_path, material_id, normal_texture);
+                        String_free(normal_path);
                     }
-                    if (orm_path != NULL && orm_path->size > 0) {
+                    if (orm_path != NULL) {
                         orm_texture = convert_ddsc(archive_manager, orm_path);
                         GLTFContext_material_set_roughness_metallic_from_data(
                             context, orm_path, material_id, orm_texture);
+                        String_free(orm_path);
                     }
-                    if (emission_path != NULL && emission_path->size > 0 && constants->UseEmissive) {
-                        emission_texture = convert_ddsc(archive_manager, emission_path);
-                        if (!constants->EmissiveTextureHasColor && diffuse_texture != NULL) {
-                            Texture *new_emission_texture = TextureOps_multiply(diffuse_texture, emission_texture);
+                    if (constants->UseEmissive) {
+                        String *emission_path = find_name32(amf_material->Textures.items[4]);
+                        if (emission_path != NULL) {
+                            emission_texture = convert_ddsc(archive_manager, emission_path);
+                            if (!constants->EmissiveTextureHasColor && diffuse_texture != NULL) {
+                                Texture *new_emission_texture = TextureOps_multiply(diffuse_texture, emission_texture);
 
-                            String* texture_save_path = GLTFContext_data_path(context);
-                            const uint32 hash = hash_string(emission_path);
-                            String tex_name = {0};
-                            Path_filename(emission_path, &tex_name);
-                            String_append_format(texture_save_path, "/%s_%08X", String_data(&tex_name), hash);
-                            String_free(&tex_name);
-                            Texture_save(emission_texture, texture_save_path);
-                            String_free(texture_save_path);
+                                String *texture_save_path = GLTFContext_data_path(context);
+                                const uint32 hash = hash_string(emission_path);
+                                String tex_name = {0};
+                                Path_filename(emission_path, &tex_name);
+                                String_append_format(texture_save_path, "/%s_%08X", String_cstr(&tex_name), hash);
+                                String_free(&tex_name);
+                                Texture_save(emission_texture, texture_save_path);
+                                String_free(texture_save_path);
 
-                            if (new_emission_texture != NULL) {
-                                Texture_free(emission_texture);
-                                emission_texture = new_emission_texture;
+                                if (new_emission_texture != NULL) {
+                                    Texture_free(emission_texture);
+                                    emission_texture = new_emission_texture;
+                                }
                             }
+                            GLTFContext_material_set_emissive_from_data(context, emission_path, material_id,
+                                                                        emission_texture);
+                            String_free(emission_path);
                         }
-                        GLTFContext_material_set_emissive_from_data(context, emission_path, material_id,
-                                                                    emission_texture);
                     }
 
                     if (constants->UseAlbedoDetail) {
-                        const String *albedo_detail_path = find_name32(amf_material->Textures.items[5]);
+                        String *albedo_detail_path = find_name32(amf_material->Textures.items[5]);
                         Texture *albedo_detail = convert_ddsc(archive_manager, albedo_detail_path);
-                        String* texture_save_path = GLTFContext_data_path(context);
+                        String *texture_save_path = GLTFContext_data_path(context);
                         const uint32 hash = hash_string(albedo_detail_path);
                         String tex_name = {0};
                         Path_filename(albedo_detail_path, &tex_name);
-                        String_append_format(texture_save_path, "/%s_%08X", String_data(&tex_name), hash);
-                        String_free(&tex_name);
+                        String_append_format(texture_save_path, "/%s_%08X", String_cstr(&tex_name), hash);
                         Texture_save(albedo_detail, texture_save_path);
+                        Texture_free(albedo_detail);
+                        String_free(&tex_name);
                         String_free(texture_save_path);
+                        String_free(albedo_detail_path);
                     }
                     if (constants->UseNormalDetail) {
-                        const String *normal_detail_path = find_name32(amf_material->Textures.items[6]);
+                        String *normal_detail_path = find_name32(amf_material->Textures.items[6]);
                         Texture *normal_detail = convert_ddsc(archive_manager, normal_detail_path);
-                        String* texture_save_path = GLTFContext_data_path(context);
+                        String *texture_save_path = GLTFContext_data_path(context);
                         const uint32 hash = hash_string(normal_detail_path);
                         String tex_name = {0};
                         Path_filename(normal_detail_path, &tex_name);
-                        String_append_format(texture_save_path, "/%s_%08X", String_data(&tex_name), hash);
-                        String_free(&tex_name);
+                        String_append_format(texture_save_path, "/%s_%08X", String_cstr(&tex_name), hash);
                         Texture_save(normal_detail, texture_save_path);
+                        Texture_free(normal_detail);
+                        String_free(&tex_name);
                         String_free(texture_save_path);
+                        String_free(normal_detail_path);
                     }
 
                     if (diffuse_texture != NULL) {
@@ -606,8 +654,9 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                         Texture_free(emission_texture);
                     }
                 }
-            } else {
-                GLog_Warning("Unsupported material render block: %s", String_data(render_block_id));
+            }
+            else {
+                GLog_Warning("Unsupported material render block: %s", String_cstr(render_block_id));
                 String_free(material_name);
                 String_free(render_block_id);
                 continue;
@@ -617,18 +666,24 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         String_free(material_name);
     }
 
-    const String *mesh_path = find_name32(amf_model->Mesh);
+    String *mesh_path = find_name32(amf_model->Mesh);
 
+    String_free(&model_name);
+    String_free(&model_without_ext);
+    String_free(&model_export_path);
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file(archive_manager, mesh_path, &mb)) {
         GLog_Error("File not found");
+        String_free(mesh_path);
         return model_root_node_id;
     }
 
-    const GL_ID mesh_root_node = export_adf_file_from_buffer(context, archive_manager, lib, havok_lib, hash_string(mesh_path),
-                                                 mesh_path,
-                                                 &mb,
-                                                 export_path);
+    const GL_ID mesh_root_node = export_adf_file_from_buffer(context, archive_manager, lib, havok_lib,
+                                                             hash_string(mesh_path),
+                                                             mesh_path,
+                                                             &mb,
+                                                             export_path);
+    String_free(mesh_path);
     GLTFContext_node_set_parent(context, mesh_root_node, model_root_node_id);
 
     mb.close(&mb);

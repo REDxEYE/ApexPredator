@@ -1,14 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
-    <Type Name="String">
-        <DisplayString>{(buffer),s}</DisplayString>
+    <!-- zstr -->
+    <Type Name="zstr">
+        <DisplayString Condition="is_long != 0">"{l.ptr,s8}" (len={l.len}, cap={l.cap})</DisplayString>
+        <DisplayString Condition="is_long == 0">"{s.buf,s8}" (len={s.len}, sso)</DisplayString>
+
+        <!-- Make it show as a string in watch windows -->
+        <StringView Condition="is_long != 0">l.ptr</StringView>
+        <StringView Condition="is_long == 0">s.buf</StringView>
+
         <Expand>
-            <Item Name="size">size</Item>
-            <Item Name="capacity">capacity</Item>
-            <Item Name="text (nul-terminated only)">
-                (buffer),s
-            </Item>
+            <Item Name="is_long">is_long</Item>
+
+            <Item Name="data" Condition="is_long != 0">l.ptr</Item>
+            <Item Name="len"  Condition="is_long != 0">l.len</Item>
+            <Item Name="cap"  Condition="is_long != 0">l.cap</Item>
+
+            <ArrayItems Condition="is_long == 0">
+                <Size>s.len</Size>
+                <ValuePointer>s.buf</ValuePointer>
+            </ArrayItems>
+            <Item Name="len" Condition="is_long == 0">s.len</Item>
+            <Item Name="cap" Condition="is_long == 0">ZSTR_SSO_CAP</Item>
+        </Expand>
+    </Type>
+
+    <!-- Optional: show underlying layouts if you ever inspect them -->
+    <Type Name="zstr_long">
+        <DisplayString>"{ptr,s8}" (len={len}, cap={cap})</DisplayString>
+        <StringView>ptr</StringView>
+        <Expand>
+            <Item Name="ptr">ptr</Item>
+            <Item Name="len">len</Item>
+            <Item Name="cap">cap</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="zstr_short">
+        <DisplayString>"{buf,s8}" (len={len}, sso)</DisplayString>
+        <StringView>buf</StringView>
+        <Expand>
+            <ArrayItems>
+                <Size>len</Size>
+                <ValuePointer>buf</ValuePointer>
+            </ArrayItems>
+            <Item Name="len">len</Item>
+            <Item Name="cap">ZSTR_SSO_CAP</Item>
+        </Expand>
+    </Type>
+
+    <!-- Your wrapper -->
+    <Type Name="String">
+        <DisplayString Condition="s.is_long != 0">"{s.l.ptr,s8}" (len={s.l.len}, cap={s.l.cap}, heap={heap_allocated})</DisplayString>
+        <DisplayString Condition="s.is_long == 0">"{s.s.buf,s8}" (len={s.s.len}, sso, heap={heap_allocated})</DisplayString>
+
+        <StringView Condition="s.is_long != 0">s.l.ptr</StringView>
+        <StringView Condition="s.is_long == 0">s.s.buf</StringView>
+
+        <Expand>
+            <Item Name="heap_allocated">heap_allocated</Item>
+            <Item Name="is_long">s.is_long</Item>
+
+            <Item Name="data" Condition="s.is_long != 0">s.l.ptr</Item>
+            <Item Name="len"  Condition="s.is_long != 0">s.l.len</Item>
+            <Item Name="cap"  Condition="s.is_long != 0">s.l.cap</Item>
+
+            <ArrayItems Condition="s.is_long == 0">
+                <Size>s.s.len</Size>
+                <ValuePointer>s.s.buf</ValuePointer>
+            </ArrayItems>
+            <Item Name="len" Condition="s.is_long == 0">s.s.len</Item>
+            <Item Name="cap" Condition="s.is_long == 0">ZSTR_SSO_CAP</Item>
+
+            <Item Name="zstr">s</Item>
         </Expand>
     </Type>
 

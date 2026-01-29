@@ -3,7 +3,7 @@
 #ifndef APEXPREDATOR_HAVOK_EXPORT_H
 #define APEXPREDATOR_HAVOK_EXPORT_H
 #include "cglm/cglm.h"
-#include "havok/havok_generated.h"
+#include "../havok/generated/havok_generated.h"
 #include "utils/gltf/cgltf_helper.h"
 
 extern mat4 IDENTITY_MAT;

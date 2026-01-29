@@ -4,6 +4,8 @@
 
 #include <assert.h>
 
+#include "dictBuilder/cover.h"
+
 #ifndef WIN32
 #include <stdio.h>
 #endif
@@ -109,7 +111,7 @@ static BufferError FileBuffer__read(FileBuffer *fb, void *dst, uint32 size, uint
     }
 #else
     if (!fb->file)return BUFFER_FAILED;
-    uint64 read_res = fread(dst, 1, size, fb->file);
+    const uint64 read_res = fread(dst, 1, size, fb->file);
     if (read != NULL) {
         *read = (uint32) read_res;
     }
@@ -177,7 +179,11 @@ void FileBuffer_init(FileBuffer *fb) {
     fb->read = (BufferReadFn) FileBuffer__read;
     fb->write = (BufferWriteFn) FileBuffer__write;
     fb->close = (BufferCloseFn) FileBuffer__close;
+#ifdef WIN32
     fb->hFile = INVALID_HANDLE_VALUE;
+#else
+    fb->file = NULL;
+#endif
 }
 
 BufferError FileBuffer_open_read(FileBuffer *fb, const char *path) {

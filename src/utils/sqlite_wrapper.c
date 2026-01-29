@@ -96,6 +96,7 @@ kv_status_t kv_open(kvdb_t **out_db, const char *path) {
     if (rc != SQLITE_OK) {
         const kv_status_t st = set_err(db, rc, db->db ? sqlite3_errmsg(db->db) : "sqlite3_open_v2 failed");
         if (db->db) sqlite3_close(db->db);
+        if (db->last_err) sqlite3_free(db->last_err);
         mp_free(db);
         return st;
     }
@@ -161,16 +162,47 @@ kv_status_t kv_get_u64(kvdb_t *db, const uint64_t key, char **out_value) {
     const int rc = sqlite3_step(db->st_get);
     if (rc == SQLITE_ROW) {
         const unsigned char *txt = sqlite3_column_text(db->st_get, 0);
+        if (!txt) {
+            *out_value = NULL;
+            return KV_OK;
+        }
         const int n = sqlite3_column_bytes(db->st_get, 0);
+        if (n==0) {
+            *out_value = NULL;
+            return KV_OK;
+        }
         char *s = mp_malloc((size_t) n + 1);
         if (!s) return KV_ENOMEM;
-        memcpy(s, txt ? (const char *) txt : "", (size_t) n);
+        memcpy(s, txt, (size_t) n);
         s[n] = '\0';
         *out_value = s;
         return KV_OK;
     }
     if (rc == SQLITE_DONE) return KV_NOTFOUND;
 
+    return set_err(db, rc, sqlite3_errmsg(db->db));
+}
+
+kv_status_t kv_get_u64_view(kvdb_t *db, const uint64_t key, const char **out, size_t *out_len) {
+    if (!db || !out) return KV_EINVAL;
+    *out = NULL;
+    if (out_len) *out_len = 0;
+
+    sqlite3_reset(db->st_get);
+    sqlite3_clear_bindings(db->st_get);
+
+    const kv_status_t st = bind_u64(db, db->st_get, 1, key);
+    if (st != KV_OK) return st;
+
+    const int rc = sqlite3_step(db->st_get);
+    if (rc == SQLITE_ROW) {
+        const unsigned char *txt = sqlite3_column_text(db->st_get, 0);
+        const int n = sqlite3_column_bytes(db->st_get, 0);
+        *out = (const char*)txt;
+        if (out_len) *out_len = (size_t)n;
+        return KV_OK;   // valid until next reset/step/finalize on st_get
+    }
+    if (rc == SQLITE_DONE) return KV_NOTFOUND;
     return set_err(db, rc, sqlite3_errmsg(db->db));
 }
 
@@ -196,6 +228,10 @@ kv_status_t kv_put_u32(kvdb_t *db, const uint32_t key, const char *value) {
 
 kv_status_t kv_get_u32(kvdb_t *db, const uint32_t key, char **out_value) {
     return kv_get_u64(db, (uint64_t) key, out_value);
+}
+
+kv_status_t kv_get_u32_view(kvdb_t *db, const uint32_t key, const char **out, size_t *out_len) {
+    return kv_get_u64_view(db, (uint64_t) key, out, out_len);
 }
 
 kv_status_t kv_del_u32(kvdb_t *db, const uint32_t key) {

@@ -1,268 +1,303 @@
-// Created by RED on 17.09.2025.
-
 #include "utils/string.h"
 
-#include <stdlib.h>
-#include <string.h>
 #include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
 
+#include "platform/logger.h"
 #include "platform/memory_profiling.h"
 
+
 void String_free(String *string) {
-    if (string->buffer != NULL && !string->statically_allocated) {
-        mp_free(string->buffer);
-        string->buffer = NULL;
+    if (string == NULL) {
+        GLog_Warning("Trying to free NULL string");
+        return;
     }
-    string->size = 0;
-    string->capacity = 0;
+    zstr_free(&string->s);
     if (string->heap_allocated) {
         mp_free(string);
     }
 }
 
-String * String_new(uint32 size) {
-    String *string = mp_malloc(sizeof(String));
-    memset(string, 0, sizeof(String));
-    string->heap_allocated = 1;
-    String_init(string, size);
-    return string;
+String* String_new(const uint32 size) {
+    String *s = (String *)mp_malloc(sizeof(String));
+    assert(s && "Out of memory");
+    memset(s, 0, sizeof(String));
+    s->heap_allocated = 1;
+    String_init(s, size);
+    return s;
 }
 
-String * String_new_from_cstr(const char *str) {
-    String *string = mp_malloc(sizeof(String));
-    memset(string, 0, sizeof(String));
-    string->heap_allocated = 1;
-    return String_from_cstr(string, str);
+String* String_new_from_cstr(const char *str) {
+    String *s = (String *)mp_malloc(sizeof(String));
+    assert(s && "Out of memory");
+    memset(s, 0, sizeof(String));
+    s->heap_allocated = 1;
+    String_from_cstr(s, str);
+    return s;
 }
 
-String * String_new_from_str(const String *other) {
-    String *string = mp_malloc(sizeof(String));
-    memset(string, 0, sizeof(String));
-    string->heap_allocated = 1;
-    String_copy_from(string, other);
-    return string;
+String * String_new_from_cstr2(const char *str, const uint32 len) {
+    String *s = (String *)mp_malloc(sizeof(String));
+    assert(s && "Out of memory");
+    memset(s, 0, sizeof(String));
+    s->heap_allocated = 1;
+    String_from_cstr2(s, str, len);
+    return s;
 }
 
+String* String_new_from_str(const String *other) {
+    String *s = (String *)mp_malloc(sizeof(String));
+    assert(s && "Out of memory");
+    memset(s, 0, sizeof(String));
+    s->heap_allocated = 1;
+    String_copy_from(s, other);
+    return s;
+}
 
-void String_init(String *string, uint32 size) {
-    string->can_be_moved = 0;
-    if (string->buffer != NULL) {
-        if (size + 1 > string->capacity) {
-            String_resize(string, size);
-            assert(string->buffer && "Out of memory");
-            memset(string->buffer, 0, size + 1);
-            string->size = 0;
-            string->capacity = size + 1;
-            return;
-        }
-        string->size = 0;
-        memset(string->buffer, 0, string->capacity);
+void String_init(String *string, const uint32 size) {
+    if (string==NULL) {
+        assert(false && "String_init: string is NULL");
         return;
     }
-    string->size = 0;
-    string->buffer = (char *) mp_malloc(size + 1);
-    string->capacity = size + 1;
-    memset(string->buffer, 0, string->capacity);
+    zstr_free(&string->s);
+    string->s = zstr_with_capacity(size);
 }
 
 String *String_from_cstr(String *string, const char *str) {
-    if (str==NULL) {
-        String_init(string, 0);
-        return string;
+    if (string==NULL) {
+        assert(false && "String_from_cstr: string is NULL");
+        return NULL;
     }
-    const size_t len = strlen(str);
-    assert(len<UINT32_MAX && "Input CStr is to long");
-    String_init(string, len);
-    memcpy(string->buffer, str, len);
-    string->buffer[len] = '\0';
-    string->size = len;
+    if (!str) { String_init(string, 0); return string; }
+
+    string->s = zstr_from(str);
 
     return string;
 }
 
-bool String_ends_with(const String *string, const String *suffix) {
-    if (suffix->size > string->size) {
-        return false;
+String * String_from_cstr2(String *string, const char *str, uint32 len) {
+    if (string==NULL) {
+        assert(false && "String_from_cstr2: string is NULL");
+        return NULL;
     }
-    return memcmp(string->buffer + string->size - suffix->size, suffix->buffer, suffix->size) == 0;
+    if (!str) { String_init(string, 0); return string; }
+
+    string->s = zstr_from_len(str, len);
+
+    return string;
 }
 
-bool String_cends_with(const String *string, const char *suffix) {
-    size_t suffix_len = strlen(suffix);
-    if (suffix_len > string->size) {
-        return false;
+const char *String_cstr(const String *string) {
+    if (string==NULL) {
+        assert(false && "String_cstr: string is NULL");
+        return NULL;
     }
-    return memcmp(string->buffer + string->size - suffix_len, suffix, suffix_len) == 0;
+    return zstr_cstr(&string->s);
 }
 
-bool String_cstarts_with(const String *string, const char *prefix) {
-    size_t prefix_len = strlen(prefix);
-    if (prefix_len > string->size) {
-        return false;
+char * String_data(String *string) {
+    if (string==NULL) {
+        assert(false && "String_data: string is NULL");
+        return NULL;
     }
-    return memcmp(string->buffer, prefix, prefix_len) == 0;
+    return zstr_data(&string->s);
 }
 
-const char *String_data(const String *string) {
-    if (string->can_be_moved) {
-        printf("Warning, using string that can be moved\n");
+uint32 String_size(const String *string) {
+    if (string==NULL) {
+        assert(false && "String_size: string is NULL");
+        return 0;
     }
-    if (string->buffer == NULL) {
-        printf("Error: trying to get data from uninitialized string\n");
-        exit(1);
-    }
-    return string->buffer;
+    return (uint32)zstr_len(&string->s);
 }
 
-void String_append_cstr(String *string, const char *str) {
-    if (!str) return;
-    uint32 str_len = (uint32) strlen(str);
-    String_append_cstr2(string, str, str_len);
+void String_set_size(String *string, const uint32 size) {
+    if (string==NULL) {
+        assert(false && "String_set_size: string is NULL");
+        return;
+    }
+    zstr_reserve(&string->s, size);
+    if (string->s.is_long) {
+        string->s.l.len = size;
+        string->s.l.ptr[size] = '\0';
+    } else {
+        string->s.s.len = (uint8_t)size;
+        string->s.s.buf[size] = '\0';
+    }
 }
 
-void String_resize(String *string, uint32_t size) {
-    uint32_t new_capacity = size + 1;
-    if (new_capacity > string->capacity) {
-        char *p = mp_realloc(string->buffer, new_capacity);
-        assert(p && "Out of memory");
-        string->buffer = p;
-        string->capacity = new_capacity;
-    }
-    string->buffer[size] = '\0';
+void String_reserve(String *string, const uint32 size) {
+    if (!string) return;
+    zstr_reserve(&string->s, size);
 }
 
 void String_trim_zeros(String *string) {
-    uint32 actual_len = strlen(string->buffer);
-    assert(actual_len<UINT32_MAX && "Invalid string.");
-    String_resize(string, actual_len);
+    if (!string) return;
+    zstr_shrink_to_fit(&string->s);
 }
 
-void String_sub_string(const String *string, uint32 start, int32 size, String *out) {
-    if (start >= string->size || size == 0) {
-        String_init(out, 0);
-        return;
+void String_fill(String *string, const uint32 offset, const uint32 size, char chr) {
+    if (!string) return;
+    zstr_reserve(&string->s, offset + size);
+    char *data = zstr_data(&string->s);
+    for (uint32 i = 0; i < size; ++i) {
+        data[offset + i] = chr;
     }
+}
 
-    uint32 available = string->size - start;
-    uint32 length;
+void String_append_cstr(String *string, const char *str) {
+    if (!string || !str) return;
+    zstr_cat(&string->s, str);
+}
 
-    if (size > 0) {
-        length = (size < (int32) available) ? (uint32) size : available;
-    } else {
-        length = available;
+void String_append_cstr2(String *string, const char *str, const uint32 size) {
+    if (!string || !str || size == 0) return;
+    zstr_cat_len(&string->s, str, size);
+}
+
+void String_append_str(String *s, const String *other) {
+    if (!s || !other) return;
+    zstr_cat_len(&s->s, zstr_cstr(&other->s), zstr_len(&other->s));
+}
+
+void String_sub_string(const String *string, const uint32 start, int32 size, String *out) {
+    if (!out) return;
+    if (size==-1) {
+        size = (int32)zstr_len(&string->s) - (int32)start;
     }
+    const zstr_view sub = zstr_sub(zstr_as_view(&string->s), start, size);
+    out->s = zstr_from_view(sub);
 
-    String_init(out, length);
-    memcpy(out->buffer, string->buffer + start, length);
-    out->size = length;
-    out->buffer[length] = '\0';
 }
 
 int32 String_find_chr(const String *string, char chr) {
-    const char *found = strchr(string->buffer, chr);
-    return found ? (int32) (found - string->buffer) : -1;
+    if (!string) return -1;
+    const char *data = zstr_cstr(&string->s);
+    const char *found = strchr(data, chr);
+    if (!found) return -1;
+
+    return (int32)(found - data);
 }
 
-void String_move_from(String *string, String *other) {
-    if (other->can_be_moved) {
-        String_steal(string, other);
-        return;
+void String_copy_from(String *dst, const String *src) {
+    if (!dst || !src) return;
+    zstr_free(&dst->s);
+    dst->s = zstr_from(zstr_cstr(&src->s));
+}
+
+void String_move_from(String *dst, String *src) {
+    if (!dst || !src) return;
+    if (String_size(dst)) {
+        zstr_free(&dst->s);
     }
-    String_copy_from(string, other);
-}
-
-void String_copy_from(String *string, const String *other) {
-    String_init(string, other->size);
-    memcpy(string->buffer, String_data(other), other->size);
-    string->size = other->size;
-    string->buffer[string->size] = '\0';
+    dst->s = src->s;
+    src->s = zstr_init();
 }
 
 void String_format(String *string, const char *fmt, ...) {
+    if (!string || !fmt) return;
+
     va_list args;
     va_start(args, fmt);
-    int needed = vsnprintf(NULL, 0, fmt, args);
+    zstr_vmt_va(&string->s, fmt, args);
     va_end(args);
-    if (needed < 0) {
-        String_init(string, 0);
-        return;
-    }
-    String_init(string, (uint32) needed);
-    va_start(args, fmt);
-    vsnprintf(string->buffer, string->capacity, fmt, args);
-    va_end(args);
-    string->size = strlen(string->buffer);
 }
 
 void String_append_format(String *string, const char *fmt, ...) {
+    if (!string || !fmt) return;
+
+    zstr new = zstr_init();
+
     va_list args;
     va_start(args, fmt);
-    int needed = vsnprintf(NULL, 0, fmt, args);
+    zstr_vmt_va(&new, fmt, args);
     va_end(args);
-    if (needed < 0) {
-        return;
-    }
-    if (string->size + needed + 1 > string->capacity) {
-        String_resize(string, string->size + needed);
-    }
-    va_start(args, fmt);
-    vsnprintf(string->buffer + string->size, string->capacity - string->size, fmt, args);
-    va_end(args);
-    string->size += needed;
+
+    zstr_cat_len(&string->s, zstr_cstr(&new), zstr_len(&new));
+
+    zstr_free(&new);
 }
 
 void String_prepend_format(String *string, const char *fmt, ...) {
+    if (!string || !fmt) return;
+
+    zstr new = zstr_init();
+
     va_list args;
     va_start(args, fmt);
-    const int needed = vsnprintf(NULL, 0, fmt, args);
+    zstr_vmt_va(&new, fmt, args);
     va_end(args);
-    if (needed < 0) {
-        return;
-    }
-    if (string->size + needed + 1 > string->capacity) {
-        String_resize(string, string->size + needed);
-    }
 
-    memmove(string->buffer + needed, string->buffer, string->size);
+    zstr old = string->s;
+    string->s = zstr_init();
+    zstr_cat_len(&string->s, zstr_cstr(&new), zstr_len(&new));
+    zstr_cat_len(&string->s, zstr_cstr(&old), zstr_len(&old));
 
-    const char tmp_char = string->buffer[0];
-    va_start(args, fmt);
-    vsnprintf(string->buffer, needed + 1, fmt, args);
-    va_end(args);
-    string->buffer[needed] = tmp_char;
-    string->size += needed+1;
+    zstr_free(&old);
+    zstr_free(&new);
 }
 
 bool String_equals(const String *string, const String *other) {
-    if (string->size != other->size) {
-        return false;
-    }
-    return memcmp(string->buffer, other->buffer, string->size) == 0;
+    if (!string || !other) return false;
+    return zstr_eq(&string->s, &other->s);
 }
 
 bool String_cequals(const String *string, const char *other) {
-    if (other == NULL) {
-        return string->size == 0;
-    }
-    size_t other_len = strlen(other);
-    if (string->size != other_len) {
-        return false;
-    }
-    return memcmp(string->buffer, other, string->size) == 0;
+    if (!string || !other) return false;
+    return zstr_view_eq(zstr_as_view(&string->s), other);
 }
 
-void String_append_cstr2(String *string, const char *str, uint32 size) {
-    if (string->size + size >= string->capacity) {
-        String_resize(string, string->size + size);
+bool String_ends_with(const String *string, const String *suffix) {
+    if (!string || !suffix) return false;
+    return zstr_ends_with(&string->s, zstr_cstr(&suffix->s));
+}
+
+bool String_cends_with(const String *string, const char *suffix) {
+    if (!string || !suffix) return false;
+    return zstr_ends_with(&string->s, suffix);
+}
+
+bool String_cstarts_with(const String *string, const char *prefix) {
+    if (!string || !prefix) return false;
+    return zstr_starts_with(&string->s, prefix);
+}
+
+char * String_detach(String *string) {
+    if (!string) return NULL;
+
+    char* detached = mp_malloc(zstr_len(&string->s) + 1);
+    assert(detached && "Out of memory");
+    memcpy(detached, zstr_cstr(&string->s), zstr_len(&string->s) + 1);
+    zstr_free(&string->s);
+
+    return detached;
+}
+
+uint32 String_find_subcstring(const String *string, const char *sub) {
+    if (!string || !sub) return UINT32_MAX;
+
+    const char *data = zstr_cstr(&string->s);
+    const char *found = strstr(data, sub);
+    if (!found) return UINT32_MAX;
+
+    return (uint32)(found - data);
+}
+
+void String_replace_char(String *string, const char *targets, const char replacement) {
+    if (!string || !targets) return;
+
+    char *data = zstr_data(&string->s);
+    const size_t len = zstr_len(&string->s);
+    const size_t target_count = strlen(targets);
+
+    for (size_t i = 0; i < len; ++i) {
+        for (size_t j = 0; j < target_count; ++j) {
+            if (data[i] == targets[j]) {
+                data[i] = replacement;
+                break;
+            }
+        }
     }
-
-    memcpy(string->buffer + string->size, str, size);
-    string->size += size;
-    string->buffer[string->size] = '\0';
 }
 
-void String_append_str(String *string, const String *other) {
-    String_append_cstr2(string, other->buffer, other->size);
-}

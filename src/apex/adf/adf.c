@@ -107,6 +107,7 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
         uint64 string_hash = 0;
         buffer->read_uint64(buffer, &string_hash);
         if (check_hash64_presence(string_hash)) {
+            String_free(&hash_tmp);
             continue;
         }
         store_hash64_name(string_hash, &hash_tmp);
@@ -164,7 +165,7 @@ void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance 
     //        type ? String_data(&type->name) : "UNKNOWN");
     if (type == NULL) {
         GLog_Error("Unknown type hash %08X for instance %s", instance->type_hash,
-               String_data(&adf->strings.items[instance->name_id]));
+               String_cstr(&adf->strings.items[instance->name_id]));
         TracyCZoneEnd(ctx);
         return NULL;
     }
@@ -173,7 +174,7 @@ void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance 
 
     const STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
     if (object_methods == NULL) {
-        GLog_Error("No read function for type hash %08X (%s)", instance->type_hash, String_data(&type->name));
+        GLog_Error("No read function for type hash %08X (%s)", instance->type_hash, String_cstr(&type->name));
         TracyCZoneEnd(ctx);
         return NULL;
     }
@@ -183,8 +184,8 @@ void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance 
     void *instance_data = mp_calloc(object_methods->size, 1);
 
     if (!object_methods->read((Buffer *) &instance_memory, lib, instance_data)) {
-        GLog_Error("Failed to read instance %s of type %s", String_data(&adf->strings.items[instance->name_id]),
-               String_data(&type->name));
+        GLog_Error("Failed to read instance %s of type %s", String_cstr(&adf->strings.items[instance->name_id]),
+               String_cstr(&type->name));
         object_methods->free(instance_data, lib);
         instance_memory.close(&instance_memory);
         mp_free(instance_data);

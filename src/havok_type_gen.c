@@ -61,6 +61,7 @@ void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
                 }
                 DA_free(&sarc_entries);
                 Archive_free((Archive *) sarc);
+                mp_free(sarc);
             }
             AAFArchive_free(&aaf_archive);
         }else if (memcmp(mb.data + 4, "TAG0", 4) == 0) {
@@ -76,27 +77,31 @@ void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
     String header_path_tmp = {0};
     String header_path = {0};
 
-    String_from_cstr(&header_path_tmp, "D:/projects/cpp/ApexPredator/include/havok/havok_generated.h");
+    String_from_cstr(&header_path_tmp, "D:/projects/cpp/ApexPredator/include/havok/generated/havok_generated.h");
     Path_convert_to_wsl(&header_path, &header_path_tmp);
     String_free(&header_path_tmp);
-    FILE *header_file = fopen(String_data(&header_path), "w");
-
-    String_from_cstr(&header_path_tmp, "D:/projects/cpp/ApexPredator/src/havok/havok_generated.c");
+    Path_ensure_parent_dirs(&header_path);
+    FILE *header_file = fopen(String_cstr(&header_path), "w");
+    // FILE *header_file = stdout;
+    //
+    String_from_cstr(&header_path_tmp, "D:/projects/cpp/ApexPredator/src/havok/generated/havok_generated.c");
     Path_convert_to_wsl(&header_path, &header_path_tmp);
     String_free(&header_path_tmp);
-    FILE *impl_file = fopen(String_data(&header_path), "w");
+    Path_ensure_parent_dirs(&header_path);
+    // FILE *impl_file = stdout;
+    FILE *impl_file = fopen(String_cstr(&header_path), "w");
 
     String_free(&header_path);
 
     String header_rel_path = {};
-    String_append_cstr(&header_rel_path, "havok/havok_generated.h");
+    String_append_cstr(&header_rel_path, "havok/generated/havok_generated.h");
 
     Havok_TypeLibrary_generate_code(lib, &namespace, header_file, &header_rel_path, impl_file);
 
     String_free(&header_rel_path);
     String_free(&namespace);
-    fclose(header_file);
-    fclose(impl_file);
+    // fclose(header_file);
+    // fclose(impl_file);
     DA_free(&all_entries);
 }
 

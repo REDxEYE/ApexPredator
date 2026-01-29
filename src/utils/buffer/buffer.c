@@ -64,7 +64,7 @@ BufferError Buffer__read_cstring(Buffer *buffer, String *string) {
     while (1) {
         char buff[32] = {0};
         uint32 readResult;
-        BufferError error = buffer->read(buffer, buff, sizeof(buff), &readResult);
+        const BufferError error = buffer->read(buffer, buff, sizeof(buff), &readResult);
         if (error < BUFFER_SUCCESS) {
             return error;
         }
@@ -89,56 +89,56 @@ BufferError Buffer__read_cstring(Buffer *buffer, String *string) {
     return BUFFER_SUCCESS;
 }
 
-static BufferError Buffer__read_string(Buffer *fb, uint32 size, String *string) {
+static BufferError Buffer__read_string(Buffer *fb, const uint32 size, String *string) {
     String_init(string, size);
     uint32 readResult;
     BufferError readErr;
-    if ((readErr = fb->read(fb, string->buffer, size, &readResult)) <= BUFFER_FAILED) {
+    if ((readErr = fb->read(fb, String_data(string), size, &readResult)) <= BUFFER_FAILED) {
         return readErr;
     }
-    string->size = readResult;
+    String_set_size(string, readResult);
     String_trim_zeros(string);
     return readErr;
 }
 
-void Buffer__skip(Buffer* buffer, uint32 size) {
+void Buffer__skip(Buffer* buffer, const uint32 size) {
     assert(buffer != NULL);
     buffer->set_position(buffer, size, BUFFER_ORIGIN_CURRENT);
 }
 
 
-static BufferError Buffer__write_int8(Buffer* fb, int8 value) {
+static BufferError Buffer__write_int8(Buffer* fb, const int8 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_uint8(Buffer* fb, uint8 value) {
+static BufferError Buffer__write_uint8(Buffer* fb, const uint8 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_int16(Buffer* fb, int16 value) {
+static BufferError Buffer__write_int16(Buffer* fb, const int16 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_uint16(Buffer* fb, uint16 value) {
+static BufferError Buffer__write_uint16(Buffer* fb, const uint16 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_int32(Buffer* fb, int32 value) {
+static BufferError Buffer__write_int32(Buffer* fb, const int32 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_uint32(Buffer* fb, uint32 value) {
+static BufferError Buffer__write_uint32(Buffer* fb, const uint32 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_int64(Buffer* fb, int64 value) {
+static BufferError Buffer__write_int64(Buffer* fb, const int64 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_uint64(Buffer* fb, uint64 value) {
+static BufferError Buffer__write_uint64(Buffer* fb, const uint64 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_float32(Buffer* fb, float32 value) {
+static BufferError Buffer__write_float32(Buffer* fb, const float32 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_float64(Buffer* fb, float64 value) {
+static BufferError Buffer__write_float64(Buffer* fb, const float64 value) {
     return fb->write(fb, &value, sizeof(value), NULL);
 }
-static BufferError Buffer__write_cstring(Buffer* fb, String* string) {
-    BufferError err = fb->write(fb, String_data(string), string->size, NULL);
+static BufferError Buffer__write_cstring(Buffer* fb, const String* string) {
+    BufferError err = fb->write(fb, String_cstr(string), String_size(string), NULL);
     if (err < BUFFER_SUCCESS) {
         return err;
     }
@@ -146,16 +146,16 @@ static BufferError Buffer__write_cstring(Buffer* fb, String* string) {
     return fb->write(fb, &zero, 1, NULL);
 }
 
-static BufferError Buffer__write_string(Buffer* fb, uint32 size, String* string) {
-    if (string->size > size) {
+static BufferError Buffer__write_string(Buffer* fb, const uint32 size, const String* string) {
+    if (String_size(string) > size) {
         return BUFFER_FAILED;
     }
-    BufferError err = fb->write(fb, String_data(string), string->size, NULL);
+    BufferError err = fb->write(fb, String_cstr(string), String_size(string), NULL);
     if (err < BUFFER_SUCCESS) {
         return err;
     }
-    if (string->size < size) {
-        uint32 to_write = size - string->size;
+    if (String_size(string) < size) {
+        uint32 to_write = size - String_size(string);
         char *zeros = mp_calloc(to_write, 1);
         if (!zeros) {
             return BUFFER_FAILED;
@@ -227,7 +227,7 @@ uint64 Buffer_remaining(Buffer *buffer, BufferError *error) {
     return size - position;
 }
 
-void Buffer_align(Buffer *buffer, uint32 alignment) {
+void Buffer_align(Buffer *buffer, const uint32 alignment) {
     assert(buffer != NULL);
     if (alignment == 0) {
         return;

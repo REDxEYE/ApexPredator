@@ -1,14 +1,16 @@
 // Created by RED on 04.01.2026.
 #include "havok/havok_support_types.h"
 
+#include "../../include/havok/generated/havok_generated.h"
 #include "platform/logger.h"
 #include "platform/memory_profiling.h"
+#include "utils/hash_helper.h"
 
-void HavokVector4_read(const TagFile *tf, const Havok_TypeLibrary *lib, HavokVector4 *obj, const uint8 *src) {
-    memcpy(obj, src, sizeof(HavokVector4));
+void hkVector4f_read(hkVector4f *obj, const TagFile *tf, const uint8 *src) {
+    memcpy(obj, src, sizeof(hkVector4f));
 }
 
-void HavokVector4_print(const HavokVector4 *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void hkVector4f_print(const hkVector4f *obj, JsonContext *ctx) {
     jsonBeginCompactArray(ctx);
     jsonValueFlt(ctx, obj->x);
     jsonValueFlt(ctx, obj->y);
@@ -17,91 +19,91 @@ void HavokVector4_print(const HavokVector4 *obj, const Havok_TypeLibrary *lib, J
     jsonEndCompactArray(ctx);
 }
 
-void char_read(const TagFile *tf, const Havok_TypeLibrary *lib, char *obj, const uint8 *src) {
+void char_read(char *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(char));
 }
 
-void char_print(const char *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void char_print(const char *obj, JsonContext *ctx) {
     jsonValueStr(ctx, obj);
 }
 
-void signed_char_read(const TagFile *tf, const Havok_TypeLibrary *lib, char *obj, const uint8 *src) {
+void signed_char_read(char *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(char));
 }
 
-void signed_char_print(const signed_char *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void signed_char_print(const signed_char *obj, JsonContext *ctx) {
     jsonValueNum(ctx, *obj);
 }
 
-void unsigned_char_read(const TagFile *tf, const Havok_TypeLibrary *lib, uint8 *obj, const uint8 *src) {
+void unsigned_char_read(uint8 *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(uint8));
 }
 
-void unsigned_char_print(const unsigned_char *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void unsigned_char_print(const unsigned_char *obj, JsonContext *ctx) {
     jsonValueNum(ctx, *obj);
 }
 
-void int_read(const TagFile *tf, const Havok_TypeLibrary *lib, int32 *obj, const uint8 *src) {
+void int_read(int32 *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(int32));
 }
 
-void int_print(const int32 *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void int_print(const int32 *obj, JsonContext *ctx) {
     jsonValueNum(ctx, *obj);
 }
 
-void unsigned_int_read(const TagFile *tf, const Havok_TypeLibrary *lib, uint32 *obj, const uint8 *src) {
+void unsigned_int_read(uint32 *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(uint32));
 }
 
-void unsigned_int_print(const uint32 *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void unsigned_int_print(const uint32 *obj, JsonContext *ctx) {
     jsonValueNum(ctx, *obj);
 }
 
-void short_read(const TagFile *tf, const Havok_TypeLibrary *lib, int16 *obj, const uint8 *src) {
+void short_read(int16 *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(int16));
 }
 
-void short_print(const int16 *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void short_print(const int16 *obj, JsonContext *ctx) {
     jsonValueNum(ctx, *obj);
 }
 
-void unsigned_short_read(const TagFile *tf, const Havok_TypeLibrary *lib, uint16 *obj, const uint8 *src) {
+void unsigned_short_read(uint16 *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(uint16));
 }
 
-void unsigned_short_print(const uint16 *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void unsigned_short_print(const uint16 *obj, JsonContext *ctx) {
     jsonValueNum(ctx, *obj);
 }
 
-void uint64_read(const TagFile *tf, const Havok_TypeLibrary *lib, uint64 *obj, const uint8 *src) {
+void uint64_read(uint64 *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(uint64));
 }
 
-void uint64_print(const uint64 *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void uint64_print(const uint64 *obj, JsonContext *ctx) {
     jsonValueNum(ctx, *obj);
 }
 
-void unsigned_long_long_read(const TagFile *tf, const Havok_TypeLibrary *lib, uint64 *obj, const uint8 *src) {
+void unsigned_long_long_read(uint64 *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(uint64));
 }
 
-void unsigned_long_long_print(const uint64 *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void unsigned_long_long_print(const uint64 *obj, JsonContext *ctx) {
     jsonValueNum(ctx, *obj);
 }
 
-void float_read(const TagFile *tf, const Havok_TypeLibrary *lib, float *obj, const uint8 *src) {
+void float_read(float *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(float));
 }
 
-void float_print(const float *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void float_print(const float *obj, JsonContext *ctx) {
     jsonValueFlt(ctx, *obj);
 }
 
-void hkMatrix3Impl_float_read(const TagFile *tf, const Havok_TypeLibrary *lib, float *obj, const uint8 *src) {
+void hkMatrix3Impl_float_read(float *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(float) * 12);
 }
 
-void hkMatrix3Impl_float_print(const float *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void hkMatrix3Impl_float_print(const float *obj, JsonContext *ctx) {
     jsonBeginCompactArray(ctx);
     for (int i = 0; i < 12; ++i) {
         jsonValueFlt(ctx, obj[i]);
@@ -109,8 +111,8 @@ void hkMatrix3Impl_float_print(const float *obj, const Havok_TypeLibrary *lib, J
     jsonEndCompactArray(ctx);
 }
 
-void hkReflect__Detail__Opaque_read(const TagFile *tf, const Havok_TypeLibrary *lib, hkReflect__Detail__Opaque*obj,
-    const uint8 *src) {
+void hkReflect__Detail__Opaque_read(const TagFile *tf, hkReflect__Detail__Opaque *obj,
+                                    const uint8 *src) {
     (void) tf;
     (void) obj;
     (void) src;
@@ -118,7 +120,14 @@ void hkReflect__Detail__Opaque_read(const TagFile *tf, const Havok_TypeLibrary *
     exit(1);
 }
 
-void hkReflect__Detail__Opaque_print(const hkReflect__Detail__Opaque *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void hkReflect__Detail__Opaque_print(const hkReflect__Detail__Opaque *obj,
+                                     JsonContext *ctx) {
+    (void) obj;
+    printf("Not implemented!");
+    exit(1);
+}
+
+void free_hkReflect__Detail__Opaque(const hkReflect__Detail__Opaque *obj, const Havok_TypeLibrary *lib) {
     (void) obj;
     printf("Not implemented!");
     exit(1);
@@ -130,7 +139,7 @@ void hkReflect__Detail__Opaque_free(const hkReflect__Detail__Opaque *obj, const 
     exit(1);
 }
 
-void hkReflect__Type_read(const TagFile *tf, const Havok_TypeLibrary *lib, hkReflect__Type*obj, const uint8 *src) {
+void hkReflect__Type_read(hkReflect__Type *obj, const TagFile *tf, const uint8 *src) {
     (void) tf;
     (void) obj;
     (void) src;
@@ -138,82 +147,215 @@ void hkReflect__Type_read(const TagFile *tf, const Havok_TypeLibrary *lib, hkRef
     exit(1);
 }
 
-void hkReflect__Type_print(const hkReflect__Type *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void hkReflect__Type_print(const hkReflect__Type *obj, JsonContext *ctx) {
     (void) obj;
     printf("Not implemented!");
     exit(1);
 }
 
-void void_print(const void *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void free_hkReflect__Type(const hkReflect__Type *obj, const Havok_TypeLibrary *lib) {
     (void) obj;
     printf("Not implemented!");
     exit(1);
 }
 
-void NamedVariant_print(const void *obj, const Havok_TypeLibrary *lib, JsonContext *ctx) {
+void void_print(const void *obj, JsonContext *ctx) {
+    (void) obj;
+    printf("Not implemented!");
+    exit(1);
+}
+
+void void_read(void *obj, const TagFile *tf, const uint8 *src) {
+    (void) tf;
+    (void) obj;
+    (void) src;
+    printf("Not implemented!");
+    exit(1);
+}
+
+#define IMPLEMENT_EMPTY_STUBS(type_name)\
+    void type_name##_init(const type_name *obj) {\
+        (void)(obj);\
+    }\
+    \
+    void type_name##_free(const type_name *obj) {\
+        (void)(obj);\
+    }
+
+IMPLEMENT_EMPTY_STUBS(unsigned_int)
+IMPLEMENT_EMPTY_STUBS(unsigned_short)
+IMPLEMENT_EMPTY_STUBS(int)
+IMPLEMENT_EMPTY_STUBS(short)
+IMPLEMENT_EMPTY_STUBS(signed_char)
+IMPLEMENT_EMPTY_STUBS(unsigned_char)
+IMPLEMENT_EMPTY_STUBS(hkVector4f)
+IMPLEMENT_EMPTY_STUBS(hkRotationImpl)
+IMPLEMENT_EMPTY_STUBS(float)
+IMPLEMENT_EMPTY_STUBS(unsigned_long_long)
+
+
+void voidPtr_print(const voidPtr *obj, JsonContext *ctx) {
+    // HavokControlBlock_print(*obj, ctx);
+}
+
+
+void voidPtr_read(voidPtr *obj, const TagFile *tf, const uint8 *src) {
+    (void) tf;
+    (void) obj;
+    (void) src;
+    printf("Not implemented!");
+    exit(1);
+}
+
+void hkRotationImpl_print(const hkRotationImpl *obj, JsonContext *ctx) {
+    jsonBeginCompactArray(ctx);
+    for (int j = 0; j < 3; ++j) {
+        jsonValueFlt(ctx, obj->m_col0[j]);
+    }
+    for (int j = 0; j < 3; ++j) {
+        jsonValueFlt(ctx, obj->m_col1[j]);
+    }
+    for (int j = 0; j < 3; ++j) {
+        jsonValueFlt(ctx, obj->m_col2[j]);
+    }
+    for (int j = 0; j < 3; ++j) {
+        jsonValueFlt(ctx, obj->m_col3[j]);
+    }
+    jsonEndCompactArray(ctx);
+}
+
+void hkRotationImpl_read(hkRotationImpl *obj, const TagFile *tf, const uint8 *src) {
+    memcpy(obj, src, sizeof(hkRotationImpl));
+}
+
+void const_charPtr_print(const const_charPtr *obj, JsonContext *ctx) {
+    jsonValueStr(ctx, *obj);
+}
+
+void const_charPtr_read(const_charPtr *obj, const TagFile *tf, const uint8 *src) {
+    ptr_read((void **) obj, tf, src, NULL);
+}
+
+
+void NamedVariant_print(const void *obj, JsonContext *ctx) {
     const NamedVariant *variant = (NamedVariant *) obj;
     const uint32 hash = hash_cstring(variant->className);
-    const HAVOK_ObjectMethods *methods = DM_get(&lib->object_functions, hash);
-    if (methods == NULL) {
-        GLog_Error("No methods for NamedVariant with name: %s (hash 0x%08X)", variant->name, hash);
-        exit(1);
-    }
-    jsonName(ctx, "ptr");
-    methods->print(variant->variant, lib, ctx);
+    // const HAVOK_ObjectMethods *methods = DM_get(&lib->object_functions, hash);
+    // if (methods == NULL) {
+    //     GLog_Error("No methods for NamedVariant with name: %s (hash 0x%08X)", variant->name, hash);
+    //     exit(1);
+    // }
+    // jsonName(ctx, "ptr");
+    // methods->print(variant->variant, ctx);
 }
 
-void read_ptr(const TagFile *tf, const Havok_TypeLibrary *lib, void **dst, const uint8 *src, uint32_t *ptr_count) {
+
+void ptr_read(void **dst, const TagFile *tf, const uint8 *src, uint32_t *ptr_count) {
     uint64 index;
-    uint64_read(tf, lib, &index, src);
+    uint64_read(&index, tf, src);
     if (index == 0) {
         *dst = NULL;
         return;
     }
     const HKItem *item = &tf->items.items[index];
-    const HKTagType *tag_type = &tf->types.items[item->type];
-    String *full_type_name = Havok_full_tag_type_name(tag_type);
-    const uint32 type_hash = hash_string(full_type_name);
-    String_free(full_type_name);
-    const HavokType *item_type = DM_get(&lib->types, type_hash);
-    if (item_type == NULL) {
-        GLog_Error("No type for type hash 0x%08X", type_hash);
+    HKTagType *tag_type = &tf->types.items[item->type];
+    const uint32 type_hash = HKTagType_hash(tag_type);
+    const HavokTypeInfo **type_info_p = DM_get(&HAVOK_TYPES_type_info, type_hash);
+    if (type_info_p == NULL) {
+        GLog_Error("No type info for type hash 0x%08X", type_hash);
+        abort();
+    }
+    const HavokTypeInfo *type_info = *type_info_p;
+
+    if (type_info->read == NULL) {
+        GLog_Error("No read method for type hash 0x%08X", type_hash);
         exit(1);
     }
-    const HAVOK_ObjectMethods *item_methods = DM_get(&lib->object_functions, type_hash);
-    if (item_methods == NULL) {
-        GLog_Error("No methods for type hash 0x%08X", type_hash);
-        exit(1);
-    }
-    uint8 *out = *dst = mp_malloc(item_type->size * item->count);
+    char *out = mp_malloc(type_info->size*item->count);
+    *dst = out;
     for (int i = 0; i < item->count; ++i) {
-        item_methods->read(tf, lib, out + (i * item_type->size), tf->data.items + item->offset + (i * item_type->size));
+        if (type_info->init != NULL) {
+            type_info->init(out + (i * type_info->size));
+        }
+        type_info->read(out + (i * type_info->size), tf, tf->data.items + item->offset + (i * type_info->disk_size));
     }
-    if (ptr_count!=NULL) {
+    if (ptr_count != NULL) {
         *ptr_count = item->count;
     }
 }
 
-void hkArray_read(const TagFile *tf, const Havok_TypeLibrary *lib, void *dst, const uint8 *src) {
-    hkArray *array = (hkArray *) dst;
-    uint32_t count = 0;
-    read_ptr(tf, lib, (void*)&array->m_data, src + 0, &count);
-    unsigned_int_read(tf, lib, (uint32_t *) &array->m_size, src + 8);
-    unsigned_int_read(tf, lib, (uint32_t *) &array->m_capacityAndFlags, src + 12);
-    array->m_size = (int32_t)count;
-    array->m_capacityAndFlags = (int32_t)count;
+
+void ptr_free(void *obj) {
+    if (obj == NULL)return;
+    const TypedPtr *ptr = obj;
+    if (ptr->type_info_->free!=NULL) {
+        ptr->type_info_->free(obj);
+    }
+    mp_free(obj);
 }
 
-void hkArray_print(const void *obj, const Havok_TypeLibrary *lib, JsonContext *ctx, const char *type_name) {
-    const hkArray *array = (hkArray *) obj;
+void hkArray_read(void *dst, const TagFile *tf, const uint8 *src) {
+    hkArray *array = dst;
+    uint32_t count = 0;
+    ptr_read((void *) &array->m_data, tf, src + 0, &count);
+    unsigned_int_read((uint32_t *) &array->m_size, tf, src + 8);
+    unsigned_int_read((uint32_t *) &array->m_capacityAndFlags, tf, src + 12);
+    array->m_size = (int32_t) count;
+    array->m_capacityAndFlags = (int32_t) count;
+}
+
+void hkArray_print(const void *obj, JsonContext *ctx) {
+    const hkArray *array = obj;
     jsonBeginArray(ctx);
-    const HavokType* type = Havok_TypeLibrary_find_by_name((Havok_TypeLibrary*)lib, type_name);
-    const HAVOK_ObjectMethods *methods = DM_get(&lib->object_functions, hash_cstring(type_name));
-    if (methods==NULL || methods->print==NULL) {
-        GLog_Error("No print methods for hkArray of type %s", type_name);
-        exit(1);
-    }
+    const HavokTypeInfo* inner_type = array->inner_type_info;
     for (int i = 0; i < array->m_size; ++i) {
-        methods->print(array->m_data + type->size*i, lib, ctx);
+        if (inner_type->is_record) {
+            jsonBeginObject(ctx);
+        }else if (inner_type->is_array) {
+            jsonBeginArray(ctx);
+        }
+        array->inner_type_info->print(array->m_data + i * array->inner_type_info->size, ctx);
+        if (inner_type->is_record) {
+            jsonEndObject(ctx);
+        }else if (inner_type->is_array) {
+            jsonEndArray(ctx);
+        }
     }
     jsonEndArray(ctx);
+}
+
+void hkArray_free(void *obj) {
+    hkArray *array = obj;
+    if (array->m_data != NULL) {
+        if (array->inner_type_info->free != NULL) {
+            for (int i = 0; i < array->m_size; ++i) {
+                array->inner_type_info->free(array->m_data + i * array->inner_type_info->size);
+            }
+        }
+        mp_free(array->m_data);
+        array->m_data = NULL;
+    }
+    array->m_size = 0;
+    array->m_capacityAndFlags = 0;
+}
+
+
+void hkStringPtr_read(hkStringPtr *obj, const TagFile *tf, const uint8 *src) {
+    ptr_read((void **) &obj->m_data, tf, src, NULL);
+}
+
+void hkStringPtr_print(const hkStringPtr *obj, JsonContext *ctx) {
+    if (obj->m_data != NULL) {
+        jsonValueStr(ctx, obj->m_data);
+    }
+    else {
+        jsonValueNull(ctx);
+    }
+}
+
+void hkStringPtr_free(hkStringPtr *obj) {
+    if (obj->m_data != NULL) {
+        mp_free((void*)obj->m_data);
+        obj->m_data = NULL;
+    }
 }

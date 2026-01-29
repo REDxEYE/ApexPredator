@@ -8,7 +8,6 @@
 static BufferError write_ply_header(Buffer *b, uint32_t vertex_count, uint32_t face_count, int have_n, int have_uv,
                                     int have_c, int have_a) {
     String h = {0};
-    String_init(&h, 0);
     String_append_cstr(&h, "ply\n");
     String_append_cstr(&h, "format binary_little_endian 1.0\n");
     String_append_format(&h, "element vertex %u\n", vertex_count);
@@ -33,7 +32,7 @@ static BufferError write_ply_header(Buffer *b, uint32_t vertex_count, uint32_t f
     String_append_format(&h, "element face %u\n", face_count);
     String_append_cstr(&h, "property list uchar int vertex_indices\n");
     String_append_cstr(&h, "end_header\n");
-    if (IS_FAILED(b->write(b, String_data(&h), h.size, NULL))) { return BUFFER_FAILED; }
+    if (IS_FAILED(b->write(b, String_cstr(&h), String_size(&h), NULL))) { return BUFFER_FAILED; }
     String_free(&h);
     return BUFFER_SUCCESS;
 }

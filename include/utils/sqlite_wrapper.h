@@ -2,6 +2,7 @@
 
 #ifndef APEXPREDATOR_SQLITE_WRAPPER_H
 #define APEXPREDATOR_SQLITE_WRAPPER_H
+#include <stddef.h>
 #include <stdint.h>
 
 typedef struct kvdb kvdb_t;
@@ -19,10 +20,12 @@ void        kv_close(kvdb_t *db);
 
 kv_status_t kv_put_u64(kvdb_t *db, uint64_t key, const char *value);
 kv_status_t kv_get_u64(kvdb_t *db, uint64_t key, char **out_value); /* caller frees */
+kv_status_t kv_get_u64_view(kvdb_t *db, uint64_t key, const char **out, size_t *out_len); /* db owned data */
 kv_status_t kv_del_u64(kvdb_t *db, uint64_t key);
 
 kv_status_t kv_put_u32(kvdb_t *db, uint32_t key, const char *value);
 kv_status_t kv_get_u32(kvdb_t *db, uint32_t key, char **out_value); /* caller frees */
+kv_status_t kv_get_u32_view(kvdb_t *db, uint32_t key, const char **out, size_t *out_len); /* db owned data */
 kv_status_t kv_del_u32(kvdb_t *db, uint32_t key);
 
 const char *kv_last_error(const kvdb_t *db);

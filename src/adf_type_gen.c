@@ -119,12 +119,12 @@ void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
     String_from_cstr(&header_path_tmp, "D:/projects/cpp/ApexPredator/include/apex/adf/adf_types.h");
     Path_convert_to_wsl(&header_path, &header_path_tmp);
     String_free(&header_path_tmp);
-    FILE *header_file = fopen(String_data(&header_path), "w");
+    FILE *header_file = fopen(String_cstr(&header_path), "w");
 
     String_from_cstr(&header_path_tmp, "D:/projects/cpp/ApexPredator/src/apex/adf/adf_types.c");
     Path_convert_to_wsl(&header_path, &header_path_tmp);
     String_free(&header_path_tmp);
-    FILE *impl_file = fopen(String_data(&header_path), "w");
+    FILE *impl_file = fopen(String_cstr(&header_path), "w");
 
     String_free(&header_path);
 
@@ -143,7 +143,7 @@ void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
         uint32 hash = hash_string(&str);
 
         String* slot = find_name64((uint64)hash);
-        String_move_from(slot, String_move(&str));
+        String_move_from(slot, &str);
         String_free(&str);
     }
 

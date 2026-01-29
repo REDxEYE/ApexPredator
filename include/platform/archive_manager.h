@@ -16,9 +16,9 @@ void ArchiveManager_init(ArchiveManager *manager);
 
 void ArchiveManager_add(ArchiveManager *manager, Archive *archive);
 
-bool ArchiveManager_get_file(ArchiveManager *manager, const String *path, MemoryBuffer *mb);
+bool ArchiveManager_get_file(const ArchiveManager *manager, const String *path, MemoryBuffer *mb);
 
-bool ArchiveManager_get_file_by_hash(ArchiveManager *manager, uint32 path, MemoryBuffer *mb);
+bool ArchiveManager_get_file_by_hash(const ArchiveManager *manager, uint32 path, MemoryBuffer *mb);
 
 bool ArchiveManager_has_file(const ArchiveManager *manager, const String *path);
 

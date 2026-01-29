@@ -15,7 +15,7 @@
 #include "apex/adf/adf_types.h"
 #include "apex/package/tab_archive.h"
 #include "havok/havok_codegen.h"
-#include "havok/havok_generated.h"
+#include "../include/havok/generated/havok_generated.h"
 #include "platform/logger.h"
 #include "utils/hash_helper.h"
 #include "utils/sqlite_wrapper.h"
@@ -26,7 +26,7 @@ typedef struct Context {
     Havok_TypeLibrary *havok_lib;
 } Context;
 
-bool visit_adf_file(Context *ctx, MemoryBuffer *mb) {
+bool visit_adf_file(const Context *ctx, MemoryBuffer *mb) {
     ADF adf = {0};
     ADF_from_buffer(&adf, (Buffer *) mb, ctx->sti_lib);
     // for (int i = 0; i < adf.header.instance_count; ++i) {
@@ -43,17 +43,17 @@ bool visit_adf_file(Context *ctx, MemoryBuffer *mb) {
     return true;
 }
 
-bool visit_ptpc_nodes(RuntimeNode *runtime_node, Context *ctx) {
+bool visit_ptpc_nodes(Context *ctx, RuntimeNode *runtime_node) {
     for (int i = 0; i < runtime_node->props.count; ++i) {
         const RuntimeProp *prop = DA_at(&runtime_node->props, i);
         if (prop->type == PROP_TYPE_STR) {
             const String *value = &prop->value.string_value;
-            kv_put_u32(ctx->db, hash_string(value), String_data(value));
+            kv_put_u32(ctx->db, hash_string(value), String_cstr(value));
         }
     }
     for (int i = 0; i < runtime_node->children.count; ++i) {
         RuntimeNode *child_node = DA_at(&runtime_node->children, i);
-        visit_ptpc_nodes(child_node, ctx);
+        visit_ptpc_nodes(ctx, child_node);
     }
     return true;
 }
@@ -61,7 +61,8 @@ bool visit_ptpc_nodes(RuntimeNode *runtime_node, Context *ctx) {
 bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
     if (memcmp(mb->data, ADF_MAGIC, 4) == 0) {
         visit_adf_file(ctx, mb);
-    } else if (memcmp(mb->data, AAF_MAGIC, 4) == 0) {
+    }
+    else if (memcmp(mb->data, AAF_MAGIC, 4) == 0) {
         AAFArchive aaf_archive = {0};
         AAFArchive_from_buffer(&aaf_archive, (Buffer *) mb);
         MemoryBuffer *section_buffer = MemoryBuffer_new();
@@ -74,7 +75,7 @@ bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
 
         for (int i = 0; i < sarc->entries.values.count; ++i) {
             const SArcEntry *entry = DA_at(&sarc->entries.values, i);
-            kv_put_u32(ctx->db, entry->hash, String_data(&entry->name));
+            kv_put_u32(ctx->db, entry->hash, String_cstr(&entry->name));
             MemoryBuffer file_mb = {0};
             if (Archive_get_file_by_hash((Archive *) sarc, entry->hash, &file_mb)) {
                 visit_archive_file(ctx, &file_mb);
@@ -83,21 +84,23 @@ bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
         }
         Archive_free((Archive *) sarc);
         AAFArchive_free(&aaf_archive);
-    } else if (memcmp(mb->data, RTPC_MAGIC, 4) == 0) {
+    }
+    else if (memcmp(mb->data, RTPC_MAGIC, 4) == 0) {
         RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) mb);
         if (root_node != NULL) {
-            visit_ptpc_nodes(root_node, ctx);
+            visit_ptpc_nodes(ctx, root_node);
             RuntimeNode_free(root_node);
         }
-    } else if (memcmp(mb->data, "TAG0", 4) == 0) {
+    }
+    else if (memcmp(mb->data, "TAG0", 4) == 0) {
         TagFile tag_file = {0};
         TagFile_from_buffer(&tag_file, (Buffer *) &mb);
         for (int i = 0; i < tag_file.types.count; ++i) {
             const HKTagType *tf_type = DA_at(&tag_file.types, i);
-            kv_put_u32(ctx->db, hash_string(&tf_type->name), String_data(&tf_type->name));
+            kv_put_u32(ctx->db, hash_string(&tf_type->name), String_cstr(&tf_type->name));
             for (int j = 0; j < tf_type->members.count; ++j) {
                 const HKTagTypeMember *tf_member = DA_at(&tf_type->members, j);
-                kv_put_u32(ctx->db, hash_string(&tf_member->name), String_data(&tf_member->name));
+                kv_put_u32(ctx->db, hash_string(&tf_member->name), String_cstr(&tf_member->name));
             }
         }
         TagFile_free(&tag_file);
@@ -108,14 +111,16 @@ bool visit_archive_file(Context *ctx, MemoryBuffer *mb) {
 bool visit_all_files(const Archive *ar, const ArchiveEntry *ae, void *ctx) {
     MemoryBuffer mb = {0};
     if (ae->path != NULL) {
-        kv_put_u32(((Context *) ctx)->db, ae->path_hash, String_data(ae->path));
+        kv_put_u32(((Context *) ctx)->db, ae->path_hash, String_cstr(ae->path));
     }
     Archive_get_file_by_hash((Archive *) ar, ae->path_hash, &mb);
-    const String *name = find_name32(ae->path_hash);
-    if (name != NULL)
-        printf("Visiting %s from archive %s\n", String_data(name), String_data(Archive_get_name(ar)));
+    String *name = find_name32(ae->path_hash);
+    if (name != NULL) {
+        printf("Visiting %s from archive %s\n", String_cstr(name), String_cstr(Archive_get_name(ar)));
+        String_free(name);
+    }
     else
-        printf("Visiting file: %08X from archive %s\n", ae->path_hash, String_data(Archive_get_name(ar)));
+        printf("Visiting file: %08X from archive %s\n", ae->path_hash, String_cstr(Archive_get_name(ar)));
     visit_archive_file(ctx, &mb);
     mb.close(&mb);
 
@@ -131,7 +136,7 @@ int main(int argc, const char *argv[]) {
 
     kvdb_t *db = get_hash_db();
 
-    FILE *f = fopen("./../strings_procmon.txt", "r");
+    FILE *f = fopen("./../gz_strings/strings_procmon.txt", "r");
     if (f) {
         char line[1024];
         while (fgets(line, sizeof(line), f)) {
@@ -141,12 +146,12 @@ int main(int argc, const char *argv[]) {
             }
             String *tmp = String_new_from_cstr(line);
             uint32 hash = hash_string(tmp);
-            kv_put_u32(db, hash, String_data(tmp));
+            kv_put_u32(db, hash, String_cstr(tmp));
             String_free(tmp);
         }
         fclose(f);
     }
-    f = fopen("./../file_locations.txt", "r");
+    f = fopen("./../gz_strings/file_locations.txt", "r");
     if (f) {
         char line[1024];
         while (fgets(line, sizeof(line), f)) {
@@ -156,7 +161,37 @@ int main(int argc, const char *argv[]) {
             }
             String *tmp = String_new_from_cstr(line);
             uint32 hash = hash_string(tmp);
-            kv_put_u32(db, hash, String_data(tmp));
+            kv_put_u32(db, hash, String_cstr(tmp));
+            String_free(tmp);
+        }
+        fclose(f);
+    }
+    f = fopen("./../gz_strings/filenames.txt", "r");
+    if (f) {
+        char line[1024];
+        while (fgets(line, sizeof(line), f)) {
+            size_t len = strlen(line);
+            if (len > 0 && line[len - 1] == '\n') {
+                line[len - 1] = '\0';
+            }
+            String *tmp = String_new_from_cstr(line);
+            uint32 hash = hash_string(tmp);
+            kv_put_u32(db, hash, String_cstr(tmp));
+            String_free(tmp);
+        }
+        fclose(f);
+    }
+    f = fopen("./../gz_strings/cross_game.txt", "r");
+    if (f) {
+        char line[1024];
+        while (fgets(line, sizeof(line), f)) {
+            size_t len = strlen(line);
+            if (len > 0 && line[len - 1] == '\n') {
+                line[len - 1] = '\0';
+            }
+            String *tmp = String_new_from_cstr(line);
+            uint32 hash = hash_string(tmp);
+            kv_put_u32(db, hash, String_cstr(tmp));
             String_free(tmp);
         }
         fclose(f);

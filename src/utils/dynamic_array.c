@@ -33,8 +33,7 @@ void DA_init_(DynamicArray__Base *da, const uint32 item_size, const uint32 initi
     da->count = 0;
     da->item_size = item_size;
     if (initial_capacity > 0) {
-        da->items = mp_malloc(initial_capacity * da->item_size);
-        memset(da->items, 0, initial_capacity * da->item_size);
+        da->items = mp_calloc(initial_capacity, da->item_size);
     } else {
         da->items = NULL;
     }
@@ -102,11 +101,11 @@ void DA_free_(DynamicArray__Base *da) {
     }
 }
 
-bool DA_contains_(DynamicArray__Base *da, const void *element, const DA_compare_fn compare_fn) {
+bool DA_contains_(DynamicArray__Base *da, const void *element, const DA_equal_fn equal_fn) {
     NULL_ITEM_CHECK;
     for (int i = 0; i < da->count; ++i) {
         const void *item = DA_at(da, i);
-        if (compare_fn(item, element)) {
+        if (equal_fn(item, element)) {
             return true;
         }
     }

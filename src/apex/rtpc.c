@@ -35,7 +35,7 @@ typedef struct {
 void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer);
 
 void RuntimeProp__move_to(RuntimeProp *src, RuntimeProp *dest) {
-    String_steal(&dest->name, String_move(&src->name));
+    String_move_from(&dest->name, &src->name);
     dest->name_hash = src->name_hash;
     dest->type = src->type;
     dest->value = src->value;
@@ -46,40 +46,38 @@ void RuntimeProp__move_to(RuntimeProp *src, RuntimeProp *dest) {
 void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer);
 
 RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
+    TracyCZoneN(ctx, "RuntimeContainer_from_buffer", 1);
     RTPCHeader header;
     if (buffer->read(buffer, &header, sizeof(RTPCHeader), NULL) != BUFFER_SUCCESS) {
         GLog_Error("Failed to read RTPC header");
+        TracyCZoneEnd(ctx);
         exit(1);
     }
     if (header.version < 1 || header.version > 3) {
         GLog_Error("Unsupported RTPC version: %u", header.version);
+        TracyCZoneEnd(ctx);
         return NULL;
     }
 
-    RuntimeNode *root_node = RuntimeNode_new(NULL);
+    RuntimeNode *root_node = RuntimeNode_new();
+    RuntimeNode_init(root_node);
     RuntimeNode__from_buffer(root_node, buffer);
-
+    TracyCZoneEnd(ctx);
     return root_node;
 }
 
-RuntimeNode *RuntimeNode_new(String *name) {
+RuntimeNode *RuntimeNode_new() {
     RuntimeNode *node = mp_malloc(sizeof(RuntimeNode));
     if (node == NULL) {
         GLog_Error("Failed to allocate memory");
         exit(1);
     }
     memset(node, 0, sizeof(RuntimeNode));
-    RuntimeNode_init(node, name);
     node->heap_allocated = 1;
     return node;
 }
 
-void RuntimeNode_init(RuntimeNode *node, String *name) {
-    if (name != NULL) {
-        String_move_from(&node->name, name);
-    } else {
-        String_init(&node->name, 64);
-    }
+void RuntimeNode_init(RuntimeNode *node) {
     DA_init(&node->props, RuntimeProp, 4);
     DA_init(&node->children, RuntimeNode, 1);
 }
@@ -263,7 +261,7 @@ void RuntimeNode_print(const RuntimeNode *node, FILE *output, const uint32 inden
     for (uint32 i = 0; i < indent; ++i) {
         fputc(' ', output);
     }
-    fprintf(output, "Node: \"%s\" (0x%08X)\n", String_data(&node->name), node->name_hash);
+    fprintf(output, "Node: \"%s\" (0x%08X)\n", String_cstr(&node->name), node->name_hash);
     for (uint32 i = 0; i < node->props.count; ++i) {
         const RuntimeProp *prop = DA_at(&node->props, i);
         if (prop->type == PROP_TYPE_NONE)continue;
@@ -275,6 +273,10 @@ void RuntimeNode_print(const RuntimeNode *node, FILE *output, const uint32 inden
     }
 }
 
+void RuntimeNode_set_name(RuntimeNode *node, String *string) {
+    String_move_from(&node->name, string);
+}
+
 void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
     RuntimeNodeHeader header;
     if (buffer->read(buffer, &header, sizeof(RuntimeNodeHeader), NULL) != BUFFER_SUCCESS) {
@@ -282,8 +284,14 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         exit(1);
     }
 
-    RuntimeNode_init(node, find_name32(header.name_hash));
-
+    String *prop_name = find_name32(header.name_hash);
+    if (prop_name == NULL) {
+        prop_name = String_new(16);
+        String_format(prop_name, "0x%08X", header.name_hash);
+    }
+    RuntimeNode_init(node);
+    RuntimeNode_set_name(node, prop_name);
+    String_free(prop_name);
 
     node->name_hash = header.name_hash;
     DA_reserve(&node->props, header.prop_count);
@@ -297,13 +305,17 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         GLog_Error("Failed to seek to node data offset: %u", header.data_offset);
         exit(1);
     }
-    RuntimeProp tmp = {0};
+    // RuntimeProp tmp = {0};
     for (int i = 0; i < header.prop_count; ++i) {
-        RuntimeProp__from_buffer(&tmp, buffer);
-        if (tmp.type != PROP_TYPE_NONE) {
-            RuntimeProp *prop = DA_append_get(&node->props);
-            RuntimeProp__move_to(&tmp, prop);
-        }
+        RuntimeProp *prop = DA_append_get(&node->props);
+        RuntimeProp__from_buffer(prop, buffer);
+        // if (tmp.type != PROP_TYPE_NONE) {
+            // *prop = tmp;
+            // memset(&tmp, 0, sizeof(RuntimeProp));
+        // }
+        // else {
+            // RuntimeProp_free(&tmp);
+        // }
     }
     // Align buffer position to 4
     int64 pos;
@@ -344,6 +356,22 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         }\
     }while(0)
 
+void RuntimeNode_free(RuntimeNode *node) {
+    assert(node!=NULL);
+
+    DA_free_with_inner(&node->props, {
+                       RuntimeProp_free(it);
+                       });
+
+    DA_free_with_inner(&node->children, {
+                       RuntimeNode_free(it);
+                       });
+    String_free(&node->name);
+    node->name_hash = 0;
+    if (node->heap_allocated)
+        mp_free(node);
+}
+
 void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
     RuntimePropHeader header;
     if (buffer->read(buffer, &header, sizeof(RuntimePropHeader), NULL) != BUFFER_SUCCESS) {
@@ -353,13 +381,12 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
     RuntimeProp_init(prop, header.prop_type);
     prop->name_hash = header.name_hash;
     String *found_name = find_name32(header.name_hash);
-    if (found_name == NULL) {
-        String tmp_name = {0};
-        String_format(&tmp_name, "0x%08X", prop->name_hash);
-        String_move_from(&prop->name, String_move(&tmp_name));
-    } else {
-        String_move_from(&prop->name, String_move(found_name));
+    if (found_name != NULL) {
+        String_move_from(&prop->name, found_name);
         String_free(found_name);
+    }
+    else {
+        String_format(&prop->name, "0x%08X", prop->name_hash);
     }
     switch (prop->type) {
         case PROP_TYPE_NONE: {
@@ -505,27 +532,9 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
     }
 }
 
-
-void RuntimeNode_free(RuntimeNode *node) {
-    assert(node!=NULL);
-    for (int i = 0; i < node->props.count; ++i) {
-        RuntimeProp_free(DA_at(&node->props, i));
-    }
-    DA_free(&node->props);
-
-    for (int i = 0; i < node->children.count; ++i) {
-        RuntimeNode_free(DA_at(&node->children, i));
-    }
-    DA_free(&node->children);
-    String_free(&node->name);
-    node->name_hash = 0;
-    if (node->heap_allocated)
-        mp_free(node);
-}
-
 void RuntimeProp_init(RuntimeProp *prop, const PropType type) {
     prop->type = type;
-    String_init(&prop->name, 16);
+    prop->name = (String){0};
     switch (type) {
         case PROP_TYPE_NONE:
         case PROP_TYPE_U32:
@@ -574,7 +583,7 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
     for (uint32 i = 0; i < indent; ++i) {
         fputc(' ', output);
     }
-    fprintf(output, "Prop: \"%s\" (0x%08X) Type: %d Value: ", String_data(&prop->name), prop->name_hash,
+    fprintf(output, "Prop: \"%s\" (0x%08X) Type: %d Value: ", String_cstr(&prop->name), prop->name_hash,
             prop->type);
     switch (prop->type) {
         case PROP_TYPE_NONE: {
@@ -582,10 +591,12 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
             break;
         }
         case PROP_TYPE_U32: {
-            const String *name_value = find_name32(prop->value.uint32_value);
+            String *name_value = find_name32(prop->value.uint32_value);
             if (name_value != NULL) {
-                fprintf(output, "\"%s\" (0x%08X)\n", String_data(name_value), prop->value.uint32_value);
-            } else {
+                fprintf(output, "\"%s\" (0x%08X)\n", String_cstr(name_value), prop->value.uint32_value);
+                String_free(name_value);
+            }
+            else {
                 fprintf(output, "%u\n", prop->value.uint32_value);
             }
 
@@ -596,7 +607,7 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
             break;
         }
         case PROP_TYPE_STR: {
-            fprintf(output, "\"%s\"\n", String_data(&prop->value.string_value));
+            fprintf(output, "\"%s\"\n", String_cstr(&prop->value.string_value));
             break;
         }
         case PROP_TYPE_VEC2: {
@@ -683,7 +694,8 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
             if (count > 32) count = 32;
             for (int i = 0; i < count; ++i) {
                 if (i > 0) fprintf(output, ", ");
-                fprintf(output, "0x%08X, 0x%08X", prop->value.event_value.items[i].a, prop->value.event_value.items[i].b);
+                fprintf(output, "0x%08X, 0x%08X", prop->value.event_value.items[i].a,
+                        prop->value.event_value.items[i].b);
             }
             if (prop->value.event_value.count > 32) {
                 fprintf(output, ", ... (%u total)", prop->value.event_value.count);
@@ -744,17 +756,17 @@ void RuntimeProp_free(RuntimeProp *prop) {
         }
     }
     prop->type = 0;
-    memset(&prop->value, 0, sizeof(prop->value));
+    // memset(&prop->value, 0, sizeof(prop->value));
 }
 
 static void print_indent(String *out, const uint32 indent) {
-    String_resize(out, out->size + indent);
-    memset(out->buffer + out->size, ' ', indent);
+    String_reserve(out, String_size(out) + indent);
+    String_fill(out, String_size(out), indent, ' ');
 }
 
 void RuntimeProp_emit_json(const RuntimeProp *prop, String *out, const uint32 indent) {
     print_indent(out, indent);
-    String_append_format(out, "\"%s\": ", String_data(&prop->name));
+    String_append_format(out, "\"%s\": ", String_cstr(&prop->name));
     switch (prop->type) {
         case PROP_TYPE_NONE:
             String_append_cstr(out, "null");
@@ -766,7 +778,7 @@ void RuntimeProp_emit_json(const RuntimeProp *prop, String *out, const uint32 in
             String_append_format(out, "%f", prop->value.float32_value);
             break;
         case PROP_TYPE_STR:
-            String_append_format(out, "\"%s\"", String_data(&prop->value.string_value));
+            String_append_format(out, "\"%s\"", String_cstr(&prop->value.string_value));
             break;
         case PROP_TYPE_VEC2:
             String_append_format(out, "[%f, %f]", prop->value.vec2_value[0], prop->value.vec2_value[1]);
@@ -859,7 +871,7 @@ void RuntimeNode_emit_json(const RuntimeNode *node, String *out, const uint32 in
     print_indent(out, indent);
     String_append_cstr(out, "{\n");
     print_indent(out, indent + 2);
-    String_append_format(out, "\"name\": \"%s\",\n", String_data(&node->name));
+    String_append_format(out, "\"name\": \"%s\",\n", String_cstr(&node->name));
     print_indent(out, indent + 2);
     String_append_format(out, "\"name_hash\": %u,\n", node->name_hash);
 

@@ -138,3 +138,13 @@ void GLog_error_s(const char* source, uint32 source_line, const char* fmt, ...) 
     Log_error_s_va(GLog_get(), source, source_line, fmt, args);
     va_end(args);
 }
+
+const char * GLog_file_name(const char *name) {
+    const char* last_slash = name;
+    for (const char* c = name; *c != '\0'; c++) {
+        if (*c == '/' || *c == '\\') {
+            last_slash = c + 1;
+        }
+    }
+    return last_slash;
+}

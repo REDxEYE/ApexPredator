@@ -140,27 +140,30 @@ void print_STI_uint32(const STI_uint32 *obj, STI_TypeLibrary *lib, FILE *handle,
 }
 
 void print_StringHash_48c5294d_4(const StringHash_48c5294d_4 *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent) {
-    const String *string = find_name32(*obj);
+    String *string = find_name32(*obj);
     if (string != NULL) {
-        fprintf(handle, "\"%s\"", String_data(string));
+        fprintf(handle, "\"%s\"", String_cstr(string));
+        String_free(string);
     } else {
         fprintf(handle, "0x%08X", *obj);
     }
 }
 
 void print_StringHash_99cfa095_6(const StringHash_99cfa095_6 *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent) {
-    const String *string = find_name64(*obj);
+    String *string = find_name64(*obj);
     if (string != NULL) {
-        fprintf(handle, "\"%s\" (0x%016llX)", String_data(string), (uint64)*obj);
+        fprintf(handle, "\"%s\" (0x%016llX)", String_cstr(string), (uint64)*obj);
+        String_free(string);
     } else {
         fprintf(handle, "0x%016llX", (uint64)*obj);
     }
 }
 
 void print_StringHash_48c5294d_8(const StringHash_48c5294d_8 *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent) {
-    const String *string = find_name64(*obj);
+    String *string = find_name64(*obj);
     if (string != NULL) {
-        fprintf(handle, "\"%s\"  (0x%016llX)", String_data(string), *obj);
+        fprintf(handle, "\"%s\"  (0x%016llX)", String_cstr(string), *obj);
+        String_free(string);
     } else {
         fprintf(handle, "0x%016llX", (unsigned long long)*obj);
     }
@@ -183,7 +186,7 @@ void print_STI_float64(const STI_float64 *obj, STI_TypeLibrary *lib, FILE *handl
 }
 
 void print_STI_String(const STI_String *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent) {
-    fprintf(handle, "\"%s\"", String_data(obj));
+    fprintf(handle, "\"%s\"", String_cstr(obj));
 }
 
 void print_STI_Deferred(const STI_Deferred *obj, STI_TypeLibrary *lib, FILE *handle, uint32 indent) {

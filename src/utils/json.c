@@ -107,6 +107,7 @@ static void WriteDeferredName(JsonContext *ctx) {
     if (ctx->name != NULL) {
         BeforeName(ctx);
         WriteString(ctx, ctx->name);
+        fprintf(ctx->stream, ": ");
         ctx->name = NULL;
     }
 }

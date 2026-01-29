@@ -6,7 +6,7 @@
 #include "adf/adf.h"
 #include "platform/archive.h"
 #include "utils/buffer/buffer.h"
-#include "utils/dynamic_insert_only_map.h"
+#include "utils/dynamic_map.h"
 
 typedef struct {
     uint32 version;
@@ -24,13 +24,13 @@ typedef struct {
 }SArcEntry;
 
 DYNAMIC_ARRAY_STRUCT(SArcEntry, SArcEntry);
-DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(SArcEntry, SArcEntryMap);
+DYNAMIC_INT_MAP_STRUCT(SArcEntry, SArcEntryMap);
 
 typedef struct {
     struct ArchiveInterface;
     SArcHeader header;
     char* strings;
-    DynamicInsertOnlyIntMap_SArcEntryMap entries;
+    DynamicIntMap_SArcEntryMap entries;
     Buffer* buffer;
 }SArchive;
 

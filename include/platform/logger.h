@@ -37,15 +37,7 @@ void GLog_info_s(const char* source, uint32 source_line, const char* fmt, ...);
 void GLog_warning_s(const char* source, uint32 source_line, const char* fmt, ...);
 void GLog_error_s(const char* source, uint32 source_line, const char* fmt, ...);
 
-inline const char* GLog_file_name(const char* name) {
-    const char* last_slash = name;
-    for (const char* c = name; *c != '\0'; c++) {
-        if (*c == '/' || *c == '\\') {
-            last_slash = c + 1;
-        }
-    }
-    return last_slash;
-}
+const char* GLog_file_name(const char* name);
 
 #define GLog_Info(...) GLog_info_s(GLog_file_name(__FILE__), __LINE__, __VA_ARGS__)
 #define GLog_Warning(...) GLog_warning_s(GLog_file_name(__FILE__), __LINE__, __VA_ARGS__)

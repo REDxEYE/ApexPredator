@@ -56,14 +56,14 @@ void GLTFContext_init(GLTFContext *ctx, const char *name) {
 }
 
 void GLTFContext_set_save_path(GLTFContext *ctx, const String *path) {
-    if (ctx->save_path.size != 0) {
+    if (String_size(&ctx->save_path) != 0) {
         return;
     }
     String_copy_from(&ctx->save_path, path);
 }
 
 void GLTFContext_set_save_cpath(GLTFContext *ctx, const char *path) {
-    if (ctx->save_path.size != 0) {
+    if (String_size(&ctx->save_path) != 0) {
         return;
     }
     String_from_cstr(&ctx->save_path, path);
@@ -250,7 +250,7 @@ void GLTFContext_finalize(GLTFContext *ctx) {
 bool GLTFContext_write_and_free(GLTFContext *ctx) {
     bool ok;
     if (ctx->meshes.count > 0 || ctx->nodes.count > 0) {
-        if (ctx->save_path.size == 0) {
+        if (String_size(&ctx->save_path) == 0) {
             GLog_Error("GLTFContext_write_and_free: no save path set");
             exit(1);
         }
@@ -272,7 +272,7 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
             Path_get_parent(&ctx->save_path, &data_dir);
             String gltf_name = {0};
             Path_filename(&ctx->save_path, &gltf_name);
-            String_append_format(&data_dir, "/%s_data", String_data(&gltf_name));
+            String_append_format(&data_dir, "/%s_data", String_cstr(&gltf_name));
             Path_ensure_dirs(&data_dir);
 
             // Loop over buffers, named(.bin extension) buffer or png files larger 100kb get written into "<gltf name>_data" subdirectory next to exported gltf, other get base64 encoded into URI
@@ -293,7 +293,7 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
                         const size_t actual_size = base64_encode(DA_get_buffer(raw_data), raw_data->count, base64_data);
                         assert(actual_size <= encoded_size);
                         String_append_cstr(&buffer_uri, base64_data);
-                        buffer->uri = String_detach(String_move(&buffer_uri));
+                        buffer->uri = String_detach(&buffer_uri);
                         String_free(&buffer_uri);
                         mp_free(base64_data);
                     } else {
@@ -305,16 +305,16 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
                         Path_join(&buffer_path, &bin_name);
                         Path_ensure_parent_dirs(&buffer_path);
 
-                        FILE *f = fopen(String_data(&buffer_path), "wb");
+                        FILE *f = fopen(String_cstr(&buffer_path), "wb");
                         if (f == NULL) {
                             GLog_Error("GLTFContext_write_and_free: failed to open buffer file for writing: %s",
-                                   String_data(&buffer_path));
+                                   String_cstr(&buffer_path));
                             exit(1);
                         }
                         fwrite(DA_get_buffer(raw_data), 1, raw_data->count, f);
                         fclose(f);
-                        String_prepend_format(&bin_name, "%s_data/", String_data(&gltf_name));
-                        buffer->uri = String_detach(String_move(&bin_name));
+                        String_prepend_format(&bin_name, "%s_data/", String_cstr(&gltf_name));
+                        buffer->uri = String_detach(&bin_name);
                         String_free(&buffer_path);
                         String_free(&bin_name);
                     }
@@ -340,7 +340,7 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
                     const size_t actual_size = base64_encode(DA_get_buffer(raw_data), raw_data->count, base64_data);
                     assert(actual_size <= encoded_size);
                     String_append_cstr(&buffer_uri, base64_data);
-                    buffer->uri = String_detach(String_move(&buffer_uri));
+                    buffer->uri = String_detach(&buffer_uri);
                     String_free(&buffer_uri);
                     mp_free(base64_data);
                     buffer->data = NULL; // cleanup after dispathing
@@ -349,8 +349,8 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
             }
         }
         ctx->options.type = cgltf_file_type_gltf;
-        GLog_Info("[INFO]: GLTF save path: %s", String_data(&ctx->save_path));
-        ok = (cgltf_write_file(&ctx->options, String_data(&ctx->save_path), ctx->data) == cgltf_result_success);
+        GLog_Info("[INFO]: GLTF save path: %s", String_cstr(&ctx->save_path));
+        ok = (cgltf_write_file(&ctx->options, String_cstr(&ctx->save_path), ctx->data) == cgltf_result_success);
     } else {
         ok = true;
     }
@@ -446,7 +446,7 @@ String * GLTFContext_data_path(const GLTFContext *ctx) {
     Path_get_parent(&ctx->save_path, data_dir);
     String gltf_name = {0};
     Path_filename(&ctx->save_path, &gltf_name);
-    String_append_format(data_dir, "/%s_data", String_data(&gltf_name));
+    String_append_format(data_dir, "/%s_data", String_cstr(&gltf_name));
     Path_ensure_dirs(data_dir);
     String_free(&gltf_name);
     return data_dir;
@@ -650,16 +650,16 @@ GL_ID GLTFContext_image_from_data(GLTFContext *ctx, const String *original_path,
     Path_filename(original_path, &tex_name);
 
     String unique_name = {0};
-    String_format(&unique_name, "%s_%08X.png", String_data(&tex_name), hash);
+    String_format(&unique_name, "%s_%08X.png", String_cstr(&tex_name), hash);
 
-    const GL_ID image_id = GLTFContext_image_new(ctx, String_data(&unique_name));
+    const GL_ID image_id = GLTFContext_image_new(ctx, String_cstr(&unique_name));
     cgltf_image *img = &ctx->images.items[image_id.v];
     img->mime_type = GLTFContext_dupe_cstring("image/png");
 
     size_t data_size = 0;
     uint32 channel_count = 0;
     uint8 *data = Texture_write_png_to_memory(texture, &channel_count, &data_size);
-    const GL_ID buffer_view = GLTFContext_create_buffer_and_view(ctx, data, data_size, String_data(&unique_name),
+    const GL_ID buffer_view = GLTFContext_create_buffer_and_view(ctx, data, data_size, String_cstr(&unique_name),
                                                                  cgltf_buffer_view_type_invalid, 0, 0);
     mp_free(data);
     img->buffer_view = gltf_tag_index(buffer_view).v;
@@ -715,20 +715,20 @@ GL_ID gltf_texture_from_texture(GLTFContext *ctx, const String *original_path, c
     Path_filename(original_path, &tex_name);
 
     String unique_name = {0};
-    String_format(&unique_name, "%s_%08X.png", String_data(&tex_name), hash);
+    String_format(&unique_name, "%s_%08X.png", String_cstr(&tex_name), hash);
     String_free(&tex_name);
 
     size_t data_size = 0;
     uint32 channel_count = 0;
     uint8 *data = Texture_write_png_to_memory(texture, &channel_count, &data_size);
 
-    const GL_ID image_id = GLTFContext_image_new(ctx, String_data(&unique_name));
+    const GL_ID image_id = GLTFContext_image_new(ctx, String_cstr(&unique_name));
     GLTFContext_image_set_mimetype(ctx, image_id, "image/png");
-    const GL_ID buffer_view = GLTFContext_create_buffer_and_view(ctx, data, data_size, String_data(&unique_name),
+    const GL_ID buffer_view = GLTFContext_create_buffer_and_view(ctx, data, data_size, String_cstr(&unique_name),
                                                                  cgltf_buffer_view_type_invalid, 0, 0);
     mp_free(data);
     GLTFContext_image_set_buffer_view(ctx, image_id, buffer_view);
-    const GL_ID tex_id = GLTFContext_texture_new_with_image(ctx, String_data(&unique_name), image_id);
+    const GL_ID tex_id = GLTFContext_texture_new_with_image(ctx, String_cstr(&unique_name), image_id);
     String_free(&unique_name);
     return tex_id;
 }

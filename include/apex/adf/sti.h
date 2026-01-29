@@ -8,7 +8,7 @@
 #include "sti_shared.h"
 #include "utils/string.h"
 #include "utils/dynamic_array.h"
-#include "utils/dynamic_insert_only_map.h"
+#include "utils/dynamic_map.h"
 #include "utils/buffer/buffer.h"
 
 typedef enum {
@@ -108,20 +108,20 @@ DYNAMIC_ARRAY_STRUCT(STI_Type, STI_Type);
 DYNAMIC_ARRAY_STRUCT(STI_Type*, STI_TypePtr);
 DYNAMIC_ARRAY_STRUCT(uint32, STI_exportedHashes);
 DYNAMIC_ARRAY_STRUCT(uint32, TypeHash);
-DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(STI_Type, STI_Type);
-DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(TypeHash, TypeHash);
+DYNAMIC_INT_MAP_STRUCT(STI_Type, STI_Type);
+DYNAMIC_INT_MAP_STRUCT(TypeHash, TypeHash);
 
 typedef bool (*read_type_fn)(Buffer* buffer, void* out);
 
 DYNAMIC_ARRAY_STRUCT(STI_ObjectMethods, STI_ObjectMethods);
 DYNAMIC_ARRAY_STRUCT(String, HashString);
 
-DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(STI_ObjectMethods, STI_ObjectMethods);
-DYNAMIC_INSERT_ONLY_INT_MAP_STRUCT(HashString, HashString);
+DYNAMIC_INT_MAP_STRUCT(STI_ObjectMethods, STI_ObjectMethods);
+DYNAMIC_INT_MAP_STRUCT(HashString, HashString);
 
-typedef DynamicInsertOnlyIntMap_STI_Type STI_TypeDict;
-typedef DynamicInsertOnlyIntMap_TypeHash STI_NameHasToTypeHash;
-typedef DynamicInsertOnlyIntMap_STI_ObjectMethods STI_FunctionDict;
+typedef DynamicIntMap_STI_Type STI_TypeDict;
+typedef DynamicIntMap_TypeHash STI_NameHasToTypeHash;
+typedef DynamicIntMap_STI_ObjectMethods STI_FunctionDict;
 
 typedef struct STI_TypeLibrary{
     STI_TypeDict types;

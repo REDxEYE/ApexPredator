@@ -2,9 +2,23 @@
 
 #include "platform/memory_tracker.h"
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _WIN32
+  #ifndef WIN32_LEAN_AND_MEAN
+  #define WIN32_LEAN_AND_MEAN
+  #endif
+  #include <windows.h>
+  #include <dbghelp.h>
+  #pragma comment(lib, "dbghelp.lib")
+#else
+#define __USE_GNU
+  #include <dlfcn.h>
+  #include <execinfo.h>
+#endif
 
 struct MpTrack {
     MpEntry* entries;
@@ -20,9 +34,9 @@ static size_t mp_hash_ptr(const void* p) {
     uintptr_t x = (uintptr_t)p;
 #if UINTPTR_MAX > 0xffffffffu
     x ^= x >> 33;
-    x *= (uintptr_t)0xff51afd7ed558ccdULL;
+    x *= (uintptr_t)0xbf58476d1ce4e5b9ULL;
     x ^= x >> 33;
-    x *= (uintptr_t)0xc4ceb9fe1a85ec53ULL;
+    x *= (uintptr_t)0x94d049bb133111ebULL;
     x ^= x >> 33;
 #else
     x ^= x >> 16;
@@ -34,6 +48,70 @@ static size_t mp_hash_ptr(const void* p) {
     return (size_t)x;
 }
 
+static inline void mp_entry_free_frames(MpEntry* e) {
+    for (uint32_t i = 0; i < e->nframes; ++i) {
+        free(e->frames[i]);
+        e->frames[i] = NULL;
+    }
+    e->nframes = 0;
+}
+
+static inline char* mp_strdup_(const char* s) {
+    if (!s) return NULL;
+    size_t n = strlen(s);
+    char* r = (char*)malloc(n + 1);
+    if (!r) return NULL;
+    memcpy(r, s, n + 1);
+    return r;
+}
+
+#ifndef _WIN32
+static void mp_symbolize_dladdr(char *out, size_t out_sz, void *addr) {
+    Dl_info info;
+    memset(&info, 0, sizeof(info));
+
+    if (dladdr(addr, &info) && info.dli_fname) {
+        const char *obj = info.dli_fname ? info.dli_fname : "?";
+        const char *sym = info.dli_sname ? info.dli_sname : "?";
+        size_t sym_off = 0;
+
+        if (info.dli_saddr) {
+            sym_off = (size_t)((uintptr_t)addr - (uintptr_t)info.dli_saddr);
+        }
+
+        /* addr is usually return address; subtract 1 to land inside caller */
+        uintptr_t a = (uintptr_t)addr;
+        if (a) a -= 1;
+
+        snprintf(out, out_sz, "%s (%s+0x%zx) [%p]", obj, sym, sym_off, (void*)a);
+    } else {
+        uintptr_t a = (uintptr_t)addr;
+        if (a) a -= 1;
+        snprintf(out, out_sz, "%p", (void*)a);
+    }
+}
+#endif
+
+static inline void mp_capture_frames_symbolized(MpEntry* e, uint32_t skip) {
+    mp_entry_free_frames(e);
+
+#ifdef _WIN32
+#else
+    void* addrs[MP_MAX_FRAMES];
+    int n = backtrace(addrs, (int)MP_MAX_FRAMES);
+    if (n <= (int)skip) return;
+
+    for (int i = (int)skip; i < n && e->nframes < MP_MAX_FRAMES; ++i) {
+        char buf[512];
+        mp_symbolize_dladdr(buf, sizeof(buf), addrs[i]);
+
+        e->frames[e->nframes] = mp_strdup_(buf);
+        if (!e->frames[e->nframes]) break;
+        e->nframes++;
+    }
+#endif
+}
+
 static size_t mp_next_pow2(size_t v) {
     if (v < 8) return 8;
     v--;
@@ -41,8 +119,8 @@ static size_t mp_next_pow2(size_t v) {
     return v + 1;
 }
 
-static MpTrack* mp_alloc_track(size_t cap) {
-    MpTrack* t = (MpTrack*)calloc(1, sizeof(MpTrack));
+static MpTrack* mp_alloc_track(const size_t cap) {
+    MpTrack* t = calloc(1, sizeof(MpTrack));
     if (!t) return NULL;
     t->cap = cap;
     t->entries = (MpEntry*)calloc(cap, sizeof(MpEntry));
@@ -130,8 +208,8 @@ MpEntry* mp_find_slot(MpTrack* t, void* key, int* found) {
     }
 }
 
-static void mp_fill_issue(MpTrackIssue* out, MpTrackIssueKind kind, void* p,
-                          size_t sa, size_t sb, MpSite a, MpSite b) {
+static void mp_fill_issue(MpTrackIssue* out, const MpTrackIssueKind kind, void* p,
+                          const size_t sa, const size_t sb, const MpSite a, const MpSite b) {
     if (!out) return;
     out->kind = kind;
     out->ptr = p;
@@ -141,7 +219,7 @@ static void mp_fill_issue(MpTrackIssue* out, MpTrackIssueKind kind, void* p,
     out->second = b;
 }
 
-int mp_track_resize(MpTrack* t, void* p, size_t new_size, MpSite where, MpTrackIssue* out_issue) {
+int mp_track_resize(MpTrack* t, void* p, const size_t new_size, const MpSite where, MpTrackIssue* out_issue) {
     if (!t || !p) return 1;
 
     int found = 0;
@@ -150,12 +228,15 @@ int mp_track_resize(MpTrack* t, void* p, size_t new_size, MpSite where, MpTrackI
         mp_fill_issue(out_issue, MP_ISSUE_FREE_WITHOUT_ALLOC, p, 0, 0, (MpSite){0}, where);
         return 0;
     }
+
+    mp_entry_free_frames(e);
+    mp_capture_frames_symbolized(e, 0);
     e->size = new_size;
     e->site = where;
     return 1;
 }
 
-int mp_track_alloc(MpTrack* t, void* p, size_t n, MpSite where, MpTrackIssue* out_issue) {
+int mp_track_alloc(MpTrack* t, void* p, const size_t n, const MpSite where, MpTrackIssue* out_issue) {
     if (!t || !p) return 1;
 
     mp_maybe_grow(t);
@@ -168,6 +249,7 @@ int mp_track_alloc(MpTrack* t, void* p, size_t n, MpSite where, MpTrackIssue* ou
         return 0;
     }
 
+    mp_capture_frames_symbolized(e, 0);
     if (e->key == MP_EMPTY) t->used++;
     e->key = p;
     e->size = n;
@@ -176,7 +258,7 @@ int mp_track_alloc(MpTrack* t, void* p, size_t n, MpSite where, MpTrackIssue* ou
     return 1;
 }
 
-int mp_track_free(MpTrack* t, void* p, MpSite where, MpTrackIssue* out_issue) {
+int mp_track_free(MpTrack* t, void* p, const MpSite where, MpTrackIssue* out_issue) {
     if (!t || !p) return 1;
 
     int found = 0;
@@ -187,7 +269,10 @@ int mp_track_free(MpTrack* t, void* p, MpSite where, MpTrackIssue* out_issue) {
         return 0;
     }
 
+    mp_entry_free_frames(e);
     e->key = MP_TOMB;
+    e->site = (MpSite){0};
+    e->size = 0;
     t->size--;
     return 1;
 }
