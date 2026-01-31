@@ -1,9 +1,9 @@
 // Created by RED on 04.01.2026.
 #include "havok/havok_support_types.h"
 
-#include "../../include/havok/generated/havok_generated.h"
+#include "havok/generated/havok_generated.h"
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 #include "utils/hash_helper.h"
 
 void hkVector4f_read(hkVector4f *obj, const TagFile *tf, const uint8 *src) {

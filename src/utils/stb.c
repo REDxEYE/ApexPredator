@@ -1,6 +1,6 @@
 // Created by RED on 23.09.2025.
 
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 #define STBIW_MALLOC(sz)        mp_malloc(sz)
 #define STBIW_REALLOC(p,newsz)  mp_realloc(p,newsz)
 #define STBIW_FREE(p)           mp_free(p)

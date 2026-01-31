@@ -371,7 +371,7 @@ Texture *export_terrain_texture(const TerrainTexture *terrain_texture, uint32 ex
 // }
 
 GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                      Havok_TypeLibrary *havok_lib, const String *path, const uint32 path_hash,
+                      const String *path, const uint32 path_hash,
                       const String *export_path) {
     if (!ArchiveManager_has_file_by_hash(archive_manager, path_hash)) {
         GLog_error("File not found\n");
@@ -384,8 +384,7 @@ GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI
         return INVALID_GL_ID;
     }
 
-    const GL_ID result = export_adf_file_from_buffer(context, archive_manager, lib, havok_lib, path_hash, path, &mb,
-                                                     export_path);
+    const GL_ID result = export_adf_file_from_buffer(context, archive_manager, lib, path_hash, path, &mb, export_path);
     mb.close(&mb);
     return result;
 }
@@ -704,7 +703,7 @@ GL_ID export_stream_path_file(GLTFContext *context, ArchiveManager *archive_mana
 }
 
 GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                                  Havok_TypeLibrary *havok_lib, const uint32 path_hash, const String *path,
+                                  const uint32 path_hash, const String *path,
                                   MemoryBuffer *mb, const String *export_path) {
     if (context == NULL) {
         GLog_Error("GLTF context is not initialized!");
@@ -743,8 +742,8 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
                     String chunk_patch_path = {0};
                     String_format(&chunk_patch_path, "terrain/hp/patches/patch_%02i_%02i_%02i.streampatch", base_lod, x,
                                   y);
-                    export_adf_file(context, archive_manager, lib, havok_lib, &chunk_patch_path,
-                                    hash_string(&chunk_patch_path), export_path);
+                    export_adf_file(context, archive_manager, lib, &chunk_patch_path, hash_string(&chunk_patch_path),
+                                    export_path);
                     String_free(&chunk_patch_path);
                     // break;
                 }
@@ -766,8 +765,7 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
             // ADF_print_instance(lib, instance, instance_data, 0);
             assert(adf.instances.count==1 && "ADF with AmfModel should have only one instance");
             const AmfModel *model = ADF_read_instance(&adf, lib, instance, mb);
-            output_node_id = export_amf_model(context, archive_manager, lib, havok_lib, model, path, path_hash,
-                                              export_path);
+            output_node_id = export_amf_model(context, archive_manager, lib, model, path, path_hash, export_path);
             ADF_free_instance(lib, instance, (void *) model);
         } else if (instance->type_hash == STI_TYPE_HASH_AmfMeshHeader) {
             assert(adf.instances.count==2 && "ADF with AmfMeshHeader should have only two instances");

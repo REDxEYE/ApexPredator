@@ -8,11 +8,11 @@
 #include "utils/gltf/cgltf_helper.h"
 
 GL_ID export_adf_file(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                              Havok_TypeLibrary *havok_lib, const String *path, uint32 path_hash, const String *export_path);
+                      const String *path, uint32 path_hash, const String *export_path);
 
 GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                      Havok_TypeLibrary *havok_lib, uint32 path_hash, const String *path, MemoryBuffer *mb,
-                      const String *export_path);
+                                  uint32 path_hash, const String *path, MemoryBuffer *mb,
+                                  const String *export_path);
 
 
 #endif //APEXPREDATOR_ADF_EXPORT_H

@@ -137,11 +137,9 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
         if (type->members.count == 0 && type->parent_hash == 0) {
             return;
         }
-        bool has_complex_members = false;
         DA_FORI(type->members, i) {
             const HavokRecordMember *member = &type->members.items[i];
             const HavokType *member_type = DM_get(&lib->types, member->type_hash);
-            has_complex_members |= is_complex_type(lib, member_type);
             if (member_type == NULL) {
                 GLog_Error("No member type data for member %s of type %s",
                            String_cstr(&member->name), String_cstr(&type->name));
@@ -149,6 +147,8 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
             }
             generate_type_def(lib, member_type, header_output, impl_output);
         }
+
+        bool has_complex_members = is_complex_type(lib, type);
 
         fprintf(header_output, "#define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
         fprintf(header_output, "typedef /*alignas(%i)*/ struct %s { // Record\n", type->align,

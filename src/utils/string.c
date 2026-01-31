@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 
 void String_free(String *string) {

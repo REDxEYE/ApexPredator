@@ -8,7 +8,7 @@
 #include <string.h>
 
 #include "int_def.h"
-#include "platform/memory_profiling.h"
+#include "memory_profiling.h"
 
 #define Z_MALLOC(sz)      mp_malloc(sz)
 #define Z_CALLOC(n, sz)  mp_calloc((n), (sz))

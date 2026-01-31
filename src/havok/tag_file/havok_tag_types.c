@@ -1,7 +1,7 @@
 // Created by RED on 12.10.2025.
 
 
-#include "../../../include/havok/tag_file/havok_tag_types.h"
+#include "havok/tag_file/havok_tag_types.h"
 
 #include <assert.h>
 

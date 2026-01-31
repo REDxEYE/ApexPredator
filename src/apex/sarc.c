@@ -2,8 +2,9 @@
 
 #include "apex/sarc.h"
 
+#include "apex/hashes.h"
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 #include "utils/hash_helper.h"
 
 void SArchive__from_buffer(SArchive *archive, Buffer *buffer);
@@ -17,16 +18,16 @@ bool SArchive__has_file_by_hash(const SArchive *archive, uint32 hash) {
     return DM_get(&archive->entries, hash) != NULL;
 }
 
-bool SArchive__get_file_by_hash(SArchive *archive, uint32 hash, MemoryBuffer *out);
+bool SArchive__get_file_by_hash(const SArchive *archive, uint32 hash, MemoryBuffer *out);
 
 void SArchive__free(SArchive *archive);
 
-bool SArchive__get_file(SArchive *archive, const String *path, MemoryBuffer *out) {
+bool SArchive__get_file(const SArchive *archive, const String *path, MemoryBuffer *out) {
     const uint32 hash = hash_string(path);
     return SArchive__get_file_by_hash(archive, hash, out);
 }
 
-bool SArchive__get_file_by_hash(SArchive *archive, uint32 hash, MemoryBuffer *out) {
+bool SArchive__get_file_by_hash(const SArchive *archive, const uint32 hash, MemoryBuffer *out) {
     const SArcEntry *entry = DM_get(&archive->entries, hash);
     if (entry == NULL) return false;
     uint64 buffer_size = 0;
@@ -49,10 +50,12 @@ bool SArchive__get_file_by_hash(SArchive *archive, uint32 hash, MemoryBuffer *ou
 }
 
 const String *SArchive__get_name(SArchive *archive) {
-    static const char* name = "SARC";
-    static String name_s = {0};
-    String_from_cstr(&name_s, name);
-    return &name_s;
+    String* name = find_name32(archive->hash);
+    if (name==NULL) {
+        name = String_new(32);
+        String_format(name, "SARC 0x%08X", archive->hash);
+    }
+    return name;
 }
 
 void SArchive__get_all_entries(const SArchive *archive, DynamicArray_ArchiveEntry *out) {
@@ -81,6 +84,10 @@ void SArchive_print_files(SArchive *archive) {
     DA_free(&entries);
 }
 
+uint32 SArchive__get_hash(const SArchive *archive) {
+    return archive->hash;
+}
+
 void SArchive__init_interface(SArchive *archive) {
     archive->has_file = (ArchiveHasFileFn) SArchive__has_file;
     archive->has_file_by_hash = (ArchiveHasFileByHashFn) SArchive__has_file_by_hash;
@@ -90,9 +97,10 @@ void SArchive__init_interface(SArchive *archive) {
     archive->get_name = (ArchiveGetNameFn) SArchive__get_name;
     archive->print_all_files = (ArchivePrintAllFilesFn) SArchive_print_files;
     archive->free = (ArchiveFreeFn) SArchive__free;
+    archive->get_hash = (ArchiveGetHashFn) SArchive__get_hash;
 }
 
-SArchive *SArchive_new(Buffer *buffer) {
+SArchive *SArchive_new(Buffer *buffer, uint32 self_hash) {
     SArchive *archive = mp_malloc(sizeof(SArchive));
     if (archive == NULL) {
         GLog_Error("Failed to allocate memory");
@@ -100,6 +108,7 @@ SArchive *SArchive_new(Buffer *buffer) {
     }
     memset(archive, 0, sizeof(SArchive));
     SArchive__init_interface(archive);
+    archive->hash = self_hash;
     SArchive__from_buffer(archive, buffer);
     return archive;
 }

@@ -5,7 +5,7 @@
 
 #include "apex/hashes.h"
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 #pragma pack(push, 1)
 typedef struct {

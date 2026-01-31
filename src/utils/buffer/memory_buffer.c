@@ -6,44 +6,44 @@
 #include <string.h>
 
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
-static BufferError MemoryBuffer__set_position(MemoryBuffer *fb, int64 position, BufferPositionOrigin origin) {
-    uint64 new_position = 0;
+static BufferError MemoryBuffer__set_position(MemoryBuffer *self, const int64 position, const BufferPositionOrigin origin) {
+    int64 new_position = 0;
     switch (origin) {
         case BUFFER_ORIGIN_START:
             if (position < 0) return BUFFER_FAILED;
-            new_position = (uint64) position;
+            new_position = position;
             break;
         case BUFFER_ORIGIN_CURRENT:
-            if (position < 0 && (uint64)(-position) > fb->position) return BUFFER_FAILED;
-            new_position = fb->position + position;
+            if (position < 0 && (-position) > self->position) return BUFFER_FAILED;
+            new_position = self->position + position;
             break;
         case BUFFER_ORIGIN_END:
-            if (position < 0 && (uint64)(-position) > fb->size) return BUFFER_FAILED;
-            new_position = fb->size + position;
+            if (position < 0 && (-position) > self->size) return BUFFER_FAILED;
+            new_position = self->size + position;
             break;
         default:
             return BUFFER_FAILED; // Invalid seek direction
     }
-    if (new_position > fb->size) {
+    if (new_position > self->size) {
         return BUFFER_FAILED;
     }
-    fb->position = new_position;
+    self->position = new_position;
     return BUFFER_SUCCESS;
 }
 
-static BufferError MemoryBuffer__get_position(MemoryBuffer *fb, int64 *position) {
-    *position = fb->position;
+static BufferError MemoryBuffer__get_position(MemoryBuffer *self, int64 *position) {
+    *position = self->position;
     return BUFFER_SUCCESS;
 }
 
-static BufferError MemoryBuffer__read(MemoryBuffer *fb, void *dst, uint32 size, uint32 *read) {
-    if (fb->position + size > fb->size) {
-        size = (uint32)(fb->size - fb->position);
+static BufferError MemoryBuffer__read(MemoryBuffer *self, void *dst, uint32 size, uint32 *read) {
+    if (self->position + size > self->size) {
+        size = (uint32)(self->size - self->position);
     }
-    memcpy(dst, fb->data + fb->position, size);
-    fb->position += size;
+    memcpy(dst, self->data + self->position, size);
+    self->position += size;
     if (read) {
         *read = size;
     }
@@ -53,12 +53,12 @@ static BufferError MemoryBuffer__read(MemoryBuffer *fb, void *dst, uint32 size, 
     return BUFFER_SUCCESS;
 }
 
-static BufferError MemoryBuffer__write(MemoryBuffer *fb, const void *src, uint64 size, uint32 *written) {
-    if (fb->position + size > fb->capacity) {
-        size = (uint32)(fb->capacity - fb->position);
+static BufferError MemoryBuffer__write(MemoryBuffer *self, const void *src, uint64 size, uint32 *written) {
+    if (self->position + size > self->capacity) {
+        size = (uint32)(self->capacity - self->position);
     }
-    memcpy(fb->data + fb->position, src, size);
-    fb->position += size;
+    memcpy(self->data + self->position, src, size);
+    self->position += size;
     if (written) {
         *written = (uint32)size;
     }
@@ -68,38 +68,38 @@ static BufferError MemoryBuffer__write(MemoryBuffer *fb, const void *src, uint64
     return BUFFER_SUCCESS;
 }
 
-static BufferError MemoryBuffer__get_size(MemoryBuffer *fb, uint64 *size) {
-    *size = fb->size;
+static BufferError MemoryBuffer__get_size(const MemoryBuffer *self, uint64 *size) {
+    *size = self->size;
     return BUFFER_SUCCESS;
 }
 
-static BufferError MemoryBuffer__close(MemoryBuffer *fb) {
-    if (fb->data) {
-        mp_free(fb->data);
-        fb->data = NULL;
+static BufferError MemoryBuffer__close(MemoryBuffer *self) {
+    if (self->data) {
+        mp_free(self->data);
+        self->data = NULL;
     }
-    fb->size = 0;
-    fb->capacity = 0;
-    fb->position = 0;
-    if (fb->heap_allocated) {
-        mp_free(fb);
+    self->size = 0;
+    self->capacity = 0;
+    self->position = 0;
+    if (self->heap_allocated) {
+        mp_free(self);
     }
     return BUFFER_SUCCESS;
 }
 
-BufferError MemoryBuffer__init(MemoryBuffer* mb) {
-    Buffer_init((Buffer*)mb);
-    mb->data = NULL;
-    mb->size = 0;
-    mb->capacity = 0;
-    mb->position = 0;
+BufferError MemoryBuffer__init(MemoryBuffer* self) {
+    Buffer_init((Buffer*)self);
+    self->data = NULL;
+    self->size = 0;
+    self->capacity = 0;
+    self->position = 0;
 
-    mb->set_position = (BufferSetPositionFn) MemoryBuffer__set_position;
-    mb->get_position = (BufferGetPositionFn) MemoryBuffer__get_position;
-    mb->read = (BufferReadFn) MemoryBuffer__read;
-    mb->write = (BufferWriteFn) MemoryBuffer__write;
-    mb->getsize = (BufferGetSizeFn) MemoryBuffer__get_size;
-    mb->close = (BufferCloseFn) MemoryBuffer__close;
+    self->set_position = (BufferSetPositionFn) MemoryBuffer__set_position;
+    self->get_position = (BufferGetPositionFn) MemoryBuffer__get_position;
+    self->read = (BufferReadFn) MemoryBuffer__read;
+    self->write = (BufferWriteFn) MemoryBuffer__write;
+    self->getsize = (BufferGetSizeFn) MemoryBuffer__get_size;
+    self->close = (BufferCloseFn) MemoryBuffer__close;
     return BUFFER_SUCCESS;
 }
 
@@ -115,24 +115,38 @@ MemoryBuffer * MemoryBuffer_new() {
     return mb;
 }
 
-BufferError MemoryBuffer_allocate(MemoryBuffer *mb, const int64 size) {
+BufferError MemoryBuffer_allocate(MemoryBuffer *self, const int64 size) {
     TracyCZoneN(ctx, "MemoryBuffer_allocate", 1);
-    if (mb->data) {
-        mp_free(mb->data);
+    if (self->data) {
+        mp_free(self->data);
     }
-    MemoryBuffer__init(mb);
-    mb->data = (uint8 *) mp_malloc(size);
-    memset(mb->data, 0, size);
-    if (!mb->data) {
-        mb->size = 0;
-        mb->capacity = 0;
-        mb->position = 0;
+    MemoryBuffer__init(self);
+    self->data = (uint8 *) mp_malloc(size);
+    memset(self->data, 0, size);
+    if (!self->data) {
+        self->size = 0;
+        self->capacity = 0;
+        self->position = 0;
         TracyCZoneEnd(ctx);
         return BUFFER_FAILED;
     }
-    mb->size = size;
-    mb->capacity = size;
-    mb->position = 0;
+    self->size = size;
+    self->capacity = size;
+    self->position = 0;
+    TracyCZoneEnd(ctx);
+    return BUFFER_SUCCESS;
+}
+
+BufferError MemoryBuffer_from_data(MemoryBuffer *self, const char *data, uint32 data_size) {
+    TracyCZoneN(ctx, "MemoryBuffer_from_data", 1);
+    if (self->data) {
+       MemoryBuffer__close(self);
+    }
+    MemoryBuffer_allocate(self, data_size);
+    memcpy(self->data, data, data_size);
+    self->size = data_size;
+    self->capacity = data_size;
+    self->position = 0;
     TracyCZoneEnd(ctx);
     return BUFFER_SUCCESS;
 }

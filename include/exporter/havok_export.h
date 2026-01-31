@@ -8,8 +8,10 @@
 
 extern mat4 IDENTITY_MAT;
 
+GL_ID export_havok_file(GLTFContext *context, const TagFile *tag_file, const String* path, const String* export_path);
+
 void build_matrix(mat4 out, const hkQsTransform* transform);
 
-GL_ID export_skeleton(GLTFContext *context, const hkaSkeleton *skeleton, Havok_TypeLibrary *havok_lib);
+GL_ID export_skeleton(GLTFContext *context, const hkaSkeleton *skeleton);
 
 #endif //APEXPREDATOR_HAVOK_EXPORT_H

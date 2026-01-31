@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 #define CALL_AND_CHECK_ERROR(func, buffer, err_ptr) \
 ({ \

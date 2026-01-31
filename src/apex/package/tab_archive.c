@@ -6,7 +6,7 @@
 #include <assert.h>
 
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 #include "tracy/TracyC.h"
 #include "utils/hash_helper.h"
 
@@ -14,17 +14,17 @@ bool TabArchive__has_file(const TabArchive *ar, const String *path);
 
 bool TabArchive__has_file_by_hash(const TabArchive *ar, uint32 hash);
 
-bool TabArchive__get_file(TabArchive *ar, const String *path, MemoryBuffer *mb);
+bool TabArchive__get_file(const TabArchive *ar, const String *path, MemoryBuffer *mb);
 
-bool TabArchive__get_file_by_hash(TabArchive *ar, uint32 hash, MemoryBuffer *mb);
+bool TabArchive__get_file_by_hash(const TabArchive *ar, uint32 hash, MemoryBuffer *mb);
 
-const String *TabArchive__get_name(TabArchive *ar);
+const String *TabArchive__get_name(const TabArchive *ar);
 
 void TabArchive__free(TabArchive *ar);
 
 void TabArchive__open(TabArchive *ar, const String *path);
 
-const String *TabArchive__get_name(TabArchive *ar) {
+const String *TabArchive__get_name(const TabArchive *ar) {
     return &ar->tab_path;
 }
 
@@ -37,6 +37,30 @@ void TabArchive_get_all_entries(TabArchive *ar, DynamicArray_ArchiveEntry *entri
         entry->archive = (Archive*)ar;
         entry->size = tab_entry->size;
     }
+}
+
+static inline const char *
+path_find_second_last_sep(const char *path)
+{
+    if (!path || !*path) return NULL;
+
+    const char *last = NULL;
+    const char *second = NULL;
+
+    for (const char *p = path; *p; ++p) {
+        if (*p == '/' || *p == '\\') {
+            second = last;
+            last = p;
+        }
+    }
+
+    return second;
+}
+
+uint32 TabArchive__get_hash(const TabArchive* ar) {
+    const String* archive_name = &ar->tab_path;
+    const char* archive_base_name = path_find_second_last_sep(String_cstr(archive_name));
+    return hash_cstring(archive_base_name);
 }
 
 void TabArchive__init_interface(TabArchive *ar) {
@@ -101,12 +125,12 @@ const TabEntry *Archive__find_entry(const TabArchive *ar, const uint32 hash) {
     return DM_get(&ar->entries, hash);
 }
 
-bool TabArchive__get_file(TabArchive *ar, const String *path, MemoryBuffer *mb) {
+bool TabArchive__get_file(const TabArchive *ar, const String *path, MemoryBuffer *mb) {
     const uint32 hash = hash_string(path);
     return TabArchive__get_file_by_hash(ar, hash, mb);
 }
 
-bool TabArchive__get_file_by_hash(TabArchive *ar, uint32 key, MemoryBuffer *mb) {
+bool TabArchive__get_file_by_hash(const TabArchive *ar, const uint32 key, MemoryBuffer *mb) {
     FileBuffer arc_file = {0};
     FileBuffer_open_read(&arc_file, String_cstr(&ar->arc_path));
     const TabEntry *entry = Archive__find_entry(ar, key);
@@ -138,7 +162,7 @@ bool TabArchive__has_file(const TabArchive *ar, const String *path) {
     return DM_get(&ar->entries, hash) != NULL;
 }
 
-bool TabArchive__has_file_by_hash(const TabArchive *ar, uint32 hash) {
+bool TabArchive__has_file_by_hash(const TabArchive *ar, const uint32 hash) {
     return DM_get(&ar->entries, hash) != NULL;
 }
 

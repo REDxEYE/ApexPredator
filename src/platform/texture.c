@@ -5,7 +5,7 @@
 #include <assert.h>
 
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 #include "utils/path.h"
 #include "utils/stb_image_write.h"
 #include "tinycpng/public/library.h"

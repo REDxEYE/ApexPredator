@@ -45,7 +45,7 @@ void Path_join_cstr(Path *base, const char *component);
 */
 void Path_join_format(Path *base, const char *fmt, ...);
 
-void Path_convert_to_wsl(Path *out, Path *in);
+void Path_convert_to_wsl(const Path *src, Path *out);
 
 void Path_rglob(const Path *path, const String *ext, DynamicArray_Path* out);
 

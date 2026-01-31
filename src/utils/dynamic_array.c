@@ -8,7 +8,7 @@
 #include <string.h>
 
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 #define NULL_ITEM_CHECK  assert(da->items!=NULL && "Uninitialized dynamic array")
 

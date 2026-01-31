@@ -11,7 +11,7 @@
 #include "platform/texture_ops.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 
 GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, String *export_path,
@@ -488,7 +488,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
 bool export_textures = false;
 
 GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                       Havok_TypeLibrary *havok_lib, const AmfModel *amf_model,
+                       const AmfModel *amf_model,
                        const String *path, const uint32 path_hash, const String *export_path) {
     if (context == NULL) {
         GLog_Error("GLTF context is not initialized!");
@@ -678,8 +678,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         return model_root_node_id;
     }
 
-    const GL_ID mesh_root_node = export_adf_file_from_buffer(context, archive_manager, lib, havok_lib,
-                                                             hash_string(mesh_path),
+    const GL_ID mesh_root_node = export_adf_file_from_buffer(context, archive_manager, lib, hash_string(mesh_path),
                                                              mesh_path,
                                                              &mb,
                                                              export_path);

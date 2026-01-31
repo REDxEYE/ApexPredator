@@ -12,7 +12,7 @@
 #include "platform/texture.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 char *GLTFContext_dupe_cstring(const char *name) {
     if (name == NULL) return NULL;

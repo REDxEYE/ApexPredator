@@ -6,7 +6,7 @@
 #include "int_def.h"
 #include <string.h>
 
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 enum { DM_EMPTY = 0xFFFFFFFFu, DM_TOMB = 0xFFFFFFFEu };
 

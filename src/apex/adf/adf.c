@@ -1,6 +1,6 @@
 // Created by RED on 19.09.2025.
 
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 #include "apex/adf/adf.h"
 

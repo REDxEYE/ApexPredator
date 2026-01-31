@@ -29,12 +29,13 @@ DYNAMIC_INT_MAP_STRUCT(SArcEntry, SArcEntryMap);
 typedef struct {
     struct ArchiveInterface;
     SArcHeader header;
+    uint32 hash;
     char* strings;
     DynamicIntMap_SArcEntryMap entries;
     Buffer* buffer;
 }SArchive;
 
-SArchive* SArchive_new(Buffer* buffer);
+SArchive* SArchive_new(Buffer* buffer, uint32 self_hash);
 // void SArchive_from_buffer(SArchive* archive, Buffer* buffer);
 // void SArchive_free(SArchive* archive);
 

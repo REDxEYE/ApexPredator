@@ -35,14 +35,18 @@ add_subdirectory(external/tinycpng)
 
 add_library(AdfLib STATIC
         src/apex/adf/adf_types.c
-        src/platform/memory_profiler.c
-        src/platform/memory_tracker.c
+        src/utils/memory_profiler.c
+        src/utils/memory_tracker.c
+
 )
 
 add_library(HavokLib STATIC
         src/havok/generated/havok_generated.c
-        src/platform/memory_profiler.c
-        src/platform/memory_tracker.c
+        src/utils/memory_profiler.c
+        src/utils/memory_tracker.c
+        src/havok/animations/track.c
+        src/havok/animations/animation.c
+        src/havok/animations/spline.c
 )
 
 SET(CommonFiles
@@ -68,8 +72,8 @@ SET(CommonFiles
         src/platform/archive.c
         src/platform/archive_manager.c
         src/platform/logger.c
-        src/platform/memory_profiler.c
-        src/platform/memory_tracker.c
+        src/utils/memory_profiler.c
+        src/utils/memory_tracker.c
         src/platform/texture.c
         src/platform/texture_ops.c
         src/utils/buffer/buffer.c
@@ -90,22 +94,24 @@ SET(CommonFiles
         src/utils/zlib_wrapper.c
         src/havok/havok_types.c
         include/havok/havok_types.h
+        src/platform/cli_parser.c
+        include/platform/cli_parser.h
 )
 
 add_executable(ApexPredator
-        src/main.c
+        src/tools/apex_predator.c
         ${CommonFiles}
 )
 
 add_executable(AdfTypeGenerator
-        src/adf_type_gen.c
+        src/tools/adf_type_gen.c
         ${CommonFiles}
-        src/platform/memory_tracker.c
-        include/platform/memory_tracker.h
+        src/utils/memory_tracker.c
+        include/utils/memory_tracker.h
 )
 
 add_executable(HavokTypeGenerator
-        src/havok_type_gen.c
+        src/tools/havok_type_gen.c
         src/apex/aaf/aaf.c
         src/apex/adf/adf.c
         src/apex/adf/sti.c
@@ -123,8 +129,8 @@ add_executable(HavokTypeGenerator
         src/platform/archive.c
         src/platform/archive_manager.c
         src/platform/logger.c
-        src/platform/memory_profiler.c
-        src/platform/memory_tracker.c
+        src/utils/memory_profiler.c
+        src/utils/memory_tracker.c
         src/platform/texture.c
         src/platform/texture_ops.c
         src/utils/buffer/buffer.c
@@ -146,12 +152,12 @@ add_executable(HavokTypeGenerator
 )
 
 add_executable(HashCollector
-        src/hash_collector.c
+        src/tools/hash_collector.c
         ${CommonFiles}
 )
 
 add_executable(StringHasher
-        src/string_hasher.c
+        src/tools/string_hasher.c
         src/utils/lookup3.c
 )
 

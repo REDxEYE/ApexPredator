@@ -8,7 +8,7 @@
 #include "utils/hash_helper.h"
 #include "utils/path.h"
 
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 #include "tracy/TracyC.h"
 
 String* export_ddsc_to_file(const ArchiveManager *archive_manager, const String *path, const String *export_path) {

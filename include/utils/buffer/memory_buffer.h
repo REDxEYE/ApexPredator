@@ -15,7 +15,9 @@ typedef struct {
 }MemoryBuffer;
 
 MemoryBuffer* MemoryBuffer_new();
-BufferError MemoryBuffer_allocate(MemoryBuffer* mb, int64 size);
+BufferError MemoryBuffer_allocate(MemoryBuffer* self, int64 size);
+// BufferError MemoryBuffer_copy(MemoryBuffer* self, const Buffer* other);
+BufferError MemoryBuffer_from_data(MemoryBuffer* self, const char* data, uint32 data_size);
 
 
 #endif //APEXPREDATOR_MEMORY_BUFFER_H

@@ -1,6 +1,6 @@
 // Created by RED on 10.10.2025.
 
-#include "../../../include/havok/tag_file/havok_tag_file.h"
+#include "havok/tag_file/havok_tag_file.h"
 
 #include <math.h>
 

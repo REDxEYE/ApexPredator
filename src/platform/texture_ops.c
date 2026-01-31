@@ -5,7 +5,7 @@
 #include <assert.h>
 
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 Texture* multiply_4c_by_1c(const Texture* a, const Texture* b) {
     // Fast path

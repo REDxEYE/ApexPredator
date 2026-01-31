@@ -1690,7 +1690,7 @@ HavokTypeInfo hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_free,
     .read = (readHavokObject)hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_read,
     .print = (printHavokObject)hkHashMapDetail__MapTuple_hkPropertyId_hkReflect__Any_print,
 };
@@ -1768,7 +1768,7 @@ HavokTypeInfo hkHashMap_hkPropertyId_hkReflect__Any_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkHashMap_hkPropertyId_hkReflect__Any_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkHashMap_hkPropertyId_hkReflect__Any_free,
     .read = (readHavokObject)hkHashMap_hkPropertyId_hkReflect__Any_read,
     .print = (printHavokObject)hkHashMap_hkPropertyId_hkReflect__Any_print,
 };
@@ -2613,7 +2613,7 @@ HavokTypeInfo hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_free,
     .read = (readHavokObject)hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_read,
     .print = (printHavokObject)hkcdStaticTree__Tree_hkcdStaticTree__DynamicStorage_hkcdStaticTree__Codec3Axis6_print,
 };
@@ -2626,7 +2626,7 @@ HavokTypeInfo hkcdStaticAabbTree__Impl_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkcdStaticAabbTree__Impl_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkcdStaticAabbTree__Impl_free,
     .read = (readHavokObject)hkcdStaticAabbTree__Impl_read,
     .print = (printHavokObject)hkcdStaticAabbTree__Impl_print,
 };
@@ -2860,7 +2860,7 @@ HavokTypeInfo hkLocalFrame_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkLocalFrame_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkLocalFrame_free,
     .read = (readHavokObject)hkLocalFrame_read,
     .print = (printHavokObject)hkLocalFrame_print,
 };
@@ -3029,7 +3029,7 @@ HavokTypeInfo hkaAnimatedReferenceFrame_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkaAnimatedReferenceFrame_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkaAnimatedReferenceFrame_free,
     .read = (readHavokObject)hkaAnimatedReferenceFrame_read,
     .print = (printHavokObject)hkaAnimatedReferenceFrame_print,
 };
@@ -4212,7 +4212,7 @@ HavokTypeInfo hknpSurfaceVelocity_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpSurfaceVelocity_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpSurfaceVelocity_free,
     .read = (readHavokObject)hknpSurfaceVelocity_read,
     .print = (printHavokObject)hknpSurfaceVelocity_print,
 };
@@ -4446,7 +4446,7 @@ HavokTypeInfo hknpRefMassDistribution_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpRefMassDistribution_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpRefMassDistribution_free,
     .read = (readHavokObject)hknpRefMassDistribution_read,
     .print = (printHavokObject)hknpRefMassDistribution_print,
 };
@@ -4498,7 +4498,7 @@ HavokTypeInfo hknpPhysicsSystemData__bodyCinfoWithAttachment_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpPhysicsSystemData__bodyCinfoWithAttachment_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpPhysicsSystemData__bodyCinfoWithAttachment_free,
     .read = (readHavokObject)hknpPhysicsSystemData__bodyCinfoWithAttachment_read,
     .print = (printHavokObject)hknpPhysicsSystemData__bodyCinfoWithAttachment_print,
 };
@@ -4524,7 +4524,7 @@ HavokTypeInfo hkpConstraintData_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkpConstraintData_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkpConstraintData_free,
     .read = (readHavokObject)hkpConstraintData_read,
     .print = (printHavokObject)hkpConstraintData_print,
 };
@@ -4836,7 +4836,7 @@ HavokTypeInfo hknpBodyQuality_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpBodyQuality_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpBodyQuality_free,
     .read = (readHavokObject)hknpBodyQuality_read,
     .print = (printHavokObject)hknpBodyQuality_print,
 };
@@ -4888,7 +4888,7 @@ HavokTypeInfo hknpBroadPhaseConfig_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpBroadPhaseConfig_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpBroadPhaseConfig_free,
     .read = (readHavokObject)hknpBroadPhaseConfig_read,
     .print = (printHavokObject)hknpBroadPhaseConfig_print,
 };
@@ -4927,7 +4927,7 @@ HavokTypeInfo hknpCollisionFilter_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpCollisionFilter_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpCollisionFilter_free,
     .read = (readHavokObject)hknpCollisionFilter_read,
     .print = (printHavokObject)hknpCollisionFilter_print,
 };
@@ -4979,7 +4979,7 @@ HavokTypeInfo hknpShapeTagCodec_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpShapeTagCodec_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpShapeTagCodec_free,
     .read = (readHavokObject)hknpShapeTagCodec_read,
     .print = (printHavokObject)hknpShapeTagCodec_print,
 };
@@ -5213,7 +5213,7 @@ HavokTypeInfo hknpConvexShape_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpConvexShape_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpConvexShape_free,
     .read = (readHavokObject)hknpConvexShape_read,
     .print = (printHavokObject)hknpConvexShape_print,
 };
@@ -5408,7 +5408,7 @@ HavokTypeInfo hknpShapeMassProperties_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpShapeMassProperties_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpShapeMassProperties_free,
     .read = (readHavokObject)hknpShapeMassProperties_read,
     .print = (printHavokObject)hknpShapeMassProperties_print,
 };
@@ -5629,7 +5629,7 @@ HavokTypeInfo hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_TI
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_free,
     .read = (readHavokObject)hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_read,
     .print = (printHavokObject)hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_print,
 };
@@ -5642,7 +5642,7 @@ HavokTypeInfo hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdD
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_free,
     .read = (readHavokObject)hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_read,
     .print = (printHavokObject)hkcdDynamicTree__Tree_hkcdDynamicTree__DefaultDynamicStorage_hkcdDynamicTree__Codec32_print,
 };
@@ -5655,7 +5655,7 @@ HavokTypeInfo hknpDynamicCompoundShapeTree_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpDynamicCompoundShapeTree_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpDynamicCompoundShapeTree_free,
     .read = (readHavokObject)hknpDynamicCompoundShapeTree_read,
     .print = (printHavokObject)hknpDynamicCompoundShapeTree_print,
 };
@@ -5681,7 +5681,7 @@ HavokTypeInfo hknpBoxShape_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpBoxShape_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpBoxShape_free,
     .read = (readHavokObject)hknpBoxShape_read,
     .print = (printHavokObject)hknpBoxShape_print,
 };
@@ -5733,7 +5733,7 @@ HavokTypeInfo hknpExternMeshShapeGeometry_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hknpExternMeshShapeGeometry_init,
-    .free = NULL,
+    .free = (freeHavokObject)hknpExternMeshShapeGeometry_free,
     .read = (readHavokObject)hknpExternMeshShapeGeometry_read,
     .print = (printHavokObject)hknpExternMeshShapeGeometry_print,
 };
@@ -5824,7 +5824,7 @@ HavokTypeInfo hkpConstraintMotor_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkpConstraintMotor_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkpConstraintMotor_free,
     .read = (readHavokObject)hkpConstraintMotor_read,
     .print = (printHavokObject)hkpConstraintMotor_print,
 };
@@ -6019,7 +6019,7 @@ HavokTypeInfo CPfxPartIndexProperty_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)CPfxPartIndexProperty_init,
-    .free = NULL,
+    .free = (freeHavokObject)CPfxPartIndexProperty_free,
     .read = (readHavokObject)CPfxPartIndexProperty_read,
     .print = (printHavokObject)CPfxPartIndexProperty_print,
 };
@@ -6136,7 +6136,7 @@ HavokTypeInfo CPfxFloatShapeProperty_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)CPfxFloatShapeProperty_init,
-    .free = NULL,
+    .free = (freeHavokObject)CPfxFloatShapeProperty_free,
     .read = (readHavokObject)CPfxFloatShapeProperty_read,
     .print = (printHavokObject)CPfxFloatShapeProperty_print,
 };
@@ -6305,7 +6305,7 @@ HavokTypeInfo hkpLimitedForceConstraintMotor_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkpLimitedForceConstraintMotor_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkpLimitedForceConstraintMotor_free,
     .read = (readHavokObject)hkpLimitedForceConstraintMotor_read,
     .print = (printHavokObject)hkpLimitedForceConstraintMotor_print,
 };
@@ -6318,7 +6318,7 @@ HavokTypeInfo hkpPositionConstraintMotor_TI = {
     .is_record = 1,
     .is_array = 0,
     .init = (initHavokObject)hkpPositionConstraintMotor_init,
-    .free = NULL,
+    .free = (freeHavokObject)hkpPositionConstraintMotor_free,
     .read = (readHavokObject)hkpPositionConstraintMotor_read,
     .print = (printHavokObject)hkpPositionConstraintMotor_print,
 };

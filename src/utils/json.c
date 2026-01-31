@@ -75,7 +75,7 @@ static void BeforeValue(JsonContext *ctx) {
             break;
         case JsonScope_DanglingName:
             ReplaceTop(ctx, JsonScope_NonEmptyObject);
-            fputs("", ctx->stream);
+            fputs(": ", ctx->stream);
             break;
         default:
             assert(0 && "Nesting problem");
@@ -107,7 +107,6 @@ static void WriteDeferredName(JsonContext *ctx) {
     if (ctx->name != NULL) {
         BeforeName(ctx);
         WriteString(ctx, ctx->name);
-        fprintf(ctx->stream, ": ");
         ctx->name = NULL;
     }
 }

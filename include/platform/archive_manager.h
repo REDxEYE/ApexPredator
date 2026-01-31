@@ -8,13 +8,23 @@
 
 DYNAMIC_ARRAY_STRUCT(Archive*, ArchivePtr);
 
-typedef struct {
+typedef struct ArchiveManager ArchiveManager;
+
+typedef void(*load_archive_fn)(const ArchiveManager* manager, uint32 hash);
+
+typedef struct ArchiveManager{
     DynamicArray_ArchivePtr archives;
+    load_archive_fn load_archive;
 } ArchiveManager;
+
 
 void ArchiveManager_init(ArchiveManager *manager);
 
-void ArchiveManager_add(ArchiveManager *manager, Archive *archive);
+bool ArchiveManager_mounted(const ArchiveManager *manager, uint32 hash);
+
+void ArchiveManager_set_archive_loader_function(ArchiveManager *manager, load_archive_fn func);
+
+void ArchiveManager_add(const ArchiveManager *manager, Archive *archive);
 
 bool ArchiveManager_get_file(const ArchiveManager *manager, const String *path, MemoryBuffer *mb);
 

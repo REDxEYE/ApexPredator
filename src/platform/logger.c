@@ -1,7 +1,7 @@
 // Created by RED on 17.01.2026.
 
 #include <stdio.h>
-#include "../../include/platform/logger.h"
+#include "platform/logger.h"
 
 #include "int_def.h"
 

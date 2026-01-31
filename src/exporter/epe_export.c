@@ -49,13 +49,13 @@ void calculate_global_node_matrix(const GLTFContext *context, const GL_ID target
 }
 
 void process_children(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                      Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
+                      RuntimeNode *node, const uint32 path_hash, const String *path,
                       const String *export_path, const GL_ID parent_gltf_node) {
     DA_FORI(node->children, i) {
-        process_epe_node(context, archive_manager, lib, havok_lib,
-                         DA_at(&node->children, i),
+        process_epe_node(context, archive_manager, lib, DA_at(&node->children, i),
                          path_hash,
-                         path, export_path, parent_gltf_node);
+                         path,
+                         export_path, parent_gltf_node);
     }
 }
 
@@ -68,8 +68,8 @@ void set_world_matrix(GLTFContext *context, const GL_ID gltf_node, RuntimeNode *
 }
 
 void handle_CCharacter(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                      Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
-                      const String *export_path, const GL_ID parent_gltf_node) {
+                       RuntimeNode *node, const uint32 path_hash, const String *path,
+                       const String *export_path, const GL_ID parent_gltf_node) {
     const String *model_filename = RuntimeNode_get_prop_by_hash_str(node, 0xE8129FE6);
     const String *skeleton_filename = RuntimeNode_get_prop_by_hash_str(node, 0x26FA86FE);
     const String *node_name_hash = &node->name;
@@ -81,8 +81,7 @@ void handle_CCharacter(GLTFContext *context, ArchiveManager *archive_manager, ST
     String skeleton_bsk_name = {0};
     Path_replace_extension(skeleton_filename, "bsk", &skeleton_bsk_name);
 
-    const GL_ID skin_id = export_file(context, archive_manager, lib, havok_lib, &skeleton_bsk_name,
-                                      hash_string(&skeleton_bsk_name),
+    const GL_ID skin_id = export_file(context, archive_manager, lib, &skeleton_bsk_name, hash_string(&skeleton_bsk_name),
                                       export_path);
     if (!IS_VALID_GL_ID(skin_id)) {
         GLog_Error("Failed to export skeleton for CCharacter: %s", String_cstr(&skeleton_bsk_name));
@@ -96,9 +95,8 @@ void handle_CCharacter(GLTFContext *context, ArchiveManager *archive_manager, ST
     }
 
     GLTFContext_push_skin(context, skin_id);
-    const GL_ID output_node = export_adf_file(context, archive_manager, lib, havok_lib, model_filename,
-                              hash_string(model_filename),
-                              export_path);
+    const GL_ID output_node = export_adf_file(context, archive_manager, lib, model_filename, hash_string(model_filename),
+                                              export_path);
 
     add_extras(context, node, output_node);
     set_world_matrix(context, output_node, node);
@@ -108,13 +106,13 @@ void handle_CCharacter(GLTFContext *context, ArchiveManager *archive_manager, ST
         GLog_Warning("Invalid parent setup: %s", String_cstr(node_name_hash));
     }
 
-    process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
+    process_children(context, archive_manager, lib, node, path_hash, path, export_path, output_node);
     GLTFContext_pop_skin(context);
 }
 
 void handle_CSecondaryMotionAttachment(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                    Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
-                    const String *export_path, const GL_ID parent_gltf_node) {
+                                       RuntimeNode *node, const uint32 path_hash, const String *path,
+                                       const String *export_path, const GL_ID parent_gltf_node) {
     const String *model_filename = RuntimeNode_get_prop_str(node, "model");
     const String *skeleton_filename = RuntimeNode_get_prop_by_hash_str(node, 0x26FA86FE);
     if (model_filename == NULL) {
@@ -123,14 +121,12 @@ void handle_CSecondaryMotionAttachment(GLTFContext *context, ArchiveManager *arc
     }
     String skeleton_bsk_name = {0};
     Path_replace_extension(skeleton_filename, "bsk", &skeleton_bsk_name);
-    const GL_ID skin_id = export_file(context, archive_manager, lib, havok_lib, &skeleton_bsk_name,
-                                hash_string(&skeleton_bsk_name),
-                                export_path);
+    const GL_ID skin_id = export_file(context, archive_manager, lib, &skeleton_bsk_name, hash_string(&skeleton_bsk_name),
+                                      export_path);
     String_free(&skeleton_bsk_name);
 
     GLTFContext_push_skin(context, skin_id);
-    const GL_ID  output_node = export_adf_file(context, archive_manager, lib, havok_lib, model_filename, hash_string(model_filename),
-                              export_path);
+    const GL_ID  output_node = export_adf_file(context, archive_manager, lib, model_filename, hash_string(model_filename), export_path);
     set_world_matrix(context, output_node, node);
     add_extras(context, node, output_node);
     if (IS_VALID_GL_ID(parent_gltf_node))
@@ -139,12 +135,12 @@ void handle_CSecondaryMotionAttachment(GLTFContext *context, ArchiveManager *arc
         const String *node_name_hash = &node->name;
         GLog_Warning("Invalid parent setup: %s", String_cstr(node_name_hash));
     }
-    process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
+    process_children(context, archive_manager, lib, node, path_hash, path, export_path, output_node);
     GLTFContext_pop_skin(context);
 }
 
 void handle_CDamageableCharacterPart(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                                     Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
+                                     RuntimeNode *node, const uint32 path_hash, const String *path,
                                      const String *export_path, const GL_ID parent_gltf_node) {
     const String *node_name = RuntimeNode_get_prop_str(node, "name");
     const String *node_name_hash = &node->name;
@@ -173,11 +169,11 @@ void handle_CDamageableCharacterPart(GLTFContext *context, ArchiveManager *archi
         GLog_Warning("Invalid parent setup: %s", String_cstr(node_name_hash));
     }
 
-    process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
+    process_children(context, archive_manager, lib, node, path_hash, path, export_path, output_node);
 }
 
 void handle_CRigidObject(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                         Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
+                         RuntimeNode *node, const uint32 path_hash, const String *path,
                          const String *export_path, const GL_ID parent_gltf_node) {
     const uint32 model_filename_hash = RuntimeNode_get_prop_u32(node, "filename");
     String* model_filename = find_name32(model_filename_hash);
@@ -186,7 +182,7 @@ void handle_CRigidObject(GLTFContext *context, ArchiveManager *archive_manager, 
         GLog_Error("Failed to get model property for CRigidObject");
         return;
     }
-    GL_ID output_node = export_adf_file(context, archive_manager, lib, havok_lib, model_filename, model_filename_hash, export_path);
+    GL_ID output_node = export_adf_file(context, archive_manager, lib, model_filename, model_filename_hash, export_path);
     if (model_filename!=NULL) {
         String_free(model_filename);
     }
@@ -204,11 +200,11 @@ void handle_CRigidObject(GLTFContext *context, ArchiveManager *archive_manager, 
         set_world_matrix(context, output_node, node);
         add_extras(context, node, output_node);
     }
-    process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
+    process_children(context, archive_manager, lib, node, path_hash, path, export_path, output_node);
 }
 
 void handle_CSkeletalAnimatedObject(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                                    Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
+                                    RuntimeNode *node, const uint32 path_hash, const String *path,
                                     const String *export_path, const GL_ID parent_gltf_node) {
     const String* model_filename = RuntimeNode_get_prop_by_hash_str(node, 0x0f94740b);
     const String* skeleton_filename = RuntimeNode_get_prop_by_hash_str(node, 0x26fa86fe);
@@ -221,8 +217,7 @@ void handle_CSkeletalAnimatedObject(GLTFContext *context, ArchiveManager *archiv
     String skeleton_bsk_name = {0};
     Path_replace_extension(skeleton_filename, "bsk", &skeleton_bsk_name);
 
-    const GL_ID skin_id = export_file(context, archive_manager, lib, havok_lib, &skeleton_bsk_name,
-                                      hash_string(&skeleton_bsk_name),
+    const GL_ID skin_id = export_file(context, archive_manager, lib, &skeleton_bsk_name, hash_string(&skeleton_bsk_name),
                                       export_path);
     const cgltf_skin *skin = &context->skins.items[skin_id.v];
     const GL_ID root_bone = skin->joints[0] != NULL ? gltf_untag_index(skin->joints[0]) : INVALID_GL_ID;
@@ -231,9 +226,8 @@ void handle_CSkeletalAnimatedObject(GLTFContext *context, ArchiveManager *archiv
     }
 
     GLTFContext_push_skin(context, skin_id);
-    const GL_ID output_node = export_adf_file(context, archive_manager, lib, havok_lib, model_filename,
-                              hash_string(model_filename),
-                              export_path);
+    const GL_ID output_node = export_adf_file(context, archive_manager, lib, model_filename, hash_string(model_filename),
+                                              export_path);
 
     add_extras(context, node, output_node);
     set_world_matrix(context, output_node, node);
@@ -244,13 +238,13 @@ void handle_CSkeletalAnimatedObject(GLTFContext *context, ArchiveManager *archiv
         GLog_Warning("Invalid parent setup: %s", String_cstr(node_name_hash));
     }
 
-    process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
+    process_children(context, archive_manager, lib, node, path_hash, path, export_path, output_node);
     GLTFContext_pop_skin(context);
 }
 
 void handle_CBoneAttachment(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                    Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
-                    const String *export_path, const GL_ID parent_gltf_node) {
+                            RuntimeNode *node, const uint32 path_hash, const String *path,
+                            const String *export_path, const GL_ID parent_gltf_node) {
     const String *node_name = RuntimeNode_get_prop_str(node, "name");
     const String *node_name_hash = &node->name;
 
@@ -281,11 +275,11 @@ void handle_CBoneAttachment(GLTFContext *context, ArchiveManager *archive_manage
         GLog_Warning("Invalid parent setup: %s", String_cstr(node_name_hash));
     }
 
-    process_children(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, output_node);
+    process_children(context, archive_manager, lib, node, path_hash, path, export_path, output_node);
 }
 
 void handle_default(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                    Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
+                    RuntimeNode *node, const uint32 path_hash, const String *path,
                     const String *export_path, const GL_ID parent_gltf_node) {
     const String *node_name = RuntimeNode_get_prop_str(node, "name");
     const String *node_name_hash = &node->name;
@@ -303,15 +297,15 @@ void handle_default(GLTFContext *context, ArchiveManager *archive_manager, STI_T
     }
 
     DA_FORI(node->children, i) {
-        process_epe_node(context, archive_manager, lib, havok_lib,
-                         DA_at(&node->children, i),
+        process_epe_node(context, archive_manager, lib, DA_at(&node->children, i),
                          path_hash,
-                         path, export_path, output_node);
+                         path,
+                         export_path, output_node);
     }
 }
 
 void process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                      Havok_TypeLibrary *havok_lib, RuntimeNode *node, const uint32 path_hash, const String *path,
+                      RuntimeNode *node, const uint32 path_hash, const String *path,
                       const String *export_path, const GL_ID parent_gltf_node) {
     if (context==NULL) {
         GLog_Error("GLTF context is not initialized!");
@@ -328,24 +322,24 @@ void process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, STI
         exit(1);
     }
     if (String_cequals(class_name, "CCharacter")) {
-        handle_CCharacter(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, parent_gltf_node);
+        handle_CCharacter(context, archive_manager, lib, node, path_hash, path, export_path, parent_gltf_node);
     }else if (String_cequals(class_name, "CSecondaryMotionAttachment")) {
-        handle_CSecondaryMotionAttachment(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, parent_gltf_node);
+        handle_CSecondaryMotionAttachment(context, archive_manager, lib, node, path_hash, path, export_path, parent_gltf_node);
     }else if (String_cequals(class_name, "CRigidObject")) {
-        handle_CRigidObject(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, parent_gltf_node);
+        handle_CRigidObject(context, archive_manager, lib, node, path_hash, path, export_path, parent_gltf_node);
     }else if (String_cequals(class_name, "CDamageableCharacterPart")) {
-        handle_CDamageableCharacterPart(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, parent_gltf_node);
+        handle_CDamageableCharacterPart(context, archive_manager, lib, node, path_hash, path, export_path, parent_gltf_node);
     }else if (String_cequals(class_name, "CSkeletalAnimatedObject")) {
-        handle_CSkeletalAnimatedObject(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, parent_gltf_node);
+        handle_CSkeletalAnimatedObject(context, archive_manager, lib, node, path_hash, path, export_path, parent_gltf_node);
     }else if (String_cequals(class_name, "CBoneAttachment")){
-        handle_CBoneAttachment(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, parent_gltf_node);
+        handle_CBoneAttachment(context, archive_manager, lib, node, path_hash, path, export_path, parent_gltf_node);
     } else {
-        handle_default(context, archive_manager, lib, havok_lib, node, path_hash, path, export_path, parent_gltf_node);
+        handle_default(context, archive_manager, lib, node, path_hash, path, export_path, parent_gltf_node);
     }
 }
 
 GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                 Havok_TypeLibrary *havok_lib, RuntimeNode *root_node, uint32 path_hash, const String *path,
+                 RuntimeNode *root_node, uint32 path_hash, const String *path,
                  const String *export_path) {
     assert(context!=NULL && "context must be initialized");
     if (path == NULL) {
@@ -363,9 +357,9 @@ GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_Type
     const GL_ID epe_root_node_id = GLTFContext_node_add(context, "epe_root");
 
     DA_FORI(root_node->children, i) {
-        process_epe_node(context, archive_manager, lib, havok_lib, DA_at(&root_node->children, i),
-                         path_hash,
-                         path, export_path, epe_root_node_id);
+        process_epe_node(context, archive_manager, lib, DA_at(&root_node->children, i), path_hash,
+                         path,
+                         export_path, epe_root_node_id);
     }
     return epe_root_node_id;
 }

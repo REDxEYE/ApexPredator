@@ -44,6 +44,9 @@ typedef void (*ArchivePrintAllFilesFn)(const Archive *archive);
 // Free function
 typedef void (*ArchiveFreeFn)(Archive *archive);
 
+// Get hash
+typedef uint32 (*ArchiveGetHashFn)(const Archive *archive);
+
 typedef struct ArchiveInterface {
     ArchiveHasFileFn has_file;
     ArchiveHasFileByHashFn has_file_by_hash;
@@ -52,6 +55,7 @@ typedef struct ArchiveInterface {
     ArchiveGetAllEntriesFn get_all_entries;
     ArchiveGetNameFn get_name;
     ArchivePrintAllFilesFn print_all_files;
+    ArchiveGetHashFn get_hash;
     ArchiveFreeFn free;
 } ArchiveInterface;
 
@@ -75,7 +79,7 @@ static inline bool Archive_has_file(const Archive *archive, const String *path) 
     return false;
 }
 
-static inline bool Archive_has_file_by_hash(const Archive *archive, uint32 hash) {
+static inline bool Archive_has_file_by_hash(const Archive *archive, const uint32 hash) {
     assert(archive!=NULL);
     if (archive->has_file_by_hash) {
         return archive->has_file_by_hash(archive, hash);
@@ -91,7 +95,7 @@ static inline bool Archive_get_file(Archive *archive, const String *path, Memory
     return false;
 }
 
-static inline bool Archive_get_file_by_hash(Archive *archive, uint32 hash, MemoryBuffer *out) {
+static inline bool Archive_get_file_by_hash(Archive *archive, const uint32 hash, MemoryBuffer *out) {
     assert(archive!=NULL);
     if (archive->get_file_by_hash) {
         return archive->get_file_by_hash(archive, hash, out);
@@ -139,5 +143,12 @@ static inline bool Archive_foreach_file(const Archive* archive, const foreach_ca
     return true;
 }
 
+static inline uint32 Archive_get_hash(const Archive* archive) {
+    assert(archive!=NULL);
+    if (archive->get_hash) {
+        return archive->get_hash(archive);
+    }
+    return 0;
+}
 
 #endif //APEXPREDATOR_ARCHIVE_H

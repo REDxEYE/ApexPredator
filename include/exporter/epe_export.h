@@ -10,11 +10,11 @@
 
 
 void process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                      Havok_TypeLibrary *havok_lib, RuntimeNode *node,
+                      RuntimeNode *node,
                       uint32 path_hash,
                       const String *path, const String *export_path, GL_ID parent_gltf_node);
 
-GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, Havok_TypeLibrary *havok_lib,
+GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
                  RuntimeNode *root_node,
                  uint32 path_hash,
                  const String *path, const String *export_path);

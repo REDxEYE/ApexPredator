@@ -7,7 +7,7 @@
 #include "apex/hashes.h"
 #include "apex/adf/sti.h"
 #include "platform/logger.h"
-#include "platform/memory_profiling.h"
+#include "utils/memory_profiling.h"
 
 bool read_STI_int8(Buffer *buffer, STI_TypeLibrary *lib, STI_int8 *out) {
     return buffer->read_int8(buffer, out) == BUFFER_SUCCESS;

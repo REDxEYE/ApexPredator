@@ -307,12 +307,12 @@ void Path_join_format(Path *base, const char *fmt, ...) {
     }
 }
 
-void Path_convert_to_wsl(Path *out, Path *in) {
+void Path_convert_to_wsl(const Path *src, Path *out) {
 #ifndef WSL_ENV
-    String_copy_from(out, in);
+    String_copy_from(out, src);
 #else
-    String_init(out, String_size(in) + 10);
-    const char *in_buffer = String_cstr(in);
+    String_init(out, String_size(src) + 10);
+    const char *in_buffer = String_cstr(src);
     const char drive = in_buffer[0];
 
     String_format(out, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in_buffer + 2);
