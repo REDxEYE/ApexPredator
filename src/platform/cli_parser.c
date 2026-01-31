@@ -2,6 +2,8 @@
 
 #include "platform/cli_parser.h"
 
+#include <errno.h>
+
 
 const char *command_argument_type_names[] = {
     "string",

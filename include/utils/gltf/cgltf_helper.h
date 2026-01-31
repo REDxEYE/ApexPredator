@@ -25,18 +25,34 @@ DYNAMIC_ARRAY_STRUCT(cgltf_buffer_view, cgltf_buffer_view);
 DYNAMIC_ARRAY_STRUCT(cgltf_attribute, cgltf_attribute);
 
 DYNAMIC_ARRAY_STRUCT(cgltf_material, cgltf_material);
+
 DYNAMIC_ARRAY_STRUCT(cgltf_texture, cgltf_texture);
+
 DYNAMIC_ARRAY_STRUCT(cgltf_image, cgltf_image);
+
 DYNAMIC_ARRAY_STRUCT(cgltf_skin, cgltf_skin);
+
+DYNAMIC_ARRAY_STRUCT(cgltf_animation, cgltf_animation);
+
 DYNAMIC_ARRAY_STRUCT(DynamicArray_uint8, data_buffer);
 
 DYNAMIC_ARRAY_STRUCT(uint32, rootNodeIds);
 
-typedef struct { uint32_t v; } D_ID;
-typedef struct { void* v; } TagD_ID;
+typedef struct {
+    uint32_t v;
+} D_ID;
 
-typedef struct { uint32_t v; } GL_ID;
-typedef struct { void* v; } TagGL_ID;
+typedef struct {
+    void *v;
+} TagD_ID;
+
+typedef struct {
+    uint32_t v;
+} GL_ID;
+
+typedef struct {
+    void *v;
+} TagGL_ID;
 
 #define INVALID_GL_ID (GL_ID){UINT32_MAX}
 
@@ -44,6 +60,7 @@ typedef struct { void* v; } TagGL_ID;
 #define IS_VALID_D_ID(d_id)  ((d_id).v != UINT32_MAX)
 
 DYNAMIC_ARRAY_STRUCT(GL_ID, GL_ID);
+
 #define MAX_GLTFCONTEXT_SKIN_STACK_DEPTH 64
 
 typedef struct GLTFContext {
@@ -62,6 +79,7 @@ typedef struct GLTFContext {
     DynamicArray_cgltf_material materials;
     DynamicArray_cgltf_texture textures;
     DynamicArray_cgltf_image images;
+    DynamicArray_cgltf_animation animations;
 
     DynamicArray_GL_ID skin_stack;
 
@@ -70,9 +88,9 @@ typedef struct GLTFContext {
     bool finalized;
 } GLTFContext;
 
-static inline TagGL_ID gltf_tag_index(const GL_ID idx) { return (TagGL_ID){(void*)(uintptr_t)(idx.v + 1u)}; }
+static inline TagGL_ID gltf_tag_index(const GL_ID idx) { return (TagGL_ID){(void *) (uintptr_t) (idx.v + 1u)}; }
 static inline GL_ID gltf_untag_index(void *p) { return (GL_ID){((uintptr_t) p) - 1u}; }
-static inline TagD_ID gltf_tag_data_id(const D_ID id) { return (TagD_ID){(void*)(uintptr_t)(id.v + 1u)}; }
+static inline TagD_ID gltf_tag_data_id(const D_ID id) { return (TagD_ID){(void *) (uintptr_t) (id.v + 1u)}; }
 static inline D_ID gltf_untag_data_id(const char *p) { return (D_ID){((uintptr_t) p) - 1u}; }
 
 char *GLTFContext_dupe_cstring(const char *name);
@@ -87,7 +105,7 @@ void GLTFContext_finalize(GLTFContext *ctx);
 
 void GLTFContext_free(GLTFContext *ctx);
 
-String* GLTFContext_data_path(const GLTFContext* ctx);
+String *GLTFContext_data_path(const GLTFContext *ctx);
 
 GL_ID GLTFContext_create_buffer(GLTFContext *ctx, const void *data, uint32 data_size, const char *name);
 
@@ -114,7 +132,9 @@ void GLTFContext_node_set_parent(const GLTFContext *ctx, GL_ID node_id, GL_ID pa
 
 void GLTFContext_node_set_matrix(const GLTFContext *ctx, GL_ID node_id, const float *matrix_4x4);
 
-void GLTFContext_node_set_extra(const GLTFContext *ctx, GL_ID node_id, const char* data);
+void GLTFContext_node_set_trs(const GLTFContext *ctx, GL_ID node_id, const vec3 pos, const versor rot, const vec3 scl);
+
+void GLTFContext_node_set_extra(const GLTFContext *ctx, GL_ID node_id, const char *data);
 
 GL_ID GLTFContext_node_find_by_name(const GLTFContext *ctx, const char *name);
 
@@ -132,7 +152,8 @@ void GLTFContext_set_primitive_indices_accessor(const GLTFContext *ctx, GL_ID me
 void GLTFContext_primitive_init_attributes(const GLTFContext *ctx, GL_ID mesh_id, uint32 prim_index,
                                            uint32 attribute_count);
 
-void GLTFContext_accessor_set_minmax(const GLTFContext *ctx, GL_ID accessor_id, const float *min_values, const float *max_values);
+void GLTFContext_accessor_set_minmax(const GLTFContext *ctx, GL_ID accessor_id, const float *min_values,
+                                     const float *max_values);
 
 void GLTFContext_primitive_set_attribute_accessor(const GLTFContext *ctx, GL_ID mesh_id, uint32 prim_index,
                                                   uint32 attribute_index, GL_ID accessor_id, const char *name);
@@ -161,30 +182,31 @@ GL_ID GLTFContext_material_new(GLTFContext *ctx, const char *name_opt);
 
 bool GLTFContext_material_diffuse_present(const GLTFContext *ctx, GL_ID material_id);
 
-void GLTFContext_material_set_diffuse_texture_from_data(GLTFContext *ctx, const String* original_path,
-                                                               GL_ID material_id,
-                                                               const Texture *texture);
+void GLTFContext_material_set_diffuse_texture_from_data(GLTFContext *ctx, const String *original_path,
+                                                        GL_ID material_id,
+                                                        const Texture *texture);
 
-void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const String* original_path,
-                                                     GL_ID material_id,
-                                                     const Texture *texture);
+void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const String *original_path,
+                                               GL_ID material_id,
+                                               const Texture *texture);
 
-void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, const String* original_path,
+void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, const String *original_path,
                                                            GL_ID material_id,
                                                            const Texture *texture);
 
 
-void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const String* original_path,
-                                                           GL_ID material_id,
-                                                           const Texture *texture);
+void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const String *original_path,
+                                                 GL_ID material_id,
+                                                 const Texture *texture);
 
 GL_ID GLTFContext_material_find_by_name(const GLTFContext *ctx, const char *name);
 
-GL_ID GLTFContext_create_skin(GLTFContext *context, const char *name, uint32 joint_count);
+GL_ID GLTFContext_skin_new(GLTFContext *context, const char *name, uint32 joint_count);
 
-void GLTFContext_skin_set_joint_inverse_matrix(GLTFContext *context, GL_ID skin_id, uint32 joint_index, const float *matrix_4x4);
+void GLTFContext_skin_set_joint_inverse_matrix(GLTFContext *context, GL_ID skin_id, uint32 joint_index,
+                                               const float *matrix_4x4);
 
-void GLTFContext_skin_set_joint_inverse_matrices(GLTFContext *context, GL_ID skin_id, DynamicArray_mat4* matrices);
+void GLTFContext_skin_set_joint_inverse_matrices(GLTFContext *context, GL_ID skin_id, DynamicArray_mat4 *matrices);
 
 void GLTFContext_skin_set_skeleton(const GLTFContext *context, GL_ID skin_id, GL_ID skeleton_node_id);
 
@@ -198,6 +220,18 @@ void GLTFContext_pop_skin(GLTFContext *context);
 
 GL_ID GLTFContext_current_skin(const GLTFContext *context);
 
+GL_ID GLTFContext_animation_new(GLTFContext *context, const char *name);
+
+GL_ID GLTFContext_animation_sampler_new(const GLTFContext *context, GL_ID animation_id,
+                                        cgltf_interpolation_type interpolation,
+                                        GL_ID input_accessor_id,
+                                        GL_ID output_accessor_id
+                                        );
+GL_ID GLTFContext_animation_channel_new(const GLTFContext *context, GL_ID animation_id,
+                                        GL_ID sampler_id,
+                                        GL_ID target_node_id,
+                                        cgltf_animation_path_type path_type
+                                        );
 
 // Shortcuts
 GL_ID GLTFContext_create_indices_accessor_from_data(

@@ -42,8 +42,10 @@ void GLTFContext_init(GLTFContext *ctx, const char *name) {
     DA_init(&ctx->textures, cgltf_texture, 1);
     DA_init(&ctx->images, cgltf_image, 1);
     DA_init(&ctx->skins, cgltf_skin, 1);
+    DA_init(&ctx->animations, cgltf_animation, 1);
     DA_init(&ctx->skin_stack, GL_ID, MAX_GLTFCONTEXT_SKIN_STACK_DEPTH);
     DA_init(&ctx->raw_buffers, DynamicArray_uint8, 1);
+
 
     ctx->data->scenes = mp_calloc(1, sizeof(cgltf_scene));
     ctx->data->scenes_count = 1;
@@ -94,6 +96,8 @@ void GLTFContext_finalize(GLTFContext *ctx) {
     ctx->data->images = DA_get_buffer(&ctx->images);
     ctx->data->skins = DA_get_buffer(&ctx->skins);
     ctx->data->skins_count = ctx->skins.count;
+    ctx->data->animations_count = ctx->animations.count;
+    ctx->data->animations = DA_get_buffer(&ctx->animations);
 
     // fix-up handles → real pointers (no realloc after this point)
     for (uint32 i = 0; i < ctx->data->nodes_count; ++i) {
@@ -194,6 +198,31 @@ void GLTFContext_finalize(GLTFContext *ctx) {
             mat->emissive_texture.texture = &ctx->data->textures[idx.v];
         }
     }
+    for (int i = 0; i < ctx->data->animations_count; ++i) {
+        const cgltf_animation *anim = &ctx->data->animations[i];
+        for (uint32 j = 0; j < anim->channels_count; ++j) {
+            cgltf_animation_channel *channel = &anim->channels[j];
+            if (channel->target_node) {
+                const GL_ID idx = gltf_untag_index(channel->target_node);
+                channel->target_node = &ctx->data->nodes[idx.v];
+            }
+            if (channel->sampler) {
+                const GL_ID idx = gltf_untag_index(channel->sampler);
+                channel->sampler = &anim->samplers[idx.v];
+            }
+        }
+        for (uint32 j = 0; j < anim->samplers_count; ++j) {
+            cgltf_animation_sampler *sampler = &anim->samplers[j];
+            if (sampler->input) {
+                const GL_ID idx = gltf_untag_index(sampler->input);
+                sampler->input = &ctx->data->accessors[idx.v];
+            }
+            if (sampler->output) {
+                const GL_ID idx = gltf_untag_index(sampler->output);
+                sampler->output = &ctx->data->accessors[idx.v];
+            }
+        }
+    }
 
     // Untag all node parents
     for (uint32 i = 0; i < ctx->data->nodes_count; ++i) {
@@ -225,7 +254,8 @@ void GLTFContext_finalize(GLTFContext *ctx) {
             assert(node_id < ctx->data->nodes_count);
             ctx->data->scene->nodes[i] = &ctx->data->nodes[node_id];
         }
-    } else {
+    }
+    else {
         // if no root nodes specified, use all nodes without parents
         uint32 root_count = 0;
         for (uint32 i = 0; i < ctx->data->nodes_count; ++i) {
@@ -296,7 +326,8 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
                         buffer->uri = String_detach(&buffer_uri);
                         String_free(&buffer_uri);
                         mp_free(base64_data);
-                    } else {
+                    }
+                    else {
                         String bin_name = {0};
                         String_from_cstr(&bin_name, buffer->name);
                         Path_replace_invalid_fs_chars(&bin_name, '_');
@@ -308,7 +339,7 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
                         FILE *f = fopen(String_cstr(&buffer_path), "wb");
                         if (f == NULL) {
                             GLog_Error("GLTFContext_write_and_free: failed to open buffer file for writing: %s",
-                                   String_cstr(&buffer_path));
+                                       String_cstr(&buffer_path));
                             exit(1);
                         }
                         fwrite(DA_get_buffer(raw_data), 1, raw_data->count, f);
@@ -325,7 +356,8 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
             }
             String_free(&data_dir);
             String_free(&gltf_name);
-        }else {
+        }
+        else {
             // all buffers get base64 encoded into URI
             for (int i = 0; i < ctx->data->buffers_count; ++i) {
                 cgltf_buffer *buffer = &ctx->data->buffers[i];
@@ -351,7 +383,8 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
         ctx->options.type = cgltf_file_type_gltf;
         GLog_Info("[INFO]: GLTF save path: %s", String_cstr(&ctx->save_path));
         ok = (cgltf_write_file(&ctx->options, String_cstr(&ctx->save_path), ctx->data) == cgltf_result_success);
-    } else {
+    }
+    else {
         ok = true;
     }
     GLTFContext_free(ctx);
@@ -360,20 +393,22 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
 }
 
 void GLTFContext_free(GLTFContext *ctx) {
+    // @formatter:off
     DA_free_with_inner(&ctx->meshes, {
                        const cgltf_mesh* mesh = it;
                        if (mesh->name != NULL) mp_free(mesh->name);
-                       for (uint32 i =0; i < mesh->primitives_count; i++) {
-                           const cgltf_primitive* primitive = &mesh->primitives[i];
-                           if (primitive->attributes) {
-                               for (uint32 j=0; j < primitive->attributes_count; j++) {
-                                   const cgltf_attribute* attribute = &primitive->attributes[j];
-                                   if (attribute->name != NULL) mp_free(attribute->name);
-                               }
-                               mp_free(primitive->attributes);
-                           }
-                       }
-                       mp_free(mesh->primitives);});
+                            for (uint32 i =0; i < mesh->primitives_count; i++) {
+                                const cgltf_primitive* primitive = &mesh->primitives[i];
+                                if (primitive->attributes) {
+                                    for (uint32 j=0; j < primitive->attributes_count; j++) {
+                                        const cgltf_attribute* attribute = &primitive->attributes[j];
+                                        if (attribute->name != NULL) mp_free(attribute->name);
+                                    }
+                                    mp_free(primitive->attributes);
+                                }
+                            }
+                       mp_free(mesh->primitives);
+                       });
 
     DA_free_with_inner(&ctx->nodes, {
                        const cgltf_node* node = it;
@@ -385,7 +420,7 @@ void GLTFContext_free(GLTFContext *ctx) {
     DA_free_with_inner(&ctx->accessors, {
                        const cgltf_accessor* acc = it;
                        if (acc->name != NULL) mp_free(acc->name);
-    });
+                       });
 
     DA_free_with_inner(&ctx->buffers, {
                        const cgltf_buffer *buf = it;
@@ -394,12 +429,10 @@ void GLTFContext_free(GLTFContext *ctx) {
                        if (buf->uri != NULL) mp_free(buf->uri);
                        });
 
-    DA_free_with_inner(&ctx->buffer_views,{
+    DA_free_with_inner(&ctx->buffer_views, {
                        const cgltf_buffer_view* bv = it;
                        if (bv->name != NULL) mp_free(bv->name);
-    });
-
-    DA_free(&ctx->scene_node_ids);
+                       });
 
     DA_free_with_inner(&ctx->materials, {
                        const cgltf_material* mat = it;
@@ -425,6 +458,8 @@ void GLTFContext_free(GLTFContext *ctx) {
                        });
 
     DA_free(&ctx->skin_stack);
+    DA_free(&ctx->scene_node_ids);
+
 
     DA_free_with_inner(&ctx->raw_buffers, {
                        DynamicArray_uint8* buf = it;
@@ -433,15 +468,17 @@ void GLTFContext_free(GLTFContext *ctx) {
 
     String_free(&ctx->save_path);
     for (int i = 0; i < ctx->data->scenes_count; ++i) {
-        if (ctx->data->scenes[i].nodes != NULL) mp_free(ctx->data->scenes[i].nodes);
-        if (ctx->data->scenes[i].name != NULL) mp_free(ctx->data->scenes[i].name);
+        if (ctx->data->scenes[i].nodes != NULL)
+            mp_free(ctx->data->scenes[i].nodes);
+        if (ctx->data->scenes[i].name != NULL)
+            mp_free(ctx->data->scenes[i].name);
     }
-
+    // @formatter:on
     mp_free(ctx->data->scenes);
     mp_free(ctx->data);
 }
 
-String * GLTFContext_data_path(const GLTFContext *ctx) {
+String *GLTFContext_data_path(const GLTFContext *ctx) {
     String *data_dir = String_new(64);
     Path_get_parent(&ctx->save_path, data_dir);
     String gltf_name = {0};
@@ -533,7 +570,8 @@ void GLTFContext_node_set_parent(const GLTFContext *ctx, const GL_ID node_id, co
         parent->children = mp_malloc(sizeof(cgltf_node *));
         parent->children_count = 1;
         parent->children[0] = gltf_tag_index(node_id).v;
-    } else {
+    }
+    else {
         parent->children = mp_realloc(parent->children, sizeof(cgltf_node *) * (parent->children_count + 1));
         parent->children[parent->children_count] = gltf_tag_index(node_id).v;
         parent->children_count += 1;
@@ -544,6 +582,16 @@ void GLTFContext_node_set_matrix(const GLTFContext *ctx, const GL_ID node_id, co
     cgltf_node *n = &ctx->nodes.items[node_id.v];
     memcpy(n->matrix, matrix_4x4, sizeof(n->matrix));
     n->has_matrix = true;
+}
+
+void GLTFContext_node_set_trs(const GLTFContext *ctx, const GL_ID node_id, const vec3 pos, const versor rot, const vec3 scl) {
+    cgltf_node *n = &ctx->nodes.items[node_id.v];
+    memcpy(n->translation, pos, sizeof(n->translation));
+    memcpy(n->rotation, rot, sizeof(n->rotation));
+    memcpy(n->scale, scl, sizeof(n->scale));
+    n->has_translation = true;
+    n->has_rotation = true;
+    n->has_scale = true;
 }
 
 GL_ID GLTFContext_mesh_add(GLTFContext *ctx, const char *name_opt, const uint32 primitive_count) {
@@ -568,7 +616,8 @@ void GLTFContext_node_set_skin(const GLTFContext *ctx, const GL_ID node_id, cons
     n->skin = gltf_tag_index(skin_id).v;
 }
 
-void GLTFContext_primitive_set_material(const GLTFContext *ctx, const GL_ID mesh_id, const uint32 primitive_id, const GL_ID material_id) {
+void GLTFContext_primitive_set_material(const GLTFContext *ctx, const GL_ID mesh_id, const uint32 primitive_id,
+                                        const GL_ID material_id) {
     const cgltf_mesh *m = &ctx->meshes.items[mesh_id.v];
     assert(primitive_id < m->primitives_count);
     cgltf_primitive *prim = &m->primitives[primitive_id];
@@ -622,7 +671,8 @@ void GLTFContext_accessor_set_minmax(const GLTFContext *ctx, const GL_ID accesso
     }
 }
 
-void GLTFContext_primitive_set_attribute_accessor(const GLTFContext *ctx, const GL_ID mesh_id, const uint32 primitive_id,
+void GLTFContext_primitive_set_attribute_accessor(const GLTFContext *ctx, const GL_ID mesh_id,
+                                                  const uint32 primitive_id,
                                                   const uint32 attribute_id, const GL_ID accessor_id,
                                                   const char *name) {
     const cgltf_mesh *m = &ctx->meshes.items[mesh_id.v];
@@ -777,10 +827,10 @@ void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, con
 }
 
 void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const String *original_path, const GL_ID material_id,
-    const Texture *texture) {
+                                                 const Texture *texture) {
     // if (texture->channel_count) {
-        // printf("Invalid texture channel count for emissive map!\n");
-        // return;
+    // printf("Invalid texture channel count for emissive map!\n");
+    // return;
     // }
     const GL_ID tex_id = gltf_texture_from_texture(ctx, original_path, texture);
     cgltf_material *mat = &ctx->materials.items[material_id.v];
@@ -808,7 +858,8 @@ void GLTFContext_node_set_extra(const GLTFContext *ctx, const GL_ID node_id, con
     }
     if (data != NULL) {
         n->extras.data = GLTFContext_dupe_cstring(data);
-    } else {
+    }
+    else {
         n->extras.data = NULL;
     }
 }
@@ -823,12 +874,13 @@ GL_ID GLTFContext_node_find_by_name(const GLTFContext *ctx, const char *name) {
     return INVALID_GL_ID;
 }
 
-GL_ID GLTFContext_create_skin(GLTFContext *context, const char *name, const uint32 joint_count) {
+GL_ID GLTFContext_skin_new(GLTFContext *context, const char *name, const uint32 joint_count) {
     cgltf_skin *skin = DA_append_get(&context->skins);
     memset(skin, 0, sizeof(*skin));
     if (name) {
         skin->name = GLTFContext_dupe_cstring(name);
-    } else {
+    }
+    else {
         skin->name = GLTFContext_dupe_cstring("skin");
     }
     skin->joints = mp_calloc(joint_count, sizeof(cgltf_node *));
@@ -852,7 +904,8 @@ void GLTFContext_skin_set_joint_inverse_matrix(GLTFContext *context, const GL_ID
             cgltf_buffer_view_type_invalid, false, 0, 0);
         skin->inverse_bind_matrices = gltf_tag_index(accessor_id).v;
         mp_free(matrices_data);
-    } else {
+    }
+    else {
         // update existing inverse bind matrices accessor
         const GL_ID accessor_id = gltf_untag_index(skin->inverse_bind_matrices);
         const cgltf_accessor *accessor = &context->accessors.items[accessor_id.v];
@@ -933,8 +986,54 @@ GL_ID GLTFContext_current_skin(const GLTFContext *context) {
     return context->skin_stack.items[context->skin_stack.count - 1];
 }
 
-GL_ID GLTFContext_create_indices_accessor_from_data(GLTFContext *ctx, const void *data, const uint32 data_size, const uint32 count,
-                                                    const char *name, const cgltf_component_type component_type, const uint32 offset) {
+GL_ID GLTFContext_animation_new(GLTFContext *context, const char *name) {
+    cgltf_animation *anim = DA_append_get(&context->animations);
+    memset(anim, 0, sizeof(*anim));
+    if (name) {
+        anim->name = GLTFContext_dupe_cstring(name);
+    }
+    else {
+        anim->name = GLTFContext_dupe_cstring("animation");
+    }
+    return (GL_ID){context->animations.count - 1};
+}
+
+GL_ID GLTFContext_animation_sampler_new(const GLTFContext *context, const GL_ID animation_id,
+                                        const cgltf_interpolation_type interpolation,
+                                        const GL_ID input_accessor_id,
+                                        const GL_ID output_accessor_id) {
+    cgltf_animation *anim = &context->animations.items[animation_id.v];
+    cgltf_animation_sampler *sampler = mp_realloc(anim->samplers,
+                                                  sizeof(cgltf_animation_sampler) * (anim->samplers_count + 1));
+    anim->samplers = sampler;
+    sampler = &anim->samplers[anim->samplers_count];
+    memset(sampler, 0, sizeof(*sampler));
+    sampler->interpolation = interpolation;
+    sampler->input = gltf_tag_index(input_accessor_id).v;
+    sampler->output = gltf_tag_index(output_accessor_id).v;
+    anim->samplers_count += 1;
+    return (GL_ID){anim->samplers_count - 1};
+}
+
+GL_ID GLTFContext_animation_channel_new(const GLTFContext *context, const GL_ID animation_id, const GL_ID sampler_id,
+                                        const GL_ID target_node_id, const cgltf_animation_path_type path_type) {
+    cgltf_animation *anim = &context->animations.items[animation_id.v];
+    cgltf_animation_channel *channel = mp_realloc(anim->channels,
+                                                  sizeof(cgltf_animation_channel) * (anim->channels_count + 1));
+    anim->channels = channel;
+    channel = &anim->channels[anim->channels_count];
+    memset(channel, 0, sizeof(*channel));
+    channel->sampler = gltf_tag_index(sampler_id).v;
+    channel->target_node = gltf_tag_index(target_node_id).v;
+    channel->target_path = path_type;
+    anim->channels_count += 1;
+    return (GL_ID){anim->channels_count - 1};
+}
+
+GL_ID GLTFContext_create_indices_accessor_from_data(GLTFContext *ctx, const void *data, const uint32 data_size,
+                                                    const uint32 count,
+                                                    const char *name, const cgltf_component_type component_type,
+                                                    const uint32 offset) {
     return GLTFContext_accessor_from_data(ctx, data, data_size, count, name,
                                           cgltf_type_scalar, component_type, cgltf_buffer_view_type_indices,
                                           false, 0, offset);

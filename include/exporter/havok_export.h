@@ -14,4 +14,5 @@ void build_matrix(mat4 out, const hkQsTransform* transform);
 
 GL_ID export_skeleton(GLTFContext *context, const hkaSkeleton *skeleton);
 
+void export_animation(GLTFContext *context, const hkaAnimationBinding *binding, const hkaSkeleton* skeleton, const String* name);
 #endif //APEXPREDATOR_HAVOK_EXPORT_H

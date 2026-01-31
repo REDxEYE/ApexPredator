@@ -67,10 +67,10 @@ void ensure_parents_loaded(const ArchiveManager *manager, const uint32 file_hash
         return;
     }
     String_free(parent_name);
+
     if (manager->load_archive != NULL) {
         manager->load_archive(manager, parent_id);
     }
-    ensure_parents_loaded(manager, (uint32) parent_id);
 }
 
 bool ArchiveManager_get_file(const ArchiveManager *manager, const String *path, MemoryBuffer *mb) {
@@ -99,15 +99,15 @@ bool ArchiveManager_get_file_by_hash(const ArchiveManager *manager, const uint32
     for (uint32 i = 0; i < manager->archives.count; ++i) {
         Archive *ar = manager->archives.items[i];
         if (Archive_get_file_by_hash(ar, path, mb)) {
-            String *filename = find_name32(path);
-            if (filename != NULL) {
-                // GLog_Info("File \"%s\" found in archive \"%s\"", String_cstr(filename),
-                //        String_cstr(Archive_get_name(ar)));
-                String_free(filename);
-            }
-            else
-                GLog_Info("File with hash %08X found in archive \"%s\"", path,
-                       String_cstr(Archive_get_name(ar)));
+            // String *filename = find_name32(path);
+            // if (filename != NULL) {
+            //     // GLog_Info("File \"%s\" found in archive \"%s\"", String_cstr(filename),
+            //     //        String_cstr(Archive_get_name(ar)));
+            //     String_free(filename);
+            // }
+            // else
+            //     GLog_Info("File with hash %08X found in archive \"%s\"", path,
+            //            String_cstr(Archive_get_name(ar)));
             TracyCZoneEnd(ctx)
             return true;
         }

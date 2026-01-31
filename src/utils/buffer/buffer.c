@@ -241,3 +241,10 @@ void Buffer_align(Buffer *buffer, const uint32 alignment) {
         buffer->set_position(buffer, padding, BUFFER_ORIGIN_CURRENT);
     }
 }
+
+void Buffer_close(Buffer *buffer) {
+    assert(buffer != NULL);
+    if (buffer->close != NULL) {
+        buffer->close(buffer);
+    }
+}
