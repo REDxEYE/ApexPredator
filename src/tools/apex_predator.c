@@ -69,7 +69,7 @@ const CommandArgument extract_anim_arguments[] = {
         .has_default = false,
     },
     {
-        .name = "out-dir",
+        .name = "out_dir",
         .flag = "o",
         .description = "Output directory for extracted animations.",
         .type = COMMAND_ARG_TYPE_STRING,
@@ -152,7 +152,7 @@ int main(int argc, const char *argv[]) {
 
     String export_path = {};
     const char *export_path_cstr = NULL;
-    cli_get_string(&cli_res, "out-dir", &export_path_cstr);
+    cli_get_string(&cli_res, "out_dir", &export_path_cstr);
     String_from_cstr(&export_path, export_path_cstr);
 
     TabArchives_init(&manager, &game_root);

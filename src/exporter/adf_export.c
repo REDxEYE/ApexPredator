@@ -3,16 +3,17 @@
 #include "exporter/adf_export.h"
 
 #include "zstd.h"
-#include "apex/hashes.h"
+#include "cglm/cglm.h"
+
 #include "apex/adf/adf.h"
 #include "apex/adf/adf_types.h"
-#include "cglm/affine-pre.h"
+#include "apex/hashes.h"
 #include "exporter/amf_export.h"
 #include "platform/logger.h"
+#include "utils/buffer/file_buffer.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
 #include "utils/stb_image_write.h"
-#include "utils/buffer/file_buffer.h"
 
 
 #pragma pack(push, 1)
@@ -103,15 +104,20 @@ Texture *export_terrain_texture(const TerrainTexture *terrain_texture, uint32 ex
     if (terrain_texture->BlockCompressionType == E_BLOCKCOMPRESSIONTYPE_NONE) {
         if (expected_channels == 1 && pixel_size == 1) {
             fmt = DXGI_FORMAT_R8_UNORM;
-        } else if (expected_channels == 1 && pixel_size == 2) {
+        }
+        else if (expected_channels == 1 && pixel_size == 2) {
             fmt = DXGI_FORMAT_R16_UNORM;
-        } else if (expected_channels == 2 && pixel_size == 4) {
+        }
+        else if (expected_channels == 2 && pixel_size == 4) {
             fmt = DXGI_FORMAT_R16G16_UNORM;
-        } else if (expected_channels == 3 && pixel_size == 3) {
+        }
+        else if (expected_channels == 3 && pixel_size == 3) {
             fmt = DXGI_FORMAT_CUSTOM_R8G8B8_UNORM;
-        } else if (expected_channels == 4 && pixel_size == 4) {
+        }
+        else if (expected_channels == 4 && pixel_size == 4) {
             fmt = DXGI_FORMAT_R8G8B8A8_UNORM;
-        } else {
+        }
+        else {
             GLog_Error("Unsupported terrain texture format with %i channels and pixel size %f", expected_channels,
                        pixel_size);
             return NULL;
@@ -685,7 +691,8 @@ GL_ID export_stream_path_file(GLTFContext *context, ArchiveManager *archive_mana
                 // } else if (block_data_instance->type_hash == STI_TYPE_HASH_InstanceDataPatch) {
                 //     const InstanceDataPatch *instance_data_patch = (InstanceDataPatch *) block_data;
                 //     export_terrain_instances(context, archive_manager, lib, block_header, instance_data_patch, export_path);
-            } else {
+            }
+            else {
                 // ADF_print_instance(lib, block_data_instance, block_data, 0);
             }
             assert(block_data_instance->type_hash!=STI_TYPE_HASH_StreamPatchBlockHeader);
@@ -750,7 +757,8 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
                 // break;
             }
             ADF_free_instance(lib, instance, (void *) world_settings);
-        } else if (instance->type_hash == STI_TYPE_HASH_StreamPatchFileHeader) {
+        }
+        else if (instance->type_hash == STI_TYPE_HASH_StreamPatchFileHeader) {
             output_node_id = export_stream_path_file(context, archive_manager, lib, &adf, mb, export_path);
             break;
             // }
@@ -761,13 +769,15 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
             //     lod = ph->PatchLod;
             // } else if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
             //     export_terrain_patch(&mesh_export_path, instance_data, tile_x, tile_y, lod);
-        } else if (instance->type_hash == STI_TYPE_HASH_AmfModel) {
+        }
+        else if (instance->type_hash == STI_TYPE_HASH_AmfModel) {
             // ADF_print_instance(lib, instance, instance_data, 0);
             assert(adf.instances.count==1 && "ADF with AmfModel should have only one instance");
             const AmfModel *model = ADF_read_instance(&adf, lib, instance, mb);
             output_node_id = export_amf_model(context, archive_manager, lib, model, path, path_hash, export_path);
             ADF_free_instance(lib, instance, (void *) model);
-        } else if (instance->type_hash == STI_TYPE_HASH_AmfMeshHeader) {
+        }
+        else if (instance->type_hash == STI_TYPE_HASH_AmfMeshHeader) {
             assert(adf.instances.count==2 && "ADF with AmfMeshHeader should have only two instances");
             instanceId++;
             const AmfMeshHeader *mesh_header = ADF_read_instance(&adf, lib, instance, mb);
@@ -781,7 +791,8 @@ GL_ID export_adf_file_from_buffer(GLTFContext *context, ArchiveManager *archive_
                                              mesh_header, mesh_buffers);
             ADF_free_instance(lib, instance, (void *) mesh_header);
             ADF_free_instance(lib, mesh_buffers_instance, (void *) mesh_buffers);
-        } else {
+        }
+        else {
             void *instance_data = ADF_read_instance(&adf, lib, instance, mb);
             String unk_file_export_path = {};
             Path_join(&unk_file_export_path, export_path);
