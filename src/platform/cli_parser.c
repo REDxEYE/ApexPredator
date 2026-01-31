@@ -644,7 +644,7 @@ void cli_print_help(const CliSpec *spec, const char *exe_path, FILE *out) {
     const char *prog = spec->prog ? spec->prog : exe_name;
     const char *root = (spec->root_name) ? spec->root_name : "game path";
 
-    fprintf(out, "%s <%s> <command> [options]\n\n", prog, root);
+    fprintf(out, "%s <%s> <command> [arguments]\n\n", prog, root);
 
     fprintf(out, "Available commands:\n");
     for (size_t ci = 0; ci < spec->command_count; ++ci) {
