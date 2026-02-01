@@ -76,7 +76,7 @@ const CommandArgument extract_anim_arguments[] = {
         .named = true,
         .required = false,
         .has_default = true,
-        .string_value = "./extracted_anims",
+        .string_value = "./extracted",
     }
 };
 
