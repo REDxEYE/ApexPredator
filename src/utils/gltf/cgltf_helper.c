@@ -57,6 +57,14 @@ void GLTFContext_init(GLTFContext *ctx, const char *name) {
     ctx->finalized = false;
 }
 
+bool GLTFContext_is_initialized(const GLTFContext *ctx) {
+    if (ctx == NULL) {
+        GLog_Error("GLTFContext_ensure_initialized: ctx is NULL");
+        exit(1);
+    }
+    return ctx->data != NULL;
+}
+
 void GLTFContext_set_save_path(GLTFContext *ctx, const String *path) {
     if (String_size(&ctx->save_path) != 0) {
         return;
@@ -457,6 +465,13 @@ void GLTFContext_free(GLTFContext *ctx) {
                        if (skin->name!=NULL)mp_free(skin->name);
                        });
 
+    DA_free_with_inner(&ctx->animations, {
+                       const cgltf_animation* anim = it;
+                       if (anim->name!=NULL)mp_free(anim->name);
+                       if (anim->channels!=NULL)mp_free(anim->channels);
+                       if (anim->samplers!=NULL)mp_free(anim->samplers);
+                       });
+
     DA_free(&ctx->skin_stack);
     DA_free(&ctx->scene_node_ids);
 
@@ -547,7 +562,7 @@ GL_ID GLTFContext_accessor_from_data(GLTFContext *ctx, const void *data, const u
     return GLTFContext_accessor_add(ctx, view_id, type, component_type, count, offset, normalized, name);
 }
 
-GL_ID GLTFContext_node_add(GLTFContext *ctx, const char *name_opt) {
+GL_ID GLTFContext_node_add(const GLTFContext *ctx, const char *name_opt) {
     cgltf_node *n = DA_append_get(&ctx->nodes);
     memset(n, 0, sizeof(*n));
     if (name_opt) {
@@ -584,7 +599,8 @@ void GLTFContext_node_set_matrix(const GLTFContext *ctx, const GL_ID node_id, co
     n->has_matrix = true;
 }
 
-void GLTFContext_node_set_trs(const GLTFContext *ctx, const GL_ID node_id, const vec3 pos, const versor rot, const vec3 scl) {
+void GLTFContext_node_set_trs(const GLTFContext *ctx, const GL_ID node_id, const vec3 pos, const versor rot,
+                              const vec3 scl) {
     cgltf_node *n = &ctx->nodes.items[node_id.v];
     memcpy(n->translation, pos, sizeof(n->translation));
     memcpy(n->rotation, rot, sizeof(n->rotation));

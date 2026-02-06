@@ -36,6 +36,7 @@ typedef struct {
 }SArchive;
 
 SArchive* SArchive_new(Buffer* buffer, uint32 self_hash);
+void SArchive_init(SArchive* archive, Buffer* buffer, uint32 self_hash);
 // void SArchive_from_buffer(SArchive* archive, Buffer* buffer);
 // void SArchive_free(SArchive* archive);
 

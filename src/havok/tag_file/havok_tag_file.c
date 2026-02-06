@@ -2,9 +2,10 @@
 
 #include "havok/tag_file/havok_tag_file.h"
 
+#include <assert.h>
 #include <math.h>
 
-#include "havok/generated/havok_generated.h"
+#include "havok/havok_types.h"
 #include "platform/common_arrays.h"
 #include "platform/logger.h"
 #include "utils/buffer/memory_buffer.h"
@@ -743,23 +744,6 @@ bool TAG0Tag_from_buffer(TagFile *tf, Buffer *buffer) {
 bool TagFile_from_buffer(TagFile *tf, Buffer *buffer) {
     TAG0Tag_from_buffer(tf, buffer);
     return true;
-}
-
-TypedPtr* TagFile_get_item(const TagFile *tf, uint32 index) {
-    const HKItem *item = &tf->items.items[index+1];
-    HKTagType *hk_tag_type = &tf->types.items[item->type];
-    const uint32 type_hash = hash_string(HKTagType_stable_name(hk_tag_type));
-    const HavokTypeInfo *type_info = *(HavokTypeInfo **) DM_get(&HAVOK_TYPES_type_info, type_hash);
-    TypedPtr *item_obj = mp_malloc(type_info->size);
-    type_info->init(item_obj);
-    type_info->read(item_obj, tf, &tf->data.items[item->offset]);
-
-    return item_obj;
-}
-
-void TagFile_free_item(TypedPtr *item) {
-    item->type_info_->free(item);
-    mp_free(item);
 }
 
 HK_SDKVersion TagFile_get_sdk_version(TagFile *tf) {

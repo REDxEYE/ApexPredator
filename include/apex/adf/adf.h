@@ -4,13 +4,30 @@
 #define APEXPREDATOR_ADF_H
 #include <stdbool.h>
 
-#include "apex/adf/sti.h"
+#include "adf_type_info_map.h"
 #include "platform/common_arrays.h"
 
 #include "utils/buffer/buffer.h"
 #include "utils/dynamic_array.h"
+#include "utils/json.h"
+#include "utils/buffer/memory_buffer.h"
 
 #define ADF_MAGIC " FDA"
+
+typedef enum {
+    ADF_Primitive = 0,
+    ADF_Structure = 1,
+    ADF_Pointer = 2,
+    ADF_Array = 3,
+    ADF_InlineArray = 4,
+    ADF_StringType = 5,
+    ADF_Recursive = 6,
+    ADF_Bitfield = 7,
+    ADF_Enumeration = 8,
+    ADF_StringHash = 9,
+    ADF_DeferredType = 10,
+    ADF_Force_i32 = 0x7FFFFFFF,
+} ADFMetaType;
 
 #pragma pack(push, 1)
 typedef struct {
@@ -41,30 +58,93 @@ typedef struct {
     uint64 name_id;
 } ADFInstance;
 
+typedef struct {
+    ADFMetaType type;
+    uint32 size;
+    uint32 alignment;
+    uint32 hash;
+    uint64 name_id;
+    uint16 flags;
+    uint16 scalar_type;
+    uint32 element_type_hash;
+    uint32 element_len;
+} ADFTypeDef;
+
+typedef struct {
+    uint64 name_id;
+    uint32 type_hash;
+    uint32 size;
+    uint32 offset: 24;
+    uint32 bit_offset: 8;
+    uint32 default_type;
+    uint64 default_value;
+} ADFStructMemberInfo;
+
+typedef struct {
+    uint64 name_id;
+    uint32 value;
+} ADFEnumMemberInfo;
+
 #pragma pack(pop)
 
+DYNAMIC_ARRAY_STRUCT(ADFTypeDef, ADFTypeDef);
+DYNAMIC_ARRAY_STRUCT(ADFStructMemberInfo, ADFStructMemberInfo);
+DYNAMIC_ARRAY_STRUCT(ADFEnumMemberInfo, ADFEnumMemberInfo);
+
+typedef struct {
+    DynamicArray_ADFStructMemberInfo members;
+} ADFStructTypeData;
+
+typedef struct {
+    DynamicArray_ADFEnumMemberInfo members;
+} ADFEnumTypeData;
+
+typedef struct {
+    uint32 count;
+} ADFArrayTypeData;
+
+typedef struct {
+    uint32 type_hash;
+} ADFDeferredTypeData;
+
+typedef union {
+    ADFStructTypeData struct_data;
+    ADFEnumTypeData enum_data;
+    ADFArrayTypeData array_data;
+    ADFDeferredTypeData deferred_data;
+} ADFTypeData;
+
+typedef struct {
+    ADFTypeDef def;
+    ADFTypeData type_data;
+} ADFType;
+
+void ADFType_free(ADFType* type);
+void ADFType_init(ADFType* type, ADFMetaType meta_type);
+
 DYNAMIC_ARRAY_STRUCT(ADFInstance, ADFInstance);
+DYNAMIC_ARRAY_STRUCT(ADFType, ADFType);
 
 typedef struct {
     ADFHeader header;
     String comment;
     DynamicArray_String strings;
     DynamicArray_ADFInstance instances;
-    DynamicArray_STI_TypeDef type_defs;
+    DynamicArray_ADFType types;
 } ADF;
 
-bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib);
+bool ADF_from_buffer(ADF *adf, Buffer *buffer);
 
 void ADF_free(ADF *adf);
 
-void ADF_load_builtin_adf(STI_TypeLibrary *lib, const uint8 *data, int64 size);
+ADF* ADF_load_builtin_adf(const uint8 *data, int64 size);
 
 ADFInstance *ADF_get_instance(ADF *adf, uint32 instance_id);
 
-void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance *instance, const MemoryBuffer *mb);
+void *ADF_read_instance(const ADF *adf, const ADFInstance *instance, const MemoryBuffer *mb, const STITypeInfoMap* type_map);
 
-void ADF_free_instance(STI_TypeLibrary* lib, const ADFInstance *instance, void* instance_data);
+void ADF_free_instance(const ADFInstance *instance, void *instance_data, const STITypeInfoMap* type_map);
 
-void ADF_print_instance(STI_TypeLibrary *lib, const ADFInstance *instance, const void* instance_data, int indent);
+void ADF_print_instance(const ADFInstance *instance, const void *instance_data,  JsonContext* ctx, const STITypeInfoMap* type_map);
 
 #endif //APEXPREDATOR_ADF_H

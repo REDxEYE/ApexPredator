@@ -3,13 +3,11 @@
 #ifndef APEXPREDATOR_HAVOK_TYPES_H
 #define APEXPREDATOR_HAVOK_TYPES_H
 
-#include "tag_file/havok_tag_file.h"
+#include "havok/havok_type_info_map.h"
 #include "utils/dynamic_map.h"
-#include "utils/json.h"
+
 
 String *Havok_full_tag_type_name(const HKTagType *type);
-
-// String *Havok_full_type_name(const Havok_TypeLibrary *lib, const HavokType *type);
 
 typedef struct HavokType HavokType;
 
@@ -84,34 +82,5 @@ void Havok_TypeLibrary_free(Havok_TypeLibrary *lib);
 HavokType *Havok_TypeLibrary_find_by_name(const Havok_TypeLibrary *lib, const char *name);
 
 void Havok_TypeLibrary_copy_from_tag_file(Havok_TypeLibrary *lib, TagFile *tf);
-
-typedef void (*initHavokObject)(void *obj);
-
-typedef void (*readHavokObject)(void *obj, const TagFile *tf, const uint8 *src);
-
-typedef void (*freeHavokObject)(void *obj);
-
-typedef void (*printHavokObject)(void *obj, JsonContext *ctx);
-
-
-typedef struct HavokVTable {
-    initHavokObject init;
-    readHavokObject read;
-    freeHavokObject free;
-    printHavokObject print;
-    uint32 size;
-    uint32 disk_size:30;
-    uint32 is_record:1;
-    uint32 is_array:1;
-    uint32 hash;
-    const char* name;
-}HavokTypeInfo;
-
-DYNAMIC_ARRAY_STRUCT(HavokTypeInfo, HavokTypeInfo);
-DYNAMIC_INT_MAP_STRUCT(HavokTypeInfo, HavokTypeInfo);
-
-typedef DynamicIntMap_HavokTypeInfo TypeInfoMap;
-
-void register_type_info(TypeInfoMap *map, uint32 hash, const HavokTypeInfo *type_info);
 
 #endif //APEXPREDATOR_HAVOK_TYPES_H

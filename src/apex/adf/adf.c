@@ -5,7 +5,6 @@
 #include "apex/adf/adf.h"
 
 #include <assert.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "apex/hashes.h"
@@ -13,69 +12,55 @@
 #include "utils/common.h"
 #include "utils/buffer/memory_buffer.h"
 #include "tracy/TracyC.h"
+#include "utils/dynamic_map.h"
 
 
-bool read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
-    STI_TypeDef *typedef_ = DA_append_get(&adf->type_defs);
-    buffer->read(buffer, typedef_, sizeof(STI_TypeDef),NULL);
-    STI_Type *type;
-    bool is_dummy = false;
-    if (DA_contains(&lib->types.keys, &typedef_->hash, compare_hashes)) {
-        STI_Type dummy = {0};
-        STI_Type_init(&dummy, typedef_->type);
-        type = &dummy;
-        String_copy_from(&type->name, &adf->strings.items[typedef_->name_id]);
-        is_dummy = true;
-    } else {
-        type = STI_TypeLibrary_new_type(lib, typedef_->type, typedef_->hash, &adf->strings.items[typedef_->name_id]);
-    }
-
-    memcpy(&type->info, typedef_, sizeof(STI_TypeDef));
-    // if (type->info.flags!=0x8000) {
-    // }
-
+bool read_typedef(ADF *adf, Buffer *buffer) {
+    ADFType *type = DA_append_get(&adf->types);
+    buffer->read(buffer, &type->def,  sizeof(ADFTypeDef), NULL);
+    const ADFTypeDef* typedef_ = &type->def;
     switch (typedef_->type) {
-        case STI_Structure: {
+        case ADF_Structure: {
             uint32 member_count = 0;
             if (buffer->read_uint32(buffer, &member_count)) {
                 return false;
             }
+            DA_init(&type->type_data.struct_data.members, ADFStructMemberInfo, member_count);
             DA_reserve(&type->type_data.struct_data.members, member_count);
             for (int j = 0; j < member_count; ++j) {
-                STI_StructMember *member = DA_append_get(&type->type_data.struct_data.members);
-                if (buffer->read(buffer, &member->info, sizeof(STI_StructMemberInfo), NULL) != BUFFER_SUCCESS) {
+                ADFEnumMemberInfo *member = DA_append_get(&type->type_data.struct_data.members);
+                if (buffer->read(buffer, member, sizeof(ADFStructMemberInfo), NULL) != BUFFER_SUCCESS) {
                     return false;
                 }
-                String_copy_from(&member->name, &adf->strings.items[member->info.name_id]);
             }
             break;
         }
-        case STI_Enumeration: {
+        case ADF_Enumeration: {
             uint32 member_count = 0;
             if (buffer->read_uint32(buffer, &member_count)) {
                 return false;
             }
+            DA_init(&type->type_data.enum_data.members, ADFEnumMemberInfo, member_count);
             DA_reserve(&type->type_data.enum_data.members, member_count);
             for (int j = 0; j < member_count; ++j) {
-                STI_EnumMember *member = DA_append_get(&type->type_data.enum_data.members);
-                if (buffer->read(buffer, &member->info, sizeof(STI_EnumMemberInfo), NULL) != BUFFER_SUCCESS) {
+                ADFEnumMemberInfo *member = DA_append_get(&type->type_data.enum_data.members);
+                if (buffer->read(buffer, member, sizeof(ADFEnumMemberInfo), NULL) != BUFFER_SUCCESS) {
                     return false;
                 }
-                String_copy_from(&member->name, &adf->strings.items[member->info.name_id]);
             }
             break;
         }
-        case STI_Array:
-        case STI_InlineArray: {
+        case ADF_Array:
+        case ADF_InlineArray: {
             if (buffer->read_uint32(buffer, &type->type_data.array_data.count)) {
                 return false;
             }
             break;
         }
-        case STI_Bitfield:
-        case STI_StringHash:
-        case STI_Pointer: {
-            if (buffer->read_uint32(buffer, &type->type_data.unk_data.unk)) {
+        case ADF_Bitfield:
+        case ADF_StringHash:
+        case ADF_Pointer: {
+            if (buffer->read_uint32(buffer, &type->type_data.deferred_data.type_hash)) {
                 return false;
             }
             break;
@@ -85,13 +70,36 @@ bool read_typedef(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
             assert(false && "Unknown type");
         };
     }
-    if (is_dummy) {
-        STI_Type_free(type);
-    }
     return true;
 }
 
-bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
+void ADFType_free(ADFType *type) {
+    switch (type->def.type) {
+        case ADF_Structure: {
+            DA_free(&type->type_data.struct_data.members);
+            break;
+        }
+        case ADF_Enumeration: {
+            DA_free(&type->type_data.enum_data.members);
+            break;
+        }
+        case ADF_Primitive:
+        case ADF_Bitfield:
+        case ADF_Pointer:
+        case ADF_StringHash:
+        case ADF_Array:
+        case ADF_InlineArray:
+        case ADF_DeferredType: {
+            break;
+        }
+        default: {
+            GLog_Error("Unknown type %i", type->def.type);
+            assert(false && "Unknown type");
+        };
+    }
+}
+
+bool ADF_from_buffer(ADF *adf, Buffer *buffer) {
     TracyCZoneN(ctx, "ADF_from_buffer", 1);
     ADFHeader *header = &adf->header;
     if (buffer->read(buffer, header, sizeof(ADFHeader),NULL) != BUFFER_SUCCESS) {
@@ -120,9 +128,9 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
         buffer->read_cstring(buffer,DA_append_get(&adf->strings));
     }
     buffer->set_position(buffer, header->typedef_offset, BUFFER_ORIGIN_START);
-    DA_init(&adf->type_defs, STI_TypeDef, header->typedef_count);
+    DA_init(&adf->types, ADFType, header->typedef_count);
     for (int i = 0; i < header->typedef_count; ++i) {
-        if (!read_typedef(adf, buffer, lib)) return false;
+        if (!read_typedef(adf, buffer)) return false;
     }
     DA_init(&adf->instances, ADFInstance, header->instance_count);
     buffer->set_position(buffer, header->instance_offset, BUFFER_ORIGIN_START);
@@ -139,18 +147,21 @@ bool ADF_from_buffer(ADF *adf, Buffer *buffer, STI_TypeLibrary *lib) {
 void ADF_free(ADF *adf) {
     String_free(&adf->comment);
     DA_free_with_inner(&adf->strings, {String_free(it);});
-    DA_free(&adf->type_defs);
+    DA_FORI(adf->types, i) {
+        ADFType_free(DA_at(&adf->types, i));
+    }
+    DA_free(&adf->types);
     DA_free(&adf->instances);
 }
 
-void ADF_load_builtin_adf(STI_TypeLibrary *lib, const uint8 *data, int64 size) {
-    ADF adf = {0};
+ADF* ADF_load_builtin_adf(const uint8 *data, int64 size) {
     MemoryBuffer emb = {0};
+    ADF* adf = mp_calloc(sizeof(ADF), 1);
     MemoryBuffer_allocate(&emb, size);
     memcpy(emb.data, data, size);
-    ADF_from_buffer(&adf, (Buffer *) &emb, lib);
-    ADF_free(&adf);
+    ADF_from_buffer(adf, (Buffer *) &emb);
     emb.close(&emb);
+    return adf;
 }
 
 ADFInstance *ADF_get_instance(ADF *adf, const uint32 instance_id) {
@@ -158,35 +169,29 @@ ADFInstance *ADF_get_instance(ADF *adf, const uint32 instance_id) {
     return DA_at(&adf->instances, instance_id);
 }
 
-void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance *instance, const MemoryBuffer *mb) {
+void *ADF_read_instance(const ADF *adf, const ADFInstance *instance, const MemoryBuffer *mb, const STITypeInfoMap* type_map) {
     TracyCZoneN(ctx, "ADF_read_instance", 1);
-    const STI_Type *type = DM_get(&lib->types, instance->type_hash);
-    // printf("Instance: %s, type %s\n", String_data(&adf->strings.items[instance->name_id]),
-    //        type ? String_data(&type->name) : "UNKNOWN");
-    if (type == NULL) {
+    const STITypeInfo **type_ptr = DM_get(type_map, instance->type_hash);
+    if (type_ptr == NULL) {
         GLog_Error("Unknown type hash %08X for instance %s", instance->type_hash,
                String_cstr(&adf->strings.items[instance->name_id]));
         TracyCZoneEnd(ctx);
         return NULL;
     }
+    const STITypeInfo* type = *type_ptr;
 
     MemoryBuffer instance_memory = {0};
 
-    const STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
-    if (object_methods == NULL) {
-        GLog_Error("No read function for type hash %08X (%s)", instance->type_hash, String_cstr(&type->name));
-        TracyCZoneEnd(ctx);
-        return NULL;
-    }
     MemoryBuffer_allocate(&instance_memory, instance->size);
     memcpy(instance_memory.data, mb->data + instance->offset, instance->size);
 
-    void *instance_data = mp_calloc(object_methods->size, 1);
-
-    if (!object_methods->read((Buffer *) &instance_memory, lib, instance_data)) {
-        GLog_Error("Failed to read instance %s of type %s", String_cstr(&adf->strings.items[instance->name_id]),
-               String_cstr(&type->name));
-        object_methods->free(instance_data, lib);
+    void *instance_data = mp_calloc(type->size, 1);
+    if (type->init) {
+        type->init(instance_data);
+    }
+    if (!type->read(instance_data, (Buffer *) &instance_memory)) {
+        GLog_Error("Failed to read instance %s of type %s", String_cstr(&adf->strings.items[instance->name_id]), type->name);
+        type->free(instance_data);
         instance_memory.close(&instance_memory);
         mp_free(instance_data);
         TracyCZoneEnd(ctx);
@@ -197,19 +202,20 @@ void *ADF_read_instance(const ADF *adf, STI_TypeLibrary *lib, const ADFInstance 
     return instance_data;
 }
 
-void ADF_free_instance(STI_TypeLibrary *lib, const ADFInstance *instance, void *instance_data) {
+void ADF_free_instance(const ADFInstance *instance, void *instance_data, const STITypeInfoMap* type_map) {
     TracyCZoneN(ctx, "ADF_free_instance", 1);
-    const STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
-    if (object_methods != NULL) {
-        object_methods->free(instance_data, lib);
+    const STITypeInfo **type_ptr = DM_get(type_map, instance->type_hash);
+    if (type_ptr != NULL) {
+
+        (*type_ptr)->free(instance_data);
     }
     mp_free(instance_data);
     TracyCZoneEnd(ctx);
 }
 
-void ADF_print_instance(STI_TypeLibrary *lib, const ADFInstance *instance, const void *instance_data, int indent) {
-    const STI_ObjectMethods *object_methods = DM_get(&lib->object_functions, instance->type_hash);
-    if (object_methods != NULL) {
-        object_methods->print(instance_data, lib, stdout, indent);
+void ADF_print_instance(const ADFInstance *instance, const void *instance_data, JsonContext* ctx, const STITypeInfoMap* type_map) {
+    const STITypeInfo **type_ptr = DM_get(type_map, instance->type_hash);
+    if (type_ptr != NULL) {
+        (*type_ptr)->print(instance_data, ctx);
     }
 }

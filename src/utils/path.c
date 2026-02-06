@@ -185,7 +185,6 @@ void Path_normalize_posix(Path *path) {
         if (Path__is_sep(c)) c = '/';
         s[i] = c;
     }
-
 }
 
 void Path_normalize_windows(Path *path) {
@@ -307,17 +306,24 @@ void Path_join_format(Path *base, const char *fmt, ...) {
     }
 }
 
-void Path_convert_to_wsl(const Path *src, Path *out) {
+void Path_convert_to_wsl(Path *src) {
 #ifndef WSL_ENV
-    String_copy_from(out, src);
+    return;
 #else
-    String_init(out, String_size(src) + 10);
+    if (String_size(src)==0) {
+        return;
+    }
     const char *in_buffer = String_cstr(src);
+    if (in_buffer[0]=='.') {
+        return;
+    }
+    String converted = {};
     const char drive = in_buffer[0];
 
-    String_format(out, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in_buffer + 2);
+    String_format(&converted, "/mnt/%c%s", (drive > 'A' ? drive + ' ' : drive), in_buffer + 2);
 
-    String_replace_char(out, "\\", '/');
+    String_replace_char(&converted, "\\", '/');
+    String_move_from(src, &converted);
 
 #endif
 }
@@ -461,6 +467,37 @@ void Path_replace_extension(const Path *path, const char *new_extension, Path *o
             String_append_cstr(out, ".");
             String_append_cstr(out, new_extension);
         }
+    }
+}
+
+void Path_replace_extension_inplace(Path *path, const char *new_extension) {
+    if (new_extension == NULL)return;
+    const size_t ext_size = strlen(new_extension);
+    const char *s = String_cstr(path);
+    int32_t last_dot = -1;
+    for (int32_t i = (int32_t) String_size(path) - 1; i >= 0; --i) {
+        if (s[i] == '.') {
+            last_dot = i;
+            break;
+        }
+        if (Path__is_sep(s[i])) {
+            break;
+        }
+    }
+
+    if (last_dot < 0) {
+        String_append_format(path, ".%s", new_extension);
+    }
+    else {
+        if (last_dot+ext_size+1 > String_size(path)) {
+            String_reserve(path, (uint32_t)(last_dot + ext_size + 1));
+            if (path->s.is_long) {
+                path->s.l.len = (uint32_t)(last_dot);
+            }else {
+                path->s.s.len = (uint8_t)(last_dot);
+            }
+        }
+        String_append_format(path, ".%s", new_extension);
     }
 }
 

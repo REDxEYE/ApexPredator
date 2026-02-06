@@ -4,9 +4,6 @@
 #define APEXPREDATOR_HAVOK_CODEGEN_H
 
 #include "havok_types.h"
-#include "tag_file/havok_tag_file.h"
-#include "utils/json.h"
-
 
 void Havok_TypeLibrary_generate_code(Havok_TypeLibrary *lib, const String *namespace, FILE *header_output,
                                 const String *header_relative_path, FILE *impl_output);

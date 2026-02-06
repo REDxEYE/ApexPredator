@@ -4,7 +4,6 @@
 
 #include <inttypes.h>
 
-#include "apex/adf/adf_types.h"
 #include "platform/common_arrays.h"
 #include "platform/logger.h"
 #include "utils/sqlite_wrapper.h"
@@ -96,17 +95,24 @@ void store_file_parent(const uint64 key, const String *path, const uint64 parent
 
 bool get_file_parent(const uint64 key, uint64 *out_parent, String **out_path) {
     const char *path = NULL;
-    if (out_path!=NULL) {
+    if (out_path == NULL) {
+        const assetdb_status_t status = kv_vp_get_u64(get_assets_db(), key, out_parent, NULL, NULL);
+        if (status != KV_OK) {
+            return false;
+        }
+    }
+    else {
         *out_path = NULL;
+        *out_parent = 0;
+        size_t path_len = 0;
+        const assetdb_status_t status = kv_vp_get_u64(get_assets_db(), key, out_parent, &path, &path_len);
+        if (status != KV_OK) {
+            return false;
+        }
+        if (path && path_len > 0) {
+            *out_path = String_new_from_cstr2(path, path_len);
+        }
     }
-    *out_parent = 0;
-    size_t path_len = 0;
-    const assetdb_status_t status = kv_vp_get_u64(get_assets_db(), key, out_parent, &path, &path_len);
-    if (status != KV_OK) {
-        return false;
-    }
-    if (path && path_len > 0 && out_path!=NULL) {
-        *out_path = String_new_from_cstr2(path, path_len);
-    }
+
     return true;
 }

@@ -188,9 +188,7 @@ void String_copy_from(String *dst, const String *src) {
 
 void String_move_from(String *dst, String *src) {
     if (!dst || !src) return;
-    if (String_size(dst)) {
-        zstr_free(&dst->s);
-    }
+    zstr_free(&dst->s);
     dst->s = src->s;
     src->s = zstr_init();
 }

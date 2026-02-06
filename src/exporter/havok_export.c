@@ -21,13 +21,16 @@ DYNAMIC_ARRAY_STRUCT(vec3, vec3);
 
 DYNAMIC_ARRAY_STRUCT(versor, versor);
 
-void export_spline_compressed_animation(GLTFContext *context, const hkaSplineCompressedAnimation *spline_animation,
+void export_spline_compressed_animation(AppState* app_state, const hkaSplineCompressedAnimation *spline_animation,
                                         const hkaAnimationBinding *binding, const hkaSkeleton *skeleton,
                                         const String *name) {
+    CHECK_APP_STATE(app_state);
+    CHECK_GLTF_STATE(&app_state->gltf_context);
+    GLTFContext *context = &app_state->gltf_context;
+
     hkaSplineDecompressor decompressor = {};
     hkaSplineDecompressor_assign(&decompressor, spline_animation);
     const float32 frame_duration = spline_animation->frameDuration;
-    const float32 block_duration = spline_animation->blockDuration;
 
     const GL_ID animation_id = GLTFContext_animation_new(context, String_cstr(name));
 
@@ -85,7 +88,7 @@ void export_spline_compressed_animation(GLTFContext *context, const hkaSplineCom
 
             const TransformSplineBlock *block = &decompressor.blocks.items[block_id];
             QTransform transform = {0};
-            TransformSplineBlock_get_value(block, track_id, frame_id, &transform);
+            TransformSplineBlock_get_value(block, track_id, local_frame, &transform);
 
             // if (transform.translation[0] > position_max[0]) position_max[0] = transform.translation[0];
             // if (transform.translation[1] > position_max[1]) position_max[1] = transform.translation[1];
@@ -177,25 +180,29 @@ void export_spline_compressed_animation(GLTFContext *context, const hkaSplineCom
     hkaSplineDecompressor_free(&decompressor);
 }
 
-void export_animation(GLTFContext *context, const hkaAnimationBinding *binding, const hkaSkeleton *skeleton,
+void export_animation(AppState* app_state, const hkaAnimationBinding *binding, const hkaSkeleton *skeleton,
                       const String *name) {
-    GL_ID skin_id = export_skeleton(context, skeleton);
+    CHECK_APP_STATE(app_state);
+
+    export_skeleton(app_state, skeleton);
 
     const hkaAnimation *animation = binding->animation.ptr;
     if (animation->type_info_->hash == hkaAnimation_HASH) {
         GLog_Warning("Raw hkaAnimation cannot be exported");
     }
     else if (animation->type_info_->hash == hkaSplineCompressedAnimation_HASH) {
-        export_spline_compressed_animation(context, (hkaSplineCompressedAnimation *) animation, binding, skeleton,
+        export_spline_compressed_animation(app_state, (hkaSplineCompressedAnimation *) animation, binding, skeleton,
                                            name);
     }
 }
 
-GL_ID export_animation_container(GLTFContext *context, const hkaAnimationContainer *animation_container) {
+GL_ID export_animation_container(AppState* app_state, const hkaAnimationContainer *animation_container) {
+    CHECK_APP_STATE(app_state);
+
     GL_ID skeleton_id = INVALID_GL_ID;
     for (int i = 0; i < animation_container->skeletons.m_size; ++i) {
         const hkaSkeleton *skeleton = animation_container->skeletons.m_data[i].ptr;
-        skeleton_id = export_skeleton(context, skeleton);
+        skeleton_id = export_skeleton(app_state, skeleton);
     }
     // for (int i = 0; i < animation_container->bindings.m_size; ++i) {
     //     const hkaAnimationBinding *binding = animation_container->bindings.m_data[i].ptr;
@@ -204,7 +211,11 @@ GL_ID export_animation_container(GLTFContext *context, const hkaAnimationContain
     return skeleton_id;
 }
 
-GL_ID export_havok_file(GLTFContext *context, const TagFile *tag_file, const String *path, const String *export_path) {
+GL_ID export_havok_file(AppState* app_state, const TagFile *tag_file, const String *path) {
+    CHECK_APP_STATE(app_state);
+        CHECK_GLTF_STATE(&app_state->gltf_context);
+    GLTFContext *context = &app_state->gltf_context;
+
     const HKItem *item = &tag_file->items.items[1];
     HKTagType *hk_tag_type = &tag_file->types.items[item->type];
     const uint32 type_hash = hash_string(HKTagType_stable_name(hk_tag_type));
@@ -221,11 +232,11 @@ GL_ID export_havok_file(GLTFContext *context, const TagFile *tag_file, const Str
             const hkRootLevelContainer__NamedVariant *variant = &root_level_container->namedVariants.m_data[i];
             if (strcmp(variant->className.m_data, "hkaAnimationContainer") == 0) {
                 const hkaAnimationContainer *animation_container = (hkaAnimationContainer *) variant->variant.ptr;
-                output_node_id = export_animation_container(context, animation_container);
+                output_node_id = export_animation_container(app_state, animation_container);
             }
         }
         String bsk_export_path = {};
-        Path_join(&bsk_export_path, export_path);
+        Path_join(&bsk_export_path, &app_state->export_path);
         Path_join(&bsk_export_path, path);
         Path_ensure_parent_dirs(&bsk_export_path);
         String_append_cstr(&bsk_export_path, ".gltf");
@@ -237,7 +248,7 @@ GL_ID export_havok_file(GLTFContext *context, const TagFile *tag_file, const Str
 
     JsonContext tmp;
     String unk_file_export_path = {0};
-    Path_join(&unk_file_export_path, export_path);
+    Path_join(&unk_file_export_path, &app_state->export_path);
     Path_join(&unk_file_export_path, path);
     Path_ensure_parent_dirs(&unk_file_export_path);
     String json_output = {0};
@@ -268,7 +279,11 @@ void build_matrix(mat4 out, const hkQsTransform *transform) {
     glm_scale(out, &scale.x);
 }
 
-GL_ID export_skeleton(GLTFContext *context, const hkaSkeleton *skeleton) {
+GL_ID export_skeleton(AppState* app_state, const hkaSkeleton *skeleton) {
+    CHECK_APP_STATE(app_state);
+        CHECK_GLTF_STATE(&app_state->gltf_context);
+    GLTFContext *context = &app_state->gltf_context;
+
     const GL_ID skeleton_root = GLTFContext_node_add(context, skeleton->name.m_data);
     const GL_ID skin_id = GLTFContext_skin_new(context, "root", skeleton->bones.m_size);
     GLTFContext_skin_set_skeleton(context, skin_id, skeleton_root);

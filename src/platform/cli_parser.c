@@ -5,6 +5,7 @@
 #include <errno.h>
 
 
+
 const char *command_argument_type_names[] = {
     "string",
     "int",
@@ -510,11 +511,22 @@ CliStatus cli_parse(const CliSpec *spec, CliResult *out, int argc, const char *a
     return CLI_OK;
 }
 
-bool cli_get_string(const CliResult *r, const char *name, const char **out) {
+bool cli_get_cstring(const CliResult *r, const char *name, const char **out) {
     for (uint32_t i = 0; i < r->arg_count; ++i) {
         const CommandArgument *a = &r->args[i];
         if (!strcmp(a->name, name) && a->type == COMMAND_ARG_TYPE_STRING) {
             if (out) *out = a->string_value;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool cli_get_string(const CliResult *r, const char *name, String* out) {
+    for (uint32_t i = 0; i < r->arg_count; ++i) {
+        const CommandArgument *a = &r->args[i];
+        if (!strcmp(a->name, name) && a->type == COMMAND_ARG_TYPE_STRING) {
+            if (out) String_from_cstr(out, a->string_value ? a->string_value : "");
             return true;
         }
     }

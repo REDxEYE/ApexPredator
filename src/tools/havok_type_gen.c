@@ -45,7 +45,7 @@ void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
             }
             if (section_buffer->data[4] == 'S' && section_buffer->data[5] == 'A' &&
                 section_buffer->data[6] == 'R' && section_buffer->data[7] == 'C') {
-                SArchive *sarc = SArchive_new((Buffer *) section_buffer); // sarc is now owner of buffer
+                SArchive *sarc = SArchive_new((Buffer *) section_buffer, entry->path_hash); // sarc is now owner of buffer
                 DynamicArray_ArchiveEntry sarc_entries = {0};
                 DA_init(&sarc_entries, ArchiveEntry, 16);
                 Archive_get_all_entries((Archive *) sarc, &sarc_entries);
@@ -74,19 +74,16 @@ void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
     String namespace = {0};
     String_from_cstr(&namespace, "HAVOK_TYPES");
 
-    String header_path_tmp = {0};
     String header_path = {0};
 
-    String_from_cstr(&header_path_tmp, "D:/projects/cpp/ApexPredator/include/havok/generated/havok_generated.h");
-    Path_convert_to_wsl(&header_path_tmp, &header_path);
-    String_free(&header_path_tmp);
+    String_from_cstr(&header_path, "D:/projects/cpp/ApexPredator/include/havok/generated/havok_generated.h");
+    Path_convert_to_wsl(&header_path);
     Path_ensure_parent_dirs(&header_path);
     FILE *header_file = fopen(String_cstr(&header_path), "w");
     // FILE *header_file = stdout;
     //
-    String_from_cstr(&header_path_tmp, "D:/projects/cpp/ApexPredator/src/havok/generated/havok_generated.c");
-    Path_convert_to_wsl(&header_path_tmp, &header_path);
-    String_free(&header_path_tmp);
+    String_from_cstr(&header_path, "D:/projects/cpp/ApexPredator/src/havok/generated/havok_generated.c");
+    Path_convert_to_wsl(&header_path);
     Path_ensure_parent_dirs(&header_path);
     // FILE *impl_file = stdout;
     FILE *impl_file = fopen(String_cstr(&header_path), "w");
@@ -112,21 +109,19 @@ int main(int argc, const char *argv[]) {
     }
 
     Havok_TypeLibrary lib = {0};
-    String tmp = {0};
     String game_root = {0};
     Havok_TypeLibrary_init(&lib);
 
     ArchiveManager manager = {0};
     ArchiveManager_init(&manager);
 
-    String_from_cstr(&tmp, argv[1]);
-    Path_convert_to_wsl(&tmp, &game_root);
+    String_from_cstr(&game_root, argv[1]);
+    Path_convert_to_wsl(&game_root);
     TabArchives_init(&manager, &game_root);
     collect_types(&manager, &lib);
 
     ArchiveManager_free(&manager);
     Havok_TypeLibrary_free(&lib);
     String_free(&game_root);
-    String_free(&tmp);
     return 0;
 }

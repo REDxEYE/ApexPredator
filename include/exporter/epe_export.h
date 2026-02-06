@@ -5,19 +5,20 @@
 #include "apex/rtpc.h"
 #include "apex/adf/sti.h"
 #include "havok/havok_codegen.h"
+#include "platform/app_state.h"
 #include "platform/archive_manager.h"
 #include "utils/gltf/cgltf_helper.h"
 
 
-void process_epe_node(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
+void process_epe_node(AppState* app_state,
                       RuntimeNode *node,
                       uint32 path_hash,
-                      const String *path, const String *export_path, GL_ID parent_gltf_node);
+                      const String *path, GL_ID parent_gltf_node);
 
-GL_ID export_epe(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
+GL_ID export_epe(AppState* app_state,
                  RuntimeNode *root_node,
                  uint32 path_hash,
-                 const String *path, const String *export_path);
+                 const String *path);
 
 
 #endif //APEXPREDATOR_EPE_EXPORT_H

@@ -2,8 +2,9 @@
 
 #include "havok/havok_types.h"
 
+#include <assert.h>
+
 #include "apex/adf/sti.h"
-#include "havok/havok_codegen.h"
 #include "platform/logger.h"
 #include "utils/common.h"
 #include "utils/hash_helper.h"

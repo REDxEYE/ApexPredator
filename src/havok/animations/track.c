@@ -75,7 +75,7 @@ static float GetSinglePoint_f32(int knotSpanIndex, int degree, float frame,
 }
 
 static void GetSinglePoint_quat(int knotSpanIndex, int degree, float frame,
-                                const u8 *knots, const versor *cPoints,
+                                const u8 *knots, versor *cPoints,
                                 versor out_q) {
     float N[5] = { 1.0f, 0, 0, 0, 0 };
 
@@ -101,10 +101,10 @@ static void GetSinglePoint_quat(int knotSpanIndex, int degree, float frame,
     glm_quat_normalize_to(acc, out_q);
 }
 
-void Track_get_value_vec3(const Track *t, float time, vec3 out) {
+void Track_get_value_vec3(Track *t, float time, vec3 out) {
     switch (t->kind) {
         case TRACK_VEC3_STATIC: {
-            const SplineStaticVec3 *st = (const SplineStaticVec3*)t->impl;
+            SplineStaticVec3 *st = (SplineStaticVec3*)t->impl;
             glm_vec3_copy(st->item, out);
         } break;
 
@@ -138,10 +138,10 @@ void Track_get_value_vec3(const Track *t, float time, vec3 out) {
     }
 }
 
-void Track_get_value_quat(const Track *t, float time, versor out) {
+void Track_get_value_quat(Track *t, float time, versor out) {
     switch (t->kind) {
         case TRACK_QUAT_STATIC: {
-            const SplineStaticQuat *st = (const SplineStaticQuat*)t->impl;
+            SplineStaticQuat *st = (SplineStaticQuat*)t->impl;
             glm_quat_copy(st->item, out);
         } break;
 

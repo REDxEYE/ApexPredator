@@ -45,12 +45,13 @@ void Path_join_cstr(Path *base, const char *component);
 */
 void Path_join_format(Path *base, const char *fmt, ...);
 
-void Path_convert_to_wsl(const Path *src, Path *out);
+void Path_convert_to_wsl(Path *src);
 
 void Path_rglob(const Path *path, const String *ext, DynamicArray_Path* out);
 
 void Path_remove_extension(const Path* path, Path* extensionless);
 void Path_replace_extension(const Path* path, const char* new_extension, Path* out);
+void Path_replace_extension_inplace(Path* path, const char* new_extension);
 
 void Path_filename(const Path* path, Path* filename);
 

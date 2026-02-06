@@ -9,6 +9,7 @@
 
 #include "int_def.h"
 #include "utils/memory_profiling.h"
+#include "utils/string.h"
 
 typedef void (*execute_fn)(int argc, const char *argv[]);
 
@@ -96,7 +97,9 @@ void cli_free(CliResult *r);
 
 CliStatus cli_parse(const CliSpec *spec, CliResult *out, int argc, const char *argv[], const char **out_err_tok);
 
-bool cli_get_string(const CliResult *r, const char *name, const char **out);
+bool cli_get_cstring(const CliResult *r, const char *name, const char **out);
+
+bool cli_get_string(const CliResult *r, const char *name, String* out);
 
 bool cli_get_int(const CliResult *r, const char *name, int *out);
 

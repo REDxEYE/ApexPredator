@@ -97,6 +97,22 @@ char *GLTFContext_dupe_cstring(const char *name);
 
 void GLTFContext_init(GLTFContext *ctx, const char *name);
 
+bool GLTFContext_is_initialized(const GLTFContext *ctx);
+
+// Check state and abort if NULL or uninitialized
+#define CHECK_GLTF_STATE(state) \
+    do { \
+        if ((state) == NULL) { \
+            GLog_Error("GLTFContext is NULL"); \
+            abort(); \
+        } \
+        if (!GLTFContext_is_initialized(state)) { \
+            GLog_Error("GLTFContext is not initialized"); \
+            abort(); \
+        } \
+    } while (0)
+
+
 void GLTFContext_set_save_path(GLTFContext *ctx, const String *path);
 
 void GLTFContext_set_save_cpath(GLTFContext *ctx, const char *path);
@@ -124,7 +140,7 @@ GL_ID GLTFContext_accessor_from_data(
     cgltf_component_type component_type, cgltf_buffer_view_type buffer_type,
     bool normalized, uint32 stride, uint32 offset);
 
-GL_ID GLTFContext_node_add(GLTFContext *ctx, const char *name_opt);
+GL_ID GLTFContext_node_add(const GLTFContext *ctx, const char *name_opt);
 
 void GLTFContext_node_set_mesh(const GLTFContext *ctx, GL_ID node_id, GL_ID mesh_id);
 

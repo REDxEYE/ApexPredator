@@ -30,8 +30,8 @@ typedef struct TransformTrack {
 
 void Track_free(Track *t);
 
-void Track_get_value_vec3(const Track *t, float time, vec3 out);
+void Track_get_value_vec3(Track *t, float time, vec3 out);
 
-void Track_get_value_quat(const Track *t, float time, versor out);
+void Track_get_value_quat(Track *t, float time, versor out);
 
 #endif //APEXPREDATOR_TRACK_H

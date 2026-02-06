@@ -11,14 +11,15 @@
 #include "utils/memory_profiling.h"
 #include "tracy/TracyC.h"
 
-String* export_ddsc_to_file(const ArchiveManager *archive_manager, const String *path, const String *export_path) {
+String* export_ddsc_to_file(AppState* app_state, const String *path, const String *export_path) {
+    CHECK_APP_STATE(app_state);
     if (path==NULL) {
         GLog_Error("Cannot export textures without name!");
         return NULL;
     }
 
     MemoryBuffer mb = {0};
-    if (!ArchiveManager_get_file_by_hash(archive_manager, hash_string(path), &mb)) {
+    if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, hash_string(path), &mb)) {
         GLog_Error("Texture file not found");
         return NULL;
     }
@@ -42,9 +43,11 @@ String* export_ddsc_to_file(const ArchiveManager *archive_manager, const String 
     return output_file;
 }
 
-Texture* convert_ddsc(ArchiveManager* archive_manager, const String *path) {
+Texture* convert_ddsc(AppState* app_state, const String *path) {
+    CHECK_APP_STATE(app_state);
     TracyCZoneN(ctx, "convert_ddsc", 1);
     MemoryBuffer mb = {0};
+    ArchiveManager *archive_manager = &app_state->archive_manager;
     if (!ArchiveManager_get_file(archive_manager, path, &mb)) {
         GLog_Error("File not found");
         TracyCZoneEnd(ctx);
@@ -123,8 +126,9 @@ Texture* convert_ddsc(ArchiveManager* archive_manager, const String *path) {
 
 }
 
-void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
-                 const String *path, const String *export_path) {
+void export_ddsc(AppState* app_state, uint32 hash, MemoryBuffer *mb,
+                 const String *path) {
+    CHECK_APP_STATE(app_state);
     if (path==NULL) {
         GLog_Error("Cannot export textures without name!");
         return;
@@ -132,7 +136,7 @@ void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
     String texture_export_path = {};
     String texture_without_ext = {};
     Path_remove_extension(path, &texture_without_ext);
-    Path_join(&texture_export_path, export_path);
+    Path_join(&texture_export_path, &app_state->export_path);
     Path_join(&texture_export_path, &texture_without_ext);
 
     String tmp_check = {};
@@ -163,12 +167,12 @@ void export_ddsc(ArchiveManager *archive_manager, uint32 hash, MemoryBuffer *mb,
         for (int i = 5; i > 0; --i) {
             Path_remove_extension(path, &atx_path);
             String_append_format(&atx_path, ".atx%i", i);
-            if (ArchiveManager_has_file(archive_manager, &atx_path)) {
+            if (ArchiveManager_has_file(&app_state->archive_manager, &atx_path)) {
                 break;
             }
         }
         MemoryBuffer atx_buffer = {0};
-        ArchiveManager_get_file(archive_manager, &atx_path, &atx_buffer);
+        ArchiveManager_get_file(&app_state->archive_manager, &atx_path, &atx_buffer);
 
         const int64 largest_mip_size = Texture_calculate_mip_size(0, header.width, header.height, header.format);
         atx_buffer.set_position(&atx_buffer, -largest_mip_size, BUFFER_ORIGIN_END);

@@ -72,7 +72,7 @@ void SArchive__get_all_entries(const SArchive *archive, DynamicArray_ArchiveEntr
     }
 }
 
-void SArchive_print_files(SArchive *archive) {
+void SArchive_print_files(const SArchive *archive) {
     DynamicArray_ArchiveEntry entries = {0};
     DA_init(&entries, ArchiveEntry, 16);
     SArchive__get_all_entries(archive, &entries);
@@ -101,16 +101,19 @@ void SArchive__init_interface(SArchive *archive) {
 }
 
 SArchive *SArchive_new(Buffer *buffer, uint32 self_hash) {
-    SArchive *archive = mp_malloc(sizeof(SArchive));
+    SArchive *archive = mp_calloc(sizeof(SArchive),1);
     if (archive == NULL) {
         GLog_Error("Failed to allocate memory");
         exit(1);
     }
-    memset(archive, 0, sizeof(SArchive));
+    SArchive_init(archive, buffer, self_hash);
+    return archive;
+}
+
+void SArchive_init(SArchive* archive, Buffer *buffer, uint32 self_hash) {
     SArchive__init_interface(archive);
     archive->hash = self_hash;
     SArchive__from_buffer(archive, buffer);
-    return archive;
 }
 
 void SArchive__from_buffer(SArchive *archive, Buffer *buffer) {
@@ -130,7 +133,7 @@ void SArchive__from_buffer(SArchive *archive, Buffer *buffer) {
         char *strings_memory = mp_malloc(strings_size);
         archive->strings = strings_memory;
         buffer->read(buffer, strings_memory, strings_size, NULL);
-        uint32 entry_count = (archive->header.dir_block_len - 4/* strings_size int */ - strings_size) / 20;
+        const uint32 entry_count = (archive->header.dir_block_len - 4/* strings_size int */ - strings_size) / 20;
         for (uint32 i = 0; i < entry_count; ++i) {
             SArcEntry entry = {0};
             uint32 name_offset;

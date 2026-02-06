@@ -2,14 +2,14 @@
 
 #ifndef APEXPREDATOR_TAG_FILE_H
 #define APEXPREDATOR_TAG_FILE_H
-#include "int_def.h"
-#include "platform/common_arrays.h"
-#include "utils/dynamic_array.h"
-#include "utils/buffer/buffer.h"
-#include "havok_tag_types.h"
-#include "assert.h"
+#include <assert.h>
 
-typedef struct TypedPtr TypedPtr;
+#include "int_def.h"
+
+#include "havok/tag_file/havok_tag_types.h"
+#include "platform/common_arrays.h"
+#include "utils/buffer/buffer.h"
+#include "utils/dynamic_array.h"
 
 typedef struct {
     uint32 size: 28;
@@ -55,9 +55,7 @@ typedef struct {
 
 bool TagFile_from_buffer(TagFile *tf, Buffer *buffer);
 
-TypedPtr* TagFile_get_item(const TagFile *tf, uint32 index);
 
-void TagFile_free_item(TypedPtr *item);
 
 HK_SDKVersion TagFile_get_sdk_version(TagFile *tf);
 

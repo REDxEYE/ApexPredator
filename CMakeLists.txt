@@ -37,118 +37,82 @@ add_library(AdfLib STATIC
         src/apex/adf/adf_types.c
         src/utils/memory_profiler.c
         src/utils/memory_tracker.c
-
+        src/apex/adf/adf_support_types.c
 )
 
 add_library(HavokLib STATIC
-        src/havok/generated/havok_generated.c
-        src/utils/memory_profiler.c
-        src/utils/memory_tracker.c
-        src/havok/animations/track.c
         src/havok/animations/animation.c
         src/havok/animations/spline.c
+        src/havok/animations/track.c
+        src/havok/generated/havok_generated.c
+        src/havok/havok_helpers.c
+        include/havok/havok_support_types_functions.h
+        src/utils/memory_profiler.c
+        src/utils/memory_tracker.c
 )
 
 SET(CommonFiles
         src/apex/aaf/aaf.c
         src/apex/adf/adf.c
         src/apex/adf/sti.c
-        src/apex/adf/sti_codegen.c
         src/apex/adf/sti_shared.c
         src/apex/avtx.c
         src/apex/hashes.c
         src/apex/package/tab_archive.c
         src/apex/rtpc.c
         src/apex/sarc.c
+        src/havok/tag_file/havok_tag_file.c
+        src/havok/tag_file/havok_tag_types.c
+        src/havok/havok_types.c
+        src/platform/app_state.c
+        src/platform/archive.c
+        src/platform/archive_manager.c
+        src/platform/cli_parser.c
+        src/platform/logger.c
+        src/platform/texture.c
+        src/platform/texture_ops.c
+        src/utils/buffer/buffer.c
+        src/utils/buffer/file_buffer.c
+        src/utils/buffer/memory_buffer.c
+        src/utils/common.c
+        src/utils/dynamic_array.c
+        src/utils/dynamic_map.c
+        src/utils/gltf/cgltf_helper.c
+        src/utils/hash_helper.c
+        src/utils/json.c
+        src/utils/lookup3.c
+        src/utils/memory_profiler.c
+        src/utils/memory_tracker.c
+        src/utils/path.c
+        src/utils/ply_writer.c
+        src/utils/sqlite_wrapper.c
+        src/utils/stb.c
+        src/utils/string.c
+        src/utils/zlib_wrapper.c
+)
+
+add_executable(ApexPredator
+        src/tools/apex_predator.c
         src/exporter/adf_export.c
         src/exporter/amf_export.c
         src/exporter/common_export.c
         src/exporter/ddsc_export.c
         src/exporter/epe_export.c
         src/exporter/havok_export.c
-        src/havok/havok_support_types.c
-        src/havok/tag_file/havok_tag_file.c
-        src/havok/tag_file/havok_tag_types.c
-        src/platform/archive.c
-        src/platform/archive_manager.c
-        src/platform/logger.c
-        src/utils/memory_profiler.c
-        src/utils/memory_tracker.c
-        src/platform/texture.c
-        src/platform/texture_ops.c
-        src/utils/buffer/buffer.c
-        src/utils/buffer/file_buffer.c
-        src/utils/buffer/memory_buffer.c
-        src/utils/common.c
-        src/utils/dynamic_array.c
-        src/utils/dynamic_map.c
-        src/utils/gltf/cgltf_helper.c
-        src/utils/hash_helper.c
-        src/utils/json.c
-        src/utils/lookup3.c
-        src/utils/path.c
-        src/utils/ply_writer.c
-        src/utils/sqlite_wrapper.c
-        src/utils/stb.c
-        src/utils/string.c
-        src/utils/zlib_wrapper.c
-        src/havok/havok_types.c
-        include/havok/havok_types.h
-        src/platform/cli_parser.c
-        include/platform/cli_parser.h
-)
-
-add_executable(ApexPredator
-        src/tools/apex_predator.c
         ${CommonFiles}
 )
 
 add_executable(AdfTypeGenerator
         src/tools/adf_type_gen.c
-        ${CommonFiles}
+        src/apex/adf/sti_codegen.c
         src/utils/memory_tracker.c
-        include/utils/memory_tracker.h
+        ${CommonFiles}
 )
 
 add_executable(HavokTypeGenerator
         src/tools/havok_type_gen.c
-        src/apex/aaf/aaf.c
-        src/apex/adf/adf.c
-        src/apex/adf/sti.c
-        src/apex/adf/sti_codegen.c
-        src/apex/adf/sti_shared.c
-        src/apex/avtx.c
-        src/apex/hashes.c
-        src/apex/package/tab_archive.c
-        src/apex/rtpc.c
-        src/apex/sarc.c
         src/havok/havok_codegen.c
-        src/havok/havok_types.c
-        src/havok/tag_file/havok_tag_file.c
-        src/havok/tag_file/havok_tag_types.c
-        src/platform/archive.c
-        src/platform/archive_manager.c
-        src/platform/logger.c
-        src/utils/memory_profiler.c
-        src/utils/memory_tracker.c
-        src/platform/texture.c
-        src/platform/texture_ops.c
-        src/utils/buffer/buffer.c
-        src/utils/buffer/file_buffer.c
-        src/utils/buffer/memory_buffer.c
-        src/utils/common.c
-        src/utils/dynamic_array.c
-        src/utils/dynamic_map.c
-        src/utils/gltf/cgltf_helper.c
-        src/utils/hash_helper.c
-        src/utils/json.c
-        src/utils/lookup3.c
-        src/utils/path.c
-        src/utils/ply_writer.c
-        src/utils/sqlite_wrapper.c
-        src/utils/stb.c
-        src/utils/string.c
-        src/utils/zlib_wrapper.c
+        ${CommonFiles}
 )
 
 add_executable(HashCollector
@@ -174,13 +138,6 @@ if (UNIX)
     target_link_libraries(AdfTypeGenerator PUBLIC m)
     target_link_libraries(HavokTypeGenerator PUBLIC m)
     target_link_libraries(HashCollector PUBLIC m)
-
-    target_link_options(AdfLib PRIVATE -rdynamic)
-    target_link_options(HavokLib PRIVATE -rdynamic)
-    target_link_options(ApexPredator PRIVATE -rdynamic)
-    target_link_options(AdfTypeGenerator PRIVATE -rdynamic)
-    target_link_options(HavokTypeGenerator PRIVATE -rdynamic)
-    target_link_options(HashCollector PRIVATE -rdynamic)
 else ()
     target_compile_options(AdfLib PRIVATE /bigobj)
     target_compile_options(HavokLib PRIVATE /bigobj)
@@ -188,18 +145,33 @@ else ()
     target_compile_options(HashCollector PRIVATE /bigobj)
 endif ()
 
-target_include_directories(AdfLib PUBLIC include)
+SET(CommonLibs
+        libzstd
+        zlibstatic
+        cglm
+        tinycpng-static
+        SQLite::SQLite3
+)
+
+SET(CommonIncludes
+        external/zlib
+        external/cglm/include
+        external/cgltf
+        external/tinycpng/include
+)
+
+target_include_directories(AdfLib PUBLIC include external/cglm/include)
 target_include_directories(HavokLib PUBLIC include)
-target_include_directories(ApexPredator PUBLIC include external/cgltf external/zlib external/tinycpng/include SQLite::SQLite3)
-target_include_directories(AdfTypeGenerator PUBLIC include external/zlib external/cgltf external/tinycpng/include)
-target_include_directories(HavokTypeGenerator PUBLIC include external/zlib external/cgltf external/tinycpng/include)
-target_include_directories(HashCollector PUBLIC include external/zlib external/cgltf external/tinycpng/include)
+target_include_directories(ApexPredator PUBLIC include ${CommonIncludes})
+target_include_directories(AdfTypeGenerator PUBLIC include ${CommonIncludes})
+target_include_directories(HavokTypeGenerator PUBLIC include ${CommonIncludes})
+target_include_directories(HashCollector PUBLIC include ${CommonIncludes})
 target_include_directories(StringHasher PUBLIC include)
 
-target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
-target_link_libraries(HashCollector PUBLIC AdfLib HavokLib libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
-target_link_libraries(AdfTypeGenerator PUBLIC libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
-target_link_libraries(HavokTypeGenerator PUBLIC libzstd zlibstatic cglm tinycpng-static SQLite::SQLite3)
+target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib ${CommonLibs})
+target_link_libraries(HashCollector PUBLIC AdfLib ${CommonLibs})
+target_link_libraries(AdfTypeGenerator PUBLIC ${CommonLibs})
+target_link_libraries(HavokTypeGenerator PUBLIC ${CommonLibs})
 target_link_libraries(HavokLib PUBLIC cglm)
 
 target_link_libraries(AdfLib PUBLIC Tracy::TracyClient)
@@ -211,4 +183,5 @@ target_link_libraries(HavokTypeGenerator PUBLIC Tracy::TracyClient)
 target_link_libraries(StringHasher PUBLIC Tracy::TracyClient)
 
 
-target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
+# target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
+# target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)

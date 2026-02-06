@@ -3,13 +3,12 @@
 #ifndef APEXPREDATOR_COMMON_EXPORT_H
 #define APEXPREDATOR_COMMON_EXPORT_H
 #include "apex/adf/sti.h"
+#include "platform/app_state.h"
 #include "platform/archive_manager.h"
 #include "utils/gltf/cgltf_helper.h"
 
 void mount_archive(const ArchiveManager *manager, uint32 hash);
 
-GL_ID export_file(GLTFContext *context, ArchiveManager *archive_manager,
-                  STI_TypeLibrary *lib,
-                  const String *path, uint32 hash, const String *export_path);
+GL_ID export_file(AppState* app_state,const String *path, uint32 hash);
 
 #endif //APEXPREDATOR_COMMON_EXPORT_H

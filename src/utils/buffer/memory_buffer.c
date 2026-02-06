@@ -42,14 +42,17 @@ static BufferError MemoryBuffer__read(MemoryBuffer *self, void *dst, uint32 size
     if (self->position + size > self->size) {
         size = (uint32)(self->size - self->position);
     }
+
+    if (size == 0) {
+        return BUFFER_UNDERFLOW;
+    }
+
     memcpy(dst, self->data + self->position, size);
     self->position += size;
     if (read) {
         *read = size;
     }
-    if (size == 0) {
-        return BUFFER_UNDERFLOW;
-    }
+
     return BUFFER_SUCCESS;
 }
 
@@ -57,14 +60,17 @@ static BufferError MemoryBuffer__write(MemoryBuffer *self, const void *src, uint
     if (self->position + size > self->capacity) {
         size = (uint32)(self->capacity - self->position);
     }
+
+    if (size == 0) {
+        return BUFFER_UNDERFLOW;
+    }
+
     memcpy(self->data + self->position, src, size);
     self->position += size;
     if (written) {
         *written = (uint32)size;
     }
-    if (size == 0) {
-        return BUFFER_UNDERFLOW;
-    }
+
     return BUFFER_SUCCESS;
 }
 

@@ -1,11 +1,13 @@
 #include <stdio.h>
 
 #include "exporter/havok_export.h"
+#include "platform/app_state.h"
 #include "platform/cli_parser.h"
 #include "utils/common.h"
 
 
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include "Windows.h"
 #else
 #include <unistd.h>
@@ -105,6 +107,7 @@ const CliSpec cli_spec = {
     .command_count = sizeof(sub_commands) / sizeof(SubCommand),
 };
 
+
 int main(int argc, const char *argv[]) {
     mp_init();
     CliResult cli_res;
@@ -131,57 +134,52 @@ int main(int argc, const char *argv[]) {
     //         printf("\rWaiting for tracy;");
     //     }
     //     printf("\n");
-
     TracyCZoneN(ctx, "App", 1);
-    ArchiveManager manager = {0};
-    ArchiveManager_init(&manager);
-    ArchiveManager_set_archive_loader_function(&manager, mount_archive);
+    AppState app_state = {};
 
-    STI_TypeLibrary lib = {0};
-    Havok_TypeLibrary havok_lib = {0};
-    Havok_TypeLibrary_init(&havok_lib);
-    STI_TypeLibrary_init(&lib);
-    STI_ADF_TYPES_register_functions(&lib);
+    ArchiveManager_init(&app_state.archive_manager);
+    ArchiveManager_set_archive_loader_function(&app_state.archive_manager, mount_archive);
+
+    // STI_TypeLibrary lib = {0};
+    // STI_TypeLibrary_init(&lib);
+    STI_ADF_TYPES_register_functions();
     HAVOK_TYPES_register_functions();
 
-    String game_root = {0};
-    String tmp = {0};
-    String_from_cstr(&tmp, cli_res.game_root);
-    Path_convert_to_wsl(&tmp, &game_root);
-    String_free(&tmp);
+    String_from_cstr(&app_state.game_root, cli_res.game_root);
+    Path_convert_to_wsl(&app_state.game_root);
 
-    String export_path = {};
-    const char *export_path_cstr = NULL;
-    cli_get_string(&cli_res, "out_dir", &export_path_cstr);
-    String_from_cstr(&export_path, export_path_cstr);
+    cli_get_string(&cli_res, "out_dir", &app_state.export_path);
+    Path_convert_to_wsl(&app_state.export_path);
 
-    TabArchives_init(&manager, &game_root);
-
-    GLTFContext context = {0};
-
-    // String_from_cstr(&file_path, "editor/entities/characters/machines/dreadnought/drea_classb_load01.epe");
+    TabArchives_init(&app_state.archive_manager, &app_state.game_root);
 
     if (strcmp(cli_res.cmd->name, "extract") == 0) {
         const char **file_paths = NULL;
         size_t file_path_count = 0;
         cli_get_array_string(&cli_res, "paths", &file_paths, &file_path_count);
         for (int file_id = 0; file_id < file_path_count; ++file_id) {
-            GLTFContext_init(&context, "root");
+            GLTFContext_init(&app_state.gltf_context, "root");
             String file_path = {0};
             String_from_cstr(&file_path, file_paths[file_id]);
 
             Path_normalize_posix(&file_path);
-            export_file(&context, &manager, &lib, &file_path, hash_string(&file_path), &export_path);
+            String save_path = {0};
+            String_copy_from(&save_path, &app_state.export_path);
+            Path_join(&save_path, &file_path);
+            Path_replace_extension_inplace(&save_path, "gltf");
+            GLTFContext_set_save_path(&app_state.gltf_context, &save_path);
+            String_free(&save_path);
 
+            export_file(&app_state, &file_path, hash_string(&file_path));
 
-            GLTFContext_write_and_free(&context);
+            GLTFContext_write_and_free(&app_state.gltf_context);
             String_free(&file_path);
         }
     }
     else if (strcmp(cli_res.cmd->name, "extract-anims") == 0) {
         const char *skeleton_path_cstr = NULL;
 
-        cli_get_string(&cli_res, "skeleton-path", &skeleton_path_cstr);
+        cli_get_cstring(&cli_res, "skeleton-path", &skeleton_path_cstr);
         uint32 skeleton_path_hash = 0;
         if (is_hex(skeleton_path_cstr)) {
             skeleton_path_hash = parse_hex_u32(skeleton_path_cstr);
@@ -198,7 +196,7 @@ int main(int argc, const char *argv[]) {
         }
 
         MemoryBuffer mb = {0};
-        if (!ArchiveManager_get_file_by_hash(&manager, skeleton_path_hash, &mb)) {
+        if (!ArchiveManager_get_file_by_hash(&app_state.archive_manager, skeleton_path_hash, &mb)) {
             GLog_Error("Skeleton file not found: %s", skeleton_path_cstr);
             goto END_CLEANUP;
         }
@@ -258,7 +256,7 @@ int main(int argc, const char *argv[]) {
                 animation_path_hash = hash_string(animation_path_tmp);
             }
 
-            if (!ArchiveManager_get_file_by_hash(&manager, animation_path_hash, &mb)) {
+            if (!ArchiveManager_get_file_by_hash(&app_state.archive_manager, animation_path_hash, &mb)) {
                 GLog_Error("Animation file not found: %s", animation_path_cstr);
                 continue;
             }
@@ -307,18 +305,20 @@ int main(int argc, const char *argv[]) {
             String anim_file_name = {0};
             Path_filename(animation_path_tmp, &anim_file_name);
 
-            GLTFContext_init(&context, String_cstr(&anim_file_name));
-            export_animation(&context, binding, skeleton, animation_path_tmp);
+            GLTFContext_init(&app_state.gltf_context, String_cstr(&anim_file_name));
+            String_free(&anim_file_name);
+
+            export_animation(&app_state, binding, skeleton, animation_path_tmp);
 
             String export_file_path = {0};
-            String_copy_from(&export_file_path, &export_path);
+            String_copy_from(&export_file_path, &app_state.export_path);
             Path_join(&export_file_path, animation_path_tmp);
             Path_ensure_parent_dirs(&export_file_path);
-            Path_replace_extension(&export_file_path, "gltf", &anim_file_name);
-            GLTFContext_set_save_path(&context, &anim_file_name);
-            String_free(&anim_file_name);
+            Path_replace_extension_inplace(&export_file_path, "gltf");
+            GLTFContext_set_save_path(&app_state.gltf_context, &export_file_path);
             String_free(&export_file_path);
-            GLTFContext_write_and_free(&context);
+
+            GLTFContext_write_and_free(&app_state.gltf_context);
 
             String_free(animation_path_tmp);
             TagFile_free_item(anim_item);
@@ -328,15 +328,13 @@ int main(int argc, const char *argv[]) {
         TagFile_free(&skeleton_tag_file);
     }
 END_CLEANUP:
-    ArchiveManager_free(&manager);
-    STI_TypeLibrary_free(&lib);
-    Havok_TypeLibrary_free(&havok_lib);
-    String_free(&tmp);
-    String_free(&game_root);
-    String_free(&export_path);
+    ArchiveManager_free(&app_state.archive_manager);
+    // STI_TypeLibrary_free(&lib);
     DM_free(&HAVOK_TYPES_type_info);
+    DM_free(&ADF_TYPES_type_info);
     cli_free(&cli_res);
     close_assets_db();
+    AppState_free(&app_state);
     TracyCZoneEnd(ctx);
     return 0;
 }

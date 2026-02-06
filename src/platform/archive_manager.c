@@ -34,6 +34,8 @@ void ArchiveManager_add(const ArchiveManager *manager, Archive *archive) {
     *(Archive **) DA_append_get(&manager->archives) = archive;
 }
 
+// #define VERBOSE_ENSURE_PARENTS_LOADED
+
 void ensure_parents_loaded(const ArchiveManager *manager, const uint32 file_hash) {
     for (uint32 i = 0; i < manager->archives.count; ++i) {
         const Archive *ar = manager->archives.items[i];
@@ -41,8 +43,8 @@ void ensure_parents_loaded(const ArchiveManager *manager, const uint32 file_hash
             return;
         }
     }
-
     uint64 parent_id = 0;
+#ifdef VERBOSE_ENSURE_PARENTS_LOADED
     String* out_name;
     if (!get_file_parent(file_hash, &parent_id, &out_name)) {
         GLog_Warning("Failed to get parent for file hash 0x%08X", file_hash);
@@ -67,6 +69,16 @@ void ensure_parents_loaded(const ArchiveManager *manager, const uint32 file_hash
         return;
     }
     String_free(parent_name);
+#else
+    if (!get_file_parent(file_hash, &parent_id, NULL)) {
+        GLog_Warning("Failed to get parent for file hash 0x%08X", file_hash);
+        return;
+    }
+
+    if (parent_id == 0) {
+        return;
+    }
+#endif
 
     if (manager->load_archive != NULL) {
         manager->load_archive(manager, parent_id);

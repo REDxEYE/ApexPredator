@@ -4,6 +4,7 @@
 #define APEXPREDATOR_STI_H
 #include <stdio.h>
 
+#include "adf.h"
 #include "int_def.h"
 #include "sti_shared.h"
 #include "utils/string.h"
@@ -11,7 +12,7 @@
 #include "utils/dynamic_map.h"
 #include "utils/buffer/buffer.h"
 
-typedef enum {
+typedef enum STI_DataType{
     STI_Primitive = 0,
     STI_Structure = 1,
     STI_Pointer = 2,
@@ -23,51 +24,24 @@ typedef enum {
     STI_Enumeration = 8,
     STI_StringHash = 9,
     STI_DeferredType = 10,
-    STI_Force_i32 = 0x7FFFFFFF,
-} STI_MetaType;
-
-#pragma pack(push, 1)
-typedef struct {
-    STI_MetaType type;
-    uint32 size;
-    uint32 alignment;
-    uint32 hash;
-    uint64 name_id;
-    uint16 flags;
-    uint16 scalar_type;
-    uint32 element_type_hash;
-    uint32 element_len;
-} STI_TypeDef;
+    STI_Alias
+}STI_DataType;
 
 typedef struct {
-    uint64 name_id;
+    String name;
     uint32 type_hash;
     uint32 size;
     uint32 offset:24;
     uint32 bit_offset:8;
     uint32 default_type;
     uint64 default_value;
-} STI_StructMemberInfo;
+} STI_StructMember;
 
 typedef struct {
-    uint64 name_id;
+    String name;
     uint32 value;
-} STI_EnumMemberInfo;
-#pragma pack(pop)
-
-typedef struct {
-    String name;
-    STI_StructMemberInfo info;
-}STI_StructMember;
-
-typedef struct {
-    String name;
-    STI_EnumMemberInfo info;
 } STI_EnumMember;
 
-
-
-DYNAMIC_ARRAY_STRUCT(STI_TypeDef, STI_TypeDef);
 DYNAMIC_ARRAY_STRUCT(STI_StructMember, STI_StructMember);
 DYNAMIC_ARRAY_STRUCT(STI_EnumMember, STI_EnumMember);
 
@@ -81,28 +55,35 @@ typedef struct {
 
 typedef struct {
     uint32 count;
+    uint32 type_hash;
 } STI_ArrayTypeData;
 
 typedef struct {
-    uint32 unk;
-} STI_UnkTypeData;
+    uint32 type_hash;
+} DeferredTypeData;
+
 
 typedef union {
     STI_StructTypeData struct_data;
     STI_EnumTypeData enum_data;
     STI_ArrayTypeData array_data;
-    STI_UnkTypeData unk_data;
+    DeferredTypeData deferred_data;
+    uint32 bits_data;
 } STI_TypeData;
 
-typedef struct {
-    STI_MetaType type;
-    STI_TypeDef info;
-    String name;
-    STI_TypeData type_data;
-} STI_Type;
 
-void STI_Type_free(STI_Type* type);
-void STI_Type_init(STI_Type* type, STI_MetaType meta_type);
+typedef struct STI_Type {
+    String name;
+    uint32 hash; // Original hash
+    uint32 size;
+    uint32 alignment;
+    // uint32 parent_hash;
+    STI_DataType type;
+    STI_TypeData data;
+}STI_Type;
+
+void STI_Type_init(STI_Type *type, STI_DataType meta_type, uint32 hash, const String* name);
+void STI_Type_free(STI_Type *type);
 
 DYNAMIC_ARRAY_STRUCT(STI_Type, STI_Type);
 DYNAMIC_ARRAY_STRUCT(STI_Type*, STI_TypePtr);
@@ -113,25 +94,27 @@ DYNAMIC_INT_MAP_STRUCT(TypeHash, TypeHash);
 
 typedef bool (*read_type_fn)(Buffer* buffer, void* out);
 
-DYNAMIC_ARRAY_STRUCT(STI_ObjectMethods, STI_ObjectMethods);
+// DYNAMIC_ARRAY_STRUCT(STI_ObjectMethods, STI_ObjectMethods);
 DYNAMIC_ARRAY_STRUCT(String, HashString);
 
-DYNAMIC_INT_MAP_STRUCT(STI_ObjectMethods, STI_ObjectMethods);
+// DYNAMIC_INT_MAP_STRUCT(STI_ObjectMethods, STI_ObjectMethods);
 DYNAMIC_INT_MAP_STRUCT(HashString, HashString);
 
 typedef DynamicIntMap_STI_Type STI_TypeDict;
 typedef DynamicIntMap_TypeHash STI_NameHasToTypeHash;
-typedef DynamicIntMap_STI_ObjectMethods STI_FunctionDict;
+// typedef DynamicIntMap_STI_ObjectMethods STI_FunctionDict;
 
 typedef struct STI_TypeLibrary{
     STI_TypeDict types;
-    STI_NameHasToTypeHash name_hash_to_type;
+    STI_NameHasToTypeHash already_seen_name_hashes;
     DynamicArray_STI_exportedHashes exported_hashes;
-    STI_FunctionDict object_functions;
+    // STI_FunctionDict object_functions;
 } STI_TypeLibrary;
 
 void STI_TypeLibrary_init(STI_TypeLibrary *lib);
-STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType type, uint32 type_hash, String* name);
+STI_Type *STI_TypeLibrary_register_adf_type(STI_TypeLibrary *lib, const ADF* adf, const ADFType* adf_type);
+// STI_Type *STI_TypeLibrary_new_type(STI_TypeLibrary *lib, STI_MetaType meta_type, uint32 type_hash, String* name);
+STI_Type* STI_TypeLibrary_register_type(STI_TypeLibrary* lib, ADFType* adf_type);
 int32 STI_TypeLibrary_types_count(const STI_TypeLibrary *lib);
 void STI_TypeLibrary_free(STI_TypeLibrary *lib);
 void STI_TypeLibrary_generate_types(STI_TypeLibrary* lib, const String* namespace, FILE *header_output, const String* relative_header_path, FILE* impl_output);
@@ -139,11 +122,6 @@ void STI_TypeLibrary_generate_types(STI_TypeLibrary* lib, const String* namespac
 const STI_Type *STI_TypeLibrary_get_type(const STI_TypeLibrary *lib, uint32 type_hash);
 
 void STI_start_type_dump(STI_TypeLibrary* lib);
-void STI_dump_type(STI_TypeLibrary* lib, const STI_Type* type, FILE* output);
-void STI_generate_reader_function(STI_TypeLibrary* lib, const STI_Type* type, FILE* output, bool prototype_only);
-void STI_generate_free_function(STI_TypeLibrary* lib, const STI_Type* type, FILE* output, bool prototype_only);
-void STI_generate_print_function(STI_TypeLibrary* lib, const STI_Type* type, FILE* output, bool prototype_only);
-void STI_generate_register_function(STI_TypeLibrary* lib, const String* namespace, FILE* output);
 
 
 #define STI_TYPE_HASH_INT8  0x580D0A62
@@ -157,6 +135,6 @@ void STI_generate_register_function(STI_TypeLibrary* lib, const String* namespac
 #define STI_TYPE_HASH_FLOAT32  0x7515A207
 #define STI_TYPE_HASH_FLOAT64  0xC609F663
 #define STI_TYPE_HASH_STRING  0x8955583E
-#define STI_TYPE_HASH_UNK  0xDEFE88ED
+#define STI_TYPE_HASH_DEFERRED  0xDEFE88ED
 
 #endif //APEXPREDATOR_STI_H

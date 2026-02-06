@@ -6,17 +6,23 @@
 #include "apex/adf/adf.h"
 #include "exporter/adf_export.h"
 #include "exporter/ddsc_export.h"
-#include "havok/havok_codegen.h"
 #include "platform/logger.h"
 #include "platform/texture_ops.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
 #include "utils/memory_profiling.h"
 
+DYNAMIC_ARRAY_STRUCT(AmfBuffer,AmfBuffer);
 
-GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib, String *export_path,
-                      uint32 path_hash, const String *path, const AmfMeshHeader *header,
+GL_ID export_amf_mesh(AppState *app_state,
+                      uint32 path_hash, const String *path,
+                      const AmfMeshHeader *header,
                       const AmfMeshBuffers *mesh_buffers) {
+    CHECK_APP_STATE(app_state);
+    CHECK_GLTF_STATE(&app_state->gltf_context);
+    GLTFContext *context = &app_state->gltf_context;
+    const ArchiveManager *archive_manager = &app_state->archive_manager;
+
     String mesh_name = {0};
     if (path != NULL) {
         Path_filename(path, &mesh_name);
@@ -41,7 +47,6 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
     DA_init(&all_index_buffer, AmfBuffer, mesh_buffers->IndexBuffers.count);
 
     AmfMeshBuffers *hi_res_buffers = NULL;
-    freeSTIObject hi_res_free_fn = NULL;
     // hires fix
     {
         MemoryBuffer hi_res_buffer = {0};
@@ -53,12 +58,10 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
                 String_from_cstr(&hi_res_path, String_cstr(hi_res_path_full) + strlen("intermediate/"));
                 if (ArchiveManager_get_file(archive_manager, &hi_res_path, &hi_res_buffer)) {
                     ADF hi_res_adf = {0};
-                    ADF_from_buffer(&hi_res_adf, (Buffer *) &hi_res_buffer, lib);
+                    ADF_from_buffer(&hi_res_adf, (Buffer *) &hi_res_buffer);
                     ADFInstance *instance = ADF_get_instance(&hi_res_adf, 0);
                     if (instance->type_hash == STI_TYPE_HASH_AmfMeshBuffers) {
-                        hi_res_buffers = ADF_read_instance(&hi_res_adf, lib, instance, &hi_res_buffer);
-                        hi_res_free_fn = ((STI_ObjectMethods *) DM_get(&lib->object_functions, instance->type_hash))->
-                                free;
+                        hi_res_buffers = ADF_read_instance(&hi_res_adf, instance, &hi_res_buffer, &ADF_TYPES_type_info);
                     }
                     else {
                         GLog_Warning("Unexpected hi-res mesh buffers type: %08X", instance->type_hash);
@@ -74,33 +77,32 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
     }
 
     for (int i = 0; i < mesh_buffers->VertexBuffers.count; ++i) {
-        AmfBuffer *vertex_buffer = DA_at(&mesh_buffers->VertexBuffers, i);
+        AmfBuffer *vertex_buffer = &mesh_buffers->VertexBuffers.items[i];
         *(AmfBuffer *) DA_append_get(&all_vertex_buffer) = *vertex_buffer;
     }
     for (int i = 0; i < mesh_buffers->IndexBuffers.count; ++i) {
-        AmfBuffer *index_buffer = DA_at(&mesh_buffers->IndexBuffers, i);
+        AmfBuffer *index_buffer = &mesh_buffers->IndexBuffers.items[i];
         *(AmfBuffer *) DA_append_get(&all_index_buffer) = *index_buffer;
     }
 
 
     if (hi_res_buffers != NULL) {
         for (int i = 0; i < hi_res_buffers->VertexBuffers.count; ++i) {
-            AmfBuffer *vertex_buffer = DA_at(&hi_res_buffers->VertexBuffers, i);
+            AmfBuffer *vertex_buffer = &hi_res_buffers->VertexBuffers.items[i];
             *(AmfBuffer *) DA_append_get(&all_vertex_buffer) = *vertex_buffer;
         }
         for (int i = 0; i < hi_res_buffers->IndexBuffers.count; ++i) {
-            AmfBuffer *index_buffer = DA_at(&hi_res_buffers->IndexBuffers, i);
+            AmfBuffer *index_buffer = &hi_res_buffers->IndexBuffers.items[i];
             *(AmfBuffer *) DA_append_get(&all_index_buffer) = *index_buffer;
         }
     }
 
 
-
     String lod_name = {0};
     for (uint32 lod_id = header->LodGroups.count - 1; lod_id < header->LodGroups.count; ++lod_id) {
-        AmfLodGroup *lod_group = DA_at(&header->LodGroups, lod_id);
+        AmfLodGroup *lod_group = &header->LodGroups.items[lod_id];
         for (int mesh_id = 0; mesh_id < lod_group->Meshes.count; ++mesh_id) {
-            AmfMesh *mesh = DA_at(&lod_group->Meshes, mesh_id);
+            AmfMesh *mesh = &lod_group->Meshes.items[mesh_id];
             // String* mesh_type = find_name32(mesh->MeshTypeId);
             String_init(&lod_name, 64);
             String_copy_from(&lod_name, &mesh_name);
@@ -124,11 +126,11 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
 
             uint32 index_buffer_stride = mesh->IndexBufferStride;
             uint32 index_buffer_offset = mesh->IndexBufferOffset;
-            DynamicArray_STI_uint8 *vertex_buffer_indices = &mesh->VertexBufferIndices;
-            DynamicArray_STI_uint8 *vertex_buffer_strides = &mesh->VertexStreamStrides;
-            DynamicArray_STI_uint32 *vertex_buffer_offsets = &mesh->VertexStreamOffsets;
-            DynamicArray_STI_int16 *bone_lookup = &mesh->BoneIndexLookup;
-            DynamicArray_AmfStreamAttribute *amf_attributes = &mesh->StreamAttributes;
+            Array_uint8 *vertex_buffer_indices = &mesh->VertexBufferIndices;
+            Array_uint8 *vertex_buffer_strides = &mesh->VertexStreamStrides;
+            Array_uint32 *vertex_buffer_offsets = &mesh->VertexStreamOffsets;
+            Array_int16 *bone_lookup = &mesh->BoneIndexLookup;
+            Array_AmfStreamAttribute *amf_attributes = &mesh->StreamAttributes;
 
             AmfBuffer *usedIndexBuffer = DA_at(&all_index_buffer, index_buffer_index);
 
@@ -143,7 +145,7 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
             GLTFContext_node_set_mesh(context, gl_node_id, gl_mesh_id);
 
             for (int sub_mesh_id = 0; sub_mesh_id < mesh->SubMeshes.count; ++sub_mesh_id) {
-                AmfSubMesh *sub_mesh = DA_at(&mesh->SubMeshes, sub_mesh_id);
+                AmfSubMesh *sub_mesh = &mesh->SubMeshes.items[sub_mesh_id];
                 String *material_name = find_name32(sub_mesh->SubMeshId);
 
                 if (material_name == NULL) {
@@ -461,22 +463,8 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
 
     String_free(&mesh_name);
 
-    context->options.type = cgltf_file_type_gltf;
-
-    String mesh_export_path = {};
-    String mesh_without_ext = {};
-    Path_remove_extension(path, &mesh_without_ext);
-    Path_join(&mesh_export_path, export_path);
-    Path_join(&mesh_export_path, &mesh_without_ext);
-    String_append_cstr(&mesh_export_path, ".gltf");
-    String_free(&mesh_without_ext);
-
-    Path_ensure_parent_dirs(&mesh_export_path);
-    GLTFContext_set_save_path(context, &mesh_export_path);
-    String_free(&mesh_export_path);
-
     if (hi_res_buffers != NULL) {
-        hi_res_free_fn(hi_res_buffers, lib);
+        hi_res_buffers->type_info_->free(hi_res_buffers);
         mp_free(hi_res_buffers);
     }
     DA_free(&all_index_buffer);
@@ -487,32 +475,20 @@ GL_ID export_amf_mesh(GLTFContext *context, ArchiveManager *archive_manager, STI
 
 bool export_textures = false;
 
-GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, STI_TypeLibrary *lib,
-                       const AmfModel *amf_model,
-                       const String *path, const uint32 path_hash, const String *export_path) {
-    if (context == NULL) {
-        GLog_Error("GLTF context is not initialized!");
-        assert(context!=NULL && "context must be initialized");
-        exit(1);
-    }
+GL_ID export_amf_model(AppState *app_state, const AmfModel *amf_model, const String *path, const uint32 path_hash) {
+    CHECK_APP_STATE(app_state);
+    CHECK_GLTF_STATE(&app_state->gltf_context);
+    GLTFContext *context = &app_state->gltf_context;
+    const ArchiveManager *archive_manager = &app_state->archive_manager;
 
-
-    String model_export_path = {0};
-    String model_without_ext = {0};
     String model_name = {0};
     if (path == NULL) {
-        String_init(&model_without_ext, 64);
-        String_append_format(&model_without_ext, "0x%08X", path_hash);
         String_from_cstr(&model_name, "model_");
         String_append_format(&model_name, "%08X", path_hash);
     }
     else {
-        Path_remove_extension(path, &model_without_ext);
         Path_filename(path, &model_name);
     }
-    Path_join(&model_export_path, export_path);
-    Path_join(&model_export_path, &model_without_ext);
-
     const GL_ID model_root_node_id = GLTFContext_node_add(context, String_cstr(&model_name));
 
     for (int mat_id = 0; mat_id < amf_model->Materials.count; ++mat_id) {
@@ -569,18 +545,18 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                     Texture *emission_texture = NULL;
 
                     if (diffuse_path != NULL) {
-                        diffuse_texture = convert_ddsc(archive_manager, diffuse_path);
+                        diffuse_texture = convert_ddsc(app_state, diffuse_path);
                         GLTFContext_material_set_diffuse_texture_from_data(
                             context, diffuse_path, material_id, diffuse_texture);
                         String_free(diffuse_path);
                     }
                     if (normal_path != NULL) {
-                        normal_texture = convert_ddsc(archive_manager, normal_path);
+                        normal_texture = convert_ddsc(app_state, normal_path);
                         GLTFContext_material_set_normal_from_data(context, normal_path, material_id, normal_texture);
                         String_free(normal_path);
                     }
                     if (orm_path != NULL) {
-                        orm_texture = convert_ddsc(archive_manager, orm_path);
+                        orm_texture = convert_ddsc(app_state, orm_path);
                         GLTFContext_material_set_roughness_metallic_from_data(
                             context, orm_path, material_id, orm_texture);
                         String_free(orm_path);
@@ -588,7 +564,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                     if (constants->UseEmissive) {
                         String *emission_path = find_name32(amf_material->Textures.items[4]);
                         if (emission_path != NULL) {
-                            emission_texture = convert_ddsc(archive_manager, emission_path);
+                            emission_texture = convert_ddsc(app_state, emission_path);
                             if (!constants->EmissiveTextureHasColor && diffuse_texture != NULL) {
                                 Texture *new_emission_texture = TextureOps_multiply(diffuse_texture, emission_texture);
 
@@ -614,7 +590,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
 
                     if (constants->UseAlbedoDetail) {
                         String *albedo_detail_path = find_name32(amf_material->Textures.items[5]);
-                        Texture *albedo_detail = convert_ddsc(archive_manager, albedo_detail_path);
+                        Texture *albedo_detail = convert_ddsc(app_state, albedo_detail_path);
                         String *texture_save_path = GLTFContext_data_path(context);
                         const uint32 hash = hash_string(albedo_detail_path);
                         String tex_name = {0};
@@ -628,7 +604,7 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
                     }
                     if (constants->UseNormalDetail) {
                         String *normal_detail_path = find_name32(amf_material->Textures.items[6]);
-                        Texture *normal_detail = convert_ddsc(archive_manager, normal_detail_path);
+                        Texture *normal_detail = convert_ddsc(app_state, normal_detail_path);
                         String *texture_save_path = GLTFContext_data_path(context);
                         const uint32 hash = hash_string(normal_detail_path);
                         String tex_name = {0};
@@ -669,8 +645,6 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
     String *mesh_path = find_name32(amf_model->Mesh);
 
     String_free(&model_name);
-    String_free(&model_without_ext);
-    String_free(&model_export_path);
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file(archive_manager, mesh_path, &mb)) {
         GLog_Error("File not found");
@@ -678,10 +652,8 @@ GL_ID export_amf_model(GLTFContext *context, ArchiveManager *archive_manager, ST
         return model_root_node_id;
     }
 
-    const GL_ID mesh_root_node = export_adf_file_from_buffer(context, archive_manager, lib, hash_string(mesh_path),
-                                                             mesh_path,
-                                                             &mb,
-                                                             export_path);
+    const GL_ID mesh_root_node = export_adf_file_from_buffer(app_state, hash_string(mesh_path),
+                                                             mesh_path, &mb);
     String_free(mesh_path);
     GLTFContext_node_set_parent(context, mesh_root_node, model_root_node_id);
 

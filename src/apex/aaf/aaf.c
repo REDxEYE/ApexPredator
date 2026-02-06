@@ -6,14 +6,15 @@
 #include "utils/zlib_wrapper.h"
 
 void AAFArchive_from_buffer(AAFArchive *archive, Buffer *buffer) {
+    TracyCZoneN(ctx, "AAFArchive_from_buffer", 1);
     buffer->read(buffer, &archive->header, sizeof(AAFHeader), NULL);
     if (strncmp(archive->header.ident, "AAF", 3) != 0) {
         GLog_Error("Invalid AAF format");
-        exit(1);
+        abort();
     }
     if (archive->header.version != 1) {
         GLog_Error("Unsupported AAF version: %d", archive->header.version);
-        exit(1);
+        abort();
     }
     DA_init(&archive->sections, AAFSection, archive->header.section_count);
     uint64 total_size = 0;
@@ -25,7 +26,7 @@ void AAFArchive_from_buffer(AAFArchive *archive, Buffer *buffer) {
         buffer->read(buffer, &entry->header, sizeof(AAFSectionHeader), NULL);
         if (memcmp(entry->header.magic,"EWAM",4)!=0) {
             GLog_Error("Invalid AAF section magic");
-            exit(1);
+            abort();
         }
         MemoryBuffer_allocate(&entry->buffer, entry->header.compressed_size);
         buffer->read(buffer, entry->buffer.data, entry->header.compressed_size, NULL);
@@ -35,11 +36,13 @@ void AAFArchive_from_buffer(AAFArchive *archive, Buffer *buffer) {
     if (total_size != archive->header.uncompressed_size) {
         GLog_Error("AAF archive uncompressed size mismatch, expected: %u, actual: %llu",
                archive->header.uncompressed_size, total_size);
-        exit(1);
+        abort();
     }
+    TracyCZoneEnd(ctx);
 }
 
 bool AAFArchive_get_data(AAFArchive *archive, MemoryBuffer *out) {
+    TracyCZoneN(ctx, "AAFArchive_get_data", 1);
     if (MemoryBuffer_allocate(out, archive->header.uncompressed_size) != BUFFER_SUCCESS) {
         return false;
     }
@@ -49,16 +52,18 @@ bool AAFArchive_get_data(AAFArchive *archive, MemoryBuffer *out) {
         if (section->buffer.size == 0 || section->buffer.data == NULL) return false;
 
 
-        int res = inflate_exact_raw(section->buffer.data, section->buffer.size, out->data + offset,
+        const int res = inflate_exact_raw(section->buffer.data, section->buffer.size, out->data + offset,
                                     section->header.uncompressed_size, NULL, NULL);
         if (res != Z_OK) {
             GLog_Error("Failed to decompress AAF section %u, zlib error: %d", index, res);
             out->close(out);
+            TracyCZoneEnd(ctx);
             return false;
         }
         offset += section->header.uncompressed_size;
     }
 
+    TracyCZoneEnd(ctx);
     return true;
 }
 

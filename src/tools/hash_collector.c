@@ -208,10 +208,9 @@ int main(int argc, const char *argv[]) {
     ArchiveManager archive_manager = {0};
     ArchiveManager_init(&archive_manager);
 
-    String tmp = {0};
     String game_root = {0};
-    String_from_cstr(&tmp, argv[1]);
-    Path_convert_to_wsl(&tmp, &game_root);
+    String_from_cstr(&game_root, argv[1]);
+    Path_convert_to_wsl(&game_root);
     TabArchives_init(&archive_manager, &game_root);
 
     STI_TypeLibrary lib = {0};
@@ -220,7 +219,6 @@ int main(int argc, const char *argv[]) {
     Havok_TypeLibrary_init(&havok_lib);
 
     STI_ADF_TYPES_register_functions(&lib);
-    HAVOK_TYPES_register_functions();
 
     Context context = {
         .db = db,
@@ -236,6 +234,5 @@ int main(int argc, const char *argv[]) {
     assetdb_close(db);
 
     String_free(&game_root);
-    String_free(&tmp);
     return 0;
 }
