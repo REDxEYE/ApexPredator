@@ -135,23 +135,21 @@ int main(int argc, const char *argv[]) {
         cli_free(&cli_res);
         return -1;
     }
-    //     while (!TracyCIsConnected) {
-    // #ifdef _WIN32
-    //         Sleep(100); /* Windows */
-    // #else
-    //         usleep(10000);
-    // #endif
-    //         printf("\rWaiting for tracy;");
-    //     }
-    //     printf("\n");
+    while (!TracyCIsConnected) {
+#ifdef _WIN32
+        Sleep(100); /* Windows */
+#else
+        usleep(10000);
+#endif
+        printf("\rWaiting for tracy;");
+    }
+    printf("\n");
     TracyCZoneN(ctx, "App", 1);
     AppState app_state = {};
 
     ArchiveManager_init(&app_state.archive_manager);
     ArchiveManager_set_archive_loader_function(&app_state.archive_manager, mount_archive);
 
-    // STI_TypeLibrary lib = {0};
-    // STI_TypeLibrary_init(&lib);
     STI_ADF_TYPES_register_functions();
     HAVOK_TYPES_register_functions();
 
@@ -182,7 +180,7 @@ int main(int argc, const char *argv[]) {
             GLTFContext_set_save_path(&app_state.gltf_context, &save_path);
             String_free(&save_path);
 
-            export_file(&app_state, &file_path, hash_string(&file_path));
+            export_file(&app_state, as_sv(&file_path), hash_string(&file_path));
 
             GLTFContext_write_and_free(&app_state.gltf_context);
             String_free(&file_path);
@@ -253,19 +251,18 @@ int main(int argc, const char *argv[]) {
         for (int file_id = 0; file_id < file_path_count; ++file_id) {
             const char *animation_path_cstr = file_paths[file_id];
             uint32 animation_path_hash = 0;
-            String *animation_path_tmp = NULL;
             if (is_hex(animation_path_cstr)) {
                 animation_path_hash = parse_hex_u32(animation_path_cstr);
-                animation_path_tmp = find_name32(animation_path_hash);
             }
             else if (is_digits(animation_path_cstr)) {
                 animation_path_hash = parse_digits_u32(animation_path_cstr);
-                animation_path_tmp = find_name32(animation_path_hash);
             }
             else {
-                animation_path_tmp = String_new_from_cstr(animation_path_cstr);
-                Path_normalize_posix(animation_path_tmp);
-                animation_path_hash = hash_string(animation_path_tmp);
+
+                String animation_path_tmp = {0};
+                String_from_cstr(&animation_path_tmp, animation_path_cstr);
+                Path_normalize_posix(&animation_path_tmp);
+                animation_path_hash = hash_string(&animation_path_tmp);
             }
 
             if (!ArchiveManager_get_file_by_hash(&app_state.archive_manager, animation_path_hash, &mb)) {
@@ -292,9 +289,6 @@ int main(int argc, const char *argv[]) {
             INVALID_ANIM_CLEANUP:
                 TagFile_free_item(anim_item);
                 TagFile_free(&anim_tag_file);
-                if (animation_path_tmp != NULL) {
-                    String_free(animation_path_tmp);
-                }
                 continue;
             }
             const hkRootLevelContainer *anim_root_container = (hkRootLevelContainer *) anim_item;
@@ -309,13 +303,14 @@ int main(int argc, const char *argv[]) {
                 "Only single animation binding per container is supported currently.");
 
             const hkaAnimationBinding *binding = anim_animation_container->bindings.m_data[0].ptr;
-            if (animation_path_tmp == NULL) {
-                animation_path_tmp = String_new(16);
-                String_format(animation_path_tmp, "anim_%08X", animation_path_hash);
-            }
-
             String anim_file_name = {0};
-            Path_filename(animation_path_tmp, &anim_file_name);
+            StringView animation_path_tmp = find_name32(animation_path_hash);
+            if (sv_is_null(animation_path_tmp)) {
+                String_format(&anim_file_name, "anim_%08X", animation_path_hash);
+            }else {
+            Path_filename_sv(animation_path_tmp, &anim_file_name);
+
+            }
 
             GLTFContext_init(&app_state.gltf_context, String_cstr(&anim_file_name));
             String_free(&anim_file_name);
@@ -324,7 +319,7 @@ int main(int argc, const char *argv[]) {
 
             String export_file_path = {0};
             String_copy_from(&export_file_path, &app_state.export_path);
-            Path_join(&export_file_path, animation_path_tmp);
+            Path_join_sv(&export_file_path, animation_path_tmp);
             Path_ensure_parent_dirs(&export_file_path);
             Path_replace_extension_inplace(&export_file_path, "gltf");
             GLTFContext_set_save_path(&app_state.gltf_context, &export_file_path);
@@ -332,7 +327,6 @@ int main(int argc, const char *argv[]) {
 
             GLTFContext_write_and_free(&app_state.gltf_context);
 
-            String_free(animation_path_tmp);
             TagFile_free_item(anim_item);
             TagFile_free(&anim_tag_file);
         }

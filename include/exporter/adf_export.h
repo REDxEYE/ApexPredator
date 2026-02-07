@@ -7,9 +7,9 @@
 #include "platform/archive_manager.h"
 #include "utils/gltf/cgltf_helper.h"
 
-GL_ID export_adf_file(AppState *app_state, const String *path, uint32 path_hash);
+GL_ID export_adf_file(AppState *app_state, StringView path, uint32 path_hash);
 
-GL_ID export_adf_file_from_buffer(AppState *app_state, uint32 path_hash, const String *path, MemoryBuffer *mb);
+GL_ID export_adf_file_from_buffer(AppState *app_state, uint32 path_hash, StringView path, MemoryBuffer *mb);
 
 
 #endif //APEXPREDATOR_ADF_EXPORT_H

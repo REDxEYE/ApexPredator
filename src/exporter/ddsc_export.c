@@ -11,15 +11,15 @@
 #include "utils/memory_profiling.h"
 #include "tracy/TracyC.h"
 
-String* export_ddsc_to_file(AppState* app_state, const String *path, const String *export_path) {
+String* export_ddsc_to_file(const AppState* app_state, const StringView path, const String *export_path) {
     CHECK_APP_STATE(app_state);
-    if (path==NULL) {
+    if (sv_is_null(path)) {
         GLog_Error("Cannot export textures without name!");
         return NULL;
     }
 
     MemoryBuffer mb = {0};
-    if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, hash_string(path), &mb)) {
+    if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, hash_vstring(path), &mb)) {
         GLog_Error("Texture file not found");
         return NULL;
     }
@@ -27,7 +27,7 @@ String* export_ddsc_to_file(AppState* app_state, const String *path, const Strin
     String* output_file = String_new(64);
 
     String texture_without_ext = {};
-    Path_remove_extension(path, &texture_without_ext);
+    Path_remove_extension_sv(path, &texture_without_ext);
     Path_join(output_file, export_path);
     Path_join(output_file, &texture_without_ext);
     String_free(&texture_without_ext);
@@ -43,7 +43,7 @@ String* export_ddsc_to_file(AppState* app_state, const String *path, const Strin
     return output_file;
 }
 
-Texture* convert_ddsc(AppState* app_state, const String *path) {
+Texture* convert_ddsc(AppState* app_state, const StringView path) {
     CHECK_APP_STATE(app_state);
     TracyCZoneN(ctx, "convert_ddsc", 1);
     MemoryBuffer mb = {0};
@@ -73,14 +73,14 @@ Texture* convert_ddsc(AppState* app_state, const String *path) {
         String atx_path = {0};
         // highest mips are in atx<N> file
         for (int i = 5; i > 0; --i) {
-            Path_remove_extension(path, &atx_path);
+            Path_remove_extension_sv(path, &atx_path);
             String_append_format(&atx_path, ".atx%i", i);
-            if (ArchiveManager_has_file(archive_manager, &atx_path)) {
+            if (ArchiveManager_has_file(archive_manager, as_sv(&atx_path))) {
                 break;
             }
         }
         MemoryBuffer atx_buffer = {0};
-        ArchiveManager_get_file(archive_manager, &atx_path, &atx_buffer);
+        ArchiveManager_get_file(archive_manager, as_sv(&atx_path), &atx_buffer);
         if (atx_buffer.size==0) {
             Texture_free(texture);
             mb.close(&mb);
@@ -127,15 +127,15 @@ Texture* convert_ddsc(AppState* app_state, const String *path) {
 }
 
 void export_ddsc(AppState* app_state, uint32 hash, MemoryBuffer *mb,
-                 const String *path) {
+                 const StringView path) {
     CHECK_APP_STATE(app_state);
-    if (path==NULL) {
+    if (sv_is_null(path)) {
         GLog_Error("Cannot export textures without name!");
         return;
     }
     String texture_export_path = {};
     String texture_without_ext = {};
-    Path_remove_extension(path, &texture_without_ext);
+    Path_remove_extension_sv(path, &texture_without_ext);
     Path_join(&texture_export_path, &app_state->export_path);
     Path_join(&texture_export_path, &texture_without_ext);
 
@@ -165,14 +165,14 @@ void export_ddsc(AppState* app_state, uint32 hash, MemoryBuffer *mb,
         String atx_path = {0};
         // highest mips are in atx<N> file
         for (int i = 5; i > 0; --i) {
-            Path_remove_extension(path, &atx_path);
+            Path_remove_extension_sv(path, &atx_path);
             String_append_format(&atx_path, ".atx%i", i);
-            if (ArchiveManager_has_file(&app_state->archive_manager, &atx_path)) {
+            if (ArchiveManager_has_file(&app_state->archive_manager, as_sv(&atx_path))) {
                 break;
             }
         }
         MemoryBuffer atx_buffer = {0};
-        ArchiveManager_get_file(&app_state->archive_manager, &atx_path, &atx_buffer);
+        ArchiveManager_get_file(&app_state->archive_manager, as_sv(&atx_path), &atx_buffer);
 
         const int64 largest_mip_size = Texture_calculate_mip_size(0, header.width, header.height, header.format);
         atx_buffer.set_position(&atx_buffer, -largest_mip_size, BUFFER_ORIGIN_END);

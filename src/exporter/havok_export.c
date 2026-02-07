@@ -23,7 +23,7 @@ DYNAMIC_ARRAY_STRUCT(versor, versor);
 
 void export_spline_compressed_animation(AppState* app_state, const hkaSplineCompressedAnimation *spline_animation,
                                         const hkaAnimationBinding *binding, const hkaSkeleton *skeleton,
-                                        const String *name) {
+                                        const StringView animation_name) {
     CHECK_APP_STATE(app_state);
     CHECK_GLTF_STATE(&app_state->gltf_context);
     GLTFContext *context = &app_state->gltf_context;
@@ -32,7 +32,7 @@ void export_spline_compressed_animation(AppState* app_state, const hkaSplineComp
     hkaSplineDecompressor_assign(&decompressor, spline_animation);
     const float32 frame_duration = spline_animation->frameDuration;
 
-    const GL_ID animation_id = GLTFContext_animation_new(context, String_cstr(name));
+    const GL_ID animation_id = GLTFContext_animation_new(context, StringView_cstr(animation_name));
 
     DynamicArray_float32 timestamps = {0};
     DynamicArray_vec3 positions = {0};
@@ -181,7 +181,7 @@ void export_spline_compressed_animation(AppState* app_state, const hkaSplineComp
 }
 
 void export_animation(AppState* app_state, const hkaAnimationBinding *binding, const hkaSkeleton *skeleton,
-                      const String *name) {
+                      const StringView animation_name) {
     CHECK_APP_STATE(app_state);
 
     export_skeleton(app_state, skeleton);
@@ -192,7 +192,7 @@ void export_animation(AppState* app_state, const hkaAnimationBinding *binding, c
     }
     else if (animation->type_info_->hash == hkaSplineCompressedAnimation_HASH) {
         export_spline_compressed_animation(app_state, (hkaSplineCompressedAnimation *) animation, binding, skeleton,
-                                           name);
+                                           animation_name);
     }
 }
 
@@ -211,7 +211,7 @@ GL_ID export_animation_container(AppState* app_state, const hkaAnimationContaine
     return skeleton_id;
 }
 
-GL_ID export_havok_file(AppState* app_state, const TagFile *tag_file, const String *path) {
+GL_ID export_havok_file(AppState* app_state, const TagFile *tag_file, const StringView path) {
     CHECK_APP_STATE(app_state);
         CHECK_GLTF_STATE(&app_state->gltf_context);
     GLTFContext *context = &app_state->gltf_context;
@@ -237,7 +237,7 @@ GL_ID export_havok_file(AppState* app_state, const TagFile *tag_file, const Stri
         }
         String bsk_export_path = {};
         Path_join(&bsk_export_path, &app_state->export_path);
-        Path_join(&bsk_export_path, path);
+        Path_join_sv(&bsk_export_path, path);
         Path_ensure_parent_dirs(&bsk_export_path);
         String_append_cstr(&bsk_export_path, ".gltf");
         GLTFContext_set_save_path(context, &bsk_export_path);
@@ -249,7 +249,7 @@ GL_ID export_havok_file(AppState* app_state, const TagFile *tag_file, const Stri
     JsonContext tmp;
     String unk_file_export_path = {0};
     Path_join(&unk_file_export_path, &app_state->export_path);
-    Path_join(&unk_file_export_path, path);
+    Path_join_sv(&unk_file_export_path, path);
     Path_ensure_parent_dirs(&unk_file_export_path);
     String json_output = {0};
     Path_replace_extension(&unk_file_export_path, "json", &json_output);

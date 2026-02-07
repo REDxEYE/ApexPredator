@@ -33,26 +33,24 @@ assetdb_t *get_assets_db() {
     return assets_db;
 }
 
-String *find_name32(const uint32 key) {
+StringView find_name32(const uint32 key) {
     const char *value = NULL;
     size_t value_len;
     const assetdb_status_t status = assetdb_kv_get_u32_view(get_assets_db(), key, &value, &value_len);
     if (status == KV_NOTFOUND || value == NULL) {
-        return NULL;
+        return StringView_empty();
     }
-    String *tmp = String_new_from_cstr2(value, value_len);
-    return tmp;
+    return StringView_from_cstr2(value, value_len);
 }
 
-String *find_name64(const uint64 key) {
+StringView find_name64(const uint64 key) {
     const char *value = NULL;
     size_t value_len;
     const assetdb_status_t status = assetdb_kv_get_u64_view(get_assets_db(), key, &value, &value_len);
     if (status == KV_NOTFOUND || value == NULL) {
-        return NULL;
+        return StringView_empty();
     }
-    String *tmp = String_new_from_cstr2(value, value_len);
-    return tmp;
+    return StringView_from_cstr2(value, value_len);
 }
 
 bool check_hash32_presence(const uint32 key) {

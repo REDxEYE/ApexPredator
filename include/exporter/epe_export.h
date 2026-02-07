@@ -13,12 +13,12 @@
 void process_epe_node(AppState* app_state,
                       RuntimeNode *node,
                       uint32 path_hash,
-                      const String *path, GL_ID parent_gltf_node);
+                      StringView path, GL_ID parent_gltf_node);
 
 GL_ID export_epe(AppState* app_state,
                  RuntimeNode *root_node,
                  uint32 path_hash,
-                 const String *path);
+                 StringView path);
 
 
 #endif //APEXPREDATOR_EPE_EXPORT_H

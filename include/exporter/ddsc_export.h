@@ -6,13 +6,14 @@
 #include "platform/app_state.h"
 #include "platform/archive_manager.h"
 #include "platform/texture.h"
+#include "utils/string_view.h"
 
-Texture* convert_ddsc(AppState* app_state, const String* path);
+Texture* convert_ddsc(AppState* app_state, StringView path);
 
-String* export_ddsc_to_file(AppState* app_state, const String *path, const String *export_path);
+String* export_ddsc_to_file(const AppState* app_state, StringView path, const String *export_path);
 
 void export_ddsc(AppState* app_state, uint32 hash, MemoryBuffer *mb,
-                 const String *path);
+                 StringView path);
 
 
 #endif //APEXPREDATOR_DDSC_EXPORT_H

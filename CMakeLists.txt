@@ -89,6 +89,8 @@ SET(CommonFiles
         src/utils/stb.c
         src/utils/string.c
         src/utils/zlib_wrapper.c
+        src/utils/string_view.c
+        include/utils/string_view.h
 )
 
 add_executable(ApexPredator
@@ -183,5 +185,5 @@ target_link_libraries(HavokTypeGenerator PUBLIC Tracy::TracyClient)
 target_link_libraries(StringHasher PUBLIC Tracy::TracyClient)
 
 
-# target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
+target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
 # target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)

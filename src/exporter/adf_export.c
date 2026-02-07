@@ -145,7 +145,7 @@ Texture *export_terrain_texture(const TerrainTexture *terrain_texture, uint32 ex
 }
 
 GL_ID export_adf_file(AppState *app_state,
-                      const String *path, const uint32 path_hash) {
+                      const StringView path, const uint32 path_hash) {
     if (!ArchiveManager_has_file_by_hash(&app_state->archive_manager, path_hash)) {
         GLog_error("File not found\n");
         return INVALID_GL_ID;
@@ -164,24 +164,24 @@ GL_ID export_adf_file(AppState *app_state,
 
 void export_terrain_patch(AppState *app_state,
                           const StreamPatchBlockHeader *header, const TerrainPatch *terrain_patch) {
-    GLTFContext* context = &app_state->gltf_context;
+    GLTFContext *context = &app_state->gltf_context;
     const uint32 patch_x_pos = header->PatchPositionX;
     const uint32 patch_z_pos = header->PatchPositionZ;
     const TerrainMesh *terrain_mesh = &terrain_patch->TerrainMesh;
 
     MemoryBuffer vertices1_buffer = {0};
-    if (!decompress_data(&terrain_mesh->Vertices, &vertices1_buffer)){
+    if (!decompress_data(&terrain_mesh->Vertices, &vertices1_buffer)) {
         GLog_Error("Failed to decompress terrain texture");
         return;
     }
     MemoryBuffer vertices2_buffer = {0};
-    if (!decompress_data(&terrain_mesh->Vertices2, &vertices2_buffer)){
+    if (!decompress_data(&terrain_mesh->Vertices2, &vertices2_buffer)) {
         GLog_Error("Failed to decompress terrain texture");
         return;
     }
 
     MemoryBuffer indices_buffer = {0};
-    if (!decompress_data(&terrain_mesh->Indices, &indices_buffer)){
+    if (!decompress_data(&terrain_mesh->Indices, &indices_buffer)) {
         GLog_Error("Failed to decompress terrain texture");
         return;
     }
@@ -252,8 +252,8 @@ void export_terrain_patch(AppState *app_state,
         *(float32 *) (DA_append_get(&normals)) = ny;
         *(float32 *) (DA_append_get(&normals)) = nz;
 
-        const float32 half_pixel_x = 1.0f / (float32)uv_dims[0];
-        const float32 half_pixel_y = 1.0f / (float32)uv_dims[1];
+        const float32 half_pixel_x = 1.0f / (float32) uv_dims[0];
+        const float32 half_pixel_y = 1.0f / (float32) uv_dims[1];
 
         *(float32 *) (DA_append_get(&uv)) = ((float32) id_uv[i].UV[0] / (float32) uv_dims[0]) + half_pixel_x;
         *(float32 *) (DA_append_get(&uv)) = ((float32) id_uv[i].UV[1] / (float32) uv_dims[1]) + half_pixel_y;
@@ -354,7 +354,8 @@ void export_terrain_patch(AppState *app_state,
         String patch_texture_name = {0};
         String_copy_from(&patch_texture_name, &patch_name);
         String_append_cstr(&patch_texture_name, "_color");
-        GLTFContext_material_set_diffuse_texture_from_data(context, &patch_texture_name, material_id, color_texture);
+        GLTFContext_material_set_diffuse_texture_from_data(context, as_sv(&patch_texture_name), material_id,
+                                                           color_texture);
         Texture_free(color_texture);
         String_free(&patch_texture_name);
     }
@@ -411,12 +412,8 @@ void export_terrain_instances(GLTFContext *context, ArchiveManager *archive_mana
 
     for (int i = 0; i < instance_data_patch->InstanceDataLayers.count; ++i) {
         const InstanceDataLayer *instance_layer = DA_at(&instance_data_patch->InstanceDataLayers, i);
-        String *layer_name = find_name32(instance_layer->Name);
+        StringView layer_name = find_name32(instance_layer->Name);
         // uint32 used_type = 0;
-        if (layer_name == NULL) {
-            layer_name = String_new(16);
-            String_format(layer_name, "layer_%08X", instance_layer->Name);
-        }
         for (int j = 0; j < instance_layer->Instances.count; ++j) {
             const VegetationSystemInstance *veg_instance = DA_at(&instance_layer->Instances, j);
             // if (used_type==0) {
@@ -425,8 +422,12 @@ void export_terrain_instances(GLTFContext *context, ArchiveManager *archive_mana
             //     assert(used_type==veg_instance->NameHash);
             // }
             String instance_name = {0};
-            String_format(&instance_name, "instance_%s_%03i", String_cstr(layer_name), j);
-
+            if (sv_is_null(layer_name)) {
+                String_format(&instance_name, "instance_0x%08DX_%03i", instance_layer->Name, j);
+            }
+            else {
+                String_format(&instance_name, "instance_%s_%03i", StringView_cstr(layer_name), j);
+            }
             const GL_ID instance_node = GLTFContext_node_add(context, String_cstr(&instance_name));
             mat4 instance_matrix;
             glm_mat4_identity(instance_matrix);
@@ -437,14 +438,14 @@ void export_terrain_instances(GLTFContext *context, ArchiveManager *archive_mana
                           });
             GLTFContext_node_set_matrix(context, instance_node, (float32 *) instance_matrix);
         }
-        String_free(layer_name);
     }
 }
 
 GL_ID export_stream_path_file(AppState *app_state, ADF *adf,
                               const MemoryBuffer *adf_buffer) {
     const ADFInstance *path_file_header_instance = DA_at(&adf->instances, 0);
-    StreamPatchFileHeader *path_file_header = ADF_read_instance(adf, path_file_header_instance, adf_buffer, &ADF_TYPES_type_info);
+    StreamPatchFileHeader *path_file_header = ADF_read_instance(adf, path_file_header_instance, adf_buffer,
+                                                                &ADF_TYPES_type_info);
     // const ADFInstance *patch_block_header_instance = DA_at(&adf->instances, 1);
     // StreamPatchBlockHeader* patch_block_header = ADF_read_instance(adf, patch_block_header_instance, adf_buffer);
 
@@ -485,7 +486,7 @@ GL_ID export_stream_path_file(AppState *app_state, ADF *adf,
     return INVALID_GL_ID;
 }
 
-GL_ID export_adf_file_from_buffer(AppState* app_state, const uint32 path_hash, const String *path,
+GL_ID export_adf_file_from_buffer(AppState *app_state, const uint32 path_hash, const StringView path,
                                   MemoryBuffer *mb) {
     CHECK_APP_STATE(app_state);
     CHECK_GLTF_STATE(&app_state->gltf_context);
@@ -510,7 +511,7 @@ GL_ID export_adf_file_from_buffer(AppState* app_state, const uint32 path_hash, c
                     String chunk_patch_path = {0};
                     String_format(&chunk_patch_path, "terrain/hp/patches/patch_%02i_%02i_%02i.streampatch", base_lod, x,
                                   y);
-                    export_adf_file(app_state, &chunk_patch_path, hash_string(&chunk_patch_path));
+                    export_adf_file(app_state, as_sv(&chunk_patch_path), hash_string(&chunk_patch_path));
                     String_free(&chunk_patch_path);
                     // break;
                 }
@@ -542,7 +543,8 @@ GL_ID export_adf_file_from_buffer(AppState* app_state, const uint32 path_hash, c
             instanceId++;
             const AmfMeshHeader *mesh_header = ADF_read_instance(&adf, instance, mb, &ADF_TYPES_type_info);
             const ADFInstance *mesh_buffers_instance = DA_at(&adf.instances, instanceId);
-            const AmfMeshBuffers *mesh_buffers = ADF_read_instance(&adf, mesh_buffers_instance, mb, &ADF_TYPES_type_info);
+            const AmfMeshBuffers *mesh_buffers = ADF_read_instance(&adf, mesh_buffers_instance, mb,
+                                                                   &ADF_TYPES_type_info);
 
             // ADF_print_instance(lib, instance, instance_data, 0);
             // ADF_print_instance(lib, mesh_buffers_instance, mesh_buffers, 0);
@@ -555,7 +557,7 @@ GL_ID export_adf_file_from_buffer(AppState* app_state, const uint32 path_hash, c
             void *instance_data = ADF_read_instance(&adf, instance, mb, &ADF_TYPES_type_info);
             String unk_file_export_path = {};
             Path_join(&unk_file_export_path, &app_state->export_path);
-            Path_join(&unk_file_export_path, path);
+            Path_join_sv(&unk_file_export_path, path);
             String_append_format(&unk_file_export_path, "_%08X", instance->type_hash);
             Path_ensure_parent_dirs(&unk_file_export_path);
             FILE *f = fopen(String_cstr(&unk_file_export_path), "wb");

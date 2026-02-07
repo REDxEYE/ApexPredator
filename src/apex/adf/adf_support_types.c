@@ -137,41 +137,38 @@ void uint32_print(const uint32 *obj, JsonContext *ctx) {
 }
 
 void StringHash_48c5294d_4_print(const StringHash_48c5294d_4 *obj, JsonContext *ctx) {
-    String *string = find_name32(*obj);
-    if (string != NULL) {
-        jsonValueStr(ctx, String_cstr(string));
-        String_free(string);
-    }
-    else {
+    const StringView string = find_name32(*obj);
+    if (sv_is_null(string)) {
         static char buffer[64];
         snprintf(buffer, sizeof(buffer), "0x%08X", *obj);
         jsonValueStr(ctx, buffer);
     }
+    else {
+        jsonValueStr(ctx, StringView_cstr(string));
+    }
 }
 
 void StringHash_99cfa095_6_print(const StringHash_99cfa095_6 *obj, JsonContext *ctx) {
-    String *string = find_name64(*obj);
-    if (string != NULL) {
-        jsonValueStr(ctx, String_cstr(string));
-        String_free(string);
-    }
-    else {
+    const StringView string = find_name64(*obj);
+    if (sv_is_null(string)) {
         static char buffer[64];
         snprintf(buffer, sizeof(buffer), "0x%012llX", (unsigned long long) *obj);
         jsonValueStr(ctx, buffer);
     }
+    else {
+        jsonValueStr(ctx, StringView_cstr(string));
+    }
 }
 
 void StringHash_48c5294d_8_print(const StringHash_48c5294d_8 *obj, JsonContext *ctx) {
-    String *string = find_name64(*obj);
-    if (string != NULL) {
-        jsonValueStr(ctx, String_cstr(string));
-        String_free(string);
-    }
-    else {
+    const StringView string = find_name64(*obj);
+    if (sv_is_null(string)) {
         static char buffer[64];
         snprintf(buffer, sizeof(buffer), "0x%016llX", (unsigned long long) *obj);
         jsonValueStr(ctx, buffer);
+    }
+    else {
+        jsonValueStr(ctx, StringView_cstr(string));
     }
 }
 

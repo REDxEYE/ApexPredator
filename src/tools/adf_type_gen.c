@@ -115,7 +115,7 @@ void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
                 for (int j = 0; j < sarc_entries.count; ++j) {
                     ArchiveEntry *aaf_entry = DA_at(&sarc_entries, j);
                     MemoryBuffer *tmp = MemoryBuffer_new();
-                    if (Archive_get_file((Archive *) &sarc, aaf_entry->path, tmp)) {
+                    if (Archive_get_file((Archive *) &sarc, &aaf_entry->path, tmp)) {
                         if (tmp->data[0] == ' ' && tmp->data[1] == 'F' && tmp->data[2] == 'D' && tmp->data[3] == 'A') {
                             ADF_from_buffer(&adf, (Buffer *) tmp);
                             import_adf(&adf, lib);
@@ -131,6 +131,11 @@ void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
         }
         Buffer_close((Buffer *) &mb);
     }
+
+    DA_free_with_inner(&all_entries, {
+                       ArchiveEntry* entry = (ArchiveEntry*)it;
+                       String_free(&entry->path);
+                       });
 
     String namespace = {0};
     String_from_cstr(&namespace, "ADF_TYPES");

@@ -16,7 +16,7 @@ typedef struct {
 }SArcHeader;
 
 typedef struct {
-    String name;
+    const char* name;
     uint32 offset;
     uint32 size;
     uint32 hash;

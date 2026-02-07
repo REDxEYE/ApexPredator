@@ -41,7 +41,7 @@ typedef struct Event{
 DYNAMIC_ARRAY_STRUCT(Event,Event);
 
 typedef struct RuntimeProp {
-    String name;
+    // String name;
     uint32 name_hash;
     PropType type;
 
@@ -75,7 +75,6 @@ DYNAMIC_ARRAY_STRUCT(RuntimeNode, RuntimeNode);
 DYNAMIC_INT_MAP_STRUCT(RuntimeNode, RuntimeNode);
 
 typedef struct RuntimeNode {
-    String name;
     uint32 name_hash;
 
     DynamicArray_RuntimeProp props;
@@ -95,7 +94,7 @@ RuntimeProp* RuntimeNode_get_prop_by_hash(const RuntimeNode* node, uint32 hash);
 // Shortcut getters for RuntimeProp values. All return NULL when prop not found. Please use RuntimeNode_has_prop to check if prop exist
 uint32 RuntimeNode_get_prop_u32(const RuntimeNode* node, const char* name);
 float32 RuntimeNode_get_prop_f32(const RuntimeNode* node, const char* name);
-String* RuntimeNode_get_prop_str(const RuntimeNode* node, const char* name);
+StringView RuntimeNode_get_prop_str(const RuntimeNode* node, const char* name);
 float32* RuntimeNode_get_prop_vec2(const RuntimeNode* node, const char* name);
 float32* RuntimeNode_get_prop_vec3(const RuntimeNode* node, const char* name);
 float32* RuntimeNode_get_prop_vec4(const RuntimeNode* node, const char* name);
@@ -109,7 +108,7 @@ DynamicArray_Event* RuntimeNode_get_prop_event(const RuntimeNode* node, const ch
 
 uint32 RuntimeNode_get_prop_by_hash_u32(const RuntimeNode* node, uint32 hash);
 float32 RuntimeNode_get_prop_by_hash_f32(const RuntimeNode* node, uint32 hash);
-String* RuntimeNode_get_prop_by_hash_str(const RuntimeNode* node, uint32 hash);
+StringView RuntimeNode_get_prop_by_hash_str(const RuntimeNode* node, uint32 hash);
 float32* RuntimeNode_get_prop_by_hash_vec2(const RuntimeNode* node, uint32 hash);
 float32* RuntimeNode_get_prop_by_hash_vec3(const RuntimeNode* node, uint32 hash);
 float32* RuntimeNode_get_prop_by_hash_vec4(const RuntimeNode* node, uint32 hash);

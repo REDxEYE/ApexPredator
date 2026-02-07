@@ -22,8 +22,8 @@ void* tracy_xrealloc_dbg(void* p, size_t n, const char* file, uint32_t line, con
 
 void* tracy_xcalloc_dbg(size_t count, size_t size, const char* file, uint32_t line, const char* func);
 
-// #define ALLOC_DEBUG
-#undef TRACY_MEMORY
+#define ALLOC_DEBUG
+// #undef TRACY_MEMORY
 
 #ifdef TRACY_MEMORY
 #ifdef ALLOC_DEBUG

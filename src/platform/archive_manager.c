@@ -85,9 +85,9 @@ void ensure_parents_loaded(const ArchiveManager *manager, const uint32 file_hash
     }
 }
 
-bool ArchiveManager_get_file(const ArchiveManager *manager, const String *path, MemoryBuffer *mb) {
+bool ArchiveManager_get_file(const ArchiveManager *manager, const StringView path, MemoryBuffer *mb) {
     TracyCZoneN(ctx, "ArchiveManager_get_file", 1);
-    const uint32 hash = hash_string(path);
+    const uint32 hash = hash_vstring(path);
     ensure_parents_loaded(manager, hash);
     for (uint32 i = 0; i < manager->archives.count; ++i) {
         Archive *ar = manager->archives.items[i];
@@ -99,7 +99,7 @@ bool ArchiveManager_get_file(const ArchiveManager *manager, const String *path, 
             return true;
         }
     }
-    GLog_Error("File \"%s\" not found in any archive", String_cstr(path));
+    GLog_Error("File \"%s\" not found in any archive", StringView_cstr(path));
     TracyCZoneEnd(ctx)
     return false;
 }
@@ -129,9 +129,9 @@ bool ArchiveManager_get_file_by_hash(const ArchiveManager *manager, const uint32
     return false;
 }
 
-bool ArchiveManager_has_file(const ArchiveManager *manager, const String *path) {
+bool ArchiveManager_has_file(const ArchiveManager *manager, const StringView path) {
     TracyCZoneN(ctx, "ArchiveManager_has_file", 1);
-    const uint32 hash = hash_string(path);
+    const uint32 hash = hash_vstring(path);
     for (uint32 i = 0; i < manager->archives.count; ++i) {
         const Archive *ar = manager->archives.items[i];
         if (Archive_has_file_by_hash(ar, hash)) {

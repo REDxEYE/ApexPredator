@@ -3,6 +3,7 @@
 #ifndef APEXPREDATOR_PATH_H
 #define APEXPREDATOR_PATH_H
 
+#include "string_view.h"
 #include "utils/string.h"
 #include "utils/dynamic_array.h"
 
@@ -32,6 +33,7 @@ int Path_ensure_parent_dirs(const Path *path);
  handling absolute components as replacements.
 */
 void Path_join(Path *base, const String *component);
+void Path_join_sv(Path *base, StringView component);
 
 /*
  Joins base with the given C-string component, normalizing separators and
@@ -50,10 +52,13 @@ void Path_convert_to_wsl(Path *src);
 void Path_rglob(const Path *path, const String *ext, DynamicArray_Path* out);
 
 void Path_remove_extension(const Path* path, Path* extensionless);
+void Path_remove_extension_sv(StringView path, Path* extensionless);
 void Path_replace_extension(const Path* path, const char* new_extension, Path* out);
+void Path_replace_extension_sv(StringView path, const char* new_extension, Path* out);
 void Path_replace_extension_inplace(Path* path, const char* new_extension);
 
 void Path_filename(const Path* path, Path* filename);
+void Path_filename_sv(StringView view, Path*filename);
 
 bool Path_exists(const Path* path);
 

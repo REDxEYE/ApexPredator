@@ -11,6 +11,7 @@
 #include "platform/texture.h"
 #include "utils/dynamic_array.h"
 #include "utils/string.h"
+#include "utils/string_view.h"
 
 DYNAMIC_ARRAY_STRUCT(cgltf_mesh, cgltf_mesh);
 
@@ -198,20 +199,20 @@ GL_ID GLTFContext_material_new(GLTFContext *ctx, const char *name_opt);
 
 bool GLTFContext_material_diffuse_present(const GLTFContext *ctx, GL_ID material_id);
 
-void GLTFContext_material_set_diffuse_texture_from_data(GLTFContext *ctx, const String *original_path,
+void GLTFContext_material_set_diffuse_texture_from_data(GLTFContext *ctx, StringView original_path,
                                                         GL_ID material_id,
                                                         const Texture *texture);
 
-void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const String *original_path,
+void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, StringView original_path,
                                                GL_ID material_id,
                                                const Texture *texture);
 
-void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, const String *original_path,
+void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, StringView original_path,
                                                            GL_ID material_id,
                                                            const Texture *texture);
 
 
-void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const String *original_path,
+void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, StringView original_path,
                                                  GL_ID material_id,
                                                  const Texture *texture);
 

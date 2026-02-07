@@ -35,7 +35,6 @@ typedef struct {
 void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer);
 
 void RuntimeProp__move_to(RuntimeProp *src, RuntimeProp *dest) {
-    String_move_from(&dest->name, &src->name);
     dest->name_hash = src->name_hash;
     dest->type = src->type;
     dest->value = src->value;
@@ -113,12 +112,12 @@ float32 RuntimeNode_get_prop_by_hash_f32(const RuntimeNode *node, const uint32 h
     return prop->value.float32_value;
 }
 
-String *RuntimeNode_get_prop_by_hash_str(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
+StringView RuntimeNode_get_prop_by_hash_str(const RuntimeNode *node, const uint32 hash) {
+    const RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_STR) {
-        return NULL;
+        return StringView_empty();
     }
-    return &prop->value.string_value;
+    return as_sv(&prop->value.string_value);
 }
 
 float32 *RuntimeNode_get_prop_by_hash_vec2(const RuntimeNode *node, const uint32 hash) {
@@ -209,7 +208,7 @@ float32 RuntimeNode_get_prop_f32(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_f32(node, hash_cstring(name));
 }
 
-String *RuntimeNode_get_prop_str(const RuntimeNode *node, const char *name) {
+StringView RuntimeNode_get_prop_str(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_str(node, hash_cstring(name));
 }
 
@@ -261,20 +260,18 @@ void RuntimeNode_print(const RuntimeNode *node, FILE *output, const uint32 inden
     for (uint32 i = 0; i < indent; ++i) {
         fputc(' ', output);
     }
-    fprintf(output, "Node: \"%s\" (0x%08X)\n", String_cstr(&node->name), node->name_hash);
+    const StringView name = find_name32(node->name_hash);
+
+    fprintf(output, "Node: \""SV_FMT"\" (0x%08X)\n", SV_ARGS(name), node->name_hash);
     for (uint32 i = 0; i < node->props.count; ++i) {
         const RuntimeProp *prop = DA_at(&node->props, i);
         if (prop->type == PROP_TYPE_NONE)continue;
         RuntimeProp_print(prop, output, indent + 2);
     }
     for (uint32 i = 0; i < node->children.count; ++i) {
-        RuntimeNode *child = DA_at(&node->children, i);
+        const RuntimeNode *child = DA_at(&node->children, i);
         RuntimeNode_print(child, output, indent + 2);
     }
-}
-
-void RuntimeNode_set_name(RuntimeNode *node, String *string) {
-    String_move_from(&node->name, string);
 }
 
 void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
@@ -284,14 +281,7 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         exit(1);
     }
 
-    String *prop_name = find_name32(header.name_hash);
-    if (prop_name == NULL) {
-        prop_name = String_new(16);
-        String_format(prop_name, "0x%08X", header.name_hash);
-    }
     RuntimeNode_init(node);
-    RuntimeNode_set_name(node, prop_name);
-    String_free(prop_name);
 
     node->name_hash = header.name_hash;
     DA_reserve(&node->props, header.prop_count);
@@ -310,11 +300,11 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         RuntimeProp *prop = DA_append_get(&node->props);
         RuntimeProp__from_buffer(prop, buffer);
         // if (tmp.type != PROP_TYPE_NONE) {
-            // *prop = tmp;
-            // memset(&tmp, 0, sizeof(RuntimeProp));
+        // *prop = tmp;
+        // memset(&tmp, 0, sizeof(RuntimeProp));
         // }
         // else {
-            // RuntimeProp_free(&tmp);
+        // RuntimeProp_free(&tmp);
         // }
     }
     // Align buffer position to 4
@@ -366,7 +356,6 @@ void RuntimeNode_free(RuntimeNode *node) {
     DA_free_with_inner(&node->children, {
                        RuntimeNode_free(it);
                        });
-    String_free(&node->name);
     node->name_hash = 0;
     if (node->heap_allocated)
         mp_free(node);
@@ -380,14 +369,8 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
     }
     RuntimeProp_init(prop, header.prop_type);
     prop->name_hash = header.name_hash;
-    String *found_name = find_name32(header.name_hash);
-    if (found_name != NULL) {
-        String_move_from(&prop->name, found_name);
-        String_free(found_name);
-    }
-    else {
-        String_format(&prop->name, "0x%08X", prop->name_hash);
-    }
+    // String *found_name = find_name32(header.name_hash);
+
     switch (prop->type) {
         case PROP_TYPE_NONE: {
             // Nothing to read
@@ -534,7 +517,6 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
 
 void RuntimeProp_init(RuntimeProp *prop, const PropType type) {
     prop->type = type;
-    prop->name = (String){0};
     switch (type) {
         case PROP_TYPE_NONE:
         case PROP_TYPE_U32:
@@ -583,21 +565,27 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
     for (uint32 i = 0; i < indent; ++i) {
         fputc(' ', output);
     }
-    fprintf(output, "Prop: \"%s\" (0x%08X) Type: %d Value: ", String_cstr(&prop->name), prop->name_hash,
-            prop->type);
+    StringView prop_name = find_name32(prop->name_hash);
+    if (sv_is_null(prop_name)) {
+        fprintf(output, "Prop: 0x%08X Type: %d Value: ", prop->name_hash, prop->type);
+    }
+    else {
+        fprintf(output, "Prop: \""SV_FMT"\" (0x%08X) Type: %d Value: ", SV_ARGS(prop_name), prop->name_hash,
+                prop->type);
+    }
+
     switch (prop->type) {
         case PROP_TYPE_NONE: {
             fprintf(output, "<NONE>\n");
             break;
         }
         case PROP_TYPE_U32: {
-            String *name_value = find_name32(prop->value.uint32_value);
-            if (name_value != NULL) {
-                fprintf(output, "\"%s\" (0x%08X)\n", String_cstr(name_value), prop->value.uint32_value);
-                String_free(name_value);
+            const StringView name_value = find_name32(prop->value.uint32_value);
+            if (sv_is_null(name_value)) {
+                fprintf(output, "%u\n", prop->value.uint32_value);
             }
             else {
-                fprintf(output, "%u\n", prop->value.uint32_value);
+                fprintf(output, "\""SV_FMT"\" (0x%08X)\n", SV_ARGS(name_value), prop->value.uint32_value);
             }
 
             break;
@@ -711,7 +699,6 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
 }
 
 void RuntimeProp_free(RuntimeProp *prop) {
-    String_free(&prop->name);
     prop->name_hash = 0;
     switch (prop->type) {
         case PROP_TYPE_NONE:
@@ -766,7 +753,13 @@ static void print_indent(String *out, const uint32 indent) {
 
 void RuntimeProp_emit_json(const RuntimeProp *prop, String *out, const uint32 indent) {
     print_indent(out, indent);
-    String_append_format(out, "\"%s\": ", String_cstr(&prop->name));
+    StringView prop_name = find_name32(prop->name_hash);
+    if (sv_is_null(prop_name)) {
+        String_append_format(out, "\"0x%08X\": ", prop->name_hash);
+    }
+    else {
+        String_append_format(out, "\""SV_FMT"\": ", SV_ARGS(prop_name));
+    }
     switch (prop->type) {
         case PROP_TYPE_NONE:
             String_append_cstr(out, "null");
@@ -871,7 +864,8 @@ void RuntimeNode_emit_json(const RuntimeNode *node, String *out, const uint32 in
     print_indent(out, indent);
     String_append_cstr(out, "{\n");
     print_indent(out, indent + 2);
-    String_append_format(out, "\"name\": \"%s\",\n", String_cstr(&node->name));
+    StringView name = find_name32(node->name_hash);
+    String_append_format(out, "\"name\": \""SV_FMT"\",\n", SV_ARGS(name));
     print_indent(out, indent + 2);
     String_append_format(out, "\"name_hash\": %u,\n", node->name_hash);
 
@@ -895,7 +889,7 @@ void RuntimeNode_emit_json(const RuntimeNode *node, String *out, const uint32 in
         print_indent(out, indent + 2);
         String_append_cstr(out, "\"children\": [\n");
         for (uint32 i = 0; i < node->children.count; ++i) {
-            RuntimeNode *child = DA_at(&node->children, i);
+            const RuntimeNode *child = DA_at(&node->children, i);
             RuntimeNode_emit_json(child, out, indent + 4);
             if (i + 1 < node->children.count) String_append_cstr(out, ",");
             String_append_cstr(out, "\n");

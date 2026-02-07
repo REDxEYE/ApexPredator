@@ -775,10 +775,10 @@ bool GLTFContext_material_diffuse_present(const GLTFContext *ctx, const GL_ID ma
     return mat->pbr_metallic_roughness.base_color_texture.texture != NULL;
 }
 
-GL_ID gltf_texture_from_texture(GLTFContext *ctx, const String *original_path, const Texture *texture) {
-    const uint32 hash = hash_string(original_path);
+GL_ID gltf_texture_from_texture(GLTFContext *ctx, const StringView original_path, const Texture *texture) {
+    const uint32 hash = hash_vstring(original_path);
     String tex_name = {0};
-    Path_filename(original_path, &tex_name);
+    Path_filename_sv(original_path, &tex_name);
 
     String unique_name = {0};
     String_format(&unique_name, "%s_%08X.png", String_cstr(&tex_name), hash);
@@ -799,7 +799,7 @@ GL_ID gltf_texture_from_texture(GLTFContext *ctx, const String *original_path, c
     return tex_id;
 }
 
-void GLTFContext_material_set_diffuse_texture_from_data(GLTFContext *ctx, const String *original_path,
+void GLTFContext_material_set_diffuse_texture_from_data(GLTFContext *ctx, const StringView original_path,
                                                         const GL_ID material_id,
                                                         const Texture *texture) {
     if (texture->channel_count <= 3 || texture->channel_count > 4) {
@@ -817,7 +817,7 @@ void GLTFContext_material_set_diffuse_texture_from_data(GLTFContext *ctx, const 
     mat->pbr_metallic_roughness.base_color_factor[3] = 1.0f;
 }
 
-void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const String *original_path, const GL_ID material_id,
+void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const StringView original_path, const GL_ID material_id,
                                                const Texture *texture) {
     if (texture->channel_count <= 3 || texture->channel_count > 4) {
         printf("Invalid texture channel count for normal map!\n");
@@ -830,7 +830,7 @@ void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const String *o
     mat->normal_texture.scale = 1.0f;
 }
 
-void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, const String *original_path,
+void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, const StringView original_path,
                                                            const GL_ID material_id,
                                                            const Texture *texture) {
     if (texture->channel_count < 3) {
@@ -842,7 +842,7 @@ void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, con
     mat->pbr_metallic_roughness.metallic_roughness_texture.texture = gltf_tag_index(tex_id).v;
 }
 
-void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const String *original_path, const GL_ID material_id,
+void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const StringView original_path, const GL_ID material_id,
                                                  const Texture *texture) {
     // if (texture->channel_count) {
     // printf("Invalid texture channel count for emissive map!\n");

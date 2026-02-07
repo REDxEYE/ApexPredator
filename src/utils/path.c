@@ -283,6 +283,12 @@ void Path_join(Path *base, const String *component) {
     Path__append_normalized(base, s, len);
 }
 
+void Path_join_sv(Path *base, const StringView component) {
+    const char *s = StringView_cstr(component);
+    const uint32_t len = StringView_size(component);
+    Path__append_normalized(base, s, len);
+}
+
 /*
  Joins base with the given C-string component, normalizing separators and
  handling absolute components as replacements.
@@ -310,11 +316,11 @@ void Path_convert_to_wsl(Path *src) {
 #ifndef WSL_ENV
     return;
 #else
-    if (String_size(src)==0) {
+    if (String_size(src) == 0) {
         return;
     }
     const char *in_buffer = String_cstr(src);
-    if (in_buffer[0]=='.') {
+    if (in_buffer[0] == '.') {
         return;
     }
     String converted = {};
@@ -368,14 +374,15 @@ void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *ta
 #include <stdio.h>
 
 static int is_dir_path(const char *fullpath, const struct dirent *ent) {
-    // Use d_type if available and reliable; otherwise lstat
+
+// Use d_type if available and reliable; otherwise lstat
 #ifdef DT_DIR
-    if (ent && ent->d_type != DT_UNKNOWN) {
+if (ent&& ent->d_type!= DT_UNKNOWN) {
         return ent->d_type == DT_DIR;
     }
 #endif
-    struct stat st;
-    if (lstat(fullpath, &st) == 0) {
+struct stat st;
+    if (lstat(fullpath, &st)== 0) {
         return S_ISDIR(st.st_mode);
     }
     return 0;
@@ -439,6 +446,27 @@ void Path_remove_extension(const Path *path, Path *extensionless) {
     }
 }
 
+void Path_remove_extension_sv(const StringView path, Path *extensionless) {
+    String_init(extensionless, StringView_size(path));
+    const char *s = StringView_cstr(path);
+    int32_t last_dot = -1;
+    for (int32_t i = (int32_t) StringView_size(path) - 1; i >= 0; --i) {
+        if (s[i] == '.') {
+            last_dot = i;
+            break;
+        }
+        if (Path__is_sep(s[i])) {
+            break;
+        }
+    }
+    if (last_dot < 0) {
+        String_append_cstr2(extensionless, s, StringView_size(path));
+    }
+    else {
+        String_append_cstr2(extensionless, s, (uint32_t) last_dot);
+    }
+}
+
 void Path_replace_extension(const Path *path, const char *new_extension, Path *out) {
     const size_t ext_size = new_extension ? strlen(new_extension) : 0;
     const char *s = String_cstr(path);
@@ -455,6 +483,37 @@ void Path_replace_extension(const Path *path, const char *new_extension, Path *o
     if (last_dot < 0) {
         String_init(out, String_size(path) + (uint32_t) ext_size + 1);
         String_copy_from(out, path);
+        if (new_extension && new_extension[0] != '\0') {
+            String_append_cstr(out, ".");
+            String_append_cstr(out, new_extension);
+        }
+    }
+    else {
+        String_init(out, last_dot + (uint32_t) ext_size + 1);
+        String_append_cstr2(out, s, (uint32_t) last_dot);
+        if (new_extension && new_extension[0] != '\0') {
+            String_append_cstr(out, ".");
+            String_append_cstr(out, new_extension);
+        }
+    }
+}
+
+void Path_replace_extension_sv(StringView path, const char *new_extension, Path *out) {
+    const size_t ext_size = new_extension ? strlen(new_extension) : 0;
+    const char *s = StringView_cstr(path);
+    int32_t last_dot = -1;
+    for (int32_t i = (int32_t) StringView_size(path) - 1; i >= 0; --i) {
+        if (s[i] == '.') {
+            last_dot = i;
+            break;
+        }
+        if (Path__is_sep(s[i])) {
+            break;
+        }
+    }
+    if (last_dot < 0) {
+        String_init(out, StringView_size(path) + (uint32_t) ext_size + 1);
+        String_append_cstr2(out, s, StringView_size(path));
         if (new_extension && new_extension[0] != '\0') {
             String_append_cstr(out, ".");
             String_append_cstr(out, new_extension);
@@ -489,12 +548,13 @@ void Path_replace_extension_inplace(Path *path, const char *new_extension) {
         String_append_format(path, ".%s", new_extension);
     }
     else {
-        if (last_dot+ext_size+1 > String_size(path)) {
-            String_reserve(path, (uint32_t)(last_dot + ext_size + 1));
-            if (path->s.is_long) {
-                path->s.l.len = (uint32_t)(last_dot);
-            }else {
-                path->s.s.len = (uint8_t)(last_dot);
+        if (last_dot + ext_size + 1 > String_size(path)) {
+            String_reserve(path, (uint32_t) (last_dot + ext_size + 1));
+            if (path->owned.is_long) {
+                path->owned.l.len = (uint32_t) (last_dot);
+            }
+            else {
+                path->owned.s.len = (uint8_t) (last_dot);
             }
         }
         String_append_format(path, ".%s", new_extension);
@@ -516,6 +576,24 @@ void Path_filename(const Path *path, Path *filename) {
     }
     else {
         String_append_cstr2(filename, s + last_sep + 1, String_size(path) - (uint32_t) last_sep - 1);
+    }
+}
+
+void Path_filename_sv(const StringView view, Path *filename) {
+    String_init(filename, StringView_size(view));
+    const char *s = view.view.data;
+    int32_t last_sep = -1;
+    for (int32_t i = (int32_t) StringView_size(view) - 1; i >= 0; --i) {
+        if (Path__is_sep(s[i])) {
+            last_sep = i;
+            break;
+        }
+    }
+    if (last_sep < 0) {
+        String_append_cstr2(filename, s, StringView_size(view));
+    }
+    else {
+        String_append_cstr2(filename, s + last_sep + 1, StringView_size(view) - (uint32_t) last_sep - 1);
     }
 }
 

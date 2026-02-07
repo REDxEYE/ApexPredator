@@ -9,6 +9,6 @@
 
 void mount_archive(const ArchiveManager *manager, uint32 hash);
 
-GL_ID export_file(AppState* app_state,const String *path, uint32 hash);
+GL_ID export_file(AppState* app_state, StringView path, uint32 hash);
 
 #endif //APEXPREDATOR_COMMON_EXPORT_H

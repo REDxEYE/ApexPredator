@@ -9,3 +9,7 @@ uint32 hash_string(const String *str) {
 uint32 hash_cstring(const char *str) {
     return hashlittle(str, strlen(str), 0);
 }
+
+uint32 hash_vstring(StringView sv) {
+    return hashlittle(StringView_cstr(sv), StringView_size(sv), 0);
+}

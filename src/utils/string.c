@@ -13,7 +13,7 @@ void String_free(String *string) {
         GLog_Warning("Trying to free NULL string");
         return;
     }
-    zstr_free(&string->s);
+    zstr_free(&string->owned);
     if (string->heap_allocated) {
         mp_free(string);
     }
@@ -60,8 +60,8 @@ void String_init(String *string, const uint32 size) {
         assert(false && "String_init: string is NULL");
         return;
     }
-    zstr_free(&string->s);
-    string->s = zstr_with_capacity(size);
+    zstr_free(&string->owned);
+    string->owned = zstr_with_capacity(size);
 }
 
 String *String_from_cstr(String *string, const char *str) {
@@ -71,7 +71,7 @@ String *String_from_cstr(String *string, const char *str) {
     }
     if (!str) { String_init(string, 0); return string; }
 
-    string->s = zstr_from(str);
+    string->owned = zstr_from(str);
 
     return string;
 }
@@ -83,7 +83,7 @@ String * String_from_cstr2(String *string, const char *str, uint32 len) {
     }
     if (!str) { String_init(string, 0); return string; }
 
-    string->s = zstr_from_len(str, len);
+    string->owned = zstr_from_len(str, len);
 
     return string;
 }
@@ -93,7 +93,7 @@ const char *String_cstr(const String *string) {
         assert(false && "String_cstr: string is NULL");
         return NULL;
     }
-    return zstr_cstr(&string->s);
+    return zstr_cstr(&string->owned);
 }
 
 char * String_data(String *string) {
@@ -101,7 +101,7 @@ char * String_data(String *string) {
         assert(false && "String_data: string is NULL");
         return NULL;
     }
-    return zstr_data(&string->s);
+    return zstr_data(&string->owned);
 }
 
 uint32 String_size(const String *string) {
@@ -109,7 +109,7 @@ uint32 String_size(const String *string) {
         assert(false && "String_size: string is NULL");
         return 0;
     }
-    return (uint32)zstr_len(&string->s);
+    return (uint32)zstr_len(&string->owned);
 }
 
 void String_set_size(String *string, const uint32 size) {
@@ -117,30 +117,30 @@ void String_set_size(String *string, const uint32 size) {
         assert(false && "String_set_size: string is NULL");
         return;
     }
-    zstr_reserve(&string->s, size);
-    if (string->s.is_long) {
-        string->s.l.len = size;
-        string->s.l.ptr[size] = '\0';
+    zstr_reserve(&string->owned, size);
+    if (string->owned.is_long) {
+        string->owned.l.len = size;
+        string->owned.l.ptr[size] = '\0';
     } else {
-        string->s.s.len = (uint8_t)size;
-        string->s.s.buf[size] = '\0';
+        string->owned.s.len = (uint8_t)size;
+        string->owned.s.buf[size] = '\0';
     }
 }
 
 void String_reserve(String *string, const uint32 size) {
     if (!string) return;
-    zstr_reserve(&string->s, size);
+    zstr_reserve(&string->owned, size);
 }
 
 void String_trim_zeros(String *string) {
     if (!string) return;
-    zstr_shrink_to_fit(&string->s);
+    zstr_shrink_to_fit(&string->owned);
 }
 
 void String_fill(String *string, const uint32 offset, const uint32 size, char chr) {
     if (!string) return;
-    zstr_reserve(&string->s, offset + size);
-    char *data = zstr_data(&string->s);
+    zstr_reserve(&string->owned, offset + size);
+    char *data = zstr_data(&string->owned);
     for (uint32 i = 0; i < size; ++i) {
         data[offset + i] = chr;
     }
@@ -148,32 +148,32 @@ void String_fill(String *string, const uint32 offset, const uint32 size, char ch
 
 void String_append_cstr(String *string, const char *str) {
     if (!string || !str) return;
-    zstr_cat(&string->s, str);
+    zstr_cat(&string->owned, str);
 }
 
 void String_append_cstr2(String *string, const char *str, const uint32 size) {
     if (!string || !str || size == 0) return;
-    zstr_cat_len(&string->s, str, size);
+    zstr_cat_len(&string->owned, str, size);
 }
 
 void String_append_str(String *s, const String *other) {
     if (!s || !other) return;
-    zstr_cat_len(&s->s, zstr_cstr(&other->s), zstr_len(&other->s));
+    zstr_cat_len(&s->owned, zstr_cstr(&other->owned), zstr_len(&other->owned));
 }
 
 void String_sub_string(const String *string, const uint32 start, int32 size, String *out) {
     if (!out) return;
     if (size==-1) {
-        size = (int32)zstr_len(&string->s) - (int32)start;
+        size = (int32)zstr_len(&string->owned) - (int32)start;
     }
-    const zstr_view sub = zstr_sub(zstr_as_view(&string->s), start, size);
-    out->s = zstr_from_view(sub);
+    const zstr_view sub = zstr_sub(zstr_as_view(&string->owned), start, size);
+    out->owned = zstr_from_view(sub);
 
 }
 
 int32 String_find_chr(const String *string, char chr) {
     if (!string) return -1;
-    const char *data = zstr_cstr(&string->s);
+    const char *data = zstr_cstr(&string->owned);
     const char *found = strchr(data, chr);
     if (!found) return -1;
 
@@ -182,15 +182,15 @@ int32 String_find_chr(const String *string, char chr) {
 
 void String_copy_from(String *dst, const String *src) {
     if (!dst || !src) return;
-    zstr_free(&dst->s);
-    dst->s = zstr_from(zstr_cstr(&src->s));
+    zstr_free(&dst->owned);
+    dst->owned = zstr_from(zstr_cstr(&src->owned));
 }
 
 void String_move_from(String *dst, String *src) {
     if (!dst || !src) return;
-    zstr_free(&dst->s);
-    dst->s = src->s;
-    src->s = zstr_init();
+    zstr_free(&dst->owned);
+    dst->owned = src->owned;
+    src->owned = zstr_init();
 }
 
 void String_format(String *string, const char *fmt, ...) {
@@ -198,7 +198,7 @@ void String_format(String *string, const char *fmt, ...) {
 
     va_list args;
     va_start(args, fmt);
-    zstr_vmt_va(&string->s, fmt, args);
+    zstr_vmt_va(&string->owned, fmt, args);
     va_end(args);
 }
 
@@ -212,7 +212,7 @@ void String_append_format(String *string, const char *fmt, ...) {
     zstr_vmt_va(&new, fmt, args);
     va_end(args);
 
-    zstr_cat_len(&string->s, zstr_cstr(&new), zstr_len(&new));
+    zstr_cat_len(&string->owned, zstr_cstr(&new), zstr_len(&new));
 
     zstr_free(&new);
 }
@@ -227,10 +227,10 @@ void String_prepend_format(String *string, const char *fmt, ...) {
     zstr_vmt_va(&new, fmt, args);
     va_end(args);
 
-    zstr old = string->s;
-    string->s = zstr_init();
-    zstr_cat_len(&string->s, zstr_cstr(&new), zstr_len(&new));
-    zstr_cat_len(&string->s, zstr_cstr(&old), zstr_len(&old));
+    zstr old = string->owned;
+    string->owned = zstr_init();
+    zstr_cat_len(&string->owned, zstr_cstr(&new), zstr_len(&new));
+    zstr_cat_len(&string->owned, zstr_cstr(&old), zstr_len(&old));
 
     zstr_free(&old);
     zstr_free(&new);
@@ -238,36 +238,36 @@ void String_prepend_format(String *string, const char *fmt, ...) {
 
 bool String_equals(const String *string, const String *other) {
     if (!string || !other) return false;
-    return zstr_eq(&string->s, &other->s);
+    return zstr_eq(&string->owned, &other->owned);
 }
 
 bool String_cequals(const String *string, const char *other) {
     if (!string || !other) return false;
-    return zstr_view_eq(zstr_as_view(&string->s), other);
+    return zstr_view_eq(zstr_as_view(&string->owned), other);
 }
 
 bool String_ends_with(const String *string, const String *suffix) {
     if (!string || !suffix) return false;
-    return zstr_ends_with(&string->s, zstr_cstr(&suffix->s));
+    return zstr_ends_with(&string->owned, zstr_cstr(&suffix->owned));
 }
 
 bool String_cends_with(const String *string, const char *suffix) {
     if (!string || !suffix) return false;
-    return zstr_ends_with(&string->s, suffix);
+    return zstr_ends_with(&string->owned, suffix);
 }
 
 bool String_cstarts_with(const String *string, const char *prefix) {
     if (!string || !prefix) return false;
-    return zstr_starts_with(&string->s, prefix);
+    return zstr_starts_with(&string->owned, prefix);
 }
 
 char * String_detach(String *string) {
     if (!string) return NULL;
 
-    char* detached = mp_malloc(zstr_len(&string->s) + 1);
+    char* detached = mp_malloc(zstr_len(&string->owned) + 1);
     assert(detached && "Out of memory");
-    memcpy(detached, zstr_cstr(&string->s), zstr_len(&string->s) + 1);
-    zstr_free(&string->s);
+    memcpy(detached, zstr_cstr(&string->owned), zstr_len(&string->owned) + 1);
+    zstr_free(&string->owned);
 
     return detached;
 }
@@ -275,7 +275,7 @@ char * String_detach(String *string) {
 uint32 String_find_subcstring(const String *string, const char *sub) {
     if (!string || !sub) return UINT32_MAX;
 
-    const char *data = zstr_cstr(&string->s);
+    const char *data = zstr_cstr(&string->owned);
     const char *found = strstr(data, sub);
     if (!found) return UINT32_MAX;
 
@@ -285,8 +285,8 @@ uint32 String_find_subcstring(const String *string, const char *sub) {
 void String_replace_char(String *string, const char *targets, const char replacement) {
     if (!string || !targets) return;
 
-    char *data = zstr_data(&string->s);
-    const size_t len = zstr_len(&string->s);
+    char *data = zstr_data(&string->owned);
+    const size_t len = zstr_len(&string->owned);
     const size_t target_count = strlen(targets);
 
     for (size_t i = 0; i < len; ++i) {

@@ -11,6 +11,7 @@
 #include "utils/dynamic_array.h"
 #include "utils/dynamic_map.h"
 #include "utils/path.h"
+#include "utils/buffer/file_buffer.h"
 
 DYNAMIC_ARRAY_STRUCT(TabEntry, TabEntry);
 DYNAMIC_INT_MAP_STRUCT(TabEntry, TabEntryMap);
@@ -18,7 +19,8 @@ DYNAMIC_INT_MAP_STRUCT(TabEntry, TabEntryMap);
 typedef struct {
     Archive;
     String tab_path;
-    String arc_path;
+    // String arc_path;
+    FileBuffer arc_buffer;
     DynamicIntMap_TabEntryMap entries;
 } TabArchive;
 TabArchive* TabArchive_new(const String* path);

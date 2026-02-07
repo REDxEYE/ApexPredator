@@ -52,7 +52,7 @@ void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
                 for (int j = 0; j < sarc_entries.count; ++j) {
                     ArchiveEntry *aaf_entry = DA_at(&sarc_entries, j);
                     MemoryBuffer *tmp = MemoryBuffer_new();
-                    if (Archive_get_file((Archive *) sarc, aaf_entry->path, tmp)) {
+                    if (Archive_get_file((Archive *) sarc, &aaf_entry->path, tmp)) {
                         if (memcmp(tmp->data + 4, "TAG0", 4) == 0) {
                             process_havok_file(lib, (Buffer*)tmp);
                         }
@@ -99,7 +99,10 @@ void collect_types(ArchiveManager *archive_manager, Havok_TypeLibrary *lib) {
     String_free(&namespace);
     fclose(header_file);
     fclose(impl_file);
-    DA_free(&all_entries);
+    DA_free_with_inner(&all_entries, {
+        ArchiveEntry* entry = (ArchiveEntry*)it;
+        String_free(&entry->path);
+    });
 }
 
 int main(int argc, const char *argv[]) {

@@ -42,20 +42,21 @@ bool SArchive__get_file_by_hash(const SArchive *archive, const uint32 hash, Memo
     archive->buffer->read(archive->buffer, out->data, entry->size, &actuallyRead);
     if (actuallyRead != entry->size) {
         GLog_Error("Failed to read SARC entry data, expected size: %u, actual size: %u", entry->size,
-               actuallyRead);
+                   actuallyRead);
         out->close(out);
         return false;
     }
     return true;
 }
 
-const String *SArchive__get_name(SArchive *archive) {
-    String* name = find_name32(archive->hash);
-    if (name==NULL) {
-        name = String_new(32);
-        String_format(name, "SARC 0x%08X", archive->hash);
+const String *SArchive__get_name(const SArchive *archive) {
+    StringView name = find_name32(archive->hash);
+    if (sv_is_null(name)) {
+        String* tmp_name = String_new(32);
+        String_format(tmp_name, "SARC 0x%08X", archive->hash);
+        return tmp_name;
     }
-    return name;
+    return StringView_to_new_string(name);
 }
 
 void SArchive__get_all_entries(const SArchive *archive, DynamicArray_ArchiveEntry *out) {
@@ -65,7 +66,7 @@ void SArchive__get_all_entries(const SArchive *archive, DynamicArray_ArchiveEntr
             continue;
         }
         ArchiveEntry *out_entry = DA_append_get(out);
-        out_entry->path = &entry->name;
+        String_from_cstr(&out_entry->path, entry->name);
         out_entry->size = entry->size;
         out_entry->path_hash = entry->hash;
         out_entry->archive = (Archive *) archive;
@@ -78,8 +79,8 @@ void SArchive_print_files(const SArchive *archive) {
     SArchive__get_all_entries(archive, &entries);
     for (int i = 0; i < entries.count; ++i) {
         const ArchiveEntry *entry = DA_at(&entries, i);
-        GLog_Info("File: %s, Size: %u, Hash: 0x%08X", String_cstr(entry->path), entry->size,
-               entry->path_hash);
+        GLog_Info("File: %s, Size: %u, Hash: 0x%08X", String_cstr(&entry->path), entry->size,
+                  entry->path_hash);
     }
     DA_free(&entries);
 }
@@ -101,7 +102,7 @@ void SArchive__init_interface(SArchive *archive) {
 }
 
 SArchive *SArchive_new(Buffer *buffer, uint32 self_hash) {
-    SArchive *archive = mp_calloc(sizeof(SArchive),1);
+    SArchive *archive = mp_calloc(sizeof(SArchive), 1);
     if (archive == NULL) {
         GLog_Error("Failed to allocate memory");
         exit(1);
@@ -110,55 +111,60 @@ SArchive *SArchive_new(Buffer *buffer, uint32 self_hash) {
     return archive;
 }
 
-void SArchive_init(SArchive* archive, Buffer *buffer, uint32 self_hash) {
+void SArchive_init(SArchive *archive, Buffer *buffer, uint32 self_hash) {
     SArchive__init_interface(archive);
     archive->hash = self_hash;
     SArchive__from_buffer(archive, buffer);
 }
 
 void SArchive__from_buffer(SArchive *archive, Buffer *buffer) {
-    DM_init(&archive->entries, SArcEntry, 16);
+    TracyCZoneN(ctx, "SArchive__from_buffer", 1);
     archive->buffer = buffer;
     buffer->read(buffer, &archive->header, sizeof(SArcHeader), NULL);
     if (memcmp(archive->header.ident, "SARC", 4) != 0) {
         GLog_Error("Invalid SARC magic");
+        TracyCZoneEnd(ctx);
         return;
     }
     if (archive->header.version2 == 2) {
         GLog_Error(" SARC version 2 is not supported");
-        exit(1);
-    } else if (archive->header.version2 == 3) {
+        abort();
+    }
+    if (archive->header.version2 == 3) {
         uint32 strings_size = 0;
         buffer->read_uint32(buffer, &strings_size);
         char *strings_memory = mp_malloc(strings_size);
         archive->strings = strings_memory;
         buffer->read(buffer, strings_memory, strings_size, NULL);
         const uint32 entry_count = (archive->header.dir_block_len - 4/* strings_size int */ - strings_size) / 20;
+        DM_init(&archive->entries, SArcEntry, entry_count);
+
         for (uint32 i = 0; i < entry_count; ++i) {
             SArcEntry entry = {0};
             uint32 name_offset;
             buffer->read_uint32(buffer, &name_offset);
-            String_from_cstr(&entry.name, &strings_memory[name_offset]);
+            entry.name = &strings_memory[name_offset];
             buffer->read_uint32(buffer, &entry.offset);
             buffer->read_uint32(buffer, &entry.size);
             buffer->read_uint32(buffer, &entry.hash);
             buffer->read_uint32(buffer, &entry.ext_hash);
-            if (hash_string(&entry.name) != entry.hash) {
+            if (hash_cstring(entry.name) != entry.hash) {
                 GLog_Error("SARC entry hash mismatch for file %s, expected: %08X, actual: %08X",
-                       String_cstr(&entry.name), entry.hash, hash_string(&entry.name));
-                exit(1);
+                           entry.name, entry.hash, hash_cstring(entry.name));
+                abort();
             }
             SArcEntry *slot = DM_insert(&archive->entries, entry.hash);
             *slot = entry;
         }
     }
+    else {
+        GLog_Error("SARC version %u is not supported", archive->header.version2);
+        abort();
+    }
+    TracyCZoneEnd(ctx);
 }
 
 void SArchive__free(SArchive *archive) {
-    for (int i = 0; i < archive->entries.values.count; ++i) {
-        SArcEntry *entry = DA_at(&archive->entries.values, i);
-        String_free(&entry->name);
-    }
     DM_free(&archive->entries);
     archive->buffer->close(archive->buffer);
     if (archive->strings) {

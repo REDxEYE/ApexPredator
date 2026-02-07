@@ -22,10 +22,9 @@ void mount_archive(const ArchiveManager *manager, const uint32 hash) {
     }
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file_by_hash(manager, hash, &mb)) {
-        String *file_name = find_name32(hash);
-        if (file_name != NULL) {
-            GLog_Error("File \"%s\" not found", String_cstr(file_name));
-            String_free(file_name);
+        StringView file_name = find_name32(hash);
+        if (sv_is_not_null(file_name)) {
+            GLog_Error("File \"%s\" not found", StringView_cstr(file_name));
         }
         else {
             GLog_Error("File 0x%08X not found", hash);
@@ -34,10 +33,9 @@ void mount_archive(const ArchiveManager *manager, const uint32 hash) {
         return;
     }
     if (memcmp(mb.data, AAF_MAGIC, 4) == 0) {
-        String *file_name = find_name32(hash);
-        if (file_name != NULL) {
-            GLog_Info("Mounting AAF archive \"%s\"", String_cstr(file_name));
-            String_free(file_name);
+        StringView file_name = find_name32(hash);
+        if (sv_is_not_null(file_name)) {
+            GLog_Info("Mounting AAF archive \"%s\"", StringView_cstr(file_name));
         }else {
             GLog_Info("Mounting AAF archive with hash 0x%08X", hash);
         }
@@ -58,20 +56,19 @@ void mount_archive(const ArchiveManager *manager, const uint32 hash) {
 }
 
 
-GL_ID export_file(AppState* app_state, const String *path, uint32 hash) {
+GL_ID export_file(AppState* app_state, const StringView path, uint32 hash) {
     CHECK_GLTF_STATE(&app_state->gltf_context);
 
-    GLog_Info("Exporting file: %s", path!=NULL ? String_cstr(path) : "unknown");
+    GLog_Info("Exporting file: %s", sv_is_not_null(path) ? StringView_cstr(path) : "unknown");
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, hash, &mb)) {
-        if (path != NULL) {
-            GLog_Error("File \"%s\" not found", String_cstr(path));
+        if (sv_is_not_null(path)) {
+            GLog_Error("File \"%s\" not found", StringView_cstr(path));
             return INVALID_GL_ID;
         }
-        String *file_name = find_name32(hash);
-        if (file_name != NULL) {
-            GLog_Error("File \"%s\" not found", String_cstr(file_name));
-            String_free(file_name);
+        StringView file_name = find_name32(hash);
+        if (sv_is_not_null(file_name)) {
+            GLog_Error("File \"%s\" not found", StringView_cstr(file_name));
             return INVALID_GL_ID;
         }
         GLog_Error("File 0x%08X not found", hash);
@@ -122,12 +119,12 @@ GL_ID export_file(AppState* app_state, const String *path, uint32 hash) {
     else {
         String unk_file_export_path = {};
         Path_join(&unk_file_export_path, &app_state->export_path);
-        Path_join(&unk_file_export_path, path);
+        Path_join_sv(&unk_file_export_path, path);
         Path_ensure_parent_dirs(&unk_file_export_path);
         FILE *f = fopen(String_cstr(&unk_file_export_path), "wb");
         fwrite(mb.data, 1, mb.size, f);
         fclose(f);
-        GLog_Warning("Unhandled file \"%s\" been written to file: \"%s\"", String_cstr(path),
+        GLog_Warning("Unhandled file \"%s\" been written to file: \"%s\"", StringView_cstr(path),
                      String_cstr(&unk_file_export_path));
         String_free(&unk_file_export_path);
     }

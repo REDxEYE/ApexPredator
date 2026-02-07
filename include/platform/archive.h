@@ -14,7 +14,7 @@ typedef struct Archive Archive;
 
 typedef struct {
     Archive *archive;
-    const String *path;
+    String path;
     uint32 path_hash;
     uint32 size;
 } ArchiveEntry;
