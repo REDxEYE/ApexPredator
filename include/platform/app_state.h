@@ -10,6 +10,8 @@ typedef struct AppState {
     String game_root;
     String export_path;
     ArchiveManager archive_manager;
+
+    bool export_textures;
 }AppState;
 
 void AppState_free(AppState* self);

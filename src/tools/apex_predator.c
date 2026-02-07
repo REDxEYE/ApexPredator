@@ -42,6 +42,16 @@ const CommandArgument extract_arguments[] = {
         .has_default = false,
     },
     {
+        .name = "no_textures",
+        .flag = "n",
+        .description = "Don't export textures.",
+        .type = COMMAND_ARG_TYPE_BOOL,
+        .named = true,
+        .required = false,
+        .has_default = true,
+        .bool_value = false,
+    },
+    {
         .name = "out_dir",
         .flag = "o",
         .description = "Output directory for extracted assets.",
@@ -154,6 +164,8 @@ int main(int argc, const char *argv[]) {
     TabArchives_init(&app_state.archive_manager, &app_state.game_root);
 
     if (strcmp(cli_res.cmd->name, "extract") == 0) {
+        cli_get_bool(&cli_res, "export_textures", &app_state.export_textures);
+
         const char **file_paths = NULL;
         size_t file_path_count = 0;
         cli_get_array_string(&cli_res, "paths", &file_paths, &file_path_count);
@@ -280,7 +292,7 @@ int main(int argc, const char *argv[]) {
             INVALID_ANIM_CLEANUP:
                 TagFile_free_item(anim_item);
                 TagFile_free(&anim_tag_file);
-                if (animation_path_tmp!=NULL) {
+                if (animation_path_tmp != NULL) {
                     String_free(animation_path_tmp);
                 }
                 continue;
@@ -297,7 +309,7 @@ int main(int argc, const char *argv[]) {
                 "Only single animation binding per container is supported currently.");
 
             const hkaAnimationBinding *binding = anim_animation_container->bindings.m_data[0].ptr;
-            if (animation_path_tmp==NULL) {
+            if (animation_path_tmp == NULL) {
                 animation_path_tmp = String_new(16);
                 String_format(animation_path_tmp, "anim_%08X", animation_path_hash);
             }
