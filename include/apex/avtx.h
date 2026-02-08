@@ -15,7 +15,18 @@ typedef struct {
     uint16 alignment;
     uint8 tile_mode;
     uint8 source;
-}AVTXStream;
+} AVTXStream;
+
+typedef enum AVATextureFlag {
+    E_AVATEXTURE_FLAG_STREAMED = 0x1,
+    E_AVATEXTURE_FLAG_PLACEMENT = 0x2,
+    E_AVATEXTURE_FLAG_TILED = 0x4,
+    E_AVATEXTURE_FLAG_SRGB = 0x8,
+    E_AVATEXTURE_FLAG_LOD_FROM_RENDER = 0x10,
+    E_AVATEXTURE_FLAG_CUBE = 0x40,
+    E_AVATEXTURE_FLAG_WATCH = 0x8000,
+} AVATextureFlag;
+
 
 typedef struct {
     char ident[4];
@@ -35,10 +46,10 @@ typedef struct {
     uint8 reserved0[2];
     uint32 reserved1;
     AVTXStream streams[8];
-}AVTXHeader;
+} AVTXHeader;
 
 #pragma pack(pop)
 
-void AVTXTexture_from_buffer(Buffer* buffer, Texture* texture);
+void AVTXTexture_from_buffer(Buffer *buffer, Texture *texture);
 
 #endif //APEXPREDATOR_AVTX_H

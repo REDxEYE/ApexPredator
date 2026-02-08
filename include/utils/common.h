@@ -17,4 +17,6 @@ uint32 parse_hex_u32(const char * str);
 
 uint32 parse_digits_u32(const char * str);
 
+#define ALIGN_UP(value, alignment) (((value) + (alignment - 1)) & ~(alignment - 1))
+
 #endif //APEXPREDATOR_COMMON_H
