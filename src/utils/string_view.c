@@ -40,7 +40,7 @@ StringView StringView_from_cstr2(const char *str, uint32 len) {
 
 StringView StringView_from_string(const String *string) {
     StringView sv = {0};
-    if (!string) {
+    if (string==NULL) {
         sv.view.data = NULL;
         sv.view.len = 0;
         return sv;
@@ -57,7 +57,7 @@ uint32 StringView_size(const StringView self) {
     return (uint32)self.view.len;
 }
 
-String * StringView_to_new_string(const StringView self) {
+String* StringView_to_new_string(const StringView self) {
     return String_new_from_cstr2(self.view.data, (uint32)self.view.len);
 }
 
@@ -89,4 +89,12 @@ bool StringView_cequals(StringView self, const char *other) {
     if (self.view.len != other_len) return false;
 
     return memcmp(self.view.data, other, other_len) == 0;
+}
+
+void String_copy_from_view(String *string, const StringView view) {
+    if (string==NULL) {
+        assert(false && "String_copy_from_view: string is NULL");
+        return;
+    }
+    zstr_cat(&string->owned, StringView_cstr(view));
 }

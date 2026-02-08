@@ -113,7 +113,7 @@ MemoryBuffer * MemoryBuffer_new() {
     MemoryBuffer *mb = mp_malloc(sizeof(MemoryBuffer));
     if (!mb) {
         GLog_Error("Out of memory");
-        exit(1);
+        abort();
     }
     memset(mb, 0, sizeof(MemoryBuffer));
     MemoryBuffer__init(mb);

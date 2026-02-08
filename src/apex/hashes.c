@@ -14,7 +14,7 @@ void init_assets_db() {
     if (assets_db == NULL) {
         if (assetdb_open(&assets_db, "./../hashes.db") != KV_OK) {
             GLog_Error("Failed to open hashes database");
-            exit(1);
+            abort();
         }
     }
 }
@@ -33,7 +33,7 @@ assetdb_t *get_assets_db() {
     return assets_db;
 }
 
-StringView find_name32(const uint32 key) {
+StringView find_name32_sv(const uint32 key) {
     const char *value = NULL;
     size_t value_len;
     const assetdb_status_t status = assetdb_kv_get_u32_view(get_assets_db(), key, &value, &value_len);
@@ -43,7 +43,7 @@ StringView find_name32(const uint32 key) {
     return StringView_from_cstr2(value, value_len);
 }
 
-StringView find_name64(const uint64 key) {
+StringView find_name64_sv(const uint64 key) {
     const char *value = NULL;
     size_t value_len;
     const assetdb_status_t status = assetdb_kv_get_u64_view(get_assets_db(), key, &value, &value_len);
@@ -53,23 +53,43 @@ StringView find_name64(const uint64 key) {
     return StringView_from_cstr2(value, value_len);
 }
 
+String * find_name32(const uint32 key) {
+    const char *value = NULL;
+    size_t value_len;
+    const assetdb_status_t status = assetdb_kv_get_u64_view(get_assets_db(), key, &value, &value_len);
+    if (status == KV_NOTFOUND) {
+        return NULL;
+    }
+    String *result = String_new_from_cstr2(value, value_len);
+    return result;
+}
+
+String * find_name64(const uint64 key) {
+    const char *value = NULL;
+    size_t value_len;
+    const assetdb_status_t status = assetdb_kv_get_u64_view(get_assets_db(), key, &value, &value_len);
+    if (status == KV_NOTFOUND) {
+        return NULL;
+    }
+    String *result = String_new_from_cstr2(value, value_len);
+    return result;
+}
+
 bool check_hash32_presence(const uint32 key) {
-    char *stored_value = NULL;
-    const assetdb_status_t status = assetdb_kv_get_u32(get_assets_db(), key, &stored_value);
+    const char *stored_value = NULL;
+    const assetdb_status_t status = assetdb_kv_get_u64_view(get_assets_db(), key, &stored_value, NULL);
     if (status == KV_NOTFOUND) {
         return false;
     }
-    mp_free(stored_value);
     return true;
 }
 
 bool check_hash64_presence(const uint64 key) {
-    char *stored_value = NULL;
-    const assetdb_status_t status = assetdb_kv_get_u64(get_assets_db(), key, &stored_value);
+    const char *stored_value = NULL;
+    const assetdb_status_t status = assetdb_kv_get_u64_view(get_assets_db(), key, &stored_value, NULL);
     if (status == KV_NOTFOUND) {
         return false;
     }
-    mp_free(stored_value);
     return true;
 }
 

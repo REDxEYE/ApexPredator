@@ -9,11 +9,11 @@ void AVTXTexture_from_buffer(Buffer *buffer, Texture *texture) {
     buffer->read(buffer, &header, sizeof(header), NULL);
     if (strncmp(header.ident, "AVTX", 4) != 0) {
         GLog_Error("Invalid AVTX texture format");
-        exit(1);
+        abort();
     }
     if (header.version != 1) {
         GLog_Error("Unsupported AVTX version: %d", header.version);
-        exit(1);
+        abort();
     }
 
 }

@@ -39,7 +39,7 @@ String* String_new_from_cstr(const char *str) {
 
 String * String_new_from_cstr2(const char *str, const uint32 len) {
     String *s = (String *)mp_malloc(sizeof(String));
-    assert(s && "Out of memory");
+    assert(s!=NULL && "Out of memory");
     memset(s, 0, sizeof(String));
     s->heap_allocated = 1;
     String_from_cstr2(s, str, len);
@@ -87,6 +87,7 @@ String * String_from_cstr2(String *string, const char *str, uint32 len) {
 
     return string;
 }
+
 
 const char *String_cstr(const String *string) {
     if (string==NULL) {
@@ -264,10 +265,7 @@ bool String_cstarts_with(const String *string, const char *prefix) {
 char * String_detach(String *string) {
     if (!string) return NULL;
 
-    char* detached = mp_malloc(zstr_len(&string->owned) + 1);
-    assert(detached && "Out of memory");
-    memcpy(detached, zstr_cstr(&string->owned), zstr_len(&string->owned) + 1);
-    zstr_free(&string->owned);
+    char* detached = zstr_take(&string->owned);
 
     return detached;
 }

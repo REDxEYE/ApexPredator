@@ -11,8 +11,10 @@
 
 assetdb_t *get_assets_db();
 void close_assets_db();
-StringView find_name32(uint32 key);
-StringView find_name64(uint64 key);
+StringView find_name32_sv(uint32 key);
+StringView find_name64_sv(uint64 key);
+String* find_name32(uint32 key);
+String* find_name64(uint64 key);
 bool check_hash32_presence(uint32 key);
 bool check_hash64_presence(uint64 key);
 void store_hash32_name(uint32 key, const String* value);

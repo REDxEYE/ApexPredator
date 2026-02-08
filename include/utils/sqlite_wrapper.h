@@ -19,12 +19,12 @@ assetdb_status_t assetdb_open(assetdb_t **out_db, const char *path);
 void        assetdb_close(assetdb_t *db);
 
 assetdb_status_t assetdb_kv_put_u64(assetdb_t *db, uint64_t key, const char *value);
-assetdb_status_t assetdb_kv_get_u64(assetdb_t *db, uint64_t key, char **out_value); /* caller frees */
+
 assetdb_status_t assetdb_kv_get_u64_view(assetdb_t *db, uint64_t key, const char **out, size_t *out_len); /* db owned data */
 assetdb_status_t assetdb_kv_del_u64(assetdb_t *db, uint64_t key);
 
 assetdb_status_t assetdb_kv_put_u32(assetdb_t *db, uint32_t key, const char *value);
-assetdb_status_t assetdb_kv_get_u32(assetdb_t *db, uint32_t key, char **out_value); /* caller frees */
+
 assetdb_status_t assetdb_kv_get_u32_view(assetdb_t *db, uint32_t key, const char **out, size_t *out_len); /* db owned data */
 assetdb_status_t assetdb_kv_del_u32(assetdb_t *db, uint32_t key);
 

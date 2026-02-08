@@ -11,7 +11,7 @@
 
 void add_extras(const GLTFContext *context, const RuntimeNode *node, const GL_ID output_node) {
     String extra_data = {0};
-    String_reserve(&extra_data, 8192);
+    String_reserve(&extra_data, 1024);
     String_append_cstr(&extra_data, "{");
     DA_FORI(node->props, i) {
         RuntimeProp_emit_json(&node->props.items[i], &extra_data, 1);
@@ -19,8 +19,7 @@ void add_extras(const GLTFContext *context, const RuntimeNode *node, const GL_ID
             String_append_cstr(&extra_data, ", ");
     }
     String_append_cstr(&extra_data, "}");
-    GLTFContext_node_set_extra(context, output_node, String_cstr(&extra_data));
-    String_free(&extra_data);
+    GLTFContext_node_set_extra(context, output_node, String_detach(&extra_data), false);
 }
 
 void get_node_matrix(const cgltf_node *target_node, mat4 out) {
@@ -76,12 +75,10 @@ void calculate_global_node_matrix(const GLTFContext *context, const GL_ID target
 }
 
 void process_children(AppState *app_state,
-                      RuntimeNode *node, const uint32 path_hash, const StringView path,
+                      RuntimeNode *node, const uint32 path_hash,
                       const GL_ID parent_gltf_node) {
     DA_FORI(node->children, i) {
-        process_epe_node(app_state, DA_at(&node->children, i),
-                         path_hash,
-                         path, parent_gltf_node);
+        process_epe_node(app_state, DA_at(&node->children, i), path_hash, parent_gltf_node);
     }
 }
 
@@ -94,7 +91,7 @@ void set_world_matrix(GLTFContext *context, const GL_ID gltf_node, RuntimeNode *
 }
 
 void handle_CCharacter(AppState *app_state,
-                       RuntimeNode *node, const uint32 path_hash, const StringView path,
+                       RuntimeNode *node, const uint32 path_hash,
                        const GL_ID parent_gltf_node) {
     GLTFContext *context = &app_state->gltf_context;
 
@@ -108,10 +105,10 @@ void handle_CCharacter(AppState *app_state,
     String skeleton_bsk_name = {0};
     Path_replace_extension_sv(skeleton_filename, "bsk", &skeleton_bsk_name);
 
-    const GL_ID skin_id = export_file(app_state, as_sv(&skeleton_bsk_name), hash_string(&skeleton_bsk_name));
+    const GL_ID skin_id = export_file(app_state, hash_string(&skeleton_bsk_name));
     if (!IS_VALID_GL_ID(skin_id)) {
         GLog_Error("Failed to export skeleton for CCharacter: %s", String_cstr(&skeleton_bsk_name));
-        exit(1);
+        abort();
     }
     String_free(&skeleton_bsk_name);
     const cgltf_skin *skin = &context->skins.items[skin_id.v];
@@ -121,7 +118,7 @@ void handle_CCharacter(AppState *app_state,
     }
 
     GLTFContext_push_skin(context, skin_id);
-    const GL_ID output_node = export_adf_file(app_state, model_filename, hash_vstring(model_filename));
+    const GL_ID output_node = export_adf_file(app_state, hash_vstring(model_filename));
 
     add_extras(context, node, output_node);
     set_world_matrix(context, output_node, node);
@@ -131,12 +128,12 @@ void handle_CCharacter(AppState *app_state,
         GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
     }
 
-    process_children(app_state, node, path_hash, path, output_node);
+    process_children(app_state, node, path_hash, output_node);
     GLTFContext_pop_skin(context);
 }
 
 void handle_CSecondaryMotionAttachment(AppState *app_state,
-                                       RuntimeNode *node, const uint32 path_hash, const StringView path,
+                                       RuntimeNode *node, const uint32 path_hash,
                                        const GL_ID parent_gltf_node) {
     GLTFContext *context = &app_state->gltf_context;
     const StringView model_filename = RuntimeNode_get_prop_str(node, "model");
@@ -147,11 +144,11 @@ void handle_CSecondaryMotionAttachment(AppState *app_state,
     }
     String skeleton_bsk_name = {0};
     Path_replace_extension_sv(skeleton_filename, "bsk", &skeleton_bsk_name);
-    const GL_ID skin_id = export_file(app_state, as_sv(&skeleton_bsk_name), hash_string(&skeleton_bsk_name));
+    const GL_ID skin_id = export_file(app_state, hash_string(&skeleton_bsk_name));
     String_free(&skeleton_bsk_name);
 
     GLTFContext_push_skin(context, skin_id);
-    const GL_ID output_node = export_adf_file(app_state, model_filename, hash_vstring(model_filename));
+    const GL_ID output_node = export_adf_file(app_state, hash_vstring(model_filename));
     set_world_matrix(context, output_node, node);
     add_extras(context, node, output_node);
     if (IS_VALID_GL_ID(parent_gltf_node))
@@ -159,30 +156,29 @@ void handle_CSecondaryMotionAttachment(AppState *app_state,
     else {
         GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
     }
-    process_children(app_state, node, path_hash, path, output_node);
+    process_children(app_state, node, path_hash, output_node);
     GLTFContext_pop_skin(context);
 }
 
 void handle_CDamageableCharacterPart(AppState *app_state,
-                                     RuntimeNode *node, const uint32 path_hash, const StringView path,
+                                     RuntimeNode *node, const uint32 path_hash,
                                      const GL_ID parent_gltf_node) {
     GLTFContext *context = &app_state->gltf_context;
+    String node_name = {0};
+    const StringView node_name_sv = RuntimeNode_get_prop_str(node, "name");
+    const StringView node_name_hash = find_name32_sv(node->name_hash);
 
-    const StringView node_name = RuntimeNode_get_prop_str(node, "name");
-    const StringView node_name_hash = find_name32(node->name_hash);
-
-    GL_ID output_node;
-    if (sv_is_not_null(node_name)) {
-        output_node = GLTFContext_node_add(context, StringView_cstr(node_name));
+    if (sv_is_not_null(node_name_sv)) {
+        String_copy_from_view(&node_name, node_name_sv);
     }
     else if (sv_is_not_null(node_name_hash)) {
-        output_node = GLTFContext_node_add(context, StringView_cstr(node_name_hash));
+        String_copy_from_view(&node_name, node_name_hash);
     }
     else {
-        char generated_name[64];
-        snprintf(generated_name, sizeof(generated_name), "node_%08X", node->name_hash);
-        output_node = GLTFContext_node_add(context, generated_name);
+        String_format(&node_name, "node_%08X", node->name_hash);
     }
+
+    const GL_ID output_node = GLTFContext_node_add(context, String_detach(&node_name), false);
 
     set_world_matrix(context, output_node, node);
     add_extras(context, node, output_node);
@@ -205,53 +201,52 @@ void handle_CDamageableCharacterPart(AppState *app_state,
         GLog_Warning("Invalid parent setup: %s", StringView_cstr(node_name_hash));
     }
 
-    process_children(app_state, node, path_hash, path, output_node);
+    process_children(app_state, node, path_hash, output_node);
 }
 
-void handle_CRigidObject(AppState *app_state,
-                         RuntimeNode *node, const uint32 path_hash, const StringView path,
-                         const GL_ID parent_gltf_node) {
+void handle_CRigidObject(AppState *app_state, RuntimeNode *node, const uint32 path_hash, const GL_ID parent_gltf_node) {
     GLTFContext *context = &app_state->gltf_context;
 
     const uint32 model_filename_hash = RuntimeNode_get_prop_u32(node, "filename");
-    const StringView model_filename = find_name32(model_filename_hash);
     if (model_filename_hash == 0) {
         GLog_Error("Failed to get model property for CRigidObject");
         return;
     }
-    GL_ID output_node = export_adf_file(app_state, model_filename, model_filename_hash);
+    GL_ID output_node = export_adf_file(app_state, model_filename_hash);
     if (IS_VALID_GL_ID(output_node)) {
         set_world_matrix(context, output_node, node);
 
         if (IS_VALID_GL_ID(parent_gltf_node))
             GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
         else {
-
             GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
         }
     }
     else {
-        const StringView node_name = find_name32(node->name_hash);
-        if (sv_is_not_null(model_filename)) {
-            output_node = GLTFContext_node_add(context, StringView_cstr(model_filename));
-        }
-        else if (sv_is_not_null(node_name)) {
-            output_node = GLTFContext_node_add(context, StringView_cstr(node_name));
+        const String *model_filename = find_name32(model_filename_hash);
+        if (model_filename == NULL) {
+            const StringView node_name = find_name32_sv(node->name_hash);
+            if (sv_is_null(node_name)) {
+                char generated_name[64];
+                snprintf(generated_name, sizeof(generated_name), "node_%08X", node->name_hash);
+                output_node = GLTFContext_node_add(context, generated_name, true);
+            }
+            else {
+                output_node = GLTFContext_node_add(context, StringView_cstr(node_name), true);
+            }
         }
         else {
-            char generated_name[64];
-            snprintf(generated_name, sizeof(generated_name), "node_%08X", node->name_hash);
-            output_node = GLTFContext_node_add(context, generated_name);
+            output_node = GLTFContext_node_add(context, String_cstr(model_filename), true);
         }
 
         set_world_matrix(context, output_node, node);
         add_extras(context, node, output_node);
     }
-    process_children(app_state, node, path_hash, path, output_node);
+    process_children(app_state, node, path_hash, output_node);
 }
 
 void handle_CSkeletalAnimatedObject(AppState *app_state,
-                                    RuntimeNode *node, const uint32 path_hash, const StringView path,
+                                    RuntimeNode *node, const uint32 path_hash,
                                     const GL_ID parent_gltf_node) {
     GLTFContext *context = &app_state->gltf_context;
 
@@ -271,7 +266,7 @@ void handle_CSkeletalAnimatedObject(AppState *app_state,
     String skeleton_bsk_name = {0};
     Path_replace_extension_sv(skeleton_filename, "bsk", &skeleton_bsk_name);
 
-    const GL_ID skin_id = export_file(app_state, as_sv(&skeleton_bsk_name), hash_string(&skeleton_bsk_name));
+    const GL_ID skin_id = export_file(app_state, hash_string(&skeleton_bsk_name));
     const cgltf_skin *skin = &context->skins.items[skin_id.v];
     const GL_ID root_bone = skin->joints[0] != NULL ? gltf_untag_index(skin->joints[0]) : INVALID_GL_ID;
     if (IS_VALID_GL_ID(root_bone)) {
@@ -279,7 +274,7 @@ void handle_CSkeletalAnimatedObject(AppState *app_state,
     }
 
     GLTFContext_push_skin(context, skin_id);
-    const GL_ID output_node = export_adf_file(app_state, model_filename, hash_vstring(model_filename));
+    const GL_ID output_node = export_adf_file(app_state, hash_vstring(model_filename));
 
     add_extras(context, node, output_node);
     set_world_matrix(context, output_node, node);
@@ -289,29 +284,29 @@ void handle_CSkeletalAnimatedObject(AppState *app_state,
         GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
     }
 
-    process_children(app_state, node, path_hash, path, output_node);
+    process_children(app_state, node, path_hash, output_node);
     GLTFContext_pop_skin(context);
 }
 
 void handle_CBoneAttachment(AppState *app_state,
-                            RuntimeNode *node, const uint32 path_hash, const StringView path,
+                            RuntimeNode *node, const uint32 path_hash,
                             const GL_ID parent_gltf_node) {
     GLTFContext *context = &app_state->gltf_context;
 
     const StringView node_name = RuntimeNode_get_prop_str(node, "name");
-    const StringView node_hash_name = find_name32(node->name_hash);
+    const StringView node_hash_name = find_name32_sv(node->name_hash);
 
     GL_ID output_node;
     if (sv_is_not_null(node_name)) {
-        output_node = GLTFContext_node_add(context, StringView_cstr(node_name));
+        output_node = GLTFContext_node_add(context, StringView_cstr(node_name), true);
     }
     else if (sv_is_not_null(node_hash_name)) {
-        output_node = GLTFContext_node_add(context, StringView_cstr(node_hash_name));
+        output_node = GLTFContext_node_add(context, StringView_cstr(node_hash_name), true);
     }
     else {
         char generated_name[64];
         snprintf(generated_name, sizeof(generated_name), "node_%08X", node->name_hash);
-        output_node = GLTFContext_node_add(context, generated_name);
+        output_node = GLTFContext_node_add(context, generated_name, true);
     }
 
     set_world_matrix(context, output_node, node);
@@ -340,28 +335,29 @@ void handle_CBoneAttachment(AppState *app_state,
         GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
     }
 
-    process_children(app_state, node, path_hash, path, output_node);
+    process_children(app_state, node, path_hash, output_node);
 }
 
-void handle_default(AppState *app_state,
-                    RuntimeNode *node, const uint32 path_hash, const StringView path,
-                    const GL_ID parent_gltf_node) {
+void handle_default(AppState *app_state, RuntimeNode *node, const uint32 path_hash, const GL_ID parent_gltf_node) {
     GLTFContext *context = &app_state->gltf_context;
 
     const StringView node_name = RuntimeNode_get_prop_str(node, "name");
-    const StringView node_name_hash = find_name32(node->name_hash);
+
 
     GL_ID output_node;
-    if (sv_is_not_null(node_name)) {
-        output_node = GLTFContext_node_add(context, StringView_cstr(node_name));
-    }
-    else if (sv_is_not_null(node_name_hash)) {
-        output_node = GLTFContext_node_add(context, StringView_cstr(node_name_hash));
+    if (sv_is_null(node_name)) {
+        const StringView node_name_hash = find_name32_sv(node->name_hash);
+        if (sv_is_null(node_name_hash)) {
+            char generated_name[64];
+            snprintf(generated_name, sizeof(generated_name), "node_%08X", node->name_hash);
+            output_node = GLTFContext_node_add(context, generated_name, true);
+        }
+        else {
+            output_node = GLTFContext_node_add(context, StringView_cstr(node_name_hash), true);
+        }
     }
     else {
-        char generated_name[64];
-        snprintf(generated_name, sizeof(generated_name), "node_%08X", node->name_hash);
-        output_node = GLTFContext_node_add(context, generated_name);
+        output_node = GLTFContext_node_add(context, StringView_cstr(node_name), true);
     }
 
     add_extras(context, node, output_node);
@@ -374,16 +370,14 @@ void handle_default(AppState *app_state,
     }
 
     DA_FORI(node->children, i) {
-        process_epe_node(app_state, DA_at(&node->children, i),
-                         path_hash,
-                         path,
-                         output_node);
+        process_epe_node(app_state, DA_at(&node->children, i), path_hash, output_node);
     }
 }
 
 void process_epe_node(AppState *app_state,
-                      RuntimeNode *node, const uint32 path_hash, const StringView path,
+                      RuntimeNode *node, const uint32 path_hash,
                       const GL_ID parent_gltf_node) {
+    TracyCZoneN(ctx, "process_epe_node", 1);
     CHECK_APP_STATE(app_state);
     CHECK_GLTF_STATE(&app_state->gltf_context);
 
@@ -393,54 +387,64 @@ void process_epe_node(AppState *app_state,
     const StringView class_name = RuntimeNode_get_prop_str(node, "_class");
     if (sv_is_null(class_name)) {
         GLog_Error("Failed to get _class property");
-        exit(1);
+        abort();
     }
+    TracyCZoneName(ctx, StringView_cstr(class_name), StringView_size(class_name));
+
     if (StringView_cequals(class_name, "CCharacter")) {
-        handle_CCharacter(app_state, node, path_hash, path, parent_gltf_node);
+        handle_CCharacter(app_state, node, path_hash, parent_gltf_node);
     }
     else if (StringView_cequals(class_name, "CSecondaryMotionAttachment")) {
-        handle_CSecondaryMotionAttachment(app_state, node, path_hash, path, parent_gltf_node);
+        handle_CSecondaryMotionAttachment(app_state, node, path_hash, parent_gltf_node);
     }
     else if (StringView_cequals(class_name, "CRigidObject")) {
-        handle_CRigidObject(app_state, node, path_hash, path, parent_gltf_node);
+        handle_CRigidObject(app_state, node, path_hash, parent_gltf_node);
     }
     else if (StringView_cequals(class_name, "CDamageableCharacterPart")) {
-        handle_CDamageableCharacterPart(app_state, node, path_hash, path, parent_gltf_node);
+        handle_CDamageableCharacterPart(app_state, node, path_hash, parent_gltf_node);
     }
     else if (StringView_cequals(class_name, "CSkeletalAnimatedObject")) {
-        handle_CSkeletalAnimatedObject(app_state, node, path_hash, path, parent_gltf_node);
+        handle_CSkeletalAnimatedObject(app_state, node, path_hash, parent_gltf_node);
     }
     else if (StringView_cequals(class_name, "CBoneAttachment")) {
-        handle_CBoneAttachment(app_state, node, path_hash, path, parent_gltf_node);
+        handle_CBoneAttachment(app_state, node, path_hash, parent_gltf_node);
     }
     else {
-        handle_default(app_state, node, path_hash, path, parent_gltf_node);
+        handle_default(app_state, node, path_hash, parent_gltf_node);
     }
+    TracyCZoneEnd(ctx);
 }
 
-GL_ID export_epe(AppState *app_state, RuntimeNode *root_node, uint32 path_hash, const StringView path) {
+GL_ID export_epe(AppState *app_state, RuntimeNode *root_node, const uint32 path_hash) {
+    TracyCZoneN(ctx, "export_epe", 1);
     CHECK_APP_STATE(app_state);
     CHECK_GLTF_STATE(&app_state->gltf_context);
     GLTFContext *context = &app_state->gltf_context;
 
-    if (sv_is_null(path)) {
-        GLog_Error("Path is NULL");
-        exit(1);
-    }
-    String epe_export_path = {};
-    Path_join(&epe_export_path, &app_state->export_path);
-    Path_join_sv(&epe_export_path, path);
-    Path_ensure_parent_dirs(&epe_export_path);
-    String_append_cstr(&epe_export_path, ".gltf");
-    GLTFContext_set_save_path(context, &epe_export_path);
-    String_free(&epe_export_path);
+    const StringView path = find_name32_sv(path_hash);
 
-    const GL_ID epe_root_node_id = GLTFContext_node_add(context, "epe_root");
+    if (sv_is_null(path)) {
+        String generated_save_path = {0};
+        String_copy_from(&generated_save_path, &app_state->export_path);
+        String_append_format(&generated_save_path, "export_%08X.gltf", path_hash);
+        Path_ensure_parent_dirs(&generated_save_path);
+        GLTFContext_set_save_path(context, &generated_save_path);
+    }
+    else {
+        String epe_export_path = {};
+        Path_join(&epe_export_path, &app_state->export_path);
+        Path_join_sv(&epe_export_path, path);
+        String_append_cstr(&epe_export_path, ".gltf");
+        Path_ensure_parent_dirs(&epe_export_path);
+        GLTFContext_set_save_path(context, &epe_export_path);
+        String_free(&epe_export_path);
+    }
+
+    const GL_ID epe_root_node_id = GLTFContext_node_add(context, "epe_root", true);
 
     DA_FORI(root_node->children, i) {
-        process_epe_node(app_state, DA_at(&root_node->children, i), path_hash,
-                         path,
-                         epe_root_node_id);
+        process_epe_node(app_state, DA_at(&root_node->children, i), path_hash, epe_root_node_id);
     }
+    TracyCZoneEnd(ctx);
     return epe_root_node_id;
 }

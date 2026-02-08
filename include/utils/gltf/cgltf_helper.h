@@ -141,7 +141,7 @@ GL_ID GLTFContext_accessor_from_data(
     cgltf_component_type component_type, cgltf_buffer_view_type buffer_type,
     bool normalized, uint32 stride, uint32 offset);
 
-GL_ID GLTFContext_node_add(const GLTFContext *ctx, const char *name_opt);
+GL_ID GLTFContext_node_add(const GLTFContext *ctx, const char *name_opt, bool copy_name);
 
 void GLTFContext_node_set_mesh(const GLTFContext *ctx, GL_ID node_id, GL_ID mesh_id);
 
@@ -151,7 +151,7 @@ void GLTFContext_node_set_matrix(const GLTFContext *ctx, GL_ID node_id, const fl
 
 void GLTFContext_node_set_trs(const GLTFContext *ctx, GL_ID node_id, const vec3 pos, const versor rot, const vec3 scl);
 
-void GLTFContext_node_set_extra(const GLTFContext *ctx, GL_ID node_id, const char *data);
+void GLTFContext_node_set_extra(const GLTFContext *ctx, GL_ID node_id, char *data, bool copy_data);
 
 GL_ID GLTFContext_node_find_by_name(const GLTFContext *ctx, const char *name);
 

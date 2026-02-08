@@ -24,7 +24,7 @@ void DA_init_(DynamicArray__Base *da, const uint32 item_size, const uint32 initi
     if (da->items!=NULL) {
         if (da->statically_allocated) {
             GLog_Error("Trying to reinitialize statically allocated dynamic array");
-            exit(1);
+            abort();
         }
         mp_free(da->items);
         da->items = NULL;
@@ -72,7 +72,7 @@ void DA_reserve_(DynamicArray__Base *da, const uint32 needed_capacity) {
         }
         void *new_items = mp_realloc(da->items, new_capacity * da->item_size);
         if (!new_items) {
-            exit(1);
+            abort();
         }
         memset((char *) new_items + da->count * da->item_size, 0,
                (new_capacity - da->count) * da->item_size);

@@ -85,25 +85,6 @@ void ensure_parents_loaded(const ArchiveManager *manager, const uint32 file_hash
     }
 }
 
-bool ArchiveManager_get_file(const ArchiveManager *manager, const StringView path, MemoryBuffer *mb) {
-    TracyCZoneN(ctx, "ArchiveManager_get_file", 1);
-    const uint32 hash = hash_vstring(path);
-    ensure_parents_loaded(manager, hash);
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        Archive *ar = manager->archives.items[i];
-        if (Archive_get_file_by_hash(ar, hash, mb)) {
-            // GLog_Info("File \"%s\" found in archive \"%s\"",
-            //        String_cstr(path),
-            //        String_cstr(Archive_get_name(ar)));
-            TracyCZoneEnd(ctx)
-            return true;
-        }
-    }
-    GLog_Error("File \"%s\" not found in any archive", StringView_cstr(path));
-    TracyCZoneEnd(ctx)
-    return false;
-}
-
 bool ArchiveManager_get_file_by_hash(const ArchiveManager *manager, const uint32 path, MemoryBuffer *mb) {
     TracyCZoneN(ctx, "ArchiveManager_get_file_by_hash", 1);
 
@@ -125,29 +106,6 @@ bool ArchiveManager_get_file_by_hash(const ArchiveManager *manager, const uint32
         }
     }
     GLog_Error("File with hash %08X not found in any archive", path);
-    TracyCZoneEnd(ctx)
-    return false;
-}
-
-bool ArchiveManager_has_file(const ArchiveManager *manager, const StringView path) {
-    TracyCZoneN(ctx, "ArchiveManager_has_file", 1);
-    const uint32 hash = hash_vstring(path);
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        const Archive *ar = manager->archives.items[i];
-        if (Archive_has_file_by_hash(ar, hash)) {
-            TracyCZoneEnd(ctx)
-            return true;
-        }
-    }
-    // Try to load parents and try again
-    ensure_parents_loaded(manager, hash);
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        const Archive *ar = manager->archives.items[i];
-        if (Archive_has_file_by_hash(ar, hash)) {
-            TracyCZoneEnd(ctx)
-            return true;
-        }
-    }
     TracyCZoneEnd(ctx)
     return false;
 }

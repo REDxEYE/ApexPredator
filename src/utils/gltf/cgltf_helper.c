@@ -20,7 +20,7 @@ char *GLTFContext_dupe_cstring(const char *name) {
     char *dup = mp_malloc(len + 1);
     if (dup == NULL) {
         GLog_Error("GLTFContext_dupe_cstring: failed to allocate memory, bailing out!");
-        exit(1);
+        abort();
     }
     memcpy(dup, name, len + 1);
     return dup;
@@ -60,7 +60,7 @@ void GLTFContext_init(GLTFContext *ctx, const char *name) {
 bool GLTFContext_is_initialized(const GLTFContext *ctx) {
     if (ctx == NULL) {
         GLog_Error("GLTFContext_ensure_initialized: ctx is NULL");
-        exit(1);
+        abort();
     }
     return ctx->data != NULL;
 }
@@ -83,7 +83,7 @@ void GLTFContext_finalize(GLTFContext *ctx) {
     // move arrays into cgltf_data
     if (ctx->finalized) {
         GLog_Error("GLTFContext_finalize: already finalized");
-        exit(1);
+        abort();
     }
     ctx->finalized = true;
     ctx->data->meshes_count = ctx->meshes.count;
@@ -290,7 +290,7 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
     if (ctx->meshes.count > 0 || ctx->nodes.count > 0) {
         if (String_size(&ctx->save_path) == 0) {
             GLog_Error("GLTFContext_write_and_free: no save path set");
-            exit(1);
+            abort();
         }
         GLTFContext_finalize(ctx);
         bool has_big_buffers = false;
@@ -348,7 +348,7 @@ bool GLTFContext_write_and_free(GLTFContext *ctx) {
                         if (f == NULL) {
                             GLog_Error("GLTFContext_write_and_free: failed to open buffer file for writing: %s",
                                        String_cstr(&buffer_path));
-                            exit(1);
+                            abort();
                         }
                         fwrite(DA_get_buffer(raw_data), 1, raw_data->count, f);
                         fclose(f);
@@ -562,11 +562,11 @@ GL_ID GLTFContext_accessor_from_data(GLTFContext *ctx, const void *data, const u
     return GLTFContext_accessor_add(ctx, view_id, type, component_type, count, offset, normalized, name);
 }
 
-GL_ID GLTFContext_node_add(const GLTFContext *ctx, const char *name_opt) {
+GL_ID GLTFContext_node_add(const GLTFContext *ctx, const char *name_opt, const bool copy_name) {
     cgltf_node *n = DA_append_get(&ctx->nodes);
     memset(n, 0, sizeof(*n));
     if (name_opt) {
-        n->name = GLTFContext_dupe_cstring(name_opt);
+        n->name = (char*) (copy_name ? GLTFContext_dupe_cstring(name_opt) : name_opt);
     }
     return (GL_ID){ctx->nodes.count - 1};
 }
@@ -817,7 +817,8 @@ void GLTFContext_material_set_diffuse_texture_from_data(GLTFContext *ctx, const 
     mat->pbr_metallic_roughness.base_color_factor[3] = 1.0f;
 }
 
-void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const StringView original_path, const GL_ID material_id,
+void GLTFContext_material_set_normal_from_data(GLTFContext *ctx, const StringView original_path,
+                                               const GL_ID material_id,
                                                const Texture *texture) {
     if (texture->channel_count <= 3 || texture->channel_count > 4) {
         printf("Invalid texture channel count for normal map!\n");
@@ -842,7 +843,8 @@ void GLTFContext_material_set_roughness_metallic_from_data(GLTFContext *ctx, con
     mat->pbr_metallic_roughness.metallic_roughness_texture.texture = gltf_tag_index(tex_id).v;
 }
 
-void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const StringView original_path, const GL_ID material_id,
+void GLTFContext_material_set_emissive_from_data(GLTFContext *ctx, const StringView original_path,
+                                                 const GL_ID material_id,
                                                  const Texture *texture) {
     // if (texture->channel_count) {
     // printf("Invalid texture channel count for emissive map!\n");
@@ -867,13 +869,13 @@ GL_ID GLTFContext_material_find_by_name(const GLTFContext *ctx, const char *name
     return INVALID_GL_ID;
 }
 
-void GLTFContext_node_set_extra(const GLTFContext *ctx, const GL_ID node_id, const char *data) {
+void GLTFContext_node_set_extra(const GLTFContext *ctx, const GL_ID node_id, char *data, const bool copy_data) {
     cgltf_node *n = &ctx->nodes.items[node_id.v];
     if (n->extras.data != NULL) {
         mp_free(n->extras.data);
     }
     if (data != NULL) {
-        n->extras.data = GLTFContext_dupe_cstring(data);
+        n->extras.data = copy_data ? GLTFContext_dupe_cstring(data) : data;
     }
     else {
         n->extras.data = NULL;
@@ -982,7 +984,7 @@ GL_ID GLTFContext_skin_find_bone_by_name(const GLTFContext *context, const GL_ID
 void GLTFContext_push_skin(GLTFContext *context, const GL_ID skin_id) {
     if (context->skin_stack.count >= MAX_GLTFCONTEXT_SKIN_STACK_DEPTH) {
         GLog_Error("GLTFContext_push_skin: skin stack overflow");
-        exit(1);
+        abort();
     }
     context->skin_stack.items[context->skin_stack.count++] = skin_id;
 }
@@ -990,7 +992,7 @@ void GLTFContext_push_skin(GLTFContext *context, const GL_ID skin_id) {
 void GLTFContext_pop_skin(GLTFContext *context) {
     if (context->skin_stack.count == 0) {
         GLog_Error("GLTFContext_pop_skin: skin stack underflow");
-        exit(1);
+        abort();
     }
     context->skin_stack.count--;
 }

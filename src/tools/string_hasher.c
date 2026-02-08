@@ -18,8 +18,8 @@ int main(void) {
             len--;
         }
         uint32 hash = hashlittle(line, strlen(line), 0);
-        //printf("String: \"%s\" has hash: 0x%08X (%u)\n", line, hash, hash);
-        printf("{.hash = 0x%08X, .name = \"%s\"},\n", hash, line);
+        printf("String: \"%s\" has hash: 0x%08X (%u)\n", line, hash, hash);
+        // printf("{.hash = 0x%08X, .name = \"%s\"},\n", hash, line);
     }
     return 0;
 }

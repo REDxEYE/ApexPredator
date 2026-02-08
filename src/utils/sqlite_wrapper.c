@@ -185,40 +185,6 @@ assetdb_status_t assetdb_kv_put_u64(assetdb_t *db, const uint64_t key, const cha
     return KV_OK;
 }
 
-assetdb_status_t assetdb_kv_get_u64(assetdb_t *db, const uint64_t key, char **out_value) {
-    if (!db || !out_value) return KV_EINVAL;
-    *out_value = NULL;
-
-    sqlite3_reset(db->kv_get);
-    sqlite3_clear_bindings(db->kv_get);
-
-    const assetdb_status_t st = bind_u64(db, db->kv_get, 1, key);
-    if (st != KV_OK) return st;
-
-    const int rc = sqlite3_step(db->kv_get);
-    if (rc == SQLITE_ROW) {
-        const unsigned char *txt = sqlite3_column_text(db->kv_get, 0);
-        if (!txt) {
-            *out_value = NULL;
-            return KV_OK;
-        }
-        const int n = sqlite3_column_bytes(db->kv_get, 0);
-        if (n==0) {
-            *out_value = NULL;
-            return KV_OK;
-        }
-        char *s = mp_malloc((size_t) n + 1);
-        if (!s) return KV_ENOMEM;
-        memcpy(s, txt, (size_t) n);
-        s[n] = '\0';
-        *out_value = s;
-        return KV_OK;
-    }
-    if (rc == SQLITE_DONE) return KV_NOTFOUND;
-
-    return set_err(db, rc, sqlite3_errmsg(db->db));
-}
-
 assetdb_status_t assetdb_kv_get_u64_view(assetdb_t *db, const uint64_t key, const char **out, size_t *out_len) {
     if (!db || !out) return KV_EINVAL;
     *out = NULL;
@@ -260,10 +226,6 @@ assetdb_status_t assetdb_kv_del_u64(assetdb_t *db, const uint64_t key) {
 
 assetdb_status_t assetdb_kv_put_u32(assetdb_t *db, const uint32_t key, const char *value) {
     return assetdb_kv_put_u64(db, (uint64_t) key, value);
-}
-
-assetdb_status_t assetdb_kv_get_u32(assetdb_t *db, const uint32_t key, char **out_value) {
-    return assetdb_kv_get_u64(db, (uint64_t) key, out_value);
 }
 
 assetdb_status_t assetdb_kv_get_u32_view(assetdb_t *db, const uint32_t key, const char **out, size_t *out_len) {

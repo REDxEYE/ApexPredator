@@ -50,7 +50,7 @@ RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
     if (buffer->read(buffer, &header, sizeof(RTPCHeader), NULL) != BUFFER_SUCCESS) {
         GLog_Error("Failed to read RTPC header");
         TracyCZoneEnd(ctx);
-        exit(1);
+        abort();
     }
     if (header.version < 1 || header.version > 3) {
         GLog_Error("Unsupported RTPC version: %u", header.version);
@@ -69,7 +69,7 @@ RuntimeNode *RuntimeNode_new() {
     RuntimeNode *node = mp_malloc(sizeof(RuntimeNode));
     if (node == NULL) {
         GLog_Error("Failed to allocate memory");
-        exit(1);
+        abort();
     }
     memset(node, 0, sizeof(RuntimeNode));
     node->heap_allocated = 1;
@@ -260,7 +260,7 @@ void RuntimeNode_print(const RuntimeNode *node, FILE *output, const uint32 inden
     for (uint32 i = 0; i < indent; ++i) {
         fputc(' ', output);
     }
-    const StringView name = find_name32(node->name_hash);
+    const StringView name = find_name32_sv(node->name_hash);
 
     fprintf(output, "Node: \""SV_FMT"\" (0x%08X)\n", SV_ARGS(name), node->name_hash);
     for (uint32 i = 0; i < node->props.count; ++i) {
@@ -278,7 +278,7 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
     RuntimeNodeHeader header;
     if (buffer->read(buffer, &header, sizeof(RuntimeNodeHeader), NULL) != BUFFER_SUCCESS) {
         GLog_Error("Failed to read RTPC root node header");
-        exit(1);
+        abort();
     }
 
     RuntimeNode_init(node);
@@ -289,11 +289,11 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
     int64 orig_pos;
     if (buffer->get_position(buffer, &orig_pos) != BUFFER_SUCCESS) {
         GLog_Error("Failed to get current buffer position");
-        exit(1);
+        abort();
     }
     if (buffer->set_position(buffer, header.data_offset, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
         GLog_Error("Failed to seek to node data offset: %u", header.data_offset);
-        exit(1);
+        abort();
     }
     // RuntimeProp tmp = {0};
     for (int i = 0; i < header.prop_count; ++i) {
@@ -311,11 +311,11 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
     int64 pos;
     if (buffer->get_position(buffer, &pos) != BUFFER_SUCCESS) {
         GLog_Error("Failed to get current buffer position");
-        exit(1);
+        abort();
     }
     if (buffer->set_position(buffer, (pos + 3) & ~3, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
         GLog_Error("Failed to align buffer position after reading RTPC properties");
-        exit(1);
+        abort();
     }
     for (int i = 0; i < header.child_count; ++i) {
         RuntimeNode *child_node = DA_append_get(&node->children);
@@ -324,7 +324,7 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
 
     if (buffer->set_position(buffer, orig_pos, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
         GLog_Error("Failed to return back");
-        exit(1);
+        abort();
     }
 }
 
@@ -333,16 +333,16 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         int64 orig_offset;\
         if(buffer->get_position(buffer, &orig_offset)!=BUFFER_SUCCESS){\
             GLog_Error("Failed to get current buffer position");\
-            exit(1);\
+            abort();\
         }\
         if (buffer->set_position(buffer, offset, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {\
             GLog_Error("Failed to seek to RTPC property data at offset: %u", offset);\
-            exit(1);\
+            abort();\
         }\
         {body}\
         if(buffer->set_position(buffer, orig_offset, BUFFER_ORIGIN_START)!=BUFFER_SUCCESS) {\
             GLog_Error("Failed to restore buffer position after reading RTPC property value");\
-            exit(1);\
+            abort();\
         }\
     }while(0)
 
@@ -365,7 +365,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
     RuntimePropHeader header;
     if (buffer->read(buffer, &header, sizeof(RuntimePropHeader), NULL) != BUFFER_SUCCESS) {
         GLog_Error("Failed to read RTPC property header");
-        exit(1);
+        abort();
     }
     RuntimeProp_init(prop, header.prop_type);
     prop->name_hash = header.name_hash;
@@ -388,7 +388,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read_cstring(buffer, &prop->value.string_value)!=BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC string property value");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -396,7 +396,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec2_value, 4*2, NULL)!=BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC vec2 property value");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -404,7 +404,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec3_value, 4*3, NULL)!=BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC vec3 property value");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -412,7 +412,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec4_value, 4*4, NULL)!=BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC vec4 property value");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -420,7 +420,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec4_value, 4*9, NULL)!=BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC MAT3X3 property value");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -428,7 +428,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read(buffer, prop->value.vec4_value, 4*16, NULL)!=BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC MAT4X4 property value");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -437,7 +437,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              uint32 array_size;
                              if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC u32 array size");
-                             exit(1);
+                             abort();
                              }
                              DA_reserve(&prop->value.uint32_array_value, array_size);
                              prop->value.uint32_array_value.count = array_size;
@@ -445,7 +445,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              if (buffer->read(buffer, prop->value.uint32_array_value.items, 4*array_size, NULL)!=
                                  BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC ARRAY_U32 property value");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -454,7 +454,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              uint32 array_size;
                              if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC u32 array size");
-                             exit(1);
+                             abort();
                              }
                              DA_reserve(&prop->value.float32_array_value, array_size);
                              prop->value.float32_array_value.count = array_size;
@@ -462,7 +462,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              if (buffer->read(buffer, prop->value.float32_array_value.items, 4*array_size, NULL)!=
                                  BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC ARRAY_F32 property value");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -471,7 +471,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              uint32 array_size;
                              if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC u32 array size");
-                             exit(1);
+                             abort();
                              }
                              DA_reserve(&prop->value.uint8_array_value, array_size);
                              prop->value.uint8_array_value.count = array_size;
@@ -479,7 +479,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              if (buffer->read(buffer, prop->value.uint8_array_value.items, array_size, NULL)!=
                                  BUFFER_SUCCESS){
                              GLog_Error("Failed to read RTPC ARRAY_U8 property value");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -487,7 +487,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
             READ_FROM_OFFSET(header.data_raw.uint_value, {
                              if (buffer->read_uint64(buffer, &prop->value.objid_value)!=BUFFER_SUCCESS){
                              printf("[ERROR]: Failed to read RTPC OBJID property value\n");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
@@ -496,7 +496,7 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              uint32 array_size;
                              if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
                              printf("[ERROR]: Failed to read RTPC u32 array size\n");
-                             exit(1);
+                             abort();
                              }
                              DA_reserve(&prop->value.event_value, array_size);
                              prop->value.event_value.count = array_size;
@@ -504,13 +504,13 @@ void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
                              if (buffer->read(buffer, prop->value.event_value.items, 8*array_size, NULL)!=
                                  BUFFER_SUCCESS){
                              printf("[ERROR]: Failed to read RTPC EVENT property value\n");
-                             exit(1);
+                             abort();
                              }});
             break;
         }
         default: {
             printf("[ERROR]: Unknown RTPC property type: %d\n", prop->type);
-            exit(1);
+            abort();
         }
     }
 }
@@ -556,7 +556,7 @@ void RuntimeProp_init(RuntimeProp *prop, const PropType type) {
         case PROP_TYPE_UNK_16:
         default: {
             printf("[ERROR]: Unknown prop type: %d\n", type);
-            exit(1);
+            abort();
         }
     }
 }
@@ -565,7 +565,7 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
     for (uint32 i = 0; i < indent; ++i) {
         fputc(' ', output);
     }
-    StringView prop_name = find_name32(prop->name_hash);
+    const StringView prop_name = find_name32_sv(prop->name_hash);
     if (sv_is_null(prop_name)) {
         fprintf(output, "Prop: 0x%08X Type: %d Value: ", prop->name_hash, prop->type);
     }
@@ -580,7 +580,7 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
             break;
         }
         case PROP_TYPE_U32: {
-            const StringView name_value = find_name32(prop->value.uint32_value);
+            const StringView name_value = find_name32_sv(prop->value.uint32_value);
             if (sv_is_null(name_value)) {
                 fprintf(output, "%u\n", prop->value.uint32_value);
             }
@@ -693,7 +693,7 @@ void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 inden
         }
         default: {
             printf("[ERROR]: Unknown prop type: %d\n", prop->type);
-            exit(1);
+            abort();
         }
     }
 }
@@ -739,7 +739,7 @@ void RuntimeProp_free(RuntimeProp *prop) {
         case PROP_TYPE_UNK_16:
         default: {
             printf("[ERROR]: Unknown prop type: %d\n", prop->type);
-            exit(1);
+            abort();
         }
     }
     prop->type = 0;
@@ -753,7 +753,7 @@ static void print_indent(String *out, const uint32 indent) {
 
 void RuntimeProp_emit_json(const RuntimeProp *prop, String *out, const uint32 indent) {
     print_indent(out, indent);
-    StringView prop_name = find_name32(prop->name_hash);
+    StringView prop_name = find_name32_sv(prop->name_hash);
     if (sv_is_null(prop_name)) {
         String_append_format(out, "\"0x%08X\": ", prop->name_hash);
     }
@@ -864,7 +864,7 @@ void RuntimeNode_emit_json(const RuntimeNode *node, String *out, const uint32 in
     print_indent(out, indent);
     String_append_cstr(out, "{\n");
     print_indent(out, indent + 2);
-    StringView name = find_name32(node->name_hash);
+    const StringView name = find_name32_sv(node->name_hash);
     String_append_format(out, "\"name\": \""SV_FMT"\",\n", SV_ARGS(name));
     print_indent(out, indent + 2);
     String_append_format(out, "\"name_hash\": %u,\n", node->name_hash);
@@ -874,7 +874,7 @@ void RuntimeNode_emit_json(const RuntimeNode *node, String *out, const uint32 in
         print_indent(out, indent + 2);
         String_append_cstr(out, "\"props\": {\n");
         for (uint32 i = 0; i < node->props.count; ++i) {
-            RuntimeProp *prop = DA_at(&node->props, i);
+            const RuntimeProp *prop = DA_at(&node->props, i);
             if (prop->type == PROP_TYPE_NONE) continue;
             RuntimeProp_emit_json(prop, out, indent + 4);
             if (i + 1 < node->props.count) String_append_cstr(out, ",");

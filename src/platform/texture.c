@@ -64,7 +64,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
                 GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_size);
                 TracyCZoneEnd(ctx);
                 assert(false && "Unexpected input size");
-                exit(1);
+                abort();
             }
             memcpy(texture->data, input, expected_size);
             break;
@@ -75,7 +75,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
                 GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_size/2);
                 TracyCZoneEnd(ctx);
                 assert(false && "Unexpected input size");
-                exit(1);
+                abort();
             }
             const int pixel_count = texture->width * texture->height;
             for (int i = 0; i < pixel_count; ++i) {
@@ -95,7 +95,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
                 GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_size/2);
                 TracyCZoneEnd(ctx);
                 assert(false && "Unexpected input size");
-                exit(1);
+                abort();
             }
             for (int i = 0; i < texture->width * texture->height; ++i) {
                 const uint16 pixel_value = ((uint16 *) input)[i];
@@ -116,7 +116,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
                 GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 TracyCZoneEnd(ctx);
                 assert(false && "Unexpected input size");
-                exit(1);
+                abort();
             }
             const uint32 block_count = blocks_wide * blocks_high;
             for (int i = 0; i < block_count; ++i) {
@@ -137,7 +137,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
                 GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 TracyCZoneEnd(ctx);
                 assert(false && "Unexpected input size");
-                exit(1);
+                abort();
             }
             const uint32 block_count = blocks_wide * blocks_high;
             for (int i = 0; i < block_count; ++i) {
@@ -158,7 +158,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
                 GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 TracyCZoneEnd(ctx);
                 assert(false && "Unexpected input size");
-                exit(1);
+                abort();
             }
             const uint32 block_count = blocks_wide * blocks_high;
             for (int i = 0; i < block_count; ++i) {
@@ -179,7 +179,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
                 GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 TracyCZoneEnd(ctx);
                 assert(false && "Unexpected input size");
-                exit(1);
+                abort();
             }
             const uint32 block_count = blocks_wide * blocks_high;
             for (int i = 0; i < block_count; ++i) {
@@ -199,7 +199,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
                 GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 TracyCZoneEnd(ctx);
                 assert(false && "Unexpected input size");
-                exit(1);
+                abort();
             }
             const uint32 block_count = blocks_wide * blocks_high;
             for (int i = 0; i < block_count; ++i) {
@@ -218,7 +218,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
                 GLog_Error("Unexpected input size: %u, expected: %u", input_size, expected_compressed_size);
                 TracyCZoneEnd(ctx);
                 assert(false && "Unexpected input size");
-                exit(1);
+                abort();
             }
             const uint32 block_count = blocks_wide * blocks_high;
             for (int i = 0; i < block_count; ++i) {
@@ -233,7 +233,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
             GLog_Error("Unsupported DXGI format: %d", format);
             TracyCZoneEnd(ctx);
             assert(false && "Unsupported DXGI format");
-            exit(1);
+            abort();
         }
     }
     TracyCZoneEnd(ctx);
@@ -321,7 +321,7 @@ void Texture_from_dxgi(Texture *texture, const DDSDXGIFormat format, const int32
         default:
             GLog_Error("Unsupported DXGI format: %d", format);
             assert(false && "Unsupported DXGI format");
-            exit(1);
+            abort();
     }
     texture->bpc = target_bpc;
     texture->channel_count = target_channels;
@@ -353,7 +353,7 @@ void Texture_save(const Texture *texture, const String *path_without_ext) {
             GLog_Error("Unsupported channel count: %d", texture->channel_count);
             TracyCZoneEnd(ctx);
             assert(false && "Unsupported channel count");
-            exit(1);
+            abort();
         }
         if (texture->bpc == 1) {
             String_append_cstr(&path_png, ".png");
@@ -379,7 +379,7 @@ void Texture_save(const Texture *texture, const String *path_without_ext) {
             GLog_Error("Unsupported bpc: %d", texture->bpc);
             TracyCZoneEnd(ctx);
             assert(false && "Unsupported bpc");
-            exit(1);
+            abort();
         }
         String_free(&path_png);
     }
@@ -525,6 +525,6 @@ uint32 Texture_calculate_mip_size(const uint32 mip, const uint32 width, const ui
         default:
             GLog_Error("Unsupported DXGI format: %d", format);
             assert(false && "Unsupported DXGI format");
-            exit(1);
+            abort();
     }
 }

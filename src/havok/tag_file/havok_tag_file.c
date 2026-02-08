@@ -16,7 +16,7 @@ TagHeader expect_tag(Buffer *buffer, const char *expected_ident) {
     TagHeader header;
     if (!TagHeader_from_buffer(&header, buffer)) {
         GLog_Error("Failed to read tag header");
-        exit(1);
+        abort();
     }
     if (memcmp(header.ident, expected_ident, 4) != 0) {
         GLog_Error("Expected tag %.4s but got %.4s", expected_ident, header.ident);
@@ -28,7 +28,7 @@ TagHeader expect_tag(Buffer *buffer, const char *expected_ident) {
             fwrite(buf, 1, read_bytes, tmp);
         }
         fclose(tmp);
-        exit(1);
+        abort();
     }
     return header;
 }
@@ -413,7 +413,7 @@ void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
         }
         default: {
             GLog_Error("Unsupported data type: %s", HKTAGTYPE_NAMES[type->data_type]);
-            exit(1);
+            abort();
         };
     }
     fprintf(out, "\n");
@@ -478,7 +478,7 @@ bool read_type_identity(MemoryBuffer *mb, DynamicArray_HKTagType *types, const D
     const uint32 type_count = read_compressed_int(buffer);
     if (type_count == 0) {
         GLog_Error("Type count is zero");
-        exit(1);
+        abort();
     }
     DA_init(types, HKTagType, type_count);
     types->count = type_count;
@@ -689,7 +689,7 @@ bool IndexTag_from_buffer(TagFile *tf, Buffer *buffer) {
 
     if (memcmp(index_header.ident, "INDX", 4) != 0) {
         GLog_Error(": Invalid INDX tag ident: %.4s", index_header.ident);
-        exit(1);
+        abort();
     }
     MemoryBuffer *mb = MemoryBuffer_new();
     CHUNK_SLICE(buffer, mb, "ITEM", FAILED);
@@ -758,7 +758,7 @@ HK_SDKVersion TagFile_get_sdk_version(TagFile *tf) {
     }
 
     printf("[ERROR]: Unsupported SDK version: %.8s\n", tf->ver);
-    exit(1);
+    abort();
 }
 
 void TagFile_free(TagFile *tf) {

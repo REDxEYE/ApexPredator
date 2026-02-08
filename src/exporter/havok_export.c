@@ -284,7 +284,7 @@ GL_ID export_skeleton(AppState* app_state, const hkaSkeleton *skeleton) {
         CHECK_GLTF_STATE(&app_state->gltf_context);
     GLTFContext *context = &app_state->gltf_context;
 
-    const GL_ID skeleton_root = GLTFContext_node_add(context, skeleton->name.m_data);
+    const GL_ID skeleton_root = GLTFContext_node_add(context, skeleton->name.m_data, true);
     const GL_ID skin_id = GLTFContext_skin_new(context, "root", skeleton->bones.m_size);
     GLTFContext_skin_set_skeleton(context, skin_id, skeleton_root);
 
@@ -297,7 +297,7 @@ GL_ID export_skeleton(AppState* app_state, const hkaSkeleton *skeleton) {
 
     for (int i = 0; i < skeleton->bones.m_size; ++i) {
         const hkaBone *bone = &skeleton->bones.m_data[i];
-        const GL_ID bone_node = GLTFContext_node_add(context, bone->name.m_data);
+        const GL_ID bone_node = GLTFContext_node_add(context, bone->name.m_data, true);
         GLTFContext_skin_set_joint(context, skin_id, i, bone_node);
         DA_append(&bone_ids, &bone_node);
         const int16 bone_parent_id = skeleton->parentIndices.m_data[i];

@@ -21,22 +21,22 @@ void mount_archive(const ArchiveManager *manager, const uint32 hash) {
         return;
     }
     MemoryBuffer mb = {0};
+    StringView file_name = find_name32_sv(hash);
     if (!ArchiveManager_get_file_by_hash(manager, hash, &mb)) {
-        StringView file_name = find_name32(hash);
         if (sv_is_not_null(file_name)) {
             GLog_Error("File \"%s\" not found", StringView_cstr(file_name));
         }
         else {
             GLog_Error("File 0x%08X not found", hash);
         }
-        Buffer_close((Buffer*)&mb);
+        Buffer_close((Buffer *) &mb);
         return;
     }
     if (memcmp(mb.data, AAF_MAGIC, 4) == 0) {
-        StringView file_name = find_name32(hash);
         if (sv_is_not_null(file_name)) {
             GLog_Info("Mounting AAF archive \"%s\"", StringView_cstr(file_name));
-        }else {
+        }
+        else {
             GLog_Info("Mounting AAF archive with hash 0x%08X", hash);
         }
         AAFArchive aaf_archive = {0};
@@ -44,31 +44,26 @@ void mount_archive(const ArchiveManager *manager, const uint32 hash) {
         MemoryBuffer *section_buffer = MemoryBuffer_new();
         if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
             GLog_Error("Failed to get AAF section 0");
-            Buffer_close((Buffer*)&mb);
+            Buffer_close((Buffer *) &mb);
             return;
         }
 
         SArchive *sarc = SArchive_new((Buffer *) section_buffer, hash); // sarc is now owner of buffer
         ArchiveManager_add(manager, (Archive *) sarc);
         AAFArchive_free(&aaf_archive);
-        Buffer_close((Buffer*)&mb);
+        Buffer_close((Buffer *) &mb);
     }
 }
 
 
-GL_ID export_file(AppState* app_state, const StringView path, uint32 hash) {
+GL_ID export_file(AppState *app_state, uint32 hash) {
     CHECK_GLTF_STATE(&app_state->gltf_context);
-
+    StringView path = find_name32_sv(hash);
     GLog_Info("Exporting file: %s", sv_is_not_null(path) ? StringView_cstr(path) : "unknown");
     MemoryBuffer mb = {0};
     if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, hash, &mb)) {
         if (sv_is_not_null(path)) {
             GLog_Error("File \"%s\" not found", StringView_cstr(path));
-            return INVALID_GL_ID;
-        }
-        StringView file_name = find_name32(hash);
-        if (sv_is_not_null(file_name)) {
-            GLog_Error("File \"%s\" not found", StringView_cstr(file_name));
             return INVALID_GL_ID;
         }
         GLog_Error("File 0x%08X not found", hash);
@@ -77,7 +72,7 @@ GL_ID export_file(AppState* app_state, const StringView path, uint32 hash) {
     GL_ID output_node_id = INVALID_GL_ID;
 
     if (memcmp(mb.data, ADF_MAGIC, 4) == 0) {
-        output_node_id = export_adf_file_from_buffer(app_state, hash, path, &mb);
+        output_node_id = export_adf_file_from_buffer(app_state, hash, &mb);
     }
     else if (memcmp(mb.data, AAF_MAGIC, 4) == 0) {
         AAFArchive aaf_archive = {0};
@@ -94,7 +89,7 @@ GL_ID export_file(AppState* app_state, const StringView path, uint32 hash) {
         AAFArchive_free(&aaf_archive);
     }
     else if (memcmp(mb.data, AVTX_MAGIC, 4) == 0) {
-        export_ddsc(app_state, hash, &mb, path);
+        export_ddsc(app_state, hash, &mb);
     }
     else if (memcmp(mb.data, RTPC_MAGIC, 4) == 0) {
         RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) &mb);
@@ -107,7 +102,7 @@ GL_ID export_file(AppState* app_state, const StringView path, uint32 hash) {
         // String_init(&epe_json, 8192);
         // RuntimeNode_emit_json(root_node, &epe_json, 0);
         // printf("%s\n", String_data(&epe_json));
-        output_node_id = export_epe(app_state, root_node, hash, path);
+        output_node_id = export_epe(app_state, root_node, hash);
         RuntimeNode_free(root_node);
     }
     else if (memcmp(mb.data + 4, "TAG0", 4) == 0) {

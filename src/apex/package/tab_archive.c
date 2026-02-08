@@ -75,7 +75,7 @@ TabArchive *TabArchive_new(const String *path) {
     TabArchive *ar = mp_malloc(sizeof(TabArchive));
     if (ar == NULL) {
         GLog_Error("Failed to allocate memory for TabArchive");
-        exit(1);
+        abort();
     }
     memset(ar, 0, sizeof(TabArchive));
     TabArchive__init_interface(ar);

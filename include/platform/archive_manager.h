@@ -27,11 +27,7 @@ void ArchiveManager_set_archive_loader_function(ArchiveManager *manager, load_ar
 
 void ArchiveManager_add(const ArchiveManager *manager, Archive *archive);
 
-bool ArchiveManager_get_file(const ArchiveManager *manager, StringView path, MemoryBuffer *mb);
-
 bool ArchiveManager_get_file_by_hash(const ArchiveManager *manager, uint32 path, MemoryBuffer *mb);
-
-bool ArchiveManager_has_file(const ArchiveManager *manager, StringView path);
 
 bool ArchiveManager_has_file_by_hash(const ArchiveManager *manager, uint32 hash);
 

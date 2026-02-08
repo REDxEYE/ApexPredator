@@ -47,7 +47,10 @@ typedef struct {
 
     uint32 total_size;
 
-    uint32 unk[5];
+    uint32 m_MetaDataOffset;
+    uint32 m_FlagField;
+    uint32 m_IncludedLibraries;
+    uint64 gap;
 } ADFHeader;
 
 typedef struct {

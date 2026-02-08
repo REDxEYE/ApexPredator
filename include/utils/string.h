@@ -39,6 +39,7 @@ String *String_from_cstr(String *string, const char *str);
 
 String *String_from_cstr2(String *string, const char *str, uint32 len);
 
+
 const char *String_cstr(const String *string);
 
 char *String_data(String *string);

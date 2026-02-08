@@ -50,7 +50,7 @@ bool SArchive__get_file_by_hash(const SArchive *archive, const uint32 hash, Memo
 }
 
 const String *SArchive__get_name(const SArchive *archive) {
-    StringView name = find_name32(archive->hash);
+    StringView name = find_name32_sv(archive->hash);
     if (sv_is_null(name)) {
         String* tmp_name = String_new(32);
         String_format(tmp_name, "SARC 0x%08X", archive->hash);
@@ -105,7 +105,7 @@ SArchive *SArchive_new(Buffer *buffer, uint32 self_hash) {
     SArchive *archive = mp_calloc(sizeof(SArchive), 1);
     if (archive == NULL) {
         GLog_Error("Failed to allocate memory");
-        exit(1);
+        abort();
     }
     SArchive_init(archive, buffer, self_hash);
     return archive;

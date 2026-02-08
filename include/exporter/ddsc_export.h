@@ -8,12 +8,9 @@
 #include "platform/texture.h"
 #include "utils/string_view.h"
 
-Texture* convert_ddsc(AppState* app_state, StringView path);
+Texture* convert_ddsc(AppState* app_state, uint32 hash);
 
-String* export_ddsc_to_file(const AppState* app_state, StringView path, const String *export_path);
-
-void export_ddsc(AppState* app_state, uint32 hash, MemoryBuffer *mb,
-                 StringView path);
+void export_ddsc(AppState* app_state, uint32 hash, MemoryBuffer *mb);
 
 
 #endif //APEXPREDATOR_DDSC_EXPORT_H

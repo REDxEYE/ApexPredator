@@ -8,20 +8,36 @@
 
 #define AVTX_MAGIC "AVTX"
 
+#pragma pack(push, 1)
+typedef struct {
+    uint32 offset;
+    uint32 size;
+    uint16 alignment;
+    uint8 tile_mode;
+    uint8 source;
+}AVTXStream;
+
 typedef struct {
     char ident[4];
-    uint16 version;
-    uint8 unk0;
+    uint8 version;
+    uint8 platform;
+    uint8 tag;
     uint8 resource_dimensions;
     DDSDXGIFormat format;
     uint16 width, height, depth;
     uint16 flags;
     uint8 mip_count;
-    uint16 unk1;
-    uint32 unk2,unk3;
-    uint32 header_size;
-    uint32 body_size;
+    uint8 mip_resident;
+    uint8 mip_cinematic;
+    uint8 mip_bias;
+    uint8 lod_group;
+    uint8 pool;
+    uint8 reserved0[2];
+    uint32 reserved1;
+    AVTXStream streams[8];
 }AVTXHeader;
+
+#pragma pack(pop)
 
 void AVTXTexture_from_buffer(Buffer* buffer, Texture* texture);
 

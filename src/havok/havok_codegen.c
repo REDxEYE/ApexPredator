@@ -22,7 +22,7 @@ void generate_members(const Havok_TypeLibrary *lib, const HavokType *record_type
         if (member_type == NULL) {
             GLog_Error("No member type data for member %s of type %s",
                        String_cstr(&member->name), String_cstr(&record_type->name));
-            exit(1);
+            abort();
         }
 
         if (member->offset != 0) {
@@ -146,7 +146,7 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
             if (member_type == NULL) {
                 GLog_Error("No member type data for member %s of type %s",
                            String_cstr(&member->name), String_cstr(&type->name));
-                exit(1);
+                abort();
             }
             generate_type_def(lib, member_type, header_output, impl_output);
         }
@@ -193,7 +193,7 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
         }
         else {
             GLog_Error("Primitive without parent type is invalid!");
-            exit(1);
+            abort();
         }
     }
     else if (type->type == HK_BASIC) {
@@ -243,7 +243,7 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
                 }
                 default: {
                     GLog_Error("Unsupported enum size %d for type %s", type->size, String_cstr(&type->name));
-                    exit(1);
+                    abort();
                 }
             }
         }
@@ -290,7 +290,7 @@ void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE
     }
     else {
         GLog_Error("Unhandled type kind %i for type %s", type->type, String_cstr(&type->name));
-        exit(1);
+        abort();
     }
 }
 
@@ -411,7 +411,7 @@ void generate_read_function_body(Havok_TypeLibrary *lib, const HavokType *type, 
             if (member_type == NULL) {
                 GLog_Error("No member type data for member %s of type %s",
                            String_cstr(&member->name), String_cstr(&type->name));
-                exit(1);
+                abort();
             }
             if (member_type->type == HK_PTR) {
                 fprintf(impl_out, "    ptr_read((void**)&obj->%s, tf, src + %i, NULL);\n",
@@ -509,7 +509,7 @@ void generate_read_function_body(Havok_TypeLibrary *lib, const HavokType *type, 
                 }
                 default: {
                     GLog_Error("Unsupported enum size %d for type %s", type->size, String_cstr(type_name));
-                    exit(1);
+                    abort();
                 }
             }
         }
@@ -582,7 +582,7 @@ void generate_print_function_body(Havok_TypeLibrary *lib, const HavokType *type,
             if (member_type == NULL) {
                 GLog_Error("No member type data for member %s of type %s",
                            String_cstr(&member->name), String_cstr(&type->name));
-                exit(1);
+                abort();
             }
             fprintf(impl_out, "    jsonName(ctx, \"%s\");\n", String_cstr(&member->name));
             if (member_type->type == HK_PTR) {
@@ -676,7 +676,7 @@ void generate_print_function_body(Havok_TypeLibrary *lib, const HavokType *type,
                 }
                 default: {
                     GLog_Error("Unsupported enum size %d for type %s", type->size, String_cstr(type_name));
-                    exit(1);
+                    abort();
                 }
             }
         }
@@ -723,7 +723,7 @@ void generate_print_function_body(Havok_TypeLibrary *lib, const HavokType *type,
     }
     else {
         GLog_Error("Unhandled type kind %i for type %s", type->type, String_cstr(&type->name));
-        exit(1);
+        abort();
     }
 }
 
@@ -744,7 +744,7 @@ void generate_free_function_body(Havok_TypeLibrary *lib, const HavokType *type, 
             if (member_type == NULL) {
                 GLog_Error("No member type data for member %s of type %s",
                            String_cstr(&member->name), String_cstr(&type->name));
-                exit(1);
+                abort();
             }
             const bool is_complex = is_complex_type(lib, member_type);
             if (!is_complex) {
@@ -852,7 +852,7 @@ void generate_init_function_body(Havok_TypeLibrary *lib, const HavokType *type, 
             if (member_type == NULL) {
                 GLog_Error("No member type data for member %s of type %s",
                            String_cstr(&member->name), String_cstr(&type->name));
-                exit(1);
+                abort();
             }
             if (member_type->type == HK_RECORD) {
                 if (member_type->members.count == 0 && member_type->parent_hash == 0) {
