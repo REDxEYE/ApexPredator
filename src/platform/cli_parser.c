@@ -4,6 +4,7 @@
 
 #include <errno.h>
 
+#include "utils/path.h"
 
 
 const char *command_argument_type_names[] = {
@@ -648,13 +649,10 @@ static void cli_print_one_arg(FILE *out, const CommandArgument *a) {
 }
 
 void cli_print_help(const CliSpec *spec, const char *exe_path, FILE *out) {
-    const bool is_posix_path = strchr(exe_path, '/') != NULL;
-    const uint32 last_slash = is_posix_path
-                                  ? (uint32) (strrchr(exe_path, '/') - exe_path + 1)
-                                  : (uint32) (strrchr(exe_path, '\\') - exe_path + 1);
-    const char *exe_name = exe_path + last_slash;
+    String exe_ = {0};
+    Path_filename_sv(StringView_from_cstr(exe_path), &exe_);
 
-    const char *prog = spec->prog ? spec->prog : exe_name;
+    const char *prog = spec->prog ? spec->prog : String_cstr(&exe_);
 
     fprintf(out, "%s <command> [arguments]\n\n", prog);
 
@@ -669,4 +667,5 @@ void cli_print_help(const CliSpec *spec, const char *exe_path, FILE *out) {
             cli_print_one_arg(out, &cmd->arguments[ai]);
         }
     }
+    String_free(&exe_);
 }

@@ -26,7 +26,7 @@
 #  define PATH_NATIVE_SEP '/'
 #endif
 
-static int Path__is_sep(char c) { return c == '/' || c == '\\'; }
+static int Path__is_sep(const char c) { return c == '/' || c == '\\'; }
 
 /*
   Returns the index after any root/prefix so mkdir starts at the right component.
