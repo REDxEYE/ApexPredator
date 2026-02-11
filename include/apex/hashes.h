@@ -24,6 +24,7 @@ void store_hash64_name(uint64 key, const String* value);
 
 void store_file_parent(uint64 key, const String* path, uint64 parent);
 void store_file_parent_sv(uint64 key, StringView path, uint64 parent);
+void search_vparent_table(const char *pattern, char ***result, uint32 *count);
 bool get_file_parent(uint64 key, uint64 *out_parent, String **out_path);
 
 #endif //APEXPREDATOR_HASHES_H

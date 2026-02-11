@@ -138,16 +138,18 @@ SET(CommonFiles
 )
 
 add_executable(ApexPredator
-        src/tools/apex_predator.c
+        src/tools/apex_predator/apex_predator.c
+        src/tools/apex_predator/commands.c
         src/exporter/adf_export.c
         src/exporter/amf_export.c
         src/exporter/common_export.c
         src/exporter/ddsc_export.c
         src/exporter/epe_export.c
         src/exporter/havok_export.c
-        ${CommonFiles}
         src/exporter/export_fmod.c
-        include/exporter/export_fmod.h
+
+        ${CommonFiles}
+
 )
 
 add_executable(AdfTypeGenerator

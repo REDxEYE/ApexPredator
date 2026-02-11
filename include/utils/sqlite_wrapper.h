@@ -5,6 +5,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "int_def.h"
+
 typedef struct assetdb assetdb_t;
 
 typedef enum kv_status {
@@ -32,6 +34,8 @@ assetdb_status_t assetdb_kv_del_u32(assetdb_t *db, uint32_t key);
 assetdb_status_t kv_vp_put_u64(assetdb_t *db, uint64_t child, uint64_t parent, const char *path);
 assetdb_status_t kv_vp_get_u64(assetdb_t *db, uint64_t child, uint64_t *out_parent, const char **out_path, size_t *out_path_len); /* db owned data */
 assetdb_status_t kv_vp_del_u64(assetdb_t *db, uint64_t child);
+
+assetdb_status_t kv_vp_search(assetdb_t *db, const char *pattern, char ***result, uint32* out_count);
 
 const char *assetdb_last_error(const assetdb_t *db);
 int         assetdb_last_sqlite_code(const assetdb_t *db);

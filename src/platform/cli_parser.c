@@ -420,16 +420,15 @@ CliStatus cli_parse(const CliSpec *spec, CliResult *out, int argc, const char *a
 
     if (!spec || !spec->commands || spec->command_count == 0) return CLI_EUSAGE;
     if (argc < 3) {
-        if (out_err_tok) *out_err_tok = "expected <game_root> <command>";
+        if (out_err_tok) *out_err_tok = "expected <command>";
         return CLI_EUSAGE;
     }
 
     out->exe_path = argv[0];
-    out->game_root = argv[1];
 
-    const SubCommand *cmd = cli_find_cmd(spec, argv[2]);
+    const SubCommand *cmd = cli_find_cmd(spec, argv[1]);
     if (!cmd) {
-        if (out_err_tok) *out_err_tok = argv[2];
+        if (out_err_tok) *out_err_tok = argv[1];
         return CLI_EUNKNOWN_CMD;
     }
 
@@ -448,7 +447,7 @@ CliStatus cli_parse(const CliSpec *spec, CliResult *out, int argc, const char *a
     const char **pos = NULL;
     size_t pos_count = 0, pos_cap = 0;
 
-    for (int i = 3; i < argc; ++i) {
+    for (int i = 2; i < argc; ++i) {
         const char *tok = argv[i];
 
         if (!strcmp(tok, "--")) {
@@ -656,9 +655,8 @@ void cli_print_help(const CliSpec *spec, const char *exe_path, FILE *out) {
     const char *exe_name = exe_path + last_slash;
 
     const char *prog = spec->prog ? spec->prog : exe_name;
-    const char *root = (spec->root_name) ? spec->root_name : "game path";
 
-    fprintf(out, "%s <%s> <command> [arguments]\n\n", prog, root);
+    fprintf(out, "%s <command> [arguments]\n\n", prog);
 
     fprintf(out, "Available commands:\n");
     for (size_t ci = 0; ci < spec->command_count; ++ci) {

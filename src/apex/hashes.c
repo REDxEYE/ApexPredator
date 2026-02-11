@@ -9,13 +9,13 @@
 #include "utils/sqlite_wrapper.h"
 
 static assetdb_t *assets_db;
-static const char* db_path = "./hashes.db";
+static const char *db_path = "./hashes.db";
 
-void set_db_path(const char* path) {
+void set_db_path(const char *path) {
     db_path = path;
 }
 
-const char* get_db_path() {
+const char *get_db_path() {
     return db_path;
 }
 
@@ -62,7 +62,7 @@ StringView find_name64_sv(const uint64 key) {
     return StringView_from_cstr2(value, value_len);
 }
 
-String * find_name32(const uint32 key) {
+String *find_name32(const uint32 key) {
     const char *value = NULL;
     size_t value_len;
     const assetdb_status_t status = assetdb_kv_get_u64_view(get_assets_db(), key, &value, &value_len);
@@ -73,7 +73,7 @@ String * find_name32(const uint32 key) {
     return result;
 }
 
-String * find_name64(const uint64 key) {
+String *find_name64(const uint64 key) {
     const char *value = NULL;
     size_t value_len;
     const assetdb_status_t status = assetdb_kv_get_u64_view(get_assets_db(), key, &value, &value_len);
@@ -119,11 +119,19 @@ void store_file_parent(const uint64 key, const String *path, const uint64 parent
         GLog_Error("Failed to store file parent for key %llu: %d", key, status);
     }
 }
+
 void store_file_parent_sv(const uint64 key, const StringView path, const uint64 parent) {
     const assetdb_status_t status =
             kv_vp_put_u64(get_assets_db(), key, parent, sv_is_not_null(path) ? StringView_cstr(path) : NULL);
     if (status != KV_OK) {
         GLog_Error("Failed to store file parent for key %llu: %d", key, status);
+    }
+}
+
+void search_vparent_table(const char *pattern, char ***result, uint32 *count) {
+    const assetdb_status_t status = kv_vp_search(get_assets_db(), pattern, result, count);
+    if (status != KV_OK) {
+        GLog_Error("Failed to search vparent table with pattern '%s': %d", pattern, status);
     }
 }
 

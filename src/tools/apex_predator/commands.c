@@ -1,213 +1,31 @@
-#include <stdio.h>
+// Created by RED on 12.02.2026.
+#include "commands.h"
 
-#include "exporter/havok_export.h"
-#include "platform/app_state.h"
-#include "platform/cli_parser.h"
-#include "utils/common.h"
-
-
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "Windows.h"
-#else
-#include <unistd.h>
-#endif
-
-#include "havok/generated/havok_generated.h"
 #include "apex/hashes.h"
-#include "apex/adf/adf_types.h"
-#include "apex/package/tab_archive.h"
-#include "havok/havok_codegen.h"
-#include "platform/archive_manager.h"
+#include "exporter/common_export.h"
+#include "exporter/havok_export.h"
+#include "havok/havok_helpers.h"
+#include "havok/generated/havok_generated.h"
+#include "havok/tag_file/havok_tag_file.h"
+#include "platform/logger.h"
+#include "utils/common.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"
-#include "utils/string.h"
-#include "utils/gltf/cgltf_helper.h"
-
-#include "exporter/amf_export.h"
-#include "exporter/common_export.h"
-#include "platform/logger.h"
-#include "utils/memory_tracker.h"
-
-#include "tracy/TracyC.h"
-
-const CommandArgument extract_arguments[] = {
-    {
-        .name = "paths",
-        .flag = NULL,
-        .description = "Paths to the assets to extract.",
-        .type = COMMAND_ARG_TYPE_ARRAY_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "no_textures",
-        .flag = "n",
-        .description = "Don't export textures.",
-        .type = COMMAND_ARG_TYPE_BOOL,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .bool_value = false,
-    },
-    {
-        .name = "raw",
-        .flag = "r",
-        .description = "Export raw data without converting to glTF.",
-        .type = COMMAND_ARG_TYPE_BOOL,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .bool_value = false,
-    },
-    {
-        .name = "out_dir",
-        .flag = "o",
-        .description = "Output directory for extracted assets.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./extracted",
-    },
-    {
-        .name = "db_path",
-        .flag = "d",
-        .description =
-        "Path to the hashes.db file for resolving asset paths from hashes. Required if using hashes instead of paths.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./hashes.db",
-    }
-};
-
-const CommandArgument extract_anim_arguments[] = {
-    {
-        .name = "skeleton-path",
-        .description = "Path(or hash) to the Havok animation container file containing the skeleton.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "animations",
-        .description = "Paths(or hashes) to the Havok animation container files to extract animations from.",
-        .type = COMMAND_ARG_TYPE_ARRAY_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "out_dir",
-        .flag = "o",
-        .description = "Output directory for extracted animations.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./extracted",
-    },
-    {
-        .name = "db_path",
-        .flag = "d",
-        .description =
-        "Path to the hashes.db file for resolving asset paths from hashes. Required if using hashes instead of paths.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./hashes.db",
-    }
-};
-
-const SubCommand sub_commands[] = {
-    {
-        .name = "extract",
-        .description = "Extract assets.",
-        .execute = NULL,
-        .argument_count = sizeof(extract_arguments) / sizeof(CommandArgument),
-        .arguments = extract_arguments,
-    },
-    {
-        .name = "extract-anims",
-        .description = "Extract animations from a Havok animation container.",
-        .execute = NULL,
-        .argument_count = sizeof(extract_anim_arguments) / sizeof(CommandArgument),
-        .arguments = extract_anim_arguments,
-    }
-};
 
 const CliSpec cli_spec = {
     .prog = NULL,
-    .root_name = "game_root",
-    .root_desc = "Path to the root directory of the game installation.",
     .commands = sub_commands,
     .command_count = sizeof(sub_commands) / sizeof(SubCommand),
 };
 
-
-int main(int argc, const char *argv[]) {
-    mp_init();
-    CliResult cli_res;
-    const char *cli_error;
-    const CliStatus cli_status = cli_parse(&cli_spec, &cli_res, argc, argv, &cli_error);
-    if (cli_status != CLI_OK) {
-        cli_print_help(&cli_spec, argv[0], stdout);
-        if (cli_error) {
-            GLog_Error("Error parsing command line: %s", cli_error);
-        }
-        else {
-            GLog_Error("Error parsing command line.");
-        }
-        mp_shutdown();
-        cli_free(&cli_res);
-        return -1;
-    }
-    //     while (!TracyCIsConnected) {
-    // #ifdef _WIN32
-    //         Sleep(100); /* Windows */
-    // #else
-    //         usleep(10000);
-    // #endif
-    //         printf("\rWaiting for tracy;");
-    //     }
-    printf("\n");
-    TracyCZoneN(ctx, "App", 1);
-
-    String db_path = {0};
-    cli_get_string(&cli_res, "db_path", &db_path);
-    set_db_path(String_cstr(&db_path));
-
-    AppState app_state = {};
-
-    ArchiveManager_init(&app_state.archive_manager);
-    ArchiveManager_set_archive_loader_function(&app_state.archive_manager, mount_archive);
-
-    STI_ADF_TYPES_register_functions();
-    HAVOK_TYPES_register_functions();
-
-    String_from_cstr(&app_state.game_root, cli_res.game_root);
-    Path_convert_to_wsl(&app_state.game_root);
-    Path_normalize_native(&app_state.game_root);
-
-    cli_get_string(&cli_res, "out_dir", &app_state.export_path);
-    Path_convert_to_wsl(&app_state.export_path);
-    Path_normalize_native(&app_state.export_path);
-
-    TabArchives_init(&app_state.archive_manager, &app_state.game_root);
-
-    if (strcmp(cli_res.cmd->name, "extract") == 0) {
-        cli_get_bool(&cli_res, "export_textures", &app_state.export_textures);
+void extract_handler(AppState *app_state, const CliResult *cli_res) {
+    cli_get_bool(cli_res, "export_textures", &app_state->export_textures);
         bool raw_export = false;
-        cli_get_bool(&cli_res, "raw", &raw_export);
+        cli_get_bool(cli_res, "raw", &raw_export);
 
         const char **file_paths = NULL;
         size_t file_path_count = 0;
-        cli_get_array_string(&cli_res, "paths", &file_paths, &file_path_count);
+        cli_get_array_string(cli_res, "paths", &file_paths, &file_path_count);
         for (int file_id = 0; file_id < file_path_count; ++file_id) {
             String file_path = {0};
             String save_path = {0};
@@ -215,12 +33,12 @@ int main(int argc, const char *argv[]) {
             String_from_cstr(&file_path, file_paths[file_id]);
             if (raw_export) {
                 Path_normalize_posix(&file_path);
-                String_copy_from(&save_path, &app_state.export_path);
+                String_copy_from(&save_path, &app_state->export_path);
                 Path_join(&save_path, &file_path);
                 Path_ensure_parent_dirs(&save_path);
 
                 MemoryBuffer mb = {0};
-                if (!ArchiveManager_get_file_by_hash(&app_state.archive_manager, hash_string(&file_path), &mb)) {
+                if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, hash_string(&file_path), &mb)) {
                     GLog_Error("File not found: %s", file_paths[file_id]);
                     String_free(&file_path);
                     String_free(&save_path);
@@ -242,26 +60,27 @@ int main(int argc, const char *argv[]) {
                 String_free(&save_path);
             }
             else {
-                GLTFContext_init(&app_state.gltf_context, "root");
+                GLTFContext_init(&app_state->gltf_context, "root");
 
                 Path_normalize_posix(&file_path);
-                String_copy_from(&save_path, &app_state.export_path);
+                String_copy_from(&save_path, &app_state->export_path);
                 Path_join(&save_path, &file_path);
                 Path_replace_extension_inplace(&save_path, "gltf");
-                GLTFContext_set_save_path(&app_state.gltf_context, &save_path);
+                GLTFContext_set_save_path(&app_state->gltf_context, &save_path);
 
-                export_file(&app_state, hash_string(&file_path));
+                export_file(app_state, hash_string(&file_path));
 
-                GLTFContext_write_and_free(&app_state.gltf_context);
+                GLTFContext_write_and_free(&app_state->gltf_context);
             }
             String_free(&file_path);
             String_free(&save_path);
         }
-    }
-    else if (strcmp(cli_res.cmd->name, "extract-anims") == 0) {
-        const char *skeleton_path_cstr = NULL;
+}
 
-        cli_get_cstring(&cli_res, "skeleton-path", &skeleton_path_cstr);
+void extract_anims_handler(AppState *app_state, const CliResult *cli_res) {
+    const char *skeleton_path_cstr = NULL;
+
+        cli_get_cstring(cli_res, "skeleton-path", &skeleton_path_cstr);
         uint32 skeleton_path_hash = 0;
         if (is_hex(skeleton_path_cstr)) {
             skeleton_path_hash = parse_hex_u32(skeleton_path_cstr);
@@ -278,9 +97,9 @@ int main(int argc, const char *argv[]) {
         }
 
         MemoryBuffer mb = {0};
-        if (!ArchiveManager_get_file_by_hash(&app_state.archive_manager, skeleton_path_hash, &mb)) {
+        if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, skeleton_path_hash, &mb)) {
             GLog_Error("Skeleton file not found: %s", skeleton_path_cstr);
-            goto END_CLEANUP;
+            return;
         }
 
         TagFile skeleton_tag_file = {0};
@@ -292,7 +111,7 @@ int main(int argc, const char *argv[]) {
         else {
             GLog_Error("Skeleton file is not a valid Havok TAG0 file.");
             Buffer_close((Buffer *) &mb);
-            goto END_CLEANUP;
+            return;
         }
 
         TypedPtr *skeleton_item = TagFile_get_item(&skeleton_tag_file, 0);
@@ -301,7 +120,7 @@ int main(int argc, const char *argv[]) {
         INVALID_SKELETON_CLEANUP:
             TagFile_free_item(skeleton_item);
             TagFile_free(&skeleton_tag_file);
-            goto END_CLEANUP;
+            return;
         }
 
         const hkRootLevelContainer *root_container = (hkRootLevelContainer *) skeleton_item;
@@ -318,7 +137,7 @@ int main(int argc, const char *argv[]) {
 
         const char **file_paths = NULL;
         size_t file_path_count = 0;
-        cli_get_array_string(&cli_res, "animations", &file_paths, &file_path_count);
+        cli_get_array_string(cli_res, "animations", &file_paths, &file_path_count);
 
         for (int file_id = 0; file_id < file_path_count; ++file_id) {
             const char *animation_path_cstr = file_paths[file_id];
@@ -336,7 +155,7 @@ int main(int argc, const char *argv[]) {
                 animation_path_hash = hash_string(&animation_path_tmp);
             }
 
-            if (!ArchiveManager_get_file_by_hash(&app_state.archive_manager, animation_path_hash, &mb)) {
+            if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, animation_path_hash, &mb)) {
                 GLog_Error("Animation file not found: %s", animation_path_cstr);
                 continue;
             }
@@ -383,35 +202,40 @@ int main(int argc, const char *argv[]) {
                 Path_filename_sv(animation_path_tmp, &anim_file_name);
             }
 
-            GLTFContext_init(&app_state.gltf_context, String_cstr(&anim_file_name));
+            GLTFContext_init(&app_state->gltf_context, String_cstr(&anim_file_name));
             String_free(&anim_file_name);
 
-            export_animation(&app_state, binding, skeleton, animation_path_tmp);
+            export_animation(app_state, binding, skeleton, animation_path_tmp);
 
             String export_file_path = {0};
-            String_copy_from(&export_file_path, &app_state.export_path);
+            String_copy_from(&export_file_path, &app_state->export_path);
             Path_join_sv(&export_file_path, animation_path_tmp);
             Path_ensure_parent_dirs(&export_file_path);
             Path_replace_extension_inplace(&export_file_path, "gltf");
-            GLTFContext_set_save_path(&app_state.gltf_context, &export_file_path);
+            GLTFContext_set_save_path(&app_state->gltf_context, &export_file_path);
             String_free(&export_file_path);
 
-            GLTFContext_write_and_free(&app_state.gltf_context);
+            GLTFContext_write_and_free(&app_state->gltf_context);
 
             TagFile_free_item(anim_item);
             TagFile_free(&anim_tag_file);
         }
         TagFile_free_item(skeleton_item);
         TagFile_free(&skeleton_tag_file);
+}
+
+void search_handler(AppState *app_state, const CliResult *cli_res) {
+    const char *query_cstr = NULL;
+    cli_get_cstring(cli_res, "query", &query_cstr);
+    char **results = NULL;
+    uint32 count = 0;
+    search_vparent_table(query_cstr, &results, &count);
+    if (count > 0 && results != NULL) {
+        printf("Search results(%u found) for query \"%s\":\n", count, query_cstr);
+        for (int i = 0; i < count; ++i) {
+            printf("  %s\n", results[i]);
+            mp_free(results[i]);
+        }
+        mp_free(results);
     }
-END_CLEANUP:
-    ArchiveManager_free(&app_state.archive_manager);
-    // STI_TypeLibrary_free(&lib);
-    DM_free(&HAVOK_TYPES_type_info);
-    DM_free(&ADF_TYPES_type_info);
-    cli_free(&cli_res);
-    close_assets_db();
-    AppState_free(&app_state);
-    TracyCZoneEnd(ctx);
-    return 0;
 }

@@ -74,10 +74,6 @@ void export_spline_compressed_animation(AppState* app_state, const hkaSplineComp
         DA_init(&rotations, versor, spline_animation->numFrames);
         DA_init(&scales, vec3, spline_animation->numFrames);
 
-        // vec3 position_min = {999999.f}, position_max = {-999999.f};
-        // versor rotation_min = {999999.f}, rotation_max = {-999999.f};
-        // vec3 scale_min = {0999999.f}, scale_max = {-999999.f};
-
         for (int frame_id = 0; frame_id < spline_animation->numFrames; ++frame_id) {
             uint32 block_id = frame_id/spline_animation->maxFramesPerBlock;
 
@@ -89,32 +85,6 @@ void export_spline_compressed_animation(AppState* app_state, const hkaSplineComp
             const TransformSplineBlock *block = &decompressor.blocks.items[block_id];
             QTransform transform = {0};
             TransformSplineBlock_get_value(block, track_id, local_frame, &transform);
-
-            // if (transform.translation[0] > position_max[0]) position_max[0] = transform.translation[0];
-            // if (transform.translation[1] > position_max[1]) position_max[1] = transform.translation[1];
-            // if (transform.translation[2] > position_max[2]) position_max[2] = transform.translation[2];
-            //
-            // if (transform.translation[0] < position_min[0]) position_min[0] = transform.translation[0];
-            // if (transform.translation[1] < position_min[1]) position_min[1] = transform.translation[1];
-            // if (transform.translation[2] < position_min[2]) position_min[2] = transform.translation[2];
-            //
-            // if (transform.rotation[0] > rotation_max[0]) rotation_max[0] = transform.rotation[0];
-            // if (transform.rotation[1] > rotation_max[1]) rotation_max[1] = transform.rotation[1];
-            // if (transform.rotation[2] > rotation_max[2]) rotation_max[2] = transform.rotation[2];
-            // if (transform.rotation[3] > rotation_max[3]) rotation_max[3] = transform.rotation[3];
-            //
-            // if (transform.rotation[0] < rotation_min[0]) rotation_min[0] = transform.rotation[0];
-            // if (transform.rotation[1] < rotation_min[1]) rotation_min[1] = transform.rotation[1];
-            // if (transform.rotation[2] < rotation_min[2]) rotation_min[2] = transform.rotation[2];
-            // if (transform.rotation[3] < rotation_min[3]) rotation_min[3] = transform.rotation[3];
-            //
-            // if (transform.scale[0] > scale_max[0]) scale_max[0] = transform.scale[0];
-            // if (transform.scale[1] > scale_max[1]) scale_max[1] = transform.scale[1];
-            // if (transform.scale[2] > scale_max[2]) scale_max[2] = transform.scale[2];
-            //
-            // if (transform.scale[0] < scale_min[0]) scale_min[0] = transform.scale[0];
-            // if (transform.scale[1] < scale_min[1]) scale_min[1] = transform.scale[1];
-            // if (transform.scale[2] < scale_min[2]) scale_min[2] = transform.scale[2];
 
             DA_append(&positions, &transform.translation);
             DA_append(&rotations, &transform.rotation);
@@ -149,10 +119,6 @@ void export_spline_compressed_animation(AppState* app_state, const hkaSplineComp
         DA_free(&positions);
         DA_free(&rotations);
         DA_free(&scales);
-
-        // GLTFContext_accessor_set_minmax(context, positions_accessor, position_min, position_max);
-        // GLTFContext_accessor_set_minmax(context, rotations_accessor, rotation_min, rotation_max);
-        // GLTFContext_accessor_set_minmax(context, scales_accessor, scale_min, scale_max);
 
         const GL_ID positions_sampler = GLTFContext_animation_sampler_new(context, animation_id,
                                                                           cgltf_interpolation_type_linear,

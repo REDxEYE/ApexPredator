@@ -11,7 +11,9 @@
 #include "utils/memory_profiling.h"
 #include "utils/string.h"
 
-typedef void (*execute_fn)(int argc, const char *argv[]);
+typedef struct CliResult CliResult;
+
+typedef void (*execute_fn)(void* user_state, const CliResult* result);
 
 typedef enum CommandArgumentType {
     COMMAND_ARG_TYPE_STRING,
@@ -76,8 +78,6 @@ typedef enum CliStatus {
 
 typedef struct CliSpec {
     const char *prog;              /* e.g. "ApexPredator.exe" (optional; fallback argv[0]) */
-    const char *root_name;         /* e.g. "game path" (help text only) */
-    const char *root_desc;         /* description in help (optional) */
 
     const SubCommand *commands;
     size_t command_count;
@@ -85,7 +85,6 @@ typedef struct CliSpec {
 
 typedef struct CliResult {
     const char *exe_path;
-    const char *game_root;
     const SubCommand *cmd;
 
     uint32_t arg_count;
@@ -112,80 +111,6 @@ bool cli_get_array_string(const CliResult *r, const char *name, const char ***ou
 bool cli_get_array_int(const CliResult *r, const char *name, const int **out, size_t *count);
 
 bool cli_get_array_float(const CliResult *r, const char *name, const float **out, size_t *count);
-
-// void cli_print_help(int argc, const char *argv[]) {
-//     const bool is_posix_path = strchr(argv[0], '/') != NULL;
-//     const uint32 last_slash = is_posix_path
-//                                   ? (uint32) (strrchr(argv[0], '/') - argv[0] + 1)
-//                                   : (uint32) (strrchr(argv[0], '\\') - argv[0] + 1);
-//     const char *exe_name = argv[0] + last_slash;
-//
-//     printf("%s <game path> <command> [options]\n\n", exe_name);
-//     printf("Available commands:\n");
-//     for (size_t i = 0; i < sizeof(sub_commands) / sizeof(SubCommand); ++i) {
-//         const SubCommand *sub_command = &sub_commands[i];
-//         printf("  %s: %s\n", sub_command->name, sub_command->description);
-//         printf("    Arguments:\n");
-//         for (int arg_id = 0; arg_id < sub_command->argument_count; ++arg_id) {
-//             const CommandArgument *arg = &sub_command->arguments[arg_id];
-//             printf("      ");
-//             if (!arg->required) {
-//                 printf("[");
-//             }
-//             if (arg->named) {
-//                 printf("--%s", arg->name);
-//             }
-//             else {
-//                 printf("%s", arg->name);
-//             }
-//             if (!arg->required) {
-//                 printf("]");
-//             }
-//             printf(": %s.", command_argument_type_names[arg->type]);
-//             if (arg->has_default) {
-//                 printf(" (default: ");
-//                 switch (arg->type) {
-//                     case COMMAND_ARG_TYPE_STRING:
-//                         printf("%s", arg->string_value);
-//                         break;
-//                     case COMMAND_ARG_TYPE_INT:
-//                         printf("%d", arg->int_value);
-//                         break;
-//                     case COMMAND_ARG_TYPE_FLOAT:
-//                         printf("%f", arg->float_value);
-//                         break;
-//                     case COMMAND_ARG_TYPE_BOOL:
-//                         printf("%s", arg->bool_value ? "true" : "false");
-//                         break;
-//                     case COMMAND_ARG_TYPE_ARRAY_STRING:
-//                         for (size_t j = 0; j < arg->array_string_value.count; ++j) {
-//                             if (j > 0) printf(", ");
-//                             printf("%s", arg->array_string_value.values[j]);
-//                         }
-//                         break;
-//                     case COMMAND_ARG_TYPE_ARRAY_INT:
-//                         for (size_t j = 0; j < arg->array_int_value.count; ++j) {
-//                             if (j > 0) printf(", ");
-//                             printf("%d", arg->array_int_value.values[j]);
-//                         }
-//                         break;
-//                     case COMMAND_ARG_TYPE_ARRAY_FLOAT:
-//                         for (size_t j = 0; j < arg->array_float_value.count; ++j) {
-//                             if (j > 0) printf(", ");
-//                             printf("%f", arg->array_float_value.values[j]);
-//                         }
-//                         break;
-//                 }
-//                 printf(")");
-//             }
-//             printf("\n");
-//             printf("      %s\n", arg->description);
-//
-//             printf("\n");
-//         }
-//     }
-//     printf("\n");
-// }
 
 
 static void cli_print_cmd_usage(const CliSpec *spec, const SubCommand *cmd, FILE *outf);

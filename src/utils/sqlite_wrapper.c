@@ -3,7 +3,6 @@
 #include "utils/sqlite_wrapper.h"
 
 #include <sqlite3.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "utils/memory_profiling.h"
@@ -308,6 +307,76 @@ assetdb_status_t kv_vp_del_u64(assetdb_t *db, const uint64_t child) {
     if (rc != SQLITE_DONE) return set_err(db, rc, sqlite3_errmsg(db->db));
 
     return (sqlite3_changes(db->db) > 0) ? KV_OK : KV_NOTFOUND;
+}
+
+assetdb_status_t kv_vp_search(assetdb_t *db, const char *pattern, char ***result, uint32* out_count) {
+    if (!db || !pattern || !result) return KV_EINVAL;
+    *result = NULL;
+
+    char *sql = sqlite3_mprintf(
+            "SELECT path FROM vparent WHERE path LIKE ?1 ESCAPE '\\';"
+    );
+    if (!sql) return KV_ENOMEM;
+
+    sqlite3_stmt *st = NULL;
+    assetdb_status_t stt = prepare_stmt(db, &st, sql);
+    sqlite3_free(sql);
+    if (stt != KV_OK) return stt;
+
+    int rc = sqlite3_bind_text(st, 1, pattern, -1, SQLITE_TRANSIENT);
+    if (rc != SQLITE_OK) {
+        sqlite3_finalize(st);
+        return set_err(db, rc, sqlite3_errmsg(db->db));
+    }
+
+    size_t capacity = 8;
+    size_t count = 0;
+    const char **res = (const char **) mp_malloc(capacity * sizeof(char*));
+    if (!res) {
+        sqlite3_finalize(st);
+        return KV_ENOMEM;
+    }
+
+    while ((rc = sqlite3_step(st)) == SQLITE_ROW) {
+        const unsigned char *txt = sqlite3_column_text(st, 0);
+        if (txt) {
+            if (count >= capacity) {
+                capacity *= 2;
+                const char **new_res = (const char **) mp_realloc(res, capacity * sizeof(char*));
+                if (!new_res) {
+                    mp_free(res);
+                    sqlite3_finalize(st);
+                    return KV_ENOMEM;
+                }
+                res = new_res;
+            }
+            const size_t str_size = strlen((const char*)txt) + 1;
+            res[count] = mp_malloc(str_size);
+            memcpy((char*)res[count], (const char*)txt, str_size);
+            count++;
+        }
+    }
+    sqlite3_finalize(st);
+
+    if (rc != SQLITE_DONE) {
+        mp_free(res);
+        return set_err(db, rc, sqlite3_errmsg(db->db));
+    }
+
+    // NULL-terminate the result array
+    if (count >= capacity) {
+        const char **new_res = (const char **) mp_realloc(res, (capacity + 1) * sizeof(char*));
+        if (!new_res) {
+            mp_free(res);
+            return KV_ENOMEM;
+        }
+        res = new_res;
+    }
+    res[count] = NULL;
+
+    *result = res;
+    *out_count = count;
+    return KV_OK;
 }
 
 const char *assetdb_last_error(const assetdb_t *db) {
