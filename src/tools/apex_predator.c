@@ -70,6 +70,17 @@ const CommandArgument extract_arguments[] = {
         .required = false,
         .has_default = true,
         .string_value = "./extracted",
+    },
+    {
+        .name = "db_path",
+        .flag = "d",
+        .description =
+        "Path to the hashes.db file for resolving asset paths from hashes. Required if using hashes instead of paths.",
+        .type = COMMAND_ARG_TYPE_STRING,
+        .named = true,
+        .required = false,
+        .has_default = true,
+        .string_value = "./hashes.db",
     }
 };
 
@@ -99,6 +110,17 @@ const CommandArgument extract_anim_arguments[] = {
         .required = false,
         .has_default = true,
         .string_value = "./extracted",
+    },
+    {
+        .name = "db_path",
+        .flag = "d",
+        .description =
+        "Path to the hashes.db file for resolving asset paths from hashes. Required if using hashes instead of paths.",
+        .type = COMMAND_ARG_TYPE_STRING,
+        .named = true,
+        .required = false,
+        .has_default = true,
+        .string_value = "./hashes.db",
     }
 };
 
@@ -155,6 +177,11 @@ int main(int argc, const char *argv[]) {
     //     }
     printf("\n");
     TracyCZoneN(ctx, "App", 1);
+
+    String db_path = {0};
+    cli_get_string(&cli_res, "db_path", &db_path);
+    set_db_path(String_cstr(&db_path));
+
     AppState app_state = {};
 
     ArchiveManager_init(&app_state.archive_manager);

@@ -8,6 +8,8 @@
 #include "utils/string.h"
 #include "utils/string_view.h"
 
+void set_db_path(const char* path);
+const char * get_db_path();
 
 assetdb_t *get_assets_db();
 void close_assets_db();

@@ -9,10 +9,19 @@
 #include "utils/sqlite_wrapper.h"
 
 static assetdb_t *assets_db;
+static const char* db_path = "./hashes.db";
+
+void set_db_path(const char* path) {
+    db_path = path;
+}
+
+const char* get_db_path() {
+    return db_path;
+}
 
 void init_assets_db() {
     if (assets_db == NULL) {
-        if (assetdb_open(&assets_db, "./../hashes.db") != KV_OK) {
+        if (assetdb_open(&assets_db, db_path) != KV_OK) {
             GLog_Error("Failed to open hashes database");
             abort();
         }
