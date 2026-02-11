@@ -375,6 +375,7 @@ void find_files_by_ext(const char *dir, const String *ext, DynamicArray_Path *ta
 
 static int is_dir_path(const char *fullpath, const struct dirent *ent) {
 
+
 // Use d_type if available and reliable; otherwise lstat
 #ifdef DT_DIR
 if (ent&& ent->d_type!= DT_UNKNOWN) {
@@ -550,13 +551,14 @@ void Path_replace_extension_inplace(Path *path, const char *new_extension) {
     else {
         if (last_dot + ext_size + 1 > String_size(path)) {
             String_reserve(path, (uint32_t) (last_dot + ext_size + 1));
-            if (path->owned.is_long) {
-                path->owned.l.len = (uint32_t) (last_dot);
-            }
-            else {
-                path->owned.s.len = (uint8_t) (last_dot);
-            }
         }
+        if (path->owned.is_long) {
+            path->owned.l.len = (uint32_t) (last_dot);
+        }
+        else {
+            path->owned.s.len = (uint8_t) (last_dot);
+        }
+
         String_append_format(path, ".%s", new_extension);
     }
 }

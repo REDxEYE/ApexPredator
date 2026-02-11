@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.20)
 project(ApexPredator C CXX)
 include(FetchContent)
-
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 FetchContent_Declare(sqlite3 GIT_REPOSITORY https://github.com/sjinks/sqlite3-cmake GIT_TAG v3.49.1)
 FetchContent_MakeAvailable(sqlite3)
 
@@ -13,22 +14,65 @@ FetchContent_Declare(
         GIT_PROGRESS TRUE
 )
 
-#set(TRACY_ON_DEMAND ON CACHE BOOL "" FORCE)
 set(TRACY_ONLY_LOCALHOST ON CACHE BOOL "" FORCE)
 set(TRACY_NO_FRAME_IMAGE ON CACHE BOOL "" FORCE)
 set(TRACY_NO_VSYNC_CAPTURE ON CACHE BOOL "" FORCE)
 set(TRACY_IGNORE_MEMORY_FAULTS ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(tracy)
 
-set(CMAKE_C_STANDARD 17)
+FetchContent_Declare(zlib-ng GIT_REPOSITORY https://github.com/zlib-ng/zlib-ng GIT_TAG 2.3.2)
+set(WITH_GTEST OFF CACHE BOOL "Disable building tests for zlib-ng")
+set(WITH_FUZZERS OFF CACHE BOOL "Disable building examples for zlib-ng")
+set(WITH_BENCHMARKS OFF CACHE BOOL "Disable building benchmarks for zlib-ng")
+set(WITH_BENCHMARK_APPS OFF CACHE BOOL "Disable building benchmarks-apps for zlib-ng")
+set(ZLIB_COMPAT OFF CACHE BOOL "Disable zlib-ng zlib compatibility layer")
+set(ZLIBNG_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
+set(ZLIBNG_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+set(ZLIBNG_ENABLE_PACKAGE_CONFIG OFF CACHE BOOL "" FORCE)
+set(ZLIB_ENABLE_OPTIMIZATIONS ON CACHE BOOL "Enable zlib-ng optimizations")
+FetchContent_MakeAvailable(zlib-ng)
+
+FetchContent_Declare(
+        zstd
+        GIT_REPOSITORY "https://github.com/facebook/zstd"
+        GIT_TAG v1.5.7
+        SOURCE_SUBDIR build/cmake
+)
+
 SET(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
 SET(ZSTD_BUILD_CONTRIB OFF CACHE BOOL "" FORCE)
-add_subdirectory(external/zstd/build/cmake)
-SET(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
-SET(ZLIB_BUILD_SHARED OFF CACHE BOOL "" FORCE)
-SET(ZLIB_INSTALL OFF CACHE BOOL "" FORCE)
-add_subdirectory(external/zlib)
-add_subdirectory(external/cglm)
+FetchContent_MakeAvailable(zstd)
+
+FetchContent_Declare(
+        cglm
+        GIT_REPOSITORY "https://github.com/recp/cglm"
+        GIT_TAG v0.9.6
+)
+FetchContent_MakeAvailable(cglm)
+
+FetchContent_Declare(
+        ogg
+        GIT_REPOSITORY "https://github.com/xiph/ogg"
+        GIT_TAG v1.3.6
+)
+FetchContent_MakeAvailable(ogg)
+#
+#if(TARGET ogg AND NOT TARGET Ogg::ogg)
+#    add_library(Ogg::ogg ALIAS ogg)
+#endif()
+
+set(OGG_FOUND TRUE CACHE BOOL "" FORCE)
+set(OGG_INCLUDE_DIR "${ogg_SOURCE_DIR}/include" CACHE PATH "" FORCE)
+set(OGG_LIBRARY ogg CACHE STRING "" FORCE) # note: target name is OK here
+
+FetchContent_Declare(
+        vorbis
+        GIT_REPOSITORY "https://github.com/xiph/vorbis"
+        GIT_TAG v1.3.7
+)
+FetchContent_MakeAvailable(vorbis)
+
+
 SET(ZLIB_ALIASES OFF CACHE BOOL "" FORCE)
 SET(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/tinycpng)
@@ -102,6 +146,8 @@ add_executable(ApexPredator
         src/exporter/epe_export.c
         src/exporter/havok_export.c
         ${CommonFiles}
+        src/exporter/export_fmod.c
+        include/exporter/export_fmod.h
 )
 
 add_executable(AdfTypeGenerator
@@ -148,21 +194,19 @@ else ()
 endif ()
 
 SET(CommonLibs
-        libzstd
-        zlibstatic
+        libzstd_static
+        zlib-ng-static
         cglm
         tinycpng-static
         SQLite::SQLite3
 )
 
 SET(CommonIncludes
-        external/zlib
-        external/cglm/include
         external/cgltf
         external/tinycpng/include
 )
 
-target_include_directories(AdfLib PUBLIC include external/cglm/include)
+target_include_directories(AdfLib PUBLIC include)
 target_include_directories(HavokLib PUBLIC include)
 target_include_directories(ApexPredator PUBLIC include ${CommonIncludes})
 target_include_directories(AdfTypeGenerator PUBLIC include ${CommonIncludes})
@@ -170,11 +214,12 @@ target_include_directories(HavokTypeGenerator PUBLIC include ${CommonIncludes})
 target_include_directories(HashCollector PUBLIC include ${CommonIncludes})
 target_include_directories(StringHasher PUBLIC include)
 
-target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib ${CommonLibs})
+target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib Ogg::ogg vorbis vorbisenc ${CommonLibs})
 target_link_libraries(HashCollector PUBLIC AdfLib ${CommonLibs})
 target_link_libraries(AdfTypeGenerator PUBLIC ${CommonLibs})
 target_link_libraries(HavokTypeGenerator PUBLIC ${CommonLibs})
 target_link_libraries(HavokLib PUBLIC cglm)
+target_link_libraries(AdfLib PUBLIC cglm)
 
 target_link_libraries(AdfLib PUBLIC Tracy::TracyClient)
 target_link_libraries(HavokLib PUBLIC Tracy::TracyClient)

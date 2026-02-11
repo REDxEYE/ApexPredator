@@ -11,6 +11,7 @@
 #include "exporter/adf_export.h"
 #include "exporter/ddsc_export.h"
 #include "exporter/epe_export.h"
+#include "exporter/export_fmod.h"
 #include "exporter/havok_export.h"
 #include "utils/path.h"
 #include "platform/logger.h"
@@ -90,6 +91,9 @@ GL_ID export_file(AppState *app_state, uint32 hash) {
     }
     else if (memcmp(mb.data, AVTX_MAGIC, 4) == 0) {
         export_ddsc(app_state, hash, &mb);
+    }
+    else if (memcmp(mb.data, RIFF_MAGIC, 4)==0) {
+      export_fmod_bank(app_state, hash);
     }
     else if (memcmp(mb.data, RTPC_MAGIC, 4) == 0) {
         RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) &mb);

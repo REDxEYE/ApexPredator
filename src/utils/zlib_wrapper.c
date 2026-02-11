@@ -2,6 +2,8 @@
 
 #include "utils/zlib_wrapper.h"
 
+#include <limits.h>
+
 #include "memory.h"
 
 int inflate_exact_into(const void* in_buf, size_t in_len,
@@ -9,10 +11,10 @@ int inflate_exact_into(const void* in_buf, size_t in_len,
                        int windowBits,
                        size_t* out_written, size_t* in_consumed)
 {
-    z_stream s;
+    zng_stream s;
     memset(&s, 0, sizeof(s));
 
-    int rc = inflateInit2(&s, windowBits);
+    int rc = zng_inflateInit2(&s, windowBits);
     if (rc != Z_OK) return rc;
 
     s.next_in = (Bytef*)in_buf;
@@ -34,27 +36,27 @@ int inflate_exact_into(const void* in_buf, size_t in_len,
         s.next_out  = (Bytef*)out_buf + s.total_out;
         s.avail_out = (uInt)remaining_out;
 
-        rc = inflate(&s, Z_NO_FLUSH);
+        rc = zng_inflate(&s, Z_NO_FLUSH);
 
         if (rc == Z_STREAM_END) {
             int ok = (size_t)s.total_out == expected_out_len;
             if (out_written)  *out_written  = (size_t)s.total_out;
             if (in_consumed)  *in_consumed  = (size_t)(s.next_in - (Bytef*)in_buf);
-            inflateEnd(&s);
+            zng_inflateEnd(&s);
             return ok ? Z_OK : Z_DATA_ERROR;
         }
 
         if (rc != Z_OK) {
             if (out_written) *out_written = (size_t)s.total_out;
             if (in_consumed) *in_consumed = (size_t)(s.next_in - (Bytef*)in_buf);
-            inflateEnd(&s);
+            zng_inflateEnd(&s);
             return rc;
         }
 
         if (s.total_out == produced_before && s.avail_in == 0 && s.avail_out != 0) {
             if (out_written) *out_written = (size_t)s.total_out;
             if (in_consumed) *in_consumed = (size_t)(s.next_in - (Bytef*)in_buf);
-            inflateEnd(&s);
+            zng_inflateEnd(&s);
             return Z_BUF_ERROR;
         }
 
@@ -63,7 +65,7 @@ int inflate_exact_into(const void* in_buf, size_t in_len,
         if ((size_t)s.total_out > expected_out_len) {
             if (out_written) *out_written = (size_t)s.total_out;
             if (in_consumed) *in_consumed = (size_t)(s.next_in - (Bytef*)in_buf);
-            inflateEnd(&s);
+            zng_inflateEnd(&s);
             return Z_BUF_ERROR;
         }
     }

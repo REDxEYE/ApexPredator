@@ -3,7 +3,7 @@
 #ifndef APEXPREDATOR_ZLIB_RAW_WRAPPER_H
 #define APEXPREDATOR_ZLIB_RAW_WRAPPER_H
 
-#include "zlib.h"
+#include "zlib-ng.h"
 #include "int_def.h"
 
 #define WB_RAW  (-MAX_WBITS)

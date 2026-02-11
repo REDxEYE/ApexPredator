@@ -165,9 +165,11 @@ int main(int argc, const char *argv[]) {
 
     String_from_cstr(&app_state.game_root, cli_res.game_root);
     Path_convert_to_wsl(&app_state.game_root);
+    Path_normalize_native(&app_state.game_root);
 
     cli_get_string(&cli_res, "out_dir", &app_state.export_path);
     Path_convert_to_wsl(&app_state.export_path);
+    Path_normalize_native(&app_state.export_path);
 
     TabArchives_init(&app_state.archive_manager, &app_state.game_root);
 

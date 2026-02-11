@@ -78,6 +78,7 @@
     </Type>
 
     <Type Name="DynamicArray_String">
+        <AlternativeType Name="DynamicArray_Sample"/>
         <AlternativeType Name="DynamicArray_STI_TypeDef"/>
         <AlternativeType Name="DynamicArray_STI_StructMember"/>
         <AlternativeType Name="DynamicArray_STI_EnumMember"/>

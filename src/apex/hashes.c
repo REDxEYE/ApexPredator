@@ -110,6 +110,13 @@ void store_file_parent(const uint64 key, const String *path, const uint64 parent
         GLog_Error("Failed to store file parent for key %llu: %d", key, status);
     }
 }
+void store_file_parent_sv(const uint64 key, const StringView path, const uint64 parent) {
+    const assetdb_status_t status =
+            kv_vp_put_u64(get_assets_db(), key, parent, sv_is_not_null(path) ? StringView_cstr(path) : NULL);
+    if (status != KV_OK) {
+        GLog_Error("Failed to store file parent for key %llu: %d", key, status);
+    }
+}
 
 bool get_file_parent(const uint64 key, uint64 *out_parent, String **out_path) {
     const char *path = NULL;

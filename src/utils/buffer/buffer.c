@@ -171,7 +171,7 @@ static BufferError Buffer__write_string(Buffer* fb, const uint32 size, const Str
 
 void Buffer_init(Buffer *buffer) {
     assert(buffer != NULL);
-
+    buffer->type=BUFFER_TYPE_UNKNOWN;
     buffer->set_position = NULL;
     buffer->get_position = NULL;
     buffer->read = NULL;

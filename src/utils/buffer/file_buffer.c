@@ -173,6 +173,7 @@ BufferError FileBuffer__close(FileBuffer *fb) {
 
 void FileBuffer_init(FileBuffer *fb) {
     Buffer_init((Buffer *) fb);
+    fb->type=BUFFER_TYPE_FILE;
     fb->set_position = (BufferSetPositionFn) FileBuffer__set_position;
     fb->get_position = (BufferGetPositionFn) FileBuffer__get_position;
     fb->getsize = (BufferGetSizeFn) FileBuffer__get_size;

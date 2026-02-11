@@ -16,6 +16,7 @@ typedef enum {
 
 typedef enum {
     // Below zero - error, above zero - non-critical, zero = success
+    BUFFER_OUT_OF_MEMORY = -2,
     BUFFER_FAILED = -1,
     BUFFER_SUCCESS = 0,
     BUFFER_UNDERFLOW,
@@ -85,6 +86,11 @@ typedef BufferError (*WriteCStringFn)(void *buffer, String *string);
 
 typedef BufferError (*WriteStringFn)(void *buffer, uint32 size, String *string);
 
+typedef enum BufferType {
+    BUFFER_TYPE_UNKNOWN,
+    BUFFER_TYPE_MEMORY,
+    BUFFER_TYPE_FILE,
+} BufferType;
 
 typedef struct BufferInterface_s {
     BufferSetPositionFn set_position;
@@ -118,6 +124,7 @@ typedef struct BufferInterface_s {
     WriteDoubleFn write_double;
     WriteCStringFn write_cstring;
     WriteStringFn write_string;
+    BufferType type;
 } BufferInterface;
 
 typedef struct Buffer_s {
@@ -130,7 +137,7 @@ uint64 Buffer_remaining(Buffer *buffer, BufferError *error);
 
 void Buffer_align(Buffer *buffer, uint32 alignment);
 
-void Buffer_close(Buffer* buffer);
+void Buffer_close(Buffer *buffer);
 
 #define IS_SUCCESS(expr)  (expr)==BUFFER_SUCCESS
 #define IS_FAILED(expr)   (expr)<=BUFFER_FAILED

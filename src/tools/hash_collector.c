@@ -28,7 +28,7 @@ typedef struct Context {
 
 bool visit_adf_file(const Context *ctx, MemoryBuffer *mb) {
     ADF adf = {0};
-    ADF_from_buffer(&adf, (Buffer *) mb, ctx->sti_lib);
+    ADF_from_buffer(&adf, (Buffer *) mb);
     // for (int i = 0; i < adf.header.instance_count; ++i) {
     //     const ADFInstance *instance = DA_at(&adf.instances, i);
     //     void *instance_data = ADF_read_instance(&adf, ctx->sti_lib, instance, mb);
@@ -76,9 +76,9 @@ bool visit_archive_file(Context *ctx, MemoryBuffer *mb, uint32 self_hash) {
         for (int i = 0; i < sarc->entries.values.count; ++i) {
             const SArcEntry *entry = DA_at(&sarc->entries.values, i);
 
-            store_file_parent(entry->hash, &entry->name, self_hash);
+            store_file_parent_sv(entry->hash, StringView_from_cstr(entry->name), self_hash);
 
-            assetdb_kv_put_u32(ctx->db, entry->hash, String_cstr(&entry->name));
+            assetdb_kv_put_u32(ctx->db, entry->hash, entry->name);
             MemoryBuffer file_mb = {0};
             if (Archive_get_file_by_hash((Archive *) sarc, entry->hash, &file_mb)) {
                 visit_archive_file(ctx, &file_mb, entry->hash);
@@ -113,13 +113,12 @@ bool visit_archive_file(Context *ctx, MemoryBuffer *mb, uint32 self_hash) {
 
 bool visit_all_files(const Archive *ar, const ArchiveEntry *ae, void *ctx) {
     MemoryBuffer mb = {0};
-    if (ae->path != NULL) {
-        assetdb_kv_put_u32(((Context *) ctx)->db, ae->path_hash, String_cstr(ae->path));
+    if (String_size(&ae->path)>0) {
+        assetdb_kv_put_u32(((Context *) ctx)->db, ae->path_hash, String_cstr(&ae->path));
     }
-    String *asset_path = find_name32(ae->path_hash);
+    const StringView asset_path = find_name32_sv(ae->path_hash);
 
-    store_file_parent(ae->path_hash, asset_path != NULL ? asset_path : ae->path, 0);
-    if (asset_path != NULL) String_free(asset_path);
+    store_file_parent_sv(ae->path_hash, sv_is_not_null(asset_path) ? asset_path : StringView_from_string(&ae->path), 0);
 
     Archive_get_file_by_hash((Archive *) ar, ae->path_hash, &mb);
     String *name = find_name32(ae->path_hash);
