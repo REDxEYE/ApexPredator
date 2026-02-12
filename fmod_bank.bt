@@ -1,0 +1,119 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+    char id[4];
+    uint32 size;
+    char format[4];
+}RIFFHeader<read=Str("%s, %i, %s", id, size, format)>;
+
+RIFFHeader header;
+
+struct RIFFChunk;
+
+local uint32 recursion_depth = 0;
+
+string read_riff_chunk(RIFFChunk &chunk){
+    if(exists(chunk.list_type)){
+        return Str("%s list, %i", chunk.list_type, chunk.size);
+    }
+    return Str("%s, %i", chunk.id, chunk.size);
+}
+
+struct FSBHeader{
+    char id[4];
+    uint32 version;
+    uint32 file_count;
+    uint32 dir_size;
+    uint32 name_size;
+    uint32 data_size;
+    uint32 ex_version;
+    uint32 flags;
+    uint32 _null;
+    uint8 hash[24];
+};
+
+typedef struct{
+    char id[4];
+    uint32 size;
+    local int64 left = size;
+    
+    if(id=="FMT "){
+        uint32 file_version, compat_version;
+        left-=8;
+    }
+    else if(id=="LIST" && recursion_depth<10){
+        char list_type[4];
+        left-=4;
+        recursion_depth+=1;
+        local uint32 list_start;
+        while(left>0){
+            list_start = FTell();
+            RIFFChunk list_chunk;   
+            left-=FTell()-list_start;
+        }
+        recursion_depth-=1;
+    }
+    else if(id=="SND "){
+        local ubyte has_next;
+        local uint32 offset = FTell();
+        union{
+            struct{
+                ubyte pad[((offset + 15) & ~15)-offset];
+                FSBHeader fsb_header;
+                
+                struct{
+                    struct{
+                        uint64 has_next_chunk:1;
+                        uint64 frequency:4;
+                        uint64 channel_count:1; // +1
+                        uint64 data_offset:28;
+                        uint64 samples:30;
+                        has_next = has_next_chunk;
+                        while(has_next){
+                            struct{
+                                uint32 has_next_chunk:1;
+                                uint32 chunk_size:24;
+                                uint32 chunk_type:7;
+                                has_next = has_next_chunk;
+                                if(chunk_size>0){
+                                    ubyte chunk_data[chunk_size];   
+                                } 
+                            }chunk;
+                        }
+                        
+                    }entry[fsb_header.file_count]<optimize=false>;
+                }dir;
+                union{
+                    struct{
+                        uint32 name_lens[fsb_header.file_count];
+                    }names;
+                    ubyte raw_names[fsb_header.name_size];
+                }names;
+            }fsb_data;
+            
+            ubyte raw_data[chunk.size];
+        }snd_data;
+    }    
+    else{
+        if(size>0) ubyte data[size];   
+        left-=size;
+    }
+    local uint32 pad_size = (size%2);
+    if(pad_size){
+        ubyte pad;   
+    }
+}RIFFChunk<read=read_riff_chunk>;
+
+while(!FEof()){
+    RIFFChunk chunk;   
+}

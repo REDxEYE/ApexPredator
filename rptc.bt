@@ -1,0 +1,59 @@
+//------------------------------------------------
+//--- 010 Editor v16.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+struct Node;
+
+enum<uint8>PropType{
+    type_none = 0,
+    type_u32 = 1,
+    type_f32 = 2,
+    type_str = 3,
+    type_vec2 = 4,
+    type_vec3 = 5,
+    type_vec4 = 6,
+    type_mat3x3 = 7,
+    type_mat4x4 = 8,
+    type_array_u32 = 9,
+    type_array_f32 = 10,
+    type_array_u8 = 11,
+    type_depreciated_12 = 12,
+    type_objid = 13,
+    type_event = 14,
+    type_unk_15 = 15,
+    type_unk_16 = 16,
+};
+
+typedef struct{
+    uint name_hash;
+    uint data_raw;
+    PropType type;    
+}Prop<read=Str("Prop<%s>", EnumToString(this.type))>;
+
+struct Node{
+    uint name_hash;
+    uint data_offset;
+    uint16 prop_count;
+    uint16 child_count;   
+    
+    FSeek(data_offset);
+    if(prop_count)Prop props[prop_count];
+    FSeek(FTell() + (4 - (FTell() % 4)) % 4);
+    if(child_count)Node children[child_count]<optimize=false>;
+    FSeek(startof(child_count)+2);
+    
+};
+
+struct{
+    char ident[4];
+    uint version;
+    Node root_node;
+}RTPC;

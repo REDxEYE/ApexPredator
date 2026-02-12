@@ -1,0 +1,128 @@
+//------------------------------------------------
+//--- 010 Editor v16.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+    string s;   
+}String<read=Str("%s", this.s)>;
+
+char ident[4];
+uint version;
+uint instance_count;
+uint instance_offset;
+
+uint typedef_count;
+uint typedef_offset;
+
+uint stringhash_count;
+uint stringhash_offset;
+
+uint nametable_count;
+uint nametable_offset;
+
+uint total_size;
+
+uint unk[5];
+string comment;
+
+FSeek(nametable_offset);
+ubyte string_sizes[nametable_count];
+String strings[nametable_count]<optimize=false>;
+
+enum<uint32> MetaType{
+    Primitive = 0,
+    Structure = 1,
+    Pointer = 2,
+    Array = 3,
+    InlineArray = 4,
+    StringType = 5,
+    MetaType6 = 6,
+    Bitfield = 7,
+    Enumeration = 8,
+    StringHash = 9
+};
+
+typedef struct{
+    uint64 name<read=Str("%s", strings[this].s)>;
+    uint type_hash;
+    uint size;
+    uint offset;
+    uint default_type;
+    uint64 default_value;
+}Member<read=Str("%s", strings[this.name].s)>;
+
+typedef struct{
+     uint64 name<read=Str("%s", strings[this].s)>;
+     uint value;
+}EnumMember<read=Str("%s = %i", strings[this.name].s, this.value)>;
+
+typedef struct{
+    MetaType type;
+    uint size;
+    uint alignment;
+    uint type_hash;
+    uint64 name<read=Str("%s", strings[this].s)>;
+    uint flags;
+    uint element_type_hash;
+    uint element_len;
+    
+    switch(type){
+    case Primitive:{
+        break;
+    }
+    case Structure:{
+        uint member_count;
+        Member members[member_count];   
+        break;
+    }
+    case Enumeration:{
+        uint member_count;
+        EnumMember members[member_count];   
+        break;   
+    }
+    case Pointer:{
+        uint count;   
+        break;
+    }
+    case InlineArray:{
+        uint count;   
+        break;
+    }
+    case Array:{
+        uint count;   
+        break;
+    }
+    case Bitfield:{
+        uint count;   
+        break;
+    }
+    case StringHash:{
+        uint count;   
+        break;
+    }
+    default:Printf("Unhandled type: %s\n", EnumToString(type));   
+    }
+    
+}TypeDef<read=Str("%s %s", EnumToString(type), strings[this.name].s)>;
+
+FSeek(typedef_offset);
+TypeDef typedefs[typedef_count]<optimize=false>;
+
+typedef struct{
+    uint name_hash;
+    uint type_hash;
+    uint offset;
+    uint size;
+    uint64 name<read=Str("%s", strings[this].s)>;
+}Instance;
+
+FSeek(instance_offset);
+Instance instances[instance_count]<optimize=false>;

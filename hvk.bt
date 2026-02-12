@@ -1,0 +1,38 @@
+//------------------------------------------------
+//--- 010 Editor v16.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct Chunk{
+    BigEndian();
+    uint32 sizeAndFlags<read=Str("%i, %s", this&0x00FFFFFF, ((this&0x40000000)!=0)?"sub":"root")>;
+    LittleEndian();
+    char ident[4];
+    if(sizeAndFlags&0x40000000){
+        char data[(sizeAndFlags&0x00FFFFFF)-8];   
+    }
+    
+};
+
+Chunk tagChunk;
+Chunk sdkvChunk;
+Chunk dataChunk;
+Chunk typeChunk;
+Chunk tptrChunk;
+Chunk tstrChunk;
+Chunk tnamChunk;
+Chunk fstrChunk;
+Chunk tbodChunk;
+Chunk thshChunk;
+Chunk tpadChunk;
+Chunk indxChunk;
+Chunk itemChunk;
+Chunk ptchChunk;

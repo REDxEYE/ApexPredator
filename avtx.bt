@@ -1,0 +1,46 @@
+//------------------------------------------------
+//--- 010 Editor v16.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+struct AVATextureStreamHeader
+{
+  unsigned int m_Offset;
+  unsigned int m_Size;
+  unsigned int16 m_Alignment;
+  unsigned int8 m_TileMode;
+  unsigned int8 m_Source;
+};
+
+
+struct AVATextureHeader
+{
+  unsigned int m_Magic;
+  unsigned int8 m_Version;
+  unsigned int8 m_Platform;
+  unsigned int8 m_Tag;
+  unsigned int8 m_Dimension;
+  unsigned int m_Format;
+  unsigned int16 m_Width;
+  unsigned int16 m_Height;
+  unsigned int16 m_Depth;
+  unsigned int16 m_Flags;
+  unsigned int8 m_Mips;
+  unsigned int8 m_MipsResident;
+  unsigned int8 m_MipsCinematic;
+  unsigned int8 m_MipsBias;
+  unsigned int8 m_LodGroup;
+  unsigned int8 m_Pool;
+  unsigned int8 m_Reserved0[2];
+  unsigned int m_Reserved1;
+  AVATextureStreamHeader m_Streams[8];
+};
+
+AVATextureHeader header;

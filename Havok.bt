@@ -1,0 +1,58 @@
+//------------------------------------------------
+//--- 010 Editor v16.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+struct Chunk;
+typedef struct{
+    BigEndian();
+    int32 size<read=Str("Size: %i, Flags: %i", this&0x0FFFFFFF, this>>30)>;
+    LittleEndian();
+    char ident[4];       
+    switch(ident){
+        case("TAG0"):{
+            break;
+        }
+        case("SDKV"):{
+            char ver[8];
+            break;
+        }
+        case("INDX"):{
+            Chunk item;
+            Chunk ptch;
+            break;
+        }
+        case("TYPE"):{
+            Chunk tprt;
+            Chunk tstr;
+            Chunk names;
+            Chunk strings;
+            Chunk body;
+            Chunk thsh;
+            Chunk pad;
+            break;   
+        }
+        case("PTCH"):{
+            uint32 unk[((size&0x0FFFFFFF)-8)/4];
+            break;   
+        }
+        default:{
+            ubyte data[(size&0x0FFFFFFF)-8];
+        }
+    }
+}Chunk<read=Str("%s", this.ident)>;
+
+
+Chunk root_tag;
+
+Chunk sdk_tag;
+Chunk data_tag;
+Chunk type_tag;
+Chunk index_tag;
