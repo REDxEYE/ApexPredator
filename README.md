@@ -42,7 +42,7 @@ Examples:
 # Extract a model to glTF
 ApexPredator extract D:\Games\GenerationZero\archives_win64 env/terrain/mountains/model-01.amf -o exported
 
-# Dump raw bytes by hash
+# Dump raw bytes by hash (currently not supported)
 ApexPredator extract D:\Games\GenerationZero\archives_win64 0xDEADBEEF -r -o dumps
 
 # Export animations
