@@ -778,7 +778,7 @@ bool GLTFContext_material_diffuse_present(const GLTFContext *ctx, const GL_ID ma
 GL_ID gltf_texture_from_texture(GLTFContext *ctx, const StringView original_path, const Texture *texture) {
     const uint32 hash = hash_vstring(original_path);
     String tex_name = {0};
-    Path_filename_sv(original_path, &tex_name);
+    Path_stem_sv(original_path, &tex_name);
 
     String unique_name = {0};
     String_format(&unique_name, "%s_%08X.png", String_cstr(&tex_name), hash);

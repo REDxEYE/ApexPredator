@@ -490,9 +490,9 @@ GL_ID export_amf_model(AppState *app_state, const AmfModel *amf_model, const uin
 
     for (int mat_id = 0; mat_id < amf_model->Materials.count; ++mat_id) {
         const AmfMaterial *amf_material = &amf_model->Materials.items[mat_id];
-        String* material_name = find_name32(amf_material->Name);
+        String *material_name = find_name32(amf_material->Name);
         GL_ID material_id;
-        if (material_name==NULL) {
+        if (material_name == NULL) {
             material_name = String_new(16);
             String_format(material_name, "material_%08X", amf_material->Name);
         }
@@ -501,7 +501,7 @@ GL_ID export_amf_model(AppState *app_state, const AmfModel *amf_model, const uin
         if (!IS_VALID_GL_ID(material_id)) {
             material_id = GLTFContext_material_new(context, String_cstr(material_name));
 
-            String* render_block_id = find_name32(amf_material->RenderBlockId);
+            String *render_block_id = find_name32(amf_material->RenderBlockId);
 
             GLog_Info("Material %s -> %s", String_cstr(material_name), String_cstr(render_block_id));
             for (int tex_id = 0; tex_id < amf_material->Textures.count; ++tex_id) {
@@ -513,9 +513,8 @@ GL_ID export_amf_model(AppState *app_state, const AmfModel *amf_model, const uin
                 GLog_Info("\tSlot %i -> %s", tex_id, StringView_cstr(tex_path));
             }
 
-
             if (String_cequals(render_block_id, "GeneralR2")) {
-                if (app_state->export_textures) {
+                if (!app_state->skip_textures) {
                     if (amf_material->Attributes.type_hash != STI_TYPE_HASH_GeneralR2Constants) {
                         GLog_Warning("Unsupported GeneralR2 material attribute type: %08X",
                                      amf_material->Attributes.type_hash);
@@ -537,37 +536,40 @@ GL_ID export_amf_model(AppState *app_state, const AmfModel *amf_model, const uin
                         Texture *orm_texture = NULL;
                         Texture *emission_texture = NULL;
 
-                        StringView diffuse_path = find_name32_sv(amf_material->Textures.items[0]);
-                        if (sv_is_not_null(diffuse_path)) {
+                        String *diffuse_path = find_name32(amf_material->Textures.items[0]);
+                        if (diffuse_path != NULL) {
                             diffuse_texture = convert_ddsc(app_state, amf_material->Textures.items[0]);
                             GLTFContext_material_set_diffuse_texture_from_data(
-                                context, diffuse_path, material_id, diffuse_texture);
+                                context, StringView_from_string(diffuse_path), material_id, diffuse_texture);
+                            String_free(diffuse_path);
                         }
-                        StringView normal_path = find_name32_sv(amf_material->Textures.items[1]);
-                        if (sv_is_not_null(normal_path)) {
+                        String *normal_path = find_name32(amf_material->Textures.items[1]);
+                        if (normal_path != NULL) {
                             normal_texture = convert_ddsc(app_state, amf_material->Textures.items[1]);
-                            GLTFContext_material_set_normal_from_data(context, normal_path, material_id,
-                                                                      normal_texture);
+                            GLTFContext_material_set_normal_from_data(
+                                context, StringView_from_string(normal_path), material_id, normal_texture);
+                            String_free(normal_path);
                         }
 
-                        StringView orm_path = find_name32_sv(amf_material->Textures.items[2]);
-                        if (sv_is_not_null(orm_path)) {
+                        String *orm_path = find_name32(amf_material->Textures.items[2]);
+                        if (orm_path != NULL) {
                             orm_texture = convert_ddsc(app_state, amf_material->Textures.items[2]);
                             GLTFContext_material_set_roughness_metallic_from_data(
-                                context, orm_path, material_id, orm_texture);
+                                context, StringView_from_string(orm_path), material_id, orm_texture);
+                            String_free(orm_path);
                         }
                         if (constants->UseEmissive) {
-                            StringView emission_path = find_name32_sv(amf_material->Textures.items[4]);
-                            if (sv_is_not_null(emission_path)) {
+                            String *emission_path = find_name32(amf_material->Textures.items[4]);
+                            if (emission_path != NULL) {
                                 emission_texture = convert_ddsc(app_state, amf_material->Textures.items[4]);
                                 if (!constants->EmissiveTextureHasColor && diffuse_texture != NULL) {
                                     Texture *new_emission_texture = TextureOps_multiply(
                                         diffuse_texture, emission_texture);
 
                                     String *texture_save_path = GLTFContext_data_path(context);
-                                    const uint32 hash = hash_vstring(emission_path);
+                                    const uint32 hash = hash_string(emission_path);
                                     String tex_name = {0};
-                                    Path_filename_sv(emission_path, &tex_name);
+                                    Path_filename(emission_path, &tex_name);
                                     String_append_format(texture_save_path, "/%s_%08X", String_cstr(&tex_name), hash);
                                     String_free(&tex_name);
                                     Texture_save(emission_texture, texture_save_path);
@@ -578,8 +580,9 @@ GL_ID export_amf_model(AppState *app_state, const AmfModel *amf_model, const uin
                                         emission_texture = new_emission_texture;
                                     }
                                 }
-                                GLTFContext_material_set_emissive_from_data(context, emission_path, material_id,
-                                                                            emission_texture);
+                                GLTFContext_material_set_emissive_from_data(
+                                    context, StringView_from_string(emission_path), material_id, emission_texture);
+                                String_free(emission_path);
                             }
                         }
 

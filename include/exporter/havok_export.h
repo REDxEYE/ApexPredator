@@ -7,6 +7,8 @@
 #include "platform/app_state.h"
 #include "utils/gltf/cgltf_helper.h"
 
+#define HAVOK_MAGIC  "TAG0"
+
 extern mat4 IDENTITY_MAT;
 
 GL_ID export_havok_file(AppState* app_state, const TagFile *tag_file, StringView path);

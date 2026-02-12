@@ -59,6 +59,8 @@ void Path_replace_extension_inplace(Path* path, const char* new_extension);
 
 void Path_filename(const Path* path, Path* filename);
 void Path_filename_sv(StringView view, Path*filename);
+void Path_stem(const Path* path, Path* stem);
+void Path_stem_sv(StringView view, Path* stem);
 
 bool Path_exists(const Path* path);
 

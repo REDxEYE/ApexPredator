@@ -599,6 +599,20 @@ void Path_filename_sv(const StringView view, Path *filename) {
     }
 }
 
+void Path_stem(const Path *path, Path *stem) {
+    Path filename = {0};
+    Path_filename(path, &filename);
+    Path_remove_extension(&filename, stem);
+    String_free(&filename);
+}
+
+void Path_stem_sv(const StringView view, Path *stem) {
+    Path filename = {0};
+    Path_filename_sv(view, &filename);
+    Path_remove_extension(&filename, stem);
+    String_free(&filename);
+}
+
 bool Path_exists(const Path *path) {
     if (String_size(path) == 0) return false;
     const char *s = String_cstr(path);

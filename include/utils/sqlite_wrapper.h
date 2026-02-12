@@ -22,20 +22,16 @@ void        assetdb_close(assetdb_t *db);
 
 assetdb_status_t assetdb_kv_put_u64(assetdb_t *db, uint64_t key, const char *value);
 
+assetdb_status_t assetdb_kv_put_u32(assetdb_t *db, uint32_t key, const char *value);
+assetdb_status_t assetdb_kv_get_u32_view(assetdb_t *db, uint32_t key, const char **out, size_t *out_len); /* db owned data */
 assetdb_status_t assetdb_kv_get_u64_view(assetdb_t *db, uint64_t key, const char **out, size_t *out_len); /* db owned data */
+assetdb_status_t assetdb_kv_del_u32(assetdb_t *db, uint32_t key);
 assetdb_status_t assetdb_kv_del_u64(assetdb_t *db, uint64_t key);
 
-assetdb_status_t assetdb_kv_put_u32(assetdb_t *db, uint32_t key, const char *value);
-
-assetdb_status_t assetdb_kv_get_u32_view(assetdb_t *db, uint32_t key, const char **out, size_t *out_len); /* db owned data */
-assetdb_status_t assetdb_kv_del_u32(assetdb_t *db, uint32_t key);
-
-
-assetdb_status_t kv_vp_put_u64(assetdb_t *db, uint64_t child, uint64_t parent, const char *path);
-assetdb_status_t kv_vp_get_u64(assetdb_t *db, uint64_t child, uint64_t *out_parent, const char **out_path, size_t *out_path_len); /* db owned data */
-assetdb_status_t kv_vp_del_u64(assetdb_t *db, uint64_t child);
-
-assetdb_status_t kv_vp_search(assetdb_t *db, const char *pattern, char ***result, uint32* out_count);
+assetdb_status_t assetdb_files_put(assetdb_t *db, uint64_t hash, const char *name_nullable, uint64_t size, uint64_t parent_hash);
+assetdb_status_t assetdb_files_get_view(assetdb_t *db, uint64_t hash, const char **out_name, size_t *out_name_len, uint64_t *out_size, uint64_t *out_parent_hash);
+assetdb_status_t assetdb_files_del(assetdb_t *db, uint64_t hash);
+assetdb_status_t assetdb_files_search(assetdb_t *db, const char *pattern, char ***out, uint32_t *out_count);
 
 const char *assetdb_last_error(const assetdb_t *db);
 int         assetdb_last_sqlite_code(const assetdb_t *db);

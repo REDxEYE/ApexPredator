@@ -109,7 +109,7 @@ GL_ID export_file(AppState *app_state, uint32 hash) {
         output_node_id = export_epe(app_state, root_node, hash);
         RuntimeNode_free(root_node);
     }
-    else if (memcmp(mb.data + 4, "TAG0", 4) == 0) {
+    else if (memcmp(mb.data + 4, HAVOK_MAGIC, 4) == 0) {
         TagFile tag_file = {0};
         TagFile_from_buffer(&tag_file, (Buffer *) &mb);
         output_node_id = export_havok_file(app_state, &tag_file, path);

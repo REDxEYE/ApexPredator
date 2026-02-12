@@ -15,13 +15,9 @@
 #include "apex/hashes.h"
 #include "apex/adf/adf_types.h"
 #include "apex/package/tab_archive.h"
-#include "havok/havok_codegen.h"
 #include "platform/archive_manager.h"
 #include "utils/path.h"
 #include "utils/string.h"
-#include "utils/gltf/cgltf_helper.h"
-
-#include "exporter/amf_export.h"
 #include "exporter/common_export.h"
 #include "platform/logger.h"
 #include "utils/memory_tracker.h"

@@ -11,7 +11,7 @@ typedef struct AppState {
     String export_path;
     ArchiveManager archive_manager;
 
-    bool export_textures;
+    bool skip_textures;
 }AppState;
 
 void AppState_free(AppState* self);

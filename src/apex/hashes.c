@@ -112,24 +112,8 @@ void store_hash64_name(const uint64 key, const String *value) {
     assetdb_kv_put_u64(get_assets_db(), key, String_cstr(value));
 }
 
-void store_file_parent(const uint64 key, const String *path, const uint64 parent) {
-    const assetdb_status_t status =
-            kv_vp_put_u64(get_assets_db(), key, parent, path != NULL ? String_cstr(path) : NULL);
-    if (status != KV_OK) {
-        GLog_Error("Failed to store file parent for key %llu: %d", key, status);
-    }
-}
-
-void store_file_parent_sv(const uint64 key, const StringView path, const uint64 parent) {
-    const assetdb_status_t status =
-            kv_vp_put_u64(get_assets_db(), key, parent, sv_is_not_null(path) ? StringView_cstr(path) : NULL);
-    if (status != KV_OK) {
-        GLog_Error("Failed to store file parent for key %llu: %d", key, status);
-    }
-}
-
-void search_vparent_table(const char *pattern, char ***result, uint32 *count) {
-    const assetdb_status_t status = kv_vp_search(get_assets_db(), pattern, result, count);
+void search_file_table(const char *pattern, char ***result, uint32 *count) {
+    const assetdb_status_t status = assetdb_files_search(get_assets_db(), pattern, result, count);
     if (status != KV_OK) {
         GLog_Error("Failed to search vparent table with pattern '%s': %d", pattern, status);
     }
@@ -138,7 +122,7 @@ void search_vparent_table(const char *pattern, char ***result, uint32 *count) {
 bool get_file_parent(const uint64 key, uint64 *out_parent, String **out_path) {
     const char *path = NULL;
     if (out_path == NULL) {
-        const assetdb_status_t status = kv_vp_get_u64(get_assets_db(), key, out_parent, NULL, NULL);
+        const assetdb_status_t status = assetdb_files_get_view(get_assets_db(), key, NULL, NULL, NULL, out_parent);
         if (status != KV_OK) {
             return false;
         }
@@ -147,7 +131,7 @@ bool get_file_parent(const uint64 key, uint64 *out_parent, String **out_path) {
         *out_path = NULL;
         *out_parent = 0;
         size_t path_len = 0;
-        const assetdb_status_t status = kv_vp_get_u64(get_assets_db(), key, out_parent, &path, &path_len);
+        const assetdb_status_t status = assetdb_files_get_view(get_assets_db(), key, &path, &path_len, NULL, out_parent);
         if (status != KV_OK) {
             return false;
         }
