@@ -5,7 +5,6 @@
 #include "apex/hashes.h"
 #include "platform/logger.h"
 #include "utils/memory_profiling.h"
-#include "utils/hash_helper.h"
 #include "tracy/TracyC.h"
 
 void ArchiveManager_init(ArchiveManager *manager) {

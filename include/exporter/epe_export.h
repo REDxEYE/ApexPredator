@@ -4,9 +4,7 @@
 #define APEXPREDATOR_EPE_EXPORT_H
 #include "apex/rtpc.h"
 #include "apex/adf/sti.h"
-#include "havok/havok_codegen.h"
 #include "platform/app_state.h"
-#include "platform/archive_manager.h"
 #include "utils/gltf/cgltf_helper.h"
 
 

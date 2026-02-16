@@ -62,8 +62,86 @@ bool float64_read(float64 *out, Buffer *buffer) {
 }
 
 bool String_read(STI_String *out, Buffer *buffer) {
-    return buffer->read_cstring(buffer, out) == BUFFER_SUCCESS;
+    uint32 offset;
+    uint32 unk;
+    if (buffer->read_uint32(buffer, &offset) != BUFFER_SUCCESS) {
+        return false;
+    }
+    if (buffer->read_uint32(buffer, &unk) != BUFFER_SUCCESS) {
+        return false;
+    }
+
+    int64 ooffset = 0;
+    buffer->get_position(buffer, &ooffset);
+    buffer->set_position(buffer, offset, BUFFER_ORIGIN_START);
+
+    if (buffer->read_cstring(buffer, out) != BUFFER_SUCCESS) {
+        if (buffer->set_position(buffer, ooffset, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
+            ;
+            GLog_Error("Failed to restore buffer position after failed string read");
+        }
+        return false;
+    }
+    if (buffer->set_position(buffer, ooffset, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
+        GLog_Error("Failed to restore buffer position after string read");
+        return false;
+    }
+    return true;
 }
+
+typedef struct DumpType {
+    const STITypeInfo *type_info_;
+    uint32 type_hash;
+    uint8 *data;
+    uint32 size;
+} DumpType;
+
+void dump_array_init(DumpType *obj);
+
+void dump_array_free(DumpType *obj);
+
+void dump_array_print(const DumpType *obj, JsonContext *ctx);
+
+static const STITypeInfo dump_array = {
+    .init = (initSTIObject) dump_array_init,
+    .read = NULL,
+    .free = (freeSTIObject) dump_array_free,
+    .print = (printSTIObject) dump_array_print,
+    .size = 0,
+    .disk_size = 0,
+    .is_struct = 0,
+    .is_array = 1,
+    .hash = 0xFFFFFFFF,
+    .name = "Unknown type dump"
+};
+
+inline void dump_array_init(DumpType *obj) {
+    obj->type_info_ = &dump_array;
+}
+
+inline void dump_array_free(DumpType *obj) {
+    mp_free(obj->data);
+    obj->data = NULL;
+}
+
+inline void dump_array_print(const DumpType *obj, JsonContext *ctx) {
+    String tmp = {0};
+    String_init(&tmp, obj->size * 3 - 1);
+    for (uint32 i = 0; i < obj->size; ++i) {
+        String_append_format(&tmp, "%02X", obj->data[i]);
+        if (i != obj->size - 1) {
+            String_append_cstr(&tmp, " ");
+        }
+    }
+    jsonBeginObject(ctx);
+    jsonName(ctx, "type_hash");
+    jsonValueNum(ctx, obj->type_hash);
+    jsonName(ctx, "data");
+    jsonValueStr(ctx, String_cstr(&tmp));
+    jsonEndObject(ctx);
+    String_free(&tmp);
+}
+
 
 bool Deferred_read(Deferred *out, Buffer *buffer) {
     const bool res = buffer->read(buffer, &out->offset, 16, NULL) == BUFFER_SUCCESS;
@@ -72,16 +150,36 @@ bool Deferred_read(Deferred *out, Buffer *buffer) {
     }
     const STITypeInfo **inner_type_ptr = DM_get(&ADF_TYPES_type_info, out->type_hash);
     if (inner_type_ptr == NULL) {
+        out->type_info_ = &dump_array;
+        DumpType *dump = out->data = mp_calloc(sizeof(DumpType), 1);
+        dump->data = mp_calloc(out->size, 1);
+        dump->size = out->size;
+        dump->type_hash = out->type_hash;
+        int64 ooffset = 0;
+        buffer->get_position(buffer, &ooffset);
+        buffer->set_position(buffer, out->offset, BUFFER_ORIGIN_START);
+        if (buffer->read(buffer, dump->data, out->size, NULL) != BUFFER_SUCCESS) {
+            GLog_Error("Failed to read unknown deferred type hash 0x%08X", out->type_hash);
+            mp_free(dump->data);
+            mp_free(dump);
+            return false;
+        }
+        buffer->set_position(buffer, ooffset, BUFFER_ORIGIN_START);
+
         GLog_Error("Unknown deferred type hash 0x%08X", out->type_hash);
         return false;
     }
     const STITypeInfo *inner_type = *inner_type_ptr;
     out->type_info_ = inner_type;
-    out->data = mp_malloc(inner_type->size);
+    out->data = mp_calloc(inner_type->size, 1);
     int64 ooffset = 0;
     buffer->get_position(buffer, &ooffset);
     buffer->set_position(buffer, out->offset, BUFFER_ORIGIN_START);
-
+    if (inner_type->init == NULL) {
+        GLog_Error("Inner type of deferred type hash 0x%08X does not have init function", out->type_hash);
+        abort();
+    }
+    inner_type->init(out->data);
     if (!inner_type->read(out->data, buffer)) {
         GLog_Error("Failed to read deferred type hash 0x%08X", out->type_hash);
         return false;

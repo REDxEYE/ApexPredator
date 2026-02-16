@@ -81,8 +81,8 @@ void STI_TypeLibrary_init(STI_TypeLibrary *lib) {
 
     //string = 0x8955583E
     type = DM_insert(&lib->types, STI_TYPE_HASH_STRING);
-    STI_Type_init(type, STI_Primitive, STI_TYPE_HASH_STRING, String_from_cstr(&tmp, "String"));
-    type->size = 16;
+    STI_Type_init(type, STI_StringType, STI_TYPE_HASH_STRING, String_from_cstr(&tmp, "String"));
+    type->size = 8;
     type->alignment = 8;
 
     //Deferred = 0xDEFE88ED
@@ -291,6 +291,7 @@ void STI_Type_free(STI_Type *type) {
         case STI_Bitfield:
         case STI_StringHash:
         case STI_Alias:
+        case STI_StringType:
         case STI_Pointer: {
             break;
         }
@@ -321,6 +322,7 @@ void STI_Type_init(STI_Type *type, const STI_DataType meta_type, uint32 hash, co
         case STI_Array:
         case STI_DeferredType:
         case STI_Alias:
+        case STI_StringType:
         case STI_InlineArray: {
             break;
         }

@@ -26,6 +26,13 @@
 
 #include "commands.h"
 
+const CliSpec cli_spec = {
+    .prog = NULL,
+    .commands = sub_commands,
+    .command_count = sizeof(sub_commands) / sizeof(SubCommand),
+};
+
+
 int main(int argc, const char *argv[]) {
     mp_init();
     CliResult cli_res;

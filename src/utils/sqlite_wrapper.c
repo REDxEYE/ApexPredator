@@ -8,10 +8,6 @@
 
 #include "utils/memory_profiling.h"
 
-#ifndef KV_NOTFOUND
-#define KV_NOTFOUND 2
-#endif
-
 typedef struct assetdb assetdb_t;
 
 struct assetdb {

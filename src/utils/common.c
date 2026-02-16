@@ -49,9 +49,9 @@ bool is_digits(const char *str) {
 }
 
 uint32 parse_hex_u32(const char *str) {
-    return strtol(str, NULL, 16);
+    return strtoll(str, NULL, 16);
 }
 
 uint32 parse_digits_u32(const char *str) {
-    return strtol(str, NULL, 10);
+    return strtoll(str, NULL, 10);
 }

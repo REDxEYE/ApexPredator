@@ -104,8 +104,9 @@ bool visit_archive_file(Context *ctx, MemoryBuffer *mb, uint32 self_hash) {
 bool visit_all_files(const Archive *ar, const ArchiveEntry *entry, Context *ctx) {
     MemoryBuffer mb = {0};
     const StringView asset_path = String_size(&entry->path)>0? StringView_from_string(&entry->path) : find_name32_sv(entry->path_hash);
-
-    assetdb_kv_put_u32(ctx->db, entry->path_hash, StringView_cstr(asset_path));
+    if (sv_is_not_null(asset_path)) {
+        assetdb_kv_put_u32(ctx->db, entry->path_hash, StringView_cstr(asset_path));
+    }
     const uint64 size = entry->size;
 
     assetdb_files_put(ctx->db, entry->path_hash, StringView_cstr(asset_path), size, 0);
@@ -158,6 +159,7 @@ int main(int argc, const char *argv[]) {
     ingest_strings_file(db, "./../gz_strings/file_locations.txt");
     ingest_strings_file(db, "./../gz_strings/filenames.txt");
     ingest_strings_file(db, "./../gz_strings/cross_game.txt");
+    ingest_strings_file(db, "./../gz_strings/game_dump_clean.txt");
 
 
     ArchiveManager archive_manager = {0};
@@ -178,7 +180,13 @@ int main(int argc, const char *argv[]) {
         .havok_lib = &havok_lib
     };
 
-    ArchiveManager_foreach_file(&archive_manager, (foreach_callback)visit_all_files, &context);
+    for (uint32 i = 0; i < archive_manager.archives.count; ++i) {
+        const Archive *ar = archive_manager.archives.items[i];
+        GLog_Info("Processing archive: %s (%u/%u)", String_cstr(Archive_get_name(ar)), i + 1, archive_manager.archives.count);
+        if (!Archive_foreach_file(ar, (foreach_callback)visit_all_files, (void*)&context)) {
+            break;
+        }
+    }
 
     Havok_TypeLibrary_free(&havok_lib);
 

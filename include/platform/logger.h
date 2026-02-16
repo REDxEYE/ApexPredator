@@ -4,7 +4,7 @@
 #define APEXPREDATOR_LOGGER_H
 
 #include <stdarg.h>
-
+#include <stdio.h>
 #include "int_def.h"
 
 typedef struct Logger Logger;

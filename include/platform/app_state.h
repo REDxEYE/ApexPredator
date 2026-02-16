@@ -2,7 +2,7 @@
 
 #ifndef APEXPREDATOR_APP_STATE_H
 #define APEXPREDATOR_APP_STATE_H
-#include "archive_manager.h"
+#include "platform/archive_manager.h"
 #include "utils/gltf/cgltf_helper.h"
 
 typedef struct AppState {

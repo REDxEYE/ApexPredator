@@ -92,8 +92,8 @@ GL_ID export_file(AppState *app_state, uint32 hash) {
     else if (memcmp(mb.data, AVTX_MAGIC, 4) == 0) {
         export_ddsc(app_state, hash, &mb);
     }
-    else if (memcmp(mb.data, RIFF_MAGIC, 4)==0) {
-      export_fmod_bank(app_state, hash);
+    else if (memcmp(mb.data, RIFF_MAGIC, 4) == 0) {
+        export_fmod_bank(app_state, hash);
     }
     else if (memcmp(mb.data, RTPC_MAGIC, 4) == 0) {
         RuntimeNode *root_node = RuntimeContainer_from_buffer((Buffer *) &mb);
@@ -115,10 +115,42 @@ GL_ID export_file(AppState *app_state, uint32 hash) {
         output_node_id = export_havok_file(app_state, &tag_file, path);
         TagFile_free(&tag_file);
     }
+    else if (memcmp(mb.data, "\x1A\x45\xDF\xA3", 4) == 0) {
+        // Save as is with correct extension
+        String export_path = {};
+        Path_join(&export_path, &app_state->export_path);
+        if (sv_is_not_null(path)) {
+            Path_join_sv(&export_path, path);
+        }
+        else {
+            String tmp = {0};
+            String_format(&tmp, "file_%08X.mvk", hash);
+            Path_join(&export_path, &tmp);
+            String_free(&tmp);
+        }
+
+        Path_ensure_parent_dirs(&export_path);
+        FILE *f = fopen(String_cstr(&export_path), "wb");
+        fwrite(mb.data, 1, mb.size, f);
+        fclose(f);
+        GLog_Warning("Unhandled MKV file \"%s\" been written to file: \"%s\"", StringView_cstr(path),
+                     String_cstr(&export_path));
+        String_free(&export_path);
+    }
     else {
         String unk_file_export_path = {};
         Path_join(&unk_file_export_path, &app_state->export_path);
-        Path_join_sv(&unk_file_export_path, path);
+        if (sv_is_not_null(path)) {
+            Path_join_sv(&unk_file_export_path, path);
+        }
+        else {
+            String tmp = {0};
+            String_format(&tmp, "file_%08X.bin", hash);
+            Path_join(&unk_file_export_path, &tmp);
+            String_free(&tmp);
+        }
+
+
         Path_ensure_parent_dirs(&unk_file_export_path);
         FILE *f = fopen(String_cstr(&unk_file_export_path), "wb");
         fwrite(mb.data, 1, mb.size, f);

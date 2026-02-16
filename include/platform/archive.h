@@ -5,6 +5,7 @@
 #include <assert.h>
 
 #include "int_def.h"
+#include "apex/hashes.h"
 #include "utils/string.h"
 #include "utils/dynamic_array.h"
 #include "utils/lookup3.h"

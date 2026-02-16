@@ -36,49 +36,10 @@ void import_builtin_adf(const uint8 *data, const int64 size, STI_TypeLibrary *li
 void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
     STI_start_type_dump(lib);
     // @formatter:off
-    import_builtin_adf(VEGETATIONINFO_ADF, sizeof(VEGETATIONINFO_ADF),lib);
-    import_builtin_adf(STRINGLOOKUP_ADF_TYPE_MEMORY, sizeof(STRINGLOOKUP_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(XLS_ADF_TYPE_MEMORY, sizeof(XLS_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(LIGHTINFO_ADF_TYPE_MEMORY, sizeof(LIGHTINFO_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(SHADER_FORMAT_LIBRARY_ARR, sizeof(SHADER_FORMAT_LIBRARY_ARR),lib);
-    import_builtin_adf(MODEL_ADF_TYPE_MEMORY, sizeof(MODEL_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(LANDSCAPE_ADF_TYPE_LIBRARY_STREAMPATCH0, sizeof(LANDSCAPE_ADF_TYPE_LIBRARY_STREAMPATCH0),lib);
-    import_builtin_adf(LANDSCAPE_ADF_TYPE_LIBRARY_STREAMPATCH1, sizeof(LANDSCAPE_ADF_TYPE_LIBRARY_STREAMPATCH1),lib);
-    import_builtin_adf(LANDSCAPE_ADF_TYPE_LIBRARY_STREAMPATCH4, sizeof(LANDSCAPE_ADF_TYPE_LIBRARY_STREAMPATCH4),lib);
-    import_builtin_adf(TERRAINOCCLUDERSTYPE_ADF, sizeof(TERRAINOCCLUDERSTYPE_ADF),lib);
-    import_builtin_adf(MODELCOLLECTION_ADF_TYPE_MEMORY, sizeof(MODELCOLLECTION_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(ADF_TYPE_LIBRARY_OCCLUDER, sizeof(ADF_TYPE_LIBRARY_OCCLUDER),lib);
-    import_builtin_adf(NGRAPHSCRIPT_ADF_TYPE_MEMORY, sizeof(NGRAPHSCRIPT_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(ROAD_GRAPH_TYPE_LIBRARY, sizeof(ROAD_GRAPH_TYPE_LIBRARY),lib);
-    import_builtin_adf(ROUTES_TYPE_LIBRARY, sizeof(ROUTES_TYPE_LIBRARY),lib);
-    import_builtin_adf(GAME_DATA_COLLECTION_ADF_TYPELIBRARY, sizeof(GAME_DATA_COLLECTION_ADF_TYPELIBRARY),lib);
-    import_builtin_adf(ANIMAL_BITMAP_DATA_ADF_TYPE_LIBRARY, sizeof(ANIMAL_BITMAP_DATA_ADF_TYPE_LIBRARY),lib);
-    import_builtin_adf(DOWNLOAD_CACHE_DATA_ADF_TYPELIBRARY, sizeof(DOWNLOAD_CACHE_DATA_ADF_TYPELIBRARY),lib);
-    import_builtin_adf(SAVE_GAME_DATA_ADF_TYPELIBRARY, sizeof(SAVE_GAME_DATA_ADF_TYPELIBRARY),lib);
-    import_builtin_adf(RAGDOLL_SETTINGS_ADF_TYPE_MEMORY, sizeof(RAGDOLL_SETTINGS_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(FORCE_PULSE_TUNING_ADF_TYPE_MEMORY, sizeof(FORCE_PULSE_TUNING_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(SCOPE_TUNING_ADF_TYPE_MEMORY, sizeof(SCOPE_TUNING_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(ARCTUNE_ADF_TYPE_MEMORY, sizeof(ARCTUNE_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(AI_TUNING_ADF_TYPE_MEMORY, sizeof(AI_TUNING_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(SPLINES_ADF_TYPE_MEMORY_1, sizeof(SPLINES_ADF_TYPE_MEMORY_1),lib);
-    import_builtin_adf(AISYS_TUNING_ADF_TYPE_MEMORY, sizeof(AISYS_TUNING_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(TERRAINSYSTEMTYPES_ADF_TYPE_LIBRARY_INFO,sizeof(TERRAINSYSTEMTYPES_ADF_TYPE_LIBRARY_INFO),lib);
-    import_builtin_adf(TERRAINSYSTEM_ADF_TYPE_LIBRARY_INFO, sizeof(TERRAINSYSTEM_ADF_TYPE_LIBRARY_INFO),lib);
-    import_builtin_adf(MODEL_ADF_TYPE_MEMORY_0, sizeof(MODEL_ADF_TYPE_MEMORY_0),lib);
-    import_builtin_adf(RUNTIME_EFFECT_LIBRARY, sizeof(RUNTIME_EFFECT_LIBRARY),lib);
-    import_builtin_adf(PFX_ADF_TYPE_MEMORY, sizeof(PFX_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(GRAPH_ADF_TYPE_MEMORY, sizeof(GRAPH_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(EXP_PROB_ADF_TYPE_MEMORY, sizeof(EXP_PROB_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(VEHICLEPHYSICSSETTINGS_ADF_TYPE_MEMORY, sizeof(VEHICLEPHYSICSSETTINGS_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(VEHICLEPIPELINE_ADF_TYPE_MEMORY, sizeof(VEHICLEPIPELINE_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(PERCEPTION_ADF_TYPE_MEMORY, sizeof(PERCEPTION_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(WATERTUNE_ADF_TYPE_MEMORY, sizeof(WATERTUNE_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(PLAYER_SETTINGS_ADF_TYPE_MEMORY, sizeof(PLAYER_SETTINGS_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(AMMO_TUNING_ADF_TYPE_MEMORY, sizeof(AMMO_TUNING_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(CUSTOM_MOVEMENT_TUNING_ADF_TYPE_MEMORY, sizeof(CUSTOM_MOVEMENT_TUNING_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(CAMERA_TUNING_ADF_TYPE_MEMORY, sizeof(CAMERA_TUNING_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(CHAINTUNE_ADF_TYPE_MEMORY, sizeof(CHAINTUNE_ADF_TYPE_MEMORY),lib);
-    import_builtin_adf(HP_MISSIONS_ADF_TYPE_MEMORY, sizeof(HP_MISSIONS_ADF_TYPE_MEMORY),lib);
+    uint32_t builtin_count = sizeof(builtin_adfs) / sizeof(BuiltinAdf);
+    for (uint32_t i = 0; i < builtin_count; ++i) {
+        import_builtin_adf((const uint8 *)builtin_adfs[i].data, builtin_adfs[i].size, lib);
+    }
     // @formatter:on
 
     ADF adf = {0};

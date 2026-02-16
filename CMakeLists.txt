@@ -82,6 +82,8 @@ add_library(AdfLib STATIC
         src/utils/memory_profiler.c
         src/utils/memory_tracker.c
         src/apex/adf/adf_support_types.c
+        src/tools/builtin_adf_dumper/patterns.c
+        src/tools/builtin_adf_dumper/patterns.h
 )
 
 add_library(HavokLib STATIC
@@ -149,6 +151,9 @@ add_executable(ApexPredator
         src/exporter/export_fmod.c
 
         ${CommonFiles}
+        src/tools/apex_predator/commands/extract.c
+        src/tools/apex_predator/commands/extract_anim.c
+        src/tools/apex_predator/commands/search.c
 
 )
 
@@ -234,3 +239,31 @@ target_link_libraries(StringHasher PUBLIC Tracy::TracyClient)
 
 target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
 # target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
+
+if (WIN32)
+
+    FetchContent_Declare(
+            minhook
+            GIT_REPOSITORY "https://github.com/TsudaKageyu/minhook"
+            GIT_TAG v1.3.4
+    )
+
+    FetchContent_MakeAvailable(minhook)
+
+    add_library(builtinAdfDumper SHARED
+            src/tools/builtin_adf_dumper/builtinAdfDumper.c
+            src/tools/builtin_adf_dumper/exports.c
+            src/tools/builtin_adf_dumper/patterns.c
+    )
+    target_link_libraries(builtinAdfDumper PRIVATE minhook)
+    target_link_directories(builtinAdfDumper PRIVATE external/detours/src)
+    #set_target_properties(builtinAdfDumper PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+
+    set(GAME_PATH "C:\\Program Files (x86)\\Steam\\steamapps\\common\\GenerationZero")
+    add_custom_command(TARGET builtinAdfDumper POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            $<TARGET_FILE:builtinAdfDumper>
+            "\"${GAME_PATH}\\winhttp.dll\""
+    )
+endif ()

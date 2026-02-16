@@ -7,256 +7,6 @@
 #include "apex/adf/adf_type_info_map.h"
 void STI_ADF_TYPES_register_functions();
 
-typedef struct ImpostorVertex ImpostorVertex;// size: 24
-typedef struct ImpostorMesh ImpostorMesh;// size: 56
-typedef struct ImpostorInfo ImpostorInfo;// size: 72
-typedef struct ImpostorCollection ImpostorCollection;// size: 16
-typedef struct VegetationModel VegetationModel;// size: 96
-typedef struct VegetationPlacementSettings VegetationPlacementSettings;// size: 48
-typedef struct VegetationEffect VegetationEffect;// size: 104
-typedef struct VegetationPhysics VegetationPhysics;// size: 88
-typedef struct VegetationObject VegetationObject;// size: 352
-typedef struct ProbabilityBuffer ProbabilityBuffer;// size: 24
-typedef struct VegetationSet VegetationSet;// size: 32
-typedef struct VegetationZone VegetationZone;// size: 16
-typedef struct VegetationIndex VegetationIndex;// size: 4
-typedef struct VegetationForestLayer VegetationForestLayer;// size: 64
-typedef struct VegetationBillboardLayer VegetationBillboardLayer;// size: 44
-typedef struct VegetationModelLayer VegetationModelLayer;// size: 52
-typedef struct VegetationPhysicsLayer VegetationPhysicsLayer;// size: 24
-typedef struct VegetationLayers VegetationLayers;// size: 64
-typedef struct VegetationWorld VegetationWorld;// size: 176
-typedef struct VegetationSystemInstanceSrc VegetationSystemInstanceSrc;// size: 48
-typedef struct VegetationSystemInstance VegetationSystemInstance;// size: 24
-typedef struct ArrayAABB ArrayAABB;// size: 28
-typedef struct TerrainPatchInfo TerrainPatchInfo;// size: 48
-typedef struct VegetationBillboardLayerStats VegetationBillboardLayerStats;// size: 32
-typedef struct VegetationDebugData VegetationDebugData;// size: 64
-typedef struct InstanceDataLayer InstanceDataLayer;// size: 128
-typedef struct InstanceDataPatch InstanceDataPatch;// size: 48
-typedef struct ForestVertex ForestVertex;// size: 4
-typedef struct ForestMesh ForestMesh;// size: 40
-typedef struct VegetationDataBuffer VegetationDataBuffer;// size: 16
-typedef struct StringLookupHashProperties StringLookupHashProperties;// size: 12
-typedef struct StringLookupSubtitle StringLookupSubtitle;// size: 12
-typedef struct StringLookupDialogueLine StringLookupDialogueLine;// size: 40
-typedef struct StringLookup StringLookup;// size: 48
-typedef struct XLSSheet XLSSheet;// size: 32
-typedef struct XLSCell XLSCell;// size: 12
-typedef struct XLSAttribute XLSAttribute;// size: 2
-typedef struct XLSBook XLSBook;// size: 128
-typedef struct LightInfo LightInfo;// size: 40
-typedef struct AllLights AllLights;// size: 16
-typedef struct Shader Shader;// size: 40
-typedef struct ShaderLibrary ShaderLibrary;// size: 112
-typedef struct AmfStreamAttribute AmfStreamAttribute;// size: 20
-typedef struct AmfBoundingBox AmfBoundingBox;// size: 24
-typedef struct AmfSubMesh AmfSubMesh;// size: 36
-typedef struct AmfMesh AmfMesh;// size: 152
-typedef struct AmfLodGroup AmfLodGroup;// size: 24
-typedef struct AmfMeshHeader AmfMeshHeader;// size: 56
-typedef struct AmfBuffer AmfBuffer;// size: 24
-typedef struct AmfMeshBuffers AmfMeshBuffers;// size: 40
-typedef struct AmfMaterial AmfMaterial;// size: 40
-typedef struct AmfModel AmfModel;// size: 48
-typedef struct AmfModelVariant AmfModelVariant;// size: 80
-typedef struct StreamPatchFileHeader StreamPatchFileHeader;// size: 24
-typedef struct StreamPatchBlockHeader StreamPatchBlockHeader;// size: 24
-typedef struct WorldSettings WorldSettings;// size: 28
-typedef struct PhysicsStreamPatchType PhysicsStreamPatchType;// size: 24
-typedef struct TerrainOccluderMesh TerrainOccluderMesh;// size: 64
-typedef struct TerrainOccluderPackedMesh TerrainOccluderPackedMesh;// size: 16
-typedef struct AdfModelCollectionInstance AdfModelCollectionInstance;// size: 92
-typedef struct AdfModelCollection AdfModelCollection;// size: 64
-typedef struct OccluderBox OccluderBox;// size: 76
-typedef struct OccluderBoxCollection OccluderBoxCollection;// size: 16
-typedef struct GSData GSData;// size: 32
-typedef struct GSDataSet GSDataSet;// size: 48
-typedef struct GSNode GSNode;// size: 64
-typedef struct GSGraph GSGraph;// size: 16
-typedef struct RoadGraphNode RoadGraphNode;// size: 16
-typedef struct RoadGraphEdge RoadGraphEdge;// size: 8
-typedef struct RoadGraphEdgeSample RoadGraphEdgeSample;// size: 6
-typedef struct RoadGraphEdgeSamples RoadGraphEdgeSamples;// size: 40
-typedef struct RoadGraph RoadGraph;// size: 136
-typedef struct RoadInfoEx RoadInfoEx;// size: 72
-typedef struct RoadToGraphLookup RoadToGraphLookup;// size: 32
-typedef struct RoadGraphRoadExtraInfo RoadGraphRoadExtraInfo;// size: 48
-typedef struct PatchSampleList PatchSampleList;// size: 4
-typedef struct PersistentRoadSamples PersistentRoadSamples;// size: 32
-typedef struct PersistentDataEx PersistentDataEx;// size: 16
-typedef struct RouteInput RouteInput;// size: 24
-typedef struct RouteInputsCollection RouteInputsCollection;// size: 16
-typedef struct RoadInfo RoadInfo;// size: 4
-typedef struct Route Route;// size: 32
-typedef struct RoutesCollection RoutesCollection;// size: 16
-typedef struct BlobOfBytes BlobOfBytes;// size: 16
-typedef struct GDCFileEntry GDCFileEntry;// size: 32
-typedef struct GameDataCollection GameDataCollection;// size: 32
-typedef struct BitmapArea BitmapArea;// size: 56
-typedef struct BitmapLayer BitmapLayer;// size: 40
-typedef struct BitmapData BitmapData;// size: 24
-typedef struct CachedFile CachedFile;// size: 80
-typedef struct DownloadFileCache DownloadFileCache;// size: 16
-typedef struct Vector2 Vector2;// size: 8
-typedef struct SaveVector3 SaveVector3;// size: 12
-typedef struct RegionData RegionData;// size: 8
-typedef struct ChildEquipment ChildEquipment;// size: 8
-typedef struct OwnedEquipment1 OwnedEquipment1;// size: 80
-typedef struct OwnedEquipment2 OwnedEquipment2;// size: 48
-typedef struct OwnedEquipment3 OwnedEquipment3;// size: 48
-typedef struct VehicleData VehicleData;// size: 12
-typedef struct PlayerDecalData PlayerDecalData;// size: 12
-typedef struct CharacterLooks CharacterLooks;// size: 56
-typedef struct PlayerPosition PlayerPosition;// size: 16
-typedef struct RaidLootSaveData RaidLootSaveData;// size: 8
-typedef struct RivalHistory1 RivalHistory1;// size: 8
-typedef struct Rival1 Rival1;// size: 40
-typedef struct RivalRegion1 RivalRegion1;// size: 32
-typedef struct RivalMissionGroup1 RivalMissionGroup1;// size: 8
-typedef struct ResourceStorageItem ResourceStorageItem;// size: 8
-typedef struct HealthBuildingComponentSaveData1 HealthBuildingComponentSaveData1;// size: 4
-typedef struct RepairBuildingComponentSaveData1 RepairBuildingComponentSaveData1;// size: 1
-typedef struct DismantleBuildingComponentSaveData1 DismantleBuildingComponentSaveData1;// size: 1
-typedef struct InventoryBuildingComponentSaveData1 InventoryBuildingComponentSaveData1;// size: 16
-typedef struct BuildingSaveData1 BuildingSaveData1;// size: 20
-typedef struct BuildingSaveData2 BuildingSaveData2;// size: 40
-typedef struct BuildingSaveData3 BuildingSaveData3;// size: 32
-typedef struct BuildContainer1 BuildContainer1;// size: 16
-typedef struct BuildingGridSaveData1 BuildingGridSaveData1;// size: 16
-typedef struct ControlPointSaveData1 ControlPointSaveData1;// size: 48
-typedef struct ControlPointSaveData2 ControlPointSaveData2;// size: 48
-typedef struct ControlPointSaveData3 ControlPointSaveData3;// size: 48
-typedef struct FactionSaveData1 FactionSaveData1;// size: 24
-typedef struct WarSeason1 WarSeason1;// size: 48
-typedef struct WarSaveData1 WarSaveData1;// size: 48
-typedef struct CharacterProfile1 CharacterProfile1;// size: 1000
-typedef struct CharacterProfile2 CharacterProfile2;// size: 1016
-typedef struct CharacterProfile3 CharacterProfile3;// size: 1024
-typedef struct CharacterProfile4 CharacterProfile4;// size: 1024
-typedef struct CharacterProfile5 CharacterProfile5;// size: 1088
-typedef struct CharacterProfile6 CharacterProfile6;// size: 1088
-typedef struct AnimalDamageablePartSaveData AnimalDamageablePartSaveData;// size: 16
-typedef struct AnimalRepopulateSaveData AnimalRepopulateSaveData;// size: 1
-typedef struct AnimalPopulationSaveData AnimalPopulationSaveData;// size: 72
-typedef struct AnimalPopulationSaveData2 AnimalPopulationSaveData2;// size: 24
-typedef struct AnimalGroupSaveData AnimalGroupSaveData;// size: 8
-typedef struct MachinePersistentStatsEncounterData MachinePersistentStatsEncounterData;// size: 16
-typedef struct MachinePersistentStatsData MachinePersistentStatsData;// size: 272
-typedef struct AnimalSaveData AnimalSaveData;// size: 1384
-typedef struct AnimalSaveData2 AnimalSaveData2;// size: 1392
-typedef struct AnimalPopulationsSaveData AnimalPopulationsSaveData;// size: 48
-typedef struct AnimalPopulationsSaveData2 AnimalPopulationsSaveData2;// size: 48
-typedef struct AnimalPopulationsSaveData3 AnimalPopulationsSaveData3;// size: 48
-typedef struct ValueOccurance ValueOccurance;// size: 96
-typedef struct MissionSaveData MissionSaveData;// size: 64
-typedef struct MissionSaveData2 MissionSaveData2;// size: 64
-typedef struct FogOfWar FogOfWar;// size: 65540
-typedef struct CodexInfo CodexInfo;// size: 8
-typedef struct IconInfo IconInfo;// size: 16
-typedef struct ReseveIconInfo ReseveIconInfo;// size: 24
-typedef struct StatisticInfo StatisticInfo;// size: 8
-typedef struct ContextualHelpInfo ContextualHelpInfo;// size: 8
-typedef struct LocationState LocationState;// size: 8
-typedef struct LocationSummarySaveData LocationSummarySaveData;// size: 112
-typedef struct PlayerRaidStatsSaveData PlayerRaidStatsSaveData;// size: 48
-typedef struct RaidSaveData RaidSaveData;// size: 32
-typedef struct RaidSaveData2 RaidSaveData2;// size: 40
-typedef struct TimerSaveData1 TimerSaveData1;// size: 16
-typedef struct ProfileSaveData1 ProfileSaveData1;// size: 120
-typedef struct ProfileSaveData2 ProfileSaveData2;// size: 120
-typedef struct ProfileSaveData3 ProfileSaveData3;// size: 160
-typedef struct ProfileSaveData4 ProfileSaveData4;// size: 160
-typedef struct SettingNameValuePair SettingNameValuePair;// size: 8
-typedef struct ProfileSaveData5 ProfileSaveData5;// size: 160
-typedef struct ProfileSaveData6 ProfileSaveData6;// size: 224
-typedef struct ProfileSaveData7 ProfileSaveData7;// size: 224
-typedef struct AcceptedPolicyPair AcceptedPolicyPair;// size: 68
-typedef struct ProfileSaveData8 ProfileSaveData8;// size: 176
-typedef struct ProfileSaveData9 ProfileSaveData9;// size: 176
-typedef struct WorldSaveData1 WorldSaveData1;// size: 216
-typedef struct WorldSaveData2 WorldSaveData2;// size: 216
-typedef struct WorldSaveData3 WorldSaveData3;// size: 232
-typedef struct WorldSaveData4 WorldSaveData4;// size: 232
-typedef struct WorldSaveData5 WorldSaveData5;// size: 248
-typedef struct WorldSaveData6 WorldSaveData6;// size: 264
-typedef struct WorldSaveData7 WorldSaveData7;// size: 296
-typedef struct WorldSaveData8 WorldSaveData8;// size: 304
-typedef struct WorldSaveData9 WorldSaveData9;// size: 336
-typedef struct WorldSaveData10 WorldSaveData10;// size: 336
-typedef struct WorldSaveData11 WorldSaveData11;// size: 336
-typedef struct CharactersSaveData1 CharactersSaveData1;// size: 4080
-typedef struct CharactersSaveData2 CharactersSaveData2;// size: 4144
-typedef struct CharactersSaveData3 CharactersSaveData3;// size: 4176
-typedef struct CharactersSaveData4 CharactersSaveData4;// size: 4176
-typedef struct CharactersSaveData5 CharactersSaveData5;// size: 4208
-typedef struct CharactersSaveData6 CharactersSaveData6;// size: 4208
-typedef struct CharactersSaveData7 CharactersSaveData7;// size: 4464
-typedef struct CharactersSaveData8 CharactersSaveData8;// size: 4464
-typedef struct SaveGameData1 SaveGameData1;// size: 48
-typedef struct SaveGameData2 SaveGameData2;// size: 64
-typedef struct SaveGameRoot SaveGameRoot;// size: 16
-typedef struct PoweredConstraintParameters PoweredConstraintParameters;// size: 20
-typedef struct RigidBodyControllerParameters RigidBodyControllerParameters;// size: 48
-typedef struct CollisionSubSystemByName CollisionSubSystemByName;// size: 16
-typedef struct RagdollSetting RagdollSetting;// size: 112
-typedef struct RagdollSettings RagdollSettings;// size: 16
-typedef struct ForcePulseSettings ForcePulseSettings;// size: 48
-typedef struct SightTuning SightTuning;// size: 20
-typedef struct ArcRenderSettings ArcRenderSettings;// size: 156
-typedef struct LynxSettings LynxSettings;// size: 8
-typedef struct HunterAttackSettings HunterAttackSettings;// size: 12
-typedef struct DreaAttackSettings DreaAttackSettings;// size: 8
-typedef struct DreaChargeSettings DreaChargeSettings;// size: 12
-typedef struct DreaThermobaricSettings DreaThermobaricSettings;// size: 32
-typedef struct HarvesterSettings HarvesterSettings;// size: 24
-typedef struct SmallMachineSettings SmallMachineSettings;// size: 16
-typedef struct MachineSettings MachineSettings;// size: 40
-typedef struct AITuningSettings AITuningSettings;// size: 152
-typedef struct SplineControlPoint SplineControlPoint;// size: 12
-typedef struct Spline5 Spline5;// size: 80
-typedef struct Spline10 Spline10;// size: 140
-typedef struct Spline20 Spline20;// size: 260
-typedef struct DataLifespans DataLifespans;// size: 68
-typedef struct AwarenessEventRanges AwarenessEventRanges;// size: 64
-typedef struct PerceptionSettings PerceptionSettings;// size: 132
-typedef struct ActionToken ActionToken;// size: 32
-typedef struct ActionTokenList ActionTokenList;// size: 16
-typedef struct VariableInt VariableInt;// size: 16
-typedef struct VariableFloat VariableFloat;// size: 16
-typedef struct VariableBool VariableBool;// size: 16
-typedef struct VariableVec3 VariableVec3;// size: 24
-typedef struct BlackboardVarList BlackboardVarList;// size: 64
-typedef struct AIGlobals AIGlobals;// size: 216
-typedef struct CompressedData CompressedData;// size: 32
-typedef struct TerrainMesh TerrainMesh;// size: 224
-typedef struct TerrainTexture TerrainTexture;// size: 48
-typedef struct TerrainPatchTexelNeighborhood TerrainPatchTexelNeighborhood;// size: 8
-typedef struct TerrainPatchTexelConnectivity TerrainPatchTexelConnectivity;// size: 80
-typedef struct TerrainPatchType TerrainPatchType;// size: 464
-typedef struct TerrainPrimitive TerrainPrimitive;// size: 32
-typedef struct TerrainPatch TerrainPatch;// size: 632
-typedef struct TerrainTextureInfo TerrainTextureInfo;// size: 32
-typedef struct TerrainColor TerrainColor;// size: 3
-typedef struct TerrainMaterial TerrainMaterial;// size: 56
-typedef struct ShaderRules ShaderRules;// size: 564
-typedef struct TerrainSystem TerrainSystem;// size: 136
-typedef struct EffectRTRenderInfo EffectRTRenderInfo;// size: 24
-typedef struct EffectRTLocalParam EffectRTLocalParam;// size: 8
-typedef struct EffectRTParameters EffectRTParameters;// size: 72
-typedef struct EffectRTInstantiator EffectRTInstantiator;// size: 96
-typedef struct EffectRTEmitterTemplate EffectRTEmitterTemplate;// size: 120
-typedef struct EffectRTEmitter EffectRTEmitter;// size: 40
-typedef struct EffectRTModifier EffectRTModifier;// size: 80
-typedef struct EffectRTTimeline EffectRTTimeline;// size: 64
-typedef struct EffectRTSpecialEffect EffectRTSpecialEffect;// size: 168
-typedef struct EffectRTBatchDescriptor EffectRTBatchDescriptor;// size: 24
-typedef struct EffectRTSpecialEffectData EffectRTSpecialEffectData;// size: 24
-typedef struct EffectRTOutputBufferDescriptor EffectRTOutputBufferDescriptor;// size: 40
-typedef struct EffectRTParamHandler EffectRTParamHandler;// size: 56
-typedef struct EffectRTSystem EffectRTSystem;// size: 224
-typedef struct EffectVertexArray EffectVertexArray;// size: 16
-typedef struct EffectTrimData EffectTrimData;// size: 40
 typedef struct PfxStaticInstance PfxStaticInstance;// size: 96
 typedef struct PfxStaticCompound PfxStaticCompound;// size: 96
 typedef struct PfxSimplePartInstance PfxSimplePartInstance;// size: 96
@@ -269,11 +19,224 @@ typedef struct PfxBodyMassProperties PfxBodyMassProperties;// size: 44
 typedef struct PfxBodyProperties PfxBodyProperties;// size: 56
 typedef struct PfxBodyPropertiesEntry PfxBodyPropertiesEntry;// size: 64
 typedef struct PfxBodyPropertiesDict PfxBodyPropertiesDict;// size: 16
+typedef struct CachedFile CachedFile;// size: 80
+typedef struct DownloadFileCache DownloadFileCache;// size: 16
+typedef struct SplineControlPoint SplineControlPoint;// size: 12
+typedef struct Spline5 Spline5;// size: 80
+typedef struct Spline10 Spline10;// size: 140
+typedef struct Spline20 Spline20;// size: 260
+typedef struct ShakeSettings ShakeSettings;// size: 28
+typedef struct RumbleSettings RumbleSettings;// size: 8
+typedef struct AutoAimSettings AutoAimSettings;// size: 84
+typedef struct WeaponAimAssistSettings WeaponAimAssistSettings;// size: 24
+typedef struct AutoAim AutoAim;// size: 108
+typedef struct AttachSetting AttachSetting;// size: 28
+typedef struct AttachSettings AttachSettings;// size: 32
+typedef struct GripPointSetting GripPointSetting;// size: 20
+typedef struct GripPointSettings GripPointSettings;// size: 16
+typedef struct UISettings UISettings;// size: 24
+typedef struct ScatterSettings ScatterSettings;// size: 44
+typedef struct RecoilSettings RecoilSettings;// size: 60
+typedef struct MountedWeaponInputSettings MountedWeaponInputSettings;// size: 20
+typedef struct WeaponTuningBase WeaponTuningBase;// size: 192
+typedef struct BulletWeaponTuningBase BulletWeaponTuningBase;// size: 48
+typedef struct BulletWeaponTuning BulletWeaponTuning;// size: 340
+typedef struct ZeroingSettings ZeroingSettings;// size: 8
+typedef struct ZeroingIndexRequirement ZeroingIndexRequirement;// size: 1
+typedef struct ZeroingIndexEntry ZeroingIndexEntry;// size: 2
+typedef struct ScopeOffsetSettings ScopeOffsetSettings;// size: 16
+typedef struct MachineWeaponTuning MachineWeaponTuning;// size: 60
+typedef struct HeavyMachineWeaponTuning HeavyMachineWeaponTuning;// size: 1
+typedef struct FlyingMachineWeaponTuning FlyingMachineWeaponTuning;// size: 20
+typedef struct AIWeaponTuning AIWeaponTuning;// size: 84
+typedef struct FireMode FireMode;// size: 36
+typedef struct AlternativeHitEntitySpawning AlternativeHitEntitySpawning;// size: 16
+typedef struct MoveSpeedMulAbscissa MoveSpeedMulAbscissa;// size: 12
+typedef struct WeaponTuning WeaponTuning;// size: 696
+typedef struct WeaponSwayTuning WeaponSwayTuning;// size: 144
+typedef struct VerticalAlignSplines VerticalAlignSplines;// size: 420
+typedef struct VerticalAlignBoneAdjustment VerticalAlignBoneAdjustment;// size: 872
+typedef struct BoneAdjustments BoneAdjustments;// size: 24
+typedef struct VerticalAimAdjust VerticalAimAdjust;// size: 24
+typedef struct InputStick InputStick;// size: 20
+typedef struct CameraSpring CameraSpring;// size: 12
+typedef struct CameraSplineControlPoint CameraSplineControlPoint;// size: 12
+typedef struct CameraSpline5 CameraSpline5;// size: 80
+typedef struct CameraSpline10 CameraSpline10;// size: 140
+typedef struct CameraTowing CameraTowing;// size: 24
+typedef struct CameraInputParams CameraInputParams;// size: 172
+typedef struct VehicleSplineFuncOfPitchParams VehicleSplineFuncOfPitchParams;// size: 424
+typedef struct GenericVehicleCamera GenericVehicleCamera;// size: 800
+typedef struct SphericalCoordinateFramingParams SphericalCoordinateFramingParams;// size: 44
+typedef struct SetOffsetFramingParams SetOffsetFramingParams;// size: 28
+typedef struct InputToOrbitModifierParams InputToOrbitModifierParams;// size: 32
+typedef struct DofModifierParams DofModifierParams;// size: 32
+typedef struct MotionBlurModifierParams MotionBlurModifierParams;// size: 16
+typedef struct FocusDofModifierParams FocusDofModifierParams;// size: 148
+typedef struct SplineFuncOfPitchParams SplineFuncOfPitchParams;// size: 328
+typedef struct SplineFuncOfYawParams SplineFuncOfYawParams;// size: 708
+typedef struct FollowSpringModifierParams FollowSpringModifierParams;// size: 208
+typedef struct CameraCollisionParams CameraCollisionParams;// size: 148
+typedef struct RadialBlurParams RadialBlurParams;// size: 36
+typedef struct AlignToVelocityParams AlignToVelocityParams;// size: 40
+typedef struct MoveInputYawParams MoveInputYawParams;// size: 40
+typedef struct MoveInputPitchParams MoveInputPitchParams;// size: 32
+typedef struct AutoPitchParams AutoPitchParams;// size: 28
+typedef struct ProceduralShakeParams ProceduralShakeParams;// size: 88
+typedef struct RollParams RollParams;// size: 56
+typedef struct MoveInputOffsetParams MoveInputOffsetParams;// size: 132
+typedef struct DynamicZParams DynamicZParams;// size: 28
+typedef struct ZOverTimeParams ZOverTimeParams;// size: 144
+typedef struct HintModifierParams HintModifierParams;// size: 84
+typedef struct WeaponCameraParams WeaponCameraParams;// size: 32
+typedef struct ParachuteAttachmentModifierParams ParachuteAttachmentModifierParams;// size: 20
+typedef struct ParachuteCameraCollisionModifierParams ParachuteCameraCollisionModifierParams;// size: 28
+typedef struct WingsuitAttachmentModifierParams WingsuitAttachmentModifierParams;// size: 132
+typedef struct PlayerCollisionModifierParams PlayerCollisionModifierParams;// size: 44
+typedef struct TankPositionModifierParams TankPositionModifierParams;// size: 16
+typedef struct CameraAnimationControl CameraAnimationControl;// size: 56
+typedef struct NoiseAnimation NoiseAnimation;// size: 496
+typedef struct SplineAnimation SplineAnimation;// size: 1120
+typedef struct ShakeAnimation ShakeAnimation;// size: 432
+typedef struct AuxiliaryMotionModifierParams AuxiliaryMotionModifierParams;// size: 56
+typedef struct LocalAngleLimitsModifierParams LocalAngleLimitsModifierParams;// size: 44
+typedef struct CameraShakeModifierParams CameraShakeModifierParams;// size: 8
+typedef struct FullScreenEffectModifierParams FullScreenEffectModifierParams;// size: 1
+typedef struct CameraBaseSmoothingModifierParams CameraBaseSmoothingModifierParams;// size: 44
+typedef struct TrackPlayerModifierParams TrackPlayerModifierParams;// size: 28
+typedef struct SequenceDofModifierParams SequenceDofModifierParams;// size: 1
+typedef struct ListenerPositionParams ListenerPositionParams;// size: 20
+typedef struct AimAssistParams AimAssistParams;// size: 24
+typedef struct FirstPersonCameraModifierParams FirstPersonCameraModifierParams;// size: 280
+typedef struct ThirdPersonCameraModifierParams ThirdPersonCameraModifierParams;// size: 232
+typedef struct FirstPersonVehicleCameraModifierParams FirstPersonVehicleCameraModifierParams;// size: 256
+typedef struct SetCameraPivotModifierParams SetCameraPivotModifierParams;// size: 16
+typedef struct JointOffsetFramingParams JointOffsetFramingParams;// size: 16
+typedef struct JointPivotModifierParams JointPivotModifierParams;// size: 16
+typedef struct AdditivePivotModifierParams AdditivePivotModifierParams;// size: 24
+typedef struct AdditiveOffsetModifierParams AdditiveOffsetModifierParams;// size: 24
+typedef struct VehicleAngleLimitsModifierParams VehicleAngleLimitsModifierParams;// size: 36
+typedef struct ChaseCameraModifierParams ChaseCameraModifierParams;// size: 228
+typedef struct CameraTransitionParams CameraTransitionParams;// size: 72
+typedef struct DataLifespans DataLifespans;// size: 68
+typedef struct AwarenessEventRanges AwarenessEventRanges;// size: 64
+typedef struct AwarenessEventThreats AwarenessEventThreats;// size: 44
+typedef struct PerceptionSettings PerceptionSettings;// size: 176
+typedef struct ActionToken ActionToken;// size: 32
+typedef struct ActionTokenList ActionTokenList;// size: 16
+typedef struct VariableInt VariableInt;// size: 16
+typedef struct VariableFloat VariableFloat;// size: 16
+typedef struct VariableBool VariableBool;// size: 16
+typedef struct VariableVec3 VariableVec3;// size: 24
+typedef struct BlackboardVarList BlackboardVarList;// size: 64
+typedef struct AIGlobals AIGlobals;// size: 256
+typedef struct CharacterSplineControlPoint CharacterSplineControlPoint;// size: 12
+typedef struct CharacterSpline10 CharacterSpline10;// size: 140
+typedef struct WeaponSkillSettings WeaponSkillSettings;// size: 88
+typedef struct MovementSteeringParams MovementSteeringParams;// size: 48
+typedef struct StaminaThresholds StaminaThresholds;// size: 4
+typedef struct CharacterFpsSettings CharacterFpsSettings;// size: 256
+typedef struct CharacterOnFootSettings CharacterOnFootSettings;// size: 36
+typedef struct CharacterSwimSettings CharacterSwimSettings;// size: 12
+typedef struct MovementType MovementType;// size: 48
+typedef struct AvoidanceSettings AvoidanceSettings;// size: 24
+typedef struct CharacterNavigationSettings CharacterNavigationSettings;// size: 56
+typedef struct VelocityFilterSettings VelocityFilterSettings;// size: 12
+typedef struct CharacterMovementSettings CharacterMovementSettings;// size: 352
+typedef struct MotorbikeTurnSettings MotorbikeTurnSettings;// size: 12
+typedef struct MotorbikeLeanSettings MotorbikeLeanSettings;// size: 32
+typedef struct MotorbikeTiltSettings MotorbikeTiltSettings;// size: 44
+typedef struct MotorbikeAimSettings MotorbikeAimSettings;// size: 16
+typedef struct MotorbikeMotionComponents MotorbikeMotionComponents;// size: 64
+typedef struct MotorbikeDebugSettings MotorbikeDebugSettings;// size: 128
+typedef struct CharacterRealizationSettings CharacterRealizationSettings;// size: 232
+typedef struct GroundAlignmentDataSplines GroundAlignmentDataSplines;// size: 420
+typedef struct BoneData BoneData;// size: 864
+typedef struct GroundAlignmentBoneAdjustment GroundAlignmentBoneAdjustment;// size: 16
+typedef struct DataSplines DataSplines;// size: 420
+typedef struct PositionRotation PositionRotation;// size: 848
+typedef struct CharacterAimingSettings CharacterAimingSettings;// size: 2608
+typedef struct CharacterSpring CharacterSpring;// size: 12
+typedef struct CharacterRetractSShotSettings CharacterRetractSShotSettings;// size: 20
+typedef struct CharacterReelToParaSettings CharacterReelToParaSettings;// size: 84
+typedef struct CharacterAirMovementSettings CharacterAirMovementSettings;// size: 452
+typedef struct CharacterAirSteerSettings CharacterAirSteerSettings;// size: 24
+typedef struct CharacterJumpSettings CharacterJumpSettings;// size: 28
+typedef struct CharacterReeledHangSettings CharacterReeledHangSettings;// size: 24
+typedef struct CharacterWingsuitSettings CharacterWingsuitSettings;// size: 484
+typedef struct CharacterFreefallSettings CharacterFreefallSettings;// size: 460
+typedef struct CharacterParachuteSettings CharacterParachuteSettings;// size: 552
+typedef struct CharacterReelInSettings CharacterReelInSettings;// size: 20
+typedef struct CustomMovementSettings CustomMovementSettings;// size: 2020
+typedef struct DirectionalAct DirectionalAct;// size: 16
+typedef struct DistanceRange DistanceRange;// size: 24
+typedef struct EventSetting EventSetting;// size: 24
+typedef struct ReactionSettings ReactionSettings;// size: 16
+typedef struct ViewFrustum ViewFrustum;// size: 52
+typedef struct SmellSettings SmellSettings;// size: 72
+typedef struct HearingSettings HearingSettings;// size: 96
+typedef struct VisionSettings VisionSettings;// size: 144
+typedef struct PerceptionConfig PerceptionConfig;// size: 328
+typedef struct ForcePulseSettings ForcePulseSettings;// size: 72
+typedef struct SoundFalloff SoundFalloff;// size: 24
+typedef struct GameZoneSetup GameZoneSetup;// size: 72
+typedef struct AmbientSetup AmbientSetup;// size: 64
+typedef struct TrainSoundSetup TrainSoundSetup;// size: 52
+typedef struct CombinedEffectSettings CombinedEffectSettings;// size: 40
+typedef struct DestructionEffects DestructionEffects;// size: 408
+typedef struct VehicleEffects VehicleEffects;// size: 324
+typedef struct RigidObjectEffects RigidObjectEffects;// size: 124
+typedef struct CharacterPhysicsEffects CharacterPhysicsEffects;// size: 84
+typedef struct VehicleRumbleEffects VehicleRumbleEffects;// size: 88
+typedef struct AttachedEffectBaseData AttachedEffectBaseData;// size: 56
+typedef struct FmodGuid FmodGuid;// size: 16
+typedef struct AttachedEffectParam AttachedEffectParam;// size: 8
+typedef struct AttachedEffectData AttachedEffectData;// size: 112
+typedef struct AttachedEffectTableData AttachedEffectTableData;// size: 728
+typedef struct DynamicAttachedEffectBaseData DynamicAttachedEffectBaseData;// size: 48
+typedef struct DynamicAttachedEffectData DynamicAttachedEffectData;// size: 104
+typedef struct DynamicAttachedEffectTableData DynamicAttachedEffectTableData;// size: 720
 typedef struct Value Value;// size: 40
 typedef struct Connection Connection;// size: 12
 typedef struct Node Node;// size: 48
 typedef struct Graph Graph;// size: 16
-typedef struct ExpCraftProbabilities ExpCraftProbabilities;// size: 52
+typedef struct StringLookupHashProperties StringLookupHashProperties;// size: 12
+typedef struct StringLookupSubtitle StringLookupSubtitle;// size: 12
+typedef struct StringLookupDialogueLine StringLookupDialogueLine;// size: 40
+typedef struct StringLookup StringLookup;// size: 48
+typedef struct GlobalFilter GlobalFilter;// size: 24
+typedef struct Type Type;// size: 56
+typedef struct Event Event;// size: 48
+typedef struct Definition Definition;// size: 32
+typedef struct Settings Settings;// size: 32
+typedef struct GerstnerWaves GerstnerWaves;// size: 12
+typedef struct WaveWorks WaveWorks;// size: 4
+typedef struct WaterTuning WaterTuning;// size: 16
+typedef struct HashString HashString;// size: 16
+typedef struct PartNode PartNode;// size: 56
+typedef struct PartsHierarchy PartsHierarchy;// size: 16
+typedef struct DeformPoint DeformPoint;// size: 224
+typedef struct DeformPoints DeformPoints;// size: 112
+typedef struct Part Part;// size: 368
+typedef struct PartPhysicsMapping PartPhysicsMapping;// size: 24
+typedef struct PartPhysicsMappings PartPhysicsMappings;// size: 16
+typedef struct RotatingPart RotatingPart;// size: 44
+typedef struct HingedPart HingedPart;// size: 1
+typedef struct WheelPart WheelPart;// size: 4
+typedef struct SpringPart SpringPart;// size: 8
+typedef struct PropellerPart PropellerPart;// size: 1
+typedef struct FinPart FinPart;// size: 1
+typedef struct DoorPart DoorPart;// size: 1
+typedef struct Bone Bone;// size: 48
+typedef struct SkinnedPart SkinnedPart;// size: 24
+typedef struct AimPartConstraint AimPartConstraint;// size: 96
+typedef struct PointPartConstraint PointPartConstraint;// size: 64
+typedef struct IKChain IKChain;// size: 104
+typedef struct VehicleParts VehicleParts;// size: 192
+typedef struct AxisAlignedBoundingBox AxisAlignedBoundingBox;// size: 24
+typedef struct StuntArea StuntArea;// size: 392
+typedef struct StuntAreaWeldingInfo StuntAreaWeldingInfo;// size: 8
+typedef struct StuntAreas StuntAreas;// size: 13064
 typedef struct ColorRGBA ColorRGBA;// size: 16
 typedef struct EulerAngles EulerAngles;// size: 12
 typedef struct SpeedDependentInputFilter SpeedDependentInputFilter;// size: 28
@@ -297,7 +260,7 @@ typedef struct BoatBuoyancy BoatBuoyancy;// size: 56
 typedef struct Submersible Submersible;// size: 80
 typedef struct LandAerodynamics LandAerodynamics;// size: 20
 typedef struct LandSteering LandSteering;// size: 60
-typedef struct DriverLean DriverLean;// size: 64
+typedef struct DriverLean DriverLean;// size: 72
 typedef struct MotorbikeWheelie MotorbikeWheelie;// size: 56
 typedef struct MotorbikeSteering MotorbikeSteering;// size: 116
 typedef struct LandEngine LandEngine;// size: 60
@@ -365,7 +328,8 @@ typedef struct PhysicsGlobalSettings PhysicsGlobalSettings;// size: 4
 typedef struct HelicopterModel HelicopterModel;// size: 280
 typedef struct VehicleDoor VehicleDoor;// size: 24
 typedef struct PatchProvision PatchProvision;// size: 80
-typedef struct VehicleMisc VehicleMisc;// size: 160
+typedef struct MotorbikeFuelSettings MotorbikeFuelSettings;// size: 8
+typedef struct VehicleMisc VehicleMisc;// size: 176
 typedef struct PID PID;// size: 12
 typedef struct AirplaneAI AirplaneAI;// size: 696
 typedef struct HelicopterAI HelicopterAI;// size: 420
@@ -386,192 +350,450 @@ typedef struct ExtendedEffectUsage ExtendedEffectUsage;// size: 32
 typedef struct ExtendedEffectUsages ExtendedEffectUsages;// size: 16
 typedef struct PartBehavior PartBehavior;// size: 32
 typedef struct PartType PartType;// size: 32
-typedef struct HashString HashString;// size: 16
-typedef struct PartNode PartNode;// size: 56
-typedef struct PartsHierarchy PartsHierarchy;// size: 16
-typedef struct DeformPoint DeformPoint;// size: 224
-typedef struct DeformPoints DeformPoints;// size: 112
-typedef struct Part Part;// size: 368
-typedef struct PartPhysicsMapping PartPhysicsMapping;// size: 24
-typedef struct PartPhysicsMappings PartPhysicsMappings;// size: 16
-typedef struct RotatingPart RotatingPart;// size: 44
-typedef struct HingedPart HingedPart;// size: 1
-typedef struct WheelPart WheelPart;// size: 4
-typedef struct SpringPart SpringPart;// size: 8
-typedef struct PropellerPart PropellerPart;// size: 1
-typedef struct FinPart FinPart;// size: 1
-typedef struct DoorPart DoorPart;// size: 1
-typedef struct Bone Bone;// size: 48
-typedef struct SkinnedPart SkinnedPart;// size: 24
-typedef struct AimPartConstraint AimPartConstraint;// size: 96
-typedef struct PointPartConstraint PointPartConstraint;// size: 64
-typedef struct IKChain IKChain;// size: 104
-typedef struct VehicleParts VehicleParts;// size: 192
-typedef struct AxisAlignedBoundingBox AxisAlignedBoundingBox;// size: 24
-typedef struct StuntArea StuntArea;// size: 392
-typedef struct StuntAreaWeldingInfo StuntAreaWeldingInfo;// size: 8
-typedef struct StuntAreas StuntAreas;// size: 13064
-typedef struct ViewFrustum ViewFrustum;// size: 52
-typedef struct SmellSettings SmellSettings;// size: 72
-typedef struct HearingSettings HearingSettings;// size: 96
-typedef struct VisionSettings VisionSettings;// size: 144
-typedef struct PerceptionConfig PerceptionConfig;// size: 328
-typedef struct GerstnerWaves GerstnerWaves;// size: 12
-typedef struct WaveWorks WaveWorks;// size: 4
-typedef struct WaterTuning WaterTuning;// size: 16
-typedef struct AimControlSettings AimControlSettings;// size: 12
-typedef struct FallDamageSettings FallDamageSettings;// size: 16
-typedef struct PlayerHealthSettings PlayerHealthSettings;// size: 164
+typedef struct MinimapSettings MinimapSettings;// size: 16
+typedef struct WobbleEffectSettings WobbleEffectSettings;// size: 48
+typedef struct HUDSettings HUDSettings;// size: 64
+typedef struct WorldMapSettings WorldMapSettings;// size: 28
+typedef struct GlobalUISettings GlobalUISettings;// size: 92
+typedef struct SightTuning SightTuning;// size: 20
+typedef struct MissileArcSettings MissileArcSettings;// size: 12
+typedef struct ClusterAmmunitionSettings ClusterAmmunitionSettings;// size: 24
+typedef struct AreaBulletSettings AreaBulletSettings;// size: 20
+typedef struct HitEntity HitEntity;// size: 8
+typedef struct Requirement Requirement;// size: 12
+typedef struct HitEntitySpawn HitEntitySpawn;// size: 24
+typedef struct ProjectileEntitySpawn ProjectileEntitySpawn;// size: 24
+typedef struct CurveAbscissa CurveAbscissa;// size: 12
+typedef struct AmmunitionRecoilSettings AmmunitionRecoilSettings;// size: 28
+typedef struct AmmunitionMagazineSettings AmmunitionMagazineSettings;// size: 4
+typedef struct AmmunitionFireModeSettings AmmunitionFireModeSettings;// size: 4
+typedef struct AmmunitionTuning AmmunitionTuning;// size: 432
+typedef struct ScopeOffsetTransform ScopeOffsetTransform;// size: 12
+typedef struct WeaponAttachData WeaponAttachData;// size: 44
+typedef struct AttachData AttachData;// size: 32
+typedef struct PlayerHealthSettings PlayerHealthSettings;// size: 180
 typedef struct PlayerMusicSettings PlayerMusicSettings;// size: 68
 typedef struct LowHealthScreenEffectSettings LowHealthScreenEffectSettings;// size: 28
 typedef struct DamageOverTimeCamShakeSettings DamageOverTimeCamShakeSettings;// size: 28
 typedef struct DamageOverTimeScreenEffectSettings DamageOverTimeScreenEffectSettings;// size: 12
 typedef struct DamageOverTimeEffectSettings DamageOverTimeEffectSettings;// size: 40
-typedef struct StorageSettings StorageSettings;// size: 16
-typedef struct PlayerSettings PlayerSettings;// size: 360
-typedef struct MissileArcSettings MissileArcSettings;// size: 12
-typedef struct ClusterAmmunitionSettings ClusterAmmunitionSettings;// size: 24
-typedef struct AmmunitionTuning AmmunitionTuning;// size: 296
-typedef struct CharacterSpring CharacterSpring;// size: 12
-typedef struct CharacterRetractSShotSettings CharacterRetractSShotSettings;// size: 20
-typedef struct CharacterReelToParaSettings CharacterReelToParaSettings;// size: 84
-typedef struct CharacterAirMovementSettings CharacterAirMovementSettings;// size: 452
-typedef struct CharacterAirSteerSettings CharacterAirSteerSettings;// size: 24
-typedef struct CharacterJumpSettings CharacterJumpSettings;// size: 28
-typedef struct CharacterReeledHangSettings CharacterReeledHangSettings;// size: 24
-typedef struct CharacterWingsuitSettings CharacterWingsuitSettings;// size: 484
-typedef struct CharacterFreefallSettings CharacterFreefallSettings;// size: 460
-typedef struct CharacterParachuteSettings CharacterParachuteSettings;// size: 552
-typedef struct CharacterReelInSettings CharacterReelInSettings;// size: 20
-typedef struct CustomMovementSettings CustomMovementSettings;// size: 2020
-typedef struct InputStick InputStick;// size: 20
-typedef struct CameraSpring CameraSpring;// size: 12
-typedef struct CameraSplineControlPoint CameraSplineControlPoint;// size: 12
-typedef struct CameraSpline5 CameraSpline5;// size: 80
-typedef struct CameraSpline10 CameraSpline10;// size: 140
-typedef struct CameraTowing CameraTowing;// size: 24
-typedef struct CameraInputParams CameraInputParams;// size: 160
-typedef struct VehicleSplineFuncOfPitchParams VehicleSplineFuncOfPitchParams;// size: 424
-typedef struct GenericVehicleCamera GenericVehicleCamera;// size: 800
-typedef struct SphericalCoordinateFramingParams SphericalCoordinateFramingParams;// size: 44
-typedef struct SetOffsetFramingParams SetOffsetFramingParams;// size: 28
-typedef struct InputToOrbitModifierParams InputToOrbitModifierParams;// size: 32
-typedef struct DofModifierParams DofModifierParams;// size: 32
-typedef struct MotionBlurModifierParams MotionBlurModifierParams;// size: 16
-typedef struct FocusDofModifierParams FocusDofModifierParams;// size: 148
-typedef struct SplineFuncOfPitchParams SplineFuncOfPitchParams;// size: 328
-typedef struct SplineFuncOfYawParams SplineFuncOfYawParams;// size: 708
-typedef struct FollowSpringModifierParams FollowSpringModifierParams;// size: 208
-typedef struct CameraCollisionParams CameraCollisionParams;// size: 148
-typedef struct RadialBlurParams RadialBlurParams;// size: 36
-typedef struct AlignToVelocityParams AlignToVelocityParams;// size: 40
-typedef struct MoveInputYawParams MoveInputYawParams;// size: 40
-typedef struct MoveInputPitchParams MoveInputPitchParams;// size: 32
-typedef struct AutoPitchParams AutoPitchParams;// size: 28
-typedef struct ProceduralShakeParams ProceduralShakeParams;// size: 88
-typedef struct RollParams RollParams;// size: 56
-typedef struct MoveInputOffsetParams MoveInputOffsetParams;// size: 132
-typedef struct DynamicZParams DynamicZParams;// size: 28
-typedef struct ZOverTimeParams ZOverTimeParams;// size: 144
-typedef struct HintModifierParams HintModifierParams;// size: 84
-typedef struct WeaponCameraParams WeaponCameraParams;// size: 32
-typedef struct ParachuteAttachmentModifierParams ParachuteAttachmentModifierParams;// size: 20
-typedef struct ParachuteCameraCollisionModifierParams ParachuteCameraCollisionModifierParams;// size: 28
-typedef struct WingsuitAttachmentModifierParams WingsuitAttachmentModifierParams;// size: 132
-typedef struct PlayerCollisionModifierParams PlayerCollisionModifierParams;// size: 44
-typedef struct TankPositionModifierParams TankPositionModifierParams;// size: 16
-typedef struct CameraAnimationControl CameraAnimationControl;// size: 56
-typedef struct NoiseAnimation NoiseAnimation;// size: 496
-typedef struct SplineAnimation SplineAnimation;// size: 1120
-typedef struct ShakeAnimation ShakeAnimation;// size: 432
-typedef struct AuxiliaryMotionModifierParams AuxiliaryMotionModifierParams;// size: 56
-typedef struct LocalAngleLimitsModifierParams LocalAngleLimitsModifierParams;// size: 44
-typedef struct CameraShakeModifierParams CameraShakeModifierParams;// size: 8
-typedef struct FullScreenEffectModifierParams FullScreenEffectModifierParams;// size: 1
-typedef struct CameraBaseSmoothingModifierParams CameraBaseSmoothingModifierParams;// size: 44
-typedef struct TrackPlayerModifierParams TrackPlayerModifierParams;// size: 28
-typedef struct SequenceDofModifierParams SequenceDofModifierParams;// size: 1
-typedef struct ListenerPositionParams ListenerPositionParams;// size: 20
-typedef struct AimAssistParams AimAssistParams;// size: 24
-typedef struct FirstPersonCameraModifierParams FirstPersonCameraModifierParams;// size: 264
-typedef struct ThirdPersonCameraModifierParams ThirdPersonCameraModifierParams;// size: 224
-typedef struct FirstPersonVehicleCameraModifierParams FirstPersonVehicleCameraModifierParams;// size: 240
-typedef struct SetCameraPivotModifierParams SetCameraPivotModifierParams;// size: 16
-typedef struct JointOffsetFramingParams JointOffsetFramingParams;// size: 16
-typedef struct JointPivotModifierParams JointPivotModifierParams;// size: 16
-typedef struct AdditivePivotModifierParams AdditivePivotModifierParams;// size: 24
-typedef struct AdditiveOffsetModifierParams AdditiveOffsetModifierParams;// size: 24
-typedef struct VehicleAngleLimitsModifierParams VehicleAngleLimitsModifierParams;// size: 36
-typedef struct ChaseCameraModifierParams ChaseCameraModifierParams;// size: 216
-typedef struct CameraTransitionParams CameraTransitionParams;// size: 72
-typedef struct ArcChainSettings ArcChainSettings;// size: 28
+typedef struct StorageLevel StorageLevel;// size: 16
+typedef struct EncumbranceSettings EncumbranceSettings;// size: 84
+typedef struct StorageSettings StorageSettings;// size: 120
+typedef struct CompanionSchematicCurrencySettings CompanionSchematicCurrencySettings;// size: 12
+typedef struct SchematicCurrencySettings SchematicCurrencySettings;// size: 12
+typedef struct PlayerSettings PlayerSettings;// size: 488
+typedef struct WeaponModTuningSettings WeaponModTuningSettings;// size: 32
+typedef struct PoweredConstraintParameters PoweredConstraintParameters;// size: 20
+typedef struct RigidBodyControllerParameters RigidBodyControllerParameters;// size: 48
+typedef struct CollisionSubSystemByName CollisionSubSystemByName;// size: 16
+typedef struct RagdollSetting RagdollSetting;// size: 112
+typedef struct RagdollSettings RagdollSettings;// size: 16
+typedef struct AttributeParams AttributeParams;// size: 12
+typedef struct ArmorParams ArmorParams;// size: 80
+typedef struct StatusAttributes StatusAttributes;// size: 140
+typedef struct ExpCraftProbabilities ExpCraftProbabilities;// size: 52
 typedef struct HunterMissionRule HunterMissionRule;// size: 96
 typedef struct HunterMissionRulesGroup HunterMissionRulesGroup;// size: 24
-typedef struct HunterMissionObjective HunterMissionObjective;// size: 136
+typedef struct HunterMissionObjective HunterMissionObjective;// size: 144
 typedef struct HunterMissionEvent HunterMissionEvent;// size: 56
-typedef struct HunterMissionAttachment HunterMissionAttachment;// size: 104
+typedef struct HunterMissionAttachment HunterMissionAttachment;// size: 112
+typedef struct HunterMissionRandomizer HunterMissionRandomizer;// size: 48
+typedef struct HunterMissionVariable HunterMissionVariable;// size: 64
 typedef struct SpecificEvent SpecificEvent;// size: 12
-typedef struct HunterMission HunterMission;// size: 232
+typedef struct HunterMission HunterMission;// size: 264
 typedef struct HunterMissionData HunterMissionData;// size: 16
+typedef struct ArcRenderSettings ArcRenderSettings;// size: 156
+typedef struct ArcChainSettings ArcChainSettings;// size: 28
+typedef struct CompanionSettings CompanionSettings;// size: 72
+typedef struct RcTickSettings RcTickSettings;// size: 172
+typedef struct FirebirdSettings FirebirdSettings;// size: 8
+typedef struct LynxSettings LynxSettings;// size: 8
+typedef struct HunterAttackSettings HunterAttackSettings;// size: 12
+typedef struct DreaAttackSettings DreaAttackSettings;// size: 8
+typedef struct DreaChargeSettings DreaChargeSettings;// size: 12
+typedef struct DreaThermobaricSettings DreaThermobaricSettings;// size: 32
+typedef struct HarvesterSettings HarvesterSettings;// size: 24
+typedef struct WolfSettings WolfSettings;// size: 12
+typedef struct SmallMachineSettings SmallMachineSettings;// size: 16
+typedef struct MachineSettings MachineSettings;// size: 44
+typedef struct AITuningSettings AITuningSettings;// size: 420
+typedef struct BalloonSettings BalloonSettings;// size: 32
+typedef struct TextureBlend TextureBlend;// size: 40
+typedef struct TextureBlendWeaponSkinTuningSettings TextureBlendWeaponSkinTuningSettings;// size: 16
+typedef struct OccluderBox OccluderBox;// size: 76
+typedef struct OccluderBoxCollection OccluderBoxCollection;// size: 16
+typedef struct GSData GSData;// size: 32
+typedef struct GSDataSet GSDataSet;// size: 48
+typedef struct GSNode GSNode;// size: 64
+typedef struct GSGraph GSGraph;// size: 16
+typedef struct BlobOfBytes BlobOfBytes;// size: 16
+typedef struct GDCFileEntry GDCFileEntry;// size: 32
+typedef struct GameDataCollection GameDataCollection;// size: 32
+typedef struct AdfModelCollectionInstance AdfModelCollectionInstance;// size: 92
+typedef struct AdfModelCollection AdfModelCollection;// size: 64
+typedef struct EnvParam EnvParam;// size: 48
+typedef struct EnvironmentParameters EnvironmentParameters;// size: 32
+typedef struct Shader Shader;// size: 40
+typedef struct ShaderLibrary ShaderLibrary;// size: 112
+typedef struct AmfStreamAttribute AmfStreamAttribute;// size: 20
+typedef struct AmfBoundingBox AmfBoundingBox;// size: 24
+typedef struct AmfSubMesh AmfSubMesh;// size: 36
+typedef struct AmfMesh AmfMesh;// size: 152
+typedef struct AmfLodGroup AmfLodGroup;// size: 24
+typedef struct AmfMeshHeader AmfMeshHeader;// size: 56
+typedef struct AmfBuffer AmfBuffer;// size: 24
+typedef struct AmfMeshBuffers AmfMeshBuffers;// size: 40
+typedef struct AmfMaterial AmfMaterial;// size: 40
+typedef struct AmfModel AmfModel;// size: 48
+typedef struct AmfModelVariant AmfModelVariant;// size: 80
+typedef struct XLSSheet XLSSheet;// size: 32
+typedef struct XLSCell XLSCell;// size: 12
+typedef struct XLSAttribute XLSAttribute;// size: 2
+typedef struct XLSBook XLSBook;// size: 128
+typedef struct StreamPatchFileHeader StreamPatchFileHeader;// size: 24
+typedef struct StreamPatchBlockHeader StreamPatchBlockHeader;// size: 24
+typedef struct WorldSettings WorldSettings;// size: 28
+typedef struct PhysicsStreamPatchType PhysicsStreamPatchType;// size: 24
+typedef struct TerrainOccluderMesh TerrainOccluderMesh;// size: 64
+typedef struct TerrainOccluderPackedMesh TerrainOccluderPackedMesh;// size: 16
+typedef struct RoadGraphNode RoadGraphNode;// size: 16
+typedef struct RoadGraphEdge RoadGraphEdge;// size: 8
+typedef struct RoadGraphEdgeSample RoadGraphEdgeSample;// size: 6
+typedef struct RoadGraphEdgeSamples RoadGraphEdgeSamples;// size: 40
+typedef struct RoadGraph RoadGraph;// size: 136
+typedef struct RoadInfoEx RoadInfoEx;// size: 72
+typedef struct RoadToGraphLookup RoadToGraphLookup;// size: 32
+typedef struct RoadGraphRoadExtraInfo RoadGraphRoadExtraInfo;// size: 48
+typedef struct PatchSampleList PatchSampleList;// size: 4
+typedef struct PersistentRoadSamples PersistentRoadSamples;// size: 32
+typedef struct PersistentDataEx PersistentDataEx;// size: 16
+typedef struct RouteInput RouteInput;// size: 24
+typedef struct RouteInputsCollection RouteInputsCollection;// size: 16
+typedef struct RoadInfo RoadInfo;// size: 4
+typedef struct Route Route;// size: 32
+typedef struct RoutesCollection RoutesCollection;// size: 16
+typedef struct BitmapArea BitmapArea;// size: 56
+typedef struct BitmapLayer BitmapLayer;// size: 40
+typedef struct BitmapData BitmapData;// size: 24
+typedef struct Vector2 Vector2;// size: 8
+typedef struct SaveVector3 SaveVector3;// size: 12
+typedef struct RegionData RegionData;// size: 8
+typedef struct ChildEquipment ChildEquipment;// size: 8
+typedef struct OwnedEquipment1 OwnedEquipment1;// size: 80
+typedef struct OwnedEquipment2 OwnedEquipment2;// size: 48
+typedef struct OwnedEquipment3 OwnedEquipment3;// size: 48
+typedef struct OwnedEquipment4 OwnedEquipment4;// size: 56
+typedef struct OwnedEquipment5 OwnedEquipment5;// size: 64
+typedef struct VehicleData VehicleData;// size: 12
+typedef struct SkillData SkillData;// size: 8
+typedef struct PlayerDecalData PlayerDecalData;// size: 12
+typedef struct CompanionData1 CompanionData1;// size: 32
+typedef struct CompanionData2 CompanionData2;// size: 32
+typedef struct CompanionData3 CompanionData3;// size: 64
+typedef struct CompanionData4 CompanionData4;// size: 72
+typedef struct CharacterLooks CharacterLooks;// size: 56
+typedef struct PlayerPosition PlayerPosition;// size: 16
+typedef struct InventoryCategoryFilterData1 InventoryCategoryFilterData1;// size: 12
+typedef struct RaidLootSaveData RaidLootSaveData;// size: 8
+typedef struct RivalHistory1 RivalHistory1;// size: 8
+typedef struct Rival1 Rival1;// size: 40
+typedef struct RivalRegion1 RivalRegion1;// size: 32
+typedef struct RivalMissionGroup1 RivalMissionGroup1;// size: 8
+typedef struct ResourceStorageItem ResourceStorageItem;// size: 8
+typedef struct ResourceStorageItem2 ResourceStorageItem2;// size: 8
+typedef struct CurrencySaveData1 CurrencySaveData1;// size: 8
+typedef struct MiniGameReplay1 MiniGameReplay1;// size: 24
+typedef struct MiniGameScore1 MiniGameScore1;// size: 48
+typedef struct MiniGameSaveData1 MiniGameSaveData1;// size: 536
+typedef struct HealthBuildingComponentSaveData1 HealthBuildingComponentSaveData1;// size: 4
+typedef struct HealthBuildingComponentSaveData2 HealthBuildingComponentSaveData2;// size: 24
+typedef struct RepairBuildingComponentSaveData1 RepairBuildingComponentSaveData1;// size: 1
+typedef struct DismantleBuildingComponentSaveData1 DismantleBuildingComponentSaveData1;// size: 1
+typedef struct InventoryBuildingComponentSaveData1 InventoryBuildingComponentSaveData1;// size: 16
+typedef struct InventoryBuildingComponentSaveData2 InventoryBuildingComponentSaveData2;// size: 16
+typedef struct InventoryBuildingComponentSaveData3 InventoryBuildingComponentSaveData3;// size: 32
+typedef struct InventoryBuildingComponentSaveData4 InventoryBuildingComponentSaveData4;// size: 32
+typedef struct ValueOccurance ValueOccurance;// size: 96
+typedef struct MissionSaveData MissionSaveData;// size: 64
+typedef struct MissionSaveData2 MissionSaveData2;// size: 64
+typedef struct MissionSaveData3 MissionSaveData3;// size: 72
+typedef struct MissionSaveData4 MissionSaveData4;// size: 72
+typedef struct MissionSaveData5 MissionSaveData5;// size: 72
+typedef struct GateBuildingComponentSaveData1 GateBuildingComponentSaveData1;// size: 2
+typedef struct BuildingSaveData1 BuildingSaveData1;// size: 20
+typedef struct BuildingSaveData2 BuildingSaveData2;// size: 40
+typedef struct BuildingSaveData3 BuildingSaveData3;// size: 32
+typedef struct BuildingSaveData4 BuildingSaveData4;// size: 32
+typedef struct BuildingSaveData5 BuildingSaveData5;// size: 40
+typedef struct BuildingSaveData6 BuildingSaveData6;// size: 56
+typedef struct BuildingSaveData7 BuildingSaveData7;// size: 80
+typedef struct BuildingSaveData8 BuildingSaveData8;// size: 80
+typedef struct BuildContainer1 BuildContainer1;// size: 16
+typedef struct BuildContainer2 BuildContainer2;// size: 16
+typedef struct BuildingGridSaveData1 BuildingGridSaveData1;// size: 16
+typedef struct BuildingGridSaveData2 BuildingGridSaveData2;// size: 16
+typedef struct BaseConfigSaveData1 BaseConfigSaveData1;// size: 2
+typedef struct ControlPointSaveData1 ControlPointSaveData1;// size: 48
+typedef struct ControlPointSaveData2 ControlPointSaveData2;// size: 48
+typedef struct ControlPointSaveData3 ControlPointSaveData3;// size: 48
+typedef struct ControlPointSaveData4 ControlPointSaveData4;// size: 48
+typedef struct ControlPointSaveData5 ControlPointSaveData5;// size: 56
+typedef struct ControlPointSaveData6 ControlPointSaveData6;// size: 72
+typedef struct ControlPointSaveData7 ControlPointSaveData7;// size: 72
+typedef struct ControlPointSaveData8 ControlPointSaveData8;// size: 72
+typedef struct ControlPointSaveData9 ControlPointSaveData9;// size: 80
+typedef struct ControlPointSaveData10 ControlPointSaveData10;// size: 80
+typedef struct ControlPointSaveData11 ControlPointSaveData11;// size: 80
+typedef struct ControlPointSaveData12 ControlPointSaveData12;// size: 80
+typedef struct ControlPointSaveData13 ControlPointSaveData13;// size: 80
+typedef struct ControlPointSaveData14 ControlPointSaveData14;// size: 80
+typedef struct FactionSaveData1 FactionSaveData1;// size: 24
+typedef struct WarSeason1 WarSeason1;// size: 48
+typedef struct WarSaveData1 WarSaveData1;// size: 48
+typedef struct BadLuckProtection1 BadLuckProtection1;// size: 8
+typedef struct StatisticInfo StatisticInfo;// size: 8
+typedef struct ProceduralMissionSaveData1 ProceduralMissionSaveData1;// size: 8
+typedef struct ProceduralMissionSaveData2 ProceduralMissionSaveData2;// size: 12
+typedef struct ProceduralMissionSaveData3 ProceduralMissionSaveData3;// size: 16
+typedef struct ProceduralMissionSaveData4 ProceduralMissionSaveData4;// size: 20
+typedef struct ProceduralMissionSaveData5 ProceduralMissionSaveData5;// size: 24
+typedef struct CharacterProfile1 CharacterProfile1;// size: 1000
+typedef struct CharacterProfile2 CharacterProfile2;// size: 1016
+typedef struct CharacterProfile3 CharacterProfile3;// size: 1024
+typedef struct CharacterProfile4 CharacterProfile4;// size: 1024
+typedef struct CharacterProfile5 CharacterProfile5;// size: 1088
+typedef struct CharacterProfile6 CharacterProfile6;// size: 1088
+typedef struct CharacterProfile7 CharacterProfile7;// size: 1104
+typedef struct CharacterProfile8 CharacterProfile8;// size: 1104
+typedef struct CharacterProfile9 CharacterProfile9;// size: 1104
+typedef struct CharacterProfile10 CharacterProfile10;// size: 1112
+typedef struct CharacterProfile11 CharacterProfile11;// size: 1128
+typedef struct CharacterProfile12 CharacterProfile12;// size: 1208
+typedef struct EquipmentNotes1 EquipmentNotes1;// size: 8
+typedef struct CharacterProfile13 CharacterProfile13;// size: 1224
+typedef struct CharacterProfile14 CharacterProfile14;// size: 1240
+typedef struct CharacterProfile15 CharacterProfile15;// size: 1240
+typedef struct PityCounter1 PityCounter1;// size: 16
+typedef struct CharacterProfile16 CharacterProfile16;// size: 1256
+typedef struct CharacterProfile17 CharacterProfile17;// size: 1264
+typedef struct CharacterProfile18 CharacterProfile18;// size: 1312
+typedef struct CharacterProfile19 CharacterProfile19;// size: 1320
+typedef struct CharacterProfile20 CharacterProfile20;// size: 1336
+typedef struct CharacterProfile21 CharacterProfile21;// size: 1352
+typedef struct CharacterProfile22 CharacterProfile22;// size: 1336
+typedef struct CharacterProfile23 CharacterProfile23;// size: 1320
+typedef struct CharacterProfile24 CharacterProfile24;// size: 1344
+typedef struct AnimalDamageablePartSaveData AnimalDamageablePartSaveData;// size: 16
+typedef struct AnimalRepopulateSaveData AnimalRepopulateSaveData;// size: 1
+typedef struct AnimalPopulationSaveData AnimalPopulationSaveData;// size: 72
+typedef struct AnimalPopulationSaveData2 AnimalPopulationSaveData2;// size: 24
+typedef struct AnimalGroupSaveData AnimalGroupSaveData;// size: 8
+typedef struct MachinePersistentStatsEncounterData MachinePersistentStatsEncounterData;// size: 16
+typedef struct MachinePersistentStatsData MachinePersistentStatsData;// size: 272
+typedef struct AnimalSaveData AnimalSaveData;// size: 1384
+typedef struct AnimalSaveData2 AnimalSaveData2;// size: 1392
+typedef struct AnimalPopulationsSaveData AnimalPopulationsSaveData;// size: 48
+typedef struct AnimalPopulationsSaveData2 AnimalPopulationsSaveData2;// size: 48
+typedef struct AnimalPopulationsSaveData3 AnimalPopulationsSaveData3;// size: 48
+typedef struct FogOfWar FogOfWar;// size: 65540
+typedef struct CodexInfo CodexInfo;// size: 8
+typedef struct IconInfo IconInfo;// size: 16
+typedef struct ReseveIconInfo ReseveIconInfo;// size: 24
+typedef struct ContextualHelpInfo ContextualHelpInfo;// size: 8
+typedef struct ContextualHelpInfo2 ContextualHelpInfo2;// size: 8
+typedef struct LocationState LocationState;// size: 8
+typedef struct LocationSummarySaveData LocationSummarySaveData;// size: 112
+typedef struct PlayerRaidStatsSaveData PlayerRaidStatsSaveData;// size: 48
+typedef struct PlayerRaidStatsSaveData2 PlayerRaidStatsSaveData2;// size: 56
+typedef struct RaidSaveData RaidSaveData;// size: 32
+typedef struct RaidSaveData2 RaidSaveData2;// size: 40
+typedef struct RaidSaveData3 RaidSaveData3;// size: 40
+typedef struct TimerSaveData1 TimerSaveData1;// size: 16
+typedef struct ProfileSaveData1 ProfileSaveData1;// size: 120
+typedef struct ProfileSaveData2 ProfileSaveData2;// size: 120
+typedef struct ProfileSaveData3 ProfileSaveData3;// size: 160
+typedef struct ProfileSaveData4 ProfileSaveData4;// size: 160
+typedef struct SettingNameValuePair SettingNameValuePair;// size: 8
+typedef struct ProfileSaveData5 ProfileSaveData5;// size: 160
+typedef struct ProfileSaveData6 ProfileSaveData6;// size: 224
+typedef struct ProfileSaveData7 ProfileSaveData7;// size: 224
+typedef struct AcceptedPolicyPair AcceptedPolicyPair;// size: 68
+typedef struct ProfileSaveData8 ProfileSaveData8;// size: 176
+typedef struct ProfileSaveData9 ProfileSaveData9;// size: 176
+typedef struct ProfileSaveData10 ProfileSaveData10;// size: 192
+typedef struct ProfileSaveData11 ProfileSaveData11;// size: 200
+typedef struct ProfileSaveData12 ProfileSaveData12;// size: 200
+typedef struct ProfileSaveData13 ProfileSaveData13;// size: 232
+typedef struct ProfileSaveData14 ProfileSaveData14;// size: 232
+typedef struct ProfileSaveData15 ProfileSaveData15;// size: 248
+typedef struct ProfileSaveData16 ProfileSaveData16;// size: 336
+typedef struct ClaimedSocialReward1 ClaimedSocialReward1;// size: 8
+typedef struct ProfileSaveData17 ProfileSaveData17;// size: 352
+typedef struct ProfileSaveData18 ProfileSaveData18;// size: 368
+typedef struct ProfileSaveData19 ProfileSaveData19;// size: 368
+typedef struct ProfileSaveData20 ProfileSaveData20;// size: 368
+typedef struct ProfileSaveData21 ProfileSaveData21;// size: 384
+typedef struct ProfileSaveData22 ProfileSaveData22;// size: 432
+typedef struct OfflineAssignment1 OfflineAssignment1;// size: 24
+typedef struct ProfileSaveData23 ProfileSaveData23;// size: 456
+typedef struct WorldProfile1 WorldProfile1;// size: 296
+typedef struct WorldProfile2 WorldProfile2;// size: 312
+typedef struct WorldProfile3 WorldProfile3;// size: 328
+typedef struct WorldProfile4 WorldProfile4;// size: 328
+typedef struct WorldProfile5 WorldProfile5;// size: 328
+typedef struct WorldProfile6 WorldProfile6;// size: 328
+typedef struct WorldProfile7 WorldProfile7;// size: 336
+typedef struct WorldProfile8 WorldProfile8;// size: 336
+typedef struct WorldProfile9 WorldProfile9;// size: 336
+typedef struct WorldProfile10 WorldProfile10;// size: 336
+typedef struct WorldProfile11 WorldProfile11;// size: 336
+typedef struct WorldSaveData1 WorldSaveData1;// size: 216
+typedef struct WorldSaveData2 WorldSaveData2;// size: 216
+typedef struct WorldSaveData3 WorldSaveData3;// size: 232
+typedef struct WorldSaveData4 WorldSaveData4;// size: 232
+typedef struct WorldSaveData5 WorldSaveData5;// size: 248
+typedef struct WorldSaveData6 WorldSaveData6;// size: 264
+typedef struct WorldSaveData7 WorldSaveData7;// size: 296
+typedef struct WorldSaveData8 WorldSaveData8;// size: 304
+typedef struct WorldSaveData9 WorldSaveData9;// size: 336
+typedef struct WorldSaveData10 WorldSaveData10;// size: 336
+typedef struct WorldSaveData11 WorldSaveData11;// size: 336
+typedef struct WorldSaveData12 WorldSaveData12;// size: 336
+typedef struct WorldSaveData13 WorldSaveData13;// size: 336
+typedef struct WorldSaveData14 WorldSaveData14;// size: 336
+typedef struct WorldSaveData15 WorldSaveData15;// size: 336
+typedef struct WorldSaveData16 WorldSaveData16;// size: 336
+typedef struct WorldSaveData17 WorldSaveData17;// size: 336
+typedef struct WorldSaveData18 WorldSaveData18;// size: 336
+typedef struct WorldSaveData19 WorldSaveData19;// size: 336
+typedef struct WorldSaveData20 WorldSaveData20;// size: 336
+typedef struct WorldSaveData21 WorldSaveData21;// size: 336
+typedef struct WorldSaveData22 WorldSaveData22;// size: 336
+typedef struct WorldSaveData23 WorldSaveData23;// size: 1224
+typedef struct WorldSaveData24 WorldSaveData24;// size: 1288
+typedef struct WorldSaveData25 WorldSaveData25;// size: 1352
+typedef struct WorldSaveData26 WorldSaveData26;// size: 1352
+typedef struct WorldSaveData27 WorldSaveData27;// size: 1352
+typedef struct WorldSaveData28 WorldSaveData28;// size: 1352
+typedef struct WorldSaveData29 WorldSaveData29;// size: 1384
+typedef struct WorldSaveData30 WorldSaveData30;// size: 1384
+typedef struct WorldSaveData31 WorldSaveData31;// size: 1400
+typedef struct WorldSaveData32 WorldSaveData32;// size: 1416
+typedef struct WorldSaveData33 WorldSaveData33;// size: 1416
+typedef struct WorldSaveData34 WorldSaveData34;// size: 1416
+typedef struct CharactersSaveData1 CharactersSaveData1;// size: 4080
+typedef struct CharactersSaveData2 CharactersSaveData2;// size: 4144
+typedef struct CharactersSaveData3 CharactersSaveData3;// size: 4176
+typedef struct CharactersSaveData4 CharactersSaveData4;// size: 4176
+typedef struct CharactersSaveData5 CharactersSaveData5;// size: 4208
+typedef struct CharactersSaveData6 CharactersSaveData6;// size: 4208
+typedef struct CharactersSaveData7 CharactersSaveData7;// size: 4464
+typedef struct CharactersSaveData8 CharactersSaveData8;// size: 4464
+typedef struct CharactersSaveData9 CharactersSaveData9;// size: 4528
+typedef struct CharactersSaveData10 CharactersSaveData10;// size: 4544
+typedef struct CharactersSaveData11 CharactersSaveData11;// size: 4544
+typedef struct CharactersSaveData12 CharactersSaveData12;// size: 4528
+typedef struct CharactersSaveData13 CharactersSaveData13;// size: 4528
+typedef struct CharactersSaveData14 CharactersSaveData14;// size: 4560
+typedef struct CharactersSaveData15 CharactersSaveData15;// size: 4560
+typedef struct CharactersSaveData16 CharactersSaveData16;// size: 4560
+typedef struct CharactersSaveData17 CharactersSaveData17;// size: 4624
+typedef struct CharactersSaveData18 CharactersSaveData18;// size: 4624
+typedef struct CharactersSaveData19 CharactersSaveData19;// size: 4912
+typedef struct CharactersSaveData20 CharactersSaveData20;// size: 4976
+typedef struct CharactersSaveData21 CharactersSaveData21;// size: 5040
+typedef struct CharactersSaveData22 CharactersSaveData22;// size: 5040
+typedef struct CharactersSaveData23 CharactersSaveData23;// size: 5104
+typedef struct CharactersSaveData24 CharactersSaveData24;// size: 5136
+typedef struct CharactersSaveData25 CharactersSaveData25;// size: 5328
+typedef struct CharactersSaveData26 CharactersSaveData26;// size: 5360
+typedef struct CharactersSaveData27 CharactersSaveData27;// size: 5424
+typedef struct CharactersSaveData28 CharactersSaveData28;// size: 5488
+typedef struct CharactersSaveData29 CharactersSaveData29;// size: 5424
+typedef struct CharactersSaveData30 CharactersSaveData30;// size: 5344
+typedef struct CharactersSaveData31 CharactersSaveData31;// size: 5288
+typedef struct CharactersSaveData32 CharactersSaveData32;// size: 5384
+typedef struct SaveGameData1 SaveGameData1;// size: 48
+typedef struct SaveGameData2 SaveGameData2;// size: 64
+typedef struct SaveGameRoot SaveGameRoot;// size: 16
+typedef struct LightInfo LightInfo;// size: 40
+typedef struct AllLights AllLights;// size: 16
+typedef struct EffectRTRenderInfo EffectRTRenderInfo;// size: 24
+typedef struct EffectRTLocalParam EffectRTLocalParam;// size: 8
+typedef struct EffectRTParameters EffectRTParameters;// size: 72
+typedef struct EffectRTInstantiator EffectRTInstantiator;// size: 96
+typedef struct EffectRTEmitterTemplate EffectRTEmitterTemplate;// size: 120
+typedef struct EffectRTEmitter EffectRTEmitter;// size: 40
+typedef struct EffectRTModifier EffectRTModifier;// size: 80
+typedef struct EffectRTTimeline EffectRTTimeline;// size: 64
+typedef struct EffectRTSpecialEffect EffectRTSpecialEffect;// size: 168
+typedef struct EffectRTBatchDescriptor EffectRTBatchDescriptor;// size: 24
+typedef struct EffectRTSpecialEffectData EffectRTSpecialEffectData;// size: 24
+typedef struct EffectRTOutputBufferDescriptor EffectRTOutputBufferDescriptor;// size: 40
+typedef struct EffectRTParamHandler EffectRTParamHandler;// size: 56
+typedef struct EffectRTSystem EffectRTSystem;// size: 224
+typedef struct EffectVertexArray EffectVertexArray;// size: 16
+typedef struct EffectTrimData EffectTrimData;// size: 40
+typedef struct TerrainPatch TerrainPatch;// size: 632
+typedef struct TerrainMesh TerrainMesh;// size: 224
+typedef struct CompressedData CompressedData;// size: 32
+typedef struct TerrainPrimitive TerrainPrimitive;// size: 32
+typedef struct TerrainTexture TerrainTexture;// size: 48
+typedef struct InstanceDataPatch InstanceDataPatch;// size: 48
+typedef struct InstanceDataLayer InstanceDataLayer;// size: 128
+typedef struct VegetationSystemInstance VegetationSystemInstance;// size: 24
+typedef struct VegetationDebugData VegetationDebugData;// size: 64
+typedef struct VegetationBillboardLayerStats VegetationBillboardLayerStats;// size: 32
+typedef struct TerrainPatchInfo TerrainPatchInfo;// size: 48
+typedef struct ArrayAABB ArrayAABB;// size: 28
 typedef struct WorldAudioPatchData WorldAudioPatchData;// size: 16
 typedef struct WorldAudioPatchZoneData WorldAudioPatchZoneData;// size: 48
 typedef struct WorldAudioVector4 WorldAudioVector4;// size: 16
 typedef struct WorldAudioPatchNormalData WorldAudioPatchNormalData;// size: 16
 typedef struct WorldAudioPatchZoneNormalData WorldAudioPatchZoneNormalData;// size: 72
-typedef struct AIGlobals_2B15A93E AIGlobals_2B15A93E;// size: 256
-typedef struct PerceptionSettings_E51D96BC PerceptionSettings_E51D96BC;// size: 176
-typedef struct AwarenessEventThreats AwarenessEventThreats;// size: 44
+typedef struct VegetationDataBuffer VegetationDataBuffer;// size: 16
+typedef struct ForestMesh ForestMesh;// size: 40
+typedef struct ForestVertex ForestVertex;// size: 4
 typedef struct WorldAudioInfo WorldAudioInfo;// size: 40
 typedef struct WorldAudioZone WorldAudioZone;// size: 112
+typedef struct ImpostorCollection ImpostorCollection;// size: 16
+typedef struct ImpostorInfo ImpostorInfo;// size: 72
+typedef struct ImpostorMesh ImpostorMesh;// size: 56
+typedef struct ImpostorVertex ImpostorVertex;// size: 24
+typedef struct TerrainSystem TerrainSystem;// size: 136
+typedef struct TerrainTextureInfo TerrainTextureInfo;// size: 32
+typedef struct TerrainColor TerrainColor;// size: 3
+typedef struct ShaderRules ShaderRules;// size: 564
+typedef struct TerrainMaterial TerrainMaterial;// size: 56
+typedef struct VegetationWorld VegetationWorld;// size: 176
+typedef struct VegetationLayers VegetationLayers;// size: 64
+typedef struct VegetationForestLayer VegetationForestLayer;// size: 64
+typedef struct VegetationBillboardLayer VegetationBillboardLayer;// size: 44
+typedef struct VegetationModelLayer VegetationModelLayer;// size: 52
+typedef struct VegetationPhysicsLayer VegetationPhysicsLayer;// size: 24
+typedef struct VegetationZone VegetationZone;// size: 16
+typedef struct VegetationSet VegetationSet;// size: 32
+typedef struct ProbabilityBuffer ProbabilityBuffer;// size: 24
+typedef struct VegetationObject VegetationObject;// size: 352
+typedef struct VegetationModel VegetationModel;// size: 96
+typedef struct VegetationPhysics VegetationPhysics;// size: 88
+typedef struct VegetationEffect VegetationEffect;// size: 104
+typedef struct VegetationPlacementSettings VegetationPlacementSettings;// size: 48
+typedef struct VegetationIndex VegetationIndex;// size: 4
 typedef struct GeneralMeshConstants GeneralMeshConstants;// size: 8
 typedef struct GeneralR2Constants GeneralR2Constants;// size: 32
-typedef struct AmmunitionTuning_51265C00 AmmunitionTuning_51265C00;// size: 432
-typedef struct HitEntitySpawn HitEntitySpawn;// size: 24
-typedef struct Requirement Requirement;// size: 12
-typedef struct HitEntity HitEntity;// size: 8
-typedef struct ProjectileEntitySpawn ProjectileEntitySpawn;// size: 24
-typedef struct CurveAbscissa CurveAbscissa;// size: 12
-typedef struct AreaBulletSettings AreaBulletSettings;// size: 20
-typedef struct AmmunitionRecoilSettings AmmunitionRecoilSettings;// size: 28
-typedef struct AmmunitionMagazineSettings AmmunitionMagazineSettings;// size: 4
-typedef struct AmmunitionFireModeSettings AmmunitionFireModeSettings;// size: 4
-typedef struct ForcePulseSettings_39C734DF ForcePulseSettings_39C734DF;// size: 72
-typedef struct RigidObjectEffects RigidObjectEffects;// size: 124
-typedef struct CombinedEffectSettings CombinedEffectSettings;// size: 40
 typedef struct GeneralMkIIIConstants GeneralMkIIIConstants;// size: 320
 typedef struct WindowConstants WindowConstants;// size: 40
 typedef struct CarPaintMeshConstants CarPaintMeshConstants;// size: 1
 typedef struct CarPaintMMConstants CarPaintMMConstants;// size: 324
 typedef struct CarPaintMMStaticConstants CarPaintMMStaticConstants;// size: 268
 typedef struct CarPaintMMDynamicConstants CarPaintMMDynamicConstants;// size: 48
-typedef struct CharacterRealizationSettings CharacterRealizationSettings;// size: 232
-typedef struct MotorbikeTurnSettings MotorbikeTurnSettings;// size: 12
-typedef struct MotorbikeLeanSettings MotorbikeLeanSettings;// size: 32
-typedef struct MotorbikeTiltSettings MotorbikeTiltSettings;// size: 44
-typedef struct MotorbikeAimSettings MotorbikeAimSettings;// size: 16
-typedef struct MotorbikeDebugSettings MotorbikeDebugSettings;// size: 128
-typedef struct MotorbikeMotionComponents MotorbikeMotionComponents;// size: 64
-typedef struct VehicleMisc_1805B2BE VehicleMisc_1805B2BE;// size: 176
-typedef struct MotorbikeFuelSettings MotorbikeFuelSettings;// size: 8
-typedef struct VehicleEffects VehicleEffects;// size: 324
-typedef struct DriverLean_0A44C93E DriverLean_0A44C93E;// size: 72
-typedef struct WeaponModTuningSettings WeaponModTuningSettings;// size: 32
-typedef struct AttachData AttachData;// size: 32
-typedef struct WeaponAttachData WeaponAttachData;// size: 44
-typedef struct ScopeOffsetTransform ScopeOffsetTransform;// size: 12
-typedef struct EnvironmentParameters EnvironmentParameters;// size: 32
-typedef struct EnvParam EnvParam;// size: 48
 typedef struct NetworkStaticObjects NetworkStaticObjects;// size: 24
 typedef struct AdfBool AdfBool;// size: 16
 typedef struct Collection Collection;// size: 32
 typedef struct CollectibleInfo CollectibleInfo;// size: 40
 typedef struct NetworkedCollectible NetworkedCollectible;// size: 16
-typedef struct HunterMissionData_C34D2AD9 HunterMissionData_C34D2AD9;// size: 16
-typedef struct HunterMission_393FF444 HunterMission_393FF444;// size: 264
-typedef struct HunterMissionObjective_02D34CF1 HunterMissionObjective_02D34CF1;// size: 144
-typedef struct HunterMissionAttachment_0A4CE1D3 HunterMissionAttachment_0A4CE1D3;// size: 112
-typedef struct HunterMissionRandomizer HunterMissionRandomizer;// size: 48
-typedef struct HunterMissionVariable HunterMissionVariable;// size: 64
 typedef struct HairConstants HairConstants;// size: 52
 typedef struct EyeGlossConstants EyeGlossConstants;// size: 24
 typedef struct CharacterSkinConstants CharacterSkinConstants;// size: 52
@@ -597,13 +819,6 @@ typedef struct LookoutPOIList LookoutPOIList;// size: 32
 typedef struct LookoutList LookoutList;// size: 24
 typedef struct POIInfo POIInfo;// size: 96
 typedef struct Vec3 Vec3;// size: 12
-typedef struct PlayerSettings_F0FEED9D PlayerSettings_F0FEED9D;// size: 488
-typedef struct PlayerHealthSettings_A5910678 PlayerHealthSettings_A5910678;// size: 180
-typedef struct StorageSettings_0884DC88 StorageSettings_0884DC88;// size: 120
-typedef struct EncumbranceSettings EncumbranceSettings;// size: 84
-typedef struct StorageLevel StorageLevel;// size: 16
-typedef struct SchematicCurrencySettings SchematicCurrencySettings;// size: 12
-typedef struct CompanionSchematicCurrencySettings CompanionSchematicCurrencySettings;// size: 12
 typedef struct ProceduralMissions ProceduralMissions;// size: 16
 typedef struct ProceduralMission ProceduralMission;// size: 24
 typedef struct ProceduralMissionInstance ProceduralMissionInstance;// size: 96
@@ -627,3912 +842,18 @@ typedef struct SafehouseUtilities SafehouseUtilities;// size: 32
 typedef struct SchematicTrees SchematicTrees;// size: 16
 typedef struct SchematicTree SchematicTree;// size: 56
 typedef struct SchematicTreeNode SchematicTreeNode;// size: 48
-typedef struct Settings Settings;// size: 32
-typedef struct GlobalFilter GlobalFilter;// size: 24
-typedef struct Type Type;// size: 56
 typedef struct FoliageMeshConstants FoliageMeshConstants;// size: 12
 typedef struct FoliageConstants FoliageConstants;// size: 52
 typedef struct BarkConstants BarkConstants;// size: 160
-typedef struct AITuningSettings_31B2542A AITuningSettings_31B2542A;// size: 420
-typedef struct RcTickSettings RcTickSettings;// size: 172
-typedef struct CompanionSettings CompanionSettings;// size: 72
-typedef struct FirebirdSettings FirebirdSettings;// size: 8
-typedef struct WolfSettings WolfSettings;// size: 12
-typedef struct MachineSettings_CB3BAD92 MachineSettings_CB3BAD92;// size: 44
-typedef struct CharacterPhysicsEffects CharacterPhysicsEffects;// size: 84
-typedef struct SoundFalloff SoundFalloff;// size: 24
 typedef struct LandmarkConstants LandmarkConstants;// size: 48
 typedef struct GeneralConstants GeneralConstants;// size: 12
-typedef struct CharacterMovementSettings CharacterMovementSettings;// size: 352
-typedef struct CharacterFpsSettings CharacterFpsSettings;// size: 256
-typedef struct StaminaThresholds StaminaThresholds;// size: 4
-typedef struct CharacterSpline10 CharacterSpline10;// size: 140
-typedef struct CharacterSplineControlPoint CharacterSplineControlPoint;// size: 12
-typedef struct WeaponSkillSettings WeaponSkillSettings;// size: 88
-typedef struct MovementSteeringParams MovementSteeringParams;// size: 48
-typedef struct CharacterOnFootSettings CharacterOnFootSettings;// size: 36
-typedef struct CharacterSwimSettings CharacterSwimSettings;// size: 12
-typedef struct VelocityFilterSettings VelocityFilterSettings;// size: 12
-typedef struct CharacterNavigationSettings CharacterNavigationSettings;// size: 56
-typedef struct AvoidanceSettings AvoidanceSettings;// size: 24
-typedef struct MovementType MovementType;// size: 48
-typedef struct GroundAlignmentBoneAdjustment GroundAlignmentBoneAdjustment;// size: 16
-typedef struct BoneData BoneData;// size: 864
-typedef struct GroundAlignmentDataSplines GroundAlignmentDataSplines;// size: 420
-typedef struct CharacterAimingSettings CharacterAimingSettings;// size: 2608
-typedef struct PositionRotation PositionRotation;// size: 848
-typedef struct DataSplines DataSplines;// size: 420
-typedef struct ThirdPersonCameraModifierParams_C9D843E6 ThirdPersonCameraModifierParams_C9D843E6;// size: 232
-typedef struct CameraInputParams_F42BA99B CameraInputParams_F42BA99B;// size: 172
-typedef struct BalloonSettings BalloonSettings;// size: 32
-typedef struct VehicleRumbleEffects VehicleRumbleEffects;// size: 88
-typedef struct FirstPersonCameraModifierParams_68D20F76 FirstPersonCameraModifierParams_68D20F76;// size: 280
-typedef struct FirstPersonVehicleCameraModifierParams_FAE9418D FirstPersonVehicleCameraModifierParams_FAE9418D;// size: 256
-typedef struct ChaseCameraModifierParams_47801B1C ChaseCameraModifierParams_47801B1C;// size: 228
-
-#define STI_TYPE_HASH_ImpostorVertex 0x1CFB60D3
-typedef struct ImpostorVertex{
-    const STITypeInfo* type_info_;
-    float32 Position[2]; // offset: 0, size: 8
-    float32 Uvs[2]; // offset: 8, size: 8
-    float32 Normal[2]; // offset: 16, size: 8
-} ImpostorVertex; // size: 24
-
-#define STI_TYPE_HASH_Array_uint16 0x72E3A69A
-typedef struct Array_uint16 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    uint16* items;
-} Array_uint16; // size: 16
-
-#define STI_TYPE_HASH_Array_ImpostorVertex 0x940AA886
-typedef struct Array_ImpostorVertex {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ImpostorVertex* items;
-} Array_ImpostorVertex; // size: 16
-
-#define STI_TYPE_HASH_ImpostorMesh 0xE3FD79AC
-typedef struct ImpostorMesh{
-    const STITypeInfo* type_info_;
-    Array_uint16 Indices; // offset: 0, size: 16
-    Array_ImpostorVertex Vertices; // offset: 16, size: 16
-    float32 Size[2]; // offset: 32, size: 8
-    float32 Offset[3]; // offset: 40, size: 12
-    uint8 Single; // offset: 52, size: 1
-} ImpostorMesh; // size: 56
-
-#define STI_TYPE_HASH_ImpostorInfo 0xAA6D6A0E
-typedef struct ImpostorInfo{
-    const STITypeInfo* type_info_;
-    ImpostorMesh ImpostorMesh; // offset: 0, size: 56
-    float32 Transmission; // offset: 56, size: 4
-    float32 SphereNormalInfluence; // offset: 60, size: 4
-    uint16 TreeId; // offset: 64, size: 2
-} ImpostorInfo; // size: 72
-
-#define STI_TYPE_HASH_Array_ImpostorInfo 0x826D2C79
-typedef struct Array_ImpostorInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ImpostorInfo* items;
-} Array_ImpostorInfo; // size: 16
-
-#define STI_TYPE_HASH_ImpostorCollection 0x10074530
-typedef struct ImpostorCollection{
-    const STITypeInfo* type_info_;
-    Array_ImpostorInfo Impostors; // offset: 0, size: 16
-} ImpostorCollection; // size: 16
-
-#define STI_TYPE_HASH_VegetationModel 0xD69BFB2D
-typedef struct VegetationModel{
-    const STITypeInfo* type_info_;
-    uint16 ModelIndex; // offset: 0, size: 2
-    uint16 ModelHandle; // offset: 2, size: 2
-    uint16 ModelExtraLodsHandle; // offset: 4, size: 2
-    uint8 ShadowCascadeLimit; // offset: 6, size: 1
-    int8 LodCount; // offset: 7, size: 1
-    float32 LodFactor; // offset: 8, size: 4
-    float32 LodBias; // offset: 12, size: 4
-    float32 HalfExtents[3]; // offset: 16, size: 12
-    uint8 ForestColor[3]; // offset: 28, size: 3
-    StringHash_48c5294d_4 ModelFilenameHash; // offset: 32, size: 4
-    StringHash_48c5294d_4 ModelExtraLodsFilenameHash; // offset: 36, size: 4
-    float32 TerrainColoringFactor; // offset: 40, size: 4
-    int16 Impostor; // offset: 44, size: 2
-    uint8 UseBillboard; // offset: 46, size: 1
-    uint8 FarLayer; // offset: 47, size: 1
-    float32 BillboardSize[2]; // offset: 48, size: 8
-    float32 SwayFactor; // offset: 56, size: 4
-    uint8 GlobalIlluminationMask; // offset: 60, size: 1
-    uint8 AlphaBlendLodMask; // offset: 61, size: 1
-    uint8 AlphaFadeLodMask; // offset: 62, size: 1
-    uint8 AlphaThreshold[5]; // offset: 63, size: 5
-    float32 AlphaMultiplier; // offset: 68, size: 4
-    float32 NormalFadeDistance; // offset: 72, size: 4
-    float32 NormalBendNear; // offset: 76, size: 4
-    float32 NormalBendFar; // offset: 80, size: 4
-    float32 SphereNormalFadeInStart; // offset: 84, size: 4
-    float32 SphereNormalFadeInEnd; // offset: 88, size: 4
-    uint32 Flags; // offset: 92, size: 4
-} VegetationModel; // size: 96
-
-#define STI_TYPE_HASH_VegetationPlacementFlags 0x02E7777D
-typedef enum{ // size: 4
-    E_VEGETATIONPLACEMENTFLAGS_NONE = 0,
-    E_VEGETATIONPLACEMENTFLAGS_FLOATS = 1,
-    VegetationPlacementFlags_ForceSize = 0x7FFFFFFF
-} VegetationPlacementFlags;
-
-#define STI_TYPE_HASH_VegetationPlacementSettings 0x1D0F3744
-typedef struct VegetationPlacementSettings{
-    const STITypeInfo* type_info_;
-    float32 SafeRadius; // offset: 0, size: 4
-    float32 TerrainSlopeInfluence; // offset: 4, size: 4
-    float32 ModelColorBegin[3]; // offset: 8, size: 12
-    float32 ModelColorEnd[3]; // offset: 20, size: 12
-    float32 SlopeRangeMaxCos; // offset: 32, size: 4
-    float32 SlopeRangeMinCos; // offset: 36, size: 4
-    float32 HeightVariation; // offset: 40, size: 4
-    VegetationPlacementFlags Flags; // offset: 44, size: 4
-} VegetationPlacementSettings; // size: 48
-
-#define STI_TYPE_HASH_VegetationEffect 0x526A773D
-typedef struct VegetationEffect{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 BreakEffect; // offset: 0, size: 4
-    StringHash_48c5294d_4 CollideEffect; // offset: 4, size: 4
-    StringHash_48c5294d_4 PassThroughEffect; // offset: 8, size: 4
-    StringHash_48c5294d_4 FastThroughEffect; // offset: 12, size: 4
-    float32 BreakEffectOffset[3]; // offset: 16, size: 12
-    float32 CollideEffectOffset[3]; // offset: 28, size: 12
-    float32 PassThroughEffectOffset[3]; // offset: 40, size: 12
-    String BreakSound; // offset: 56, size: 16
-    String CollideSound; // offset: 64, size: 16
-    String PassThroughSound; // offset: 72, size: 16
-    String FastThroughSound; // offset: 80, size: 16
-    StringHash_48c5294d_4 FallingLeavesEffect; // offset: 88, size: 4
-    int32 PassThroughSoundVolume; // offset: 92, size: 4
-    int32 FoliageDensity; // offset: 96, size: 4
-    StringHash_48c5294d_4 LocatorFile; // offset: 100, size: 4
-} VegetationEffect; // size: 104
-
-#define STI_TYPE_HASH_Array_StringHash_48c5294d_4 0xB68E5583
-typedef struct Array_StringHash_48c5294d_4 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    StringHash_48c5294d_4* items;
-} Array_StringHash_48c5294d_4; // size: 16
-
-#define STI_TYPE_HASH_VegetationPhysics 0xCFC07A39
-typedef struct VegetationPhysics{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 PfxFile; // offset: 0, size: 4
-    StringHash_48c5294d_4 NavmeshPfxFile; // offset: 4, size: 4
-    StringHash_48c5294d_4 StumpFile; // offset: 8, size: 4
-    StringHash_48c5294d_4 PfxStumpFile; // offset: 12, size: 4
-    Array_StringHash_48c5294d_4 BrokenFile; // offset: 16, size: 16
-    Array_StringHash_48c5294d_4 BrokenPfxFile; // offset: 32, size: 16
-    uint16 PhysicsHandle; // offset: 48, size: 2
-    float32 ImpulseLimitPassThrough; // offset: 52, size: 4
-    float32 ImpulseThreshold; // offset: 56, size: 4
-    float32 BreakByBulletLimit; // offset: 60, size: 4
-    float32 BreakByExplosionLimit; // offset: 64, size: 4
-    float32 ExplosiveImpulseModifier; // offset: 68, size: 4
-    float32 AngularLimit; // offset: 72, size: 4
-    float32 Magnitude; // offset: 76, size: 4
-    uint8 BreaksOnCollision; // offset: 80, size: 1
-    uint8 TerrainNormal; // offset: 80, size: 1
-    uint8 HasCollisions; // offset: 80, size: 1
-    uint8 FarModel; // offset: 80, size: 1
-    uint8 IsPebble; // offset: 80, size: 1
-    uint8 IgnorePlayer; // offset: 80, size: 1
-    uint8 IsAiCover; // offset: 80, size: 1
-    uint8 StaticPathfinding; // offset: 81, size: 1
-    uint8 NavmeshUseHull2d; // offset: 82, size: 1
-} VegetationPhysics; // size: 88
-
-#define STI_TYPE_HASH_VegetationObject 0xC89F980E
-typedef struct VegetationObject{
-    const STITypeInfo* type_info_;
-    uint8 Index; // offset: 0, size: 1
-    StringHash_48c5294d_4 NameHash; // offset: 4, size: 4
-    StringHash_48c5294d_4 LayerHash; // offset: 8, size: 4
-    VegetationModel Model; // offset: 12, size: 96
-    VegetationPhysics Physics; // offset: 112, size: 88
-    VegetationEffect Effects; // offset: 200, size: 104
-    VegetationPlacementSettings PlacementSettings; // offset: 304, size: 48
-} VegetationObject; // size: 352
-
-#define STI_TYPE_HASH_Array_int16 0x52A3F45E
-typedef struct Array_int16 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    int16* items;
-} Array_int16; // size: 16
-
-#define STI_TYPE_HASH_ProbabilityBuffer 0xD94A182E
-typedef struct ProbabilityBuffer{
-    const STITypeInfo* type_info_;
-    Array_int16 Buffer; // offset: 0, size: 16
-    uint8 AnyValidVariation; // offset: 16, size: 1
-} ProbabilityBuffer; // size: 24
-
-#define STI_TYPE_HASH_Array_ProbabilityBuffer 0x21B7D13F
-typedef struct Array_ProbabilityBuffer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ProbabilityBuffer* items;
-} Array_ProbabilityBuffer; // size: 16
-
-#define STI_TYPE_HASH_VegetationSet 0x63D49D28
-typedef struct VegetationSet{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
-    Array_ProbabilityBuffer ProbabilityBuffer; // offset: 8, size: 16
-    float32 ModelGrassClustering; // offset: 24, size: 4
-} VegetationSet; // size: 32
-
-#define STI_TYPE_HASH_Array_VegetationSet 0xBEDA8528
-typedef struct Array_VegetationSet {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationSet* items;
-} Array_VegetationSet; // size: 16
-
-#define STI_TYPE_HASH_VegetationZone 0x3DE7F6F8
-typedef struct VegetationZone{
-    const STITypeInfo* type_info_;
-    Array_VegetationSet VegetationSets; // offset: 0, size: 16
-} VegetationZone; // size: 16
-
-#define STI_TYPE_HASH_VegetationIndex 0x083BCB19
-typedef struct VegetationIndex{
-    const STITypeInfo* type_info_;
-    int16 VegetationSetIndex; // offset: 0, size: 2
-    int16 ClimateZoneIndex; // offset: 2, size: 2
-} VegetationIndex; // size: 4
-
-#define STI_TYPE_HASH_VegetationForestLayer 0x1D3D4A42
-typedef struct VegetationForestLayer{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
-    int32 ConstructionPipelineWidth; // offset: 4, size: 4
-    int32 PatchLod; // offset: 8, size: 4
-    int32 PatchMapWidth; // offset: 12, size: 4
-    float32 Range; // offset: 16, size: 4
-    float32 Density; // offset: 20, size: 4
-    float32 FadeInStart; // offset: 24, size: 4
-    float32 FadeInRange; // offset: 28, size: 4
-    float32 FadeOutStart; // offset: 32, size: 4
-    float32 FadeOutRange; // offset: 36, size: 4
-    float32 NormalStrength; // offset: 40, size: 4
-    uint32 GlobalTextureTiling; // offset: 44, size: 4
-    String NormalDisplacementMap; // offset: 48, size: 16
-    int32 TextureWidth; // offset: 56, size: 4
-    int32 MeshNumVertices; // offset: 60, size: 4
-} VegetationForestLayer; // size: 64
-
-#define STI_TYPE_HASH_VegetationBillboardLayer 0xDBB46F58
-typedef struct VegetationBillboardLayer{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
-    int32 Channel; // offset: 4, size: 4
-    int32 ConstructionPipelineWidth; // offset: 8, size: 4
-    int32 PatchLod; // offset: 12, size: 4
-    int32 PatchMapWidth; // offset: 16, size: 4
-    float32 Range; // offset: 20, size: 4
-    float32 FadeInStart; // offset: 24, size: 4
-    float32 FadeInRange; // offset: 28, size: 4
-    float32 FadeOutStart; // offset: 32, size: 4
-    float32 FadeOutRange; // offset: 36, size: 4
-    uint32 SourceLayerHash; // offset: 40, size: 4
-} VegetationBillboardLayer; // size: 44
-
-#define STI_TYPE_HASH_VegetationModelLayer 0x2E907B52
-typedef struct VegetationModelLayer{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
-    int32 Channel; // offset: 4, size: 4
-    int32 ConstructionPipelineWidth; // offset: 8, size: 4
-    int32 PatchLod; // offset: 12, size: 4
-    int32 PatchMapWidth; // offset: 16, size: 4
-    float32 Range; // offset: 20, size: 4
-    float32 Density; // offset: 24, size: 4
-    float32 EndFadeRange; // offset: 28, size: 4
-    float32 CrossFadeRange; // offset: 32, size: 4
-    int16 DebugObject; // offset: 36, size: 2
-    float32 OffsetRadius; // offset: 40, size: 4
-    float32 FadeOutStart; // offset: 44, size: 4
-    float32 FadeOutEnd; // offset: 48, size: 4
-} VegetationModelLayer; // size: 52
-
-#define STI_TYPE_HASH_VegetationPhysicsLayer 0xD10F0420
-typedef struct VegetationPhysicsLayer{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
-    int32 ConstructionPipelineWidth; // offset: 4, size: 4
-    int32 PatchLod; // offset: 8, size: 4
-    int32 PatchMapWidth; // offset: 12, size: 4
-    float32 Range; // offset: 16, size: 4
-    uint32 SourceLayerHash; // offset: 20, size: 4
-} VegetationPhysicsLayer; // size: 24
-
-#define STI_TYPE_HASH_Array_VegetationForestLayer 0x980B9F7A
-typedef struct Array_VegetationForestLayer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationForestLayer* items;
-} Array_VegetationForestLayer; // size: 16
-
-#define STI_TYPE_HASH_Array_VegetationBillboardLayer 0x05DBB0E4
-typedef struct Array_VegetationBillboardLayer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationBillboardLayer* items;
-} Array_VegetationBillboardLayer; // size: 16
-
-#define STI_TYPE_HASH_Array_VegetationModelLayer 0x918B782D
-typedef struct Array_VegetationModelLayer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationModelLayer* items;
-} Array_VegetationModelLayer; // size: 16
-
-#define STI_TYPE_HASH_Array_VegetationPhysicsLayer 0xE707093D
-typedef struct Array_VegetationPhysicsLayer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationPhysicsLayer* items;
-} Array_VegetationPhysicsLayer; // size: 16
-
-#define STI_TYPE_HASH_VegetationLayers 0x3394E18F
-typedef struct VegetationLayers{
-    const STITypeInfo* type_info_;
-    Array_VegetationForestLayer VegetationForestLayer; // offset: 0, size: 16
-    Array_VegetationBillboardLayer VegetationBillboardLayer; // offset: 16, size: 16
-    Array_VegetationModelLayer VegetationModelLayer; // offset: 32, size: 16
-    Array_VegetationPhysicsLayer VegetationPhysicsLayer; // offset: 48, size: 16
-} VegetationLayers; // size: 64
-
-#define STI_TYPE_HASH_Array_VegetationZone 0x0EF1B60A
-typedef struct Array_VegetationZone {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationZone* items;
-} Array_VegetationZone; // size: 16
-
-#define STI_TYPE_HASH_Array_VegetationObject 0xC5E3777F
-typedef struct Array_VegetationObject {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationObject* items;
-} Array_VegetationObject; // size: 16
-
-#define STI_TYPE_HASH_Array_VegetationIndex 0x8F8B460B
-typedef struct Array_VegetationIndex {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationIndex* items;
-} Array_VegetationIndex; // size: 16
-
-#define STI_TYPE_HASH_VegetationWorld 0x22A653FD
-typedef struct VegetationWorld{
-    const STITypeInfo* type_info_;
-    VegetationLayers VegetationLayers; // offset: 0, size: 64
-    Array_VegetationZone VegetationZones; // offset: 64, size: 16
-    Array_VegetationObject VegetationObjects; // offset: 80, size: 16
-    VegetationZone DefaultVegetationZone; // offset: 96, size: 16
-    Array_VegetationIndex VegetationIndex; // offset: 112, size: 16
-    String BillboardAtlasDiffuse; // offset: 128, size: 16
-    String BillboardAtlasNormal; // offset: 136, size: 16
-    float32 WorldSize[3]; // offset: 144, size: 12
-    ImpostorCollection ImpostorCollection; // offset: 160, size: 16
-} VegetationWorld; // size: 176
-
-#define STI_TYPE_HASH_VegetationSystemInstanceSrc 0x8A7E7530
-typedef struct VegetationSystemInstanceSrc{
-    const STITypeInfo* type_info_;
-    float32 X; // offset: 0, size: 4
-    float32 Y; // offset: 4, size: 4
-    float32 Z; // offset: 8, size: 4
-    float32 Rotation[4]; // offset: 12, size: 16
-    float32 Color_R; // offset: 28, size: 4
-    float32 Color_G; // offset: 32, size: 4
-    float32 Color_B; // offset: 36, size: 4
-    StringHash_48c5294d_4 NameHash; // offset: 40, size: 4
-    uint8 ZoneIndex; // offset: 44, size: 1
-    uint8 IsPlanted; // offset: 45, size: 1
-} VegetationSystemInstanceSrc; // size: 48
-
-#define STI_TYPE_HASH_VegetationSystemInstance 0x1F783B17
-typedef struct VegetationSystemInstance{
-    const STITypeInfo* type_info_;
-    uint16 X; // offset: 0, size: 2
-    uint16 Z; // offset: 2, size: 2
-    uint32 Y; // offset: 4, size: 4
-    uint8 ZoneIndex; // offset: 8, size: 1
-    uint8 IsPlanted; // offset: 8, size: 1
-    uint8 IsDestroyed; // offset: 8, size: 1
-    uint32 Rotation; // offset: 12, size: 4
-    uint8 Color_R; // offset: 16, size: 1
-    uint8 Color_G; // offset: 17, size: 1
-    uint8 Color_B; // offset: 18, size: 1
-    StringHash_48c5294d_4 NameHash; // offset: 20, size: 4
-} VegetationSystemInstance; // size: 24
-
-#define STI_TYPE_HASH_ArrayAABB 0x200D0BC9
-typedef struct ArrayAABB{
-    const STITypeInfo* type_info_;
-    uint32 X; // offset: 0, size: 4
-    uint32 Z; // offset: 4, size: 4
-    uint32 Size; // offset: 8, size: 4
-    uint32 Index; // offset: 12, size: 4
-    uint32 Count; // offset: 16, size: 4
-    int16 Children[4]; // offset: 20, size: 8
-} ArrayAABB; // size: 28
-
-#define STI_TYPE_HASH_Array_uint32 0xE8ABFE3B
-typedef struct Array_uint32 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    uint32* items;
-} Array_uint32; // size: 16
-
-#define STI_TYPE_HASH_Array_ArrayAABB 0x573FA4BF
-typedef struct Array_ArrayAABB {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ArrayAABB* items;
-} Array_ArrayAABB; // size: 16
-
-#define STI_TYPE_HASH_TerrainPatchInfo 0xB9D80AD4
-typedef struct TerrainPatchInfo{
-    const STITypeInfo* type_info_;
-    int32 PatchX; // offset: 0, size: 4
-    int32 PatchZ; // offset: 4, size: 4
-    int32 PatchLod; // offset: 8, size: 4
-    Array_uint32 TriangleIndices; // offset: 16, size: 16
-    Array_ArrayAABB TriangleQuadTree; // offset: 32, size: 16
-} TerrainPatchInfo; // size: 48
-
-#define STI_TYPE_HASH_VegetationBillboardLayerStats 0xA553A921
-typedef struct VegetationBillboardLayerStats{
-    const STITypeInfo* type_info_;
-    uint8 IsRidge; // offset: 0, size: 1
-    uint32 NumInstances; // offset: 4, size: 4
-    uint32 NumOnTreeLine; // offset: 8, size: 4
-    uint32 NumOnRidges; // offset: 12, size: 4
-    uint32 NumCulledBySize; // offset: 16, size: 4
-    uint32 NumCulledByForestMesh; // offset: 20, size: 4
-    uint32 NumCulledBySeaLevel; // offset: 24, size: 4
-    uint32 NumCulledByThinout; // offset: 28, size: 4
-} VegetationBillboardLayerStats; // size: 32
-
-#define STI_TYPE_HASH_Array_String 0xC106B357
-typedef struct Array_String {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    String* items;
-} Array_String; // size: 16
-
-#define STI_TYPE_HASH_VegetationDebugData 0xC7D58849
-typedef struct VegetationDebugData{
-    const STITypeInfo* type_info_;
-    Array_uint16 LocationIndices; // offset: 0, size: 16
-    Array_String LocationNames; // offset: 16, size: 16
-    VegetationBillboardLayerStats Stats; // offset: 32, size: 32
-} VegetationDebugData; // size: 64
-
-#define STI_TYPE_HASH_Array_VegetationSystemInstance 0xEA0A66F0
-typedef struct Array_VegetationSystemInstance {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationSystemInstance* items;
-} Array_VegetationSystemInstance; // size: 16
-
-#define STI_TYPE_HASH_InstanceDataLayer 0xF8DD7138
-typedef struct InstanceDataLayer{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 Name; // offset: 0, size: 4
-    float32 BoundingMin[3]; // offset: 4, size: 12
-    float32 BoundingMax[3]; // offset: 16, size: 12
-    Array_VegetationSystemInstance Instances; // offset: 32, size: 16
-    Array_uint32 UsedTypes; // offset: 48, size: 16
-    VegetationDebugData VegetationDebugData; // offset: 64, size: 64
-} InstanceDataLayer; // size: 128
-
-#define STI_TYPE_HASH_Array_InstanceDataLayer 0x766E412E
-typedef struct Array_InstanceDataLayer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    InstanceDataLayer* items;
-} Array_InstanceDataLayer; // size: 16
-
-#define STI_TYPE_HASH_Array_TerrainPatchInfo 0x6032D156
-typedef struct Array_TerrainPatchInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    TerrainPatchInfo* items;
-} Array_TerrainPatchInfo; // size: 16
-
-#define STI_TYPE_HASH_InstanceDataPatch 0xFD88832A
-typedef struct InstanceDataPatch{
-    const STITypeInfo* type_info_;
-    int32 PatchX; // offset: 0, size: 4
-    int32 PatchZ; // offset: 4, size: 4
-    int32 PatchLod; // offset: 8, size: 4
-    Array_InstanceDataLayer InstanceDataLayers; // offset: 16, size: 16
-    Array_TerrainPatchInfo TerrainPatchInfo; // offset: 32, size: 16
-} InstanceDataPatch; // size: 48
-
-#define STI_TYPE_HASH_ForestVertex 0x291C7A90
-typedef struct ForestVertex{
-    const STITypeInfo* type_info_;
-    uint16 Y; // offset: 0, size: 2
-    uint8 Slope[2]; // offset: 2, size: 2
-} ForestVertex; // size: 4
-
-#define STI_TYPE_HASH_Array_ForestVertex 0xDAEE84C4
-typedef struct Array_ForestVertex {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ForestVertex* items;
-} Array_ForestVertex; // size: 16
-
-#define STI_TYPE_HASH_ForestMesh 0xC2D93166
-typedef struct ForestMesh{
-    const STITypeInfo* type_info_;
-    Array_ForestVertex Vertices; // offset: 0, size: 16
-    float32 BoundingMin[3]; // offset: 16, size: 12
-    float32 BoundingMax[3]; // offset: 28, size: 12
-} ForestMesh; // size: 40
-
-#define STI_TYPE_HASH_Array_uint8 0x6F962A30
-typedef struct Array_uint8 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    uint8* items;
-} Array_uint8; // size: 16
-
-#define STI_TYPE_HASH_VegetationDataBuffer 0x8F581B21
-typedef struct VegetationDataBuffer{
-    const STITypeInfo* type_info_;
-    Array_uint8 Buffer; // offset: 0, size: 16
-} VegetationDataBuffer; // size: 16
-
-#define STI_TYPE_HASH_StringLookupHashProperties 0xDCFE3700
-typedef struct StringLookupHashProperties{
-    const STITypeInfo* type_info_;
-    uint32 Hash; // offset: 0, size: 4
-    uint32 TextOffset; // offset: 4, size: 4
-    uint32 NameOffset; // offset: 8, size: 4
-} StringLookupHashProperties; // size: 12
-
-#define STI_TYPE_HASH_StringLookupSubtitle 0x6355E3EF
-typedef struct StringLookupSubtitle{
-    const STITypeInfo* type_info_;
-    uint32 LineHash; // offset: 0, size: 4
-    float32 Start; // offset: 4, size: 4
-    float32 Duration; // offset: 8, size: 4
-} StringLookupSubtitle; // size: 12
-
-#define STI_TYPE_HASH_Array_StringLookupSubtitle 0x06AABECE
-typedef struct Array_StringLookupSubtitle {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    StringLookupSubtitle* items;
-} Array_StringLookupSubtitle; // size: 16
-
-#define STI_TYPE_HASH_StringLookupDialogueLine 0x06A27C80
-typedef struct StringLookupDialogueLine{
-    const STITypeInfo* type_info_;
-    uint32 Hash; // offset: 0, size: 4
-    uint32 NameOffset; // offset: 4, size: 4
-    Array_StringLookupSubtitle Subtitles; // offset: 8, size: 16
-    uint32 FMODEvent; // offset: 24, size: 4
-    StringHash_48c5294d_4 IncomingCall; // offset: 28, size: 4
-    StringHash_48c5294d_4 CharacterName; // offset: 32, size: 4
-    uint32 Flags; // offset: 36, size: 4
-} StringLookupDialogueLine; // size: 40
-
-#define STI_TYPE_HASH_Array_StringLookupHashProperties 0x782ACDB9
-typedef struct Array_StringLookupHashProperties {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    StringLookupHashProperties* items;
-} Array_StringLookupHashProperties; // size: 16
-
-#define STI_TYPE_HASH_Array_StringLookupDialogueLine 0x8E6505A2
-typedef struct Array_StringLookupDialogueLine {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    StringLookupDialogueLine* items;
-} Array_StringLookupDialogueLine; // size: 16
-
-#define STI_TYPE_HASH_Array_int8 0x00A1294F
-typedef struct Array_int8 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    int8* items;
-} Array_int8; // size: 16
-
-#define STI_TYPE_HASH_StringLookup 0xB3ABF11B
-typedef struct StringLookup{
-    const STITypeInfo* type_info_;
-    Array_StringLookupHashProperties SortedPairs; // offset: 0, size: 16
-    Array_StringLookupDialogueLine SortedDialogueLines; // offset: 16, size: 16
-    Array_int8 Text; // offset: 32, size: 16
-} StringLookup; // size: 48
-
-#define STI_TYPE_HASH_XLSSheet 0xD987FB8B
-typedef struct XLSSheet{
-    const STITypeInfo* type_info_;
-    uint32 Cols; // offset: 0, size: 4
-    uint32 Rows; // offset: 4, size: 4
-    Array_uint32 CellIndex; // offset: 8, size: 16
-    String Name; // offset: 24, size: 16
-} XLSSheet; // size: 32
-
-#define STI_TYPE_HASH_XLSCell 0x9AE3055D
-typedef struct XLSCell{
-    const STITypeInfo* type_info_;
-    uint16 Type; // offset: 0, size: 2
-    uint32 DataIndex; // offset: 4, size: 4
-    uint32 AttributeIndex; // offset: 8, size: 4
-} XLSCell; // size: 12
-
-#define STI_TYPE_HASH_XLSAttribute 0x8EE26A32
-typedef struct XLSAttribute{
-    const STITypeInfo* type_info_;
-    uint8 FGColorIndex; // offset: 0, size: 1
-    uint8 BGColorIndex; // offset: 1, size: 1
-} XLSAttribute; // size: 2
-
-#define STI_TYPE_HASH_Array_XLSSheet 0x08777DDD
-typedef struct Array_XLSSheet {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    XLSSheet* items;
-} Array_XLSSheet; // size: 16
-
-#define STI_TYPE_HASH_Array_XLSCell 0x85840D51
-typedef struct Array_XLSCell {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    XLSCell* items;
-} Array_XLSCell; // size: 16
-
-#define STI_TYPE_HASH_Array_float32 0x168B4EB8
-typedef struct Array_float32 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    float32* items;
-} Array_float32; // size: 16
-
-#define STI_TYPE_HASH_Array_XLSAttribute 0x061B813D
-typedef struct Array_XLSAttribute {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    XLSAttribute* items;
-} Array_XLSAttribute; // size: 16
-
-#define STI_TYPE_HASH_XLSBook 0x0B73315D
-typedef struct XLSBook{
-    const STITypeInfo* type_info_;
-    Array_XLSSheet Sheet; // offset: 0, size: 16
-    Array_XLSCell Cell; // offset: 16, size: 16
-    Array_String StringData; // offset: 32, size: 16
-    Array_float32 ValueData; // offset: 48, size: 16
-    Array_uint8 BoolData; // offset: 64, size: 16
-    Array_String DateData; // offset: 80, size: 16
-    Array_uint32 ColorData; // offset: 96, size: 16
-    Array_XLSAttribute Attribute; // offset: 112, size: 16
-} XLSBook; // size: 128
-
-#define STI_TYPE_HASH_LightInfo 0x30B45553
-typedef struct LightInfo{
-    const STITypeInfo* type_info_;
-    float32 Position[3]; // offset: 0, size: 12
-    uint8 Diffuse[3]; // offset: 12, size: 3
-    uint8 Radius; // offset: 15, size: 1
-    uint8 HasDistantLod; // offset: 16, size: 1
-    uint64 ObjectID; // offset: 24, size: 8
-    uint32 Ordinal; // offset: 32, size: 4
-    uint16 CellIndex; // offset: 36, size: 2
-} LightInfo; // size: 40
-
-#define STI_TYPE_HASH_Array_LightInfo 0x9580A0DB
-typedef struct Array_LightInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    LightInfo* items;
-} Array_LightInfo; // size: 16
-
-#define STI_TYPE_HASH_AllLights 0x94625F53
-typedef struct AllLights{
-    const STITypeInfo* type_info_;
-    Array_LightInfo Lights; // offset: 0, size: 16
-} AllLights; // size: 16
-
-#define STI_TYPE_HASH_Shader 0xC2CE5A9E
-typedef struct Shader{
-    const STITypeInfo* type_info_;
-    uint32 NameHash; // offset: 0, size: 4
-    String Name; // offset: 8, size: 16
-    uint32 DataHash; // offset: 16, size: 4
-    Array_uint8 BinaryData; // offset: 24, size: 16
-} Shader; // size: 40
-
-#define STI_TYPE_HASH_Array_Shader 0x453B6CBD
-typedef struct Array_Shader {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    Shader* items;
-} Array_Shader; // size: 16
-
-#define STI_TYPE_HASH_ShaderLibrary 0xF2923B32
-typedef struct ShaderLibrary{
-    const STITypeInfo* type_info_;
-    String Name; // offset: 0, size: 16
-    String BuildTime; // offset: 8, size: 16
-    Array_Shader VertexShaders; // offset: 16, size: 16
-    Array_Shader FragmentShaders; // offset: 32, size: 16
-    Array_Shader ComputeShaders; // offset: 48, size: 16
-    Array_Shader GeometryShaders; // offset: 64, size: 16
-    Array_Shader HullShaders; // offset: 80, size: 16
-    Array_Shader DomainShaders; // offset: 96, size: 16
-} ShaderLibrary; // size: 112
-
-#define STI_TYPE_HASH_AmfFormat 0x0418CEAB
-typedef enum{ // size: 4
-    AmfFormat_R32G32B32A32_FLOAT = 0,
-    AmfFormat_R32G32B32A32_UINT = 1,
-    AmfFormat_R32G32B32A32_SINT = 2,
-    AmfFormat_R32G32B32_FLOAT = 3,
-    AmfFormat_R32G32B32_UINT = 4,
-    AmfFormat_R32G32B32_SINT = 5,
-    AmfFormat_R16G16B16A16_FLOAT = 6,
-    AmfFormat_R16G16B16A16_UNORM = 7,
-    AmfFormat_R16G16B16A16_UINT = 8,
-    AmfFormat_R16G16B16A16_SNORM = 9,
-    AmfFormat_R16G16B16A16_SINT = 10,
-    AmfFormat_R16G16B16_FLOAT = 11,
-    AmfFormat_R16G16B16_UNORM = 12,
-    AmfFormat_R16G16B16_UINT = 13,
-    AmfFormat_R16G16B16_SNORM = 14,
-    AmfFormat_R16G16B16_SINT = 15,
-    AmfFormat_R32G32_FLOAT = 16,
-    AmfFormat_R32G32_UINT = 17,
-    AmfFormat_R32G32_SINT = 18,
-    AmfFormat_R10G10B10A2_UNORM = 19,
-    AmfFormat_R10G10B10A2_UINT = 20,
-    AmfFormat_R11G11B10_FLOAT = 21,
-    AmfFormat_R8G8B8A8_UNORM = 22,
-    AmfFormat_R8G8B8A8_UNORM_SRGB = 23,
-    AmfFormat_R8G8B8A8_UINT = 24,
-    AmfFormat_R8G8B8A8_SNORM = 25,
-    AmfFormat_R8G8B8A8_SINT = 26,
-    AmfFormat_R16G16_FLOAT = 27,
-    AmfFormat_R16G16_UNORM = 28,
-    AmfFormat_R16G16_UINT = 29,
-    AmfFormat_R16G16_SNORM = 30,
-    AmfFormat_R16G16_SINT = 31,
-    AmfFormat_R32_FLOAT = 32,
-    AmfFormat_R32_UINT = 33,
-    AmfFormat_R32_SINT = 34,
-    AmfFormat_R8G8_UNORM = 35,
-    AmfFormat_R8G8_UINT = 36,
-    AmfFormat_R8G8_SNORM = 37,
-    AmfFormat_R8G8_SINT = 38,
-    AmfFormat_R16_FLOAT = 39,
-    AmfFormat_R16_UNORM = 40,
-    AmfFormat_R16_UINT = 41,
-    AmfFormat_R16_SNORM = 42,
-    AmfFormat_R16_SINT = 43,
-    AmfFormat_R8_UNORM = 44,
-    AmfFormat_R8_UINT = 45,
-    AmfFormat_R8_SNORM = 46,
-    AmfFormat_R8_SINT = 47,
-    AmfFormat_R32_UNIT_VEC_AS_FLOAT = 48,
-    AmfFormat_R32_R8G8B8A8_UNORM_AS_FLOAT = 49,
-    AmfFormat_R8G8B8A8_TANGENT_SPACE = 50,
-    AmfFormat_ForceSize = 0x7FFFFFFF
-} AmfFormat;
-
-#define STI_TYPE_HASH_AmfUsage 0x49BE3A72
-typedef enum{ // size: 4
-    AmfUsage_Unspecified = 0,
-    AmfUsage_Position = 1,
-    AmfUsage_TextureCoordinate = 2,
-    AmfUsage_Normal = 3,
-    AmfUsage_Tangent = 4,
-    AmfUsage_BiTangent = 5,
-    AmfUsage_TangentSpace = 6,
-    AmfUsage_BoneIndex = 7,
-    AmfUsage_BoneWeight = 8,
-    AmfUsage_Color = 9,
-    AmfUsage_WireRadius = 10,
-    AmfUsage_ForceSize = 0x7FFFFFFF
-} AmfUsage;
-
-#define STI_TYPE_HASH_AmfStreamAttribute 0xCD6F6402
-typedef struct AmfStreamAttribute{
-    const STITypeInfo* type_info_;
-    AmfUsage Usage; // offset: 0, size: 4
-    AmfFormat Format; // offset: 4, size: 4
-    uint8 StreamIndex; // offset: 8, size: 1
-    uint8 StreamOffset; // offset: 9, size: 1
-    uint8 StreamStride; // offset: 10, size: 1
-    uint8 PackingData[8]; // offset: 11, size: 8
-} AmfStreamAttribute; // size: 20
-
-#define STI_TYPE_HASH_AmfBoundingBox 0x08E31707
-typedef struct AmfBoundingBox{
-    const STITypeInfo* type_info_;
-    float32 Min[3]; // offset: 0, size: 12
-    float32 Max[3]; // offset: 12, size: 12
-} AmfBoundingBox; // size: 24
-
-#define STI_TYPE_HASH_AmfSubMesh 0xD004AC12
-typedef struct AmfSubMesh{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 SubMeshId; // offset: 0, size: 4
-    uint32 IndexCount; // offset: 4, size: 4
-    uint32 IndexStreamOffset; // offset: 8, size: 4
-    AmfBoundingBox BoundingBox; // offset: 12, size: 24
-} AmfSubMesh; // size: 36
-
-#define STI_TYPE_HASH_Array_AmfSubMesh 0xFBB375AE
-typedef struct Array_AmfSubMesh {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AmfSubMesh* items;
-} Array_AmfSubMesh; // size: 16
-
-#define STI_TYPE_HASH_Array_AmfStreamAttribute 0xD1C9E8DC
-typedef struct Array_AmfStreamAttribute {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AmfStreamAttribute* items;
-} Array_AmfStreamAttribute; // size: 16
-
-#define STI_TYPE_HASH_AmfMesh 0xB8E95039
-typedef struct AmfMesh{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 MeshTypeId; // offset: 0, size: 4
-    uint32 IndexCount; // offset: 4, size: 4
-    uint32 VertexCount; // offset: 8, size: 4
-    uint8 IndexBufferIndex; // offset: 12, size: 1
-    uint8 IndexBufferStride; // offset: 13, size: 1
-    uint32 IndexBufferOffset; // offset: 16, size: 4
-    Array_uint8 VertexBufferIndices; // offset: 24, size: 16
-    Array_uint8 VertexStreamStrides; // offset: 40, size: 16
-    Array_uint32 VertexStreamOffsets; // offset: 56, size: 16
-    float32 TextureDensities[3]; // offset: 72, size: 12
-    Deferred MeshProperties; // offset: 88, size: 16
-    Array_int16 BoneIndexLookup; // offset: 104, size: 16
-    Array_AmfSubMesh SubMeshes; // offset: 120, size: 16
-    Array_AmfStreamAttribute StreamAttributes; // offset: 136, size: 16
-} AmfMesh; // size: 152
-
-#define STI_TYPE_HASH_Array_AmfMesh 0x58482F62
-typedef struct Array_AmfMesh {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AmfMesh* items;
-} Array_AmfMesh; // size: 16
-
-#define STI_TYPE_HASH_AmfLodGroup 0x5E93771F
-typedef struct AmfLodGroup{
-    const STITypeInfo* type_info_;
-    uint32 LODIndex; // offset: 0, size: 4
-    Array_AmfMesh Meshes; // offset: 8, size: 16
-} AmfLodGroup; // size: 24
-
-#define STI_TYPE_HASH_Array_AmfLodGroup 0xC249939A
-typedef struct Array_AmfLodGroup {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AmfLodGroup* items;
-} Array_AmfLodGroup; // size: 16
-
-#define STI_TYPE_HASH_AmfMeshHeader 0xEA60065D
-typedef struct AmfMeshHeader{
-    const STITypeInfo* type_info_;
-    AmfBoundingBox BoundingBox; // offset: 0, size: 24
-    uint32 MemoryTag; // offset: 24, size: 4
-    Array_AmfLodGroup LodGroups; // offset: 32, size: 16
-    StringHash_48c5294d_4 HighLodPath; // offset: 48, size: 4
-} AmfMeshHeader; // size: 56
-
-#define STI_TYPE_HASH_AmfBuffer 0xD8D7382B
-typedef struct AmfBuffer{
-    const STITypeInfo* type_info_;
-    Array_uint8 Data; // offset: 0, size: 16
-    uint8 CreateSRV; // offset: 16, size: 1
-} AmfBuffer; // size: 24
-
-#define STI_TYPE_HASH_Array_AmfBuffer 0x62039D16
-typedef struct Array_AmfBuffer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AmfBuffer* items;
-} Array_AmfBuffer; // size: 16
-
-#define STI_TYPE_HASH_AmfMeshBuffers 0x67B3A453
-typedef struct AmfMeshBuffers{
-    const STITypeInfo* type_info_;
-    uint32 MemoryTag; // offset: 0, size: 4
-    Array_AmfBuffer IndexBuffers; // offset: 8, size: 16
-    Array_AmfBuffer VertexBuffers; // offset: 24, size: 16
-} AmfMeshBuffers; // size: 40
-
-#define STI_TYPE_HASH_AmfMaterial 0x11CE3318
-typedef struct AmfMaterial{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 Name; // offset: 0, size: 4
-    StringHash_48c5294d_4 RenderBlockId; // offset: 4, size: 4
-    Deferred Attributes; // offset: 8, size: 16
-    Array_StringHash_48c5294d_4 Textures; // offset: 24, size: 16
-} AmfMaterial; // size: 40
-
-#define STI_TYPE_HASH_Array_AmfMaterial 0x087472E5
-typedef struct Array_AmfMaterial {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AmfMaterial* items;
-} Array_AmfMaterial; // size: 16
-
-#define STI_TYPE_HASH_AmfModel 0xF7C20A69
-typedef struct AmfModel{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 Mesh; // offset: 0, size: 4
-    Array_uint8 LodSlots; // offset: 8, size: 16
-    uint32 MemoryTag; // offset: 24, size: 4
-    float32 LodFactor; // offset: 28, size: 4
-    Array_AmfMaterial Materials; // offset: 32, size: 16
-} AmfModel; // size: 48
-
-#define STI_TYPE_HASH_AmfModelVariant 0x7A9D926E
-typedef struct AmfModelVariant{
-    const STITypeInfo* type_info_;
-    AmfModel Data; // offset: 0, size: 48
-    Array_String Resources; // offset: 48, size: 16
-    Array_String HrResources; // offset: 64, size: 16
-} AmfModelVariant; // size: 80
-
-#define STI_TYPE_HASH_StreamPatchMemoryType 0x5A6DE0C2
-typedef enum{ // size: 4
-    STREAM_PATCH_STATIC_POOL = 0,
-    STREAM_PATCH_DYNAMIC = 1,
-    STREAM_PATCH_USER = 2,
-    StreamPatchMemoryType_ForceSize = 0x7FFFFFFF
-} StreamPatchMemoryType;
-
-#define STI_TYPE_HASH_StreamPatchFileHeader 0x852D0D20
-typedef struct StreamPatchFileHeader{
-    const STITypeInfo* type_info_;
-    uint32 Version; // offset: 0, size: 4
-    int32 Size; // offset: 4, size: 4
-    uint32 DynamicMemoryRequirements; // offset: 8, size: 4
-    int32 PatchPositionX; // offset: 12, size: 4
-    int32 PatchPositionZ; // offset: 16, size: 4
-    int32 PatchLod; // offset: 20, size: 4
-} StreamPatchFileHeader; // size: 24
-
-#define STI_TYPE_HASH_StreamPatchBlockHeader 0x78CB76FD
-typedef struct StreamPatchBlockHeader{
-    const STITypeInfo* type_info_;
-    uint32 Version; // offset: 0, size: 4
-    StreamPatchMemoryType MemoryType; // offset: 4, size: 4
-    int32 MemorySize; // offset: 8, size: 4
-    int32 PatchPositionX; // offset: 12, size: 4
-    int32 PatchPositionZ; // offset: 16, size: 4
-    int32 PatchLod; // offset: 20, size: 4
-} StreamPatchBlockHeader; // size: 24
-
-#define STI_TYPE_HASH_WorldSettings 0xDB0ABA48
-typedef struct WorldSettings{
-    const STITypeInfo* type_info_;
-    uint32 WorldSize[3]; // offset: 0, size: 12
-    int32 PatchBaseLod; // offset: 12, size: 4
-    int32 PatchLodRange[2]; // offset: 16, size: 8
-    int32 StaticPatchMemoryRequirements; // offset: 24, size: 4
-} WorldSettings; // size: 28
-
-#define STI_TYPE_HASH_PhysicsStreamPatchType 0xC49009EE
-typedef struct PhysicsStreamPatchType{
-    const STITypeInfo* type_info_;
-    Array_uint8 ResourceContainer; // offset: 0, size: 16
-    uint32 ResourceContainerSizeUnpacked; // offset: 16, size: 4
-} PhysicsStreamPatchType; // size: 24
-
-#define STI_TYPE_HASH_TerrainOccluderMesh 0xB0E9518E
-typedef struct TerrainOccluderMesh{
-    const STITypeInfo* type_info_;
-    float32 BoundingBox[6]; // offset: 0, size: 24
-    Array_uint16 Vertices; // offset: 24, size: 16
-    Array_uint16 Indices; // offset: 40, size: 16
-    uint32 TriangleOmitted; // offset: 56, size: 4
-} TerrainOccluderMesh; // size: 64
-
-#define STI_TYPE_HASH_TerrainOccluderPackedMesh 0xA543D386
-typedef struct TerrainOccluderPackedMesh{
-    const STITypeInfo* type_info_;
-    Array_uint8 Data; // offset: 0, size: 16
-} TerrainOccluderPackedMesh; // size: 16
-
-#define STI_TYPE_HASH_AdfModelCollectionInstance 0x58D78264
-typedef struct AdfModelCollectionInstance{
-    const STITypeInfo* type_info_;
-    float32 Transform[16]; // offset: 0, size: 64
-    uint16 ModelIndex; // offset: 64, size: 2
-    uint16 CastShadow; // offset: 66, size: 2
-    uint16 ClipOnDistance; // offset: 66, size: 2
-    uint16 SizeCull; // offset: 66, size: 2
-    uint16 SandAmount; // offset: 66, size: 2
-    float32 AABB[6]; // offset: 68, size: 24
-} AdfModelCollectionInstance; // size: 92
-
-#define STI_TYPE_HASH_Array_AdfModelCollectionInstance 0xD6DB2DB1
-typedef struct Array_AdfModelCollectionInstance {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AdfModelCollectionInstance* items;
-} Array_AdfModelCollectionInstance; // size: 16
-
-#define STI_TYPE_HASH_AdfModelCollection 0xB5B062F1
-typedef struct AdfModelCollection{
-    const STITypeInfo* type_info_;
-    Array_AdfModelCollectionInstance Instances; // offset: 0, size: 16
-    Array_uint32 Models; // offset: 16, size: 16
-    float32 AABB[6]; // offset: 32, size: 24
-    int32 FixedCount; // offset: 56, size: 4
-} AdfModelCollection; // size: 64
-
-#define STI_TYPE_HASH_OccluderBox 0xE89E4CD1
-typedef struct OccluderBox{
-    const STITypeInfo* type_info_;
-    float32 Extents[3]; // offset: 0, size: 12
-    float32 Transform[16]; // offset: 12, size: 64
-} OccluderBox; // size: 76
-
-#define STI_TYPE_HASH_Array_OccluderBox 0xADC2BF32
-typedef struct Array_OccluderBox {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    OccluderBox* items;
-} Array_OccluderBox; // size: 16
-
-#define STI_TYPE_HASH_OccluderBoxCollection 0x38FDA78F
-typedef struct OccluderBoxCollection{
-    const STITypeInfo* type_info_;
-    Array_OccluderBox Boxes; // offset: 0, size: 16
-} OccluderBoxCollection; // size: 16
-
-#define STI_TYPE_HASH_GSData 0xCEBF6839
-typedef struct GSData{
-    const STITypeInfo* type_info_;
-    uint32 Name; // offset: 0, size: 4
-    uint32 Type; // offset: 4, size: 4
-    Array_uint8 Value; // offset: 8, size: 16
-    uint8 Reference; // offset: 24, size: 1
-} GSData; // size: 32
-
-#define STI_TYPE_HASH_Array_GSData 0xA6196600
-typedef struct Array_GSData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    GSData* items;
-} Array_GSData; // size: 16
-
-#define STI_TYPE_HASH_Array_GSDataSet 0xE442B43E
-typedef struct Array_GSDataSet {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    GSDataSet* items;
-} Array_GSDataSet; // size: 16
-
-#define STI_TYPE_HASH_GSDataSet 0x76B4E4DF
-typedef struct GSDataSet{
-    const STITypeInfo* type_info_;
-    uint32 Name; // offset: 0, size: 4
-    Array_GSData Data; // offset: 8, size: 16
-    Array_GSDataSet DataSets; // offset: 24, size: 16
-} GSDataSet; // size: 48
-
-#define STI_TYPE_HASH_GSNode 0x57FECC61
-typedef struct GSNode{
-    const STITypeInfo* type_info_;
-    uint32 Class; // offset: 0, size: 4
-    uint32* Function; // offset: 8, size: 8
-    GSDataSet DataSet; // offset: 16, size: 48
-} GSNode; // size: 64
-
-#define STI_TYPE_HASH_Array_GSNode 0x7CA67BB8
-typedef struct Array_GSNode {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    GSNode* items;
-} Array_GSNode; // size: 16
-
-#define STI_TYPE_HASH_GSGraph 0x69B6DFA4
-typedef struct GSGraph{
-    const STITypeInfo* type_info_;
-    Array_GSNode Nodes; // offset: 0, size: 16
-} GSGraph; // size: 16
-
-#define STI_TYPE_HASH_RoadGraphNode 0xADE91332
-typedef struct RoadGraphNode{
-    const STITypeInfo* type_info_;
-    float32 Position[3]; // offset: 0, size: 12
-    uint16 EdgesOffset; // offset: 12, size: 2
-    uint16 EdgesCount; // offset: 14, size: 2
-} RoadGraphNode; // size: 16
-
-#define STI_TYPE_HASH_RoadGraphEdge 0x0A9F9A09
-typedef struct RoadGraphEdge{
-    const STITypeInfo* type_info_;
-    uint16 NodeA; // offset: 0, size: 2
-    uint16 NodeB; // offset: 2, size: 2
-    uint16 Length; // offset: 4, size: 2
-    uint16 Flags; // offset: 6, size: 2
-} RoadGraphEdge; // size: 8
-
-#define STI_TYPE_HASH_RoadGraphEdgeSample 0x9E0A91AC
-typedef struct RoadGraphEdgeSample{
-    const STITypeInfo* type_info_;
-    uint8 OffsetX; // offset: 0, size: 1
-    uint8 OffsetZ; // offset: 1, size: 1
-    uint16 Y; // offset: 2, size: 2
-    uint16 EdgeId; // offset: 4, size: 2
-} RoadGraphEdgeSample; // size: 6
-
-#define STI_TYPE_HASH_Array_RoadGraphEdgeSample 0x099F5EC1
-typedef struct Array_RoadGraphEdgeSample {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RoadGraphEdgeSample* items;
-} Array_RoadGraphEdgeSample; // size: 16
-
-#define STI_TYPE_HASH_RoadGraphEdgeSamples 0xB9E3B8BE
-typedef struct RoadGraphEdgeSamples{
-    const STITypeInfo* type_info_;
-    Array_RoadGraphEdgeSample Samples; // offset: 0, size: 16
-    uint32 PatchSize; // offset: 16, size: 4
-    uint32 PatchCount; // offset: 20, size: 4
-    Array_uint32 PatchOffsets; // offset: 24, size: 16
-} RoadGraphEdgeSamples; // size: 40
-
-#define STI_TYPE_HASH_Array_RoadGraphNode 0xAE4B125D
-typedef struct Array_RoadGraphNode {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RoadGraphNode* items;
-} Array_RoadGraphNode; // size: 16
-
-#define STI_TYPE_HASH_Array_RoadGraphEdge 0x850E7451
-typedef struct Array_RoadGraphEdge {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RoadGraphEdge* items;
-} Array_RoadGraphEdge; // size: 16
-
-#define STI_TYPE_HASH_Array_uint64 0x41D663A3
-typedef struct Array_uint64 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    uint64* items;
-} Array_uint64; // size: 16
-
-#define STI_TYPE_HASH_RoadGraph 0x7085C625
-typedef struct RoadGraph{
-    const STITypeInfo* type_info_;
-    String RoadType; // offset: 0, size: 16
-    uint32 RoadTypeHash; // offset: 8, size: 4
-    Array_RoadGraphNode Nodes; // offset: 16, size: 16
-    Array_RoadGraphEdge Edges; // offset: 32, size: 16
-    Array_uint16 NodeEdges; // offset: 48, size: 16
-    Array_uint64 EdgeMap; // offset: 64, size: 16
-    RoadGraphEdgeSamples EdgeSamples; // offset: 80, size: 40
-    Array_uint16 EdgeRegions; // offset: 120, size: 16
-} RoadGraph; // size: 136
-
-#define STI_TYPE_HASH_RoadInfoEx 0x6C34A509
-typedef struct RoadInfoEx{
-    const STITypeInfo* type_info_;
-    Array_float32 SplinePoints; // offset: 0, size: 16
-    float32 AABBMin[3]; // offset: 16, size: 12
-    float32 AABBMax[3]; // offset: 28, size: 12
-    uint64 GameObjectID; // offset: 40, size: 8
-    float32 Length; // offset: 48, size: 4
-    uint8 LaneCount; // offset: 52, size: 1
-    uint8 TraverseType; // offset: 53, size: 1
-    float32 LaneWidth; // offset: 56, size: 4
-    uint16 DistBetweenVehicles; // offset: 60, size: 2
-    float32 SpeedLimit; // offset: 64, size: 4
-} RoadInfoEx; // size: 72
-
-#define STI_TYPE_HASH_RoadToGraphLookup 0x5A92DA67
-typedef struct RoadToGraphLookup{
-    const STITypeInfo* type_info_;
-    Array_uint64 GameObjectIDs; // offset: 0, size: 16
-    Array_uint16 EdgeIds; // offset: 16, size: 16
-} RoadToGraphLookup; // size: 32
-
-#define STI_TYPE_HASH_Array_RoadInfoEx 0x58BD22FC
-typedef struct Array_RoadInfoEx {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RoadInfoEx* items;
-} Array_RoadInfoEx; // size: 16
-
-#define STI_TYPE_HASH_RoadGraphRoadExtraInfo 0x7CBE0434
-typedef struct RoadGraphRoadExtraInfo{
-    const STITypeInfo* type_info_;
-    Array_RoadInfoEx RoadInfos; // offset: 0, size: 16
-    RoadToGraphLookup GameObjectToEdgeTable; // offset: 16, size: 32
-} RoadGraphRoadExtraInfo; // size: 48
-
-#define STI_TYPE_HASH_PatchSampleList 0xA9C339D3
-typedef struct PatchSampleList{
-    const STITypeInfo* type_info_;
-    uint8 PatchX; // offset: 0, size: 1
-    uint8 PatchZ; // offset: 1, size: 1
-    uint16 NumSamples; // offset: 2, size: 2
-} PatchSampleList; // size: 4
-
-#define STI_TYPE_HASH_Array_PatchSampleList 0x86138DA9
-typedef struct Array_PatchSampleList {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    PatchSampleList* items;
-} Array_PatchSampleList; // size: 16
-
-#define STI_TYPE_HASH_PersistentRoadSamples 0xFE9699DB
-typedef struct PersistentRoadSamples{
-    const STITypeInfo* type_info_;
-    Array_PatchSampleList Patches; // offset: 0, size: 16
-    Array_uint16 SampleIndices; // offset: 16, size: 16
-} PersistentRoadSamples; // size: 32
-
-#define STI_TYPE_HASH_Array_PersistentRoadSamples 0x3AA31483
-typedef struct Array_PersistentRoadSamples {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    PersistentRoadSamples* items;
-} Array_PersistentRoadSamples; // size: 16
-
-#define STI_TYPE_HASH_PersistentDataEx 0x2FC9D465
-typedef struct PersistentDataEx{
-    const STITypeInfo* type_info_;
-    Array_PersistentRoadSamples PersistentInfo; // offset: 0, size: 16
-} PersistentDataEx; // size: 16
-
-#define STI_TYPE_HASH_RouteInput 0xE5E2EABF
-typedef struct RouteInput{
-    const STITypeInfo* type_info_;
-    uint64 GameObjectID; // offset: 0, size: 8
-    uint64 StartingRoadGameObjectID; // offset: 8, size: 8
-    uint16 IsReversed; // offset: 16, size: 2
-} RouteInput; // size: 24
-
-#define STI_TYPE_HASH_Array_RouteInput 0x39CB3995
-typedef struct Array_RouteInput {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RouteInput* items;
-} Array_RouteInput; // size: 16
-
-#define STI_TYPE_HASH_RouteInputsCollection 0x46A57B00
-typedef struct RouteInputsCollection{
-    const STITypeInfo* type_info_;
-    Array_RouteInput RouteInputs; // offset: 0, size: 16
-} RouteInputsCollection; // size: 16
-
-#define STI_TYPE_HASH_RoadInfo 0x2BC3C6A5
-typedef struct RoadInfo{
-    const STITypeInfo* type_info_;
-    uint16 EdgeId; // offset: 0, size: 2
-    uint16 IsReversed; // offset: 2, size: 2
-} RoadInfo; // size: 4
-
-#define STI_TYPE_HASH_Array_RoadInfo 0x8E4E12DA
-typedef struct Array_RoadInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RoadInfo* items;
-} Array_RoadInfo; // size: 16
-
-#define STI_TYPE_HASH_Route 0x3021C8AF
-typedef struct Route{
-    const STITypeInfo* type_info_;
-    uint64 GameObjectID; // offset: 0, size: 8
-    Array_RoadInfo RoadInfos; // offset: 8, size: 16
-    uint16 IsLooping; // offset: 24, size: 2
-    uint16 IsReversed; // offset: 26, size: 2
-} Route; // size: 32
-
-#define STI_TYPE_HASH_Array_Route 0x80330D9B
-typedef struct Array_Route {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    Route* items;
-} Array_Route; // size: 16
-
-#define STI_TYPE_HASH_RoutesCollection 0x830A093D
-typedef struct RoutesCollection{
-    const STITypeInfo* type_info_;
-    Array_Route Routes; // offset: 0, size: 16
-} RoutesCollection; // size: 16
-
-#define STI_TYPE_HASH_BlobOfBytes 0xD74CC4CB
-typedef struct BlobOfBytes{
-    const STITypeInfo* type_info_;
-    Array_uint8 Bytes; // offset: 0, size: 16
-} BlobOfBytes; // size: 16
-
-#define STI_TYPE_HASH_GDCFileEntry 0x0A0C56EE
-typedef struct GDCFileEntry{
-    const STITypeInfo* type_info_;
-    Deferred Data; // offset: 0, size: 16
-    String FileName; // offset: 16, size: 16
-    uint32 Version; // offset: 24, size: 4
-} GDCFileEntry; // size: 32
-
-#define STI_TYPE_HASH_Array_GDCFileEntry 0xE3524CEB
-typedef struct Array_GDCFileEntry {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    GDCFileEntry* items;
-} Array_GDCFileEntry; // size: 16
-
-#define STI_TYPE_HASH_GameDataCollection 0x178842FE
-typedef struct GameDataCollection{
-    const STITypeInfo* type_info_;
-    Array_GDCFileEntry Files; // offset: 0, size: 16
-    Array_StringHash_48c5294d_4 Names; // offset: 16, size: 16
-} GameDataCollection; // size: 32
-
-#define STI_TYPE_HASH_BitmapArea 0xB29E65D4
-typedef struct BitmapArea{
-    const STITypeInfo* type_info_;
-    int32 key; // offset: 0, size: 4
-    int32 X; // offset: 4, size: 4
-    int32 Y; // offset: 8, size: 4
-    int32 Size; // offset: 12, size: 4
-    Array_uint32 Tiles; // offset: 16, size: 16
-    float32 AabbMin[3]; // offset: 32, size: 12
-    float32 AabbMax[3]; // offset: 44, size: 12
-} BitmapArea; // size: 56
-
-#define STI_TYPE_HASH_Array_BitmapArea 0x2ACBA889
-typedef struct Array_BitmapArea {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    BitmapArea* items;
-} Array_BitmapArea; // size: 16
-
-#define STI_TYPE_HASH_BitmapLayer 0x37920366
-typedef struct BitmapLayer{
-    const STITypeInfo* type_info_;
-    Array_BitmapArea Areas; // offset: 0, size: 16
-    Array_uint32 Bitfield; // offset: 16, size: 16
-    uint32 TypeHash; // offset: 32, size: 4
-} BitmapLayer; // size: 40
-
-#define STI_TYPE_HASH_Array_BitmapLayer 0xC148E455
-typedef struct Array_BitmapLayer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    BitmapLayer* items;
-} Array_BitmapLayer; // size: 16
-
-#define STI_TYPE_HASH_BitmapData 0x6E9B42C0
-typedef struct BitmapData{
-    const STITypeInfo* type_info_;
-    int32 Width; // offset: 0, size: 4
-    int32 Height; // offset: 4, size: 4
-    Array_BitmapLayer Layers; // offset: 8, size: 16
-} BitmapData; // size: 24
-
-#define STI_TYPE_HASH_CachedFile 0x7A7F9799
-typedef struct CachedFile{
-    const STITypeInfo* type_info_;
-    uint8 Hash[64]; // offset: 0, size: 64
-    uint64 Expiry; // offset: 64, size: 8
-    uint32 Url_Hash; // offset: 72, size: 4
-} CachedFile; // size: 80
-
-#define STI_TYPE_HASH_Array_CachedFile 0x45998B64
-typedef struct Array_CachedFile {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    CachedFile* items;
-} Array_CachedFile; // size: 16
-
-#define STI_TYPE_HASH_DownloadFileCache 0x61679F23
-typedef struct DownloadFileCache{
-    const STITypeInfo* type_info_;
-    Array_CachedFile Files; // offset: 0, size: 16
-} DownloadFileCache; // size: 16
-
-#define STI_TYPE_HASH_Vector2 0xBA9D34AF
-typedef struct Vector2{
-    const STITypeInfo* type_info_;
-    float32 X; // offset: 0, size: 4
-    float32 Y; // offset: 4, size: 4
-} Vector2; // size: 8
-
-#define STI_TYPE_HASH_SaveVector3 0x8AC5F08D
-typedef struct SaveVector3{
-    const STITypeInfo* type_info_;
-    float32 X; // offset: 0, size: 4
-    float32 Y; // offset: 4, size: 4
-    float32 Z; // offset: 8, size: 4
-} SaveVector3; // size: 12
-
-#define STI_TYPE_HASH_RegionData 0x12F120D7
-typedef struct RegionData{
-    const STITypeInfo* type_info_;
-    uint32 RegionHash; // offset: 0, size: 4
-    uint32 Status; // offset: 4, size: 4
-} RegionData; // size: 8
-
-#define STI_TYPE_HASH_ChildEquipment 0x35DB5D2A
-typedef struct ChildEquipment{
-    const STITypeInfo* type_info_;
-    uint32 ID; // offset: 0, size: 4
-    uint32 EquipmentHash; // offset: 4, size: 4
-} ChildEquipment; // size: 8
-
-#define STI_TYPE_HASH_OwnedEquipment1 0x48A4BB06
-typedef struct OwnedEquipment1{
-    const STITypeInfo* type_info_;
-    ChildEquipment ChildEquipment[8]; // offset: 0, size: 64
-    uint32 ID; // offset: 64, size: 4
-    uint32 EquipmentHash; // offset: 68, size: 4
-    uint32 Amount; // offset: 72, size: 4
-    uint8 ChildEquipmentCount; // offset: 76, size: 1
-    uint8 Column; // offset: 77, size: 1
-    uint8 Row; // offset: 78, size: 1
-} OwnedEquipment1; // size: 80
-
-#define STI_TYPE_HASH_OwnedEquipment2 0x84952D13
-typedef struct OwnedEquipment2{
-    const STITypeInfo* type_info_;
-    uint32 ChildEquipment[8]; // offset: 0, size: 32
-    uint32 ID; // offset: 32, size: 4
-    uint32 EquipmentHash; // offset: 36, size: 4
-    uint32 Amount; // offset: 40, size: 4
-    uint8 ChildEquipmentCount; // offset: 44, size: 1
-} OwnedEquipment2; // size: 48
-
-#define STI_TYPE_HASH_OwnedEquipment3 0x300F9A42
-typedef struct OwnedEquipment3{
-    const STITypeInfo* type_info_;
-    uint32 ChildEquipment[8]; // offset: 0, size: 32
-    uint32 ID; // offset: 32, size: 4
-    uint32 EquipmentHash; // offset: 36, size: 4
-    uint32 Amount; // offset: 40, size: 4
-    uint8 ChildEquipmentCount; // offset: 44, size: 1
-    uint8 RefinementLevels; // offset: 45, size: 1
-} OwnedEquipment3; // size: 48
-
-#define STI_TYPE_HASH_VehicleData 0x103D282C
-typedef struct VehicleData{
-    const STITypeInfo* type_info_;
-    uint32 EquipmentHash; // offset: 0, size: 4
-    int32 Fuel; // offset: 4, size: 4
-    int32 Health; // offset: 8, size: 4
-} VehicleData; // size: 12
-
-#define STI_TYPE_HASH_PlayerDecalData 0xCF763E73
-typedef struct PlayerDecalData{
-    const STITypeInfo* type_info_;
-    uint32 PartHash; // offset: 0, size: 4
-    uint32 DecalSlotHash; // offset: 4, size: 4
-    uint32 DecalHash; // offset: 8, size: 4
-} PlayerDecalData; // size: 12
-
-#define STI_TYPE_HASH_Array_PlayerDecalData 0xF70C7D60
-typedef struct Array_PlayerDecalData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    PlayerDecalData* items;
-} Array_PlayerDecalData; // size: 16
-
-#define STI_TYPE_HASH_CharacterLooks 0x4D061095
-typedef struct CharacterLooks{
-    const STITypeInfo* type_info_;
-    Array_PlayerDecalData DecalData; // offset: 0, size: 16
-    Array_uint32 Parts; // offset: 16, size: 16
-    uint32 Character; // offset: 32, size: 4
-    uint32 SkinTone; // offset: 36, size: 4
-    uint32 Stereotype; // offset: 40, size: 4
-    uint32 FacePaint; // offset: 44, size: 4
-    uint8 Height; // offset: 48, size: 1
-    uint8 Gender; // offset: 49, size: 1
-} CharacterLooks; // size: 56
-
-#define STI_TYPE_HASH_PlayerPosition 0x34309F13
-typedef struct PlayerPosition{
-    const STITypeInfo* type_info_;
-    SaveVector3 Position; // offset: 0, size: 12
-    int32 ReserveId; // offset: 12, size: 4
-} PlayerPosition; // size: 16
-
-#define STI_TYPE_HASH_RaidLootSaveData 0x99BE971F
-typedef struct RaidLootSaveData{
-    const STITypeInfo* type_info_;
-    uint32 RaidId; // offset: 0, size: 4
-    uint32 RaidSeed; // offset: 4, size: 4
-} RaidLootSaveData; // size: 8
-
-#define STI_TYPE_HASH_RivalHistory1 0x1C7A5FCD
-typedef struct RivalHistory1{
-    const STITypeInfo* type_info_;
-    uint32 Hash; // offset: 0, size: 4
-    float32 Age; // offset: 4, size: 4
-} RivalHistory1; // size: 8
-
-#define STI_TYPE_HASH_Array_RivalHistory1 0x9E324918
-typedef struct Array_RivalHistory1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RivalHistory1* items;
-} Array_RivalHistory1; // size: 16
-
-#define STI_TYPE_HASH_Rival1 0x5E5D3657
-typedef struct Rival1{
-    const STITypeInfo* type_info_;
-    uint32 Id; // offset: 0, size: 4
-    uint32 XP; // offset: 4, size: 4
-    uint8 SerialNumber; // offset: 8, size: 1
-    uint32 Title; // offset: 12, size: 4
-    uint32 PlayerKills; // offset: 16, size: 4
-    uint8 Dead; // offset: 20, size: 1
-    Array_RivalHistory1 History; // offset: 24, size: 16
-} Rival1; // size: 40
-
-#define STI_TYPE_HASH_Array_Rival1 0x13010931
-typedef struct Array_Rival1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    Rival1* items;
-} Array_Rival1; // size: 16
-
-#define STI_TYPE_HASH_RivalRegion1 0x8084CEB4
-typedef struct RivalRegion1{
-    const STITypeInfo* type_info_;
-    uint32 RegionHash; // offset: 0, size: 4
-    uint32 InsurrectionScore; // offset: 4, size: 4
-    float32 Cooldown; // offset: 8, size: 4
-    Array_Rival1 Rivals; // offset: 16, size: 16
-} RivalRegion1; // size: 32
-
-#define STI_TYPE_HASH_RivalMissionGroup1 0x840D4CE1
-typedef struct RivalMissionGroup1{
-    const STITypeInfo* type_info_;
-    uint32 GroupId; // offset: 0, size: 4
-    float32 Cooldown; // offset: 4, size: 4
-} RivalMissionGroup1; // size: 8
-
-#define STI_TYPE_HASH_ResourceStorageItem 0x08D2BAAA
-typedef struct ResourceStorageItem{
-    const STITypeInfo* type_info_;
-    uint32 Name; // offset: 0, size: 4
-    uint32 Amount; // offset: 4, size: 4
-} ResourceStorageItem; // size: 8
-
-#define STI_TYPE_HASH_HealthBuildingComponentSaveData1 0x535A906B
-typedef struct HealthBuildingComponentSaveData1{
-    const STITypeInfo* type_info_;
-    float32 Health; // offset: 0, size: 4
-} HealthBuildingComponentSaveData1; // size: 4
-
-#define STI_TYPE_HASH_RepairBuildingComponentSaveData1 0x88085078
-typedef struct RepairBuildingComponentSaveData1{
-    const STITypeInfo* type_info_;
-    uint8 Repairing; // offset: 0, size: 1
-} RepairBuildingComponentSaveData1; // size: 1
-
-#define STI_TYPE_HASH_DismantleBuildingComponentSaveData1 0x47635897
-typedef struct DismantleBuildingComponentSaveData1{
-    const STITypeInfo* type_info_;
-    uint8 Dismantling; // offset: 0, size: 1
-} DismantleBuildingComponentSaveData1; // size: 1
-
-#define STI_TYPE_HASH_Array_ResourceStorageItem 0xDDA12564
-typedef struct Array_ResourceStorageItem {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ResourceStorageItem* items;
-} Array_ResourceStorageItem; // size: 16
-
-#define STI_TYPE_HASH_InventoryBuildingComponentSaveData1 0xD277F506
-typedef struct InventoryBuildingComponentSaveData1{
-    const STITypeInfo* type_info_;
-    Array_ResourceStorageItem Resources; // offset: 0, size: 16
-} InventoryBuildingComponentSaveData1; // size: 16
-
-#define STI_TYPE_HASH_BuildingSaveData1 0x7ABAFC5D
-typedef struct BuildingSaveData1{
-    const STITypeInfo* type_info_;
-    uint32 Id; // offset: 0, size: 4
-    uint32 BuildingTypeHash; // offset: 4, size: 4
-    uint8 ActiveState; // offset: 8, size: 1
-    HealthBuildingComponentSaveData1 HealthComponent; // offset: 12, size: 4
-    RepairBuildingComponentSaveData1 RepairComponent; // offset: 16, size: 1
-    DismantleBuildingComponentSaveData1 DismantleComponent; // offset: 17, size: 1
-} BuildingSaveData1; // size: 20
-
-#define STI_TYPE_HASH_BuildingSaveData2 0x6F4858F7
-typedef struct BuildingSaveData2{
-    const STITypeInfo* type_info_;
-    uint32 Id; // offset: 0, size: 4
-    uint32 BuildingTypeHash; // offset: 4, size: 4
-    uint8 ActiveState; // offset: 8, size: 1
-    HealthBuildingComponentSaveData1 HealthComponent; // offset: 12, size: 4
-    RepairBuildingComponentSaveData1 RepairComponent; // offset: 16, size: 1
-    DismantleBuildingComponentSaveData1 DismantleComponent; // offset: 17, size: 1
-    InventoryBuildingComponentSaveData1 InventoryComponent; // offset: 24, size: 16
-} BuildingSaveData2; // size: 40
-
-#define STI_TYPE_HASH_BuildingSaveData3 0xF2FF3568
-typedef struct BuildingSaveData3{
-    const STITypeInfo* type_info_;
-    uint32 Id; // offset: 0, size: 4
-    uint32 BuildingTypeHash; // offset: 4, size: 4
-    uint8 ActiveState; // offset: 8, size: 1
-    HealthBuildingComponentSaveData1 HealthComponent; // offset: 12, size: 4
-    InventoryBuildingComponentSaveData1 InventoryComponent; // offset: 16, size: 16
-} BuildingSaveData3; // size: 32
-
-#define STI_TYPE_HASH_BuildContainer1 0x89CC2B53
-typedef struct BuildContainer1{
-    const STITypeInfo* type_info_;
-    uint32 BuildingId; // offset: 0, size: 4
-    float32 Rotation; // offset: 4, size: 4
-    uint32 Row; // offset: 8, size: 4
-    uint32 Col; // offset: 12, size: 4
-} BuildContainer1; // size: 16
-
-#define STI_TYPE_HASH_Array_BuildContainer1 0x76477CED
-typedef struct Array_BuildContainer1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    BuildContainer1* items;
-} Array_BuildContainer1; // size: 16
-
-#define STI_TYPE_HASH_BuildingGridSaveData1 0x5C929317
-typedef struct BuildingGridSaveData1{
-    const STITypeInfo* type_info_;
-    Array_BuildContainer1 Buildings; // offset: 0, size: 16
-} BuildingGridSaveData1; // size: 16
-
-#define STI_TYPE_HASH_Array_BuildingSaveData1 0xA3A38BEC
-typedef struct Array_BuildingSaveData1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    BuildingSaveData1* items;
-} Array_BuildingSaveData1; // size: 16
-
-#define STI_TYPE_HASH_ControlPointSaveData1 0x625B2FC5
-typedef struct ControlPointSaveData1{
-    const STITypeInfo* type_info_;
-    uint64 Id; // offset: 0, size: 8
-    int32 OwnerFaction; // offset: 8, size: 4
-    BuildingGridSaveData1 Grid; // offset: 16, size: 16
-    Array_BuildingSaveData1 Buildings; // offset: 32, size: 16
-} ControlPointSaveData1; // size: 48
-
-#define STI_TYPE_HASH_Array_BuildingSaveData2 0x73F6F13D
-typedef struct Array_BuildingSaveData2 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    BuildingSaveData2* items;
-} Array_BuildingSaveData2; // size: 16
-
-#define STI_TYPE_HASH_ControlPointSaveData2 0x1F8BA734
-typedef struct ControlPointSaveData2{
-    const STITypeInfo* type_info_;
-    uint64 Id; // offset: 0, size: 8
-    int32 OwnerFaction; // offset: 8, size: 4
-    BuildingGridSaveData1 Grid; // offset: 16, size: 16
-    Array_BuildingSaveData2 Buildings; // offset: 32, size: 16
-} ControlPointSaveData2; // size: 48
-
-#define STI_TYPE_HASH_Array_BuildingSaveData3 0x32242945
-typedef struct Array_BuildingSaveData3 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    BuildingSaveData3* items;
-} Array_BuildingSaveData3; // size: 16
-
-#define STI_TYPE_HASH_ControlPointSaveData3 0xDDA7B5AB
-typedef struct ControlPointSaveData3{
-    const STITypeInfo* type_info_;
-    uint64 Id; // offset: 0, size: 8
-    int32 OwnerFaction; // offset: 8, size: 4
-    BuildingGridSaveData1 Grid; // offset: 16, size: 16
-    Array_BuildingSaveData3 Buildings; // offset: 32, size: 16
-} ControlPointSaveData3; // size: 48
-
-#define STI_TYPE_HASH_FactionSaveData1 0xAC9CD509
-typedef struct FactionSaveData1{
-    const STITypeInfo* type_info_;
-    uint64 Id; // offset: 0, size: 8
-    float32 Resources[4]; // offset: 8, size: 16
-} FactionSaveData1; // size: 24
-
-#define STI_TYPE_HASH_Array_FactionSaveData1 0x7874D912
-typedef struct Array_FactionSaveData1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    FactionSaveData1* items;
-} Array_FactionSaveData1; // size: 16
-
-#define STI_TYPE_HASH_Array_ControlPointSaveData3 0xD24F05AD
-typedef struct Array_ControlPointSaveData3 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ControlPointSaveData3* items;
-} Array_ControlPointSaveData3; // size: 16
-
-#define STI_TYPE_HASH_WarSeason1 0x1A937F73
-typedef struct WarSeason1{
-    const STITypeInfo* type_info_;
-    int32 SeasonId; // offset: 0, size: 4
-    Array_FactionSaveData1 Factions; // offset: 8, size: 16
-    Array_ControlPointSaveData3 ControlPoints; // offset: 24, size: 16
-    uint32 NextBuildingId; // offset: 40, size: 4
-} WarSeason1; // size: 48
-
-#define STI_TYPE_HASH_WarSaveData1 0x0135C0D8
-typedef struct WarSaveData1{
-    const STITypeInfo* type_info_;
-    WarSeason1 CurrentSeason; // offset: 0, size: 48
-} WarSaveData1; // size: 48
-
-#define STI_TYPE_HASH_Array_OwnedEquipment1 0x8EC2A5B7
-typedef struct Array_OwnedEquipment1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    OwnedEquipment1* items;
-} Array_OwnedEquipment1; // size: 16
-
-#define STI_TYPE_HASH_Array_VehicleData 0x6DD2F5AE
-typedef struct Array_VehicleData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VehicleData* items;
-} Array_VehicleData; // size: 16
-
-#define STI_TYPE_HASH_Array_PlayerPosition 0xB92A82A1
-typedef struct Array_PlayerPosition {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    PlayerPosition* items;
-} Array_PlayerPosition; // size: 16
-
-#define STI_TYPE_HASH_CharacterProfile1 0xC9D783B8
-typedef struct CharacterProfile1{
-    const STITypeInfo* type_info_;
-    CharacterLooks CharacterLooks; // offset: 0, size: 56
-    uint32 Skills[128]; // offset: 56, size: 512
-    uint8 SkillLevel[128]; // offset: 568, size: 128
-    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
-    uint32 SkillPoints; // offset: 760, size: 4
-    uint32 ActiveSkill; // offset: 764, size: 4
-    uint32 Xp; // offset: 768, size: 4
-    uint16 Level; // offset: 772, size: 2
-    uint8 Created; // offset: 774, size: 1
-    Array_OwnedEquipment1 Inventory; // offset: 776, size: 16
-    uint32 PPInventorySlot[16]; // offset: 792, size: 64
-    Array_VehicleData VehicleData; // offset: 856, size: 16
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 872, size: 1
-    uint8 BackpackSizeColumns; // offset: 873, size: 1
-    uint8 BackpackSizeRows; // offset: 874, size: 1
-    Array_uint32 EmotesUnlocked; // offset: 880, size: 16
-    uint32 EmoteSlots[8]; // offset: 896, size: 32
-    Array_uint64 Collectables; // offset: 928, size: 16
-    float32 DistanceTravelled; // offset: 944, size: 4
-    float32 TimeOfDay; // offset: 948, size: 4
-    float32 WeatherTime; // offset: 952, size: 4
-    Array_PlayerPosition PlayerPositions; // offset: 960, size: 16
-    uint64 LastLevelUpTS; // offset: 976, size: 8
-    Array_uint32 GivenDLCItems; // offset: 984, size: 16
-} CharacterProfile1; // size: 1000
-
-#define STI_TYPE_HASH_Array_RaidLootSaveData 0xDD57E55A
-typedef struct Array_RaidLootSaveData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RaidLootSaveData* items;
-} Array_RaidLootSaveData; // size: 16
-
-#define STI_TYPE_HASH_CharacterProfile2 0xAA8F3A44
-typedef struct CharacterProfile2{
-    const STITypeInfo* type_info_;
-    CharacterLooks CharacterLooks; // offset: 0, size: 56
-    uint32 Skills[128]; // offset: 56, size: 512
-    uint8 SkillLevel[128]; // offset: 568, size: 128
-    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
-    uint32 SkillPoints; // offset: 760, size: 4
-    uint32 ActiveSkill; // offset: 764, size: 4
-    uint32 Xp; // offset: 768, size: 4
-    uint16 Level; // offset: 772, size: 2
-    uint8 Created; // offset: 774, size: 1
-    Array_OwnedEquipment1 Inventory; // offset: 776, size: 16
-    uint32 PPInventorySlot[16]; // offset: 792, size: 64
-    Array_VehicleData VehicleData; // offset: 856, size: 16
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 872, size: 1
-    uint8 BackpackSizeColumns; // offset: 873, size: 1
-    uint8 BackpackSizeRows; // offset: 874, size: 1
-    Array_uint32 EmotesUnlocked; // offset: 880, size: 16
-    uint32 EmoteSlots[8]; // offset: 896, size: 32
-    Array_uint64 Collectables; // offset: 928, size: 16
-    float32 DistanceTravelled; // offset: 944, size: 4
-    float32 TimeOfDay; // offset: 948, size: 4
-    float32 WeatherTime; // offset: 952, size: 4
-    Array_PlayerPosition PlayerPositions; // offset: 960, size: 16
-    uint64 LastLevelUpTS; // offset: 976, size: 8
-    Array_uint32 GivenDLCItems; // offset: 984, size: 16
-    Array_RaidLootSaveData RaidLootAcquired; // offset: 1000, size: 16
-} CharacterProfile2; // size: 1016
-
-#define STI_TYPE_HASH_CharacterProfile3 0xDFBC06E1
-typedef struct CharacterProfile3{
-    const STITypeInfo* type_info_;
-    CharacterLooks CharacterLooks; // offset: 0, size: 56
-    uint32 Skills[128]; // offset: 56, size: 512
-    uint8 SkillLevel[128]; // offset: 568, size: 128
-    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
-    uint32 SkillPoints; // offset: 760, size: 4
-    uint32 ActiveSkill; // offset: 764, size: 4
-    uint32 Xp; // offset: 768, size: 4
-    uint16 Level; // offset: 772, size: 2
-    uint8 Created; // offset: 774, size: 1
-    Array_OwnedEquipment1 Inventory; // offset: 776, size: 16
-    uint32 PPInventorySlot[16]; // offset: 792, size: 64
-    Array_VehicleData VehicleData; // offset: 856, size: 16
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 872, size: 1
-    uint8 BackpackSizeColumns; // offset: 873, size: 1
-    uint8 BackpackSizeRows; // offset: 874, size: 1
-    Array_uint32 EmotesUnlocked; // offset: 880, size: 16
-    uint32 EmoteSlots[8]; // offset: 896, size: 32
-    Array_uint64 Collectables; // offset: 928, size: 16
-    float32 DistanceTravelled; // offset: 944, size: 4
-    float32 TimeOfDay; // offset: 948, size: 4
-    float32 WeatherTime; // offset: 952, size: 4
-    Array_PlayerPosition PlayerPositions; // offset: 960, size: 16
-    uint64 LastLevelUpTS; // offset: 976, size: 8
-    Array_uint32 GivenDLCItems; // offset: 984, size: 16
-    Array_RaidLootSaveData RaidLootAcquired; // offset: 1000, size: 16
-    uint32 ActiveTitle; // offset: 1016, size: 4
-} CharacterProfile3; // size: 1024
-
-#define STI_TYPE_HASH_Array_OwnedEquipment2 0x3C667799
-typedef struct Array_OwnedEquipment2 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    OwnedEquipment2* items;
-} Array_OwnedEquipment2; // size: 16
-
-#define STI_TYPE_HASH_CharacterProfile4 0x59A1CEA7
-typedef struct CharacterProfile4{
-    const STITypeInfo* type_info_;
-    CharacterLooks CharacterLooks; // offset: 0, size: 56
-    uint32 Skills[128]; // offset: 56, size: 512
-    uint8 SkillLevel[128]; // offset: 568, size: 128
-    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
-    uint32 SkillPoints; // offset: 760, size: 4
-    uint32 ActiveSkill; // offset: 764, size: 4
-    uint32 Xp; // offset: 768, size: 4
-    uint16 Level; // offset: 772, size: 2
-    uint8 Created; // offset: 774, size: 1
-    Array_OwnedEquipment2 Inventory; // offset: 776, size: 16
-    uint32 PPInventorySlot[16]; // offset: 792, size: 64
-    Array_VehicleData VehicleData; // offset: 856, size: 16
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 872, size: 1
-    Array_uint32 EmotesUnlocked; // offset: 880, size: 16
-    uint32 EmoteSlots[8]; // offset: 896, size: 32
-    Array_uint64 Collectables; // offset: 928, size: 16
-    float32 DistanceTravelled; // offset: 944, size: 4
-    float32 TimeOfDay; // offset: 948, size: 4
-    float32 WeatherTime; // offset: 952, size: 4
-    Array_PlayerPosition PlayerPositions; // offset: 960, size: 16
-    uint64 LastLevelUpTS; // offset: 976, size: 8
-    Array_uint32 GivenDLCItems; // offset: 984, size: 16
-    Array_RaidLootSaveData RaidLootAcquired; // offset: 1000, size: 16
-    uint32 ActiveTitle; // offset: 1016, size: 4
-} CharacterProfile4; // size: 1024
-
-#define STI_TYPE_HASH_CharacterProfile5 0x8651DCB6
-typedef struct CharacterProfile5{
-    const STITypeInfo* type_info_;
-    CharacterLooks CharacterLooks; // offset: 0, size: 56
-    uint32 Skills[128]; // offset: 56, size: 512
-    uint8 SkillLevel[128]; // offset: 568, size: 128
-    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
-    uint32 SkillPoints; // offset: 760, size: 4
-    uint32 ActiveSkill; // offset: 764, size: 4
-    uint32 Xp; // offset: 768, size: 4
-    uint16 Level; // offset: 772, size: 2
-    uint8 Created; // offset: 774, size: 1
-    Array_OwnedEquipment2 Inventory; // offset: 776, size: 16
-    uint32 PPInventorySlot[16]; // offset: 792, size: 64
-    uint32 InventorySlotPreferredItem[16]; // offset: 856, size: 64
-    Array_VehicleData VehicleData; // offset: 920, size: 16
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 936, size: 1
-    Array_uint32 EmotesUnlocked; // offset: 944, size: 16
-    uint32 EmoteSlots[8]; // offset: 960, size: 32
-    Array_uint64 Collectables; // offset: 992, size: 16
-    float32 DistanceTravelled; // offset: 1008, size: 4
-    float32 TimeOfDay; // offset: 1012, size: 4
-    float32 WeatherTime; // offset: 1016, size: 4
-    Array_PlayerPosition PlayerPositions; // offset: 1024, size: 16
-    uint64 LastLevelUpTS; // offset: 1040, size: 8
-    Array_uint32 GivenDLCItems; // offset: 1048, size: 16
-    Array_RaidLootSaveData RaidLootAcquired; // offset: 1064, size: 16
-    uint32 ActiveTitle; // offset: 1080, size: 4
-} CharacterProfile5; // size: 1088
-
-#define STI_TYPE_HASH_Array_OwnedEquipment3 0xA52092CD
-typedef struct Array_OwnedEquipment3 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    OwnedEquipment3* items;
-} Array_OwnedEquipment3; // size: 16
-
-#define STI_TYPE_HASH_CharacterProfile6 0x3CA808FF
-typedef struct CharacterProfile6{
-    const STITypeInfo* type_info_;
-    CharacterLooks CharacterLooks; // offset: 0, size: 56
-    uint32 Skills[128]; // offset: 56, size: 512
-    uint8 SkillLevel[128]; // offset: 568, size: 128
-    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
-    uint32 SkillPoints; // offset: 760, size: 4
-    uint32 ActiveSkill; // offset: 764, size: 4
-    uint32 Xp; // offset: 768, size: 4
-    uint16 Level; // offset: 772, size: 2
-    uint8 Created; // offset: 774, size: 1
-    Array_OwnedEquipment3 Inventory; // offset: 776, size: 16
-    uint32 PPInventorySlot[16]; // offset: 792, size: 64
-    uint32 InventorySlotPreferredItem[16]; // offset: 856, size: 64
-    Array_VehicleData VehicleData; // offset: 920, size: 16
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 936, size: 1
-    Array_uint32 EmotesUnlocked; // offset: 944, size: 16
-    uint32 EmoteSlots[8]; // offset: 960, size: 32
-    Array_uint64 Collectables; // offset: 992, size: 16
-    float32 DistanceTravelled; // offset: 1008, size: 4
-    float32 TimeOfDay; // offset: 1012, size: 4
-    float32 WeatherTime; // offset: 1016, size: 4
-    Array_PlayerPosition PlayerPositions; // offset: 1024, size: 16
-    uint64 LastLevelUpTS; // offset: 1040, size: 8
-    Array_uint32 GivenDLCItems; // offset: 1048, size: 16
-    Array_RaidLootSaveData RaidLootAcquired; // offset: 1064, size: 16
-    uint32 ActiveTitle; // offset: 1080, size: 4
-} CharacterProfile6; // size: 1088
-
-#define STI_TYPE_HASH_AnimalDamageablePartSaveData 0x9858DE73
-typedef struct AnimalDamageablePartSaveData{
-    const STITypeInfo* type_info_;
-    uint64 PartId; // offset: 0, size: 8
-    float32 Health; // offset: 8, size: 4
-} AnimalDamageablePartSaveData; // size: 16
-
-#define STI_TYPE_HASH_AnimalRepopulateSaveData 0xD78B6D39
-typedef struct AnimalRepopulateSaveData{
-    const STITypeInfo* type_info_;
-    uint8 Loadout; // offset: 0, size: 1
-} AnimalRepopulateSaveData; // size: 1
-
-#define STI_TYPE_HASH_AnimalPopulationSaveData 0xA56B4D42
-typedef struct AnimalPopulationSaveData{
-    const STITypeInfo* type_info_;
-    uint32 NameHashId; // offset: 0, size: 4
-    AnimalRepopulateSaveData RepopulateData[64]; // offset: 4, size: 64
-    uint32 RepopulateCount; // offset: 68, size: 4
-} AnimalPopulationSaveData; // size: 72
-
-#define STI_TYPE_HASH_Array_AnimalRepopulateSaveData 0x799AB336
-typedef struct Array_AnimalRepopulateSaveData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AnimalRepopulateSaveData* items;
-} Array_AnimalRepopulateSaveData; // size: 16
-
-#define STI_TYPE_HASH_AnimalPopulationSaveData2 0x40690AC2
-typedef struct AnimalPopulationSaveData2{
-    const STITypeInfo* type_info_;
-    uint32 NameHashId; // offset: 0, size: 4
-    Array_AnimalRepopulateSaveData RepopulateData; // offset: 8, size: 16
-} AnimalPopulationSaveData2; // size: 24
-
-#define STI_TYPE_HASH_AnimalGroupSaveData 0x7A2135E7
-typedef struct AnimalGroupSaveData{
-    const STITypeInfo* type_info_;
-    uint32 PopulationNameHashId; // offset: 0, size: 4
-    int32 SpawnAreaId; // offset: 4, size: 4
-} AnimalGroupSaveData; // size: 8
-
-#define STI_TYPE_HASH_MachinePersistentStatsEncounterData 0xC519FB33
-typedef struct MachinePersistentStatsEncounterData{
-    const STITypeInfo* type_info_;
-    uint64 PlayerPlatformID; // offset: 0, size: 8
-    uint16 Count; // offset: 8, size: 2
-    float32 UnitDamageReceived; // offset: 12, size: 4
-} MachinePersistentStatsEncounterData; // size: 16
-
-#define STI_TYPE_HASH_MachinePersistentStatsData 0x29363BD5
-typedef struct MachinePersistentStatsData{
-    const STITypeInfo* type_info_;
-    float32 Age; // offset: 0, size: 4
-    MachinePersistentStatsEncounterData Encounters[16]; // offset: 8, size: 256
-    uint32 EncountersCount; // offset: 264, size: 4
-} MachinePersistentStatsData; // size: 272
-
-#define STI_TYPE_HASH_AnimalSaveData 0xC3B60F44
-typedef struct AnimalSaveData{
-    const STITypeInfo* type_info_;
-    uint32 PopulationNameHashId; // offset: 0, size: 4
-    uint32 GroupIndex; // offset: 4, size: 4
-    uint8 Loadout; // offset: 8, size: 1
-    uint32 VisualVariationSeed; // offset: 12, size: 4
-    AnimalDamageablePartSaveData Parts[64]; // offset: 16, size: 1024
-    uint8 PartsCount; // offset: 1040, size: 1
-    uint8 DynamicMaterialWeights[64]; // offset: 1041, size: 64
-    MachinePersistentStatsData PersistentStats; // offset: 1112, size: 272
-} AnimalSaveData; // size: 1384
-
-#define STI_TYPE_HASH_AnimalSaveData2 0x8567D007
-typedef struct AnimalSaveData2{
-    const STITypeInfo* type_info_;
-    uint32 PopulationNameHashId; // offset: 0, size: 4
-    uint32 GroupIndex; // offset: 4, size: 4
-    uint8 Loadout; // offset: 8, size: 1
-    uint32 VisualVariationSeed; // offset: 12, size: 4
-    AnimalDamageablePartSaveData Parts[64]; // offset: 16, size: 1024
-    uint8 PartsCount; // offset: 1040, size: 1
-    uint8 DynamicMaterialWeights[64]; // offset: 1041, size: 64
-    MachinePersistentStatsData PersistentStats; // offset: 1112, size: 272
-    uint32 RivalId; // offset: 1384, size: 4
-} AnimalSaveData2; // size: 1392
-
-#define STI_TYPE_HASH_Array_AnimalPopulationSaveData 0x0C312EDA
-typedef struct Array_AnimalPopulationSaveData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AnimalPopulationSaveData* items;
-} Array_AnimalPopulationSaveData; // size: 16
-
-#define STI_TYPE_HASH_Array_AnimalGroupSaveData 0xCFB0F2B7
-typedef struct Array_AnimalGroupSaveData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AnimalGroupSaveData* items;
-} Array_AnimalGroupSaveData; // size: 16
-
-#define STI_TYPE_HASH_Array_AnimalSaveData 0xF328F417
-typedef struct Array_AnimalSaveData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AnimalSaveData* items;
-} Array_AnimalSaveData; // size: 16
-
-#define STI_TYPE_HASH_AnimalPopulationsSaveData 0xE0835B0D
-typedef struct AnimalPopulationsSaveData{
-    const STITypeInfo* type_info_;
-    Array_AnimalPopulationSaveData Populations; // offset: 0, size: 16
-    Array_AnimalGroupSaveData Groups; // offset: 16, size: 16
-    Array_AnimalSaveData Animals; // offset: 32, size: 16
-} AnimalPopulationsSaveData; // size: 48
-
-#define STI_TYPE_HASH_Array_AnimalPopulationSaveData2 0xB99504F2
-typedef struct Array_AnimalPopulationSaveData2 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AnimalPopulationSaveData2* items;
-} Array_AnimalPopulationSaveData2; // size: 16
-
-#define STI_TYPE_HASH_AnimalPopulationsSaveData2 0x8135731B
-typedef struct AnimalPopulationsSaveData2{
-    const STITypeInfo* type_info_;
-    Array_AnimalPopulationSaveData2 Populations; // offset: 0, size: 16
-    Array_AnimalGroupSaveData Groups; // offset: 16, size: 16
-    Array_AnimalSaveData Animals; // offset: 32, size: 16
-} AnimalPopulationsSaveData2; // size: 48
-
-#define STI_TYPE_HASH_Array_AnimalSaveData2 0x92E6BDA5
-typedef struct Array_AnimalSaveData2 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AnimalSaveData2* items;
-} Array_AnimalSaveData2; // size: 16
-
-#define STI_TYPE_HASH_AnimalPopulationsSaveData3 0xF581DB01
-typedef struct AnimalPopulationsSaveData3{
-    const STITypeInfo* type_info_;
-    Array_AnimalPopulationSaveData2 Populations; // offset: 0, size: 16
-    Array_AnimalGroupSaveData Groups; // offset: 16, size: 16
-    Array_AnimalSaveData2 Animals; // offset: 32, size: 16
-} AnimalPopulationsSaveData3; // size: 48
-
-#define STI_TYPE_HASH_ValueOccurance 0xE289C362
-typedef struct ValueOccurance{
-    const STITypeInfo* type_info_;
-    Array_uint32 Hashes; // offset: 0, size: 16
-    Array_uint32 HashAmounts; // offset: 16, size: 16
-    Array_uint32 Ints; // offset: 32, size: 16
-    Array_uint32 IntAmounts; // offset: 48, size: 16
-    Array_uint8 Bools; // offset: 64, size: 16
-    Array_uint32 BoolAmounts; // offset: 80, size: 16
-} ValueOccurance; // size: 96
-
-#define STI_TYPE_HASH_Array_ValueOccurance 0x0B213CEA
-typedef struct Array_ValueOccurance {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ValueOccurance* items;
-} Array_ValueOccurance; // size: 16
-
-#define STI_TYPE_HASH_Array_MissionSaveData 0x000639DC
-typedef struct Array_MissionSaveData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    MissionSaveData* items;
-} Array_MissionSaveData; // size: 16
-
-#define STI_TYPE_HASH_MissionSaveData 0x3173765E
-typedef struct MissionSaveData{
-    const STITypeInfo* type_info_;
-    int32 Id; // offset: 0, size: 4
-    uint32 CompletionsDone; // offset: 4, size: 4
-    uint8 TrackingState; // offset: 8, size: 1
-    uint8 CompletionState; // offset: 9, size: 1
-    Array_uint32 ValueOccuranceIds; // offset: 16, size: 16
-    Array_ValueOccurance ValueOccurences; // offset: 32, size: 16
-    Array_MissionSaveData Children; // offset: 48, size: 16
-} MissionSaveData; // size: 64
-
-#define STI_TYPE_HASH_Array_MissionSaveData2 0x25BED5E6
-typedef struct Array_MissionSaveData2 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    MissionSaveData2* items;
-} Array_MissionSaveData2; // size: 16
-
-#define STI_TYPE_HASH_MissionSaveData2 0x96CF2AD4
-typedef struct MissionSaveData2{
-    const STITypeInfo* type_info_;
-    Array_MissionSaveData2 Children; // offset: 0, size: 16
-    Array_uint32 ValueOccuranceIds; // offset: 16, size: 16
-    Array_ValueOccurance ValueOccurences; // offset: 32, size: 16
-    int32 Id; // offset: 48, size: 4
-    uint32 ContentHash; // offset: 52, size: 4
-    uint32 CompletionsDone; // offset: 56, size: 4
-    uint8 TrackingState; // offset: 60, size: 1
-    uint8 CompletionState; // offset: 61, size: 1
-} MissionSaveData2; // size: 64
-
-#define STI_TYPE_HASH_FogOfWar 0x585E62B9
-typedef struct FogOfWar{
-    const STITypeInfo* type_info_;
-    uint8 Mask[65536]; // offset: 0, size: 65536
-    int32 ReserveId; // offset: 65536, size: 4
-} FogOfWar; // size: 65540
-
-#define STI_TYPE_HASH_CodexInfo 0x54936891
-typedef struct CodexInfo{
-    const STITypeInfo* type_info_;
-    uint32 Id; // offset: 0, size: 4
-    uint8 Status; // offset: 4, size: 1
-    uint8 Category; // offset: 5, size: 1
-} CodexInfo; // size: 8
-
-#define STI_TYPE_HASH_IconInfo 0x0972A334
-typedef struct IconInfo{
-    const STITypeInfo* type_info_;
-    uint64 Id; // offset: 0, size: 8
-    uint8 State; // offset: 8, size: 1
-} IconInfo; // size: 16
-
-#define STI_TYPE_HASH_Array_IconInfo 0x5200E26F
-typedef struct Array_IconInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    IconInfo* items;
-} Array_IconInfo; // size: 16
-
-#define STI_TYPE_HASH_ReseveIconInfo 0x70952331
-typedef struct ReseveIconInfo{
-    const STITypeInfo* type_info_;
-    Array_IconInfo IconInfos; // offset: 0, size: 16
-    int32 ReserveId; // offset: 16, size: 4
-} ReseveIconInfo; // size: 24
-
-#define STI_TYPE_HASH_StatisticInfo 0x8978CF31
-typedef struct StatisticInfo{
-    const STITypeInfo* type_info_;
-    uint32 NameHash; // offset: 0, size: 4
-    uint32 Value; // offset: 4, size: 4
-} StatisticInfo; // size: 8
-
-#define STI_TYPE_HASH_ContextualHelpInfo 0x1D72E59B
-typedef struct ContextualHelpInfo{
-    const STITypeInfo* type_info_;
-    uint32 Id; // offset: 0, size: 4
-    uint8 State; // offset: 4, size: 1
-} ContextualHelpInfo; // size: 8
-
-#define STI_TYPE_HASH_LocationState 0xCC86C468
-typedef struct LocationState{
-    const STITypeInfo* type_info_;
-    uint32 NameHash; // offset: 0, size: 4
-    uint8 Enabled; // offset: 4, size: 1
-} LocationState; // size: 8
-
-#define STI_TYPE_HASH_LocationSummarySaveData 0x6C66D9B5
-typedef struct LocationSummarySaveData{
-    const STITypeInfo* type_info_;
-    uint32 LocationId; // offset: 0, size: 4
-    uint8 Activated; // offset: 4, size: 1
-    uint32 NrRequiredLootCrates; // offset: 8, size: 4
-    Array_uint64 FoundLootCrates; // offset: 16, size: 16
-    Array_uint64 FoundItemIds; // offset: 32, size: 16
-    Array_uint64 FoundWeaponTokens; // offset: 48, size: 16
-    Array_uint64 FoundCollectables; // offset: 64, size: 16
-    Array_uint64 FoundNests; // offset: 80, size: 16
-    Array_uint64 FoundWorldMissionTokens; // offset: 96, size: 16
-} LocationSummarySaveData; // size: 112
-
-#define STI_TYPE_HASH_PlayerRaidStatsSaveData 0x71A37500
-typedef struct PlayerRaidStatsSaveData{
-    const STITypeInfo* type_info_;
-    uint64 ProfileTrackingId; // offset: 0, size: 8
-    int32 TotalKills; // offset: 8, size: 4
-    int32 TotalAssists; // offset: 12, size: 4
-    int32 Heals; // offset: 16, size: 4
-    int32 Revives; // offset: 20, size: 4
-    int32 TickKills; // offset: 24, size: 4
-    int32 ScoutKills; // offset: 28, size: 4
-    int32 RunnerKills; // offset: 32, size: 4
-    int32 HunterKills; // offset: 36, size: 4
-    int32 HarvesterKills; // offset: 40, size: 4
-    int32 TankKills; // offset: 44, size: 4
-} PlayerRaidStatsSaveData; // size: 48
-
-#define STI_TYPE_HASH_Array_PlayerRaidStatsSaveData 0xB95E8510
-typedef struct Array_PlayerRaidStatsSaveData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    PlayerRaidStatsSaveData* items;
-} Array_PlayerRaidStatsSaveData; // size: 16
-
-#define STI_TYPE_HASH_RaidSaveData 0x45FDACC5
-typedef struct RaidSaveData{
-    const STITypeInfo* type_info_;
-    uint32 RaidId; // offset: 0, size: 4
-    uint32 StartedWithSeed; // offset: 4, size: 4
-    uint32 CompletedWithSeed; // offset: 8, size: 4
-    Array_PlayerRaidStatsSaveData PlayerRaidStartingStats; // offset: 16, size: 16
-} RaidSaveData; // size: 32
-
-#define STI_TYPE_HASH_RaidSaveData2 0x50653E41
-typedef struct RaidSaveData2{
-    const STITypeInfo* type_info_;
-    uint32 RaidId; // offset: 0, size: 4
-    uint32 StartedWithSeed; // offset: 4, size: 4
-    uint32 CompletedWithSeed; // offset: 8, size: 4
-    uint64 ElapsedTime; // offset: 16, size: 8
-    Array_PlayerRaidStatsSaveData PlayerRaidStartingStats; // offset: 24, size: 16
-} RaidSaveData2; // size: 40
-
-#define STI_TYPE_HASH_TimerSaveData1 0xC3AFBFA1
-typedef struct TimerSaveData1{
-    const STITypeInfo* type_info_;
-    uint64 Id; // offset: 0, size: 8
-    int32 TimeLeft; // offset: 8, size: 4
-} TimerSaveData1; // size: 16
-
-#define STI_TYPE_HASH_Array_int32 0xFB9FD4CC
-typedef struct Array_int32 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    int32* items;
-} Array_int32; // size: 16
-
-#define STI_TYPE_HASH_ProfileSaveData1 0x1CFEB8DC
-typedef struct ProfileSaveData1{
-    const STITypeInfo* type_info_;
-    Array_uint64 Collectables; // offset: 0, size: 16
-    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
-    uint32 EmoteSlots[8]; // offset: 32, size: 32
-    uint64 TrackingId; // offset: 64, size: 8
-    Array_int32 Settings; // offset: 72, size: 16
-    Array_uint32 CompletedBounties; // offset: 88, size: 16
-    int64 LastLogin; // offset: 104, size: 8
-    uint8 SocialDisabled; // offset: 112, size: 1
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
-} ProfileSaveData1; // size: 120
-
-#define STI_TYPE_HASH_ProfileSaveData2 0x8A583246
-typedef struct ProfileSaveData2{
-    const STITypeInfo* type_info_;
-    Array_uint64 Collectables; // offset: 0, size: 16
-    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
-    uint32 EmoteSlots[8]; // offset: 32, size: 32
-    uint64 TrackingId; // offset: 64, size: 8
-    Array_int32 Settings; // offset: 72, size: 16
-    Array_uint32 CompletedBounties; // offset: 88, size: 16
-    int64 LastLogin; // offset: 104, size: 8
-    uint8 SocialDisabled; // offset: 112, size: 1
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
-    uint8 TrackingEnabled; // offset: 114, size: 1
-    uint8 ShownTrackingOptIn; // offset: 114, size: 1
-    uint8 CrashReportingEnabled; // offset: 114, size: 1
-    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
-} ProfileSaveData2; // size: 120
-
-#define STI_TYPE_HASH_ProfileSaveData3 0xC3D54813
-typedef struct ProfileSaveData3{
-    const STITypeInfo* type_info_;
-    Array_uint64 Collectables; // offset: 0, size: 16
-    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
-    uint32 EmoteSlots[8]; // offset: 32, size: 32
-    uint64 TrackingId; // offset: 64, size: 8
-    Array_int32 Settings; // offset: 72, size: 16
-    Array_uint32 CompletedBounties; // offset: 88, size: 16
-    int64 LastLogin; // offset: 104, size: 8
-    uint8 SocialDisabled; // offset: 112, size: 1
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
-    uint8 TrackingEnabled; // offset: 114, size: 1
-    uint8 ShownTrackingOptIn; // offset: 114, size: 1
-    uint8 CrashReportingEnabled; // offset: 114, size: 1
-    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
-    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
-    Array_OwnedEquipment1 SafehouseStorage; // offset: 136, size: 16
-    uint8 SafehouseStorageSizeColumns; // offset: 152, size: 1
-    uint8 SafehouseStorageSizeRows; // offset: 153, size: 1
-} ProfileSaveData3; // size: 160
-
-#define STI_TYPE_HASH_ProfileSaveData4 0x4942B541
-typedef struct ProfileSaveData4{
-    const STITypeInfo* type_info_;
-    Array_uint64 Collectables; // offset: 0, size: 16
-    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
-    uint32 EmoteSlots[8]; // offset: 32, size: 32
-    uint64 TrackingId; // offset: 64, size: 8
-    Array_int32 Settings; // offset: 72, size: 16
-    Array_uint32 CompletedBounties; // offset: 88, size: 16
-    int64 LastLogin; // offset: 104, size: 8
-    uint8 SocialDisabled; // offset: 112, size: 1
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
-    uint8 TrackingEnabled; // offset: 114, size: 1
-    uint8 ShownTrackingOptIn; // offset: 114, size: 1
-    uint8 CrashReportingEnabled; // offset: 114, size: 1
-    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
-    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
-    Array_OwnedEquipment1 SafehouseStorage; // offset: 136, size: 16
-    uint8 SafehouseStorageSizeColumns; // offset: 152, size: 1
-    uint8 SafehouseStorageSizeRows; // offset: 153, size: 1
-    uint32 FixVersion; // offset: 156, size: 4
-} ProfileSaveData4; // size: 160
-
-#define STI_TYPE_HASH_SettingNameValuePair 0xE034A9D2
-typedef struct SettingNameValuePair{
-    const STITypeInfo* type_info_;
-    uint32 Name; // offset: 0, size: 4
-    uint32 Value; // offset: 4, size: 4
-} SettingNameValuePair; // size: 8
-
-#define STI_TYPE_HASH_Array_SettingNameValuePair 0x96663D9E
-typedef struct Array_SettingNameValuePair {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    SettingNameValuePair* items;
-} Array_SettingNameValuePair; // size: 16
-
-#define STI_TYPE_HASH_ProfileSaveData5 0xE929635D
-typedef struct ProfileSaveData5{
-    const STITypeInfo* type_info_;
-    Array_uint64 Collectables; // offset: 0, size: 16
-    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
-    uint32 EmoteSlots[8]; // offset: 32, size: 32
-    uint64 TrackingId; // offset: 64, size: 8
-    Array_SettingNameValuePair Settings; // offset: 72, size: 16
-    Array_uint32 CompletedBounties; // offset: 88, size: 16
-    int64 LastLogin; // offset: 104, size: 8
-    uint8 SocialDisabled; // offset: 112, size: 1
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
-    uint8 TrackingEnabled; // offset: 114, size: 1
-    uint8 ShownTrackingOptIn; // offset: 114, size: 1
-    uint8 CrashReportingEnabled; // offset: 114, size: 1
-    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
-    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
-    Array_OwnedEquipment1 SafehouseStorage; // offset: 136, size: 16
-    uint8 SafehouseStorageSizeColumns; // offset: 152, size: 1
-    uint8 SafehouseStorageSizeRows; // offset: 153, size: 1
-    uint32 FixVersion; // offset: 156, size: 4
-} ProfileSaveData5; // size: 160
-
-#define STI_TYPE_HASH_ProfileSaveData6 0x5DA072F2
-typedef struct ProfileSaveData6{
-    const STITypeInfo* type_info_;
-    Array_uint64 Collectables; // offset: 0, size: 16
-    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
-    uint32 EmoteSlots[8]; // offset: 32, size: 32
-    uint64 TrackingId; // offset: 64, size: 8
-    Array_SettingNameValuePair Settings; // offset: 72, size: 16
-    Array_uint32 CompletedBounties; // offset: 88, size: 16
-    int64 LastLogin; // offset: 104, size: 8
-    uint8 SocialDisabled; // offset: 112, size: 1
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
-    uint8 TrackingEnabled; // offset: 114, size: 1
-    uint8 ShownTrackingOptIn; // offset: 114, size: 1
-    uint8 CrashReportingEnabled; // offset: 114, size: 1
-    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
-    uint8 AcceptedEULA; // offset: 114, size: 1
-    uint8 EULA_PP_HASH[64]; // offset: 115, size: 64
-    Array_ResourceStorageItem ResourceStorage; // offset: 184, size: 16
-    Array_OwnedEquipment1 SafehouseStorage; // offset: 200, size: 16
-    uint8 SafehouseStorageSizeColumns; // offset: 216, size: 1
-    uint8 SafehouseStorageSizeRows; // offset: 217, size: 1
-    uint32 FixVersion; // offset: 220, size: 4
-} ProfileSaveData6; // size: 224
-
-#define STI_TYPE_HASH_ProfileSaveData7 0x3BE671E0
-typedef struct ProfileSaveData7{
-    const STITypeInfo* type_info_;
-    Array_uint64 Collectables; // offset: 0, size: 16
-    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
-    uint32 EmoteSlots[8]; // offset: 32, size: 32
-    uint64 TrackingId; // offset: 64, size: 8
-    Array_SettingNameValuePair Settings; // offset: 72, size: 16
-    Array_uint32 CompletedBounties; // offset: 88, size: 16
-    int64 LastLogin; // offset: 104, size: 8
-    uint8 SocialDisabled; // offset: 112, size: 1
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
-    uint8 TrackingEnabled; // offset: 114, size: 1
-    uint8 ShownTrackingOptIn; // offset: 114, size: 1
-    uint8 CrashReportingEnabled; // offset: 114, size: 1
-    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
-    uint8 AcceptedEULA; // offset: 114, size: 1
-    uint8 EULA_PP_HASH[64]; // offset: 115, size: 64
-    Array_ResourceStorageItem ResourceStorage; // offset: 184, size: 16
-    Array_OwnedEquipment2 SafehouseStorage; // offset: 200, size: 16
-    uint32 FixVersion; // offset: 216, size: 4
-} ProfileSaveData7; // size: 224
-
-#define STI_TYPE_HASH_AcceptedPolicyPair 0xD6A60493
-typedef struct AcceptedPolicyPair{
-    const STITypeInfo* type_info_;
-    uint32 Name; // offset: 0, size: 4
-    uint8 Hash[64]; // offset: 4, size: 64
-} AcceptedPolicyPair; // size: 68
-
-#define STI_TYPE_HASH_Array_AcceptedPolicyPair 0xEC0454FF
-typedef struct Array_AcceptedPolicyPair {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AcceptedPolicyPair* items;
-} Array_AcceptedPolicyPair; // size: 16
-
-#define STI_TYPE_HASH_ProfileSaveData8 0x5031BC71
-typedef struct ProfileSaveData8{
-    const STITypeInfo* type_info_;
-    Array_uint64 Collectables; // offset: 0, size: 16
-    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
-    uint32 EmoteSlots[8]; // offset: 32, size: 32
-    uint64 TrackingId; // offset: 64, size: 8
-    Array_SettingNameValuePair Settings; // offset: 72, size: 16
-    Array_uint32 CompletedBounties; // offset: 88, size: 16
-    int64 LastLogin; // offset: 104, size: 8
-    uint8 SocialDisabled; // offset: 112, size: 1
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
-    uint8 TrackingEnabled; // offset: 114, size: 1
-    uint8 ShownTrackingOptIn; // offset: 114, size: 1
-    uint8 CrashReportingEnabled; // offset: 114, size: 1
-    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
-    uint8 AcceptedEULA; // offset: 114, size: 1
-    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
-    Array_OwnedEquipment2 SafehouseStorage; // offset: 136, size: 16
-    uint32 FixVersion; // offset: 152, size: 4
-    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 160, size: 16
-} ProfileSaveData8; // size: 176
-
-#define STI_TYPE_HASH_ProfileSaveData9 0x1A8A1C09
-typedef struct ProfileSaveData9{
-    const STITypeInfo* type_info_;
-    Array_uint64 Collectables; // offset: 0, size: 16
-    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
-    uint32 EmoteSlots[8]; // offset: 32, size: 32
-    uint64 TrackingId; // offset: 64, size: 8
-    Array_SettingNameValuePair Settings; // offset: 72, size: 16
-    Array_uint32 CompletedBounties; // offset: 88, size: 16
-    int64 LastLogin; // offset: 104, size: 8
-    uint8 SocialDisabled; // offset: 112, size: 1
-    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
-    uint8 TrackingEnabled; // offset: 114, size: 1
-    uint8 ShownTrackingOptIn; // offset: 114, size: 1
-    uint8 CrashReportingEnabled; // offset: 114, size: 1
-    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
-    uint8 AcceptedEULA; // offset: 114, size: 1
-    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
-    Array_OwnedEquipment3 SafehouseStorage; // offset: 136, size: 16
-    uint32 FixVersion; // offset: 152, size: 4
-    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 160, size: 16
-} ProfileSaveData9; // size: 176
-
-#define STI_TYPE_HASH_Array_RegionData 0xF33CC2F5
-typedef struct Array_RegionData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RegionData* items;
-} Array_RegionData; // size: 16
-
-#define STI_TYPE_HASH_Array_FogOfWar 0x51816FEB
-typedef struct Array_FogOfWar {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    FogOfWar* items;
-} Array_FogOfWar; // size: 16
-
-#define STI_TYPE_HASH_Array_LocationState 0x5FFD080C
-typedef struct Array_LocationState {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    LocationState* items;
-} Array_LocationState; // size: 16
-
-#define STI_TYPE_HASH_Array_CodexInfo 0x99831F86
-typedef struct Array_CodexInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    CodexInfo* items;
-} Array_CodexInfo; // size: 16
-
-#define STI_TYPE_HASH_Array_ReseveIconInfo 0xDC70913E
-typedef struct Array_ReseveIconInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ReseveIconInfo* items;
-} Array_ReseveIconInfo; // size: 16
-
-#define STI_TYPE_HASH_Array_StatisticInfo 0xB959E093
-typedef struct Array_StatisticInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    StatisticInfo* items;
-} Array_StatisticInfo; // size: 16
-
-#define STI_TYPE_HASH_Array_ContextualHelpInfo 0x9E5F7769
-typedef struct Array_ContextualHelpInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ContextualHelpInfo* items;
-} Array_ContextualHelpInfo; // size: 16
-
-#define STI_TYPE_HASH_Array_LocationSummarySaveData 0xF10552F5
-typedef struct Array_LocationSummarySaveData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    LocationSummarySaveData* items;
-} Array_LocationSummarySaveData; // size: 16
-
-#define STI_TYPE_HASH_WorldSaveData1 0x7B62E644
-typedef struct WorldSaveData1{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-} WorldSaveData1; // size: 216
-
-#define STI_TYPE_HASH_WorldSaveData2 0xA5ABA935
-typedef struct WorldSaveData2{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-} WorldSaveData2; // size: 216
-
-#define STI_TYPE_HASH_Array_RaidSaveData 0xEA00DAB9
-typedef struct Array_RaidSaveData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RaidSaveData* items;
-} Array_RaidSaveData; // size: 16
-
-#define STI_TYPE_HASH_WorldSaveData3 0xD2966D76
-typedef struct WorldSaveData3{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-    Array_RaidSaveData Raids; // offset: 216, size: 16
-} WorldSaveData3; // size: 232
-
-#define STI_TYPE_HASH_Array_RaidSaveData2 0x513F57AC
-typedef struct Array_RaidSaveData2 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RaidSaveData2* items;
-} Array_RaidSaveData2; // size: 16
-
-#define STI_TYPE_HASH_WorldSaveData4 0x47512ED2
-typedef struct WorldSaveData4{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-    Array_RaidSaveData2 Raids; // offset: 216, size: 16
-} WorldSaveData4; // size: 232
-
-#define STI_TYPE_HASH_Array_TimerSaveData1 0xDF216242
-typedef struct Array_TimerSaveData1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    TimerSaveData1* items;
-} Array_TimerSaveData1; // size: 16
-
-#define STI_TYPE_HASH_WorldSaveData5 0x830EBB35
-typedef struct WorldSaveData5{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-    Array_RaidSaveData2 Raids; // offset: 216, size: 16
-    Array_TimerSaveData1 Timers; // offset: 232, size: 16
-} WorldSaveData5; // size: 248
-
-#define STI_TYPE_HASH_WorldSaveData6 0xD3B9313C
-typedef struct WorldSaveData6{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-    Array_RaidSaveData2 Raids; // offset: 216, size: 16
-    Array_TimerSaveData1 Timers; // offset: 232, size: 16
-    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
-} WorldSaveData6; // size: 264
-
-#define STI_TYPE_HASH_Array_RivalRegion1 0x41CFE53B
-typedef struct Array_RivalRegion1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RivalRegion1* items;
-} Array_RivalRegion1; // size: 16
-
-#define STI_TYPE_HASH_WorldSaveData7 0xCA977B94
-typedef struct WorldSaveData7{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-    Array_RaidSaveData2 Raids; // offset: 216, size: 16
-    Array_TimerSaveData1 Timers; // offset: 232, size: 16
-    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
-    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
-    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
-} WorldSaveData7; // size: 296
-
-#define STI_TYPE_HASH_WorldSaveData8 0x2338422B
-typedef struct WorldSaveData8{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-    Array_RaidSaveData2 Raids; // offset: 216, size: 16
-    Array_TimerSaveData1 Timers; // offset: 232, size: 16
-    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
-    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
-    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
-    uint32 DifficultyLevel; // offset: 296, size: 4
-    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
-} WorldSaveData8; // size: 304
-
-#define STI_TYPE_HASH_Array_ControlPointSaveData1 0xFDF5F6EC
-typedef struct Array_ControlPointSaveData1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ControlPointSaveData1* items;
-} Array_ControlPointSaveData1; // size: 16
-
-#define STI_TYPE_HASH_Array_RivalMissionGroup1 0x0FD8107D
-typedef struct Array_RivalMissionGroup1 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RivalMissionGroup1* items;
-} Array_RivalMissionGroup1; // size: 16
-
-#define STI_TYPE_HASH_WorldSaveData9 0xF861AEA3
-typedef struct WorldSaveData9{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-    Array_RaidSaveData2 Raids; // offset: 216, size: 16
-    Array_TimerSaveData1 Timers; // offset: 232, size: 16
-    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
-    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
-    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
-    uint32 DifficultyLevel; // offset: 296, size: 4
-    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
-    Array_ControlPointSaveData1 ControlPoints; // offset: 304, size: 16
-    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
-} WorldSaveData9; // size: 336
-
-#define STI_TYPE_HASH_Array_ControlPointSaveData2 0x34DE30B0
-typedef struct Array_ControlPointSaveData2 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ControlPointSaveData2* items;
-} Array_ControlPointSaveData2; // size: 16
-
-#define STI_TYPE_HASH_WorldSaveData10 0x032EE90F
-typedef struct WorldSaveData10{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-    Array_RaidSaveData2 Raids; // offset: 216, size: 16
-    Array_TimerSaveData1 Timers; // offset: 232, size: 16
-    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
-    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
-    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
-    uint32 DifficultyLevel; // offset: 296, size: 4
-    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
-    Array_ControlPointSaveData2 ControlPoints; // offset: 304, size: 16
-    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
-} WorldSaveData10; // size: 336
-
-#define STI_TYPE_HASH_WorldSaveData11 0x18EC6CF4
-typedef struct WorldSaveData11{
-    const STITypeInfo* type_info_;
-    Array_RegionData Regions; // offset: 0, size: 16
-    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
-    Array_uint64 Collectables; // offset: 64, size: 16
-    uint32 LootSeed; // offset: 80, size: 4
-    Array_FogOfWar FogOfWar; // offset: 88, size: 16
-    int32 ReserveId; // offset: 104, size: 4
-    Array_LocationState Locations; // offset: 112, size: 16
-    Array_CodexInfo CodexInfos; // offset: 128, size: 16
-    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
-    Array_StatisticInfo Statistics; // offset: 160, size: 16
-    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
-    uint8 ContextualHelpActive; // offset: 192, size: 1
-    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
-    Array_RaidSaveData2 Raids; // offset: 216, size: 16
-    Array_TimerSaveData1 Timers; // offset: 232, size: 16
-    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
-    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
-    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
-    uint32 DifficultyLevel; // offset: 296, size: 4
-    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
-    Array_ControlPointSaveData3 ControlPoints; // offset: 304, size: 16
-    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
-} WorldSaveData11; // size: 336
-
-#define STI_TYPE_HASH_CharactersSaveData1 0xE23ECACE
-typedef struct CharactersSaveData1{
-    const STITypeInfo* type_info_;
-    CharacterProfile1 Characters[4]; // offset: 0, size: 4000
-    uint32 EquipmentIDCounter; // offset: 4000, size: 4
-    Array_OwnedEquipment1 ItemStash; // offset: 4008, size: 16
-    Array_uint32 GivenDLCItems; // offset: 4024, size: 16
-    uint32 ActiveCharacterIndex; // offset: 4040, size: 4
-    Array_MissionSaveData MissionCampaigns; // offset: 4048, size: 16
-    Array_int32 MissionCampaignsReserveIds; // offset: 4064, size: 16
-} CharactersSaveData1; // size: 4080
-
-#define STI_TYPE_HASH_CharactersSaveData2 0x8C9469B0
-typedef struct CharactersSaveData2{
-    const STITypeInfo* type_info_;
-    CharacterProfile2 Characters[4]; // offset: 0, size: 4064
-    uint32 EquipmentIDCounter; // offset: 4064, size: 4
-    Array_OwnedEquipment1 ItemStash; // offset: 4072, size: 16
-    Array_uint32 GivenDLCItems; // offset: 4088, size: 16
-    uint32 ActiveCharacterIndex; // offset: 4104, size: 4
-    Array_MissionSaveData MissionCampaigns; // offset: 4112, size: 16
-    Array_int32 MissionCampaignsReserveIds; // offset: 4128, size: 16
-} CharactersSaveData2; // size: 4144
-
-#define STI_TYPE_HASH_CharactersSaveData3 0x7E0A0FED
-typedef struct CharactersSaveData3{
-    const STITypeInfo* type_info_;
-    CharacterProfile2 Characters[4]; // offset: 0, size: 4064
-    uint32 EquipmentIDCounter; // offset: 4064, size: 4
-    Array_OwnedEquipment1 ItemStash; // offset: 4072, size: 16
-    Array_OwnedEquipment1 UnknownItemsStash; // offset: 4088, size: 16
-    Array_OwnedEquipment1 InaccessibleItems; // offset: 4104, size: 16
-    Array_uint32 GivenDLCItems; // offset: 4120, size: 16
-    uint32 ActiveCharacterIndex; // offset: 4136, size: 4
-    Array_MissionSaveData MissionCampaigns; // offset: 4144, size: 16
-    Array_int32 MissionCampaignsReserveIds; // offset: 4160, size: 16
-} CharactersSaveData3; // size: 4176
-
-#define STI_TYPE_HASH_CharactersSaveData4 0x438C0703
-typedef struct CharactersSaveData4{
-    const STITypeInfo* type_info_;
-    CharacterProfile2 Characters[4]; // offset: 0, size: 4064
-    uint32 EquipmentIDCounter; // offset: 4064, size: 4
-    Array_OwnedEquipment1 ItemStash; // offset: 4072, size: 16
-    Array_OwnedEquipment1 UnknownItemsStash; // offset: 4088, size: 16
-    Array_OwnedEquipment1 InaccessibleItems; // offset: 4104, size: 16
-    Array_uint32 GivenDLCItems; // offset: 4120, size: 16
-    uint32 ActiveCharacterIndex; // offset: 4136, size: 4
-    Array_MissionSaveData2 MissionCampaigns; // offset: 4144, size: 16
-    Array_int32 MissionCampaignsReserveIds; // offset: 4160, size: 16
-} CharactersSaveData4; // size: 4176
-
-#define STI_TYPE_HASH_CharactersSaveData5 0x719780FF
-typedef struct CharactersSaveData5{
-    const STITypeInfo* type_info_;
-    CharacterProfile3 Characters[4]; // offset: 0, size: 4096
-    uint32 EquipmentIDCounter; // offset: 4096, size: 4
-    Array_OwnedEquipment1 ItemStash; // offset: 4104, size: 16
-    Array_OwnedEquipment1 UnknownItemsStash; // offset: 4120, size: 16
-    Array_OwnedEquipment1 InaccessibleItems; // offset: 4136, size: 16
-    Array_uint32 GivenDLCItems; // offset: 4152, size: 16
-    uint32 ActiveCharacterIndex; // offset: 4168, size: 4
-    Array_MissionSaveData2 MissionCampaigns; // offset: 4176, size: 16
-    Array_int32 MissionCampaignsReserveIds; // offset: 4192, size: 16
-} CharactersSaveData5; // size: 4208
-
-#define STI_TYPE_HASH_CharactersSaveData6 0x40E96F21
-typedef struct CharactersSaveData6{
-    const STITypeInfo* type_info_;
-    CharacterProfile4 Characters[4]; // offset: 0, size: 4096
-    uint32 EquipmentIDCounter; // offset: 4096, size: 4
-    Array_OwnedEquipment2 ItemStash; // offset: 4104, size: 16
-    Array_OwnedEquipment2 UnknownItemsStash; // offset: 4120, size: 16
-    Array_OwnedEquipment2 InaccessibleItems; // offset: 4136, size: 16
-    Array_uint32 GivenDLCItems; // offset: 4152, size: 16
-    uint32 ActiveCharacterIndex; // offset: 4168, size: 4
-    Array_MissionSaveData2 MissionCampaigns; // offset: 4176, size: 16
-    Array_int32 MissionCampaignsReserveIds; // offset: 4192, size: 16
-} CharactersSaveData6; // size: 4208
-
-#define STI_TYPE_HASH_CharactersSaveData7 0xF106ED5C
-typedef struct CharactersSaveData7{
-    const STITypeInfo* type_info_;
-    CharacterProfile5 Characters[4]; // offset: 0, size: 4352
-    uint32 EquipmentIDCounter; // offset: 4352, size: 4
-    Array_OwnedEquipment2 ItemStash; // offset: 4360, size: 16
-    Array_OwnedEquipment2 UnknownItemsStash; // offset: 4376, size: 16
-    Array_OwnedEquipment2 InaccessibleItems; // offset: 4392, size: 16
-    Array_uint32 GivenDLCItems; // offset: 4408, size: 16
-    uint32 ActiveCharacterIndex; // offset: 4424, size: 4
-    Array_MissionSaveData2 MissionCampaigns; // offset: 4432, size: 16
-    Array_int32 MissionCampaignsReserveIds; // offset: 4448, size: 16
-} CharactersSaveData7; // size: 4464
-
-#define STI_TYPE_HASH_CharactersSaveData8 0x9AB00D3B
-typedef struct CharactersSaveData8{
-    const STITypeInfo* type_info_;
-    CharacterProfile6 Characters[4]; // offset: 0, size: 4352
-    uint32 EquipmentIDCounter; // offset: 4352, size: 4
-    Array_OwnedEquipment3 ItemStash; // offset: 4360, size: 16
-    Array_OwnedEquipment3 UnknownItemsStash; // offset: 4376, size: 16
-    Array_OwnedEquipment3 InaccessibleItems; // offset: 4392, size: 16
-    Array_uint32 GivenDLCItems; // offset: 4408, size: 16
-    uint32 ActiveCharacterIndex; // offset: 4424, size: 4
-    Array_MissionSaveData2 MissionCampaigns; // offset: 4432, size: 16
-    Array_int32 MissionCampaignsReserveIds; // offset: 4448, size: 16
-} CharactersSaveData8; // size: 4464
-
-#define STI_TYPE_HASH_SaveGameData1 0x4D75E188
-typedef struct SaveGameData1{
-    const STITypeInfo* type_info_;
-    Deferred Characters; // offset: 0, size: 16
-    Deferred Profile; // offset: 16, size: 16
-    Deferred World; // offset: 32, size: 16
-} SaveGameData1; // size: 48
-
-#define STI_TYPE_HASH_SaveGameData2 0x8878829F
-typedef struct SaveGameData2{
-    const STITypeInfo* type_info_;
-    Deferred Characters; // offset: 0, size: 16
-    Deferred Profile; // offset: 16, size: 16
-    Deferred World; // offset: 32, size: 16
-    Deferred War; // offset: 48, size: 16
-} SaveGameData2; // size: 64
-
-#define STI_TYPE_HASH_SaveGameRoot 0x1605F39E
-typedef struct SaveGameRoot{
-    const STITypeInfo* type_info_;
-    Deferred SaveData; // offset: 0, size: 16
-} SaveGameRoot; // size: 16
-
-#define STI_TYPE_HASH_ControllerType 0x6304CBBF
-typedef enum{ // size: 4
-    DISABLE = 0,
-    RIGID_BODY = 1,
-    POWERED_CHAIN = 2,
-    POWERED_CONSTRAINT = 3,
-    ControllerType_ForceSize = 0x7FFFFFFF
-} ControllerType;
-
-#define STI_TYPE_HASH_BoneLengthAdjustmentType 0x7F50FEAC
-typedef enum{ // size: 4
-    NONE = 0,
-    REFERRENCE_POSE = 1,
-    CURRENT_POSE = 2,
-    BoneLengthAdjustmentType_ForceSize = 0x7FFFFFFF
-} BoneLengthAdjustmentType;
-
-#define STI_TYPE_HASH_PoweredConstraintParameters 0x00306438
-typedef struct PoweredConstraintParameters{
-    const STITypeInfo* type_info_;
-    float32 Tau; // offset: 0, size: 4
-    float32 Damping; // offset: 4, size: 4
-    float32 PropotionalRecoveryVelocity; // offset: 8, size: 4
-    float32 ConstantRecoveryVelocity; // offset: 12, size: 4
-    float32 MaxForce; // offset: 16, size: 4
-} PoweredConstraintParameters; // size: 20
-
-#define STI_TYPE_HASH_RigidBodyControllerParameters 0x833AA8DC
-typedef struct RigidBodyControllerParameters{
-    const STITypeInfo* type_info_;
-    float32 HierarchyGain; // offset: 0, size: 4
-    float32 VelocityDamping; // offset: 4, size: 4
-    float32 AccelerationGain; // offset: 8, size: 4
-    float32 VelocityGain; // offset: 12, size: 4
-    float32 PositionGain; // offset: 16, size: 4
-    float32 PositionMaxLinearVelocity; // offset: 20, size: 4
-    float32 PositionMaxAngularVelocity; // offset: 24, size: 4
-    float32 SnapGain; // offset: 28, size: 4
-    float32 SnapMaxLinearVelocity; // offset: 32, size: 4
-    float32 SnapMaxAngularVelocity; // offset: 36, size: 4
-    float32 SnapMaxLinearDistance; // offset: 40, size: 4
-    float32 SnapMaxAngularDistance; // offset: 44, size: 4
-} RigidBodyControllerParameters; // size: 48
-
-#define STI_TYPE_HASH_CollisionSubSystemByName 0x77AF0A98
-typedef struct CollisionSubSystemByName{
-    const STITypeInfo* type_info_;
-    String RigidBodyName; // offset: 0, size: 16
-    uint8 SubSystemID; // offset: 8, size: 1
-    uint8 NoCollideID; // offset: 9, size: 1
-} CollisionSubSystemByName; // size: 16
-
-#define STI_TYPE_HASH_Array_CollisionSubSystemByName 0xB8D7AE1E
-typedef struct Array_CollisionSubSystemByName {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    CollisionSubSystemByName* items;
-} Array_CollisionSubSystemByName; // size: 16
-
-#define STI_TYPE_HASH_RagdollSetting 0x805D116C
-typedef struct RagdollSetting{
-    const STITypeInfo* type_info_;
-    String Name; // offset: 0, size: 16
-    uint8 ControllerType; // offset: 8, size: 1
-    uint8 MapAnimationToPhysics; // offset: 9, size: 1
-    uint8 SetBindPoseWhenMapping; // offset: 10, size: 1
-    uint8 BoneLengthAdjustmentType; // offset: 11, size: 1
-    PoweredConstraintParameters PoweredConstraintParameters; // offset: 12, size: 20
-    RigidBodyControllerParameters RigidBodyControllerParameters; // offset: 32, size: 48
-    Array_String KeyframedRigidBodies; // offset: 80, size: 16
-    Array_CollisionSubSystemByName CollisionSubSystems; // offset: 96, size: 16
-} RagdollSetting; // size: 112
-
-#define STI_TYPE_HASH_Array_RagdollSetting 0x69429C1B
-typedef struct Array_RagdollSetting {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RagdollSetting* items;
-} Array_RagdollSetting; // size: 16
-
-#define STI_TYPE_HASH_RagdollSettings 0x10ACC3A4
-typedef struct RagdollSettings{
-    const STITypeInfo* type_info_;
-    Array_RagdollSetting Settings; // offset: 0, size: 16
-} RagdollSettings; // size: 16
-
-#define STI_TYPE_HASH_ForcePulseSettings 0xB23A25E9
-typedef struct ForcePulseSettings{
-    const STITypeInfo* type_info_;
-    uint32 PlayerDamage; // offset: 0, size: 4
-    float32 PlayerDamageRadius; // offset: 4, size: 4
-    float32 PlayerDamageRadiusPercentageMax; // offset: 8, size: 4
-    float32 PlayerDamageRadiusMin; // offset: 12, size: 4
-    uint32 AIDamage; // offset: 16, size: 4
-    float32 AIDamageRadius; // offset: 20, size: 4
-    float32 AIDamageRadiusPercentageMax; // offset: 24, size: 4
-    float32 AIDamageRadiusMin; // offset: 28, size: 4
-    float32 AIAwarenessEventRange; // offset: 32, size: 4
-    String HitEntitySpawnTag; // offset: 40, size: 16
-} ForcePulseSettings; // size: 48
-
-#define STI_TYPE_HASH_SightTuning 0x97E92882
-typedef struct SightTuning{
-    const STITypeInfo* type_info_;
-    float32 zoom_multiplier_level_0; // offset: 0, size: 4
-    float32 zoom_multiplier_level_1; // offset: 4, size: 4
-    float32 zoom_multiplier_level_2; // offset: 8, size: 4
-    float32 zoom_multiplier_level_3; // offset: 12, size: 4
-    float32 zoom_multiplier_level_4; // offset: 16, size: 4
-} SightTuning; // size: 20
-
-#define STI_TYPE_HASH_ArcRenderSettings 0xD0718CCC
-typedef struct ArcRenderSettings{
-    const STITypeInfo* type_info_;
-    float32 total_lifetime_min; // offset: 0, size: 4
-    float32 total_lifetime_max; // offset: 4, size: 4
-    uint32 trigger_on_spawn; // offset: 8, size: 4
-    float32 trigger_delay_min; // offset: 12, size: 4
-    float32 trigger_delay_max; // offset: 16, size: 4
-    uint32 arc_spawns_per_trigger_min; // offset: 20, size: 4
-    uint32 arc_spawns_per_trigger_max; // offset: 24, size: 4
-    float32 max_arc_distance; // offset: 28, size: 4
-    float32 arc_travel_speed; // offset: 32, size: 4
-    float32 vertices_per_meter; // offset: 36, size: 4
-    float32 arc_lifetime_min; // offset: 40, size: 4
-    float32 arc_lifetime_max; // offset: 44, size: 4
-    float32 arc_width_min; // offset: 48, size: 4
-    float32 arc_width_max; // offset: 52, size: 4
-    uint32 noise_num_octaves; // offset: 56, size: 4
-    float32 noise_period; // offset: 60, size: 4
-    float32 noise_size_base; // offset: 64, size: 4
-    float32 noise_size_octave_2; // offset: 68, size: 4
-    float32 noise_size_octave_3; // offset: 72, size: 4
-    float32 noise_travel_speed_base; // offset: 76, size: 4
-    float32 noise_travel_speed_octave_2; // offset: 80, size: 4
-    float32 noise_travel_speed_octave_3; // offset: 84, size: 4
-    float32 noise_size_multiplier_at_start; // offset: 88, size: 4
-    float32 noise_size_multiplier_growth_over_time; // offset: 92, size: 4
-    float32 noise_size_multiplier_max; // offset: 96, size: 4
-    float32 bend_height_at_start_min; // offset: 100, size: 4
-    float32 bend_height_at_start_max; // offset: 104, size: 4
-    float32 bend_max_angle_from_vertical; // offset: 108, size: 4
-    float32 bend_height_growth_over_time; // offset: 112, size: 4
-    float32 bend_height_final_min; // offset: 116, size: 4
-    float32 bend_height_final_max; // offset: 120, size: 4
-    float32 size_multiplier_by_distance; // offset: 124, size: 4
-    float32 min_scale_by_camera_distance; // offset: 128, size: 4
-    float32 emission_min; // offset: 132, size: 4
-    float32 emission_max; // offset: 136, size: 4
-    float32 emission_jitter; // offset: 140, size: 4
-    float32 emission_color_r; // offset: 144, size: 4
-    float32 emission_color_g; // offset: 148, size: 4
-    float32 emission_color_b; // offset: 152, size: 4
-} ArcRenderSettings; // size: 156
-
-#define STI_TYPE_HASH_LynxSettings 0xF2A153E7
-typedef struct LynxSettings{
-    const STITypeInfo* type_info_;
-    float32 movement_speed_rate_engine_destroyed; // offset: 0, size: 4
-    float32 movement_speed_rate_engine_destroyed_all; // offset: 4, size: 4
-} LynxSettings; // size: 8
-
-#define STI_TYPE_HASH_HunterAttackSettings 0x83A13191
-typedef struct HunterAttackSettings{
-    const STITypeInfo* type_info_;
-    float32 melee_jump_attack_chance_suppressor; // offset: 0, size: 4
-    float32 melee_jump_attack_chance_flanker; // offset: 4, size: 4
-    float32 melee_jump_attack_chance_backsteper; // offset: 8, size: 4
-} HunterAttackSettings; // size: 12
-
-#define STI_TYPE_HASH_DreaAttackSettings 0x6F88E58F
-typedef struct DreaAttackSettings{
-    const STITypeInfo* type_info_;
-    float32 attack_cooldown[2]; // offset: 0, size: 8
-} DreaAttackSettings; // size: 8
-
-#define STI_TYPE_HASH_DreaChargeSettings 0x4FBF8692
-typedef struct DreaChargeSettings{
-    const STITypeInfo* type_info_;
-    float32 LockOnTargetDistance; // offset: 0, size: 4
-    float32 LockOnTargetOffset; // offset: 4, size: 4
-    float32 ChargeDistance; // offset: 8, size: 4
-} DreaChargeSettings; // size: 12
-
-#define STI_TYPE_HASH_DreaThermobaricSettings 0x85C0F117
-typedef struct DreaThermobaricSettings{
-    const STITypeInfo* type_info_;
-    float32 thermobaric_wave_thresholds_1; // offset: 0, size: 4
-    float32 thermobaric_wave_thresholds_2; // offset: 4, size: 4
-    float32 thermobaric_wave_thresholds_3; // offset: 8, size: 4
-    float32 thermobaric_wave_warning_time; // offset: 12, size: 4
-    float32 thermobaric_wave_warning_sound_interval; // offset: 16, size: 4
-    float32 thermobaric_explosion_threshold; // offset: 20, size: 4
-    float32 thermobaric_explosion_warning_time; // offset: 24, size: 4
-    float32 thermobaric_explosion_warning_sound_interval; // offset: 28, size: 4
-} DreaThermobaricSettings; // size: 32
-
-#define STI_TYPE_HASH_HarvesterSettings 0xB77EE664
-typedef struct HarvesterSettings{
-    const STITypeInfo* type_info_;
-    float32 turtle_time[2]; // offset: 0, size: 8
-    float32 reinforce_delay[2]; // offset: 8, size: 8
-    int32 max_reinforcements[2]; // offset: 16, size: 8
-} HarvesterSettings; // size: 24
-
-#define STI_TYPE_HASH_SmallMachineSettings 0x9B457AEE
-typedef struct SmallMachineSettings{
-    const STITypeInfo* type_info_;
-    int32 use_min_dist_from_target_in_combat; // offset: 0, size: 4
-    float32 min_dist_has_ranged_weapon_primary; // offset: 4, size: 4
-    float32 min_dist_has_ranged_weapon_secondary; // offset: 8, size: 4
-    float32 min_dist_has_no_ranged_weapon; // offset: 12, size: 4
-} SmallMachineSettings; // size: 16
-
-#define STI_TYPE_HASH_MachineSettings 0xB82AB2B3
-typedef struct MachineSettings{
-    const STITypeInfo* type_info_;
-    float32 lured_attack_range; // offset: 0, size: 4
-    float32 check_last_seen_heard; // offset: 4, size: 4
-    int32 max_target_count; // offset: 8, size: 4
-    float32 melee_weapon_range; // offset: 12, size: 4
-    float32 melee_weapon_cooldown[2]; // offset: 16, size: 8
-    float32 support_weapon_range; // offset: 24, size: 4
-    float32 support_weapon_cooldown[2]; // offset: 28, size: 8
-    float32 ranged_weapon_aim_prediction_multiplier; // offset: 36, size: 4
-} MachineSettings; // size: 40
-
-#define STI_TYPE_HASH_AITuningSettings 0x9F9E403C
-typedef struct AITuningSettings{
-    const STITypeInfo* type_info_;
-    LynxSettings Lynx_Settings; // offset: 0, size: 8
-    HunterAttackSettings Hunter_Attack_Settings; // offset: 8, size: 12
-    DreaAttackSettings DreadnoughtAttackSettings; // offset: 20, size: 8
-    DreaChargeSettings DreadnoughtChargeSettings; // offset: 28, size: 12
-    DreaThermobaricSettings DreadnoughtThermobaricSettings; // offset: 40, size: 32
-    HarvesterSettings HarvesterSettings; // offset: 72, size: 24
-    SmallMachineSettings SmallMachineSettings; // offset: 96, size: 16
-    MachineSettings Machine_Settings; // offset: 112, size: 40
-} AITuningSettings; // size: 152
-
-#define STI_TYPE_HASH_SplineControlPoint 0xCC733C4E
-typedef struct SplineControlPoint{
-    const STITypeInfo* type_info_;
-    float32 x; // offset: 0, size: 4
-    float32 y; // offset: 4, size: 4
-    float32 y2; // offset: 8, size: 4
-} SplineControlPoint; // size: 12
-
-#define STI_TYPE_HASH_Spline5 0xBB1A741B
-typedef struct Spline5{
-    const STITypeInfo* type_info_;
-    float32 x_min; // offset: 0, size: 4
-    float32 x_max; // offset: 4, size: 4
-    float32 y_min; // offset: 8, size: 4
-    float32 y_max; // offset: 12, size: 4
-    int8 interpolation_type; // offset: 16, size: 1
-    int8 number_of_control_points; // offset: 17, size: 1
-    SplineControlPoint control_points[5]; // offset: 20, size: 60
-} Spline5; // size: 80
-
-#define STI_TYPE_HASH_Spline10 0xC8F4CBF3
-typedef struct Spline10{
-    const STITypeInfo* type_info_;
-    float32 x_min; // offset: 0, size: 4
-    float32 x_max; // offset: 4, size: 4
-    float32 y_min; // offset: 8, size: 4
-    float32 y_max; // offset: 12, size: 4
-    int8 interpolation_type; // offset: 16, size: 1
-    int8 number_of_control_points; // offset: 17, size: 1
-    SplineControlPoint control_points[10]; // offset: 20, size: 120
-} Spline10; // size: 140
-
-#define STI_TYPE_HASH_Spline20 0xF3FF06A4
-typedef struct Spline20{
-    const STITypeInfo* type_info_;
-    float32 x_min; // offset: 0, size: 4
-    float32 x_max; // offset: 4, size: 4
-    float32 y_min; // offset: 8, size: 4
-    float32 y_max; // offset: 12, size: 4
-    int8 interpolation_type; // offset: 16, size: 1
-    int8 number_of_control_points; // offset: 17, size: 1
-    SplineControlPoint control_points[20]; // offset: 20, size: 240
-} Spline20; // size: 260
-
-#define STI_TYPE_HASH_DataLifespans 0xA4201C50
-typedef struct DataLifespans{
-    const STITypeInfo* type_info_;
-    uint32 Vision; // offset: 0, size: 4
-    uint32 Awareness_ReactToAwareness; // offset: 4, size: 4
-    uint32 Awareness_Death; // offset: 8, size: 4
-    uint32 Awareness_SelfDamaged; // offset: 12, size: 4
-    uint32 Awareness_OthersDamaged; // offset: 16, size: 4
-    uint32 Awareness_WeaponFire; // offset: 20, size: 4
-    uint32 Awareness_BulletImpact; // offset: 24, size: 4
-    uint32 Awareness_CharacterCollision; // offset: 28, size: 4
-    uint32 Awareness_CollideWithPlayerVehicle; // offset: 32, size: 4
-    uint32 Awareness_SelfHitByBullet; // offset: 36, size: 4
-    uint32 Awareness_LoudVegetation; // offset: 40, size: 4
-    uint32 Awareness_ThreatPropagation; // offset: 44, size: 4
-    uint32 Awareness_SelfHitByDistraction; // offset: 48, size: 4
-    uint32 Awareness_SelfHitByEMP; // offset: 52, size: 4
-    uint32 Awareness_SelfHitByStun; // offset: 56, size: 4
-    uint32 Awareness_ForcePulse; // offset: 60, size: 4
-    uint32 Awareness_IncomingBullet; // offset: 64, size: 4
-} DataLifespans; // size: 68
-
-#define STI_TYPE_HASH_AwarenessEventRanges 0xAC3A81DA
-typedef struct AwarenessEventRanges{
-    const STITypeInfo* type_info_;
-    float32 ReactToAwareness; // offset: 0, size: 4
-    float32 Death; // offset: 4, size: 4
-    float32 SelfDamaged; // offset: 8, size: 4
-    float32 OthersDamaged; // offset: 12, size: 4
-    float32 WeaponFire; // offset: 16, size: 4
-    float32 BulletImpact; // offset: 20, size: 4
-    float32 CharacterCollision; // offset: 24, size: 4
-    float32 CollideWithPlayerVehicle; // offset: 28, size: 4
-    float32 SelfHitByBullet; // offset: 32, size: 4
-    float32 LoudVegetation; // offset: 36, size: 4
-    float32 ThreatPropagation; // offset: 40, size: 4
-    float32 SelfHitByDistraction; // offset: 44, size: 4
-    float32 SelfHitByEMP; // offset: 48, size: 4
-    float32 SelfHitByStun; // offset: 52, size: 4
-    float32 ForcePulse; // offset: 56, size: 4
-    float32 IncomingBullet; // offset: 60, size: 4
-} AwarenessEventRanges; // size: 64
-
-#define STI_TYPE_HASH_PerceptionSettings 0x71076821
-typedef struct PerceptionSettings{
-    const STITypeInfo* type_info_;
-    DataLifespans Lifespans; // offset: 0, size: 68
-    AwarenessEventRanges EventRanges; // offset: 68, size: 64
-} PerceptionSettings; // size: 132
-
-#define STI_TYPE_HASH_ActionToken 0xE4FE51C0
-typedef struct ActionToken{
-    const STITypeInfo* type_info_;
-    String DebugName; // offset: 0, size: 16
-    uint32 Count; // offset: 8, size: 4
-    float32 AcquireWaitMin; // offset: 12, size: 4
-    float32 AcquireWaitMax; // offset: 16, size: 4
-    float32 TokenCooldownMin; // offset: 20, size: 4
-    float32 TokenCooldownMax; // offset: 24, size: 4
-} ActionToken; // size: 32
-
-#define STI_TYPE_HASH_Array_ActionToken 0x912EE1CD
-typedef struct Array_ActionToken {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ActionToken* items;
-} Array_ActionToken; // size: 16
-
-#define STI_TYPE_HASH_ActionTokenList 0x94A8CB2B
-typedef struct ActionTokenList{
-    const STITypeInfo* type_info_;
-    Array_ActionToken Tokens; // offset: 0, size: 16
-} ActionTokenList; // size: 16
-
-#define STI_TYPE_HASH_VariableInt 0xD3CC2A98
-typedef struct VariableInt{
-    const STITypeInfo* type_info_;
-    String Name; // offset: 0, size: 16
-    uint32 Val; // offset: 8, size: 4
-} VariableInt; // size: 16
-
-#define STI_TYPE_HASH_VariableFloat 0x1513E576
-typedef struct VariableFloat{
-    const STITypeInfo* type_info_;
-    String Name; // offset: 0, size: 16
-    float32 Val; // offset: 8, size: 4
-} VariableFloat; // size: 16
-
-#define STI_TYPE_HASH_VariableBool 0xB6040E06
-typedef struct VariableBool{
-    const STITypeInfo* type_info_;
-    String Name; // offset: 0, size: 16
-    uint8 Val; // offset: 8, size: 1
-} VariableBool; // size: 16
-
-#define STI_TYPE_HASH_VariableVec3 0x7A806EBA
-typedef struct VariableVec3{
-    const STITypeInfo* type_info_;
-    String Name; // offset: 0, size: 16
-    float32 ValX; // offset: 8, size: 4
-    float32 ValY; // offset: 12, size: 4
-    float32 ValZ; // offset: 16, size: 4
-} VariableVec3; // size: 24
-
-#define STI_TYPE_HASH_Array_VariableInt 0x5929D20F
-typedef struct Array_VariableInt {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VariableInt* items;
-} Array_VariableInt; // size: 16
-
-#define STI_TYPE_HASH_Array_VariableFloat 0x1D893C22
-typedef struct Array_VariableFloat {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VariableFloat* items;
-} Array_VariableFloat; // size: 16
-
-#define STI_TYPE_HASH_Array_VariableBool 0xF3A00D50
-typedef struct Array_VariableBool {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VariableBool* items;
-} Array_VariableBool; // size: 16
-
-#define STI_TYPE_HASH_Array_VariableVec3 0xC5FB392B
-typedef struct Array_VariableVec3 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VariableVec3* items;
-} Array_VariableVec3; // size: 16
-
-#define STI_TYPE_HASH_BlackboardVarList 0xEC3BC042
-typedef struct BlackboardVarList{
-    const STITypeInfo* type_info_;
-    Array_VariableInt Ints; // offset: 0, size: 16
-    Array_VariableFloat Floats; // offset: 16, size: 16
-    Array_VariableBool Bools; // offset: 32, size: 16
-    Array_VariableVec3 Vec3s; // offset: 48, size: 16
-} BlackboardVarList; // size: 64
-
-#define STI_TYPE_HASH_AIGlobals 0x2A3F35F9
-typedef struct AIGlobals{
-    const STITypeInfo* type_info_;
-    PerceptionSettings Perception; // offset: 0, size: 132
-    ActionTokenList ActionTokens; // offset: 136, size: 16
-    BlackboardVarList BlackboardVariables; // offset: 152, size: 64
-} AIGlobals; // size: 216
-
-#define STI_TYPE_HASH_MemAllocator 0x52EEFC8D
-typedef enum{ // size: 4
-    E_MEMALLOCATOR_CPU = 0,
-    E_MEMALLOCATOR_SHARED = 1,
-    E_MEMALLOCATOR_GPU = 2,
-    MemAllocator_ForceSize = 0x7FFFFFFF
-} MemAllocator;
-
-#define STI_TYPE_HASH_CompressedData 0x56500CAA
-typedef struct CompressedData{
-    const STITypeInfo* type_info_;
-    uint32 UncompressedSize; // offset: 0, size: 4
-    Array_uint8 Data; // offset: 8, size: 16
-    MemAllocator UncompressAllocator; // offset: 24, size: 4
-} CompressedData; // size: 32
-
-#define STI_TYPE_HASH_TerrainMesh 0x962828FC
-typedef struct TerrainMesh{
-    const STITypeInfo* type_info_;
-    float32 BoundingBox[6]; // offset: 0, size: 24
-    CompressedData Indices; // offset: 24, size: 32
-    uint32 IndexTypeSize; // offset: 56, size: 4
-    CompressedData Vertices; // offset: 64, size: 32
-    CompressedData Vertices2; // offset: 96, size: 32
-    CompressedData QuadInfos; // offset: 128, size: 32
-    CompressedData TriangleIndices; // offset: 160, size: 32
-    CompressedData GroupTriIndices; // offset: 192, size: 32
-} TerrainMesh; // size: 224
-
-#define STI_TYPE_HASH_BlockCompressionType 0xD97AAC30
-typedef enum{ // size: 4
-    E_BLOCKCOMPRESSIONTYPE_NONE = 0,
-    E_BLOCKCOMPRESSIONTYPE_BC3 = 1,
-    E_BLOCKCOMPRESSIONTYPE_BC7 = 2,
-    BlockCompressionType_ForceSize = 0x7FFFFFFF
-} BlockCompressionType;
-
-#define STI_TYPE_HASH_TerrainTexture 0x0D811C0C
-typedef struct TerrainTexture{
-    const STITypeInfo* type_info_;
-    uint32 Width; // offset: 0, size: 4
-    uint32 Height; // offset: 4, size: 4
-    BlockCompressionType BlockCompressionType; // offset: 8, size: 4
-    uint32 Tiled; // offset: 12, size: 4
-    uint32 Srgb; // offset: 12, size: 4
-    CompressedData Data; // offset: 16, size: 32
-} TerrainTexture; // size: 48
-
-#define STI_TYPE_HASH_TerrainPatchTexelNeighborhood 0x6D19D407
-typedef struct TerrainPatchTexelNeighborhood{
-    const STITypeInfo* type_info_;
-    uint16 Flags; // offset: 0, size: 2
-    uint16 Count; // offset: 2, size: 2
-    uint32 Start; // offset: 4, size: 4
-} TerrainPatchTexelNeighborhood; // size: 8
-
-#define STI_TYPE_HASH_TerrainPatchTexelConnectivity 0xDD8B3562
-typedef struct TerrainPatchTexelConnectivity{
-    const STITypeInfo* type_info_;
-    Array_int32 TexelMap; // offset: 0, size: 16
-    Array_uint64 Neighborhoods; // offset: 16, size: 16
-    Array_uint32 NeighborhoodData; // offset: 32, size: 16
-    Array_uint64 AdjacentAtoms; // offset: 48, size: 16
-    Array_uint32 AdjacentAtomData; // offset: 64, size: 16
-} TerrainPatchTexelConnectivity; // size: 80
-
-#define STI_TYPE_HASH_Array_TerrainMesh 0x9962046F
-typedef struct Array_TerrainMesh {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    TerrainMesh* items;
-} Array_TerrainMesh; // size: 16
-
-#define STI_TYPE_HASH_TerrainPatchType 0xD1100928
-typedef struct TerrainPatchType{
-    const STITypeInfo* type_info_;
-    Array_TerrainMesh TerrainMesh; // offset: 0, size: 16
-    TerrainTexture TerrainDisplacementTexture; // offset: 16, size: 48
-    TerrainTexture TerrainNormalTexture; // offset: 64, size: 48
-    TerrainTexture TerrainTriangleMapTexture; // offset: 112, size: 48
-    TerrainTexture TerrainMaterialDuplexTexture; // offset: 160, size: 48
-    TerrainTexture TerrainQualityTexture; // offset: 208, size: 48
-    TerrainTexture TerrainIndirectionTexture; // offset: 256, size: 48
-    TerrainTexture TerrainSSDFAtlas; // offset: 304, size: 48
-    TerrainPatchTexelConnectivity TexelConnectivity; // offset: 352, size: 80
-    Array_float32 LegoVertices; // offset: 432, size: 16
-    Array_uint8 VertexFlags; // offset: 448, size: 16
-} TerrainPatchType; // size: 464
-
-#define STI_TYPE_HASH_TerrainPrimitive 0x45FEA6F5
-typedef struct TerrainPrimitive{
-    const STITypeInfo* type_info_;
-    float32 AABBMin[3]; // offset: 0, size: 12
-    float32 AABBMax[3]; // offset: 12, size: 12
-    float32 MinW; // offset: 24, size: 4
-    float32 MaxW; // offset: 28, size: 4
-} TerrainPrimitive; // size: 32
-
-#define STI_TYPE_HASH_Array_TerrainPrimitive 0x80B0FEC7
-typedef struct Array_TerrainPrimitive {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    TerrainPrimitive* items;
-} Array_TerrainPrimitive; // size: 16
-
-#define STI_TYPE_HASH_TerrainPatch 0xFD31E1DB
-typedef struct TerrainPatch{
-    const STITypeInfo* type_info_;
-    TerrainMesh TerrainMesh; // offset: 0, size: 224
-    Array_TerrainPrimitive TerrainPrimitive; // offset: 224, size: 16
-    TerrainTexture TerrainDisplacementTexture; // offset: 240, size: 48
-    TerrainTexture TerrainNormalTexture; // offset: 288, size: 48
-    TerrainTexture TerrainTriangleMapTexture; // offset: 336, size: 48
-    TerrainTexture TerrainMaterialDuplexTexture; // offset: 384, size: 48
-    TerrainTexture TerrainColorTexture; // offset: 432, size: 48
-    TerrainTexture TerrainQualityTexture; // offset: 480, size: 48
-    TerrainTexture TerrainIndirectionTexture; // offset: 528, size: 48
-    TerrainTexture TerrainSSDFAtlas; // offset: 576, size: 48
-    uint32 DisplacementDownsampled; // offset: 624, size: 4
-} TerrainPatch; // size: 632
-
-#define STI_TYPE_HASH_TerrainTextureInfo 0x510C5C3A
-typedef struct TerrainTextureInfo{
-    const STITypeInfo* type_info_;
-    Array_uint8 Data; // offset: 0, size: 16
-    uint32 Width; // offset: 16, size: 4
-    uint32 Height; // offset: 20, size: 4
-    uint32 NumSlices; // offset: 24, size: 4
-} TerrainTextureInfo; // size: 32
-
-#define STI_TYPE_HASH_TerrainColor 0x8B031E4A
-typedef struct TerrainColor{
-    const STITypeInfo* type_info_;
-    uint8 Red; // offset: 0, size: 1
-    uint8 Green; // offset: 1, size: 1
-    uint8 Blue; // offset: 2, size: 1
-} TerrainColor; // size: 3
-
-#define STI_TYPE_HASH_TerrainMaterial 0x03F547B9
-typedef struct TerrainMaterial{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
-    StringHash_48c5294d_4 VegetationSet; // offset: 4, size: 4
-    StringHash_48c5294d_4 GameMaterial; // offset: 8, size: 4
-    uint8 TextureNearIndex; // offset: 12, size: 1
-    uint8 TextureMidIndex; // offset: 13, size: 1
-    float32 Transmissive; // offset: 16, size: 4
-    float32 ColorInfluence; // offset: 20, size: 4
-    uint8 ColorNear[3]; // offset: 24, size: 3
-    uint8 ColorMid[3]; // offset: 27, size: 3
-    uint8 GroundHaze; // offset: 30, size: 1
-    float32 NormalDampening; // offset: 32, size: 4
-    float32 DisplacementScale; // offset: 36, size: 4
-    float32 DisplacementBias; // offset: 40, size: 4
-    uint8 DisplacementMip; // offset: 44, size: 1
-    float32 BlendScale; // offset: 48, size: 4
-    float32 BlendBias; // offset: 52, size: 4
-} TerrainMaterial; // size: 56
-
-#define STI_TYPE_HASH_ShaderRules 0x12448329
-typedef struct ShaderRules{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
-    StringHash_48c5294d_4 AudioZone; // offset: 4, size: 4
-    uint8 TopographyIndex; // offset: 8, size: 1
-    float32 Rotation[2]; // offset: 12, size: 8
-    uint8 RotationIndex; // offset: 20, size: 1
-    TerrainMaterial VariationMaterials[4]; // offset: 24, size: 224
-    uint8 VariationIndex; // offset: 248, size: 1
-    uint8 InvertVariation; // offset: 249, size: 1
-    uint8 TransitionSlot; // offset: 250, size: 1
-    float32 SlotBlendFactor; // offset: 252, size: 4
-    float32 NormalDetailBalance; // offset: 256, size: 4
-    TerrainMaterial PrimitiveMaterials[4]; // offset: 260, size: 224
-    float32 VariationSlotCenters[4]; // offset: 484, size: 16
-    float32 NormalSlotCenters[4]; // offset: 500, size: 16
-    float32 PrimitiveSlotCenters[4]; // offset: 516, size: 16
-    uint8 ColorNear[3]; // offset: 532, size: 3
-    uint8 ColorMid[3]; // offset: 535, size: 3
-    uint8 DebugColor[3]; // offset: 538, size: 3
-    uint8 ProjectionType; // offset: 541, size: 1
-    float32 DisplacementScale; // offset: 544, size: 4
-    float32 DisplacementBias; // offset: 548, size: 4
-    uint8 DisplacementMip; // offset: 552, size: 1
-    float32 BlendScale; // offset: 556, size: 4
-    float32 BlendBias; // offset: 560, size: 4
-} ShaderRules; // size: 564
-
-#define STI_TYPE_HASH_Array_TerrainColor 0x46DD6C99
-typedef struct Array_TerrainColor {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    TerrainColor* items;
-} Array_TerrainColor; // size: 16
-
-#define STI_TYPE_HASH_Array_ShaderRules 0xD956C9F9
-typedef struct Array_ShaderRules {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ShaderRules* items;
-} Array_ShaderRules; // size: 16
-
-#define STI_TYPE_HASH_TerrainSystem 0x21237EA8
-typedef struct TerrainSystem{
-    const STITypeInfo* type_info_;
-    TerrainTextureInfo TerrainDisplacementTexture; // offset: 0, size: 32
-    TerrainTextureInfo TerrainVariationTexture; // offset: 32, size: 32
-    TerrainTextureInfo TerrainNormalMapTexture; // offset: 64, size: 32
-    float32 TextureTilingMid; // offset: 96, size: 4
-    float32 TextureTilingDetail; // offset: 100, size: 4
-    Array_TerrainColor TerrainMeanColor; // offset: 104, size: 16
-    Array_ShaderRules ShaderRules; // offset: 120, size: 16
-} TerrainSystem; // size: 136
-
-#define STI_TYPE_HASH_EffectRTRenderInfo 0xC47ADDF4
-typedef struct EffectRTRenderInfo{
-    const STITypeInfo* type_info_;
-    uint32 RenderBlockTypeHash; // offset: 0, size: 4
-    uint16 VertexBufferHeaderSize; // offset: 4, size: 2
-    uint16 ParticleVertexMemorySize; // offset: 6, size: 2
-    Array_uint32 RenderBlockData; // offset: 8, size: 16
-} EffectRTRenderInfo; // size: 24
-
-#define STI_TYPE_HASH_EffectRTLocalParam 0x8E3EB952
-typedef struct EffectRTLocalParam{
-    const STITypeInfo* type_info_;
-    uint32 Hash; // offset: 0, size: 4
-    uint16 Index; // offset: 4, size: 2
-    uint16 NumParams; // offset: 6, size: 2
-} EffectRTLocalParam; // size: 8
-
-#define STI_TYPE_HASH_Array_EffectRTLocalParam 0x0073CA09
-typedef struct Array_EffectRTLocalParam {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTLocalParam* items;
-} Array_EffectRTLocalParam; // size: 16
-
-#define STI_TYPE_HASH_EffectRTParameters 0x15C3EBC7
-typedef struct EffectRTParameters{
-    const STITypeInfo* type_info_;
-    Array_uint16 FloatParamIndices; // offset: 0, size: 16
-    Array_int32 Int32Params; // offset: 16, size: 16
-    Array_EffectRTLocalParam LocalParams; // offset: 32, size: 16
-    uint32 LocalParamsSize; // offset: 48, size: 4
-    Array_uint32 TimelineConnections; // offset: 56, size: 16
-} EffectRTParameters; // size: 72
-
-#define STI_TYPE_HASH_Array_EffectRTRenderInfo 0xEF57B84F
-typedef struct Array_EffectRTRenderInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTRenderInfo* items;
-} Array_EffectRTRenderInfo; // size: 16
-
-#define STI_TYPE_HASH_EffectRTInstantiator 0x7320C0F6
-typedef struct EffectRTInstantiator{
-    const STITypeInfo* type_info_;
-    EffectRTParameters Parameters; // offset: 0, size: 72
-    Array_EffectRTRenderInfo RenderInfos; // offset: 72, size: 16
-    uint32 TypeHash; // offset: 88, size: 4
-    uint16 ExtraMemPerParticle; // offset: 92, size: 2
-    uint16 TrimIndex; // offset: 94, size: 2
-} EffectRTInstantiator; // size: 96
-
-#define STI_TYPE_HASH_EffectRTEmitterTemplate 0xF421C359
-typedef struct EffectRTEmitterTemplate{
-    const STITypeInfo* type_info_;
-    Array_uint16 EmitterParams; // offset: 0, size: 16
-    Array_uint32 EmitterTimelineConnections; // offset: 16, size: 16
-    Array_uint8 ParticleModifiers; // offset: 32, size: 16
-    uint32 EmitterLifetimeIndex; // offset: 48, size: 4
-    uint32 StartTime; // offset: 52, size: 4
-    Array_uint8 AliveInstantiators; // offset: 56, size: 16
-    Array_uint8 OnDeathInstantiators; // offset: 72, size: 16
-    uint16 MaxParticles; // offset: 88, size: 2
-    uint8 Flags; // offset: 90, size: 1
-    uint32 TypeHash; // offset: 92, size: 4
-    uint32 LocalParamsSize; // offset: 96, size: 4
-    Array_EffectRTLocalParam LocalParams; // offset: 104, size: 16
-} EffectRTEmitterTemplate; // size: 120
-
-#define STI_TYPE_HASH_EffectRTEmitter 0x9F160F8C
-typedef struct EffectRTEmitter{
-    const STITypeInfo* type_info_;
-    uint16 EmitterTemplateIndex; // offset: 0, size: 2
-    uint8 Flags; // offset: 2, size: 1
-    Array_uint8 EmitterModifiers; // offset: 8, size: 16
-    Array_uint32 StartInOutputBuffer; // offset: 24, size: 16
-} EffectRTEmitter; // size: 40
-
-#define STI_TYPE_HASH_EffectRTModifier 0x190BFAA5
-typedef struct EffectRTModifier{
-    const STITypeInfo* type_info_;
-    EffectRTParameters Parameters; // offset: 0, size: 72
-    uint32 TypeHash; // offset: 72, size: 4
-    uint32 Flags; // offset: 76, size: 4
-} EffectRTModifier; // size: 80
-
-#define STI_TYPE_HASH_EffectRTTimeline 0x326A2784
-typedef struct EffectRTTimeline{
-    const STITypeInfo* type_info_;
-    int8 ControlPointsY[16]; // offset: 0, size: 16
-    float32 StartX[4]; // offset: 16, size: 16
-    float32 EndX[4]; // offset: 32, size: 16
-    float32 XScaleRecip[4]; // offset: 48, size: 16
-} EffectRTTimeline; // size: 64
-
-#define STI_TYPE_HASH_EffectRTSpecialEffect 0x31696983
-typedef struct EffectRTSpecialEffect{
-    const STITypeInfo* type_info_;
-    Array_uint16 FloatParamIndices; // offset: 0, size: 16
-    Array_uint32 EmitterTimelineConnections; // offset: 16, size: 16
-    Array_uint8 Modifiers; // offset: 32, size: 16
-    int32 Params[29]; // offset: 48, size: 116
-    uint32 Hash; // offset: 164, size: 4
-} EffectRTSpecialEffect; // size: 168
-
-#define STI_TYPE_HASH_EffectRTBatchDescriptor 0xE4F9CF13
-typedef struct EffectRTBatchDescriptor{
-    const STITypeInfo* type_info_;
-    uint32 OutputBufferOffset; // offset: 0, size: 4
-    uint32 RenderBlockTypeHash; // offset: 4, size: 4
-    uint32 OutBufferHeaderSize; // offset: 8, size: 4
-    uint32 ConstantRenderBlockSize; // offset: 12, size: 4
-    uint32* ConstantRenderBlockData; // offset: 16, size: 8
-} EffectRTBatchDescriptor; // size: 24
-
-#define STI_TYPE_HASH_EffectRTSpecialEffectData 0x863552C1
-typedef struct EffectRTSpecialEffectData{
-    const STITypeInfo* type_info_;
-    Array_uint32 ConstantData; // offset: 0, size: 16
-    uint32 Hash; // offset: 16, size: 4
-} EffectRTSpecialEffectData; // size: 24
-
-#define STI_TYPE_HASH_Array_EffectRTBatchDescriptor 0xF2C6BB8D
-typedef struct Array_EffectRTBatchDescriptor {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTBatchDescriptor* items;
-} Array_EffectRTBatchDescriptor; // size: 16
-
-#define STI_TYPE_HASH_Array_EffectRTSpecialEffectData 0xCB5CEA2E
-typedef struct Array_EffectRTSpecialEffectData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTSpecialEffectData* items;
-} Array_EffectRTSpecialEffectData; // size: 16
-
-#define STI_TYPE_HASH_EffectRTOutputBufferDescriptor 0x433F04D3
-typedef struct EffectRTOutputBufferDescriptor{
-    const STITypeInfo* type_info_;
-    uint32 OutputBufferSize; // offset: 0, size: 4
-    Array_EffectRTBatchDescriptor BatchDescriptors; // offset: 8, size: 16
-    Array_EffectRTSpecialEffectData SpecialEffectData; // offset: 24, size: 16
-} EffectRTOutputBufferDescriptor; // size: 40
-
-#define STI_TYPE_HASH_EffectRTParamHandler 0x09AFEC54
-typedef struct EffectRTParamHandler{
-    const STITypeInfo* type_info_;
-    Array_uint16 FloatParamIndices; // offset: 0, size: 16
-    Array_uint32 Timelines; // offset: 16, size: 16
-    float32 Age; // offset: 32, size: 4
-    Array_uint32 ParamHash; // offset: 40, size: 16
-} EffectRTParamHandler; // size: 56
-
-#define STI_TYPE_HASH_Array_EffectRTEmitterTemplate 0x6F01237F
-typedef struct Array_EffectRTEmitterTemplate {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTEmitterTemplate* items;
-} Array_EffectRTEmitterTemplate; // size: 16
-
-#define STI_TYPE_HASH_Array_EffectRTEmitter 0x8F771246
-typedef struct Array_EffectRTEmitter {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTEmitter* items;
-} Array_EffectRTEmitter; // size: 16
-
-#define STI_TYPE_HASH_Array_EffectRTModifier 0xEE9E1E94
-typedef struct Array_EffectRTModifier {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTModifier* items;
-} Array_EffectRTModifier; // size: 16
-
-#define STI_TYPE_HASH_Array_EffectRTTimeline 0xF14CBAEA
-typedef struct Array_EffectRTTimeline {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTTimeline* items;
-} Array_EffectRTTimeline; // size: 16
-
-#define STI_TYPE_HASH_Array_EffectRTInstantiator 0x3ABFFB90
-typedef struct Array_EffectRTInstantiator {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTInstantiator* items;
-} Array_EffectRTInstantiator; // size: 16
-
-#define STI_TYPE_HASH_Array_EffectRTSpecialEffect 0x75D1B9A9
-typedef struct Array_EffectRTSpecialEffect {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTSpecialEffect* items;
-} Array_EffectRTSpecialEffect; // size: 16
-
-#define STI_TYPE_HASH_Array_EffectRTParamHandler 0x0FED0DD8
-typedef struct Array_EffectRTParamHandler {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EffectRTParamHandler* items;
-} Array_EffectRTParamHandler; // size: 16
-
-#define STI_TYPE_HASH_EffectRTSystem 0x3A6CFD95
-typedef struct EffectRTSystem{
-    const STITypeInfo* type_info_;
-    Array_EffectRTEmitterTemplate EmitterTemplates; // offset: 0, size: 16
-    Array_EffectRTEmitter Emitters; // offset: 16, size: 16
-    Array_EffectRTModifier Modifiers; // offset: 32, size: 16
-    Array_EffectRTTimeline Timelines; // offset: 48, size: 16
-    Array_EffectRTInstantiator Instantiators; // offset: 64, size: 16
-    Array_EffectRTSpecialEffect SpecialEffects; // offset: 80, size: 16
-    Array_EffectRTParamHandler ParamHandler; // offset: 96, size: 16
-    Array_float32 Params; // offset: 112, size: 16
-    EffectRTOutputBufferDescriptor OutputBufferDescriptor; // offset: 128, size: 40
-    Array_EffectRTLocalParam NamedParameters; // offset: 168, size: 16
-    uint32 NamedParametersSize; // offset: 184, size: 4
-    Array_StringHash_48c5294d_4 Dependencies; // offset: 192, size: 16
-    Array_float32 Properties; // offset: 208, size: 16
-} EffectRTSystem; // size: 224
-
-#define STI_TYPE_HASH_EffectVertexArray 0xCA0AD610
-typedef struct EffectVertexArray{
-    const STITypeInfo* type_info_;
-    Array_float32 Array; // offset: 0, size: 16
-} EffectVertexArray; // size: 16
-
-#define STI_TYPE_HASH_EffectTrimData 0x5EE06CAE
-typedef struct EffectTrimData{
-    const STITypeInfo* type_info_;
-    uint8 AnimFramesX; // offset: 0, size: 1
-    uint8 AnimFramesY; // offset: 1, size: 1
-    EffectVertexArray Vertices[2]; // offset: 8, size: 32
-} EffectTrimData; // size: 40
 
 #define STI_TYPE_HASH_PfxStaticInstance 0xD39A7AA5
 typedef struct PfxStaticInstance{
     const STITypeInfo* type_info_;
     float32 location_space_transform[16]; // offset: 0, size: 64
-    String collision_path; // offset: 64, size: 16
-    String model_path; // offset: 72, size: 16
+    String collision_path; // offset: 64, size: 8
+    String model_path; // offset: 72, size: 8
 } PfxStaticInstance; // size: 96
 
 #define STI_TYPE_HASH_Array_PfxStaticInstance 0xEB81D635
@@ -4553,14 +874,14 @@ typedef struct PfxStaticCompound{
 typedef struct PfxSimplePartInstance{
     const STITypeInfo* type_info_;
     float32 breakable_space_transform[16]; // offset: 0, size: 64
-    String collision_path; // offset: 64, size: 16
+    String collision_path; // offset: 64, size: 8
 } PfxSimplePartInstance; // size: 96
 
 #define STI_TYPE_HASH_PfxBreakablePartInstance 0x1C8E89D6
 typedef struct PfxBreakablePartInstance{
     const STITypeInfo* type_info_;
     float32 breakable_space_transform[16]; // offset: 0, size: 64
-    String collision_path; // offset: 64, size: 16
+    String collision_path; // offset: 64, size: 8
     float32 breaking_collision_impulse; // offset: 72, size: 4
 } PfxBreakablePartInstance; // size: 96
 
@@ -4652,7 +973,7 @@ typedef struct PfxBodyProperties{
 #define STI_TYPE_HASH_PfxBodyPropertiesEntry 0xD6D89480
 typedef struct PfxBodyPropertiesEntry{
     const STITypeInfo* type_info_;
-    String body_name; // offset: 0, size: 16
+    String body_name; // offset: 0, size: 8
     PfxBodyProperties body_properties; // offset: 8, size: 56
 } PfxBodyPropertiesEntry; // size: 64
 
@@ -4669,6 +990,2458 @@ typedef struct PfxBodyPropertiesDict{
     Array_PfxBodyPropertiesEntry entries; // offset: 0, size: 16
 } PfxBodyPropertiesDict; // size: 16
 
+#define STI_TYPE_HASH_CachedFile 0x7A7F9799
+typedef struct CachedFile{
+    const STITypeInfo* type_info_;
+    uint8 Hash[64]; // offset: 0, size: 64
+    uint64 Expiry; // offset: 64, size: 8
+    uint32 Url_Hash; // offset: 72, size: 4
+} CachedFile; // size: 80
+
+#define STI_TYPE_HASH_Array_CachedFile 0x45998B64
+typedef struct Array_CachedFile {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    CachedFile* items;
+} Array_CachedFile; // size: 16
+
+#define STI_TYPE_HASH_DownloadFileCache 0x61679F23
+typedef struct DownloadFileCache{
+    const STITypeInfo* type_info_;
+    Array_CachedFile Files; // offset: 0, size: 16
+} DownloadFileCache; // size: 16
+
+#define STI_TYPE_HASH_SplineControlPoint 0xCC733C4E
+typedef struct SplineControlPoint{
+    const STITypeInfo* type_info_;
+    float32 x; // offset: 0, size: 4
+    float32 y; // offset: 4, size: 4
+    float32 y2; // offset: 8, size: 4
+} SplineControlPoint; // size: 12
+
+#define STI_TYPE_HASH_Spline5 0xBB1A741B
+typedef struct Spline5{
+    const STITypeInfo* type_info_;
+    float32 x_min; // offset: 0, size: 4
+    float32 x_max; // offset: 4, size: 4
+    float32 y_min; // offset: 8, size: 4
+    float32 y_max; // offset: 12, size: 4
+    int8 interpolation_type; // offset: 16, size: 1
+    int8 number_of_control_points; // offset: 17, size: 1
+    SplineControlPoint control_points[5]; // offset: 20, size: 60
+} Spline5; // size: 80
+
+#define STI_TYPE_HASH_Spline10 0xC8F4CBF3
+typedef struct Spline10{
+    const STITypeInfo* type_info_;
+    float32 x_min; // offset: 0, size: 4
+    float32 x_max; // offset: 4, size: 4
+    float32 y_min; // offset: 8, size: 4
+    float32 y_max; // offset: 12, size: 4
+    int8 interpolation_type; // offset: 16, size: 1
+    int8 number_of_control_points; // offset: 17, size: 1
+    SplineControlPoint control_points[10]; // offset: 20, size: 120
+} Spline10; // size: 140
+
+#define STI_TYPE_HASH_Spline20 0xF3FF06A4
+typedef struct Spline20{
+    const STITypeInfo* type_info_;
+    float32 x_min; // offset: 0, size: 4
+    float32 x_max; // offset: 4, size: 4
+    float32 y_min; // offset: 8, size: 4
+    float32 y_max; // offset: 12, size: 4
+    int8 interpolation_type; // offset: 16, size: 1
+    int8 number_of_control_points; // offset: 17, size: 1
+    SplineControlPoint control_points[20]; // offset: 20, size: 240
+} Spline20; // size: 260
+
+#define STI_TYPE_HASH_ShakeSettings 0x3CAE2F34
+typedef struct ShakeSettings{
+    const STITypeInfo* type_info_;
+    uint32 shake_type; // offset: 0, size: 4
+    float32 shake_frequency; // offset: 4, size: 4
+    float32 shake_time; // offset: 8, size: 4
+    float32 shake_falloff; // offset: 12, size: 4
+    float32 shake_amplitude[3]; // offset: 16, size: 12
+} ShakeSettings; // size: 28
+
+#define STI_TYPE_HASH_RumbleSettings 0xAB9E7AB6
+typedef struct RumbleSettings{
+    const STITypeInfo* type_info_;
+    float32 rumble_time; // offset: 0, size: 4
+    float32 rumble_strength; // offset: 4, size: 4
+} RumbleSettings; // size: 8
+
+#define STI_TYPE_HASH_AutoAimSettings 0x6C2A0499
+typedef struct AutoAimSettings{
+    const STITypeInfo* type_info_;
+    float32 AngleThresholdNewTarget; // offset: 0, size: 4
+    float32 AngleThresholdCurrentTarget; // offset: 4, size: 4
+    float32 AngleThreshMultiplierAtCutoff; // offset: 8, size: 4
+    float32 AngleThreshMultiplierCutoff; // offset: 12, size: 4
+    float32 StickyAimStartAngle; // offset: 16, size: 4
+    float32 StickyAimAngleNewTarget; // offset: 20, size: 4
+    float32 StickyAimAngleCurrentTarget; // offset: 24, size: 4
+    float32 StickyAimStrength; // offset: 28, size: 4
+    float32 StickyAimMinAccValue; // offset: 32, size: 4
+    float32 StickyAimMaxAccValue; // offset: 36, size: 4
+    float32 SnapAimTarget; // offset: 40, size: 4
+    float32 FitWeightCurrentTarget; // offset: 44, size: 4
+    float32 FitWeightDistance; // offset: 48, size: 4
+    float32 FitWeightAngleDeflection; // offset: 52, size: 4
+    float32 AlwaysTargetDistance; // offset: 56, size: 4
+    float32 MaxAimDistance; // offset: 60, size: 4
+    float32 MinAimDistance; // offset: 64, size: 4
+    uint32 CanTargetCharacters; // offset: 68, size: 4
+    uint32 CanTargetVehicles; // offset: 72, size: 4
+    uint32 CanTargetRigidObjects; // offset: 76, size: 4
+    uint32 UseWeaponDirection; // offset: 80, size: 4
+} AutoAimSettings; // size: 84
+
+#define STI_TYPE_HASH_WeaponAimAssistSettings 0x508C54ED
+typedef struct WeaponAimAssistSettings{
+    const STITypeInfo* type_info_;
+    float32 SlowDownInnerSize; // offset: 0, size: 4
+    float32 SlowDownOuterSize; // offset: 4, size: 4
+    float32 SlowDownInnerMultiplier; // offset: 8, size: 4
+    float32 AccInputInnerClamp; // offset: 12, size: 4
+    float32 FallOffStartFraction; // offset: 16, size: 4
+    float32 FallOffEndFraction; // offset: 20, size: 4
+} WeaponAimAssistSettings; // size: 24
+
+#define STI_TYPE_HASH_AutoAim 0x5618735F
+typedef struct AutoAim{
+    const STITypeInfo* type_info_;
+    WeaponAimAssistSettings WeaponAimAssist; // offset: 0, size: 24
+    AutoAimSettings WeaponAutoAim; // offset: 24, size: 84
+} AutoAim; // size: 108
+
+#define STI_TYPE_HASH_AttachSetting 0x9F56B13E
+typedef struct AttachSetting{
+    const STITypeInfo* type_info_;
+    float32 Translate_X; // offset: 0, size: 4
+    float32 Translate_Y; // offset: 4, size: 4
+    float32 Translate_Z; // offset: 8, size: 4
+    float32 Rotate_X; // offset: 12, size: 4
+    float32 Rotate_Y; // offset: 16, size: 4
+    float32 Rotate_Z; // offset: 20, size: 4
+    uint32 Is_Z_Axis_Forward; // offset: 24, size: 4
+} AttachSetting; // size: 28
+
+#define STI_TYPE_HASH_Array_AttachSetting 0x69C7FA79
+typedef struct Array_AttachSetting {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AttachSetting* items;
+} Array_AttachSetting; // size: 16
+
+#define STI_TYPE_HASH_AttachSettings 0x9EBBFBEF
+typedef struct AttachSettings{
+    const STITypeInfo* type_info_;
+    Array_AttachSetting player_attach_setting; // offset: 0, size: 16
+    Array_AttachSetting ai_attach_setting; // offset: 16, size: 16
+} AttachSettings; // size: 32
+
+#define STI_TYPE_HASH_GripPointSetting 0xC9778E52
+typedef struct GripPointSetting{
+    const STITypeInfo* type_info_;
+    float32 Translate_X; // offset: 0, size: 4
+    float32 Translate_Y; // offset: 4, size: 4
+    float32 Translate_Z; // offset: 8, size: 4
+    uint32 GripHand; // offset: 12, size: 4
+    uint32 Mounted; // offset: 16, size: 4
+} GripPointSetting; // size: 20
+
+#define STI_TYPE_HASH_Array_GripPointSetting 0x493F7D00
+typedef struct Array_GripPointSetting {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    GripPointSetting* items;
+} Array_GripPointSetting; // size: 16
+
+#define STI_TYPE_HASH_GripPointSettings 0x7C962FA6
+typedef struct GripPointSettings{
+    const STITypeInfo* type_info_;
+    Array_GripPointSetting grip_point_setting; // offset: 0, size: 16
+} GripPointSettings; // size: 16
+
+#define STI_TYPE_HASH_UISettings 0x5388883B
+typedef struct UISettings{
+    const STITypeInfo* type_info_;
+    uint32 crosshair_style; // offset: 0, size: 4
+    uint8 crosshair_in_ads; // offset: 4, size: 1
+    float32 crosshair_scatter_extremes[2]; // offset: 8, size: 8
+    float32 reticle_offset_in_fov_fraction; // offset: 16, size: 4
+    uint32 charge_style; // offset: 20, size: 4
+} UISettings; // size: 24
+
+#define STI_TYPE_HASH_ScatterSettings 0x55B2D4D2
+typedef struct ScatterSettings{
+    const STITypeInfo* type_info_;
+    float32 scatter_minimum; // offset: 0, size: 4
+    float32 scatter_maximum; // offset: 4, size: 4
+    float32 scatter_per_shot; // offset: 8, size: 4
+    float32 scatter_multiplier_movement; // offset: 12, size: 4
+    float32 scatter_multiplier_aiming; // offset: 16, size: 4
+    float32 scatter_recover_rate; // offset: 20, size: 4
+    float32 scatter_reset_time; // offset: 24, size: 4
+    float32 scatter_clamp_horizontal[2]; // offset: 28, size: 8
+    float32 scatter_clamp_vertical[2]; // offset: 36, size: 8
+} ScatterSettings; // size: 44
+
+#define STI_TYPE_HASH_RecoilSettings 0xCCB67486
+typedef struct RecoilSettings{
+    const STITypeInfo* type_info_;
+    float32 recoil_yaw[2]; // offset: 0, size: 8
+    float32 recoil_pitch[2]; // offset: 8, size: 8
+    float32 recoil_fov_instant[2]; // offset: 16, size: 8
+    float32 recoil_fov_additive[2]; // offset: 24, size: 8
+    float32 recoil_first_shot_multiplier; // offset: 32, size: 4
+    float32 recoil_precision_aim_multiplier; // offset: 36, size: 4
+    float32 recoil_recover_percentage; // offset: 40, size: 4
+    float32 recoil_recover_speed; // offset: 44, size: 4
+    float32 recoil_apply_speed; // offset: 48, size: 4
+    float32 recoil_sway_multiplier; // offset: 52, size: 4
+    float32 recoil_max_delta_sway_angle; // offset: 56, size: 4
+} RecoilSettings; // size: 60
+
+#define STI_TYPE_HASH_MountedWeaponInputSettings 0xB61B3655
+typedef struct MountedWeaponInputSettings{
+    const STITypeInfo* type_info_;
+    float32 direct_speed; // offset: 0, size: 4
+    float32 direct_speed_exponential; // offset: 4, size: 4
+    float32 accel_exponential; // offset: 8, size: 4
+    float32 top_speed; // offset: 12, size: 4
+    float32 acc_period; // offset: 16, size: 4
+} MountedWeaponInputSettings; // size: 20
+
+#define STI_TYPE_HASH_WeaponTuningBase 0x1A5AAB31
+typedef struct WeaponTuningBase{
+    const STITypeInfo* type_info_;
+    float32 impulse; // offset: 0, size: 4
+    float32 vehicle_damage_factor; // offset: 4, size: 4
+    float32 vehicle_impulse_factor; // offset: 8, size: 4
+    float32 object_damage_factor; // offset: 12, size: 4
+    float32 object_impulse_factor; // offset: 16, size: 4
+    float32 damage; // offset: 20, size: 4
+    float32 damage_charged; // offset: 24, size: 4
+    RecoilSettings recoil; // offset: 28, size: 60
+    ScatterSettings scatter; // offset: 88, size: 44
+    ShakeSettings shake; // offset: 132, size: 28
+    RumbleSettings rumble; // offset: 160, size: 8
+    MountedWeaponInputSettings mounted_input; // offset: 168, size: 20
+    float32 noise_multiplier; // offset: 188, size: 4
+} WeaponTuningBase; // size: 192
+
+#define STI_TYPE_HASH_BulletWeaponTuningBase 0xD8E29B25
+typedef struct BulletWeaponTuningBase{
+    const STITypeInfo* type_info_;
+    float32 tracer_fire_velocity; // offset: 0, size: 4
+    float32 tracer_fire_length; // offset: 4, size: 4
+    float32 tracer_fire_width; // offset: 8, size: 4
+    float32 tracer_expand_width; // offset: 12, size: 4
+    float32 tracer_time_to_live; // offset: 16, size: 4
+    float32 ricochet_chance; // offset: 20, size: 4
+    float32 smoke_trail_tile_size; // offset: 24, size: 4
+    uint8 tracer_per_smoke_trail; // offset: 28, size: 1
+    uint8 bullets_per_tracer; // offset: 29, size: 1
+    uint8 ricochet_count; // offset: 30, size: 1
+    uint8 tracer_texture_type; // offset: 31, size: 1
+    uint8 gravity_on; // offset: 32, size: 1
+    float32 gravity_strength; // offset: 36, size: 4
+    float32 bullet_spawn_aim_fdelay; // offset: 40, size: 4
+    float32 bullet_spawn_hip_fdelay; // offset: 44, size: 4
+} BulletWeaponTuningBase; // size: 48
+
+#define STI_TYPE_HASH_BulletWeaponTuning 0x1F7BC4B1
+typedef struct BulletWeaponTuning{
+    const STITypeInfo* type_info_;
+    WeaponTuningBase base_tuning; // offset: 0, size: 192
+    BulletWeaponTuningBase bullet_base_tuning; // offset: 192, size: 48
+    float32 headshot_multiplier; // offset: 240, size: 4
+    uint8 bullet_is_explosive; // offset: 244, size: 1
+    float32 aim_charge_speed; // offset: 248, size: 4
+    float32 aim_discharge_speed; // offset: 252, size: 4
+    float32 aim_stamina_cost_ps; // offset: 256, size: 4
+    Spline5 aim_stamina_wobble_curve; // offset: 260, size: 80
+} BulletWeaponTuning; // size: 340
+
+#define STI_TYPE_HASH_ZeroingSettings 0xF4BEB339
+typedef struct ZeroingSettings{
+    const STITypeInfo* type_info_;
+    float32 zero_distance; // offset: 0, size: 4
+    float32 angle; // offset: 4, size: 4
+} ZeroingSettings; // size: 8
+
+#define STI_TYPE_HASH_ZeroingIndexRequirement 0x7B036404
+typedef struct ZeroingIndexRequirement{
+    const STITypeInfo* type_info_;
+    int8 ads; // offset: 0, size: 1
+} ZeroingIndexRequirement; // size: 1
+
+#define STI_TYPE_HASH_ZeroingIndexEntry 0x2E5E3369
+typedef struct ZeroingIndexEntry{
+    const STITypeInfo* type_info_;
+    int8 index; // offset: 0, size: 1
+    ZeroingIndexRequirement requirement; // offset: 1, size: 1
+} ZeroingIndexEntry; // size: 2
+
+#define STI_TYPE_HASH_ScopeOffsetSettings 0xB7A4C209
+typedef struct ScopeOffsetSettings{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 ScopeNameHash; // offset: 0, size: 4
+    float32 HorizontalOffset; // offset: 4, size: 4
+    float32 VerticalOffset; // offset: 8, size: 4
+    float32 DepthOffset; // offset: 12, size: 4
+} ScopeOffsetSettings; // size: 16
+
+#define STI_TYPE_HASH_MachineWeaponTuning 0x4908DB7D
+typedef struct MachineWeaponTuning{
+    const STITypeInfo* type_info_;
+    float32 ranged_weapon_range[2]; // offset: 0, size: 8
+    float32 ranged_weapon_aim_scatter[2]; // offset: 8, size: 8
+    float32 ranged_weapon_cooldown[2]; // offset: 16, size: 8
+    float32 ranged_weapon_shooting_delay; // offset: 24, size: 4
+    float32 ranged_weapon_shooting_time; // offset: 28, size: 4
+    float32 ranged_weapon_aim_offset[3]; // offset: 32, size: 12
+    uint8 ranged_weapon_is_singleshot; // offset: 44, size: 1
+    float32 ranged_weapon_aim_prediction_time; // offset: 48, size: 4
+    float32 ranged_weapon_max_half_angle; // offset: 52, size: 4
+    int32 ranged_weapon_behaviour_pattern_number; // offset: 56, size: 4
+} MachineWeaponTuning; // size: 60
+
+#define STI_TYPE_HASH_HeavyMachineWeaponTuning 0x5867C4B9
+typedef struct HeavyMachineWeaponTuning{
+    const STITypeInfo* type_info_;
+    uint8 ranged_weapon_used_when_moving; // offset: 0, size: 1
+} HeavyMachineWeaponTuning; // size: 1
+
+#define STI_TYPE_HASH_FlyingMachineWeaponTuning 0xBA016F82
+typedef struct FlyingMachineWeaponTuning{
+    const STITypeInfo* type_info_;
+    float32 ranged_weapon_desired_altitude; // offset: 0, size: 4
+    float32 ranged_weapon_prep_time; // offset: 4, size: 4
+    int32 ranged_weapon_ammo_before_prep; // offset: 8, size: 4
+    float32 ranged_weapon_circling_radius; // offset: 12, size: 4
+    float32 ranged_weapon_target_update_time; // offset: 16, size: 4
+} FlyingMachineWeaponTuning; // size: 20
+
+#define STI_TYPE_HASH_AIWeaponTuning 0xF98E1933
+typedef struct AIWeaponTuning{
+    const STITypeInfo* type_info_;
+    MachineWeaponTuning MachineSettings; // offset: 0, size: 60
+    HeavyMachineWeaponTuning HeavyMachineSettings; // offset: 60, size: 1
+    FlyingMachineWeaponTuning FlyingMachineWeaponTuning; // offset: 64, size: 20
+} AIWeaponTuning; // size: 84
+
+#define STI_TYPE_HASH_FireMode 0x2F0E22C1
+typedef struct FireMode{
+    const STITypeInfo* type_info_;
+    uint8 automatic; // offset: 0, size: 1
+    uint8 bolt_action; // offset: 1, size: 1
+    uint8 pump_action; // offset: 2, size: 1
+    uint8 single_shot; // offset: 3, size: 1
+    uint8 charge; // offset: 4, size: 1
+    uint8 burst_count; // offset: 5, size: 1
+    float32 fire_delay; // offset: 8, size: 4
+    float32 burst_delay; // offset: 12, size: 4
+    float32 initial_fire_delay; // offset: 16, size: 4
+    uint8 recoil_after_burst_ends; // offset: 20, size: 1
+    float32 charge_speed; // offset: 24, size: 4
+    float32 charge_min; // offset: 28, size: 4
+    uint8 use_on_max_charge; // offset: 32, size: 1
+} FireMode; // size: 36
+
+#define STI_TYPE_HASH_AlternativeHitEntitySpawning 0xFF7EBA5E
+typedef struct AlternativeHitEntitySpawning{
+    const STITypeInfo* type_info_;
+    String hit_entity_spawn_tag; // offset: 0, size: 8
+    StringHash_48c5294d_4 organ_type; // offset: 8, size: 4
+    float32 probability; // offset: 12, size: 4
+} AlternativeHitEntitySpawning; // size: 16
+
+#define STI_TYPE_HASH_MoveSpeedMulAbscissa 0x4F86F943
+typedef struct MoveSpeedMulAbscissa{
+    const STITypeInfo* type_info_;
+    float32 is_aiming; // offset: 0, size: 4
+    float32 is_firing; // offset: 4, size: 4
+    float32 charge_level; // offset: 8, size: 4
+} MoveSpeedMulAbscissa; // size: 12
+
+#define STI_TYPE_HASH_Array_FireMode 0xBAB86FE7
+typedef struct Array_FireMode {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    FireMode* items;
+} Array_FireMode; // size: 16
+
+#define STI_TYPE_HASH_Array_ZeroingIndexEntry 0xB4ADDBDD
+typedef struct Array_ZeroingIndexEntry {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ZeroingIndexEntry* items;
+} Array_ZeroingIndexEntry; // size: 16
+
+#define STI_TYPE_HASH_Array_ZeroingSettings 0xF979E7FB
+typedef struct Array_ZeroingSettings {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ZeroingSettings* items;
+} Array_ZeroingSettings; // size: 16
+
+#define STI_TYPE_HASH_Array_ScopeOffsetSettings 0xA99A4ED9
+typedef struct Array_ScopeOffsetSettings {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ScopeOffsetSettings* items;
+} Array_ScopeOffsetSettings; // size: 16
+
+#define STI_TYPE_HASH_Array_AlternativeHitEntitySpawning 0xA00C279C
+typedef struct Array_AlternativeHitEntitySpawning {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AlternativeHitEntitySpawning* items;
+} Array_AlternativeHitEntitySpawning; // size: 16
+
+#define STI_TYPE_HASH_WeaponTuning 0x331A0A14
+typedef struct WeaponTuning{
+    const STITypeInfo* type_info_;
+    BulletWeaponTuning bullet_weapon; // offset: 0, size: 340
+    Array_FireMode fire_modes; // offset: 344, size: 16
+    int32 magazine_size; // offset: 360, size: 4
+    float32 reload_time_scale; // offset: 364, size: 4
+    float32 kinetic_energy; // offset: 368, size: 4
+    float32 trigger_sensitivity[2]; // offset: 372, size: 8
+    float32 aim_timer_override; // offset: 380, size: 4
+    float32 weapon_wobble_modifier; // offset: 384, size: 4
+    float32 weapon_recoil_penalty; // offset: 388, size: 4
+    int8 ZeroingIndex; // offset: 392, size: 1
+    Array_ZeroingIndexEntry ZeroingIndexOnRequirement; // offset: 400, size: 16
+    Array_ZeroingSettings ZeroingSettings; // offset: 416, size: 16
+    float32 HorizontalOffset; // offset: 432, size: 4
+    float32 VerticalOffset; // offset: 436, size: 4
+    float32 DepthOffset; // offset: 440, size: 4
+    Array_ScopeOffsetSettings ScopeOffsetSettings; // offset: 448, size: 16
+    UISettings UISettings; // offset: 464, size: 24
+    uint8 unlimited_ammo; // offset: 488, size: 1
+    uint8 adjust_aim_direction_after_trajectory; // offset: 489, size: 1
+    Array_AlternativeHitEntitySpawning alternative_hit_entity_spawning; // offset: 496, size: 16
+    AIWeaponTuning ai_tuning; // offset: 512, size: 84
+    Spline5 move_speed_mul_curve; // offset: 596, size: 80
+    MoveSpeedMulAbscissa move_speed_mul_abscissa; // offset: 676, size: 12
+    uint8 move_speed_ignore_aim_steering_params; // offset: 688, size: 1
+} WeaponTuning; // size: 696
+
+#define STI_TYPE_HASH_WeaponSwayTuning 0x82D0BEA7
+typedef struct WeaponSwayTuning{
+    const STITypeInfo* type_info_;
+    String ik_joint; // offset: 0, size: 8
+    String reference_joint; // offset: 8, size: 8
+    uint32 disable_rotation_sway; // offset: 16, size: 4
+    uint32 disable_translation_sway; // offset: 20, size: 4
+    float32 spring_coeff_drag; // offset: 24, size: 4
+    float32 spring_coeff_catchup; // offset: 28, size: 4
+    float32 wp_scale_yaw; // offset: 32, size: 4
+    float32 wp_scale_pitch; // offset: 36, size: 4
+    float32 wp_scale_roll; // offset: 40, size: 4
+    float32 wp_max_yaw_input; // offset: 44, size: 4
+    float32 wp_max_pitch_input; // offset: 48, size: 4
+    float32 wp_max_roll_input; // offset: 52, size: 4
+    float32 wp_translation_scale_x; // offset: 56, size: 4
+    float32 wp_translation_scale_y; // offset: 60, size: 4
+    float32 aim_scale_yaw; // offset: 64, size: 4
+    float32 aim_scale_pitch; // offset: 68, size: 4
+    float32 aim_scale_roll; // offset: 72, size: 4
+    float32 aim_max_yaw_input; // offset: 76, size: 4
+    float32 aim_max_pitch_input; // offset: 80, size: 4
+    float32 aim_max_roll_input; // offset: 84, size: 4
+    float32 aim_translation_scale_x; // offset: 88, size: 4
+    float32 aim_translation_scale_y; // offset: 92, size: 4
+    float32 mouse_wp_scale_yaw; // offset: 96, size: 4
+    float32 mouse_wp_scale_pitch; // offset: 100, size: 4
+    float32 mouse_wp_scale_roll; // offset: 104, size: 4
+    float32 mouse_wp_translation_scale_x; // offset: 108, size: 4
+    float32 mouse_wp_translation_scale_y; // offset: 112, size: 4
+    float32 mouse_aim_scale_yaw; // offset: 116, size: 4
+    float32 mouse_aim_scale_pitch; // offset: 120, size: 4
+    float32 mouse_aim_scale_roll; // offset: 124, size: 4
+    float32 mouse_aim_translation_scale_x; // offset: 128, size: 4
+    float32 mouse_aim_translation_scale_y; // offset: 132, size: 4
+    float32 overshoot_scale; // offset: 136, size: 4
+} WeaponSwayTuning; // size: 144
+
+#define STI_TYPE_HASH_VerticalAlignSplines 0xDD723006
+typedef struct VerticalAlignSplines{
+    const STITypeInfo* type_info_;
+    Spline10 X; // offset: 0, size: 140
+    Spline10 Y; // offset: 140, size: 140
+    Spline10 Z; // offset: 280, size: 140
+} VerticalAlignSplines; // size: 420
+
+#define STI_TYPE_HASH_Array_StringHash_48c5294d_4 0xB68E5583
+typedef struct Array_StringHash_48c5294d_4 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    StringHash_48c5294d_4* items;
+} Array_StringHash_48c5294d_4; // size: 16
+
+#define STI_TYPE_HASH_VerticalAlignBoneAdjustment 0xAC3A9FB6
+typedef struct VerticalAlignBoneAdjustment{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 Bone; // offset: 0, size: 4
+    Array_StringHash_48c5294d_4 Bones; // offset: 8, size: 16
+    uint8 ApplyVerticalAim; // offset: 24, size: 1
+    uint8 LocalOrModelSpaceRotation; // offset: 25, size: 1
+    VerticalAlignSplines Position; // offset: 28, size: 420
+    VerticalAlignSplines Rotation; // offset: 448, size: 420
+} VerticalAlignBoneAdjustment; // size: 872
+
+#define STI_TYPE_HASH_Array_VerticalAlignBoneAdjustment 0x148F7F9A
+typedef struct Array_VerticalAlignBoneAdjustment {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VerticalAlignBoneAdjustment* items;
+} Array_VerticalAlignBoneAdjustment; // size: 16
+
+#define STI_TYPE_HASH_BoneAdjustments 0x69EFA97C
+typedef struct BoneAdjustments{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 Id; // offset: 0, size: 4
+    Array_VerticalAlignBoneAdjustment BoneOffsets; // offset: 8, size: 16
+} BoneAdjustments; // size: 24
+
+#define STI_TYPE_HASH_Array_BoneAdjustments 0x2DD1A80C
+typedef struct Array_BoneAdjustments {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BoneAdjustments* items;
+} Array_BoneAdjustments; // size: 16
+
+#define STI_TYPE_HASH_VerticalAimAdjust 0xEB42F07D
+typedef struct VerticalAimAdjust{
+    const STITypeInfo* type_info_;
+    uint8 DebugDraw; // offset: 0, size: 1
+    uint8 AutoTest; // offset: 1, size: 1
+    Array_BoneAdjustments AdjustState; // offset: 8, size: 16
+} VerticalAimAdjust; // size: 24
+
+#define STI_TYPE_HASH_InputStick 0x4789DAD4
+typedef struct InputStick{
+    const STITypeInfo* type_info_;
+    float32 DirectSpeed; // offset: 0, size: 4
+    float32 DirectSpeedExponential; // offset: 4, size: 4
+    float32 AccelExponential; // offset: 8, size: 4
+    float32 TopSpeed; // offset: 12, size: 4
+    float32 AccPeriod; // offset: 16, size: 4
+} InputStick; // size: 20
+
+#define STI_TYPE_HASH_CameraSpring 0x09FFE9A3
+typedef struct CameraSpring{
+    const STITypeInfo* type_info_;
+    float32 Speed; // offset: 0, size: 4
+    float32 Constant; // offset: 4, size: 4
+    float32 Damping; // offset: 8, size: 4
+} CameraSpring; // size: 12
+
+#define STI_TYPE_HASH_CameraSplineControlPoint 0x3F6554A2
+typedef struct CameraSplineControlPoint{
+    const STITypeInfo* type_info_;
+    float32 x; // offset: 0, size: 4
+    float32 y; // offset: 4, size: 4
+    float32 y2; // offset: 8, size: 4
+} CameraSplineControlPoint; // size: 12
+
+#define STI_TYPE_HASH_CameraSpline5 0x377FDF13
+typedef struct CameraSpline5{
+    const STITypeInfo* type_info_;
+    float32 x_min; // offset: 0, size: 4
+    float32 x_max; // offset: 4, size: 4
+    float32 y_min; // offset: 8, size: 4
+    float32 y_max; // offset: 12, size: 4
+    int8 number_of_control_points; // offset: 16, size: 1
+    int8 interpolation_type; // offset: 17, size: 1
+    CameraSplineControlPoint control_points[5]; // offset: 20, size: 60
+} CameraSpline5; // size: 80
+
+#define STI_TYPE_HASH_CameraSpline10 0xB91DE16D
+typedef struct CameraSpline10{
+    const STITypeInfo* type_info_;
+    float32 x_min; // offset: 0, size: 4
+    float32 x_max; // offset: 4, size: 4
+    float32 y_min; // offset: 8, size: 4
+    float32 y_max; // offset: 12, size: 4
+    int8 number_of_control_points; // offset: 16, size: 1
+    int8 interpolation_type; // offset: 17, size: 1
+    CameraSplineControlPoint control_points[10]; // offset: 20, size: 120
+} CameraSpline10; // size: 140
+
+#define STI_TYPE_HASH_CameraTowing 0x7C28DDBA
+typedef struct CameraTowing{
+    const STITypeInfo* type_info_;
+    float32 TowingOffsetCamera[3]; // offset: 0, size: 12
+    float32 TowingOffsetLookAt[3]; // offset: 12, size: 12
+} CameraTowing; // size: 24
+
+#define STI_TYPE_HASH_CameraInputParams 0xF42BA99B
+typedef struct CameraInputParams{
+    const STITypeInfo* type_info_;
+    float32 MaxHorizontalAngularSpeed; // offset: 0, size: 4
+    float32 MaxVerticalAngularSpeed; // offset: 4, size: 4
+    CameraSpline10 InputCurve; // offset: 8, size: 140
+    float32 InputAcceleration; // offset: 148, size: 4
+    float32 InputAccelerationStartAt; // offset: 152, size: 4
+    float32 StaticMouseSensitivity; // offset: 156, size: 4
+    float32 StaticControllerSensitivity; // offset: 160, size: 4
+    float32 ProportionalMouseSensitivity; // offset: 164, size: 4
+    float32 ProportionalControllerSensitivity; // offset: 168, size: 4
+} CameraInputParams; // size: 172
+
+#define STI_TYPE_HASH_VehicleSplineFuncOfPitchParams 0x1165029E
+typedef struct VehicleSplineFuncOfPitchParams{
+    const STITypeInfo* type_info_;
+    int8 use_spline_for_rotation_point; // offset: 0, size: 1
+    CameraSpline10 PedestalSpline; // offset: 4, size: 140
+    CameraSpline10 DollySpline; // offset: 144, size: 140
+    CameraSpline10 FOVSpline; // offset: 284, size: 140
+} VehicleSplineFuncOfPitchParams; // size: 424
+
+#define STI_TYPE_HASH_GenericVehicleCamera 0xBBFC91EE
+typedef struct GenericVehicleCamera{
+    const STITypeInfo* type_info_;
+    float32 StateTransitionTime; // offset: 0, size: 4
+    float32 TransitionToCrashStateDelay; // offset: 4, size: 4
+    float32 DriftTransitionTime; // offset: 8, size: 4
+    float32 CameraPosition[3]; // offset: 12, size: 12
+    float32 CrashingCameraPosition[3]; // offset: 24, size: 12
+    float32 RotationPoint[3]; // offset: 36, size: 12
+    float32 LookAtPoint[3]; // offset: 48, size: 12
+    float32 LookAtReferenceWheelbaseRatio; // offset: 60, size: 4
+    float32 AddLookAtPointToPositionRatio; // offset: 64, size: 4
+    float32 VelDirBlendWithVehicleDirSpeed; // offset: 68, size: 4
+    float32 DrivingVelocityMatrixBlend; // offset: 72, size: 4
+    float32 MinTimeForHalfTurn; // offset: 76, size: 4
+    float32 YawSpringStiffness; // offset: 80, size: 4
+    float32 DriftYawSpringStiffness; // offset: 84, size: 4
+    float32 YawSpringAngleLimit; // offset: 88, size: 4
+    float32 YawSpringLimitStiffnessPower; // offset: 92, size: 4
+    float32 YawSpringStiffnessMax; // offset: 96, size: 4
+    float32 PitchSpringStiffness; // offset: 100, size: 4
+    float32 PitchLimit[2]; // offset: 104, size: 8
+    float32 RollSpringStiffness; // offset: 112, size: 4
+    float32 RollLimit[2]; // offset: 116, size: 8
+    CameraSpring LagSpring; // offset: 124, size: 12
+    float32 LagCameraRelativity; // offset: 136, size: 4
+    float32 LagVelocityScale; // offset: 140, size: 4
+    float32 FollowCameraRange[2]; // offset: 144, size: 8
+    CameraSpring CameraVelocitySpring; // offset: 152, size: 12
+    CameraSpring LookAtVelocitySpring; // offset: 164, size: 12
+    float32 UpCameraVelocityRefSpeedKph; // offset: 176, size: 4
+    float32 UpCameraRange[2]; // offset: 180, size: 8
+    float32 UpLookAtVelocityRefSpeedKph; // offset: 188, size: 4
+    float32 UpLookAtRange[2]; // offset: 192, size: 8
+    float32 RightCameraVelocityRefSpeedKph; // offset: 200, size: 4
+    float32 RightCameraRange[2]; // offset: 204, size: 8
+    float32 RightLookAtVelocityRefSpeedKph; // offset: 212, size: 4
+    float32 RightLookAtRange[2]; // offset: 216, size: 8
+    float32 RollWithVehicleAmount; // offset: 224, size: 4
+    float32 ReCenterDelay; // offset: 228, size: 4
+    float32 ReCenterSpeed; // offset: 232, size: 4
+    float32 FOVVelocityRange[2]; // offset: 236, size: 8
+    float32 FOV[2]; // offset: 244, size: 8
+    CameraSpring FOVBlendSpring; // offset: 252, size: 12
+    float32 FOVZoomAdjustment; // offset: 264, size: 4
+    CameraSpring CollisionBlendSpring; // offset: 268, size: 12
+    float32 CollisionFudgeFactor; // offset: 280, size: 4
+    uint8 CollisionPitchEnabled; // offset: 284, size: 1
+    CameraSpring CollisionPitchSpring; // offset: 288, size: 12
+    float32 CollisionPitchDistance; // offset: 300, size: 4
+    uint32 CollisionCheckWater; // offset: 304, size: 4
+    float32 CollisionStartPoint[3]; // offset: 308, size: 12
+    CameraTowing TowingOffsets; // offset: 320, size: 24
+    uint8 AlignReferenceWithWorldUp; // offset: 344, size: 1
+    uint32 DrawDebugInfo; // offset: 348, size: 4
+    float32 ListenerHeadRelativity; // offset: 352, size: 4
+    InputStick InputSettings; // offset: 356, size: 20
+    VehicleSplineFuncOfPitchParams SplineFuncOfPitchParams; // offset: 376, size: 424
+} GenericVehicleCamera; // size: 800
+
+#define STI_TYPE_HASH_SphericalCoordinateFramingParams 0x377BB3FB
+typedef struct SphericalCoordinateFramingParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 DrawDebug; // offset: 1, size: 1
+    float32 PivotPosition[3]; // offset: 4, size: 12
+    float32 Azimuth; // offset: 16, size: 4
+    float32 Elevation; // offset: 20, size: 4
+    float32 Distance; // offset: 24, size: 4
+    float32 Pitch; // offset: 28, size: 4
+    float32 Yaw; // offset: 32, size: 4
+    float32 Roll; // offset: 36, size: 4
+    float32 FOV; // offset: 40, size: 4
+} SphericalCoordinateFramingParams; // size: 44
+
+#define STI_TYPE_HASH_SetOffsetFramingParams 0xF3CCD5D9
+typedef struct SetOffsetFramingParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    float32 OffsetPosition[3]; // offset: 4, size: 12
+    float32 Pitch; // offset: 16, size: 4
+    float32 Yaw; // offset: 20, size: 4
+    float32 Roll; // offset: 24, size: 4
+} SetOffsetFramingParams; // size: 28
+
+#define STI_TYPE_HASH_InputToOrbitModifierParams 0xE067E35F
+typedef struct InputToOrbitModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 StickyAimEnabled; // offset: 1, size: 1
+    float32 InputScale; // offset: 4, size: 4
+    float32 DirectSpeed; // offset: 8, size: 4
+    float32 DirectSpeedExponential; // offset: 12, size: 4
+    float32 AccelExponential; // offset: 16, size: 4
+    float32 TopSpeed; // offset: 20, size: 4
+    float32 AccPeriod; // offset: 24, size: 4
+    float32 MouseInputScale; // offset: 28, size: 4
+} InputToOrbitModifierParams; // size: 32
+
+#define STI_TYPE_HASH_DofModifierParams 0x25FC54BA
+typedef struct DofModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 FocalDistanceNear; // offset: 4, size: 4
+    float32 FocalDistanceFar; // offset: 8, size: 4
+    float32 MaxDOF; // offset: 12, size: 4
+    float32 MaxDOFNear; // offset: 16, size: 4
+    float32 DOFSmoothness; // offset: 20, size: 4
+    float32 DOFSmoothnessNear; // offset: 24, size: 4
+    float32 DOFHeightFalloff; // offset: 28, size: 4
+} DofModifierParams; // size: 32
+
+#define STI_TYPE_HASH_MotionBlurModifierParams 0xE7FCB175
+typedef struct MotionBlurModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 MotionBlurFactor; // offset: 4, size: 4
+    float32 MaxMotionBlur; // offset: 8, size: 4
+    float32 MotionBlurShutterExposure; // offset: 12, size: 4
+} MotionBlurModifierParams; // size: 16
+
+#define STI_TYPE_HASH_FocusDofModifierParams 0x0C277C94
+typedef struct FocusDofModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 NearRicoToCamFraction; // offset: 4, size: 4
+    float32 MaxNearFocusDifferential; // offset: 8, size: 4
+    uint8 RespectNearLimitIfNoDirect; // offset: 12, size: 1
+    float32 FarMultiplier; // offset: 16, size: 4
+    float32 MaxFarFocusDifferential; // offset: 20, size: 4
+    uint8 RespectFarLimitIfNoDirect; // offset: 24, size: 1
+    CameraSpring DistanceSpring; // offset: 28, size: 12
+    CameraSpline5 RightStickToMaxDof; // offset: 40, size: 80
+    CameraSpring MoreBlurSpring; // offset: 120, size: 12
+    CameraSpring LessBlurSpring; // offset: 132, size: 12
+    uint8 RespectWeaponOverride; // offset: 144, size: 1
+} FocusDofModifierParams; // size: 148
+
+#define STI_TYPE_HASH_SplineFuncOfPitchParams 0xAE4480DA
+typedef struct SplineFuncOfPitchParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 UseWorldPitch; // offset: 1, size: 1
+    CameraSpline5 TruckSpline; // offset: 4, size: 80
+    CameraSpline5 PedestalSpline; // offset: 84, size: 80
+    CameraSpline5 DollySpline; // offset: 164, size: 80
+    CameraSpline5 FOVSpline; // offset: 244, size: 80
+    uint8 DrawDebug; // offset: 324, size: 1
+} SplineFuncOfPitchParams; // size: 328
+
+#define STI_TYPE_HASH_SplineFuncOfYawParams 0x3CDF692B
+typedef struct SplineFuncOfYawParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    CameraSpline10 TruckSpline; // offset: 4, size: 140
+    CameraSpline10 PedestalSpline; // offset: 144, size: 140
+    CameraSpline10 DollySpline; // offset: 284, size: 140
+    CameraSpline10 FOVSpline; // offset: 424, size: 140
+    CameraSpline10 PitchScaleSpline; // offset: 564, size: 140
+    uint8 DrawDebug; // offset: 704, size: 1
+} SplineFuncOfYawParams; // size: 708
+
+#define STI_TYPE_HASH_FollowSpringModifierParams 0xAA59BD9C
+typedef struct FollowSpringModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 XZOnly; // offset: 1, size: 1
+    CameraSpring FollowSpring; // offset: 4, size: 12
+    float32 FollowCameraRelativity; // offset: 16, size: 4
+    uint8 UseStuckBehavior; // offset: 20, size: 1
+    CameraSpring StuckSpring; // offset: 24, size: 12
+    float32 MaxSpeedWhenStuck; // offset: 36, size: 4
+    float32 DistWhenStuck; // offset: 40, size: 4
+    CameraSpline5 SpeedToDistSpline; // offset: 44, size: 80
+    CameraSpline5 PitchScaleSpline; // offset: 124, size: 80
+    uint8 DrawDebug; // offset: 204, size: 1
+} FollowSpringModifierParams; // size: 208
+
+#define STI_TYPE_HASH_CameraCollisionParams 0x339BE1DB
+typedef struct CameraCollisionParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 DrawDebug; // offset: 1, size: 1
+    float32 CollisionResponseOffset[3]; // offset: 4, size: 12
+    float32 Radius; // offset: 16, size: 4
+    float32 PassthroughRadius; // offset: 20, size: 4
+    float32 MaxCameraPassthroughThickness; // offset: 24, size: 4
+    uint8 CollideCharacter; // offset: 28, size: 1
+    float32 ExtensionMaxVelocity; // offset: 32, size: 4
+    float32 MaxDistancePushVelocity; // offset: 36, size: 4
+    float32 MovementCastAhead; // offset: 40, size: 4
+    float32 AngularCastAhead; // offset: 44, size: 4
+    float32 MinCollisionDist; // offset: 48, size: 4
+    float32 CameraPlaneMargin; // offset: 52, size: 4
+    float32 CameraPushMargin; // offset: 56, size: 4
+    CameraSpline5 DistanceToOpacitySpline; // offset: 60, size: 80
+    uint8 IgnoreOffsetDistanceChange; // offset: 140, size: 1
+    uint8 IgnorePlayerVehicle; // offset: 141, size: 1
+    uint8 KeepAboveWater; // offset: 142, size: 1
+    uint8 DisableClosestProximityCollision; // offset: 143, size: 1
+    uint8 CollisionResponseUprightViewAligned; // offset: 144, size: 1
+} CameraCollisionParams; // size: 148
+
+#define STI_TYPE_HASH_RadialBlurParams 0x6285C634
+typedef struct RadialBlurParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 SpeedRange[2]; // offset: 4, size: 8
+    float32 FactorRange[2]; // offset: 12, size: 8
+    float32 OffsetRange[2]; // offset: 20, size: 8
+    float32 Pos[2]; // offset: 28, size: 8
+} RadialBlurParams; // size: 36
+
+#define STI_TYPE_HASH_AlignToVelocityParams 0xF4264F1C
+typedef struct AlignToVelocityParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 YawAlignAmount; // offset: 4, size: 4
+    float32 PitchAlignAmount; // offset: 8, size: 4
+    CameraSpring LookSpring; // offset: 12, size: 12
+    float32 AlignDelay; // offset: 24, size: 4
+    float32 LowSpeedTargetPitch; // offset: 28, size: 4
+    float32 LowSpeedStartBlend; // offset: 32, size: 4
+    float32 LowSpeedEndBlend; // offset: 36, size: 4
+} AlignToVelocityParams; // size: 40
+
+#define STI_TYPE_HASH_MoveInputYawParams 0xF27B84C6
+typedef struct MoveInputYawParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 MinimumYSpeed; // offset: 4, size: 4
+    float32 DelayTime; // offset: 8, size: 4
+    float32 MoveStickInputThreshold; // offset: 12, size: 4
+    uint32 ResetTimerOnIdle; // offset: 16, size: 4
+    uint32 ResetOnFire; // offset: 20, size: 4
+    uint32 ResetOnGround; // offset: 24, size: 4
+    float32 Accel; // offset: 28, size: 4
+    float32 MaxSpeed; // offset: 32, size: 4
+    uint8 DrawDebug; // offset: 36, size: 1
+} MoveInputYawParams; // size: 40
+
+#define STI_TYPE_HASH_MoveInputPitchParams 0x90F23AB3
+typedef struct MoveInputPitchParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 DelayTime; // offset: 4, size: 4
+    float32 MoveStickInputThreshold; // offset: 8, size: 4
+    uint32 ResetTimerOnIdle; // offset: 12, size: 4
+    uint32 ResetTimerOnEnter; // offset: 16, size: 4
+    uint32 AlwaysPitchDown; // offset: 20, size: 4
+    float32 Accel; // offset: 24, size: 4
+    float32 MaxSpeed; // offset: 28, size: 4
+} MoveInputPitchParams; // size: 32
+
+#define STI_TYPE_HASH_AutoPitchParams 0xC1D281C9
+typedef struct AutoPitchParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 DelayTime; // offset: 4, size: 4
+    uint32 ResetOnFire; // offset: 8, size: 4
+    float32 TargetPitch; // offset: 12, size: 4
+    uint32 AlwaysPitchDown; // offset: 16, size: 4
+    float32 Accel; // offset: 20, size: 4
+    float32 MaxSpeed; // offset: 24, size: 4
+} AutoPitchParams; // size: 28
+
+#define STI_TYPE_HASH_ProceduralShakeParams 0x5C7E1635
+typedef struct ProceduralShakeParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 SyncPhase; // offset: 1, size: 1
+    float32 PitchFrequency; // offset: 4, size: 4
+    float32 PitchAmplitude[2]; // offset: 8, size: 8
+    float32 RollFrequency; // offset: 16, size: 4
+    float32 RollAmplitude[2]; // offset: 20, size: 8
+    float32 YawFrequency; // offset: 28, size: 4
+    float32 YawAmplitude[2]; // offset: 32, size: 8
+    float32 LocalXFrequency; // offset: 40, size: 4
+    float32 LocalXAmplitude[2]; // offset: 44, size: 8
+    float32 LocalYFrequency; // offset: 52, size: 4
+    float32 LocalYAmplitude[2]; // offset: 56, size: 8
+    float32 LocalZFrequency; // offset: 64, size: 4
+    float32 LocalZAmplitude[2]; // offset: 68, size: 8
+    float32 SpeedRange[2]; // offset: 76, size: 8
+    float32 SpeedMaxScale; // offset: 84, size: 4
+} ProceduralShakeParams; // size: 88
+
+#define STI_TYPE_HASH_RollParams 0x52A574C7
+typedef struct RollParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    CameraSpring RollSpring; // offset: 4, size: 12
+    CameraSpring BackToZeroSpring; // offset: 16, size: 12
+    float32 SpeedRelax; // offset: 28, size: 4
+    float32 SpeedIncrease; // offset: 32, size: 4
+    float32 AnimXScale; // offset: 36, size: 4
+    float32 LookInputHorizontalScale; // offset: 40, size: 4
+    float32 InheritRollRatio; // offset: 44, size: 4
+    uint8 ResetOnLookInput; // offset: 48, size: 1
+    float32 ReapplyDelay; // offset: 52, size: 4
+} RollParams; // size: 56
+
+#define STI_TYPE_HASH_MoveInputOffsetParams 0xCAC71B6C
+typedef struct MoveInputOffsetParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 MaxCloserDist; // offset: 4, size: 4
+    float32 MaxFartherDist; // offset: 8, size: 4
+    float32 MaxLeftDist; // offset: 12, size: 4
+    float32 MaxRightDist; // offset: 16, size: 4
+    float32 MaxValueThreshold; // offset: 20, size: 4
+    uint8 LeftRightAffectsCloseFar; // offset: 24, size: 1
+    CameraSpring BlendInSpring; // offset: 28, size: 12
+    CameraSpring BlendOutSpring; // offset: 40, size: 12
+    CameraSpline5 PitchScaleSpline; // offset: 52, size: 80
+} MoveInputOffsetParams; // size: 132
+
+#define STI_TYPE_HASH_DynamicZParams 0xD2F33D33
+typedef struct DynamicZParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 FlatMotionOnly; // offset: 1, size: 1
+    float32 DistanceLimits[2]; // offset: 4, size: 8
+    float32 SpeedCloser; // offset: 12, size: 4
+    float32 SpeedFarther; // offset: 16, size: 4
+    float32 WeightAnimX; // offset: 20, size: 4
+    float32 WeightLookInput; // offset: 24, size: 4
+} DynamicZParams; // size: 28
+
+#define STI_TYPE_HASH_ZOverTimeParams 0x2A626FB7
+typedef struct ZOverTimeParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    CameraSpline10 TimeToZSpline; // offset: 4, size: 140
+} ZOverTimeParams; // size: 144
+
+#define STI_TYPE_HASH_HintModifierParams 0x3A3557FE
+typedef struct HintModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint32 HintHashes[4]; // offset: 4, size: 16
+    float32 DeltaPivotOffset[3]; // offset: 20, size: 12
+    float32 DeltaPitch; // offset: 32, size: 4
+    float32 DeltaYaw; // offset: 36, size: 4
+    float32 DeltaRoll; // offset: 40, size: 4
+    float32 DeltaAzimuth; // offset: 44, size: 4
+    float32 DeltaElevation; // offset: 48, size: 4
+    float32 DeltaDistance; // offset: 52, size: 4
+    CameraSpring BlendInSpring; // offset: 56, size: 12
+    CameraSpring BlendOutSpring; // offset: 68, size: 12
+    uint8 DrawDebug; // offset: 80, size: 1
+} HintModifierParams; // size: 84
+
+#define STI_TYPE_HASH_WeaponCameraParams 0x0D949B66
+typedef struct WeaponCameraParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    CameraSpring YawSpring; // offset: 4, size: 12
+    CameraSpring PitchSpring; // offset: 16, size: 12
+    uint8 SnapAimEnabled; // offset: 28, size: 1
+} WeaponCameraParams; // size: 32
+
+#define STI_TYPE_HASH_ParachuteAttachmentModifierParams 0x4FE34BC2
+typedef struct ParachuteAttachmentModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 DrawDebug; // offset: 1, size: 1
+    float32 PivotBlendFactor; // offset: 4, size: 4
+    float32 PivotPedistalOffset; // offset: 8, size: 4
+    float32 YawClampAngle; // offset: 12, size: 4
+    float32 PitchClampAngle; // offset: 16, size: 4
+} ParachuteAttachmentModifierParams; // size: 20
+
+#define STI_TYPE_HASH_ParachuteCameraCollisionModifierParams 0x82E6CA3D
+typedef struct ParachuteCameraCollisionModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 DrawDebug; // offset: 1, size: 1
+    float32 BoxWidth; // offset: 4, size: 4
+    float32 BoxHeight; // offset: 8, size: 4
+    float32 BoxDepth; // offset: 12, size: 4
+    float32 MinOpacity; // offset: 16, size: 4
+    float32 HideSpeed; // offset: 20, size: 4
+    float32 RestoreSpeed; // offset: 24, size: 4
+} ParachuteCameraCollisionModifierParams; // size: 28
+
+#define STI_TYPE_HASH_WingsuitAttachmentModifierParams 0x88612420
+typedef struct WingsuitAttachmentModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 DrawDebug; // offset: 1, size: 1
+    float32 SpeedScaleX; // offset: 4, size: 4
+    float32 SpeedScaleXMaxSpeed; // offset: 8, size: 4
+    float32 InputScaleX; // offset: 12, size: 4
+    float32 InputScaleUpY; // offset: 16, size: 4
+    float32 InputScaleDwnY; // offset: 20, size: 4
+    float32 OffsetSmoothingFactor; // offset: 24, size: 4
+    CameraSpring CameraOffsetInputSpringX; // offset: 28, size: 12
+    CameraSpring CameraOffsetInputSpringY; // offset: 40, size: 12
+    CameraSpline5 PitchToDefaultCameraOffset; // offset: 52, size: 80
+} WingsuitAttachmentModifierParams; // size: 132
+
+#define STI_TYPE_HASH_PlayerCollisionModifierParams 0x4934B283
+typedef struct PlayerCollisionModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 DrawDebug; // offset: 1, size: 1
+    uint8 CheckHeadToHipsBox; // offset: 2, size: 1
+    float32 HeadToHipsDepth; // offset: 4, size: 4
+    float32 HeadToHipsWidth; // offset: 8, size: 4
+    float32 HeadToHipsHeightScale; // offset: 12, size: 4
+    uint8 CheckHipsToFeetBox; // offset: 16, size: 1
+    float32 HipsToFeetDepth; // offset: 20, size: 4
+    float32 HipsToFeetWidth; // offset: 24, size: 4
+    float32 HipsToFeetHeightScale; // offset: 28, size: 4
+    float32 IntersectOpacity; // offset: 32, size: 4
+    float32 BlendInSpeed; // offset: 36, size: 4
+    float32 BlendOutSpeed; // offset: 40, size: 4
+} PlayerCollisionModifierParams; // size: 44
+
+#define STI_TYPE_HASH_TankPositionModifierParams 0x6E72348F
+typedef struct TankPositionModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 CameraPosition[3]; // offset: 4, size: 12
+} TankPositionModifierParams; // size: 16
+
+#define STI_TYPE_HASH_CameraAnimationControl 0x78CA2A53
+typedef struct CameraAnimationControl{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    String StartMessage; // offset: 8, size: 8
+    String StopMessage; // offset: 16, size: 8
+    String ParameterMessage; // offset: 24, size: 8
+    uint8 AutoStart; // offset: 32, size: 1
+    float32 Duration; // offset: 36, size: 4
+    float32 EaseInTime; // offset: 40, size: 4
+    float32 EaseOutTime; // offset: 44, size: 4
+    uint8 Looping; // offset: 48, size: 1
+    uint8 EnableHorizonStabilization; // offset: 49, size: 1
+} CameraAnimationControl; // size: 56
+
+#define STI_TYPE_HASH_NoiseAnimation 0xDA1C735D
+typedef struct NoiseAnimation{
+    const STITypeInfo* type_info_;
+    CameraAnimationControl Control; // offset: 0, size: 56
+    uint8 ForcedWave; // offset: 56, size: 1
+    float32 MasterAmplitudeScale; // offset: 60, size: 4
+    CameraSpline5 MasterAmplitudeScaleSpline; // offset: 64, size: 80
+    float32 MasterFrequencyScale; // offset: 144, size: 4
+    CameraSpline5 MasterFrequencyScaleSpline; // offset: 148, size: 80
+    float32 MasterStiffnessScale; // offset: 228, size: 4
+    CameraSpline5 MasterStiffnessScaleSpline; // offset: 232, size: 80
+    float32 TiltMaxAmplitude; // offset: 312, size: 4
+    float32 TiltMinAmplitude; // offset: 316, size: 4
+    float32 TiltFrequency; // offset: 320, size: 4
+    float32 TiltStiffness; // offset: 324, size: 4
+    float32 PanMaxAmplitude; // offset: 328, size: 4
+    float32 PanMinAmplitude; // offset: 332, size: 4
+    float32 PanFrequency; // offset: 336, size: 4
+    float32 PanStiffness; // offset: 340, size: 4
+    float32 DutchMaxAmplitude; // offset: 344, size: 4
+    float32 DutchMinAmplitude; // offset: 348, size: 4
+    float32 DutchFrequency; // offset: 352, size: 4
+    float32 DutchStiffness; // offset: 356, size: 4
+    float32 PedistalMaxAmplitude; // offset: 360, size: 4
+    float32 PedistalMinAmplitude; // offset: 364, size: 4
+    float32 PedistalFrequency; // offset: 368, size: 4
+    float32 PedistalStiffness; // offset: 372, size: 4
+    float32 TruckMaxAmplitude; // offset: 376, size: 4
+    float32 TruckMinAmplitude; // offset: 380, size: 4
+    float32 TruckFrequency; // offset: 384, size: 4
+    float32 TruckStiffness; // offset: 388, size: 4
+    float32 DollyMaxAmplitude; // offset: 392, size: 4
+    float32 DollyMinAmplitude; // offset: 396, size: 4
+    float32 DollyFrequency; // offset: 400, size: 4
+    float32 DollyStiffness; // offset: 404, size: 4
+    uint8 UseTransformedSpeed; // offset: 408, size: 1
+    CameraSpline5 SpeedScaleSpline; // offset: 412, size: 80
+} NoiseAnimation; // size: 496
+
+#define STI_TYPE_HASH_SplineAnimation 0x82C21EC5
+typedef struct SplineAnimation{
+    const STITypeInfo* type_info_;
+    CameraAnimationControl Control; // offset: 0, size: 56
+    CameraSpline10 TiltSpline; // offset: 56, size: 140
+    CameraSpline10 PanSpline; // offset: 196, size: 140
+    CameraSpline10 DutchSpline; // offset: 336, size: 140
+    CameraSpline10 TruckSpline; // offset: 476, size: 140
+    CameraSpline10 PedistalSpline; // offset: 616, size: 140
+    CameraSpline10 DollySpline; // offset: 756, size: 140
+    CameraSpline10 FOVSpline; // offset: 896, size: 140
+    uint8 UseTransformedSpeed; // offset: 1036, size: 1
+    CameraSpline5 SpeedScaleSpline; // offset: 1040, size: 80
+} SplineAnimation; // size: 1120
+
+#define STI_TYPE_HASH_ShakeAnimation 0x711748A7
+typedef struct ShakeAnimation{
+    const STITypeInfo* type_info_;
+    CameraAnimationControl Control; // offset: 0, size: 56
+    uint8 Pan; // offset: 56, size: 1
+    uint8 Tilt; // offset: 57, size: 1
+    uint8 Dutch; // offset: 58, size: 1
+    float32 RotationMaxAmplitude; // offset: 60, size: 4
+    float32 RotationAmplitudeScale; // offset: 64, size: 4
+    CameraSpline5 RotationAmplitudeScaleSpline; // offset: 68, size: 80
+    float32 RotationMaxFrequency; // offset: 148, size: 4
+    float32 RotationFrequencyScale; // offset: 152, size: 4
+    CameraSpline5 RotationFrequencyScaleSpline; // offset: 156, size: 80
+    float32 TranslationMaxAmplitude; // offset: 236, size: 4
+    float32 TranslationAmplitudeScale; // offset: 240, size: 4
+    CameraSpline5 TranslationAmplitudeScaleSpline; // offset: 244, size: 80
+    float32 TranslationMaxFrequency; // offset: 324, size: 4
+    float32 TranslationFrequencyScale; // offset: 328, size: 4
+    CameraSpline5 TranslationFrequencyScaleSpline; // offset: 332, size: 80
+    String MasterAmplitudeScaleBBKey; // offset: 416, size: 8
+    String MasterFrequencyScaleBBKey; // offset: 424, size: 8
+} ShakeAnimation; // size: 432
+
+#define STI_TYPE_HASH_Array_SplineAnimation 0x2883EBF3
+typedef struct Array_SplineAnimation {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    SplineAnimation* items;
+} Array_SplineAnimation; // size: 16
+
+#define STI_TYPE_HASH_Array_NoiseAnimation 0x877D7B41
+typedef struct Array_NoiseAnimation {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    NoiseAnimation* items;
+} Array_NoiseAnimation; // size: 16
+
+#define STI_TYPE_HASH_Array_ShakeAnimation 0x66CC8091
+typedef struct Array_ShakeAnimation {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ShakeAnimation* items;
+} Array_ShakeAnimation; // size: 16
+
+#define STI_TYPE_HASH_AuxiliaryMotionModifierParams 0xF49B2335
+typedef struct AuxiliaryMotionModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 DrawDebug; // offset: 1, size: 1
+    Array_SplineAnimation SplineAnimations; // offset: 8, size: 16
+    Array_NoiseAnimation NoiseAnimations; // offset: 24, size: 16
+    Array_ShakeAnimation ShakeAnimations; // offset: 40, size: 16
+} AuxiliaryMotionModifierParams; // size: 56
+
+#define STI_TYPE_HASH_LocalAngleLimitsModifierParams 0x22364C66
+typedef struct LocalAngleLimitsModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 DisablePitchLimits; // offset: 1, size: 1
+    float32 PitchLimit[2]; // offset: 4, size: 8
+    float32 PitchLimitSmoothing[2]; // offset: 12, size: 8
+    uint8 DisableYawLimits; // offset: 20, size: 1
+    float32 YawLimit[2]; // offset: 24, size: 8
+    float32 YawLimitSmoothing[2]; // offset: 32, size: 8
+    uint8 UsePlayerCharacterRootPitch; // offset: 40, size: 1
+} LocalAngleLimitsModifierParams; // size: 44
+
+#define STI_TYPE_HASH_CameraShakeModifierParams 0x9922B266
+typedef struct CameraShakeModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    uint8 OnfootLayerActivate; // offset: 1, size: 1
+    uint8 VehicleLayerActivate; // offset: 2, size: 1
+    float32 BlurScale; // offset: 4, size: 4
+} CameraShakeModifierParams; // size: 8
+
+#define STI_TYPE_HASH_FullScreenEffectModifierParams 0xF165BD1E
+typedef struct FullScreenEffectModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+} FullScreenEffectModifierParams; // size: 1
+
+#define STI_TYPE_HASH_CameraBaseSmoothingModifierParams 0xD1C9BF21
+typedef struct CameraBaseSmoothingModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 Speed; // offset: 4, size: 4
+    float32 MinY; // offset: 8, size: 4
+    uint8 OnlySmoothY; // offset: 12, size: 1
+    float32 SpeedTranslationY; // offset: 16, size: 4
+    float32 SpeedTranslationYScaleStart; // offset: 20, size: 4
+    float32 SpeedTranslationYScaleEnd; // offset: 24, size: 4
+    float32 SpeedTranslationYScale; // offset: 28, size: 4
+    float32 MaxTranslationYOff; // offset: 32, size: 4
+    float32 SpeedTranslationXZ; // offset: 36, size: 4
+    float32 MaxTranslationXZOff; // offset: 40, size: 4
+} CameraBaseSmoothingModifierParams; // size: 44
+
+#define STI_TYPE_HASH_TrackPlayerModifierParams 0x14FF19DA
+typedef struct TrackPlayerModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 TargetPositionOffset[3]; // offset: 4, size: 12
+    CameraSpring TargetPositionSpring; // offset: 16, size: 12
+} TrackPlayerModifierParams; // size: 28
+
+#define STI_TYPE_HASH_SequenceDofModifierParams 0xC938D931
+typedef struct SequenceDofModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+} SequenceDofModifierParams; // size: 1
+
+#define STI_TYPE_HASH_ListenerPositionParams 0xF458D1C3
+typedef struct ListenerPositionParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 CameraPositionAmount; // offset: 4, size: 4
+    float32 AttachedOffset[3]; // offset: 8, size: 12
+} ListenerPositionParams; // size: 20
+
+#define STI_TYPE_HASH_AimAssistParams 0x800AB894
+typedef struct AimAssistParams{
+    const STITypeInfo* type_info_;
+    float32 StrafingAimAssist_Turning; // offset: 0, size: 4
+    float32 AimAssistSlowDown_Turning; // offset: 4, size: 4
+    float32 StrafingAimAssist_Default; // offset: 8, size: 4
+    float32 AimAssistSlowDown_Default; // offset: 12, size: 4
+    float32 SlowDownSpeedLimit; // offset: 16, size: 4
+    float32 PostSlowDownRampUpSpeed; // offset: 20, size: 4
+} AimAssistParams; // size: 24
+
+#define STI_TYPE_HASH_FirstPersonCameraModifierParams 0x68D20F76
+typedef struct FirstPersonCameraModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams InputParams; // offset: 4, size: 172
+    float32 ForegroundFOV; // offset: 176, size: 4
+    float32 WorldFOV; // offset: 180, size: 4
+    uint8 UseGameSettingsWorldFov; // offset: 184, size: 1
+    String ForegroundBBKey; // offset: 192, size: 8
+    uint8 ForegroundPitchEnabled; // offset: 200, size: 1
+    String AimAdjustmentSegments[3]; // offset: 208, size: 24
+    uint8 AlignToSurface; // offset: 232, size: 1
+    float32 AlignToSurfaceStiffness; // offset: 236, size: 4
+    float32 ProneAllowedHeightPushUp; // offset: 240, size: 4
+    float32 PronePushUpRayLength; // offset: 244, size: 4
+    float32 PronePushUpRayBackOffset; // offset: 248, size: 4
+    AimAssistParams AimAssist; // offset: 252, size: 24
+} FirstPersonCameraModifierParams; // size: 280
+
+#define STI_TYPE_HASH_ThirdPersonCameraModifierParams 0xC9D843E6
+typedef struct ThirdPersonCameraModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams InputParams; // offset: 4, size: 172
+    float32 WorldFOV; // offset: 176, size: 4
+    uint8 UseGameSettingsWorldFov; // offset: 180, size: 1
+    String AimAdjustmentSegments[3]; // offset: 184, size: 24
+    AimAssistParams AimAssist; // offset: 208, size: 24
+} ThirdPersonCameraModifierParams; // size: 232
+
+#define STI_TYPE_HASH_FirstPersonVehicleCameraModifierParams 0xFAE9418D
+typedef struct FirstPersonVehicleCameraModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams InputParams; // offset: 4, size: 172
+    float32 ForeGroundFOV; // offset: 176, size: 4
+    float32 WorldFOV; // offset: 180, size: 4
+    uint8 UseGameSettingsWorldFov; // offset: 184, size: 1
+    String ForegroundBBKey; // offset: 192, size: 8
+    float32 VehicleFovMaxIncrease; // offset: 200, size: 4
+    float32 MaxFovOneAngle; // offset: 204, size: 4
+    float32 MaxFovZeroAngle; // offset: 208, size: 4
+    float32 FovVehicleMinSpeed; // offset: 212, size: 4
+    float32 FovVehicleMaxSpeed; // offset: 216, size: 4
+    float32 VehiclePitchScale; // offset: 220, size: 4
+    float32 VehicleRollScale; // offset: 224, size: 4
+    float32 VehiclePitchScaleDotThreshold; // offset: 228, size: 4
+    float32 VehicleRollScaleDotThreshold; // offset: 232, size: 4
+    float32 AutoAlignTime; // offset: 236, size: 4
+    float32 AutoAlignDelay; // offset: 240, size: 4
+    float32 AutoAlignSafeAngle; // offset: 244, size: 4
+    float32 AutoAlignMinimumSpeed; // offset: 248, size: 4
+} FirstPersonVehicleCameraModifierParams; // size: 256
+
+#define STI_TYPE_HASH_SetCameraPivotModifierParams 0xCA9796B6
+typedef struct SetCameraPivotModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    float32 Offset[3]; // offset: 4, size: 12
+} SetCameraPivotModifierParams; // size: 16
+
+#define STI_TYPE_HASH_JointOffsetFramingParams 0x6095148F
+typedef struct JointOffsetFramingParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    String JointName; // offset: 8, size: 8
+} JointOffsetFramingParams; // size: 16
+
+#define STI_TYPE_HASH_JointPivotModifierParams 0x7EF84BC9
+typedef struct JointPivotModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    String JointName; // offset: 8, size: 8
+} JointPivotModifierParams; // size: 16
+
+#define STI_TYPE_HASH_AdditivePivotModifierParams 0x98A936A0
+typedef struct AdditivePivotModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    String JointName; // offset: 8, size: 8
+    float32 Weight; // offset: 16, size: 4
+} AdditivePivotModifierParams; // size: 24
+
+#define STI_TYPE_HASH_AdditiveOffsetModifierParams 0xE2A37906
+typedef struct AdditiveOffsetModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    String JointName; // offset: 8, size: 8
+    float32 TranslationWeight; // offset: 16, size: 4
+    float32 RotationWeight; // offset: 20, size: 4
+} AdditiveOffsetModifierParams; // size: 24
+
+#define STI_TYPE_HASH_VehicleAngleLimitsModifierParams 0x5D918B5C
+typedef struct VehicleAngleLimitsModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 BypassModifier; // offset: 0, size: 1
+    float32 PitchLimit[2]; // offset: 4, size: 8
+    float32 PitchLimitSmoothing[2]; // offset: 12, size: 8
+    float32 YawLimit[2]; // offset: 20, size: 8
+    float32 YawLimitSmoothing[2]; // offset: 28, size: 8
+} VehicleAngleLimitsModifierParams; // size: 36
+
+#define STI_TYPE_HASH_ChaseCameraModifierParams 0x47801B1C
+typedef struct ChaseCameraModifierParams{
+    const STITypeInfo* type_info_;
+    uint8 DrawDebug; // offset: 0, size: 1
+    uint8 BypassModifier; // offset: 1, size: 1
+    CameraInputParams InputParams; // offset: 4, size: 172
+    float32 SpringCoeffX; // offset: 176, size: 4
+    float32 SpringCoeffY; // offset: 180, size: 4
+    float32 ChaseDelayAfterInput; // offset: 184, size: 4
+    float32 SpeedThreshold; // offset: 188, size: 4
+    float32 MaxSpeed; // offset: 192, size: 4
+    float32 MaxDeltaDolly; // offset: 196, size: 4
+    CameraSpring DollySpring; // offset: 200, size: 12
+    float32 MaxDeltaFOV; // offset: 212, size: 4
+    CameraSpring FOVSpring; // offset: 216, size: 12
+} ChaseCameraModifierParams; // size: 228
+
+#define STI_TYPE_HASH_CameraTransitionParams 0x15B9C3D0
+typedef struct CameraTransitionParams{
+    const STITypeInfo* type_info_;
+    float32 Time; // offset: 0, size: 4
+    float32 FovTimeFractionStart; // offset: 4, size: 4
+    float32 FovTimeFractionEnd; // offset: 8, size: 4
+    uint8 FovAlgorithm; // offset: 12, size: 1
+    float32 DofTimeFractionStart; // offset: 16, size: 4
+    float32 DofTimeFractionEnd; // offset: 20, size: 4
+    uint8 DofAlgorithm; // offset: 24, size: 1
+    float32 MotionBlurTimeFractionStart; // offset: 28, size: 4
+    float32 MotionBlurTimeFractionEnd; // offset: 32, size: 4
+    uint8 MotionBlurAlgorithm; // offset: 36, size: 1
+    float32 TranslationTimeFractionStart; // offset: 40, size: 4
+    float32 TranslationTimeFractionEnd; // offset: 44, size: 4
+    uint8 TranslationAlgorithm; // offset: 48, size: 1
+    float32 RotationTimeFractionStart; // offset: 52, size: 4
+    float32 RotationTimeFractionEnd; // offset: 56, size: 4
+    uint8 RotationAlgorithm; // offset: 60, size: 1
+    uint8 CollisionEnabled; // offset: 61, size: 1
+    float32 CollisionRadius; // offset: 64, size: 4
+    uint8 CollisionMaxIterations; // offset: 68, size: 1
+    uint8 CollisionDrawDebug; // offset: 69, size: 1
+} CameraTransitionParams; // size: 72
+
+#define STI_TYPE_HASH_DataLifespans 0xA4201C50
+typedef struct DataLifespans{
+    const STITypeInfo* type_info_;
+    uint32 Vision; // offset: 0, size: 4
+    uint32 Awareness_ReactToAwareness; // offset: 4, size: 4
+    uint32 Awareness_Death; // offset: 8, size: 4
+    uint32 Awareness_SelfDamaged; // offset: 12, size: 4
+    uint32 Awareness_OthersDamaged; // offset: 16, size: 4
+    uint32 Awareness_WeaponFire; // offset: 20, size: 4
+    uint32 Awareness_BulletImpact; // offset: 24, size: 4
+    uint32 Awareness_CharacterCollision; // offset: 28, size: 4
+    uint32 Awareness_CollideWithPlayerVehicle; // offset: 32, size: 4
+    uint32 Awareness_SelfHitByBullet; // offset: 36, size: 4
+    uint32 Awareness_LoudVegetation; // offset: 40, size: 4
+    uint32 Awareness_ThreatPropagation; // offset: 44, size: 4
+    uint32 Awareness_SelfHitByDistraction; // offset: 48, size: 4
+    uint32 Awareness_SelfHitByEMP; // offset: 52, size: 4
+    uint32 Awareness_SelfHitByStun; // offset: 56, size: 4
+    uint32 Awareness_ForcePulse; // offset: 60, size: 4
+    uint32 Awareness_IncomingBullet; // offset: 64, size: 4
+} DataLifespans; // size: 68
+
+#define STI_TYPE_HASH_AwarenessEventRanges 0xAC3A81DA
+typedef struct AwarenessEventRanges{
+    const STITypeInfo* type_info_;
+    float32 ReactToAwareness; // offset: 0, size: 4
+    float32 Death; // offset: 4, size: 4
+    float32 SelfDamaged; // offset: 8, size: 4
+    float32 OthersDamaged; // offset: 12, size: 4
+    float32 WeaponFire; // offset: 16, size: 4
+    float32 BulletImpact; // offset: 20, size: 4
+    float32 CharacterCollision; // offset: 24, size: 4
+    float32 CollideWithPlayerVehicle; // offset: 28, size: 4
+    float32 SelfHitByBullet; // offset: 32, size: 4
+    float32 LoudVegetation; // offset: 36, size: 4
+    float32 ThreatPropagation; // offset: 40, size: 4
+    float32 SelfHitByDistraction; // offset: 44, size: 4
+    float32 SelfHitByEMP; // offset: 48, size: 4
+    float32 SelfHitByStun; // offset: 52, size: 4
+    float32 ForcePulse; // offset: 56, size: 4
+    float32 IncomingBullet; // offset: 60, size: 4
+} AwarenessEventRanges; // size: 64
+
+#define STI_TYPE_HASH_AwarenessEventThreats 0x86ECC040
+typedef struct AwarenessEventThreats{
+    const STITypeInfo* type_info_;
+    float32 Death; // offset: 0, size: 4
+    float32 SelfDamaged; // offset: 4, size: 4
+    float32 OthersDamaged; // offset: 8, size: 4
+    float32 CharacterCollision; // offset: 12, size: 4
+    float32 CollideWithPlayerVehicle; // offset: 16, size: 4
+    float32 ThreatPropagation; // offset: 20, size: 4
+    float32 SelfHitByDistraction; // offset: 24, size: 4
+    float32 SelfHitByEMP; // offset: 28, size: 4
+    float32 SelfHitByStun; // offset: 32, size: 4
+    float32 ForcePulse; // offset: 36, size: 4
+    float32 IncomingBullet; // offset: 40, size: 4
+} AwarenessEventThreats; // size: 44
+
+#define STI_TYPE_HASH_PerceptionSettings 0xE51D96BC
+typedef struct PerceptionSettings{
+    const STITypeInfo* type_info_;
+    DataLifespans Lifespans; // offset: 0, size: 68
+    AwarenessEventRanges EventRanges; // offset: 68, size: 64
+    AwarenessEventThreats EventThreats; // offset: 132, size: 44
+} PerceptionSettings; // size: 176
+
+#define STI_TYPE_HASH_ActionToken 0xE4FE51C0
+typedef struct ActionToken{
+    const STITypeInfo* type_info_;
+    String DebugName; // offset: 0, size: 8
+    uint32 Count; // offset: 8, size: 4
+    float32 AcquireWaitMin; // offset: 12, size: 4
+    float32 AcquireWaitMax; // offset: 16, size: 4
+    float32 TokenCooldownMin; // offset: 20, size: 4
+    float32 TokenCooldownMax; // offset: 24, size: 4
+} ActionToken; // size: 32
+
+#define STI_TYPE_HASH_Array_ActionToken 0x912EE1CD
+typedef struct Array_ActionToken {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ActionToken* items;
+} Array_ActionToken; // size: 16
+
+#define STI_TYPE_HASH_ActionTokenList 0x94A8CB2B
+typedef struct ActionTokenList{
+    const STITypeInfo* type_info_;
+    Array_ActionToken Tokens; // offset: 0, size: 16
+} ActionTokenList; // size: 16
+
+#define STI_TYPE_HASH_VariableInt 0xD3CC2A98
+typedef struct VariableInt{
+    const STITypeInfo* type_info_;
+    String Name; // offset: 0, size: 8
+    uint32 Val; // offset: 8, size: 4
+} VariableInt; // size: 16
+
+#define STI_TYPE_HASH_VariableFloat 0x1513E576
+typedef struct VariableFloat{
+    const STITypeInfo* type_info_;
+    String Name; // offset: 0, size: 8
+    float32 Val; // offset: 8, size: 4
+} VariableFloat; // size: 16
+
+#define STI_TYPE_HASH_VariableBool 0xB6040E06
+typedef struct VariableBool{
+    const STITypeInfo* type_info_;
+    String Name; // offset: 0, size: 8
+    uint8 Val; // offset: 8, size: 1
+} VariableBool; // size: 16
+
+#define STI_TYPE_HASH_VariableVec3 0x7A806EBA
+typedef struct VariableVec3{
+    const STITypeInfo* type_info_;
+    String Name; // offset: 0, size: 8
+    float32 ValX; // offset: 8, size: 4
+    float32 ValY; // offset: 12, size: 4
+    float32 ValZ; // offset: 16, size: 4
+} VariableVec3; // size: 24
+
+#define STI_TYPE_HASH_Array_VariableInt 0x5929D20F
+typedef struct Array_VariableInt {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VariableInt* items;
+} Array_VariableInt; // size: 16
+
+#define STI_TYPE_HASH_Array_VariableFloat 0x1D893C22
+typedef struct Array_VariableFloat {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VariableFloat* items;
+} Array_VariableFloat; // size: 16
+
+#define STI_TYPE_HASH_Array_VariableBool 0xF3A00D50
+typedef struct Array_VariableBool {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VariableBool* items;
+} Array_VariableBool; // size: 16
+
+#define STI_TYPE_HASH_Array_VariableVec3 0xC5FB392B
+typedef struct Array_VariableVec3 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VariableVec3* items;
+} Array_VariableVec3; // size: 16
+
+#define STI_TYPE_HASH_BlackboardVarList 0xEC3BC042
+typedef struct BlackboardVarList{
+    const STITypeInfo* type_info_;
+    Array_VariableInt Ints; // offset: 0, size: 16
+    Array_VariableFloat Floats; // offset: 16, size: 16
+    Array_VariableBool Bools; // offset: 32, size: 16
+    Array_VariableVec3 Vec3s; // offset: 48, size: 16
+} BlackboardVarList; // size: 64
+
+#define STI_TYPE_HASH_AIGlobals 0x2B15A93E
+typedef struct AIGlobals{
+    const STITypeInfo* type_info_;
+    PerceptionSettings Perception; // offset: 0, size: 176
+    ActionTokenList ActionTokens; // offset: 176, size: 16
+    BlackboardVarList BlackboardVariables; // offset: 192, size: 64
+} AIGlobals; // size: 256
+
+#define STI_TYPE_HASH_CharacterSplineControlPoint 0x39408479
+typedef struct CharacterSplineControlPoint{
+    const STITypeInfo* type_info_;
+    float32 x; // offset: 0, size: 4
+    float32 y; // offset: 4, size: 4
+    float32 y2; // offset: 8, size: 4
+} CharacterSplineControlPoint; // size: 12
+
+#define STI_TYPE_HASH_CharacterSpline10 0xB83445A2
+typedef struct CharacterSpline10{
+    const STITypeInfo* type_info_;
+    float32 x_min; // offset: 0, size: 4
+    float32 x_max; // offset: 4, size: 4
+    float32 y_min; // offset: 8, size: 4
+    float32 y_max; // offset: 12, size: 4
+    int8 number_of_control_points; // offset: 16, size: 1
+    CharacterSplineControlPoint control_points[10]; // offset: 20, size: 120
+} CharacterSpline10; // size: 140
+
+#define STI_TYPE_HASH_WeaponSkillSettings 0x4CB92B3B
+typedef struct WeaponSkillSettings{
+    const STITypeInfo* type_info_;
+    float32 RestingHeartRate; // offset: 0, size: 4
+    float32 MaxHeartRate; // offset: 4, size: 4
+    float32 HeartRateRecoveryCooldown; // offset: 8, size: 4
+    float32 HeartRateRecoverySpeed; // offset: 12, size: 4
+    float32 HeartRateIncreaseSpeed; // offset: 16, size: 4
+    float32 JumpHeartRatePenalty; // offset: 20, size: 4
+    float32 HoldBreathHeartRateThreshold; // offset: 24, size: 4
+    float32 MaxBreathOutPenalty; // offset: 28, size: 4
+    float32 BreathOutPenaltyRate; // offset: 32, size: 4
+    float32 HoldBreathDurationPenaltyScale; // offset: 36, size: 4
+    float32 HoldBreathHeartRatePenalty; // offset: 40, size: 4
+    float32 HoldBreathWobbleScale; // offset: 44, size: 4
+    float32 MinBreathingWobbleScale; // offset: 48, size: 4
+    float32 WobbleEaseInSpeed; // offset: 52, size: 4
+    float32 WobbleEaseOutSpeed; // offset: 56, size: 4
+    float32 StandingWoobleModifier; // offset: 60, size: 4
+    float32 CrouchWoobleModifier; // offset: 64, size: 4
+    float32 CrawlWoobleModifier; // offset: 68, size: 4
+    float32 CameraRotationPenalty; // offset: 72, size: 4
+    float32 CameraAngleDiffForPenalty; // offset: 76, size: 4
+    float32 PenaltyEaseOutSpeed; // offset: 80, size: 4
+    float32 MaxPenalty; // offset: 84, size: 4
+} WeaponSkillSettings; // size: 88
+
+#define STI_TYPE_HASH_MovementSteeringParams 0xD3D817F0
+typedef struct MovementSteeringParams{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_8 MovementType; // offset: 0, size: 8
+    StringHash_48c5294d_8 StanceType; // offset: 8, size: 8
+    float32 Friction; // offset: 16, size: 4
+    float32 Acceleration; // offset: 20, size: 4
+    float32 MinMovementSpeed; // offset: 24, size: 4
+    float32 MaxMovementSpeed; // offset: 28, size: 4
+    float32 MinAnimationSpeed; // offset: 32, size: 4
+    float32 MaxAnimationSpeed; // offset: 36, size: 4
+    float32 TargetHeartRate; // offset: 40, size: 4
+} MovementSteeringParams; // size: 48
+
+#define STI_TYPE_HASH_StaminaThresholds 0xEF81DAE4
+typedef struct StaminaThresholds{
+    const STITypeInfo* type_info_;
+    float32 SprintThreshold; // offset: 0, size: 4
+} StaminaThresholds; // size: 4
+
+#define STI_TYPE_HASH_Array_MovementSteeringParams 0xFD038990
+typedef struct Array_MovementSteeringParams {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    MovementSteeringParams* items;
+} Array_MovementSteeringParams; // size: 16
+
+#define STI_TYPE_HASH_CharacterFpsSettings 0x7F8C57CA
+typedef struct CharacterFpsSettings{
+    const STITypeInfo* type_info_;
+    StaminaThresholds StaminaThresholds; // offset: 0, size: 4
+    float32 AimSpeedModifier; // offset: 4, size: 4
+    float32 JumpSpeed; // offset: 8, size: 4
+    CharacterSpline10 InputToMovementSpeedCurve; // offset: 12, size: 140
+    WeaponSkillSettings WeaponSkillSettings; // offset: 152, size: 88
+    Array_MovementSteeringParams MovementParams; // offset: 240, size: 16
+} CharacterFpsSettings; // size: 256
+
+#define STI_TYPE_HASH_CharacterOnFootSettings 0x5BF7B765
+typedef struct CharacterOnFootSettings{
+    const STITypeInfo* type_info_;
+    float32 WalkSpeed; // offset: 0, size: 4
+    float32 WalkMaxVelocity; // offset: 4, size: 4
+    float32 WalkMinInput; // offset: 8, size: 4
+    float32 JogMaxVelocity; // offset: 12, size: 4
+    float32 RunSpeed; // offset: 16, size: 4
+    float32 MaxSpeedToPlayStartAnim; // offset: 20, size: 4
+    float32 EnableStarts; // offset: 24, size: 4
+    float32 EnablePlants; // offset: 28, size: 4
+    float32 EnableStops; // offset: 32, size: 4
+} CharacterOnFootSettings; // size: 36
+
+#define STI_TYPE_HASH_CharacterSwimSettings 0xD2314AB5
+typedef struct CharacterSwimSettings{
+    const STITypeInfo* type_info_;
+    float32 SurfaceSwimFullDeflection; // offset: 0, size: 4
+    float32 SurfaceToUnderwaterPitch; // offset: 4, size: 4
+    float32 SurfaceSwimNoInputToStopTime; // offset: 8, size: 4
+} CharacterSwimSettings; // size: 12
+
+#define STI_TYPE_HASH_MovementType 0x36B033EF
+typedef struct MovementType{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 MovementTypeID; // offset: 0, size: 4
+    float32 DesiredHorizontalSpeed; // offset: 4, size: 4
+    float32 DesiredVerticalSpeed; // offset: 8, size: 4
+    float32 DesiredAltitude; // offset: 12, size: 4
+    float32 DesiredTreeAltitude; // offset: 16, size: 4
+    float32 MinLinearSpeed; // offset: 20, size: 4
+    float32 MaxLinearSpeed; // offset: 24, size: 4
+    float32 MaxLinearAcceleration; // offset: 28, size: 4
+    float32 MaxLinearDeceleration; // offset: 32, size: 4
+    float32 MaxAngularSpeed; // offset: 36, size: 4
+    float32 MaxAngularAcceleration; // offset: 40, size: 4
+    float32 MaxSteeringAngle; // offset: 44, size: 4
+} MovementType; // size: 48
+
+#define STI_TYPE_HASH_AvoidanceSettings 0x1D0668F1
+typedef struct AvoidanceSettings{
+    const STITypeInfo* type_info_;
+    float32 WallFollowingAngle; // offset: 0, size: 4
+    float32 DodgingPenalty; // offset: 4, size: 4
+    float32 VelocityHysteresis; // offset: 8, size: 4
+    float32 SidednessChangingPenalty; // offset: 12, size: 4
+    float32 CollisionPenalty; // offset: 16, size: 4
+    float32 PenetrationPenalty; // offset: 20, size: 4
+} AvoidanceSettings; // size: 24
+
+#define STI_TYPE_HASH_CharacterNavigationSettings 0x5244E18C
+typedef struct CharacterNavigationSettings{
+    const STITypeInfo* type_info_;
+    uint8 KinematicConstraintType; // offset: 0, size: 1
+    float32 MinLinearSpeed; // offset: 4, size: 4
+    float32 MaxLinearSpeed; // offset: 8, size: 4
+    float32 MaxLinearAcceleration; // offset: 12, size: 4
+    float32 MaxLinearDeceleration; // offset: 16, size: 4
+    float32 MaxAngularSpeed; // offset: 20, size: 4
+    float32 LeftTurnRadius; // offset: 24, size: 4
+    float32 RightTurnRadius; // offset: 28, size: 4
+    AvoidanceSettings AvoidanceSettings; // offset: 32, size: 24
+} CharacterNavigationSettings; // size: 56
+
+#define STI_TYPE_HASH_VelocityFilterSettings 0x534F7900
+typedef struct VelocityFilterSettings{
+    const STITypeInfo* type_info_;
+    float32 gain; // offset: 0, size: 4
+    float32 max_speed; // offset: 4, size: 4
+    float32 max_acceleration; // offset: 8, size: 4
+} VelocityFilterSettings; // size: 12
+
+#define STI_TYPE_HASH_Array_CharacterNavigationSettings 0xB8E51EBA
+typedef struct Array_CharacterNavigationSettings {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    CharacterNavigationSettings* items;
+} Array_CharacterNavigationSettings; // size: 16
+
+#define STI_TYPE_HASH_Array_MovementType 0x146D96CD
+typedef struct Array_MovementType {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    MovementType* items;
+} Array_MovementType; // size: 16
+
+#define STI_TYPE_HASH_CharacterMovementSettings 0x8C3760D4
+typedef struct CharacterMovementSettings{
+    const STITypeInfo* type_info_;
+    CharacterFpsSettings FpsSettings; // offset: 0, size: 256
+    CharacterOnFootSettings OnFootSettings; // offset: 256, size: 36
+    CharacterSwimSettings SwimSettings; // offset: 292, size: 12
+    VelocityFilterSettings VelocityFilterSettings; // offset: 304, size: 12
+    Array_CharacterNavigationSettings NavigationSettings; // offset: 320, size: 16
+    Array_MovementType MovementTypes; // offset: 336, size: 16
+} CharacterMovementSettings; // size: 352
+
+#define STI_TYPE_HASH_MotorbikeTurnSettings 0xB10C6BB1
+typedef struct MotorbikeTurnSettings{
+    const STITypeInfo* type_info_;
+    float32 max_turn_angle; // offset: 0, size: 4
+    float32 turn_directional_spring_coeff; // offset: 4, size: 4
+    float32 turn_directional_scale; // offset: 8, size: 4
+} MotorbikeTurnSettings; // size: 12
+
+#define STI_TYPE_HASH_MotorbikeLeanSettings 0x753EAF11
+typedef struct MotorbikeLeanSettings{
+    const STITypeInfo* type_info_;
+    float32 max_lean_angle; // offset: 0, size: 4
+    float32 lean_time_spring_coeff; // offset: 4, size: 4
+    float32 lean_directional_spring_coeff; // offset: 8, size: 4
+    float32 lean_directional_scale; // offset: 12, size: 4
+    float32 max_roll_speed; // offset: 16, size: 4
+    float32 steering_influence; // offset: 20, size: 4
+    float32 roll_speed_influence; // offset: 24, size: 4
+    float32 roll_angle_influence; // offset: 28, size: 4
+} MotorbikeLeanSettings; // size: 32
+
+#define STI_TYPE_HASH_MotorbikeTiltSettings 0x79FB1A03
+typedef struct MotorbikeTiltSettings{
+    const STITypeInfo* type_info_;
+    float32 tilt_time_offset; // offset: 0, size: 4
+    float32 max_tilt_angle; // offset: 4, size: 4
+    float32 tilt_time_spring_coeff; // offset: 8, size: 4
+    float32 tilt_directional_spring_coeff; // offset: 12, size: 4
+    float32 tilt_directional_scale; // offset: 16, size: 4
+    float32 max_pitch_acceleration; // offset: 20, size: 4
+    float32 steering_influence; // offset: 24, size: 4
+    float32 pitch_acceleration_influence; // offset: 28, size: 4
+    float32 pitch_angle_influence; // offset: 32, size: 4
+    float32 max_vertical_acceleration; // offset: 36, size: 4
+    float32 vertical_acceleration_influence; // offset: 40, size: 4
+} MotorbikeTiltSettings; // size: 44
+
+#define STI_TYPE_HASH_MotorbikeAimSettings 0x3B12E100
+typedef struct MotorbikeAimSettings{
+    const STITypeInfo* type_info_;
+    float32 aim_play_speed; // offset: 0, size: 4
+    float32 no_aim_angle_threshold; // offset: 4, size: 4
+    float32 no_aim_ease_in_speed; // offset: 8, size: 4
+    float32 no_aim_ease_out_speed; // offset: 12, size: 4
+} MotorbikeAimSettings; // size: 16
+
+#define STI_TYPE_HASH_MotorbikeMotionComponents 0x7DF9CB35
+typedef struct MotorbikeMotionComponents{
+    const STITypeInfo* type_info_;
+    float32 turn_mid_to_left; // offset: 0, size: 4
+    float32 turn_left_to_mid; // offset: 4, size: 4
+    float32 turn_mid_to_right; // offset: 8, size: 4
+    float32 turn_right_to_mid; // offset: 12, size: 4
+    float32 lean_mid_to_left; // offset: 16, size: 4
+    float32 lean_left_to_mid; // offset: 20, size: 4
+    float32 lean_mid_to_right; // offset: 24, size: 4
+    float32 lean_right_to_mid; // offset: 28, size: 4
+    float32 tilt_bwd_to_fwd; // offset: 32, size: 4
+    float32 tilt_fwd_to_bwd; // offset: 36, size: 4
+    float32 wind_effect; // offset: 40, size: 4
+    float32 exist_effect; // offset: 44, size: 4
+    float32 base_motion; // offset: 48, size: 4
+    float32 aim_cw_to_ccw; // offset: 52, size: 4
+    float32 no_aim_partial; // offset: 56, size: 4
+    float32 recoil_partial; // offset: 60, size: 4
+} MotorbikeMotionComponents; // size: 64
+
+#define STI_TYPE_HASH_MotorbikeDebugSettings 0x7791749E
+typedef struct MotorbikeDebugSettings{
+    const STITypeInfo* type_info_;
+    MotorbikeMotionComponents OverrideNormalizedTimes; // offset: 0, size: 64
+    MotorbikeMotionComponents OverrideWeights; // offset: 64, size: 64
+} MotorbikeDebugSettings; // size: 128
+
+#define STI_TYPE_HASH_CharacterRealizationSettings 0xEBF8A9A3
+typedef struct CharacterRealizationSettings{
+    const STITypeInfo* type_info_;
+    MotorbikeTurnSettings TurnSettings; // offset: 0, size: 12
+    MotorbikeLeanSettings LeanSettings; // offset: 12, size: 32
+    MotorbikeTiltSettings TiltSettings; // offset: 44, size: 44
+    MotorbikeAimSettings AimSettings; // offset: 88, size: 16
+    MotorbikeDebugSettings DebugSettings; // offset: 104, size: 128
+} CharacterRealizationSettings; // size: 232
+
+#define STI_TYPE_HASH_GroundAlignmentDataSplines 0xABF9943C
+typedef struct GroundAlignmentDataSplines{
+    const STITypeInfo* type_info_;
+    Spline10 X; // offset: 0, size: 140
+    Spline10 Y; // offset: 140, size: 140
+    Spline10 Z; // offset: 280, size: 140
+} GroundAlignmentDataSplines; // size: 420
+
+#define STI_TYPE_HASH_BoneData 0x82F08092
+typedef struct BoneData{
+    const STITypeInfo* type_info_;
+    Array_StringHash_48c5294d_4 Bones; // offset: 0, size: 16
+    uint8 LocalOrModelSpaceRotation; // offset: 16, size: 1
+    GroundAlignmentDataSplines Position; // offset: 20, size: 420
+    GroundAlignmentDataSplines Rotation; // offset: 440, size: 420
+} BoneData; // size: 864
+
+#define STI_TYPE_HASH_Array_BoneData 0x799DEDF7
+typedef struct Array_BoneData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BoneData* items;
+} Array_BoneData; // size: 16
+
+#define STI_TYPE_HASH_GroundAlignmentBoneAdjustment 0xC72C29CC
+typedef struct GroundAlignmentBoneAdjustment{
+    const STITypeInfo* type_info_;
+    Array_BoneData GroundAlignmentBoneData; // offset: 0, size: 16
+} GroundAlignmentBoneAdjustment; // size: 16
+
+#define STI_TYPE_HASH_DataSplines 0x80768771
+typedef struct DataSplines{
+    const STITypeInfo* type_info_;
+    Spline10 X; // offset: 0, size: 140
+    Spline10 Y; // offset: 140, size: 140
+    Spline10 Z; // offset: 280, size: 140
+} DataSplines; // size: 420
+
+#define STI_TYPE_HASH_PositionRotation 0x1CBF3642
+typedef struct PositionRotation{
+    const STITypeInfo* type_info_;
+    String Bone; // offset: 0, size: 8
+    DataSplines Position; // offset: 8, size: 420
+    DataSplines Rotation; // offset: 428, size: 420
+} PositionRotation; // size: 848
+
+#define STI_TYPE_HASH_CharacterAimingSettings 0x13DE2B36
+typedef struct CharacterAimingSettings{
+    const STITypeInfo* type_info_;
+    uint8 DebugDraw; // offset: 0, size: 1
+    PositionRotation OffsetPivot; // offset: 8, size: 848
+    PositionRotation OffsetSpineIk; // offset: 856, size: 848
+    PositionRotation OffsetHeadIk; // offset: 1704, size: 848
+    float32 LeftWeight; // offset: 2552, size: 4
+    float32 RightWeight; // offset: 2556, size: 4
+    float32 UpWeight; // offset: 2560, size: 4
+    float32 DownWeight; // offset: 2564, size: 4
+    float32 AimTimer; // offset: 2568, size: 4
+    float32 NoAimUpMinAngle; // offset: 2572, size: 4
+    float32 NoAimUpMaxAngle; // offset: 2576, size: 4
+    float32 NoAimDownMinAngle; // offset: 2580, size: 4
+    float32 NoAimDownMaxAngle; // offset: 2584, size: 4
+    float32 AimUpMinAngle; // offset: 2588, size: 4
+    float32 AimUpMaxAngle; // offset: 2592, size: 4
+    float32 AimDownMinAngle; // offset: 2596, size: 4
+    float32 AimDownMaxAngle; // offset: 2600, size: 4
+} CharacterAimingSettings; // size: 2608
+
+#define STI_TYPE_HASH_CharacterSpring 0x8EA5D6C0
+typedef struct CharacterSpring{
+    const STITypeInfo* type_info_;
+    float32 Speed; // offset: 0, size: 4
+    float32 Constant; // offset: 4, size: 4
+    float32 Damping; // offset: 8, size: 4
+} CharacterSpring; // size: 12
+
+#define STI_TYPE_HASH_CharacterRetractSShotSettings 0x750CFDD7
+typedef struct CharacterRetractSShotSettings{
+    const STITypeInfo* type_info_;
+    float32 BlendInSpeed; // offset: 0, size: 4
+    float32 BlendOutSpeed; // offset: 4, size: 4
+    float32 MaxSpeedAdjust; // offset: 8, size: 4
+    float32 DirectAccel; // offset: 12, size: 4
+    float32 ForwardAccel; // offset: 16, size: 4
+} CharacterRetractSShotSettings; // size: 20
+
+#define STI_TYPE_HASH_CharacterReelToParaSettings 0xC0CE022A
+typedef struct CharacterReelToParaSettings{
+    const STITypeInfo* type_info_;
+    float32 ExtraLiftCutoff; // offset: 0, size: 4
+    float32 ExtraLift[3]; // offset: 4, size: 12
+    float32 ExtraDownwardForce[3]; // offset: 16, size: 12
+    float32 StopExtraLiftHeight; // offset: 28, size: 4
+    float32 DragX[3]; // offset: 32, size: 12
+    float32 DragY[3]; // offset: 44, size: 12
+    float32 DragZ[3]; // offset: 56, size: 12
+    float32 UpwardVelocityClamp; // offset: 68, size: 4
+    float32 FakeSlingshotSpeedThreshold; // offset: 72, size: 4
+    float32 FakeSlingshotAccel; // offset: 76, size: 4
+    float32 FakeSlingshotMinPitch; // offset: 80, size: 4
+} CharacterReelToParaSettings; // size: 84
+
+#define STI_TYPE_HASH_CharacterAirMovementSettings 0x242E0171
+typedef struct CharacterAirMovementSettings{
+    const STITypeInfo* type_info_;
+    float32 Gravity; // offset: 0, size: 4
+    float32 MaxVelocity; // offset: 4, size: 4
+    float32 MaxVelocityXZ; // offset: 8, size: 4
+    float32 ClampVelocitySpeed; // offset: 12, size: 4
+    float32 Lift[3]; // offset: 16, size: 12
+    float32 DragX[3]; // offset: 28, size: 12
+    float32 DragY[3]; // offset: 40, size: 12
+    float32 DragZ[3]; // offset: 52, size: 12
+    float32 LiftPoint[3]; // offset: 64, size: 12
+    float32 PitchLimit[2]; // offset: 76, size: 8
+    float32 YawSteerAmount; // offset: 84, size: 4
+    uint32 DrawDebugLines; // offset: 88, size: 4
+    CharacterSpring RotateCharYawToVelocity; // offset: 92, size: 12
+    CharacterSpring RotateCharPitchToVelocity; // offset: 104, size: 12
+    CharacterSpring PitchInputSpring; // offset: 116, size: 12
+    CharacterSpring YawInputSpring; // offset: 128, size: 12
+    CharacterSpring RollInputSpring; // offset: 140, size: 12
+    float32 XInputYawPitchRollAmount[3]; // offset: 152, size: 12
+    float32 YInputYawPitchRollAmount[3]; // offset: 164, size: 12
+    float32 XLookYawPitchRollAmount[3]; // offset: 176, size: 12
+    float32 YLookYawPitchRollAmount[3]; // offset: 188, size: 12
+    CharacterSpring RotateCharYawToSlingshot; // offset: 200, size: 12
+    float32 PersistYawPitchRoll[3]; // offset: 212, size: 12
+    float32 CenterYawPitchRoll[3]; // offset: 224, size: 12
+    CharacterSpring LiftInputSpring; // offset: 236, size: 12
+    CharacterSpring DragInputSpring; // offset: 248, size: 12
+    CharacterSpring AnimInputSpringX; // offset: 260, size: 12
+    CharacterSpring AnimInputSpringY; // offset: 272, size: 12
+    float32 NearGroundLiftDistance; // offset: 284, size: 4
+    float32 NearGroundMaxLift; // offset: 288, size: 4
+    float32 NearGroundLiftExponent; // offset: 292, size: 4
+    float32 NearGroundLiftDecayMax; // offset: 296, size: 4
+    float32 NearGroundLiftDecayMultiplier; // offset: 300, size: 4
+    float32 NearGroundLiftRecoverRate; // offset: 304, size: 4
+    float32 LookSteerDeadZone[2]; // offset: 308, size: 8
+    float32 LookSteerMaxSpeed[2]; // offset: 316, size: 8
+    float32 LookSteerMaxYaw; // offset: 324, size: 4
+    float32 LookSteerMaxPitch[2]; // offset: 328, size: 8
+    float32 LookSteerExponential[2]; // offset: 336, size: 8
+    float32 LookSteerAimingDeadZone[2]; // offset: 344, size: 8
+    float32 LookSteerAimingMaxSpeed[2]; // offset: 352, size: 8
+    float32 LookSteerAimingMaxYaw; // offset: 360, size: 4
+    float32 LookSteerAimingMaxPitch[2]; // offset: 364, size: 8
+    float32 LookSteerAimingExponential[2]; // offset: 372, size: 8
+    float32 SlingshotPitchAdjust; // offset: 380, size: 4
+    float32 SlingshotExtraLift; // offset: 384, size: 4
+    float32 SlingshotDirectAccel; // offset: 388, size: 4
+    float32 SlingshotForwardAccel; // offset: 392, size: 4
+    float32 SlingshotMaxSpeedAdjust; // offset: 396, size: 4
+    float32 SlingshotDragXYZAdjust[3]; // offset: 400, size: 12
+    float32 SlingshotBreakPitch; // offset: 412, size: 4
+    float32 SlingshotBreakYawStart; // offset: 416, size: 4
+    float32 SlingshotBreakYawEnd; // offset: 420, size: 4
+    float32 SlingshotBreakYawBlendTime; // offset: 424, size: 4
+    float32 SlingshotBreakDistance; // offset: 428, size: 4
+    CharacterRetractSShotSettings RetractSlingshotSettings; // offset: 432, size: 20
+} CharacterAirMovementSettings; // size: 452
+
+#define STI_TYPE_HASH_CharacterAirSteerSettings 0x8ED81101
+typedef struct CharacterAirSteerSettings{
+    const STITypeInfo* type_info_;
+    float32 MaxAcceleration; // offset: 0, size: 4
+    float32 MaxDeceleration; // offset: 4, size: 4
+    float32 FacingSpeed; // offset: 8, size: 4
+    float32 NoInputAcceleration; // offset: 12, size: 4
+    float32 MaxSpeed; // offset: 16, size: 4
+    float32 AngularDisplacementSpeed; // offset: 20, size: 4
+} CharacterAirSteerSettings; // size: 24
+
+#define STI_TYPE_HASH_CharacterJumpSettings 0x2D58F9E2
+typedef struct CharacterJumpSettings{
+    const STITypeInfo* type_info_;
+    CharacterAirSteerSettings AirSteerSettings; // offset: 0, size: 24
+    float32 FallingUpwardsDecel; // offset: 24, size: 4
+} CharacterJumpSettings; // size: 28
+
+#define STI_TYPE_HASH_CharacterReeledHangSettings 0x7AD42D51
+typedef struct CharacterReeledHangSettings{
+    const STITypeInfo* type_info_;
+    CharacterAirSteerSettings AirSteerSettings; // offset: 0, size: 24
+} CharacterReeledHangSettings; // size: 24
+
+#define STI_TYPE_HASH_CharacterWingsuitSettings 0x7DE82967
+typedef struct CharacterWingsuitSettings{
+    const STITypeInfo* type_info_;
+    CharacterAirMovementSettings AirControl; // offset: 0, size: 452
+    float32 MaxAngularSpeed; // offset: 452, size: 4
+    float32 MaxAngularAccel; // offset: 456, size: 4
+    CharacterSpring AnimTwitchInputSpringX; // offset: 460, size: 12
+    CharacterSpring AnimTwitchInputSpringY; // offset: 472, size: 12
+} CharacterWingsuitSettings; // size: 484
+
+#define STI_TYPE_HASH_CharacterFreefallSettings 0x790755CA
+typedef struct CharacterFreefallSettings{
+    const STITypeInfo* type_info_;
+    CharacterAirMovementSettings AirControl; // offset: 0, size: 452
+    float32 YawSpeedAnimXEffect; // offset: 452, size: 4
+    float32 DecelXZNoInputSpeed; // offset: 456, size: 4
+} CharacterFreefallSettings; // size: 460
+
+#define STI_TYPE_HASH_CharacterParachuteSettings 0xA88A574E
+typedef struct CharacterParachuteSettings{
+    const STITypeInfo* type_info_;
+    float32 MaxAngularSpeed; // offset: 0, size: 4
+    float32 MaxAngularAccel; // offset: 4, size: 4
+    float32 VelocityAlignMinSpeed; // offset: 8, size: 4
+    float32 ParachuteToPivotDistance; // offset: 12, size: 4
+    CharacterReelToParaSettings ReelToParaSettings; // offset: 16, size: 84
+    CharacterAirMovementSettings AirControl; // offset: 100, size: 452
+} CharacterParachuteSettings; // size: 552
+
+#define STI_TYPE_HASH_CharacterReelInSettings 0x78E1020B
+typedef struct CharacterReelInSettings{
+    const STITypeInfo* type_info_;
+    float32 PerpendicularDrag; // offset: 0, size: 4
+    CharacterSpring LookSteerSpring; // offset: 4, size: 12
+    float32 Gravity; // offset: 16, size: 4
+} CharacterReelInSettings; // size: 20
+
+#define STI_TYPE_HASH_CustomMovementSettings 0x9F56E45C
+typedef struct CustomMovementSettings{
+    const STITypeInfo* type_info_;
+    CharacterAirMovementSettings FallingAirControl; // offset: 0, size: 452
+    CharacterFreefallSettings FreefallSettings; // offset: 452, size: 460
+    CharacterReelInSettings ReelInSettings; // offset: 912, size: 20
+    CharacterReeledHangSettings ReeledHangSettings; // offset: 932, size: 24
+    CharacterJumpSettings JumpSettings; // offset: 956, size: 28
+    CharacterParachuteSettings ParachuteSettings; // offset: 984, size: 552
+    CharacterWingsuitSettings WingsuitSettings; // offset: 1536, size: 484
+} CustomMovementSettings; // size: 2020
+
+#define STI_TYPE_HASH_DirectionalAct 0x226E6929
+typedef struct DirectionalAct{
+    const STITypeInfo* type_info_;
+    float32 AngleMin; // offset: 0, size: 4
+    float32 AngleMax; // offset: 4, size: 4
+    String Act; // offset: 8, size: 8
+} DirectionalAct; // size: 16
+
+#define STI_TYPE_HASH_Array_DirectionalAct 0x46A57A7B
+typedef struct Array_DirectionalAct {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    DirectionalAct* items;
+} Array_DirectionalAct; // size: 16
+
+#define STI_TYPE_HASH_DistanceRange 0x3B58E84F
+typedef struct DistanceRange{
+    const STITypeInfo* type_info_;
+    float32 DistMin; // offset: 0, size: 4
+    float32 DistMax; // offset: 4, size: 4
+    Array_DirectionalAct Acts; // offset: 8, size: 16
+} DistanceRange; // size: 24
+
+#define STI_TYPE_HASH_Array_DistanceRange 0x879A58EF
+typedef struct Array_DistanceRange {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    DistanceRange* items;
+} Array_DistanceRange; // size: 16
+
+#define STI_TYPE_HASH_EventSetting 0x34FD85CB
+typedef struct EventSetting{
+    const STITypeInfo* type_info_;
+    int32 EventType; // offset: 0, size: 4
+    Array_DistanceRange Ranges; // offset: 8, size: 16
+} EventSetting; // size: 24
+
+#define STI_TYPE_HASH_Array_EventSetting 0x84F2DD98
+typedef struct Array_EventSetting {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EventSetting* items;
+} Array_EventSetting; // size: 16
+
+#define STI_TYPE_HASH_ReactionSettings 0xB7BAF208
+typedef struct ReactionSettings{
+    const STITypeInfo* type_info_;
+    Array_EventSetting Reactions; // offset: 0, size: 16
+} ReactionSettings; // size: 16
+
+#define STI_TYPE_HASH_ViewFrustum 0x4D0B5CC7
+typedef struct ViewFrustum{
+    const STITypeInfo* type_info_;
+    float32 FOV_H; // offset: 0, size: 4
+    float32 FOV_V; // offset: 4, size: 4
+    float32 Near; // offset: 8, size: 4
+    float32 Far; // offset: 12, size: 4
+    float32 Yaw; // offset: 16, size: 4
+    float32 Pitch; // offset: 20, size: 4
+    uint32 OnFoot; // offset: 24, size: 4
+    uint32 InLandVehicle; // offset: 28, size: 4
+    uint32 InHelicopter; // offset: 32, size: 4
+    uint32 InSeaVehicle; // offset: 36, size: 4
+    uint32 InTank; // offset: 40, size: 4
+    uint32 Mounted; // offset: 44, size: 4
+    uint32 InAAGun; // offset: 48, size: 4
+} ViewFrustum; // size: 52
+
+#define STI_TYPE_HASH_Array_float32 0x168B4EB8
+typedef struct Array_float32 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    float32* items;
+} Array_float32; // size: 16
+
+#define STI_TYPE_HASH_SmellSettings 0x4821C6C2
+typedef struct SmellSettings{
+    const STITypeInfo* type_info_;
+    float32 SmellFov; // offset: 0, size: 4
+    Array_float32 ProneDistanceScore; // offset: 8, size: 16
+    Array_float32 CrouchDistanceScore; // offset: 24, size: 16
+    Array_float32 StandDistanceScore; // offset: 40, size: 16
+    Array_float32 SwimDistanceScore; // offset: 56, size: 16
+} SmellSettings; // size: 72
+
+#define STI_TYPE_HASH_HearingSettings 0x510ED72C
+typedef struct HearingSettings{
+    const STITypeInfo* type_info_;
+    Array_float32 CrawlDistanceScore; // offset: 0, size: 16
+    Array_float32 SneakDistanceScore; // offset: 16, size: 16
+    Array_float32 WalkDistanceScore; // offset: 32, size: 16
+    Array_float32 JogDistanceScore; // offset: 48, size: 16
+    Array_float32 RunDistanceScore; // offset: 64, size: 16
+    Array_float32 SwimDistanceScore; // offset: 80, size: 16
+} HearingSettings; // size: 96
+
+#define STI_TYPE_HASH_VisionSettings 0xB8386CAB
+typedef struct VisionSettings{
+    const STITypeInfo* type_info_;
+    Array_float32 ProneDistanceScore; // offset: 0, size: 16
+    Array_float32 CrouchDistanceScore; // offset: 16, size: 16
+    Array_float32 StandDistanceScore; // offset: 32, size: 16
+    Array_float32 SwimDistanceScore; // offset: 48, size: 16
+    Array_float32 CrawlDistanceScore; // offset: 64, size: 16
+    Array_float32 SneakDistanceScore; // offset: 80, size: 16
+    Array_float32 WalkDistanceScore; // offset: 96, size: 16
+    Array_float32 JogDistanceScore; // offset: 112, size: 16
+    Array_float32 RunDistanceScore; // offset: 128, size: 16
+} VisionSettings; // size: 144
+
+#define STI_TYPE_HASH_Array_ViewFrustum 0xFD88A4AB
+typedef struct Array_ViewFrustum {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ViewFrustum* items;
+} Array_ViewFrustum; // size: 16
+
+#define STI_TYPE_HASH_PerceptionConfig 0x62616919
+typedef struct PerceptionConfig{
+    const STITypeInfo* type_info_;
+    Array_ViewFrustum ViewFrustums; // offset: 0, size: 16
+    SmellSettings SmellSettings; // offset: 16, size: 72
+    HearingSettings HearingSettings; // offset: 88, size: 96
+    VisionSettings VisionSettings; // offset: 184, size: 144
+} PerceptionConfig; // size: 328
+
+#define STI_TYPE_HASH_ForcePulseSettings 0x39C734DF
+typedef struct ForcePulseSettings{
+    const STITypeInfo* type_info_;
+    uint32 PlayerDamage; // offset: 0, size: 4
+    float32 PlayerDamageRadius; // offset: 4, size: 4
+    float32 PlayerDamageRadiusPercentageMax; // offset: 8, size: 4
+    float32 PlayerDamageRadiusMin; // offset: 12, size: 4
+    uint32 AIDamage; // offset: 16, size: 4
+    float32 AIDamageRadius; // offset: 20, size: 4
+    float32 AIDamageRadiusPercentageMax; // offset: 24, size: 4
+    float32 AIDamageRadiusMin; // offset: 28, size: 4
+    float32 AIAwarenessEventRange; // offset: 32, size: 4
+    String HitEntitySpawnTag; // offset: 40, size: 8
+    String PlayerHitEntitySpawnTag; // offset: 48, size: 8
+    String AIHitEntitySpawnTag; // offset: 56, size: 8
+    uint8 HitEntityAttach; // offset: 64, size: 1
+    uint8 HitEntityTriggerNonAttached; // offset: 65, size: 1
+} ForcePulseSettings; // size: 72
+
+#define STI_TYPE_HASH_SoundFalloff 0x6FFEF00C
+typedef struct SoundFalloff{
+    const STITypeInfo* type_info_;
+    float32 Radius; // offset: 0, size: 4
+    float32 MaxDistance; // offset: 4, size: 4
+    float32 Linearity; // offset: 8, size: 4
+    float32 EnergyRadius; // offset: 12, size: 4
+    float32 VolumeSumBias; // offset: 16, size: 4
+    uint8 DebugPlot; // offset: 20, size: 1
+} SoundFalloff; // size: 24
+
+#define STI_TYPE_HASH_GameZoneSetup 0x2DE3B8DF
+typedef struct GameZoneSetup{
+    const STITypeInfo* type_info_;
+    String Name; // offset: 0, size: 8
+    float32 LoopGain; // offset: 8, size: 4
+    float32 DetailModulation; // offset: 12, size: 4
+    int32 DetailCount; // offset: 16, size: 4
+    float32 DetailLength[2]; // offset: 20, size: 8
+    float32 DetailWait[2]; // offset: 28, size: 8
+    float32 DetailGainRange[2]; // offset: 36, size: 8
+    int32 SprinkleCount; // offset: 44, size: 4
+    float32 SprinkleRadius; // offset: 48, size: 4
+    float32 SprinkleSpacing; // offset: 52, size: 4
+    float32 SprinkleWait[2]; // offset: 56, size: 8
+    float32 MixVolumeThreshold; // offset: 64, size: 4
+    float32 MixSpeed; // offset: 68, size: 4
+} GameZoneSetup; // size: 72
+
+#define STI_TYPE_HASH_Array_GameZoneSetup 0x958019F2
+typedef struct Array_GameZoneSetup {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    GameZoneSetup* items;
+} Array_GameZoneSetup; // size: 16
+
+#define STI_TYPE_HASH_AmbientSetup 0xE52D754F
+typedef struct AmbientSetup{
+    const STITypeInfo* type_info_;
+    Array_GameZoneSetup GameZones; // offset: 0, size: 16
+    int32 ActiveLoopCount; // offset: 16, size: 4
+    int32 SampleRings; // offset: 20, size: 4
+    int32 SampleCount; // offset: 24, size: 4
+    float32 SampleRadius; // offset: 28, size: 4
+    float32 SampleCountExp; // offset: 32, size: 4
+    float32 SampleRadiusExp; // offset: 36, size: 4
+    SoundFalloff Falloff; // offset: 40, size: 24
+} AmbientSetup; // size: 64
+
+#define STI_TYPE_HASH_TrainSoundSetup 0x43CC5C1F
+typedef struct TrainSoundSetup{
+    const STITypeInfo* type_info_;
+    float32 Gain; // offset: 0, size: 4
+    float32 FrontWheelsOffset[3]; // offset: 4, size: 12
+    float32 RearWheelsOffset[3]; // offset: 16, size: 12
+    SoundFalloff Falloff; // offset: 28, size: 24
+} TrainSoundSetup; // size: 52
+
+#define STI_TYPE_HASH_CombinedEffectSettings 0x4BCC09AF
+typedef struct CombinedEffectSettings{
+    const STITypeInfo* type_info_;
+    float32 MinImpulseVelocity; // offset: 0, size: 4
+    float32 MaxImpulseVelocity; // offset: 4, size: 4
+    float32 MaxImpulseMass; // offset: 8, size: 4
+    float32 MinScrape; // offset: 12, size: 4
+    float32 MaxScrape; // offset: 16, size: 4
+    float32 FilterTime; // offset: 20, size: 4
+    float32 MinRadius; // offset: 24, size: 4
+    float32 MaxRadius; // offset: 28, size: 4
+    float32 Priority; // offset: 32, size: 4
+    float32 MaxRingingTime; // offset: 36, size: 4
+} CombinedEffectSettings; // size: 40
+
+#define STI_TYPE_HASH_DestructionEffects 0x9EE65C82
+typedef struct DestructionEffects{
+    const STITypeInfo* type_info_;
+    CombinedEffectSettings DebrisImpact; // offset: 0, size: 40
+    CombinedEffectSettings SmallPieceImpact; // offset: 40, size: 40
+    CombinedEffectSettings SmallPieceWaterImpact; // offset: 80, size: 40
+    CombinedEffectSettings SmallPieceSliding; // offset: 120, size: 40
+    CombinedEffectSettings SmallFracture; // offset: 160, size: 40
+    CombinedEffectSettings BigPieceImpact; // offset: 200, size: 40
+    CombinedEffectSettings BigPieceSliding; // offset: 240, size: 40
+    CombinedEffectSettings BigPieceWaterImpact; // offset: 280, size: 40
+    CombinedEffectSettings BigFracture; // offset: 320, size: 40
+    CombinedEffectSettings PieceDestroyed; // offset: 360, size: 40
+    float32 BigPieceMass; // offset: 400, size: 4
+    float32 BigFractureMass; // offset: 404, size: 4
+} DestructionEffects; // size: 408
+
+#define STI_TYPE_HASH_VehicleEffects 0xDBF90EF3
+typedef struct VehicleEffects{
+    const STITypeInfo* type_info_;
+    CombinedEffectSettings Impact; // offset: 0, size: 40
+    CombinedEffectSettings WaterImpact; // offset: 40, size: 40
+    CombinedEffectSettings Sliding; // offset: 80, size: 40
+    CombinedEffectSettings Deform; // offset: 120, size: 40
+    CombinedEffectSettings UnderCarriageImpact; // offset: 160, size: 40
+    CombinedEffectSettings UnderCarriageSlide; // offset: 200, size: 40
+    CombinedEffectSettings PieceImpact; // offset: 240, size: 40
+    CombinedEffectSettings PieceSliding; // offset: 280, size: 40
+    float32 SpinningSpeedThreshold; // offset: 320, size: 4
+} VehicleEffects; // size: 324
+
+#define STI_TYPE_HASH_RigidObjectEffects 0xFDCF8095
+typedef struct RigidObjectEffects{
+    const STITypeInfo* type_info_;
+    CombinedEffectSettings Impact; // offset: 0, size: 40
+    CombinedEffectSettings WaterImpact; // offset: 40, size: 40
+    CombinedEffectSettings Sliding; // offset: 80, size: 40
+    float32 SpinningSpeedThreshold; // offset: 120, size: 4
+} RigidObjectEffects; // size: 124
+
+#define STI_TYPE_HASH_CharacterPhysicsEffects 0x6C5739CA
+typedef struct CharacterPhysicsEffects{
+    const STITypeInfo* type_info_;
+    CombinedEffectSettings RagdollImpact; // offset: 0, size: 40
+    CombinedEffectSettings RagdollSliding; // offset: 40, size: 40
+    float32 SpinningSpeedThreshold; // offset: 80, size: 4
+} CharacterPhysicsEffects; // size: 84
+
+#define STI_TYPE_HASH_VehicleRumbleEffects 0xAD92D81A
+typedef struct VehicleRumbleEffects{
+    const STITypeInfo* type_info_;
+    float32 BumpDecaySpeed; // offset: 0, size: 4
+    float32 MaxBump; // offset: 4, size: 4
+    float32 DoorCloseBump; // offset: 8, size: 4
+    float32 GearChangeBump; // offset: 12, size: 4
+    float32 MinImpactBumpImpulse; // offset: 16, size: 4
+    float32 ImpactBumpAmount; // offset: 20, size: 4
+    float32 MinScrapeFactor; // offset: 24, size: 4
+    float32 ScrapeBumpAmount; // offset: 28, size: 4
+    float32 RpmHFMinAmount; // offset: 32, size: 4
+    float32 RpmLFAmount; // offset: 36, size: 4
+    float32 RpmLFModulateAmount; // offset: 40, size: 4
+    float32 RpmLFModulateSpeed; // offset: 44, size: 4
+    float32 RpmHFAmount; // offset: 48, size: 4
+    float32 RpmHFModulateAmount; // offset: 52, size: 4
+    float32 RpmHFModulateSpeed; // offset: 56, size: 4
+    float32 LoadLFAmount; // offset: 60, size: 4
+    float32 LoadLFModulateAmount; // offset: 64, size: 4
+    float32 LoadLFModulateSpeed; // offset: 68, size: 4
+    float32 GroundScale; // offset: 72, size: 4
+    float32 GroundModulateSpeed; // offset: 76, size: 4
+    float32 GroundModulateAmount; // offset: 80, size: 4
+    float32 WheelSuspensionAmount; // offset: 84, size: 4
+} VehicleRumbleEffects; // size: 88
+
+#define STI_TYPE_HASH_Array_uint32 0xE8ABFE3B
+typedef struct Array_uint32 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    uint32* items;
+} Array_uint32; // size: 16
+
+#define STI_TYPE_HASH_AttachedEffectBaseData 0x19716392
+typedef struct AttachedEffectBaseData{
+    const STITypeInfo* type_info_;
+    Array_uint32 Usage; // offset: 0, size: 16
+    float32 RetriggerTime; // offset: 16, size: 4
+    uint32 DynamicPositionHint; // offset: 20, size: 4
+    uint32 TranslationMode; // offset: 24, size: 4
+    uint32 RotationMode; // offset: 28, size: 4
+    uint32 UpdateParamsFirstFrameOnly; // offset: 32, size: 4
+    uint32 SoundLayerAlias; // offset: 36, size: 4
+    uint32 SoundLayerOneShot; // offset: 40, size: 4
+    float32 SoundLayerFadeInTime; // offset: 44, size: 4
+    float32 SoundLayerFadeOutTime; // offset: 48, size: 4
+    float32 SoundLayerEnergy; // offset: 52, size: 4
+} AttachedEffectBaseData; // size: 56
+
+#define STI_TYPE_HASH_FmodGuid 0x4FF8DDD7
+typedef struct FmodGuid{
+    const STITypeInfo* type_info_;
+    uint8 Data[16]; // offset: 0, size: 16
+} FmodGuid; // size: 16
+
+#define STI_TYPE_HASH_AttachedEffectParam 0xA847192B
+typedef struct AttachedEffectParam{
+    const STITypeInfo* type_info_;
+    uint32 Input; // offset: 0, size: 4
+    uint32 Output; // offset: 4, size: 4
+} AttachedEffectParam; // size: 8
+
+#define STI_TYPE_HASH_Array_AttachedEffectParam 0x64EADD0B
+typedef struct Array_AttachedEffectParam {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AttachedEffectParam* items;
+} Array_AttachedEffectParam; // size: 16
+
+#define STI_TYPE_HASH_AttachedEffectData 0xD984E775
+typedef struct AttachedEffectData{
+    const STITypeInfo* type_info_;
+    AttachedEffectBaseData Base; // offset: 0, size: 56
+    uint32 Effect; // offset: 56, size: 4
+    uint8 Sound[16]; // offset: 60, size: 16
+    Array_AttachedEffectParam EffectParams; // offset: 80, size: 16
+    Array_AttachedEffectParam SoundParams; // offset: 96, size: 16
+} AttachedEffectData; // size: 112
+
+#define STI_TYPE_HASH_AttachedEffectTableData 0x36B2391C
+typedef struct AttachedEffectTableData{
+    const STITypeInfo* type_info_;
+    AttachedEffectBaseData Base; // offset: 0, size: 56
+    uint32 Effects[32]; // offset: 56, size: 128
+    FmodGuid Sounds[32]; // offset: 184, size: 512
+    Array_AttachedEffectParam EffectParams; // offset: 696, size: 16
+    Array_AttachedEffectParam SoundParams; // offset: 712, size: 16
+} AttachedEffectTableData; // size: 728
+
+#define STI_TYPE_HASH_DynamicAttachedEffectBaseData 0x776F536F
+typedef struct DynamicAttachedEffectBaseData{
+    const STITypeInfo* type_info_;
+    Array_uint32 Usage; // offset: 0, size: 16
+    uint32 Material; // offset: 16, size: 4
+    float32 RetriggerTime; // offset: 20, size: 4
+    uint32 UpdateParamsFirstFrameOnly; // offset: 24, size: 4
+    uint32 SoundLayerAlias; // offset: 28, size: 4
+    uint32 SoundLayerOneShot; // offset: 32, size: 4
+    float32 SoundLayerFadeInTime; // offset: 36, size: 4
+    float32 SoundLayerFadeOutTime; // offset: 40, size: 4
+    float32 SoundLayerEnergy; // offset: 44, size: 4
+} DynamicAttachedEffectBaseData; // size: 48
+
+#define STI_TYPE_HASH_DynamicAttachedEffectData 0xBE79D258
+typedef struct DynamicAttachedEffectData{
+    const STITypeInfo* type_info_;
+    DynamicAttachedEffectBaseData Base; // offset: 0, size: 48
+    uint32 Effect; // offset: 48, size: 4
+    uint8 Sound[16]; // offset: 52, size: 16
+    Array_AttachedEffectParam EffectParams; // offset: 72, size: 16
+    Array_AttachedEffectParam SoundParams; // offset: 88, size: 16
+} DynamicAttachedEffectData; // size: 104
+
+#define STI_TYPE_HASH_DynamicAttachedEffectTableData 0x75592F8B
+typedef struct DynamicAttachedEffectTableData{
+    const STITypeInfo* type_info_;
+    DynamicAttachedEffectBaseData Base; // offset: 0, size: 48
+    uint32 Effects[32]; // offset: 48, size: 128
+    FmodGuid Sounds[32]; // offset: 176, size: 512
+    Array_AttachedEffectParam EffectParams; // offset: 688, size: 16
+    Array_AttachedEffectParam SoundParams; // offset: 704, size: 16
+} DynamicAttachedEffectTableData; // size: 720
+
 #define STI_TYPE_HASH_Value 0x288A448A
 typedef struct Value{
     const STITypeInfo* type_info_;
@@ -4676,7 +3449,7 @@ typedef struct Value{
     StringHash_48c5294d_4 TypeHash; // offset: 4, size: 4
     int32 DataInt; // offset: 8, size: 4
     float32 DataFloat; // offset: 12, size: 4
-    String DataString; // offset: 16, size: 16
+    String DataString; // offset: 16, size: 8
     StringHash_48c5294d_4 DataStringHash; // offset: 24, size: 4
     float32 DataVector3f[3]; // offset: 28, size: 12
 } Value; // size: 40
@@ -4726,23 +3499,585 @@ typedef struct Graph{
     Array_Node Nodes; // offset: 0, size: 16
 } Graph; // size: 16
 
-#define STI_TYPE_HASH_ExpCraftProbabilities 0xE99ACACA
-typedef struct ExpCraftProbabilities{
+#define STI_TYPE_HASH_StringLookupHashProperties 0xDCFE3700
+typedef struct StringLookupHashProperties{
     const STITypeInfo* type_info_;
-    float32 NoBonusSlot; // offset: 0, size: 4
-    float32 OneBonusSlot; // offset: 4, size: 4
-    float32 TwoBonusSlot; // offset: 8, size: 4
-    float32 MediocreChance; // offset: 12, size: 4
-    float32 CommonChance; // offset: 16, size: 4
-    float32 RareChance; // offset: 20, size: 4
-    float32 EpicChance; // offset: 24, size: 4
-    float32 LegendaryChance; // offset: 28, size: 4
-    float32 Q1Chance; // offset: 32, size: 4
-    float32 Q2Chance; // offset: 36, size: 4
-    float32 Q3Chance; // offset: 40, size: 4
-    float32 Q4Chance; // offset: 44, size: 4
-    float32 Q5Chance; // offset: 48, size: 4
-} ExpCraftProbabilities; // size: 52
+    uint32 Hash; // offset: 0, size: 4
+    uint32 TextOffset; // offset: 4, size: 4
+    uint32 NameOffset; // offset: 8, size: 4
+} StringLookupHashProperties; // size: 12
+
+#define STI_TYPE_HASH_StringLookupSubtitle 0x6355E3EF
+typedef struct StringLookupSubtitle{
+    const STITypeInfo* type_info_;
+    uint32 LineHash; // offset: 0, size: 4
+    float32 Start; // offset: 4, size: 4
+    float32 Duration; // offset: 8, size: 4
+} StringLookupSubtitle; // size: 12
+
+#define STI_TYPE_HASH_Array_StringLookupSubtitle 0x06AABECE
+typedef struct Array_StringLookupSubtitle {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    StringLookupSubtitle* items;
+} Array_StringLookupSubtitle; // size: 16
+
+#define STI_TYPE_HASH_StringLookupDialogueLine 0x06A27C80
+typedef struct StringLookupDialogueLine{
+    const STITypeInfo* type_info_;
+    uint32 Hash; // offset: 0, size: 4
+    uint32 NameOffset; // offset: 4, size: 4
+    Array_StringLookupSubtitle Subtitles; // offset: 8, size: 16
+    uint32 FMODEvent; // offset: 24, size: 4
+    StringHash_48c5294d_4 IncomingCall; // offset: 28, size: 4
+    StringHash_48c5294d_4 CharacterName; // offset: 32, size: 4
+    uint32 Flags; // offset: 36, size: 4
+} StringLookupDialogueLine; // size: 40
+
+#define STI_TYPE_HASH_Array_StringLookupHashProperties 0x782ACDB9
+typedef struct Array_StringLookupHashProperties {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    StringLookupHashProperties* items;
+} Array_StringLookupHashProperties; // size: 16
+
+#define STI_TYPE_HASH_Array_StringLookupDialogueLine 0x8E6505A2
+typedef struct Array_StringLookupDialogueLine {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    StringLookupDialogueLine* items;
+} Array_StringLookupDialogueLine; // size: 16
+
+#define STI_TYPE_HASH_Array_int8 0x00A1294F
+typedef struct Array_int8 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    int8* items;
+} Array_int8; // size: 16
+
+#define STI_TYPE_HASH_StringLookup 0xB3ABF11B
+typedef struct StringLookup{
+    const STITypeInfo* type_info_;
+    Array_StringLookupHashProperties SortedPairs; // offset: 0, size: 16
+    Array_StringLookupDialogueLine SortedDialogueLines; // offset: 16, size: 16
+    Array_int8 Text; // offset: 32, size: 16
+} StringLookup; // size: 48
+
+#define STI_TYPE_HASH_GlobalFilter 0x6C575AC6
+typedef struct GlobalFilter{
+    const STITypeInfo* type_info_;
+    float32 MinRetriggerTime; // offset: 0, size: 4
+    float32 MaxRetriggerTime; // offset: 4, size: 4
+    String EnableEvent; // offset: 8, size: 8
+    String DisableEvent; // offset: 16, size: 8
+} GlobalFilter; // size: 24
+
+#define STI_TYPE_HASH_Type 0x38E7C2DB
+typedef struct Type{
+    const STITypeInfo* type_info_;
+    uint32 SettingsNameHash; // offset: 0, size: 4
+    float32 PreDelay; // offset: 4, size: 4
+    float32 MinRetriggerTime; // offset: 8, size: 4
+    float32 MaxRetriggerTime; // offset: 12, size: 4
+    Array_uint32 GlobalFilters; // offset: 16, size: 16
+    uint32 Type; // offset: 32, size: 4
+    uint32 Flags; // offset: 36, size: 4
+    float32 MaxDistance; // offset: 40, size: 4
+    uint32 Priority; // offset: 44, size: 4
+    uint32 MaxTriggerCount; // offset: 48, size: 4
+} Type; // size: 56
+
+#define STI_TYPE_HASH_Event 0xCF476747
+typedef struct Event{
+    const STITypeInfo* type_info_;
+    uint32 NameHash; // offset: 0, size: 4
+    uint64 GlobalEventHash; // offset: 8, size: 8
+    uint32 TypeIndex; // offset: 16, size: 4
+    Array_uint32 Variations; // offset: 24, size: 16
+    uint32 VariationIndex; // offset: 40, size: 4
+} Event; // size: 48
+
+#define STI_TYPE_HASH_Array_Event 0x4A10F7AB
+typedef struct Array_Event {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    Event* items;
+} Array_Event; // size: 16
+
+#define STI_TYPE_HASH_Definition 0x6D4FD5AA
+typedef struct Definition{
+    const STITypeInfo* type_info_;
+    float32 MinRetriggerTime; // offset: 0, size: 4
+    float32 MaxRetriggerTime; // offset: 4, size: 4
+    float32 MinExclRetriggerTime; // offset: 8, size: 4
+    float32 MaxExclRetriggerTime; // offset: 12, size: 4
+    Array_Event VocalEvents; // offset: 16, size: 16
+} Definition; // size: 32
+
+#define STI_TYPE_HASH_Array_GlobalFilter 0xEDA5B7A8
+typedef struct Array_GlobalFilter {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    GlobalFilter* items;
+} Array_GlobalFilter; // size: 16
+
+#define STI_TYPE_HASH_Array_Type 0xE85AF305
+typedef struct Array_Type {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    Type* items;
+} Array_Type; // size: 16
+
+#define STI_TYPE_HASH_Settings 0x1B7640FE
+typedef struct Settings{
+    const STITypeInfo* type_info_;
+    Array_GlobalFilter GlobalFilters; // offset: 0, size: 16
+    Array_Type Types; // offset: 16, size: 16
+} Settings; // size: 32
+
+#define STI_TYPE_HASH_GerstnerWaves 0x4449336F
+typedef struct GerstnerWaves{
+    const STITypeInfo* type_info_;
+    float32 shallow_surface_speed_multiplier; // offset: 0, size: 4
+    float32 deep_surface_speed_multiplier; // offset: 4, size: 4
+    float32 deep_sea_depth; // offset: 8, size: 4
+} GerstnerWaves; // size: 12
+
+#define STI_TYPE_HASH_WaveWorks 0xF8A21332
+typedef struct WaveWorks{
+    const STITypeInfo* type_info_;
+    float32 surface_speed_multiplier; // offset: 0, size: 4
+} WaveWorks; // size: 4
+
+#define STI_TYPE_HASH_WaterTuning 0xEA0D54DA
+typedef struct WaterTuning{
+    const STITypeInfo* type_info_;
+    GerstnerWaves gerstner_waves; // offset: 0, size: 12
+    WaveWorks wave_works; // offset: 12, size: 4
+} WaterTuning; // size: 16
+
+#define STI_TYPE_HASH_HashString 0xA62E34F9
+typedef struct HashString{
+    const STITypeInfo* type_info_;
+    String string; // offset: 0, size: 8
+    uint32 hash; // offset: 8, size: 4
+} HashString; // size: 16
+
+#define STI_TYPE_HASH_Array_int16 0x52A3F45E
+typedef struct Array_int16 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    int16* items;
+} Array_int16; // size: 16
+
+#define STI_TYPE_HASH_PartNode 0x2280C3D9
+typedef struct PartNode{
+    const STITypeInfo* type_info_;
+    String part_name; // offset: 0, size: 8
+    String world_collision_shape_name; // offset: 8, size: 8
+    String raycast_shape_name; // offset: 16, size: 8
+    String mesh_path; // offset: 24, size: 8
+    int32 is_deformable; // offset: 32, size: 4
+    int16 part_index; // offset: 36, size: 2
+    int16 parent_part; // offset: 38, size: 2
+    Array_int16 child_parts; // offset: 40, size: 16
+} PartNode; // size: 56
+
+#define STI_TYPE_HASH_Array_PartNode 0xC110BF49
+typedef struct Array_PartNode {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PartNode* items;
+} Array_PartNode; // size: 16
+
+#define STI_TYPE_HASH_PartsHierarchy 0x7EBB4046
+typedef struct PartsHierarchy{
+    const STITypeInfo* type_info_;
+    Array_PartNode part_nodes; // offset: 0, size: 16
+} PartsHierarchy; // size: 16
+
+#define STI_TYPE_HASH_DeformPoint 0x63B48D76
+typedef struct DeformPoint{
+    const STITypeInfo* type_info_;
+    String name; // offset: 0, size: 8
+    uint32 name_hash; // offset: 8, size: 4
+    String from_part; // offset: 16, size: 8
+    uint32 from_part_hash; // offset: 24, size: 4
+    uint32 from_part_index; // offset: 28, size: 4
+    String skinned_to_part; // offset: 32, size: 8
+    uint32 skinned_to_part_hash; // offset: 40, size: 4
+    uint32 skinned_to_part_index; // offset: 44, size: 4
+    uint32 shape_key; // offset: 48, size: 4
+    uint8 has_custom_end; // offset: 52, size: 1
+    HashString deform_point_type; // offset: 56, size: 16
+    float32 start_transform[16]; // offset: 72, size: 64
+    float32 end_transform[16]; // offset: 136, size: 64
+    int16 vertex_indices[4]; // offset: 200, size: 8
+    float32 vertex_weights[4]; // offset: 208, size: 16
+} DeformPoint; // size: 224
+
+#define STI_TYPE_HASH_Array_DeformPoint 0x9272B4C9
+typedef struct Array_DeformPoint {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    DeformPoint* items;
+} Array_DeformPoint; // size: 16
+
+#define STI_TYPE_HASH_Array_uint16 0x72E3A69A
+typedef struct Array_uint16 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    uint16* items;
+} Array_uint16; // size: 16
+
+#define STI_TYPE_HASH_DeformPoints 0xBA022EDF
+typedef struct DeformPoints{
+    const STITypeInfo* type_info_;
+    Array_DeformPoint points; // offset: 0, size: 16
+    Array_uint16 constraint_indices; // offset: 16, size: 16
+    Array_uint16 light_indices; // offset: 32, size: 16
+    Array_uint16 wheel_indices; // offset: 48, size: 16
+    Array_uint16 non_deformable_parts_indices; // offset: 64, size: 16
+    Array_uint16 hauling_hitch_indices; // offset: 80, size: 16
+    Array_uint16 trailing_hitch_indices; // offset: 96, size: 16
+} DeformPoints; // size: 112
+
+#define STI_TYPE_HASH_Part 0x66C03982
+typedef struct Part{
+    const STITypeInfo* type_info_;
+    HashString name; // offset: 0, size: 16
+    HashString damage_type; // offset: 16, size: 16
+    HashString behavior; // offset: 32, size: 16
+    HashString model; // offset: 48, size: 16
+    HashString model_swap; // offset: 64, size: 16
+    int8 part_index; // offset: 80, size: 1
+    int8 parent_part_index; // offset: 81, size: 1
+    float32 parent_space_offset[16]; // offset: 84, size: 64
+    float32 bind_pose_bone_matrix[16]; // offset: 148, size: 64
+    Array_int8 children_part_indices; // offset: 216, size: 16
+    int8 starts_loose; // offset: 232, size: 1
+    int8 should_break; // offset: 233, size: 1
+    int8 prevent_mesh_swap_while_alive; // offset: 234, size: 1
+    int8 prevent_loosening_while_alive; // offset: 235, size: 1
+    int8 prevent_breaking_while_alive; // offset: 236, size: 1
+    int8 always_mesh_swap_on_death; // offset: 237, size: 1
+    int8 always_loosen_on_death; // offset: 238, size: 1
+    int8 always_break_on_death; // offset: 239, size: 1
+    int8 disappears_when_broken; // offset: 240, size: 1
+    int8 appears_on_death; // offset: 241, size: 1
+    int8 disappears_on_death; // offset: 242, size: 1
+    int8 starts_deleted; // offset: 243, size: 1
+    int8 is_deformable; // offset: 244, size: 1
+    int8 has_lights; // offset: 245, size: 1
+    int8 has_world_collision_shape; // offset: 246, size: 1
+    int8 only_collides_once_loose; // offset: 247, size: 1
+    int8 only_collides_once_broken; // offset: 248, size: 1
+    Array_int16 hide_parts_when_broken; // offset: 256, size: 16
+    Array_int16 meshswap_parts_when_broken; // offset: 272, size: 16
+    Array_int16 loosen_parts_when_broken; // offset: 288, size: 16
+    Array_int16 break_parts_when_broken; // offset: 304, size: 16
+    int16 world_collision_instance_id; // offset: 320, size: 2
+    int16 raycast_instance_id; // offset: 322, size: 2
+    int16 grandpa_world_instance_id; // offset: 324, size: 2
+    int16 grandpa_raycast_instance_id; // offset: 326, size: 2
+    int16 world_collision_body_id; // offset: 328, size: 2
+    int16 raycast_body_id; // offset: 330, size: 2
+    int16 constraint_index; // offset: 332, size: 2
+    float32 centroid[4]; // offset: 336, size: 16
+    float32 deformation_centroid_offset[4]; // offset: 352, size: 16
+} Part; // size: 368
+
+#define STI_TYPE_HASH_PartPhysicsMapping 0x3EEC15F4
+typedef struct PartPhysicsMapping{
+    const STITypeInfo* type_info_;
+    String name; // offset: 0, size: 8
+    int8 part_index; // offset: 8, size: 1
+    int8 world_collision_instance_id; // offset: 9, size: 1
+    int8 raycast_instance_id; // offset: 10, size: 1
+    int8 grandpa_world_instance_id; // offset: 11, size: 1
+    int8 grandpa_raycast_instance_id; // offset: 12, size: 1
+    int16 world_collision_body_id; // offset: 14, size: 2
+    int16 raycast_body_id; // offset: 16, size: 2
+    int16 constraint_index; // offset: 18, size: 2
+} PartPhysicsMapping; // size: 24
+
+#define STI_TYPE_HASH_Array_PartPhysicsMapping 0x63696EE4
+typedef struct Array_PartPhysicsMapping {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PartPhysicsMapping* items;
+} Array_PartPhysicsMapping; // size: 16
+
+#define STI_TYPE_HASH_PartPhysicsMappings 0x29B100E2
+typedef struct PartPhysicsMappings{
+    const STITypeInfo* type_info_;
+    Array_PartPhysicsMapping part_physics_mappings; // offset: 0, size: 16
+} PartPhysicsMappings; // size: 16
+
+#define STI_TYPE_HASH_RotatingPart 0xBD803D08
+typedef struct RotatingPart{
+    const STITypeInfo* type_info_;
+    int8 part_index; // offset: 0, size: 1
+    int8 number_of_blades; // offset: 1, size: 1
+    float32 position[3]; // offset: 4, size: 12
+    float32 rotation_axis[3]; // offset: 16, size: 12
+    float32 rpm_multiplier; // offset: 28, size: 4
+    float32 min_rpm_visible; // offset: 32, size: 4
+    float32 max_rpm_visible; // offset: 36, size: 4
+    float32 rpm_opacity_transition; // offset: 40, size: 4
+} RotatingPart; // size: 44
+
+#define STI_TYPE_HASH_HingedPart 0x4BBC352C
+typedef struct HingedPart{
+    const STITypeInfo* type_info_;
+    int8 part_index; // offset: 0, size: 1
+} HingedPart; // size: 1
+
+#define STI_TYPE_HASH_WheelPart 0x01DB7089
+typedef struct WheelPart{
+    const STITypeInfo* type_info_;
+    int8 part_index; // offset: 0, size: 1
+    int8 wheel_slot; // offset: 1, size: 1
+    int8 number_of_spokes; // offset: 2, size: 1
+    int8 spins; // offset: 3, size: 1
+} WheelPart; // size: 4
+
+#define STI_TYPE_HASH_SpringPart 0xF3AF13A9
+typedef struct SpringPart{
+    const STITypeInfo* type_info_;
+    int8 part_index; // offset: 0, size: 1
+    int8 wheel_slot; // offset: 1, size: 1
+    float32 model_length_at_rest; // offset: 4, size: 4
+} SpringPart; // size: 8
+
+#define STI_TYPE_HASH_PropellerPart 0x0A720746
+typedef struct PropellerPart{
+    const STITypeInfo* type_info_;
+    int8 part_index; // offset: 0, size: 1
+} PropellerPart; // size: 1
+
+#define STI_TYPE_HASH_FinPart 0x26ED2EC9
+typedef struct FinPart{
+    const STITypeInfo* type_info_;
+    int8 part_index; // offset: 0, size: 1
+} FinPart; // size: 1
+
+#define STI_TYPE_HASH_DoorPart 0x95699934
+typedef struct DoorPart{
+    const STITypeInfo* type_info_;
+    int8 part_index; // offset: 0, size: 1
+} DoorPart; // size: 1
+
+#define STI_TYPE_HASH_Bone 0x796058B7
+typedef struct Bone{
+    const STITypeInfo* type_info_;
+    HashString name; // offset: 0, size: 16
+    HashString parent_bone_name; // offset: 16, size: 16
+    HashString animation_type; // offset: 32, size: 16
+} Bone; // size: 48
+
+#define STI_TYPE_HASH_Array_Bone 0xB89C9F9A
+typedef struct Array_Bone {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    Bone* items;
+} Array_Bone; // size: 16
+
+#define STI_TYPE_HASH_SkinnedPart 0x75E38043
+typedef struct SkinnedPart{
+    const STITypeInfo* type_info_;
+    int8 part_index; // offset: 0, size: 1
+    Array_Bone bones; // offset: 8, size: 16
+} SkinnedPart; // size: 24
+
+#define STI_TYPE_HASH_AimPartConstraint 0xA84D9A9A
+typedef struct AimPartConstraint{
+    const STITypeInfo* type_info_;
+    HashString source_part; // offset: 0, size: 16
+    HashString target_part; // offset: 16, size: 16
+    int8 source_part_index; // offset: 32, size: 1
+    int8 target_part_index; // offset: 33, size: 1
+    float32 aim_vector[3]; // offset: 36, size: 12
+    float32 up_vector[3]; // offset: 48, size: 12
+    float32 world_up_vector[3]; // offset: 60, size: 12
+    float32 angle_offset[3]; // offset: 72, size: 12
+    float32 constrained_rotation_axes[3]; // offset: 84, size: 12
+} AimPartConstraint; // size: 96
+
+#define STI_TYPE_HASH_PointPartConstraint 0x3C2EFE9F
+typedef struct PointPartConstraint{
+    const STITypeInfo* type_info_;
+    HashString source_part; // offset: 0, size: 16
+    HashString target_part; // offset: 16, size: 16
+    int8 source_part_index; // offset: 32, size: 1
+    int8 target_part_index; // offset: 33, size: 1
+    float32 translation_offset[3]; // offset: 36, size: 12
+    float32 constrained_translation_axes[3]; // offset: 48, size: 12
+} PointPartConstraint; // size: 64
+
+#define STI_TYPE_HASH_IKChain 0x2756F437
+typedef struct IKChain{
+    const STITypeInfo* type_info_;
+    HashString attachment_part; // offset: 0, size: 16
+    int8 attachment_part_index; // offset: 16, size: 1
+    HashString root_part; // offset: 24, size: 16
+    int8 root_part_index; // offset: 40, size: 1
+    HashString mid_part; // offset: 48, size: 16
+    int8 mid_part_index; // offset: 64, size: 1
+    HashString effector_part; // offset: 72, size: 16
+    int8 effector_part_index; // offset: 88, size: 1
+    float32 root_to_mid_length; // offset: 92, size: 4
+    float32 mid_to_effector_length; // offset: 96, size: 4
+} IKChain; // size: 104
+
+#define STI_TYPE_HASH_Array_Part 0x6DB3EB66
+typedef struct Array_Part {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    Part* items;
+} Array_Part; // size: 16
+
+#define STI_TYPE_HASH_Array_WheelPart 0x82A02ED4
+typedef struct Array_WheelPart {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    WheelPart* items;
+} Array_WheelPart; // size: 16
+
+#define STI_TYPE_HASH_Array_HingedPart 0x81D37ED6
+typedef struct Array_HingedPart {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    HingedPart* items;
+} Array_HingedPart; // size: 16
+
+#define STI_TYPE_HASH_Array_RotatingPart 0x689D218F
+typedef struct Array_RotatingPart {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RotatingPart* items;
+} Array_RotatingPart; // size: 16
+
+#define STI_TYPE_HASH_Array_PropellerPart 0xB680C9FB
+typedef struct Array_PropellerPart {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PropellerPart* items;
+} Array_PropellerPart; // size: 16
+
+#define STI_TYPE_HASH_Array_FinPart 0x78FF133E
+typedef struct Array_FinPart {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    FinPart* items;
+} Array_FinPart; // size: 16
+
+#define STI_TYPE_HASH_Array_SpringPart 0xAE42CDED
+typedef struct Array_SpringPart {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    SpringPart* items;
+} Array_SpringPart; // size: 16
+
+#define STI_TYPE_HASH_Array_SkinnedPart 0xE53E990C
+typedef struct Array_SkinnedPart {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    SkinnedPart* items;
+} Array_SkinnedPart; // size: 16
+
+#define STI_TYPE_HASH_Array_DoorPart 0xF37672FC
+typedef struct Array_DoorPart {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    DoorPart* items;
+} Array_DoorPart; // size: 16
+
+#define STI_TYPE_HASH_Array_AimPartConstraint 0xD07D279C
+typedef struct Array_AimPartConstraint {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AimPartConstraint* items;
+} Array_AimPartConstraint; // size: 16
+
+#define STI_TYPE_HASH_Array_PointPartConstraint 0x849D274C
+typedef struct Array_PointPartConstraint {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PointPartConstraint* items;
+} Array_PointPartConstraint; // size: 16
+
+#define STI_TYPE_HASH_Array_IKChain 0xADF2728C
+typedef struct Array_IKChain {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    IKChain* items;
+} Array_IKChain; // size: 16
+
+#define STI_TYPE_HASH_VehicleParts 0xEA5CE415
+typedef struct VehicleParts{
+    const STITypeInfo* type_info_;
+    Array_Part parts; // offset: 0, size: 16
+    Array_WheelPart wheel_parts; // offset: 16, size: 16
+    Array_HingedPart hinged_parts; // offset: 32, size: 16
+    Array_RotatingPart rotating_parts; // offset: 48, size: 16
+    Array_PropellerPart propeller_parts; // offset: 64, size: 16
+    Array_FinPart fin_parts; // offset: 80, size: 16
+    Array_SpringPart spring_parts; // offset: 96, size: 16
+    Array_SkinnedPart skinned_parts; // offset: 112, size: 16
+    Array_DoorPart door_parts; // offset: 128, size: 16
+    Array_AimPartConstraint aim_part_constraints; // offset: 144, size: 16
+    Array_PointPartConstraint point_part_constraints; // offset: 160, size: 16
+    Array_IKChain ik_chains; // offset: 176, size: 16
+} VehicleParts; // size: 192
+
+#define STI_TYPE_HASH_AxisAlignedBoundingBox 0x77D16175
+typedef struct AxisAlignedBoundingBox{
+    const STITypeInfo* type_info_;
+    float32 min_x; // offset: 0, size: 4
+    float32 max_x; // offset: 4, size: 4
+    float32 min_y; // offset: 8, size: 4
+    float32 max_y; // offset: 12, size: 4
+    float32 min_z; // offset: 16, size: 4
+    float32 max_z; // offset: 20, size: 4
+} AxisAlignedBoundingBox; // size: 24
+
+#define STI_TYPE_HASH_StuntArea 0x083BBC1E
+typedef struct StuntArea{
+    const STITypeInfo* type_info_;
+    String name; // offset: 0, size: 8
+    uint32 name_hash; // offset: 8, size: 4
+    String part_name; // offset: 16, size: 8
+    uint32 part_hash; // offset: 24, size: 4
+    uint32 part_index; // offset: 28, size: 4
+    uint32 deform_points[16]; // offset: 32, size: 64
+    uint8 edge_validity[16]; // offset: 96, size: 16
+    uint16 number_of_deform_points; // offset: 112, size: 2
+    uint16 active; // offset: 114, size: 2
+    float32 vertices3D_local[48]; // offset: 116, size: 192
+    uint8 triangle_indices[42]; // offset: 308, size: 42
+    uint16 number_of_triangles; // offset: 350, size: 2
+    AxisAlignedBoundingBox bounding_box_local; // offset: 352, size: 24
+    float32 center_local[3]; // offset: 376, size: 12
+} StuntArea; // size: 392
+
+#define STI_TYPE_HASH_StuntAreaWeldingInfo 0x56E5108C
+typedef struct StuntAreaWeldingInfo{
+    const STITypeInfo* type_info_;
+    int16 stunt_area_a_index; // offset: 0, size: 2
+    int16 edge_a_index; // offset: 2, size: 2
+    int16 stunt_area_b_index; // offset: 4, size: 2
+    int16 edge_b_index; // offset: 6, size: 2
+} StuntAreaWeldingInfo; // size: 8
+
+#define STI_TYPE_HASH_StuntAreas 0x9327DF87
+typedef struct StuntAreas{
+    const STITypeInfo* type_info_;
+    StuntArea stunt_areas[32]; // offset: 0, size: 12544
+    uint8 number_of_stunt_areas; // offset: 12544, size: 1
+    StuntAreaWeldingInfo welding_info[64]; // offset: 12546, size: 512
+    uint16 number_of_welding_info; // offset: 13058, size: 2
+} StuntAreas; // size: 13064
 
 #define STI_TYPE_HASH_ColorRGBA 0x48CCE0EE
 typedef struct ColorRGBA{
@@ -5048,7 +4383,7 @@ typedef struct LandSteering{
     float32 wheel_drift_aligning_strength; // offset: 56, size: 4
 } LandSteering; // size: 60
 
-#define STI_TYPE_HASH_DriverLean 0xE546C190
+#define STI_TYPE_HASH_DriverLean 0x0A44C93E
 typedef struct DriverLean{
     const STITypeInfo* type_info_;
     float32 t_to_full_lean_min_speed_s; // offset: 0, size: 4
@@ -5060,14 +4395,16 @@ typedef struct DriverLean{
     float32 lean_speedcurve_falloff; // offset: 24, size: 4
     float32 max_lean_angle_deg; // offset: 28, size: 4
     float32 max_drift_lean_angle_deg; // offset: 32, size: 4
-    float32 ease_in_angle_deg; // offset: 36, size: 4
-    float32 leaning_torque; // offset: 40, size: 4
-    float32 drift_leaning_torque; // offset: 44, size: 4
-    float32 righting_torque; // offset: 48, size: 4
-    float32 drift_factor_lean_power; // offset: 52, size: 4
-    float32 lean_damping; // offset: 56, size: 4
-    float32 lean_ratio_for_max_steer; // offset: 60, size: 4
-} DriverLean; // size: 64
+    float32 drift_factor_lean_power; // offset: 36, size: 4
+    float32 lean_damping; // offset: 40, size: 4
+    float32 lean_ratio_for_max_steer; // offset: 44, size: 4
+    float32 lean_p; // offset: 48, size: 4
+    float32 lean_i; // offset: 52, size: 4
+    float32 lean_d; // offset: 56, size: 4
+    float32 lean_pid_max_output; // offset: 60, size: 4
+    float32 max_lean_extra_damping; // offset: 64, size: 4
+    float32 roll_speed_soft_clamp; // offset: 68, size: 4
+} DriverLean; // size: 72
 
 #define STI_TYPE_HASH_MotorbikeWheelie 0xBBCBB145
 typedef struct MotorbikeWheelie{
@@ -5222,13 +4559,6 @@ typedef struct AI{
     float32 speed_backward; // offset: 40, size: 4
 } AI; // size: 44
 
-#define STI_TYPE_HASH_HashString 0xA62E34F9
-typedef struct HashString{
-    const STITypeInfo* type_info_;
-    String string; // offset: 0, size: 16
-    uint32 hash; // offset: 8, size: 4
-} HashString; // size: 16
-
 #define STI_TYPE_HASH_PartDamageType 0x9724E4C1
 typedef struct PartDamageType{
     const STITypeInfo* type_info_;
@@ -5382,7 +4712,7 @@ typedef struct Aerodynamics{
 #define STI_TYPE_HASH_Rudder 0x566E5A72
 typedef struct Rudder{
     const STITypeInfo* type_info_;
-    String name; // offset: 0, size: 16
+    String name; // offset: 0, size: 8
     HashString physics_component_name; // offset: 8, size: 16
     float32 hinge_point[3]; // offset: 24, size: 12
     EulerAngles hinge_angles; // offset: 36, size: 12
@@ -6029,6 +5359,13 @@ typedef struct PatchProvision{
     float32 value_19; // offset: 76, size: 4
 } PatchProvision; // size: 80
 
+#define STI_TYPE_HASH_MotorbikeFuelSettings 0xF6434BF3
+typedef struct MotorbikeFuelSettings{
+    const STITypeInfo* type_info_;
+    float32 fuel_base_consumption; // offset: 0, size: 4
+    float32 fuel_velocity_consumption_per_second; // offset: 4, size: 4
+} MotorbikeFuelSettings; // size: 8
+
 #define STI_TYPE_HASH_Array_VehicleDoor 0x7DB3F539
 typedef struct Array_VehicleDoor {
     const STITypeInfo* type_info_;
@@ -6036,7 +5373,7 @@ typedef struct Array_VehicleDoor {
     VehicleDoor* items;
 } Array_VehicleDoor; // size: 16
 
-#define STI_TYPE_HASH_VehicleMisc 0x7ECA5AC6
+#define STI_TYPE_HASH_VehicleMisc 0x1805B2BE
 typedef struct VehicleMisc{
     const STITypeInfo* type_info_;
     float32 open_door_duration_s; // offset: 0, size: 4
@@ -6056,8 +5393,10 @@ typedef struct VehicleMisc{
     float32 max_damage_speed_kph; // offset: 68, size: 4
     int32 damage_at_min_speed; // offset: 72, size: 4
     int32 damage_at_max_speed; // offset: 76, size: 4
-    PatchProvision patch_provision; // offset: 80, size: 80
-} VehicleMisc; // size: 160
+    float32 impulse_resistance; // offset: 80, size: 4
+    MotorbikeFuelSettings fuel_settings; // offset: 84, size: 8
+    PatchProvision patch_provision; // offset: 92, size: 80
+} VehicleMisc; // size: 176
 
 #define STI_TYPE_HASH_PID 0xBAE3FB45
 typedef struct PID{
@@ -6141,6 +5480,13 @@ typedef struct BoatAI{
     float32 Limit_Path_Depth; // offset: 252, size: 4
     uint8 Limit_IsLargeVehicle; // offset: 256, size: 1
 } BoatAI; // size: 260
+
+#define STI_TYPE_HASH_Array_uint8 0x6F962A30
+typedef struct Array_uint8 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    uint8* items;
+} Array_uint8; // size: 16
 
 #define STI_TYPE_HASH_TriangulatedMesh 0xA843C6A1
 typedef struct TriangulatedMesh{
@@ -6228,8 +5574,8 @@ typedef struct Decals{
 #define STI_TYPE_HASH_PartTuning 0xDCED0396
 typedef struct PartTuning{
     const STITypeInfo* type_info_;
-    String part_name; // offset: 0, size: 16
-    String hello_world; // offset: 8, size: 16
+    String part_name; // offset: 0, size: 8
+    String hello_world; // offset: 8, size: 8
     float32 magnetic_sensitivity; // offset: 16, size: 4
 } PartTuning; // size: 24
 
@@ -6249,7 +5595,7 @@ typedef struct PartTunings{
 #define STI_TYPE_HASH_ExtendedExposedVariable 0xD7FD9895
 typedef struct ExtendedExposedVariable{
     const STITypeInfo* type_info_;
-    String expression; // offset: 0, size: 16
+    String expression; // offset: 0, size: 8
 } ExtendedExposedVariable; // size: 8
 
 #define STI_TYPE_HASH_Array_ExtendedExposedVariable 0x0320923A
@@ -6269,8 +5615,8 @@ typedef struct ExtendedExposedVariables{
 typedef struct ExtendedEffectUsage{
     const STITypeInfo* type_info_;
     HashString name; // offset: 0, size: 16
-    String activation_expression; // offset: 16, size: 16
-    String deactivation_expression; // offset: 24, size: 16
+    String activation_expression; // offset: 16, size: 8
+    String deactivation_expression; // offset: 24, size: 8
 } ExtendedEffectUsage; // size: 32
 
 #define STI_TYPE_HASH_Array_ExtendedEffectUsage 0xC664427A
@@ -6307,516 +5653,252 @@ typedef struct PartType{
     Array_PartBehavior part_behaviors; // offset: 16, size: 16
 } PartType; // size: 32
 
-#define STI_TYPE_HASH_PartNode 0x2280C3D9
-typedef struct PartNode{
+#define STI_TYPE_HASH_MinimapSettings 0xE4B1D490
+typedef struct MinimapSettings{
     const STITypeInfo* type_info_;
-    String part_name; // offset: 0, size: 16
-    String world_collision_shape_name; // offset: 8, size: 16
-    String raycast_shape_name; // offset: 16, size: 16
-    String mesh_path; // offset: 24, size: 16
-    int32 is_deformable; // offset: 32, size: 4
-    int16 part_index; // offset: 36, size: 2
-    int16 parent_part; // offset: 38, size: 2
-    Array_int16 child_parts; // offset: 40, size: 16
-} PartNode; // size: 56
+    float32 MapScaleMin; // offset: 0, size: 4
+    float32 MapScaleMax; // offset: 4, size: 4
+    float32 IconScaleMin; // offset: 8, size: 4
+    float32 IconScaleMax; // offset: 12, size: 4
+} MinimapSettings; // size: 16
 
-#define STI_TYPE_HASH_Array_PartNode 0xC110BF49
-typedef struct Array_PartNode {
+#define STI_TYPE_HASH_WobbleEffectSettings 0x9DAE8656
+typedef struct WobbleEffectSettings{
     const STITypeInfo* type_info_;
-    uint32 count;
-    PartNode* items;
-} Array_PartNode; // size: 16
+    float32 JumpAccelearion; // offset: 0, size: 4
+    float32 LandingAccelearion; // offset: 4, size: 4
+    float32 SprintingAccelearion; // offset: 8, size: 4
+    float32 ImpactAccelearion; // offset: 12, size: 4
+    float32 LinearMovementGain; // offset: 16, size: 4
+    float32 LinearMovementConstant; // offset: 20, size: 4
+    float32 LinearMovementDamping; // offset: 24, size: 4
+    float32 VehicleLinearMovementGain; // offset: 28, size: 4
+    float32 AngularMovementGain; // offset: 32, size: 4
+    float32 AngularMovementConstant; // offset: 36, size: 4
+    float32 AngularMovementDamping; // offset: 40, size: 4
+    float32 VehicleAngularMovementGain; // offset: 44, size: 4
+} WobbleEffectSettings; // size: 48
 
-#define STI_TYPE_HASH_PartsHierarchy 0x7EBB4046
-typedef struct PartsHierarchy{
+#define STI_TYPE_HASH_HUDSettings 0x2132A067
+typedef struct HUDSettings{
     const STITypeInfo* type_info_;
-    Array_PartNode part_nodes; // offset: 0, size: 16
-} PartsHierarchy; // size: 16
+    MinimapSettings MinimapSettings; // offset: 0, size: 16
+    WobbleEffectSettings WobbleEffectSettings; // offset: 16, size: 48
+} HUDSettings; // size: 64
 
-#define STI_TYPE_HASH_DeformPoint 0x63B48D76
-typedef struct DeformPoint{
+#define STI_TYPE_HASH_WorldMapSettings 0xE5A6EE25
+typedef struct WorldMapSettings{
     const STITypeInfo* type_info_;
-    String name; // offset: 0, size: 16
-    uint32 name_hash; // offset: 8, size: 4
-    String from_part; // offset: 16, size: 16
-    uint32 from_part_hash; // offset: 24, size: 4
-    uint32 from_part_index; // offset: 28, size: 4
-    String skinned_to_part; // offset: 32, size: 16
-    uint32 skinned_to_part_hash; // offset: 40, size: 4
-    uint32 skinned_to_part_index; // offset: 44, size: 4
-    uint32 shape_key; // offset: 48, size: 4
-    uint8 has_custom_end; // offset: 52, size: 1
-    HashString deform_point_type; // offset: 56, size: 16
-    float32 start_transform[16]; // offset: 72, size: 64
-    float32 end_transform[16]; // offset: 136, size: 64
-    int16 vertex_indices[4]; // offset: 200, size: 8
-    float32 vertex_weights[4]; // offset: 208, size: 16
-} DeformPoint; // size: 224
+    float32 MapScaleMin; // offset: 0, size: 4
+    float32 MapScaleMax; // offset: 4, size: 4
+    int8 MapScaleSteps; // offset: 8, size: 1
+    int8 MapScaleDefaultStep; // offset: 9, size: 1
+    float32 IconScaleMin; // offset: 12, size: 4
+    float32 IconScaleMax; // offset: 16, size: 4
+    float32 PlayerIconScaleMin; // offset: 20, size: 4
+    float32 PlayerIconScaleMax; // offset: 24, size: 4
+} WorldMapSettings; // size: 28
 
-#define STI_TYPE_HASH_Array_DeformPoint 0x9272B4C9
-typedef struct Array_DeformPoint {
+#define STI_TYPE_HASH_GlobalUISettings 0x41A131B6
+typedef struct GlobalUISettings{
     const STITypeInfo* type_info_;
-    uint32 count;
-    DeformPoint* items;
-} Array_DeformPoint; // size: 16
+    HUDSettings HUDSettings; // offset: 0, size: 64
+    WorldMapSettings WorldMapSettings; // offset: 64, size: 28
+} GlobalUISettings; // size: 92
 
-#define STI_TYPE_HASH_DeformPoints 0xBA022EDF
-typedef struct DeformPoints{
+#define STI_TYPE_HASH_SightTuning 0x97E92882
+typedef struct SightTuning{
     const STITypeInfo* type_info_;
-    Array_DeformPoint points; // offset: 0, size: 16
-    Array_uint16 constraint_indices; // offset: 16, size: 16
-    Array_uint16 light_indices; // offset: 32, size: 16
-    Array_uint16 wheel_indices; // offset: 48, size: 16
-    Array_uint16 non_deformable_parts_indices; // offset: 64, size: 16
-    Array_uint16 hauling_hitch_indices; // offset: 80, size: 16
-    Array_uint16 trailing_hitch_indices; // offset: 96, size: 16
-} DeformPoints; // size: 112
+    float32 zoom_multiplier_level_0; // offset: 0, size: 4
+    float32 zoom_multiplier_level_1; // offset: 4, size: 4
+    float32 zoom_multiplier_level_2; // offset: 8, size: 4
+    float32 zoom_multiplier_level_3; // offset: 12, size: 4
+    float32 zoom_multiplier_level_4; // offset: 16, size: 4
+} SightTuning; // size: 20
 
-#define STI_TYPE_HASH_Part 0x66C03982
-typedef struct Part{
+#define STI_TYPE_HASH_MissileArcSettings 0x9502D786
+typedef struct MissileArcSettings{
     const STITypeInfo* type_info_;
-    HashString name; // offset: 0, size: 16
-    HashString damage_type; // offset: 16, size: 16
-    HashString behavior; // offset: 32, size: 16
-    HashString model; // offset: 48, size: 16
-    HashString model_swap; // offset: 64, size: 16
-    int8 part_index; // offset: 80, size: 1
-    int8 parent_part_index; // offset: 81, size: 1
-    float32 parent_space_offset[16]; // offset: 84, size: 64
-    float32 bind_pose_bone_matrix[16]; // offset: 148, size: 64
-    Array_int8 children_part_indices; // offset: 216, size: 16
-    int8 starts_loose; // offset: 232, size: 1
-    int8 should_break; // offset: 233, size: 1
-    int8 prevent_mesh_swap_while_alive; // offset: 234, size: 1
-    int8 prevent_loosening_while_alive; // offset: 235, size: 1
-    int8 prevent_breaking_while_alive; // offset: 236, size: 1
-    int8 always_mesh_swap_on_death; // offset: 237, size: 1
-    int8 always_loosen_on_death; // offset: 238, size: 1
-    int8 always_break_on_death; // offset: 239, size: 1
-    int8 disappears_when_broken; // offset: 240, size: 1
-    int8 appears_on_death; // offset: 241, size: 1
-    int8 disappears_on_death; // offset: 242, size: 1
-    int8 starts_deleted; // offset: 243, size: 1
-    int8 is_deformable; // offset: 244, size: 1
-    int8 has_lights; // offset: 245, size: 1
-    int8 has_world_collision_shape; // offset: 246, size: 1
-    int8 only_collides_once_loose; // offset: 247, size: 1
-    int8 only_collides_once_broken; // offset: 248, size: 1
-    Array_int16 hide_parts_when_broken; // offset: 256, size: 16
-    Array_int16 meshswap_parts_when_broken; // offset: 272, size: 16
-    Array_int16 loosen_parts_when_broken; // offset: 288, size: 16
-    Array_int16 break_parts_when_broken; // offset: 304, size: 16
-    int16 world_collision_instance_id; // offset: 320, size: 2
-    int16 raycast_instance_id; // offset: 322, size: 2
-    int16 grandpa_world_instance_id; // offset: 324, size: 2
-    int16 grandpa_raycast_instance_id; // offset: 326, size: 2
-    int16 world_collision_body_id; // offset: 328, size: 2
-    int16 raycast_body_id; // offset: 330, size: 2
-    int16 constraint_index; // offset: 332, size: 2
-    float32 centroid[4]; // offset: 336, size: 16
-    float32 deformation_centroid_offset[4]; // offset: 352, size: 16
-} Part; // size: 368
+    float32 arc_height; // offset: 0, size: 4
+    float32 arc_angle; // offset: 4, size: 4
+    float32 arc_velocity_multiplier; // offset: 8, size: 4
+} MissileArcSettings; // size: 12
 
-#define STI_TYPE_HASH_PartPhysicsMapping 0x3EEC15F4
-typedef struct PartPhysicsMapping{
+#define STI_TYPE_HASH_ClusterAmmunitionSettings 0x564018B8
+typedef struct ClusterAmmunitionSettings{
     const STITypeInfo* type_info_;
-    String name; // offset: 0, size: 16
-    int8 part_index; // offset: 8, size: 1
-    int8 world_collision_instance_id; // offset: 9, size: 1
-    int8 raycast_instance_id; // offset: 10, size: 1
-    int8 grandpa_world_instance_id; // offset: 11, size: 1
-    int8 grandpa_raycast_instance_id; // offset: 12, size: 1
-    int16 world_collision_body_id; // offset: 14, size: 2
-    int16 raycast_body_id; // offset: 16, size: 2
-    int16 constraint_index; // offset: 18, size: 2
-} PartPhysicsMapping; // size: 24
+    String cluster_entity_spawn_tag; // offset: 0, size: 8
+    uint8 no_of_clusters; // offset: 8, size: 1
+    float32 spawn_distance; // offset: 12, size: 4
+    float32 spread_min; // offset: 16, size: 4
+    float32 spread_max; // offset: 20, size: 4
+} ClusterAmmunitionSettings; // size: 24
 
-#define STI_TYPE_HASH_Array_PartPhysicsMapping 0x63696EE4
-typedef struct Array_PartPhysicsMapping {
+#define STI_TYPE_HASH_AreaBulletSettings 0xC275272D
+typedef struct AreaBulletSettings{
     const STITypeInfo* type_info_;
-    uint32 count;
-    PartPhysicsMapping* items;
-} Array_PartPhysicsMapping; // size: 16
+    float32 hit_radius_start; // offset: 0, size: 4
+    float32 despawn_radius_start; // offset: 4, size: 4
+    float32 despawn_radius_end; // offset: 8, size: 4
+    float32 despawn_sphere_margin; // offset: 12, size: 4
+    uint8 hit_holey_materials; // offset: 16, size: 1
+    uint8 holey_materials_stop_bullet; // offset: 17, size: 1
+} AreaBulletSettings; // size: 20
 
-#define STI_TYPE_HASH_PartPhysicsMappings 0x29B100E2
-typedef struct PartPhysicsMappings{
+#define STI_TYPE_HASH_HitEntity 0x0E2CDB1F
+typedef struct HitEntity{
     const STITypeInfo* type_info_;
-    Array_PartPhysicsMapping part_physics_mappings; // offset: 0, size: 16
-} PartPhysicsMappings; // size: 16
+    String spawn_tag; // offset: 0, size: 8
+} HitEntity; // size: 8
 
-#define STI_TYPE_HASH_RotatingPart 0xBD803D08
-typedef struct RotatingPart{
+#define STI_TYPE_HASH_Requirement 0x482B29E5
+typedef struct Requirement{
     const STITypeInfo* type_info_;
-    int8 part_index; // offset: 0, size: 1
-    int8 number_of_blades; // offset: 1, size: 1
-    float32 position[3]; // offset: 4, size: 12
-    float32 rotation_axis[3]; // offset: 16, size: 12
-    float32 rpm_multiplier; // offset: 28, size: 4
-    float32 min_rpm_visible; // offset: 32, size: 4
-    float32 max_rpm_visible; // offset: 36, size: 4
-    float32 rpm_opacity_transition; // offset: 40, size: 4
-} RotatingPart; // size: 44
+    float32 charge; // offset: 0, size: 4
+    float32 damage; // offset: 4, size: 4
+    float32 lifetime; // offset: 8, size: 4
+} Requirement; // size: 12
 
-#define STI_TYPE_HASH_HingedPart 0x4BBC352C
-typedef struct HingedPart{
+#define STI_TYPE_HASH_HitEntitySpawn 0xD54F2716
+typedef struct HitEntitySpawn{
     const STITypeInfo* type_info_;
-    int8 part_index; // offset: 0, size: 1
-} HingedPart; // size: 1
+    Requirement requirement; // offset: 0, size: 12
+    HitEntity hit_entity; // offset: 16, size: 8
+} HitEntitySpawn; // size: 24
 
-#define STI_TYPE_HASH_WheelPart 0x01DB7089
-typedef struct WheelPart{
+#define STI_TYPE_HASH_ProjectileEntitySpawn 0x6ECC35B5
+typedef struct ProjectileEntitySpawn{
     const STITypeInfo* type_info_;
-    int8 part_index; // offset: 0, size: 1
-    int8 wheel_slot; // offset: 1, size: 1
-    int8 number_of_spokes; // offset: 2, size: 1
-    int8 spins; // offset: 3, size: 1
-} WheelPart; // size: 4
+    Requirement requirement; // offset: 0, size: 12
+    String spawn_tag; // offset: 16, size: 8
+} ProjectileEntitySpawn; // size: 24
 
-#define STI_TYPE_HASH_SpringPart 0xF3AF13A9
-typedef struct SpringPart{
+#define STI_TYPE_HASH_CurveAbscissa 0x3E68D2C5
+typedef struct CurveAbscissa{
     const STITypeInfo* type_info_;
-    int8 part_index; // offset: 0, size: 1
-    int8 wheel_slot; // offset: 1, size: 1
-    float32 model_length_at_rest; // offset: 4, size: 4
-} SpringPart; // size: 8
+    float32 distance; // offset: 0, size: 4
+    float32 lifetime; // offset: 4, size: 4
+    float32 charge; // offset: 8, size: 4
+} CurveAbscissa; // size: 12
 
-#define STI_TYPE_HASH_PropellerPart 0x0A720746
-typedef struct PropellerPart{
+#define STI_TYPE_HASH_AmmunitionRecoilSettings 0x56B8D197
+typedef struct AmmunitionRecoilSettings{
     const STITypeInfo* type_info_;
-    int8 part_index; // offset: 0, size: 1
-} PropellerPart; // size: 1
+    float32 recoil_multiplier; // offset: 0, size: 4
+    float32 recoil_first_shot_multiplier; // offset: 4, size: 4
+    float32 recoil_precision_aim_multiplier; // offset: 8, size: 4
+    float32 recoil_recover_perc_multiplier; // offset: 12, size: 4
+    float32 recoil_recover_speed_multiplier; // offset: 16, size: 4
+    float32 recoil_apply_speed_multiplier; // offset: 20, size: 4
+    float32 recoil_sway_multiplier; // offset: 24, size: 4
+} AmmunitionRecoilSettings; // size: 28
 
-#define STI_TYPE_HASH_FinPart 0x26ED2EC9
-typedef struct FinPart{
+#define STI_TYPE_HASH_AmmunitionMagazineSettings 0x07C23A2F
+typedef struct AmmunitionMagazineSettings{
     const STITypeInfo* type_info_;
-    int8 part_index; // offset: 0, size: 1
-} FinPart; // size: 1
+    int32 increased_mag_size; // offset: 0, size: 4
+} AmmunitionMagazineSettings; // size: 4
 
-#define STI_TYPE_HASH_DoorPart 0x95699934
-typedef struct DoorPart{
+#define STI_TYPE_HASH_AmmunitionFireModeSettings 0x9B821F83
+typedef struct AmmunitionFireModeSettings{
     const STITypeInfo* type_info_;
-    int8 part_index; // offset: 0, size: 1
-} DoorPart; // size: 1
+    float32 fire_delay_multiplier; // offset: 0, size: 4
+} AmmunitionFireModeSettings; // size: 4
 
-#define STI_TYPE_HASH_Bone 0x796058B7
-typedef struct Bone{
-    const STITypeInfo* type_info_;
-    HashString name; // offset: 0, size: 16
-    HashString parent_bone_name; // offset: 16, size: 16
-    HashString animation_type; // offset: 32, size: 16
-} Bone; // size: 48
-
-#define STI_TYPE_HASH_Array_Bone 0xB89C9F9A
-typedef struct Array_Bone {
+#define STI_TYPE_HASH_Array_HitEntitySpawn 0xB3B621AD
+typedef struct Array_HitEntitySpawn {
     const STITypeInfo* type_info_;
     uint32 count;
-    Bone* items;
-} Array_Bone; // size: 16
+    HitEntitySpawn* items;
+} Array_HitEntitySpawn; // size: 16
 
-#define STI_TYPE_HASH_SkinnedPart 0x75E38043
-typedef struct SkinnedPart{
-    const STITypeInfo* type_info_;
-    int8 part_index; // offset: 0, size: 1
-    Array_Bone bones; // offset: 8, size: 16
-} SkinnedPart; // size: 24
-
-#define STI_TYPE_HASH_AimPartConstraint 0xA84D9A9A
-typedef struct AimPartConstraint{
-    const STITypeInfo* type_info_;
-    HashString source_part; // offset: 0, size: 16
-    HashString target_part; // offset: 16, size: 16
-    int8 source_part_index; // offset: 32, size: 1
-    int8 target_part_index; // offset: 33, size: 1
-    float32 aim_vector[3]; // offset: 36, size: 12
-    float32 up_vector[3]; // offset: 48, size: 12
-    float32 world_up_vector[3]; // offset: 60, size: 12
-    float32 angle_offset[3]; // offset: 72, size: 12
-    float32 constrained_rotation_axes[3]; // offset: 84, size: 12
-} AimPartConstraint; // size: 96
-
-#define STI_TYPE_HASH_PointPartConstraint 0x3C2EFE9F
-typedef struct PointPartConstraint{
-    const STITypeInfo* type_info_;
-    HashString source_part; // offset: 0, size: 16
-    HashString target_part; // offset: 16, size: 16
-    int8 source_part_index; // offset: 32, size: 1
-    int8 target_part_index; // offset: 33, size: 1
-    float32 translation_offset[3]; // offset: 36, size: 12
-    float32 constrained_translation_axes[3]; // offset: 48, size: 12
-} PointPartConstraint; // size: 64
-
-#define STI_TYPE_HASH_IKChain 0x2756F437
-typedef struct IKChain{
-    const STITypeInfo* type_info_;
-    HashString attachment_part; // offset: 0, size: 16
-    int8 attachment_part_index; // offset: 16, size: 1
-    HashString root_part; // offset: 24, size: 16
-    int8 root_part_index; // offset: 40, size: 1
-    HashString mid_part; // offset: 48, size: 16
-    int8 mid_part_index; // offset: 64, size: 1
-    HashString effector_part; // offset: 72, size: 16
-    int8 effector_part_index; // offset: 88, size: 1
-    float32 root_to_mid_length; // offset: 92, size: 4
-    float32 mid_to_effector_length; // offset: 96, size: 4
-} IKChain; // size: 104
-
-#define STI_TYPE_HASH_Array_Part 0x6DB3EB66
-typedef struct Array_Part {
+#define STI_TYPE_HASH_Array_ProjectileEntitySpawn 0x0D62D9A4
+typedef struct Array_ProjectileEntitySpawn {
     const STITypeInfo* type_info_;
     uint32 count;
-    Part* items;
-} Array_Part; // size: 16
+    ProjectileEntitySpawn* items;
+} Array_ProjectileEntitySpawn; // size: 16
 
-#define STI_TYPE_HASH_Array_WheelPart 0x82A02ED4
-typedef struct Array_WheelPart {
+#define STI_TYPE_HASH_AmmunitionTuning 0x51265C00
+typedef struct AmmunitionTuning{
+    const STITypeInfo* type_info_;
+    float32 max_range; // offset: 0, size: 4
+    float32 diameter; // offset: 4, size: 4
+    float32 length; // offset: 8, size: 4
+    float32 ballistic_coefficient_front; // offset: 12, size: 4
+    float32 ballistic_coefficient_side; // offset: 16, size: 4
+    float32 drag_coefficient; // offset: 20, size: 4
+    float32 kinetic_energy; // offset: 24, size: 4
+    float32 mass; // offset: 28, size: 4
+    float32 projectile_damage; // offset: 32, size: 4
+    float32 armour_damage_multiplier; // offset: 36, size: 4
+    float32 organ_damage_multiplier; // offset: 40, size: 4
+    float32 propagate_leftover_damage; // offset: 44, size: 4
+    uint8 projectiles_per_shot; // offset: 48, size: 1
+    String projectile_model_path; // offset: 56, size: 8
+    float32 hit_radius; // offset: 64, size: 4
+    String hit_entity_spawn_tag; // offset: 72, size: 8
+    Array_HitEntitySpawn hit_entity_spawns_on_requirement; // offset: 80, size: 16
+    uint8 hit_entity_spawn_method; // offset: 96, size: 1
+    uint8 hit_entity_spawn_max_count; // offset: 97, size: 1
+    uint8 hit_entity_spawn_on_kill_hit; // offset: 98, size: 1
+    uint8 hit_entity_use_bullet_model; // offset: 99, size: 1
+    uint8 trigger_non_attached_entities; // offset: 100, size: 1
+    uint8 spawn_hit_entity_weapon_controller_only; // offset: 101, size: 1
+    uint8 use_arc_movement; // offset: 102, size: 1
+    uint8 use_staggered_arming; // offset: 103, size: 1
+    uint8 pierce_armor_pieces; // offset: 104, size: 1
+    uint8 spawn_both_bullet_and_projectile_entity; // offset: 105, size: 1
+    String projectile_entity_spawn_tag; // offset: 112, size: 8
+    Array_ProjectileEntitySpawn projectile_entity_spawn_tag_on_requirement; // offset: 120, size: 16
+    float32 scatter_multiplier; // offset: 136, size: 4
+    float32 multi_projectile_scatter_angle; // offset: 140, size: 4
+    Spline5 damage_falloff_curve; // offset: 144, size: 80
+    CurveAbscissa damage_falloff_curve_abscissa; // offset: 224, size: 12
+    Spline5 penetration_falloff_curve; // offset: 236, size: 80
+    CurveAbscissa penetration_falloff_curve_abscissa; // offset: 316, size: 12
+    MissileArcSettings missile_arc_settings; // offset: 328, size: 12
+    ClusterAmmunitionSettings cluster_ammunition_settings; // offset: 344, size: 24
+    AreaBulletSettings area_bullet_settings; // offset: 368, size: 20
+    float32 noise_multiplier; // offset: 388, size: 4
+    AmmunitionRecoilSettings recoil_settings; // offset: 392, size: 28
+    AmmunitionMagazineSettings mag_settings; // offset: 420, size: 4
+    AmmunitionFireModeSettings fire_settings; // offset: 424, size: 4
+} AmmunitionTuning; // size: 432
+
+#define STI_TYPE_HASH_ScopeOffsetTransform 0xB5BB6B1C
+typedef struct ScopeOffsetTransform{
+    const STITypeInfo* type_info_;
+    float32 X; // offset: 0, size: 4
+    float32 Y; // offset: 4, size: 4
+    float32 Z; // offset: 8, size: 4
+} ScopeOffsetTransform; // size: 12
+
+#define STI_TYPE_HASH_WeaponAttachData 0x8A3548E2
+typedef struct WeaponAttachData{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 WeaponKey; // offset: 0, size: 4
+    StringHash_48c5294d_4 ScopeAttachementBone; // offset: 4, size: 4
+    ScopeOffsetTransform ScopeOffset; // offset: 8, size: 12
+    ScopeOffsetTransform RailOffset; // offset: 20, size: 12
+    ScopeOffsetTransform ScopeAdapterOffset; // offset: 32, size: 12
+} WeaponAttachData; // size: 44
+
+#define STI_TYPE_HASH_Array_WeaponAttachData 0xFF569B1D
+typedef struct Array_WeaponAttachData {
     const STITypeInfo* type_info_;
     uint32 count;
-    WheelPart* items;
-} Array_WheelPart; // size: 16
+    WeaponAttachData* items;
+} Array_WeaponAttachData; // size: 16
 
-#define STI_TYPE_HASH_Array_HingedPart 0x81D37ED6
-typedef struct Array_HingedPart {
+#define STI_TYPE_HASH_AttachData 0x463452F1
+typedef struct AttachData{
     const STITypeInfo* type_info_;
-    uint32 count;
-    HingedPart* items;
-} Array_HingedPart; // size: 16
+    Array_WeaponAttachData Weapons; // offset: 0, size: 16
+    ScopeOffsetTransform ScopeCenterOffset; // offset: 16, size: 12
+} AttachData; // size: 32
 
-#define STI_TYPE_HASH_Array_RotatingPart 0x689D218F
-typedef struct Array_RotatingPart {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    RotatingPart* items;
-} Array_RotatingPart; // size: 16
-
-#define STI_TYPE_HASH_Array_PropellerPart 0xB680C9FB
-typedef struct Array_PropellerPart {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    PropellerPart* items;
-} Array_PropellerPart; // size: 16
-
-#define STI_TYPE_HASH_Array_FinPart 0x78FF133E
-typedef struct Array_FinPart {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    FinPart* items;
-} Array_FinPart; // size: 16
-
-#define STI_TYPE_HASH_Array_SpringPart 0xAE42CDED
-typedef struct Array_SpringPart {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    SpringPart* items;
-} Array_SpringPart; // size: 16
-
-#define STI_TYPE_HASH_Array_SkinnedPart 0xE53E990C
-typedef struct Array_SkinnedPart {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    SkinnedPart* items;
-} Array_SkinnedPart; // size: 16
-
-#define STI_TYPE_HASH_Array_DoorPart 0xF37672FC
-typedef struct Array_DoorPart {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    DoorPart* items;
-} Array_DoorPart; // size: 16
-
-#define STI_TYPE_HASH_Array_AimPartConstraint 0xD07D279C
-typedef struct Array_AimPartConstraint {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    AimPartConstraint* items;
-} Array_AimPartConstraint; // size: 16
-
-#define STI_TYPE_HASH_Array_PointPartConstraint 0x849D274C
-typedef struct Array_PointPartConstraint {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    PointPartConstraint* items;
-} Array_PointPartConstraint; // size: 16
-
-#define STI_TYPE_HASH_Array_IKChain 0xADF2728C
-typedef struct Array_IKChain {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    IKChain* items;
-} Array_IKChain; // size: 16
-
-#define STI_TYPE_HASH_VehicleParts 0xEA5CE415
-typedef struct VehicleParts{
-    const STITypeInfo* type_info_;
-    Array_Part parts; // offset: 0, size: 16
-    Array_WheelPart wheel_parts; // offset: 16, size: 16
-    Array_HingedPart hinged_parts; // offset: 32, size: 16
-    Array_RotatingPart rotating_parts; // offset: 48, size: 16
-    Array_PropellerPart propeller_parts; // offset: 64, size: 16
-    Array_FinPart fin_parts; // offset: 80, size: 16
-    Array_SpringPart spring_parts; // offset: 96, size: 16
-    Array_SkinnedPart skinned_parts; // offset: 112, size: 16
-    Array_DoorPart door_parts; // offset: 128, size: 16
-    Array_AimPartConstraint aim_part_constraints; // offset: 144, size: 16
-    Array_PointPartConstraint point_part_constraints; // offset: 160, size: 16
-    Array_IKChain ik_chains; // offset: 176, size: 16
-} VehicleParts; // size: 192
-
-#define STI_TYPE_HASH_AxisAlignedBoundingBox 0x77D16175
-typedef struct AxisAlignedBoundingBox{
-    const STITypeInfo* type_info_;
-    float32 min_x; // offset: 0, size: 4
-    float32 max_x; // offset: 4, size: 4
-    float32 min_y; // offset: 8, size: 4
-    float32 max_y; // offset: 12, size: 4
-    float32 min_z; // offset: 16, size: 4
-    float32 max_z; // offset: 20, size: 4
-} AxisAlignedBoundingBox; // size: 24
-
-#define STI_TYPE_HASH_StuntArea 0x083BBC1E
-typedef struct StuntArea{
-    const STITypeInfo* type_info_;
-    String name; // offset: 0, size: 16
-    uint32 name_hash; // offset: 8, size: 4
-    String part_name; // offset: 16, size: 16
-    uint32 part_hash; // offset: 24, size: 4
-    uint32 part_index; // offset: 28, size: 4
-    uint32 deform_points[16]; // offset: 32, size: 64
-    uint8 edge_validity[16]; // offset: 96, size: 16
-    uint16 number_of_deform_points; // offset: 112, size: 2
-    uint16 active; // offset: 114, size: 2
-    float32 vertices3D_local[48]; // offset: 116, size: 192
-    uint8 triangle_indices[42]; // offset: 308, size: 42
-    uint16 number_of_triangles; // offset: 350, size: 2
-    AxisAlignedBoundingBox bounding_box_local; // offset: 352, size: 24
-    float32 center_local[3]; // offset: 376, size: 12
-} StuntArea; // size: 392
-
-#define STI_TYPE_HASH_StuntAreaWeldingInfo 0x56E5108C
-typedef struct StuntAreaWeldingInfo{
-    const STITypeInfo* type_info_;
-    int16 stunt_area_a_index; // offset: 0, size: 2
-    int16 edge_a_index; // offset: 2, size: 2
-    int16 stunt_area_b_index; // offset: 4, size: 2
-    int16 edge_b_index; // offset: 6, size: 2
-} StuntAreaWeldingInfo; // size: 8
-
-#define STI_TYPE_HASH_StuntAreas 0x9327DF87
-typedef struct StuntAreas{
-    const STITypeInfo* type_info_;
-    StuntArea stunt_areas[32]; // offset: 0, size: 12544
-    uint8 number_of_stunt_areas; // offset: 12544, size: 1
-    StuntAreaWeldingInfo welding_info[64]; // offset: 12546, size: 512
-    uint16 number_of_welding_info; // offset: 13058, size: 2
-} StuntAreas; // size: 13064
-
-#define STI_TYPE_HASH_ViewFrustum 0x4D0B5CC7
-typedef struct ViewFrustum{
-    const STITypeInfo* type_info_;
-    float32 FOV_H; // offset: 0, size: 4
-    float32 FOV_V; // offset: 4, size: 4
-    float32 Near; // offset: 8, size: 4
-    float32 Far; // offset: 12, size: 4
-    float32 Yaw; // offset: 16, size: 4
-    float32 Pitch; // offset: 20, size: 4
-    uint32 OnFoot; // offset: 24, size: 4
-    uint32 InLandVehicle; // offset: 28, size: 4
-    uint32 InHelicopter; // offset: 32, size: 4
-    uint32 InSeaVehicle; // offset: 36, size: 4
-    uint32 InTank; // offset: 40, size: 4
-    uint32 Mounted; // offset: 44, size: 4
-    uint32 InAAGun; // offset: 48, size: 4
-} ViewFrustum; // size: 52
-
-#define STI_TYPE_HASH_SmellSettings 0x4821C6C2
-typedef struct SmellSettings{
-    const STITypeInfo* type_info_;
-    float32 SmellFov; // offset: 0, size: 4
-    Array_float32 ProneDistanceScore; // offset: 8, size: 16
-    Array_float32 CrouchDistanceScore; // offset: 24, size: 16
-    Array_float32 StandDistanceScore; // offset: 40, size: 16
-    Array_float32 SwimDistanceScore; // offset: 56, size: 16
-} SmellSettings; // size: 72
-
-#define STI_TYPE_HASH_HearingSettings 0x510ED72C
-typedef struct HearingSettings{
-    const STITypeInfo* type_info_;
-    Array_float32 CrawlDistanceScore; // offset: 0, size: 16
-    Array_float32 SneakDistanceScore; // offset: 16, size: 16
-    Array_float32 WalkDistanceScore; // offset: 32, size: 16
-    Array_float32 JogDistanceScore; // offset: 48, size: 16
-    Array_float32 RunDistanceScore; // offset: 64, size: 16
-    Array_float32 SwimDistanceScore; // offset: 80, size: 16
-} HearingSettings; // size: 96
-
-#define STI_TYPE_HASH_VisionSettings 0xB8386CAB
-typedef struct VisionSettings{
-    const STITypeInfo* type_info_;
-    Array_float32 ProneDistanceScore; // offset: 0, size: 16
-    Array_float32 CrouchDistanceScore; // offset: 16, size: 16
-    Array_float32 StandDistanceScore; // offset: 32, size: 16
-    Array_float32 SwimDistanceScore; // offset: 48, size: 16
-    Array_float32 CrawlDistanceScore; // offset: 64, size: 16
-    Array_float32 SneakDistanceScore; // offset: 80, size: 16
-    Array_float32 WalkDistanceScore; // offset: 96, size: 16
-    Array_float32 JogDistanceScore; // offset: 112, size: 16
-    Array_float32 RunDistanceScore; // offset: 128, size: 16
-} VisionSettings; // size: 144
-
-#define STI_TYPE_HASH_Array_ViewFrustum 0xFD88A4AB
-typedef struct Array_ViewFrustum {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ViewFrustum* items;
-} Array_ViewFrustum; // size: 16
-
-#define STI_TYPE_HASH_PerceptionConfig 0x62616919
-typedef struct PerceptionConfig{
-    const STITypeInfo* type_info_;
-    Array_ViewFrustum ViewFrustums; // offset: 0, size: 16
-    SmellSettings SmellSettings; // offset: 16, size: 72
-    HearingSettings HearingSettings; // offset: 88, size: 96
-    VisionSettings VisionSettings; // offset: 184, size: 144
-} PerceptionConfig; // size: 328
-
-#define STI_TYPE_HASH_GerstnerWaves 0x4449336F
-typedef struct GerstnerWaves{
-    const STITypeInfo* type_info_;
-    float32 shallow_surface_speed_multiplier; // offset: 0, size: 4
-    float32 deep_surface_speed_multiplier; // offset: 4, size: 4
-    float32 deep_sea_depth; // offset: 8, size: 4
-} GerstnerWaves; // size: 12
-
-#define STI_TYPE_HASH_WaveWorks 0xF8A21332
-typedef struct WaveWorks{
-    const STITypeInfo* type_info_;
-    float32 surface_speed_multiplier; // offset: 0, size: 4
-} WaveWorks; // size: 4
-
-#define STI_TYPE_HASH_WaterTuning 0xEA0D54DA
-typedef struct WaterTuning{
-    const STITypeInfo* type_info_;
-    GerstnerWaves gerstner_waves; // offset: 0, size: 12
-    WaveWorks wave_works; // offset: 12, size: 4
-} WaterTuning; // size: 16
-
-#define STI_TYPE_HASH_AimControlSettings 0xCAD14753
-typedef struct AimControlSettings{
-    const STITypeInfo* type_info_;
-    float32 YawDeadZone; // offset: 0, size: 4
-    float32 PitchDeadZone; // offset: 4, size: 4
-    float32 SensivityMultiplier; // offset: 8, size: 4
-} AimControlSettings; // size: 12
-
-#define STI_TYPE_HASH_FallDamageSettings 0x3106F877
-typedef struct FallDamageSettings{
-    const STITypeInfo* type_info_;
-    float32 MinHeight; // offset: 0, size: 4
-    float32 MaxHeight; // offset: 4, size: 4
-    float32 MinDamage; // offset: 8, size: 4
-    float32 MaxDamage; // offset: 12, size: 4
-} FallDamageSettings; // size: 16
-
-#define STI_TYPE_HASH_PlayerHealthSettings 0x65BD3DA0
+#define STI_TYPE_HASH_PlayerHealthSettings 0xA5910678
 typedef struct PlayerHealthSettings{
     const STITypeInfo* type_info_;
     float32 Health; // offset: 0, size: 4
@@ -6824,12 +5906,9 @@ typedef struct PlayerHealthSettings{
     float32 InstantKillProtectionHealth; // offset: 8, size: 4
     float32 InstantKillProtectionDuration; // offset: 12, size: 4
     float32 InstantKillHealthMemoryTime; // offset: 16, size: 4
-    FallDamageSettings FallDamageLight; // offset: 20, size: 16
-    FallDamageSettings FallDamageHeavy; // offset: 36, size: 16
-    FallDamageSettings FallDamageVeryHeavy; // offset: 52, size: 16
-    FallDamageSettings FallDamageDeadly; // offset: 68, size: 16
-    Spline5 DamageCurve; // offset: 84, size: 80
-} PlayerHealthSettings; // size: 164
+    Spline5 FallDamageCurve; // offset: 20, size: 80
+    Spline5 DamageCurve; // offset: 100, size: 80
+} PlayerHealthSettings; // size: 180
 
 #define STI_TYPE_HASH_PlayerMusicSettings 0x073DB4EC
 typedef struct PlayerMusicSettings{
@@ -6889,1119 +5968,236 @@ typedef struct DamageOverTimeEffectSettings{
     DamageOverTimeScreenEffectSettings ScreenEffectSettings; // offset: 28, size: 12
 } DamageOverTimeEffectSettings; // size: 40
 
-#define STI_TYPE_HASH_StorageSettings 0xA866D7EB
+#define STI_TYPE_HASH_StorageLevel 0x3ECFAA6B
+typedef struct StorageLevel{
+    const STITypeInfo* type_info_;
+    float32 Capacity; // offset: 0, size: 4
+    String UpgradeCost; // offset: 8, size: 8
+} StorageLevel; // size: 16
+
+#define STI_TYPE_HASH_EncumbranceSettings 0xB3665C5F
+typedef struct EncumbranceSettings{
+    const STITypeInfo* type_info_;
+    float32 NoStaminaMoveSpeedMul; // offset: 0, size: 4
+    Spline5 MoveStaminaCost; // offset: 4, size: 80
+} EncumbranceSettings; // size: 84
+
+#define STI_TYPE_HASH_Array_StorageLevel 0x4CDBE823
+typedef struct Array_StorageLevel {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    StorageLevel* items;
+} Array_StorageLevel; // size: 16
+
+#define STI_TYPE_HASH_StorageSettings 0x0884DC88
 typedef struct StorageSettings{
     const STITypeInfo* type_info_;
-    float32 SafehouseStorageCapacity; // offset: 0, size: 4
-    float32 ResourceStorageCapacity; // offset: 4, size: 4
-    float32 LightEncumberanceExtraWeight; // offset: 8, size: 4
-    float32 HeavyEncumberanceExtraWeight; // offset: 12, size: 4
-} StorageSettings; // size: 16
+    EncumbranceSettings EncumbranceSettings; // offset: 0, size: 84
+    Array_StorageLevel SafehouseStorageLevels; // offset: 88, size: 16
+    Array_StorageLevel ResourceStorageLevels; // offset: 104, size: 16
+} StorageSettings; // size: 120
 
-#define STI_TYPE_HASH_PlayerSettings 0x27C7BBC4
+#define STI_TYPE_HASH_CompanionSchematicCurrencySettings 0x71EE6B0E
+typedef struct CompanionSchematicCurrencySettings{
+    const STITypeInfo* type_info_;
+    uint8 SmallMachineKill; // offset: 0, size: 1
+    uint8 LargeMachineKill; // offset: 1, size: 1
+    uint8 RivalKill; // offset: 2, size: 1
+    uint8 ReaperKill; // offset: 3, size: 1
+    float32 TravelDistance; // offset: 4, size: 4
+    uint8 TravelReward; // offset: 8, size: 1
+} CompanionSchematicCurrencySettings; // size: 12
+
+#define STI_TYPE_HASH_SchematicCurrencySettings 0x68BBFA36
+typedef struct SchematicCurrencySettings{
+    const STITypeInfo* type_info_;
+    CompanionSchematicCurrencySettings CompanionSchematicCurrencySettings; // offset: 0, size: 12
+} SchematicCurrencySettings; // size: 12
+
+#define STI_TYPE_HASH_PlayerSettings 0xF0FEED9D
 typedef struct PlayerSettings{
     const STITypeInfo* type_info_;
-    String LocalPlayerExpentity; // offset: 0, size: 16
-    String RemotePlayerExpentity; // offset: 8, size: 16
+    String LocalPlayerExpentity; // offset: 0, size: 8
+    String RemotePlayerExpentity; // offset: 8, size: 8
     uint8 DisableCharacterCustomization; // offset: 16, size: 1
     float32 DownedAbandonTime; // offset: 20, size: 4
     float32 CustomGravity; // offset: 24, size: 4
     float32 KnockDownForceThreshold; // offset: 28, size: 4
-    AimControlSettings AimControlSettings; // offset: 32, size: 12
-    PlayerHealthSettings PlayerHealthSettings; // offset: 44, size: 164
-    LowHealthScreenEffectSettings LowHealthScreenEffectSettings; // offset: 208, size: 28
-    PlayerMusicSettings PlayerMusicSettings; // offset: 236, size: 68
-    DamageOverTimeEffectSettings DamageOverTimeEffectSettings; // offset: 304, size: 40
-    StorageSettings StorageSettings; // offset: 344, size: 16
-} PlayerSettings; // size: 360
+    PlayerHealthSettings PlayerHealthSettings; // offset: 32, size: 180
+    LowHealthScreenEffectSettings LowHealthScreenEffectSettings; // offset: 212, size: 28
+    PlayerMusicSettings PlayerMusicSettings; // offset: 240, size: 68
+    DamageOverTimeEffectSettings DamageOverTimeEffectSettings; // offset: 308, size: 40
+    StorageSettings StorageSettings; // offset: 352, size: 120
+    SchematicCurrencySettings SchematicCurrencySettings; // offset: 472, size: 12
+} PlayerSettings; // size: 488
 
-#define STI_TYPE_HASH_MissileArcSettings 0x9502D786
-typedef struct MissileArcSettings{
+#define STI_TYPE_HASH_WeaponModTuningSettings 0xEF0C9EDF
+typedef struct WeaponModTuningSettings{
     const STITypeInfo* type_info_;
-    float32 arc_height; // offset: 0, size: 4
-    float32 arc_angle; // offset: 4, size: 4
-    float32 arc_velocity_multiplier; // offset: 8, size: 4
-} MissileArcSettings; // size: 12
+    float32 noise_multiplier; // offset: 0, size: 4
+    float32 muzzle_velocity_multiplier; // offset: 4, size: 4
+    float32 weapon_spread_multiplier; // offset: 8, size: 4
+    float32 recoil_multiplier; // offset: 12, size: 4
+    float32 aim_wobble_multiplier; // offset: 16, size: 4
+    float32 recoil_first_shot_multiplier; // offset: 20, size: 4
+    uint32 increased_mag_size; // offset: 24, size: 4
+    float32 damage_multiplier; // offset: 28, size: 4
+} WeaponModTuningSettings; // size: 32
 
-#define STI_TYPE_HASH_ClusterAmmunitionSettings 0x564018B8
-typedef struct ClusterAmmunitionSettings{
+#define STI_TYPE_HASH_ControllerType 0x6304CBBF
+typedef enum{ // size: 4
+    DISABLE = 0,
+    RIGID_BODY = 1,
+    POWERED_CHAIN = 2,
+    POWERED_CONSTRAINT = 3,
+    ControllerType_ForceSize = 0x7FFFFFFF
+} ControllerType;
+
+#define STI_TYPE_HASH_BoneLengthAdjustmentType 0x7F50FEAC
+typedef enum{ // size: 4
+    NONE = 0,
+    REFERRENCE_POSE = 1,
+    CURRENT_POSE = 2,
+    BoneLengthAdjustmentType_ForceSize = 0x7FFFFFFF
+} BoneLengthAdjustmentType;
+
+#define STI_TYPE_HASH_PoweredConstraintParameters 0x00306438
+typedef struct PoweredConstraintParameters{
     const STITypeInfo* type_info_;
-    String cluster_entity_spawn_tag; // offset: 0, size: 16
-    uint8 no_of_clusters; // offset: 8, size: 1
-    float32 spawn_distance; // offset: 12, size: 4
-    float32 spread_min; // offset: 16, size: 4
-    float32 spread_max; // offset: 20, size: 4
-} ClusterAmmunitionSettings; // size: 24
+    float32 Tau; // offset: 0, size: 4
+    float32 Damping; // offset: 4, size: 4
+    float32 PropotionalRecoveryVelocity; // offset: 8, size: 4
+    float32 ConstantRecoveryVelocity; // offset: 12, size: 4
+    float32 MaxForce; // offset: 16, size: 4
+} PoweredConstraintParameters; // size: 20
 
-#define STI_TYPE_HASH_AmmunitionTuning 0xC71FEDFE
-typedef struct AmmunitionTuning{
+#define STI_TYPE_HASH_RigidBodyControllerParameters 0x833AA8DC
+typedef struct RigidBodyControllerParameters{
     const STITypeInfo* type_info_;
-    float32 max_range; // offset: 0, size: 4
-    float32 diameter; // offset: 4, size: 4
-    float32 length; // offset: 8, size: 4
-    float32 ballistic_coefficient_front; // offset: 12, size: 4
-    float32 ballistic_coefficient_side; // offset: 16, size: 4
-    float32 drag_coefficient; // offset: 20, size: 4
-    float32 kinetic_energy; // offset: 24, size: 4
-    float32 mass; // offset: 28, size: 4
-    float32 projectile_damage; // offset: 32, size: 4
-    float32 armour_damage_multiplier; // offset: 36, size: 4
-    float32 organ_damage_multiplier; // offset: 40, size: 4
-    uint8 projectiles_per_shot; // offset: 44, size: 1
-    String projectile_model_path; // offset: 48, size: 16
-    float32 hit_radius; // offset: 56, size: 4
-    String hit_entity_spawn_tag; // offset: 64, size: 16
-    uint8 trigger_non_attached_entities; // offset: 72, size: 1
-    uint8 spawn_hit_entity_weapon_controller_only; // offset: 73, size: 1
-    uint8 use_arc_movement; // offset: 74, size: 1
-    uint8 use_staggered_arming; // offset: 75, size: 1
-    uint8 pierce_armor_pieces; // offset: 76, size: 1
-    String projectile_entity_spawn_tag; // offset: 80, size: 16
-    float32 scatter_multiplier; // offset: 88, size: 4
-    float32 multi_projectile_scatter_angle; // offset: 92, size: 4
-    Spline5 damage_falloff_curve; // offset: 96, size: 80
-    Spline5 penetration_falloff_curve; // offset: 176, size: 80
-    MissileArcSettings missile_arc_settings; // offset: 256, size: 12
-    ClusterAmmunitionSettings cluster_ammunition_settings; // offset: 272, size: 24
-} AmmunitionTuning; // size: 296
+    float32 HierarchyGain; // offset: 0, size: 4
+    float32 VelocityDamping; // offset: 4, size: 4
+    float32 AccelerationGain; // offset: 8, size: 4
+    float32 VelocityGain; // offset: 12, size: 4
+    float32 PositionGain; // offset: 16, size: 4
+    float32 PositionMaxLinearVelocity; // offset: 20, size: 4
+    float32 PositionMaxAngularVelocity; // offset: 24, size: 4
+    float32 SnapGain; // offset: 28, size: 4
+    float32 SnapMaxLinearVelocity; // offset: 32, size: 4
+    float32 SnapMaxAngularVelocity; // offset: 36, size: 4
+    float32 SnapMaxLinearDistance; // offset: 40, size: 4
+    float32 SnapMaxAngularDistance; // offset: 44, size: 4
+} RigidBodyControllerParameters; // size: 48
 
-#define STI_TYPE_HASH_CharacterSpring 0x8EA5D6C0
-typedef struct CharacterSpring{
+#define STI_TYPE_HASH_CollisionSubSystemByName 0x77AF0A98
+typedef struct CollisionSubSystemByName{
     const STITypeInfo* type_info_;
-    float32 Speed; // offset: 0, size: 4
-    float32 Constant; // offset: 4, size: 4
-    float32 Damping; // offset: 8, size: 4
-} CharacterSpring; // size: 12
+    String RigidBodyName; // offset: 0, size: 8
+    uint8 SubSystemID; // offset: 8, size: 1
+    uint8 NoCollideID; // offset: 9, size: 1
+} CollisionSubSystemByName; // size: 16
 
-#define STI_TYPE_HASH_CharacterRetractSShotSettings 0x750CFDD7
-typedef struct CharacterRetractSShotSettings{
-    const STITypeInfo* type_info_;
-    float32 BlendInSpeed; // offset: 0, size: 4
-    float32 BlendOutSpeed; // offset: 4, size: 4
-    float32 MaxSpeedAdjust; // offset: 8, size: 4
-    float32 DirectAccel; // offset: 12, size: 4
-    float32 ForwardAccel; // offset: 16, size: 4
-} CharacterRetractSShotSettings; // size: 20
-
-#define STI_TYPE_HASH_CharacterReelToParaSettings 0xC0CE022A
-typedef struct CharacterReelToParaSettings{
-    const STITypeInfo* type_info_;
-    float32 ExtraLiftCutoff; // offset: 0, size: 4
-    float32 ExtraLift[3]; // offset: 4, size: 12
-    float32 ExtraDownwardForce[3]; // offset: 16, size: 12
-    float32 StopExtraLiftHeight; // offset: 28, size: 4
-    float32 DragX[3]; // offset: 32, size: 12
-    float32 DragY[3]; // offset: 44, size: 12
-    float32 DragZ[3]; // offset: 56, size: 12
-    float32 UpwardVelocityClamp; // offset: 68, size: 4
-    float32 FakeSlingshotSpeedThreshold; // offset: 72, size: 4
-    float32 FakeSlingshotAccel; // offset: 76, size: 4
-    float32 FakeSlingshotMinPitch; // offset: 80, size: 4
-} CharacterReelToParaSettings; // size: 84
-
-#define STI_TYPE_HASH_CharacterAirMovementSettings 0x242E0171
-typedef struct CharacterAirMovementSettings{
-    const STITypeInfo* type_info_;
-    float32 Gravity; // offset: 0, size: 4
-    float32 MaxVelocity; // offset: 4, size: 4
-    float32 MaxVelocityXZ; // offset: 8, size: 4
-    float32 ClampVelocitySpeed; // offset: 12, size: 4
-    float32 Lift[3]; // offset: 16, size: 12
-    float32 DragX[3]; // offset: 28, size: 12
-    float32 DragY[3]; // offset: 40, size: 12
-    float32 DragZ[3]; // offset: 52, size: 12
-    float32 LiftPoint[3]; // offset: 64, size: 12
-    float32 PitchLimit[2]; // offset: 76, size: 8
-    float32 YawSteerAmount; // offset: 84, size: 4
-    uint32 DrawDebugLines; // offset: 88, size: 4
-    CharacterSpring RotateCharYawToVelocity; // offset: 92, size: 12
-    CharacterSpring RotateCharPitchToVelocity; // offset: 104, size: 12
-    CharacterSpring PitchInputSpring; // offset: 116, size: 12
-    CharacterSpring YawInputSpring; // offset: 128, size: 12
-    CharacterSpring RollInputSpring; // offset: 140, size: 12
-    float32 XInputYawPitchRollAmount[3]; // offset: 152, size: 12
-    float32 YInputYawPitchRollAmount[3]; // offset: 164, size: 12
-    float32 XLookYawPitchRollAmount[3]; // offset: 176, size: 12
-    float32 YLookYawPitchRollAmount[3]; // offset: 188, size: 12
-    CharacterSpring RotateCharYawToSlingshot; // offset: 200, size: 12
-    float32 PersistYawPitchRoll[3]; // offset: 212, size: 12
-    float32 CenterYawPitchRoll[3]; // offset: 224, size: 12
-    CharacterSpring LiftInputSpring; // offset: 236, size: 12
-    CharacterSpring DragInputSpring; // offset: 248, size: 12
-    CharacterSpring AnimInputSpringX; // offset: 260, size: 12
-    CharacterSpring AnimInputSpringY; // offset: 272, size: 12
-    float32 NearGroundLiftDistance; // offset: 284, size: 4
-    float32 NearGroundMaxLift; // offset: 288, size: 4
-    float32 NearGroundLiftExponent; // offset: 292, size: 4
-    float32 NearGroundLiftDecayMax; // offset: 296, size: 4
-    float32 NearGroundLiftDecayMultiplier; // offset: 300, size: 4
-    float32 NearGroundLiftRecoverRate; // offset: 304, size: 4
-    float32 LookSteerDeadZone[2]; // offset: 308, size: 8
-    float32 LookSteerMaxSpeed[2]; // offset: 316, size: 8
-    float32 LookSteerMaxYaw; // offset: 324, size: 4
-    float32 LookSteerMaxPitch[2]; // offset: 328, size: 8
-    float32 LookSteerExponential[2]; // offset: 336, size: 8
-    float32 LookSteerAimingDeadZone[2]; // offset: 344, size: 8
-    float32 LookSteerAimingMaxSpeed[2]; // offset: 352, size: 8
-    float32 LookSteerAimingMaxYaw; // offset: 360, size: 4
-    float32 LookSteerAimingMaxPitch[2]; // offset: 364, size: 8
-    float32 LookSteerAimingExponential[2]; // offset: 372, size: 8
-    float32 SlingshotPitchAdjust; // offset: 380, size: 4
-    float32 SlingshotExtraLift; // offset: 384, size: 4
-    float32 SlingshotDirectAccel; // offset: 388, size: 4
-    float32 SlingshotForwardAccel; // offset: 392, size: 4
-    float32 SlingshotMaxSpeedAdjust; // offset: 396, size: 4
-    float32 SlingshotDragXYZAdjust[3]; // offset: 400, size: 12
-    float32 SlingshotBreakPitch; // offset: 412, size: 4
-    float32 SlingshotBreakYawStart; // offset: 416, size: 4
-    float32 SlingshotBreakYawEnd; // offset: 420, size: 4
-    float32 SlingshotBreakYawBlendTime; // offset: 424, size: 4
-    float32 SlingshotBreakDistance; // offset: 428, size: 4
-    CharacterRetractSShotSettings RetractSlingshotSettings; // offset: 432, size: 20
-} CharacterAirMovementSettings; // size: 452
-
-#define STI_TYPE_HASH_CharacterAirSteerSettings 0x8ED81101
-typedef struct CharacterAirSteerSettings{
-    const STITypeInfo* type_info_;
-    float32 MaxAcceleration; // offset: 0, size: 4
-    float32 MaxDeceleration; // offset: 4, size: 4
-    float32 FacingSpeed; // offset: 8, size: 4
-    float32 NoInputAcceleration; // offset: 12, size: 4
-    float32 MaxSpeed; // offset: 16, size: 4
-    float32 AngularDisplacementSpeed; // offset: 20, size: 4
-} CharacterAirSteerSettings; // size: 24
-
-#define STI_TYPE_HASH_CharacterJumpSettings 0x2D58F9E2
-typedef struct CharacterJumpSettings{
-    const STITypeInfo* type_info_;
-    CharacterAirSteerSettings AirSteerSettings; // offset: 0, size: 24
-    float32 FallingUpwardsDecel; // offset: 24, size: 4
-} CharacterJumpSettings; // size: 28
-
-#define STI_TYPE_HASH_CharacterReeledHangSettings 0x7AD42D51
-typedef struct CharacterReeledHangSettings{
-    const STITypeInfo* type_info_;
-    CharacterAirSteerSettings AirSteerSettings; // offset: 0, size: 24
-} CharacterReeledHangSettings; // size: 24
-
-#define STI_TYPE_HASH_CharacterWingsuitSettings 0x7DE82967
-typedef struct CharacterWingsuitSettings{
-    const STITypeInfo* type_info_;
-    CharacterAirMovementSettings AirControl; // offset: 0, size: 452
-    float32 MaxAngularSpeed; // offset: 452, size: 4
-    float32 MaxAngularAccel; // offset: 456, size: 4
-    CharacterSpring AnimTwitchInputSpringX; // offset: 460, size: 12
-    CharacterSpring AnimTwitchInputSpringY; // offset: 472, size: 12
-} CharacterWingsuitSettings; // size: 484
-
-#define STI_TYPE_HASH_CharacterFreefallSettings 0x790755CA
-typedef struct CharacterFreefallSettings{
-    const STITypeInfo* type_info_;
-    CharacterAirMovementSettings AirControl; // offset: 0, size: 452
-    float32 YawSpeedAnimXEffect; // offset: 452, size: 4
-    float32 DecelXZNoInputSpeed; // offset: 456, size: 4
-} CharacterFreefallSettings; // size: 460
-
-#define STI_TYPE_HASH_CharacterParachuteSettings 0xA88A574E
-typedef struct CharacterParachuteSettings{
-    const STITypeInfo* type_info_;
-    float32 MaxAngularSpeed; // offset: 0, size: 4
-    float32 MaxAngularAccel; // offset: 4, size: 4
-    float32 VelocityAlignMinSpeed; // offset: 8, size: 4
-    float32 ParachuteToPivotDistance; // offset: 12, size: 4
-    CharacterReelToParaSettings ReelToParaSettings; // offset: 16, size: 84
-    CharacterAirMovementSettings AirControl; // offset: 100, size: 452
-} CharacterParachuteSettings; // size: 552
-
-#define STI_TYPE_HASH_CharacterReelInSettings 0x78E1020B
-typedef struct CharacterReelInSettings{
-    const STITypeInfo* type_info_;
-    float32 PerpendicularDrag; // offset: 0, size: 4
-    CharacterSpring LookSteerSpring; // offset: 4, size: 12
-    float32 Gravity; // offset: 16, size: 4
-} CharacterReelInSettings; // size: 20
-
-#define STI_TYPE_HASH_CustomMovementSettings 0x9F56E45C
-typedef struct CustomMovementSettings{
-    const STITypeInfo* type_info_;
-    CharacterAirMovementSettings FallingAirControl; // offset: 0, size: 452
-    CharacterFreefallSettings FreefallSettings; // offset: 452, size: 460
-    CharacterReelInSettings ReelInSettings; // offset: 912, size: 20
-    CharacterReeledHangSettings ReeledHangSettings; // offset: 932, size: 24
-    CharacterJumpSettings JumpSettings; // offset: 956, size: 28
-    CharacterParachuteSettings ParachuteSettings; // offset: 984, size: 552
-    CharacterWingsuitSettings WingsuitSettings; // offset: 1536, size: 484
-} CustomMovementSettings; // size: 2020
-
-#define STI_TYPE_HASH_InputStick 0x4789DAD4
-typedef struct InputStick{
-    const STITypeInfo* type_info_;
-    float32 DirectSpeed; // offset: 0, size: 4
-    float32 DirectSpeedExponential; // offset: 4, size: 4
-    float32 AccelExponential; // offset: 8, size: 4
-    float32 TopSpeed; // offset: 12, size: 4
-    float32 AccPeriod; // offset: 16, size: 4
-} InputStick; // size: 20
-
-#define STI_TYPE_HASH_CameraSpring 0x09FFE9A3
-typedef struct CameraSpring{
-    const STITypeInfo* type_info_;
-    float32 Speed; // offset: 0, size: 4
-    float32 Constant; // offset: 4, size: 4
-    float32 Damping; // offset: 8, size: 4
-} CameraSpring; // size: 12
-
-#define STI_TYPE_HASH_CameraSplineControlPoint 0x3F6554A2
-typedef struct CameraSplineControlPoint{
-    const STITypeInfo* type_info_;
-    float32 x; // offset: 0, size: 4
-    float32 y; // offset: 4, size: 4
-    float32 y2; // offset: 8, size: 4
-} CameraSplineControlPoint; // size: 12
-
-#define STI_TYPE_HASH_CameraSpline5 0x377FDF13
-typedef struct CameraSpline5{
-    const STITypeInfo* type_info_;
-    float32 x_min; // offset: 0, size: 4
-    float32 x_max; // offset: 4, size: 4
-    float32 y_min; // offset: 8, size: 4
-    float32 y_max; // offset: 12, size: 4
-    int8 number_of_control_points; // offset: 16, size: 1
-    int8 interpolation_type; // offset: 17, size: 1
-    CameraSplineControlPoint control_points[5]; // offset: 20, size: 60
-} CameraSpline5; // size: 80
-
-#define STI_TYPE_HASH_CameraSpline10 0xB91DE16D
-typedef struct CameraSpline10{
-    const STITypeInfo* type_info_;
-    float32 x_min; // offset: 0, size: 4
-    float32 x_max; // offset: 4, size: 4
-    float32 y_min; // offset: 8, size: 4
-    float32 y_max; // offset: 12, size: 4
-    int8 number_of_control_points; // offset: 16, size: 1
-    int8 interpolation_type; // offset: 17, size: 1
-    CameraSplineControlPoint control_points[10]; // offset: 20, size: 120
-} CameraSpline10; // size: 140
-
-#define STI_TYPE_HASH_CameraTowing 0x7C28DDBA
-typedef struct CameraTowing{
-    const STITypeInfo* type_info_;
-    float32 TowingOffsetCamera[3]; // offset: 0, size: 12
-    float32 TowingOffsetLookAt[3]; // offset: 12, size: 12
-} CameraTowing; // size: 24
-
-#define STI_TYPE_HASH_CameraInputParams 0xF249CB3A
-typedef struct CameraInputParams{
-    const STITypeInfo* type_info_;
-    float32 MaxHorizontalAngularSpeed; // offset: 0, size: 4
-    float32 MaxVerticalAngularSpeed; // offset: 4, size: 4
-    CameraSpline10 InputCurve; // offset: 8, size: 140
-    float32 InputAcceleration; // offset: 148, size: 4
-    float32 InputAccelerationStartAt; // offset: 152, size: 4
-    float32 Sensitivity; // offset: 156, size: 4
-} CameraInputParams; // size: 160
-
-#define STI_TYPE_HASH_VehicleSplineFuncOfPitchParams 0x1165029E
-typedef struct VehicleSplineFuncOfPitchParams{
-    const STITypeInfo* type_info_;
-    int8 use_spline_for_rotation_point; // offset: 0, size: 1
-    CameraSpline10 PedestalSpline; // offset: 4, size: 140
-    CameraSpline10 DollySpline; // offset: 144, size: 140
-    CameraSpline10 FOVSpline; // offset: 284, size: 140
-} VehicleSplineFuncOfPitchParams; // size: 424
-
-#define STI_TYPE_HASH_GenericVehicleCamera 0xBBFC91EE
-typedef struct GenericVehicleCamera{
-    const STITypeInfo* type_info_;
-    float32 StateTransitionTime; // offset: 0, size: 4
-    float32 TransitionToCrashStateDelay; // offset: 4, size: 4
-    float32 DriftTransitionTime; // offset: 8, size: 4
-    float32 CameraPosition[3]; // offset: 12, size: 12
-    float32 CrashingCameraPosition[3]; // offset: 24, size: 12
-    float32 RotationPoint[3]; // offset: 36, size: 12
-    float32 LookAtPoint[3]; // offset: 48, size: 12
-    float32 LookAtReferenceWheelbaseRatio; // offset: 60, size: 4
-    float32 AddLookAtPointToPositionRatio; // offset: 64, size: 4
-    float32 VelDirBlendWithVehicleDirSpeed; // offset: 68, size: 4
-    float32 DrivingVelocityMatrixBlend; // offset: 72, size: 4
-    float32 MinTimeForHalfTurn; // offset: 76, size: 4
-    float32 YawSpringStiffness; // offset: 80, size: 4
-    float32 DriftYawSpringStiffness; // offset: 84, size: 4
-    float32 YawSpringAngleLimit; // offset: 88, size: 4
-    float32 YawSpringLimitStiffnessPower; // offset: 92, size: 4
-    float32 YawSpringStiffnessMax; // offset: 96, size: 4
-    float32 PitchSpringStiffness; // offset: 100, size: 4
-    float32 PitchLimit[2]; // offset: 104, size: 8
-    float32 RollSpringStiffness; // offset: 112, size: 4
-    float32 RollLimit[2]; // offset: 116, size: 8
-    CameraSpring LagSpring; // offset: 124, size: 12
-    float32 LagCameraRelativity; // offset: 136, size: 4
-    float32 LagVelocityScale; // offset: 140, size: 4
-    float32 FollowCameraRange[2]; // offset: 144, size: 8
-    CameraSpring CameraVelocitySpring; // offset: 152, size: 12
-    CameraSpring LookAtVelocitySpring; // offset: 164, size: 12
-    float32 UpCameraVelocityRefSpeedKph; // offset: 176, size: 4
-    float32 UpCameraRange[2]; // offset: 180, size: 8
-    float32 UpLookAtVelocityRefSpeedKph; // offset: 188, size: 4
-    float32 UpLookAtRange[2]; // offset: 192, size: 8
-    float32 RightCameraVelocityRefSpeedKph; // offset: 200, size: 4
-    float32 RightCameraRange[2]; // offset: 204, size: 8
-    float32 RightLookAtVelocityRefSpeedKph; // offset: 212, size: 4
-    float32 RightLookAtRange[2]; // offset: 216, size: 8
-    float32 RollWithVehicleAmount; // offset: 224, size: 4
-    float32 ReCenterDelay; // offset: 228, size: 4
-    float32 ReCenterSpeed; // offset: 232, size: 4
-    float32 FOVVelocityRange[2]; // offset: 236, size: 8
-    float32 FOV[2]; // offset: 244, size: 8
-    CameraSpring FOVBlendSpring; // offset: 252, size: 12
-    float32 FOVZoomAdjustment; // offset: 264, size: 4
-    CameraSpring CollisionBlendSpring; // offset: 268, size: 12
-    float32 CollisionFudgeFactor; // offset: 280, size: 4
-    uint8 CollisionPitchEnabled; // offset: 284, size: 1
-    CameraSpring CollisionPitchSpring; // offset: 288, size: 12
-    float32 CollisionPitchDistance; // offset: 300, size: 4
-    uint32 CollisionCheckWater; // offset: 304, size: 4
-    float32 CollisionStartPoint[3]; // offset: 308, size: 12
-    CameraTowing TowingOffsets; // offset: 320, size: 24
-    uint8 AlignReferenceWithWorldUp; // offset: 344, size: 1
-    uint32 DrawDebugInfo; // offset: 348, size: 4
-    float32 ListenerHeadRelativity; // offset: 352, size: 4
-    InputStick InputSettings; // offset: 356, size: 20
-    VehicleSplineFuncOfPitchParams SplineFuncOfPitchParams; // offset: 376, size: 424
-} GenericVehicleCamera; // size: 800
-
-#define STI_TYPE_HASH_SphericalCoordinateFramingParams 0x377BB3FB
-typedef struct SphericalCoordinateFramingParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 DrawDebug; // offset: 1, size: 1
-    float32 PivotPosition[3]; // offset: 4, size: 12
-    float32 Azimuth; // offset: 16, size: 4
-    float32 Elevation; // offset: 20, size: 4
-    float32 Distance; // offset: 24, size: 4
-    float32 Pitch; // offset: 28, size: 4
-    float32 Yaw; // offset: 32, size: 4
-    float32 Roll; // offset: 36, size: 4
-    float32 FOV; // offset: 40, size: 4
-} SphericalCoordinateFramingParams; // size: 44
-
-#define STI_TYPE_HASH_SetOffsetFramingParams 0xF3CCD5D9
-typedef struct SetOffsetFramingParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    float32 OffsetPosition[3]; // offset: 4, size: 12
-    float32 Pitch; // offset: 16, size: 4
-    float32 Yaw; // offset: 20, size: 4
-    float32 Roll; // offset: 24, size: 4
-} SetOffsetFramingParams; // size: 28
-
-#define STI_TYPE_HASH_InputToOrbitModifierParams 0xE067E35F
-typedef struct InputToOrbitModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 StickyAimEnabled; // offset: 1, size: 1
-    float32 InputScale; // offset: 4, size: 4
-    float32 DirectSpeed; // offset: 8, size: 4
-    float32 DirectSpeedExponential; // offset: 12, size: 4
-    float32 AccelExponential; // offset: 16, size: 4
-    float32 TopSpeed; // offset: 20, size: 4
-    float32 AccPeriod; // offset: 24, size: 4
-    float32 MouseInputScale; // offset: 28, size: 4
-} InputToOrbitModifierParams; // size: 32
-
-#define STI_TYPE_HASH_DofModifierParams 0x25FC54BA
-typedef struct DofModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 FocalDistanceNear; // offset: 4, size: 4
-    float32 FocalDistanceFar; // offset: 8, size: 4
-    float32 MaxDOF; // offset: 12, size: 4
-    float32 MaxDOFNear; // offset: 16, size: 4
-    float32 DOFSmoothness; // offset: 20, size: 4
-    float32 DOFSmoothnessNear; // offset: 24, size: 4
-    float32 DOFHeightFalloff; // offset: 28, size: 4
-} DofModifierParams; // size: 32
-
-#define STI_TYPE_HASH_MotionBlurModifierParams 0xE7FCB175
-typedef struct MotionBlurModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 MotionBlurFactor; // offset: 4, size: 4
-    float32 MaxMotionBlur; // offset: 8, size: 4
-    float32 MotionBlurShutterExposure; // offset: 12, size: 4
-} MotionBlurModifierParams; // size: 16
-
-#define STI_TYPE_HASH_FocusDofModifierParams 0x0C277C94
-typedef struct FocusDofModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 NearRicoToCamFraction; // offset: 4, size: 4
-    float32 MaxNearFocusDifferential; // offset: 8, size: 4
-    uint8 RespectNearLimitIfNoDirect; // offset: 12, size: 1
-    float32 FarMultiplier; // offset: 16, size: 4
-    float32 MaxFarFocusDifferential; // offset: 20, size: 4
-    uint8 RespectFarLimitIfNoDirect; // offset: 24, size: 1
-    CameraSpring DistanceSpring; // offset: 28, size: 12
-    CameraSpline5 RightStickToMaxDof; // offset: 40, size: 80
-    CameraSpring MoreBlurSpring; // offset: 120, size: 12
-    CameraSpring LessBlurSpring; // offset: 132, size: 12
-    uint8 RespectWeaponOverride; // offset: 144, size: 1
-} FocusDofModifierParams; // size: 148
-
-#define STI_TYPE_HASH_SplineFuncOfPitchParams 0xAE4480DA
-typedef struct SplineFuncOfPitchParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 UseWorldPitch; // offset: 1, size: 1
-    CameraSpline5 TruckSpline; // offset: 4, size: 80
-    CameraSpline5 PedestalSpline; // offset: 84, size: 80
-    CameraSpline5 DollySpline; // offset: 164, size: 80
-    CameraSpline5 FOVSpline; // offset: 244, size: 80
-    uint8 DrawDebug; // offset: 324, size: 1
-} SplineFuncOfPitchParams; // size: 328
-
-#define STI_TYPE_HASH_SplineFuncOfYawParams 0x3CDF692B
-typedef struct SplineFuncOfYawParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    CameraSpline10 TruckSpline; // offset: 4, size: 140
-    CameraSpline10 PedestalSpline; // offset: 144, size: 140
-    CameraSpline10 DollySpline; // offset: 284, size: 140
-    CameraSpline10 FOVSpline; // offset: 424, size: 140
-    CameraSpline10 PitchScaleSpline; // offset: 564, size: 140
-    uint8 DrawDebug; // offset: 704, size: 1
-} SplineFuncOfYawParams; // size: 708
-
-#define STI_TYPE_HASH_FollowSpringModifierParams 0xAA59BD9C
-typedef struct FollowSpringModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 XZOnly; // offset: 1, size: 1
-    CameraSpring FollowSpring; // offset: 4, size: 12
-    float32 FollowCameraRelativity; // offset: 16, size: 4
-    uint8 UseStuckBehavior; // offset: 20, size: 1
-    CameraSpring StuckSpring; // offset: 24, size: 12
-    float32 MaxSpeedWhenStuck; // offset: 36, size: 4
-    float32 DistWhenStuck; // offset: 40, size: 4
-    CameraSpline5 SpeedToDistSpline; // offset: 44, size: 80
-    CameraSpline5 PitchScaleSpline; // offset: 124, size: 80
-    uint8 DrawDebug; // offset: 204, size: 1
-} FollowSpringModifierParams; // size: 208
-
-#define STI_TYPE_HASH_CameraCollisionParams 0x339BE1DB
-typedef struct CameraCollisionParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 DrawDebug; // offset: 1, size: 1
-    float32 CollisionResponseOffset[3]; // offset: 4, size: 12
-    float32 Radius; // offset: 16, size: 4
-    float32 PassthroughRadius; // offset: 20, size: 4
-    float32 MaxCameraPassthroughThickness; // offset: 24, size: 4
-    uint8 CollideCharacter; // offset: 28, size: 1
-    float32 ExtensionMaxVelocity; // offset: 32, size: 4
-    float32 MaxDistancePushVelocity; // offset: 36, size: 4
-    float32 MovementCastAhead; // offset: 40, size: 4
-    float32 AngularCastAhead; // offset: 44, size: 4
-    float32 MinCollisionDist; // offset: 48, size: 4
-    float32 CameraPlaneMargin; // offset: 52, size: 4
-    float32 CameraPushMargin; // offset: 56, size: 4
-    CameraSpline5 DistanceToOpacitySpline; // offset: 60, size: 80
-    uint8 IgnoreOffsetDistanceChange; // offset: 140, size: 1
-    uint8 IgnorePlayerVehicle; // offset: 141, size: 1
-    uint8 KeepAboveWater; // offset: 142, size: 1
-    uint8 DisableClosestProximityCollision; // offset: 143, size: 1
-    uint8 CollisionResponseUprightViewAligned; // offset: 144, size: 1
-} CameraCollisionParams; // size: 148
-
-#define STI_TYPE_HASH_RadialBlurParams 0x6285C634
-typedef struct RadialBlurParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 SpeedRange[2]; // offset: 4, size: 8
-    float32 FactorRange[2]; // offset: 12, size: 8
-    float32 OffsetRange[2]; // offset: 20, size: 8
-    float32 Pos[2]; // offset: 28, size: 8
-} RadialBlurParams; // size: 36
-
-#define STI_TYPE_HASH_AlignToVelocityParams 0xF4264F1C
-typedef struct AlignToVelocityParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 YawAlignAmount; // offset: 4, size: 4
-    float32 PitchAlignAmount; // offset: 8, size: 4
-    CameraSpring LookSpring; // offset: 12, size: 12
-    float32 AlignDelay; // offset: 24, size: 4
-    float32 LowSpeedTargetPitch; // offset: 28, size: 4
-    float32 LowSpeedStartBlend; // offset: 32, size: 4
-    float32 LowSpeedEndBlend; // offset: 36, size: 4
-} AlignToVelocityParams; // size: 40
-
-#define STI_TYPE_HASH_MoveInputYawParams 0xF27B84C6
-typedef struct MoveInputYawParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 MinimumYSpeed; // offset: 4, size: 4
-    float32 DelayTime; // offset: 8, size: 4
-    float32 MoveStickInputThreshold; // offset: 12, size: 4
-    uint32 ResetTimerOnIdle; // offset: 16, size: 4
-    uint32 ResetOnFire; // offset: 20, size: 4
-    uint32 ResetOnGround; // offset: 24, size: 4
-    float32 Accel; // offset: 28, size: 4
-    float32 MaxSpeed; // offset: 32, size: 4
-    uint8 DrawDebug; // offset: 36, size: 1
-} MoveInputYawParams; // size: 40
-
-#define STI_TYPE_HASH_MoveInputPitchParams 0x90F23AB3
-typedef struct MoveInputPitchParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 DelayTime; // offset: 4, size: 4
-    float32 MoveStickInputThreshold; // offset: 8, size: 4
-    uint32 ResetTimerOnIdle; // offset: 12, size: 4
-    uint32 ResetTimerOnEnter; // offset: 16, size: 4
-    uint32 AlwaysPitchDown; // offset: 20, size: 4
-    float32 Accel; // offset: 24, size: 4
-    float32 MaxSpeed; // offset: 28, size: 4
-} MoveInputPitchParams; // size: 32
-
-#define STI_TYPE_HASH_AutoPitchParams 0xC1D281C9
-typedef struct AutoPitchParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 DelayTime; // offset: 4, size: 4
-    uint32 ResetOnFire; // offset: 8, size: 4
-    float32 TargetPitch; // offset: 12, size: 4
-    uint32 AlwaysPitchDown; // offset: 16, size: 4
-    float32 Accel; // offset: 20, size: 4
-    float32 MaxSpeed; // offset: 24, size: 4
-} AutoPitchParams; // size: 28
-
-#define STI_TYPE_HASH_ProceduralShakeParams 0x5C7E1635
-typedef struct ProceduralShakeParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 SyncPhase; // offset: 1, size: 1
-    float32 PitchFrequency; // offset: 4, size: 4
-    float32 PitchAmplitude[2]; // offset: 8, size: 8
-    float32 RollFrequency; // offset: 16, size: 4
-    float32 RollAmplitude[2]; // offset: 20, size: 8
-    float32 YawFrequency; // offset: 28, size: 4
-    float32 YawAmplitude[2]; // offset: 32, size: 8
-    float32 LocalXFrequency; // offset: 40, size: 4
-    float32 LocalXAmplitude[2]; // offset: 44, size: 8
-    float32 LocalYFrequency; // offset: 52, size: 4
-    float32 LocalYAmplitude[2]; // offset: 56, size: 8
-    float32 LocalZFrequency; // offset: 64, size: 4
-    float32 LocalZAmplitude[2]; // offset: 68, size: 8
-    float32 SpeedRange[2]; // offset: 76, size: 8
-    float32 SpeedMaxScale; // offset: 84, size: 4
-} ProceduralShakeParams; // size: 88
-
-#define STI_TYPE_HASH_RollParams 0x52A574C7
-typedef struct RollParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    CameraSpring RollSpring; // offset: 4, size: 12
-    CameraSpring BackToZeroSpring; // offset: 16, size: 12
-    float32 SpeedRelax; // offset: 28, size: 4
-    float32 SpeedIncrease; // offset: 32, size: 4
-    float32 AnimXScale; // offset: 36, size: 4
-    float32 LookInputHorizontalScale; // offset: 40, size: 4
-    float32 InheritRollRatio; // offset: 44, size: 4
-    uint8 ResetOnLookInput; // offset: 48, size: 1
-    float32 ReapplyDelay; // offset: 52, size: 4
-} RollParams; // size: 56
-
-#define STI_TYPE_HASH_MoveInputOffsetParams 0xCAC71B6C
-typedef struct MoveInputOffsetParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 MaxCloserDist; // offset: 4, size: 4
-    float32 MaxFartherDist; // offset: 8, size: 4
-    float32 MaxLeftDist; // offset: 12, size: 4
-    float32 MaxRightDist; // offset: 16, size: 4
-    float32 MaxValueThreshold; // offset: 20, size: 4
-    uint8 LeftRightAffectsCloseFar; // offset: 24, size: 1
-    CameraSpring BlendInSpring; // offset: 28, size: 12
-    CameraSpring BlendOutSpring; // offset: 40, size: 12
-    CameraSpline5 PitchScaleSpline; // offset: 52, size: 80
-} MoveInputOffsetParams; // size: 132
-
-#define STI_TYPE_HASH_DynamicZParams 0xD2F33D33
-typedef struct DynamicZParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 FlatMotionOnly; // offset: 1, size: 1
-    float32 DistanceLimits[2]; // offset: 4, size: 8
-    float32 SpeedCloser; // offset: 12, size: 4
-    float32 SpeedFarther; // offset: 16, size: 4
-    float32 WeightAnimX; // offset: 20, size: 4
-    float32 WeightLookInput; // offset: 24, size: 4
-} DynamicZParams; // size: 28
-
-#define STI_TYPE_HASH_ZOverTimeParams 0x2A626FB7
-typedef struct ZOverTimeParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    CameraSpline10 TimeToZSpline; // offset: 4, size: 140
-} ZOverTimeParams; // size: 144
-
-#define STI_TYPE_HASH_HintModifierParams 0x3A3557FE
-typedef struct HintModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint32 HintHashes[4]; // offset: 4, size: 16
-    float32 DeltaPivotOffset[3]; // offset: 20, size: 12
-    float32 DeltaPitch; // offset: 32, size: 4
-    float32 DeltaYaw; // offset: 36, size: 4
-    float32 DeltaRoll; // offset: 40, size: 4
-    float32 DeltaAzimuth; // offset: 44, size: 4
-    float32 DeltaElevation; // offset: 48, size: 4
-    float32 DeltaDistance; // offset: 52, size: 4
-    CameraSpring BlendInSpring; // offset: 56, size: 12
-    CameraSpring BlendOutSpring; // offset: 68, size: 12
-    uint8 DrawDebug; // offset: 80, size: 1
-} HintModifierParams; // size: 84
-
-#define STI_TYPE_HASH_WeaponCameraParams 0x0D949B66
-typedef struct WeaponCameraParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    CameraSpring YawSpring; // offset: 4, size: 12
-    CameraSpring PitchSpring; // offset: 16, size: 12
-    uint8 SnapAimEnabled; // offset: 28, size: 1
-} WeaponCameraParams; // size: 32
-
-#define STI_TYPE_HASH_ParachuteAttachmentModifierParams 0x4FE34BC2
-typedef struct ParachuteAttachmentModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 DrawDebug; // offset: 1, size: 1
-    float32 PivotBlendFactor; // offset: 4, size: 4
-    float32 PivotPedistalOffset; // offset: 8, size: 4
-    float32 YawClampAngle; // offset: 12, size: 4
-    float32 PitchClampAngle; // offset: 16, size: 4
-} ParachuteAttachmentModifierParams; // size: 20
-
-#define STI_TYPE_HASH_ParachuteCameraCollisionModifierParams 0x82E6CA3D
-typedef struct ParachuteCameraCollisionModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 DrawDebug; // offset: 1, size: 1
-    float32 BoxWidth; // offset: 4, size: 4
-    float32 BoxHeight; // offset: 8, size: 4
-    float32 BoxDepth; // offset: 12, size: 4
-    float32 MinOpacity; // offset: 16, size: 4
-    float32 HideSpeed; // offset: 20, size: 4
-    float32 RestoreSpeed; // offset: 24, size: 4
-} ParachuteCameraCollisionModifierParams; // size: 28
-
-#define STI_TYPE_HASH_WingsuitAttachmentModifierParams 0x88612420
-typedef struct WingsuitAttachmentModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 DrawDebug; // offset: 1, size: 1
-    float32 SpeedScaleX; // offset: 4, size: 4
-    float32 SpeedScaleXMaxSpeed; // offset: 8, size: 4
-    float32 InputScaleX; // offset: 12, size: 4
-    float32 InputScaleUpY; // offset: 16, size: 4
-    float32 InputScaleDwnY; // offset: 20, size: 4
-    float32 OffsetSmoothingFactor; // offset: 24, size: 4
-    CameraSpring CameraOffsetInputSpringX; // offset: 28, size: 12
-    CameraSpring CameraOffsetInputSpringY; // offset: 40, size: 12
-    CameraSpline5 PitchToDefaultCameraOffset; // offset: 52, size: 80
-} WingsuitAttachmentModifierParams; // size: 132
-
-#define STI_TYPE_HASH_PlayerCollisionModifierParams 0x4934B283
-typedef struct PlayerCollisionModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 DrawDebug; // offset: 1, size: 1
-    uint8 CheckHeadToHipsBox; // offset: 2, size: 1
-    float32 HeadToHipsDepth; // offset: 4, size: 4
-    float32 HeadToHipsWidth; // offset: 8, size: 4
-    float32 HeadToHipsHeightScale; // offset: 12, size: 4
-    uint8 CheckHipsToFeetBox; // offset: 16, size: 1
-    float32 HipsToFeetDepth; // offset: 20, size: 4
-    float32 HipsToFeetWidth; // offset: 24, size: 4
-    float32 HipsToFeetHeightScale; // offset: 28, size: 4
-    float32 IntersectOpacity; // offset: 32, size: 4
-    float32 BlendInSpeed; // offset: 36, size: 4
-    float32 BlendOutSpeed; // offset: 40, size: 4
-} PlayerCollisionModifierParams; // size: 44
-
-#define STI_TYPE_HASH_TankPositionModifierParams 0x6E72348F
-typedef struct TankPositionModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 CameraPosition[3]; // offset: 4, size: 12
-} TankPositionModifierParams; // size: 16
-
-#define STI_TYPE_HASH_CameraAnimationControl 0x78CA2A53
-typedef struct CameraAnimationControl{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    String StartMessage; // offset: 8, size: 16
-    String StopMessage; // offset: 16, size: 16
-    String ParameterMessage; // offset: 24, size: 16
-    uint8 AutoStart; // offset: 32, size: 1
-    float32 Duration; // offset: 36, size: 4
-    float32 EaseInTime; // offset: 40, size: 4
-    float32 EaseOutTime; // offset: 44, size: 4
-    uint8 Looping; // offset: 48, size: 1
-    uint8 EnableHorizonStabilization; // offset: 49, size: 1
-} CameraAnimationControl; // size: 56
-
-#define STI_TYPE_HASH_NoiseAnimation 0xDA1C735D
-typedef struct NoiseAnimation{
-    const STITypeInfo* type_info_;
-    CameraAnimationControl Control; // offset: 0, size: 56
-    uint8 ForcedWave; // offset: 56, size: 1
-    float32 MasterAmplitudeScale; // offset: 60, size: 4
-    CameraSpline5 MasterAmplitudeScaleSpline; // offset: 64, size: 80
-    float32 MasterFrequencyScale; // offset: 144, size: 4
-    CameraSpline5 MasterFrequencyScaleSpline; // offset: 148, size: 80
-    float32 MasterStiffnessScale; // offset: 228, size: 4
-    CameraSpline5 MasterStiffnessScaleSpline; // offset: 232, size: 80
-    float32 TiltMaxAmplitude; // offset: 312, size: 4
-    float32 TiltMinAmplitude; // offset: 316, size: 4
-    float32 TiltFrequency; // offset: 320, size: 4
-    float32 TiltStiffness; // offset: 324, size: 4
-    float32 PanMaxAmplitude; // offset: 328, size: 4
-    float32 PanMinAmplitude; // offset: 332, size: 4
-    float32 PanFrequency; // offset: 336, size: 4
-    float32 PanStiffness; // offset: 340, size: 4
-    float32 DutchMaxAmplitude; // offset: 344, size: 4
-    float32 DutchMinAmplitude; // offset: 348, size: 4
-    float32 DutchFrequency; // offset: 352, size: 4
-    float32 DutchStiffness; // offset: 356, size: 4
-    float32 PedistalMaxAmplitude; // offset: 360, size: 4
-    float32 PedistalMinAmplitude; // offset: 364, size: 4
-    float32 PedistalFrequency; // offset: 368, size: 4
-    float32 PedistalStiffness; // offset: 372, size: 4
-    float32 TruckMaxAmplitude; // offset: 376, size: 4
-    float32 TruckMinAmplitude; // offset: 380, size: 4
-    float32 TruckFrequency; // offset: 384, size: 4
-    float32 TruckStiffness; // offset: 388, size: 4
-    float32 DollyMaxAmplitude; // offset: 392, size: 4
-    float32 DollyMinAmplitude; // offset: 396, size: 4
-    float32 DollyFrequency; // offset: 400, size: 4
-    float32 DollyStiffness; // offset: 404, size: 4
-    uint8 UseTransformedSpeed; // offset: 408, size: 1
-    CameraSpline5 SpeedScaleSpline; // offset: 412, size: 80
-} NoiseAnimation; // size: 496
-
-#define STI_TYPE_HASH_SplineAnimation 0x82C21EC5
-typedef struct SplineAnimation{
-    const STITypeInfo* type_info_;
-    CameraAnimationControl Control; // offset: 0, size: 56
-    CameraSpline10 TiltSpline; // offset: 56, size: 140
-    CameraSpline10 PanSpline; // offset: 196, size: 140
-    CameraSpline10 DutchSpline; // offset: 336, size: 140
-    CameraSpline10 TruckSpline; // offset: 476, size: 140
-    CameraSpline10 PedistalSpline; // offset: 616, size: 140
-    CameraSpline10 DollySpline; // offset: 756, size: 140
-    CameraSpline10 FOVSpline; // offset: 896, size: 140
-    uint8 UseTransformedSpeed; // offset: 1036, size: 1
-    CameraSpline5 SpeedScaleSpline; // offset: 1040, size: 80
-} SplineAnimation; // size: 1120
-
-#define STI_TYPE_HASH_ShakeAnimation 0x711748A7
-typedef struct ShakeAnimation{
-    const STITypeInfo* type_info_;
-    CameraAnimationControl Control; // offset: 0, size: 56
-    uint8 Pan; // offset: 56, size: 1
-    uint8 Tilt; // offset: 57, size: 1
-    uint8 Dutch; // offset: 58, size: 1
-    float32 RotationMaxAmplitude; // offset: 60, size: 4
-    float32 RotationAmplitudeScale; // offset: 64, size: 4
-    CameraSpline5 RotationAmplitudeScaleSpline; // offset: 68, size: 80
-    float32 RotationMaxFrequency; // offset: 148, size: 4
-    float32 RotationFrequencyScale; // offset: 152, size: 4
-    CameraSpline5 RotationFrequencyScaleSpline; // offset: 156, size: 80
-    float32 TranslationMaxAmplitude; // offset: 236, size: 4
-    float32 TranslationAmplitudeScale; // offset: 240, size: 4
-    CameraSpline5 TranslationAmplitudeScaleSpline; // offset: 244, size: 80
-    float32 TranslationMaxFrequency; // offset: 324, size: 4
-    float32 TranslationFrequencyScale; // offset: 328, size: 4
-    CameraSpline5 TranslationFrequencyScaleSpline; // offset: 332, size: 80
-    String MasterAmplitudeScaleBBKey; // offset: 416, size: 16
-    String MasterFrequencyScaleBBKey; // offset: 424, size: 16
-} ShakeAnimation; // size: 432
-
-#define STI_TYPE_HASH_Array_SplineAnimation 0x2883EBF3
-typedef struct Array_SplineAnimation {
+#define STI_TYPE_HASH_Array_String 0xC106B357
+typedef struct Array_String {
     const STITypeInfo* type_info_;
     uint32 count;
-    SplineAnimation* items;
-} Array_SplineAnimation; // size: 16
+    String* items;
+} Array_String; // size: 16
 
-#define STI_TYPE_HASH_Array_NoiseAnimation 0x877D7B41
-typedef struct Array_NoiseAnimation {
+#define STI_TYPE_HASH_Array_CollisionSubSystemByName 0xB8D7AE1E
+typedef struct Array_CollisionSubSystemByName {
     const STITypeInfo* type_info_;
     uint32 count;
-    NoiseAnimation* items;
-} Array_NoiseAnimation; // size: 16
+    CollisionSubSystemByName* items;
+} Array_CollisionSubSystemByName; // size: 16
 
-#define STI_TYPE_HASH_Array_ShakeAnimation 0x66CC8091
-typedef struct Array_ShakeAnimation {
+#define STI_TYPE_HASH_RagdollSetting 0x805D116C
+typedef struct RagdollSetting{
+    const STITypeInfo* type_info_;
+    String Name; // offset: 0, size: 8
+    uint8 ControllerType; // offset: 8, size: 1
+    uint8 MapAnimationToPhysics; // offset: 9, size: 1
+    uint8 SetBindPoseWhenMapping; // offset: 10, size: 1
+    uint8 BoneLengthAdjustmentType; // offset: 11, size: 1
+    PoweredConstraintParameters PoweredConstraintParameters; // offset: 12, size: 20
+    RigidBodyControllerParameters RigidBodyControllerParameters; // offset: 32, size: 48
+    Array_String KeyframedRigidBodies; // offset: 80, size: 16
+    Array_CollisionSubSystemByName CollisionSubSystems; // offset: 96, size: 16
+} RagdollSetting; // size: 112
+
+#define STI_TYPE_HASH_Array_RagdollSetting 0x69429C1B
+typedef struct Array_RagdollSetting {
     const STITypeInfo* type_info_;
     uint32 count;
-    ShakeAnimation* items;
-} Array_ShakeAnimation; // size: 16
+    RagdollSetting* items;
+} Array_RagdollSetting; // size: 16
 
-#define STI_TYPE_HASH_AuxiliaryMotionModifierParams 0xF49B2335
-typedef struct AuxiliaryMotionModifierParams{
+#define STI_TYPE_HASH_RagdollSettings 0x10ACC3A4
+typedef struct RagdollSettings{
     const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 DrawDebug; // offset: 1, size: 1
-    Array_SplineAnimation SplineAnimations; // offset: 8, size: 16
-    Array_NoiseAnimation NoiseAnimations; // offset: 24, size: 16
-    Array_ShakeAnimation ShakeAnimations; // offset: 40, size: 16
-} AuxiliaryMotionModifierParams; // size: 56
+    Array_RagdollSetting Settings; // offset: 0, size: 16
+} RagdollSettings; // size: 16
 
-#define STI_TYPE_HASH_LocalAngleLimitsModifierParams 0x22364C66
-typedef struct LocalAngleLimitsModifierParams{
+#define STI_TYPE_HASH_AttributeParams 0xCA0E4970
+typedef struct AttributeParams{
     const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 DisablePitchLimits; // offset: 1, size: 1
-    float32 PitchLimit[2]; // offset: 4, size: 8
-    float32 PitchLimitSmoothing[2]; // offset: 12, size: 8
-    uint8 DisableYawLimits; // offset: 20, size: 1
-    float32 YawLimit[2]; // offset: 24, size: 8
-    float32 YawLimitSmoothing[2]; // offset: 32, size: 8
-    uint8 UsePlayerCharacterRootPitch; // offset: 40, size: 1
-} LocalAngleLimitsModifierParams; // size: 44
+    int32 Value; // offset: 0, size: 4
+    float32 Percentage; // offset: 4, size: 4
+    float32 UIValue; // offset: 8, size: 4
+} AttributeParams; // size: 12
 
-#define STI_TYPE_HASH_CameraShakeModifierParams 0x9922B266
-typedef struct CameraShakeModifierParams{
+#define STI_TYPE_HASH_ArmorParams 0x881988E5
+typedef struct ArmorParams{
     const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    uint8 OnfootLayerActivate; // offset: 1, size: 1
-    uint8 VehicleLayerActivate; // offset: 2, size: 1
-    float32 BlurScale; // offset: 4, size: 4
-} CameraShakeModifierParams; // size: 8
+    float32 Overall; // offset: 0, size: 4
+    float32 OverallUIValue; // offset: 4, size: 4
+    float32 Bullet; // offset: 8, size: 4
+    float32 BulletUIValue; // offset: 12, size: 4
+    float32 Explosion; // offset: 16, size: 4
+    float32 ExplosionUIValue; // offset: 20, size: 4
+    float32 Fire; // offset: 24, size: 4
+    float32 FireUIValue; // offset: 28, size: 4
+    float32 Fall; // offset: 32, size: 4
+    float32 FallUIValue; // offset: 36, size: 4
+    float32 Impact; // offset: 40, size: 4
+    float32 ImpactUIValue; // offset: 44, size: 4
+    float32 Gas; // offset: 48, size: 4
+    float32 GasUIValue; // offset: 52, size: 4
+    float32 Biological; // offset: 56, size: 4
+    float32 BiologicalUIValue; // offset: 60, size: 4
+    float32 Radiation; // offset: 64, size: 4
+    float32 RadiationUIValue; // offset: 68, size: 4
+    float32 Melee; // offset: 72, size: 4
+    float32 MeleeUIValue; // offset: 76, size: 4
+} ArmorParams; // size: 80
 
-#define STI_TYPE_HASH_FullScreenEffectModifierParams 0xF165BD1E
-typedef struct FullScreenEffectModifierParams{
+#define STI_TYPE_HASH_StatusAttributes 0x3B088027
+typedef struct StatusAttributes{
     const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-} FullScreenEffectModifierParams; // size: 1
+    AttributeParams HealthBonus; // offset: 0, size: 12
+    ArmorParams DamageResistance; // offset: 12, size: 80
+    AttributeParams MovementSpeed; // offset: 92, size: 12
+    AttributeParams JumpBoost; // offset: 104, size: 12
+    AttributeParams Visiblity; // offset: 116, size: 12
+    AttributeParams NoiseReduction; // offset: 128, size: 12
+} StatusAttributes; // size: 140
 
-#define STI_TYPE_HASH_CameraBaseSmoothingModifierParams 0xD1C9BF21
-typedef struct CameraBaseSmoothingModifierParams{
+#define STI_TYPE_HASH_ExpCraftProbabilities 0xE99ACACA
+typedef struct ExpCraftProbabilities{
     const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 Speed; // offset: 4, size: 4
-    float32 MinY; // offset: 8, size: 4
-    uint8 OnlySmoothY; // offset: 12, size: 1
-    float32 SpeedTranslationY; // offset: 16, size: 4
-    float32 SpeedTranslationYScaleStart; // offset: 20, size: 4
-    float32 SpeedTranslationYScaleEnd; // offset: 24, size: 4
-    float32 SpeedTranslationYScale; // offset: 28, size: 4
-    float32 MaxTranslationYOff; // offset: 32, size: 4
-    float32 SpeedTranslationXZ; // offset: 36, size: 4
-    float32 MaxTranslationXZOff; // offset: 40, size: 4
-} CameraBaseSmoothingModifierParams; // size: 44
-
-#define STI_TYPE_HASH_TrackPlayerModifierParams 0x14FF19DA
-typedef struct TrackPlayerModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 TargetPositionOffset[3]; // offset: 4, size: 12
-    CameraSpring TargetPositionSpring; // offset: 16, size: 12
-} TrackPlayerModifierParams; // size: 28
-
-#define STI_TYPE_HASH_SequenceDofModifierParams 0xC938D931
-typedef struct SequenceDofModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-} SequenceDofModifierParams; // size: 1
-
-#define STI_TYPE_HASH_ListenerPositionParams 0xF458D1C3
-typedef struct ListenerPositionParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 CameraPositionAmount; // offset: 4, size: 4
-    float32 AttachedOffset[3]; // offset: 8, size: 12
-} ListenerPositionParams; // size: 20
-
-#define STI_TYPE_HASH_AimAssistParams 0x800AB894
-typedef struct AimAssistParams{
-    const STITypeInfo* type_info_;
-    float32 StrafingAimAssist_Turning; // offset: 0, size: 4
-    float32 AimAssistSlowDown_Turning; // offset: 4, size: 4
-    float32 StrafingAimAssist_Default; // offset: 8, size: 4
-    float32 AimAssistSlowDown_Default; // offset: 12, size: 4
-    float32 SlowDownSpeedLimit; // offset: 16, size: 4
-    float32 PostSlowDownRampUpSpeed; // offset: 20, size: 4
-} AimAssistParams; // size: 24
-
-#define STI_TYPE_HASH_FirstPersonCameraModifierParams 0x5027B2E0
-typedef struct FirstPersonCameraModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    CameraInputParams InputParams; // offset: 4, size: 160
-    float32 ForegroundFOV; // offset: 164, size: 4
-    float32 WorldFOV; // offset: 168, size: 4
-    uint8 UseGameSettingsWorldFov; // offset: 172, size: 1
-    String ForegroundBBKey; // offset: 176, size: 16
-    uint8 ForegroundPitchEnabled; // offset: 184, size: 1
-    String AimAdjustmentSegments[3]; // offset: 192, size: 24
-    uint8 AlignToSurface; // offset: 216, size: 1
-    float32 AlignToSurfaceStiffness; // offset: 220, size: 4
-    float32 ProneAllowedHeightPushUp; // offset: 224, size: 4
-    float32 PronePushUpRayLength; // offset: 228, size: 4
-    float32 PronePushUpRayBackOffset; // offset: 232, size: 4
-    AimAssistParams AimAssist; // offset: 236, size: 24
-} FirstPersonCameraModifierParams; // size: 264
-
-#define STI_TYPE_HASH_ThirdPersonCameraModifierParams 0x2EF30D23
-typedef struct ThirdPersonCameraModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    CameraInputParams InputParams; // offset: 4, size: 160
-    float32 WorldFOV; // offset: 164, size: 4
-    uint8 UseGameSettingsWorldFov; // offset: 168, size: 1
-    String AimAdjustmentSegments[3]; // offset: 176, size: 24
-    AimAssistParams AimAssist; // offset: 200, size: 24
-} ThirdPersonCameraModifierParams; // size: 224
-
-#define STI_TYPE_HASH_FirstPersonVehicleCameraModifierParams 0x8DE3074A
-typedef struct FirstPersonVehicleCameraModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    CameraInputParams InputParams; // offset: 4, size: 160
-    float32 ForeGroundFOV; // offset: 164, size: 4
-    float32 WorldFOV; // offset: 168, size: 4
-    uint8 UseGameSettingsWorldFov; // offset: 172, size: 1
-    String ForegroundBBKey; // offset: 176, size: 16
-    float32 VehicleFovMaxIncrease; // offset: 184, size: 4
-    float32 MaxFovOneAngle; // offset: 188, size: 4
-    float32 MaxFovZeroAngle; // offset: 192, size: 4
-    float32 FovVehicleMinSpeed; // offset: 196, size: 4
-    float32 FovVehicleMaxSpeed; // offset: 200, size: 4
-    float32 VehiclePitchScale; // offset: 204, size: 4
-    float32 VehicleRollScale; // offset: 208, size: 4
-    float32 VehiclePitchScaleDotThreshold; // offset: 212, size: 4
-    float32 VehicleRollScaleDotThreshold; // offset: 216, size: 4
-    float32 AutoAlignTime; // offset: 220, size: 4
-    float32 AutoAlignDelay; // offset: 224, size: 4
-    float32 AutoAlignSafeAngle; // offset: 228, size: 4
-    float32 AutoAlignMinimumSpeed; // offset: 232, size: 4
-} FirstPersonVehicleCameraModifierParams; // size: 240
-
-#define STI_TYPE_HASH_SetCameraPivotModifierParams 0xCA9796B6
-typedef struct SetCameraPivotModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    float32 Offset[3]; // offset: 4, size: 12
-} SetCameraPivotModifierParams; // size: 16
-
-#define STI_TYPE_HASH_JointOffsetFramingParams 0x6095148F
-typedef struct JointOffsetFramingParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    String JointName; // offset: 8, size: 16
-} JointOffsetFramingParams; // size: 16
-
-#define STI_TYPE_HASH_JointPivotModifierParams 0x7EF84BC9
-typedef struct JointPivotModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    String JointName; // offset: 8, size: 16
-} JointPivotModifierParams; // size: 16
-
-#define STI_TYPE_HASH_AdditivePivotModifierParams 0x98A936A0
-typedef struct AdditivePivotModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    String JointName; // offset: 8, size: 16
-    float32 Weight; // offset: 16, size: 4
-} AdditivePivotModifierParams; // size: 24
-
-#define STI_TYPE_HASH_AdditiveOffsetModifierParams 0xE2A37906
-typedef struct AdditiveOffsetModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    String JointName; // offset: 8, size: 16
-    float32 TranslationWeight; // offset: 16, size: 4
-    float32 RotationWeight; // offset: 20, size: 4
-} AdditiveOffsetModifierParams; // size: 24
-
-#define STI_TYPE_HASH_VehicleAngleLimitsModifierParams 0x5D918B5C
-typedef struct VehicleAngleLimitsModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 BypassModifier; // offset: 0, size: 1
-    float32 PitchLimit[2]; // offset: 4, size: 8
-    float32 PitchLimitSmoothing[2]; // offset: 12, size: 8
-    float32 YawLimit[2]; // offset: 20, size: 8
-    float32 YawLimitSmoothing[2]; // offset: 28, size: 8
-} VehicleAngleLimitsModifierParams; // size: 36
-
-#define STI_TYPE_HASH_ChaseCameraModifierParams 0xE4E3BE1D
-typedef struct ChaseCameraModifierParams{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    CameraInputParams InputParams; // offset: 4, size: 160
-    float32 SpringCoeffX; // offset: 164, size: 4
-    float32 SpringCoeffY; // offset: 168, size: 4
-    float32 ChaseDelayAfterInput; // offset: 172, size: 4
-    float32 SpeedThreshold; // offset: 176, size: 4
-    float32 MaxSpeed; // offset: 180, size: 4
-    float32 MaxDeltaDolly; // offset: 184, size: 4
-    CameraSpring DollySpring; // offset: 188, size: 12
-    float32 MaxDeltaFOV; // offset: 200, size: 4
-    CameraSpring FOVSpring; // offset: 204, size: 12
-} ChaseCameraModifierParams; // size: 216
-
-#define STI_TYPE_HASH_CameraTransitionParams 0x15B9C3D0
-typedef struct CameraTransitionParams{
-    const STITypeInfo* type_info_;
-    float32 Time; // offset: 0, size: 4
-    float32 FovTimeFractionStart; // offset: 4, size: 4
-    float32 FovTimeFractionEnd; // offset: 8, size: 4
-    uint8 FovAlgorithm; // offset: 12, size: 1
-    float32 DofTimeFractionStart; // offset: 16, size: 4
-    float32 DofTimeFractionEnd; // offset: 20, size: 4
-    uint8 DofAlgorithm; // offset: 24, size: 1
-    float32 MotionBlurTimeFractionStart; // offset: 28, size: 4
-    float32 MotionBlurTimeFractionEnd; // offset: 32, size: 4
-    uint8 MotionBlurAlgorithm; // offset: 36, size: 1
-    float32 TranslationTimeFractionStart; // offset: 40, size: 4
-    float32 TranslationTimeFractionEnd; // offset: 44, size: 4
-    uint8 TranslationAlgorithm; // offset: 48, size: 1
-    float32 RotationTimeFractionStart; // offset: 52, size: 4
-    float32 RotationTimeFractionEnd; // offset: 56, size: 4
-    uint8 RotationAlgorithm; // offset: 60, size: 1
-    uint8 CollisionEnabled; // offset: 61, size: 1
-    float32 CollisionRadius; // offset: 64, size: 4
-    uint8 CollisionMaxIterations; // offset: 68, size: 1
-    uint8 CollisionDrawDebug; // offset: 69, size: 1
-} CameraTransitionParams; // size: 72
-
-#define STI_TYPE_HASH_ArcChainSettings 0x5B23FAC7
-typedef struct ArcChainSettings{
-    const STITypeInfo* type_info_;
-    int32 ChainCount; // offset: 0, size: 4
-    int32 MaxTargetsPerChain; // offset: 4, size: 4
-    float32 Radius; // offset: 8, size: 4
-    float32 JumpDelay; // offset: 12, size: 4
-    int16 PlayerDamage; // offset: 16, size: 2
-    int16 MachineDamage; // offset: 18, size: 2
-    uint32 DamageTypes; // offset: 20, size: 4
-    uint8 HitsLocalPlayer; // offset: 24, size: 1
-} ArcChainSettings; // size: 28
+    float32 NoBonusSlot; // offset: 0, size: 4
+    float32 OneBonusSlot; // offset: 4, size: 4
+    float32 TwoBonusSlot; // offset: 8, size: 4
+    float32 MediocreChance; // offset: 12, size: 4
+    float32 CommonChance; // offset: 16, size: 4
+    float32 RareChance; // offset: 20, size: 4
+    float32 EpicChance; // offset: 24, size: 4
+    float32 LegendaryChance; // offset: 28, size: 4
+    float32 Q1Chance; // offset: 32, size: 4
+    float32 Q2Chance; // offset: 36, size: 4
+    float32 Q3Chance; // offset: 40, size: 4
+    float32 Q4Chance; // offset: 44, size: 4
+    float32 Q5Chance; // offset: 48, size: 4
+} ExpCraftProbabilities; // size: 52
 
 #define STI_TYPE_HASH_Array_StringHash_99cfa095_6 0x64193B5D
 typedef struct Array_StringHash_99cfa095_6 {
@@ -8009,6 +6205,13 @@ typedef struct Array_StringHash_99cfa095_6 {
     uint32 count;
     StringHash_99cfa095_6* items;
 } Array_StringHash_99cfa095_6; // size: 16
+
+#define STI_TYPE_HASH_Array_int32 0xFB9FD4CC
+typedef struct Array_int32 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    int32* items;
+} Array_int32; // size: 16
 
 #define STI_TYPE_HASH_HunterMissionRule 0x9477BF5D
 typedef struct HunterMissionRule{
@@ -8037,7 +6240,7 @@ typedef struct HunterMissionRulesGroup{
     Array_Deferred Rules; // offset: 8, size: 16
 } HunterMissionRulesGroup; // size: 24
 
-#define STI_TYPE_HASH_HunterMissionObjective 0x3ED6AB6F
+#define STI_TYPE_HASH_HunterMissionObjective 0x02D34CF1
 typedef struct HunterMissionObjective{
     const STITypeInfo* type_info_;
     int32 Id; // offset: 0, size: 4
@@ -8051,7 +6254,9 @@ typedef struct HunterMissionObjective{
     StringHash_48c5294d_4 NameShort; // offset: 16, size: 4
     int32 TimeLimit; // offset: 20, size: 4
     uint8 ShowTimer; // offset: 24, size: 1
-    String MarkerName; // offset: 32, size: 16
+    uint8 ShowExclusively; // offset: 25, size: 1
+    uint8 ShowInLog; // offset: 26, size: 1
+    String MarkerName; // offset: 32, size: 8
     StringHash_99cfa095_6 ShowMarker; // offset: 40, size: 6
     StringHash_99cfa095_6 HideMarker; // offset: 46, size: 6
     StringHash_99cfa095_6 ResetEvent; // offset: 52, size: 6
@@ -8063,7 +6268,8 @@ typedef struct HunterMissionObjective{
     Array_int32 DependenciesRequired; // offset: 80, size: 16
     Array_int32 DependenciesOptional; // offset: 96, size: 16
     HunterMissionRulesGroup Conditions; // offset: 112, size: 24
-} HunterMissionObjective; // size: 136
+    StringHash_99cfa095_6 ForceCompleteEvent; // offset: 136, size: 6
+} HunterMissionObjective; // size: 144
 
 #define STI_TYPE_HASH_HunterMissionEvent 0xE277C1B0
 typedef struct HunterMissionEvent{
@@ -8079,25 +6285,48 @@ typedef struct HunterMissionEvent{
     Array_int32 DependenciesOptional; // offset: 40, size: 16
 } HunterMissionEvent; // size: 56
 
-#define STI_TYPE_HASH_HunterMissionAttachment 0xC1078CAA
+#define STI_TYPE_HASH_HunterMissionAttachment 0x0A4CE1D3
 typedef struct HunterMissionAttachment{
     const STITypeInfo* type_info_;
     int32 Id; // offset: 0, size: 4
-    StringHash_48c5294d_4 Name; // offset: 4, size: 4
-    StringHash_48c5294d_4 NameShort; // offset: 8, size: 4
-    int32 Type; // offset: 12, size: 4
-    StringHash_99cfa095_6 Event; // offset: 16, size: 6
-    StringHash_48c5294d_4 Text; // offset: 24, size: 4
-    StringHash_99cfa095_6 Reward; // offset: 28, size: 6
-    StringHash_99cfa095_6 PlayAudioEvent; // offset: 34, size: 6
-    StringHash_99cfa095_6 StopAudioEvent; // offset: 40, size: 6
-    uint8 Enabled; // offset: 46, size: 1
-    String Image; // offset: 48, size: 16
-    String Entity; // offset: 56, size: 16
-    Array_int32 DependenciesRequired; // offset: 64, size: 16
-    Array_int32 DependenciesOptional; // offset: 80, size: 16
-    uint8 Persist; // offset: 96, size: 1
-} HunterMissionAttachment; // size: 104
+    uint8 ForceActive; // offset: 4, size: 1
+    StringHash_48c5294d_4 Name; // offset: 8, size: 4
+    StringHash_48c5294d_4 NameShort; // offset: 12, size: 4
+    int32 Type; // offset: 16, size: 4
+    StringHash_99cfa095_6 Event; // offset: 20, size: 6
+    StringHash_48c5294d_4 Text; // offset: 28, size: 4
+    StringHash_99cfa095_6 Reward; // offset: 32, size: 6
+    StringHash_99cfa095_6 PlayAudioEvent; // offset: 38, size: 6
+    StringHash_99cfa095_6 StopAudioEvent; // offset: 44, size: 6
+    uint8 Enabled; // offset: 50, size: 1
+    String Image; // offset: 56, size: 8
+    String Entity; // offset: 64, size: 8
+    Array_int32 DependenciesRequired; // offset: 72, size: 16
+    Array_int32 DependenciesOptional; // offset: 88, size: 16
+    uint8 Persist; // offset: 104, size: 1
+} HunterMissionAttachment; // size: 112
+
+#define STI_TYPE_HASH_HunterMissionRandomizer 0x558F4BCD
+typedef struct HunterMissionRandomizer{
+    const STITypeInfo* type_info_;
+    int32 Id; // offset: 0, size: 4
+    StringHash_48c5294d_4 NameShort; // offset: 4, size: 4
+    uint8 Enabled; // offset: 8, size: 1
+    Array_int32 DependenciesRequired; // offset: 16, size: 16
+    Array_int32 DependenciesOptional; // offset: 32, size: 16
+} HunterMissionRandomizer; // size: 48
+
+#define STI_TYPE_HASH_HunterMissionVariable 0x0B39A901
+typedef struct HunterMissionVariable{
+    const STITypeInfo* type_info_;
+    int32 Id; // offset: 0, size: 4
+    StringHash_48c5294d_4 NameShort; // offset: 4, size: 4
+    uint8 Enabled; // offset: 8, size: 1
+    Array_int32 DependenciesRequired; // offset: 16, size: 16
+    Array_int32 DependenciesOptional; // offset: 32, size: 16
+    StringHash_48c5294d_4 Type; // offset: 48, size: 4
+    String Default; // offset: 56, size: 8
+} HunterMissionVariable; // size: 64
 
 #define STI_TYPE_HASH_SpecificEvent 0x86428854
 typedef struct SpecificEvent{
@@ -8113,7 +6342,7 @@ typedef struct Array_SpecificEvent {
     SpecificEvent* items;
 } Array_SpecificEvent; // size: 16
 
-#define STI_TYPE_HASH_Array_HunterMissionObjective 0xCC0C9DAC
+#define STI_TYPE_HASH_Array_HunterMissionObjective 0x2F4FAC15
 typedef struct Array_HunterMissionObjective {
     const STITypeInfo* type_info_;
     uint32 count;
@@ -8127,14 +6356,28 @@ typedef struct Array_HunterMissionEvent {
     HunterMissionEvent* items;
 } Array_HunterMissionEvent; // size: 16
 
-#define STI_TYPE_HASH_Array_HunterMissionAttachment 0x5D8B31E6
+#define STI_TYPE_HASH_Array_HunterMissionAttachment 0x978A2639
 typedef struct Array_HunterMissionAttachment {
     const STITypeInfo* type_info_;
     uint32 count;
     HunterMissionAttachment* items;
 } Array_HunterMissionAttachment; // size: 16
 
-#define STI_TYPE_HASH_HunterMission 0x2021BC4B
+#define STI_TYPE_HASH_Array_HunterMissionRandomizer 0x3C76FCD6
+typedef struct Array_HunterMissionRandomizer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    HunterMissionRandomizer* items;
+} Array_HunterMissionRandomizer; // size: 16
+
+#define STI_TYPE_HASH_Array_HunterMissionVariable 0xADFD371E
+typedef struct Array_HunterMissionVariable {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    HunterMissionVariable* items;
+} Array_HunterMissionVariable; // size: 16
+
+#define STI_TYPE_HASH_HunterMission 0x393FF444
 typedef struct HunterMission{
     const STITypeInfo* type_info_;
     int32 Id; // offset: 0, size: 4
@@ -8156,7 +6399,7 @@ typedef struct HunterMission{
     Array_StringHash_48c5294d_4 Regions; // offset: 96, size: 16
     uint64 WarboardRegion; // offset: 112, size: 8
     StringHash_48c5294d_4 WarboardSubType; // offset: 120, size: 4
-    String Banner; // offset: 128, size: 16
+    String Banner; // offset: 128, size: 8
     StringHash_48c5294d_4 Character; // offset: 136, size: 4
     StringHash_48c5294d_4 ContentKey; // offset: 140, size: 4
     Array_int32 DependenciesRequired; // offset: 144, size: 16
@@ -8164,23 +6407,6013 @@ typedef struct HunterMission{
     uint32 ContentHash; // offset: 176, size: 4
     uint8 CarryOver; // offset: 180, size: 1
     uint8 CanCancelCompleted; // offset: 181, size: 1
+    uint8 CanSaveState; // offset: 182, size: 1
+    uint8 ShowInLog; // offset: 183, size: 1
     Array_HunterMissionObjective Objectives; // offset: 184, size: 16
     Array_HunterMissionEvent Events; // offset: 200, size: 16
     Array_HunterMissionAttachment Attachments; // offset: 216, size: 16
-} HunterMission; // size: 232
+    Array_HunterMissionRandomizer Randomizers; // offset: 232, size: 16
+    Array_HunterMissionVariable Variables; // offset: 248, size: 16
+} HunterMission; // size: 264
 
-#define STI_TYPE_HASH_Array_HunterMission 0x8F836B09
+#define STI_TYPE_HASH_Array_HunterMission 0x3A58C0DF
 typedef struct Array_HunterMission {
     const STITypeInfo* type_info_;
     uint32 count;
     HunterMission* items;
 } Array_HunterMission; // size: 16
 
-#define STI_TYPE_HASH_HunterMissionData 0x7B2BAFDE
+#define STI_TYPE_HASH_HunterMissionData 0xC34D2AD9
 typedef struct HunterMissionData{
     const STITypeInfo* type_info_;
     Array_HunterMission Missions; // offset: 0, size: 16
 } HunterMissionData; // size: 16
+
+#define STI_TYPE_HASH_ArcRenderSettings 0xD0718CCC
+typedef struct ArcRenderSettings{
+    const STITypeInfo* type_info_;
+    float32 total_lifetime_min; // offset: 0, size: 4
+    float32 total_lifetime_max; // offset: 4, size: 4
+    uint32 trigger_on_spawn; // offset: 8, size: 4
+    float32 trigger_delay_min; // offset: 12, size: 4
+    float32 trigger_delay_max; // offset: 16, size: 4
+    uint32 arc_spawns_per_trigger_min; // offset: 20, size: 4
+    uint32 arc_spawns_per_trigger_max; // offset: 24, size: 4
+    float32 max_arc_distance; // offset: 28, size: 4
+    float32 arc_travel_speed; // offset: 32, size: 4
+    float32 vertices_per_meter; // offset: 36, size: 4
+    float32 arc_lifetime_min; // offset: 40, size: 4
+    float32 arc_lifetime_max; // offset: 44, size: 4
+    float32 arc_width_min; // offset: 48, size: 4
+    float32 arc_width_max; // offset: 52, size: 4
+    uint32 noise_num_octaves; // offset: 56, size: 4
+    float32 noise_period; // offset: 60, size: 4
+    float32 noise_size_base; // offset: 64, size: 4
+    float32 noise_size_octave_2; // offset: 68, size: 4
+    float32 noise_size_octave_3; // offset: 72, size: 4
+    float32 noise_travel_speed_base; // offset: 76, size: 4
+    float32 noise_travel_speed_octave_2; // offset: 80, size: 4
+    float32 noise_travel_speed_octave_3; // offset: 84, size: 4
+    float32 noise_size_multiplier_at_start; // offset: 88, size: 4
+    float32 noise_size_multiplier_growth_over_time; // offset: 92, size: 4
+    float32 noise_size_multiplier_max; // offset: 96, size: 4
+    float32 bend_height_at_start_min; // offset: 100, size: 4
+    float32 bend_height_at_start_max; // offset: 104, size: 4
+    float32 bend_max_angle_from_vertical; // offset: 108, size: 4
+    float32 bend_height_growth_over_time; // offset: 112, size: 4
+    float32 bend_height_final_min; // offset: 116, size: 4
+    float32 bend_height_final_max; // offset: 120, size: 4
+    float32 size_multiplier_by_distance; // offset: 124, size: 4
+    float32 min_scale_by_camera_distance; // offset: 128, size: 4
+    float32 emission_min; // offset: 132, size: 4
+    float32 emission_max; // offset: 136, size: 4
+    float32 emission_jitter; // offset: 140, size: 4
+    float32 emission_color_r; // offset: 144, size: 4
+    float32 emission_color_g; // offset: 148, size: 4
+    float32 emission_color_b; // offset: 152, size: 4
+} ArcRenderSettings; // size: 156
+
+#define STI_TYPE_HASH_ArcChainSettings 0x5B23FAC7
+typedef struct ArcChainSettings{
+    const STITypeInfo* type_info_;
+    int32 ChainCount; // offset: 0, size: 4
+    int32 MaxTargetsPerChain; // offset: 4, size: 4
+    float32 Radius; // offset: 8, size: 4
+    float32 JumpDelay; // offset: 12, size: 4
+    int16 PlayerDamage; // offset: 16, size: 2
+    int16 MachineDamage; // offset: 18, size: 2
+    uint32 DamageTypes; // offset: 20, size: 4
+    uint8 HitsLocalPlayer; // offset: 24, size: 1
+} ArcChainSettings; // size: 28
+
+#define STI_TYPE_HASH_CompanionSettings 0xBA658830
+typedef struct CompanionSettings{
+    const STITypeInfo* type_info_;
+    int32 heal_amount; // offset: 0, size: 4
+    float32 heal_cooldown; // offset: 4, size: 4
+    float32 heal_duration; // offset: 8, size: 4
+    float32 heal_threshold; // offset: 12, size: 4
+    float32 spot_duration; // offset: 16, size: 4
+    float32 spot_xp_mult; // offset: 20, size: 4
+    float32 spot_damage_mult; // offset: 24, size: 4
+    float32 spot_cooldown; // offset: 28, size: 4
+    float32 scavenge_range; // offset: 32, size: 4
+    float32 scavenge_height; // offset: 36, size: 4
+    float32 scavenge_duration; // offset: 40, size: 4
+    float32 calm_player_range; // offset: 44, size: 4
+    float32 calm_run_range; // offset: 48, size: 4
+    float32 alert_player_range; // offset: 52, size: 4
+    float32 alert_duration; // offset: 56, size: 4
+    float32 teleport_range; // offset: 60, size: 4
+    float32 shutdown_health; // offset: 64, size: 4
+    float32 base_health; // offset: 68, size: 4
+} CompanionSettings; // size: 72
+
+#define STI_TYPE_HASH_RcTickSettings 0xBF45821A
+typedef struct RcTickSettings{
+    const STITypeInfo* type_info_;
+    float32 maximum_signal_range; // offset: 0, size: 4
+    float32 warning_signal_range; // offset: 4, size: 4
+    Spline10 signal_strength_noise; // offset: 8, size: 140
+    float32 remote_control_maximum_time; // offset: 148, size: 4
+    float32 camera_delay_start; // offset: 152, size: 4
+    float32 camera_delay_end; // offset: 156, size: 4
+    float32 jump_strength[2]; // offset: 160, size: 8
+    float32 jump_local_to_aim; // offset: 168, size: 4
+} RcTickSettings; // size: 172
+
+#define STI_TYPE_HASH_FirebirdSettings 0x9B2FBF77
+typedef struct FirebirdSettings{
+    const STITypeInfo* type_info_;
+    float32 bomb_run_desired_height; // offset: 0, size: 4
+    float32 strafe_chance; // offset: 4, size: 4
+} FirebirdSettings; // size: 8
+
+#define STI_TYPE_HASH_LynxSettings 0xF2A153E7
+typedef struct LynxSettings{
+    const STITypeInfo* type_info_;
+    float32 movement_speed_rate_engine_destroyed; // offset: 0, size: 4
+    float32 movement_speed_rate_engine_destroyed_all; // offset: 4, size: 4
+} LynxSettings; // size: 8
+
+#define STI_TYPE_HASH_HunterAttackSettings 0x83A13191
+typedef struct HunterAttackSettings{
+    const STITypeInfo* type_info_;
+    float32 melee_jump_attack_chance_suppressor; // offset: 0, size: 4
+    float32 melee_jump_attack_chance_flanker; // offset: 4, size: 4
+    float32 melee_jump_attack_chance_backsteper; // offset: 8, size: 4
+} HunterAttackSettings; // size: 12
+
+#define STI_TYPE_HASH_DreaAttackSettings 0x6F88E58F
+typedef struct DreaAttackSettings{
+    const STITypeInfo* type_info_;
+    float32 attack_cooldown[2]; // offset: 0, size: 8
+} DreaAttackSettings; // size: 8
+
+#define STI_TYPE_HASH_DreaChargeSettings 0x4FBF8692
+typedef struct DreaChargeSettings{
+    const STITypeInfo* type_info_;
+    float32 LockOnTargetDistance; // offset: 0, size: 4
+    float32 LockOnTargetOffset; // offset: 4, size: 4
+    float32 ChargeDistance; // offset: 8, size: 4
+} DreaChargeSettings; // size: 12
+
+#define STI_TYPE_HASH_DreaThermobaricSettings 0x85C0F117
+typedef struct DreaThermobaricSettings{
+    const STITypeInfo* type_info_;
+    float32 thermobaric_wave_thresholds_1; // offset: 0, size: 4
+    float32 thermobaric_wave_thresholds_2; // offset: 4, size: 4
+    float32 thermobaric_wave_thresholds_3; // offset: 8, size: 4
+    float32 thermobaric_wave_warning_time; // offset: 12, size: 4
+    float32 thermobaric_wave_warning_sound_interval; // offset: 16, size: 4
+    float32 thermobaric_explosion_threshold; // offset: 20, size: 4
+    float32 thermobaric_explosion_warning_time; // offset: 24, size: 4
+    float32 thermobaric_explosion_warning_sound_interval; // offset: 28, size: 4
+} DreaThermobaricSettings; // size: 32
+
+#define STI_TYPE_HASH_HarvesterSettings 0xB77EE664
+typedef struct HarvesterSettings{
+    const STITypeInfo* type_info_;
+    float32 turtle_time[2]; // offset: 0, size: 8
+    float32 reinforce_delay[2]; // offset: 8, size: 8
+    int32 max_reinforcements[2]; // offset: 16, size: 8
+} HarvesterSettings; // size: 24
+
+#define STI_TYPE_HASH_WolfSettings 0x11F0041A
+typedef struct WolfSettings{
+    const STITypeInfo* type_info_;
+    float32 chance_reposition; // offset: 0, size: 4
+    float32 heal_weapon_cooldown[2]; // offset: 4, size: 8
+} WolfSettings; // size: 12
+
+#define STI_TYPE_HASH_SmallMachineSettings 0x9B457AEE
+typedef struct SmallMachineSettings{
+    const STITypeInfo* type_info_;
+    int32 use_min_dist_from_target_in_combat; // offset: 0, size: 4
+    float32 min_dist_has_ranged_weapon_primary; // offset: 4, size: 4
+    float32 min_dist_has_ranged_weapon_secondary; // offset: 8, size: 4
+    float32 min_dist_has_no_ranged_weapon; // offset: 12, size: 4
+} SmallMachineSettings; // size: 16
+
+#define STI_TYPE_HASH_MachineSettings 0xCB3BAD92
+typedef struct MachineSettings{
+    const STITypeInfo* type_info_;
+    float32 lured_attack_range; // offset: 0, size: 4
+    float32 check_last_seen_heard; // offset: 4, size: 4
+    int32 max_target_count; // offset: 8, size: 4
+    float32 melee_weapon_range; // offset: 12, size: 4
+    float32 melee_weapon_cooldown[2]; // offset: 16, size: 8
+    float32 support_weapon_range; // offset: 24, size: 4
+    float32 support_weapon_cooldown[2]; // offset: 28, size: 8
+    float32 ranged_weapon_aim_prediction_multiplier; // offset: 36, size: 4
+    float32 machine_damage_multiplier; // offset: 40, size: 4
+} MachineSettings; // size: 44
+
+#define STI_TYPE_HASH_AITuningSettings 0x31B2542A
+typedef struct AITuningSettings{
+    const STITypeInfo* type_info_;
+    RcTickSettings RcTickSettings; // offset: 0, size: 172
+    CompanionSettings Companion_Settings; // offset: 172, size: 72
+    FirebirdSettings Firebird_Settings; // offset: 244, size: 8
+    LynxSettings Lynx_Settings; // offset: 252, size: 8
+    HunterAttackSettings Hunter_Attack_Settings; // offset: 260, size: 12
+    DreaAttackSettings DreadnoughtAttackSettings; // offset: 272, size: 8
+    DreaChargeSettings DreadnoughtChargeSettings; // offset: 280, size: 12
+    DreaThermobaricSettings DreadnoughtThermobaricSettings; // offset: 292, size: 32
+    HarvesterSettings HarvesterSettings; // offset: 324, size: 24
+    WolfSettings WolfSettings; // offset: 348, size: 12
+    SmallMachineSettings SmallMachineSettings; // offset: 360, size: 16
+    MachineSettings Machine_Settings; // offset: 376, size: 44
+} AITuningSettings; // size: 420
+
+#define STI_TYPE_HASH_BalloonSettings 0x19E00E29
+typedef struct BalloonSettings{
+    const STITypeInfo* type_info_;
+    float32 InflationTime; // offset: 0, size: 4
+    float32 DeflationTime; // offset: 4, size: 4
+    float32 InflateForce; // offset: 8, size: 4
+    float32 FloatForce; // offset: 12, size: 4
+    float32 FloatHeight; // offset: 16, size: 4
+    float32 FloatBounceDuration; // offset: 20, size: 4
+    float32 FloatBounceStrength; // offset: 24, size: 4
+    float32 FloatDriftResistance; // offset: 28, size: 4
+} BalloonSettings; // size: 32
+
+#define STI_TYPE_HASH_TextureBlend 0xA6D85C84
+typedef struct TextureBlend{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 EquipmentHash; // offset: 0, size: 4
+    String Albedo; // offset: 8, size: 8
+    String Normal; // offset: 16, size: 8
+    String Mask; // offset: 24, size: 8
+    String Mpm; // offset: 32, size: 8
+} TextureBlend; // size: 40
+
+#define STI_TYPE_HASH_Array_TextureBlend 0xFFB75647
+typedef struct Array_TextureBlend {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    TextureBlend* items;
+} Array_TextureBlend; // size: 16
+
+#define STI_TYPE_HASH_TextureBlendWeaponSkinTuningSettings 0xC199E5BF
+typedef struct TextureBlendWeaponSkinTuningSettings{
+    const STITypeInfo* type_info_;
+    Array_TextureBlend Entries; // offset: 0, size: 16
+} TextureBlendWeaponSkinTuningSettings; // size: 16
+
+#define STI_TYPE_HASH_OccluderBox 0xE89E4CD1
+typedef struct OccluderBox{
+    const STITypeInfo* type_info_;
+    float32 Extents[3]; // offset: 0, size: 12
+    float32 Transform[16]; // offset: 12, size: 64
+} OccluderBox; // size: 76
+
+#define STI_TYPE_HASH_Array_OccluderBox 0xADC2BF32
+typedef struct Array_OccluderBox {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    OccluderBox* items;
+} Array_OccluderBox; // size: 16
+
+#define STI_TYPE_HASH_OccluderBoxCollection 0x38FDA78F
+typedef struct OccluderBoxCollection{
+    const STITypeInfo* type_info_;
+    Array_OccluderBox Boxes; // offset: 0, size: 16
+} OccluderBoxCollection; // size: 16
+
+#define STI_TYPE_HASH_GSData 0xCEBF6839
+typedef struct GSData{
+    const STITypeInfo* type_info_;
+    uint32 Name; // offset: 0, size: 4
+    uint32 Type; // offset: 4, size: 4
+    Array_uint8 Value; // offset: 8, size: 16
+    uint8 Reference; // offset: 24, size: 1
+} GSData; // size: 32
+
+#define STI_TYPE_HASH_Array_GSData 0xA6196600
+typedef struct Array_GSData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    GSData* items;
+} Array_GSData; // size: 16
+
+#define STI_TYPE_HASH_Array_GSDataSet 0xE442B43E
+typedef struct Array_GSDataSet {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    GSDataSet* items;
+} Array_GSDataSet; // size: 16
+
+#define STI_TYPE_HASH_GSDataSet 0x76B4E4DF
+typedef struct GSDataSet{
+    const STITypeInfo* type_info_;
+    uint32 Name; // offset: 0, size: 4
+    Array_GSData Data; // offset: 8, size: 16
+    Array_GSDataSet DataSets; // offset: 24, size: 16
+} GSDataSet; // size: 48
+
+#define STI_TYPE_HASH_GSNode 0x57FECC61
+typedef struct GSNode{
+    const STITypeInfo* type_info_;
+    uint32 Class; // offset: 0, size: 4
+    uint32* Function; // offset: 8, size: 8
+    GSDataSet DataSet; // offset: 16, size: 48
+} GSNode; // size: 64
+
+#define STI_TYPE_HASH_Array_GSNode 0x7CA67BB8
+typedef struct Array_GSNode {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    GSNode* items;
+} Array_GSNode; // size: 16
+
+#define STI_TYPE_HASH_GSGraph 0x69B6DFA4
+typedef struct GSGraph{
+    const STITypeInfo* type_info_;
+    Array_GSNode Nodes; // offset: 0, size: 16
+} GSGraph; // size: 16
+
+#define STI_TYPE_HASH_BlobOfBytes 0xD74CC4CB
+typedef struct BlobOfBytes{
+    const STITypeInfo* type_info_;
+    Array_uint8 Bytes; // offset: 0, size: 16
+} BlobOfBytes; // size: 16
+
+#define STI_TYPE_HASH_GDCFileEntry 0x0A0C56EE
+typedef struct GDCFileEntry{
+    const STITypeInfo* type_info_;
+    Deferred Data; // offset: 0, size: 16
+    String FileName; // offset: 16, size: 8
+    uint32 Version; // offset: 24, size: 4
+} GDCFileEntry; // size: 32
+
+#define STI_TYPE_HASH_Array_GDCFileEntry 0xE3524CEB
+typedef struct Array_GDCFileEntry {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    GDCFileEntry* items;
+} Array_GDCFileEntry; // size: 16
+
+#define STI_TYPE_HASH_GameDataCollection 0x178842FE
+typedef struct GameDataCollection{
+    const STITypeInfo* type_info_;
+    Array_GDCFileEntry Files; // offset: 0, size: 16
+    Array_StringHash_48c5294d_4 Names; // offset: 16, size: 16
+} GameDataCollection; // size: 32
+
+#define STI_TYPE_HASH_AdfModelCollectionInstance 0x58D78264
+typedef struct AdfModelCollectionInstance{
+    const STITypeInfo* type_info_;
+    float32 Transform[16]; // offset: 0, size: 64
+    uint16 ModelIndex; // offset: 64, size: 2
+    uint16 CastShadow; // offset: 66, size: 2
+    uint16 ClipOnDistance; // offset: 66, size: 2
+    uint16 SizeCull; // offset: 66, size: 2
+    uint16 SandAmount; // offset: 66, size: 2
+    float32 AABB[6]; // offset: 68, size: 24
+} AdfModelCollectionInstance; // size: 92
+
+#define STI_TYPE_HASH_Array_AdfModelCollectionInstance 0xD6DB2DB1
+typedef struct Array_AdfModelCollectionInstance {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AdfModelCollectionInstance* items;
+} Array_AdfModelCollectionInstance; // size: 16
+
+#define STI_TYPE_HASH_AdfModelCollection 0xB5B062F1
+typedef struct AdfModelCollection{
+    const STITypeInfo* type_info_;
+    Array_AdfModelCollectionInstance Instances; // offset: 0, size: 16
+    Array_uint32 Models; // offset: 16, size: 16
+    float32 AABB[6]; // offset: 32, size: 24
+    int32 FixedCount; // offset: 56, size: 4
+} AdfModelCollection; // size: 64
+
+#define STI_TYPE_HASH_EnvParam 0xF0C1376C
+typedef struct EnvParam{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 Name; // offset: 0, size: 4
+    Array_float32 Keys; // offset: 8, size: 16
+    Array_float32 Values; // offset: 24, size: 16
+    int8 Type; // offset: 40, size: 1
+    int8 Curve; // offset: 41, size: 1
+    int8 Blend; // offset: 42, size: 1
+    int8 Operation; // offset: 43, size: 1
+} EnvParam; // size: 48
+
+#define STI_TYPE_HASH_Array_EnvParam 0x70C80904
+typedef struct Array_EnvParam {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EnvParam* items;
+} Array_EnvParam; // size: 16
+
+#define STI_TYPE_HASH_EnvironmentParameters 0xE998CACE
+typedef struct EnvironmentParameters{
+    const STITypeInfo* type_info_;
+    String Name; // offset: 0, size: 8
+    uint32 RenderFeatures; // offset: 8, size: 4
+    Array_EnvParam Parameters; // offset: 16, size: 16
+} EnvironmentParameters; // size: 32
+
+#define STI_TYPE_HASH_EnvironmentCurveTypes 0x36CB794A
+typedef enum{ // size: 4
+    EP_CURVE_LINEAR = 0,
+    EP_CURVE_EASEIN = 1,
+    EP_CURVE_EASEOUT = 2,
+    EP_CURVE_EASEINOUT = 3,
+    EnvironmentCurveTypes_ForceSize = 0x7FFFFFFF
+} EnvironmentCurveTypes;
+
+#define STI_TYPE_HASH_EnvironmentBlendModes 0x00254C90
+typedef enum{ // size: 4
+    EP_BLEND_ALPHA = 0,
+    EP_BLEND_ALPHA_MULTIPLY = 1,
+    EP_BLEND_ADDITIVE = 2,
+    EP_BLEND_ADDITIVE_MULTIPLY = 3,
+    EP_BLEND_MIN = 4,
+    EP_BLEND_MAX = 5,
+    EP_BLEND_REPLACE = 6,
+    EnvironmentBlendModes_ForceSize = 0x7FFFFFFF
+} EnvironmentBlendModes;
+
+#define STI_TYPE_HASH_EnvironmentOps 0xFC8E502A
+typedef enum{ // size: 4
+    EP_OP_VALUE = 0,
+    EP_OP_ONEOVERVALUE = 1,
+    EP_OP_EXPVALUE = 2,
+    EP_OP_ONEOVEREXPVALUE = 3,
+    EP_OP_SINVALUE = 4,
+    EP_OP_ONEOVERSINVALUE = 5,
+    EnvironmentOps_ForceSize = 0x7FFFFFFF
+} EnvironmentOps;
+
+#define STI_TYPE_HASH_Shader 0xC2CE5A9E
+typedef struct Shader{
+    const STITypeInfo* type_info_;
+    uint32 NameHash; // offset: 0, size: 4
+    String Name; // offset: 8, size: 8
+    uint32 DataHash; // offset: 16, size: 4
+    Array_uint8 BinaryData; // offset: 24, size: 16
+} Shader; // size: 40
+
+#define STI_TYPE_HASH_Array_Shader 0x453B6CBD
+typedef struct Array_Shader {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    Shader* items;
+} Array_Shader; // size: 16
+
+#define STI_TYPE_HASH_ShaderLibrary 0xF2923B32
+typedef struct ShaderLibrary{
+    const STITypeInfo* type_info_;
+    String Name; // offset: 0, size: 8
+    String BuildTime; // offset: 8, size: 8
+    Array_Shader VertexShaders; // offset: 16, size: 16
+    Array_Shader FragmentShaders; // offset: 32, size: 16
+    Array_Shader ComputeShaders; // offset: 48, size: 16
+    Array_Shader GeometryShaders; // offset: 64, size: 16
+    Array_Shader HullShaders; // offset: 80, size: 16
+    Array_Shader DomainShaders; // offset: 96, size: 16
+} ShaderLibrary; // size: 112
+
+#define STI_TYPE_HASH_AmfFormat 0x0418CEAB
+typedef enum{ // size: 4
+    AmfFormat_R32G32B32A32_FLOAT = 0,
+    AmfFormat_R32G32B32A32_UINT = 1,
+    AmfFormat_R32G32B32A32_SINT = 2,
+    AmfFormat_R32G32B32_FLOAT = 3,
+    AmfFormat_R32G32B32_UINT = 4,
+    AmfFormat_R32G32B32_SINT = 5,
+    AmfFormat_R16G16B16A16_FLOAT = 6,
+    AmfFormat_R16G16B16A16_UNORM = 7,
+    AmfFormat_R16G16B16A16_UINT = 8,
+    AmfFormat_R16G16B16A16_SNORM = 9,
+    AmfFormat_R16G16B16A16_SINT = 10,
+    AmfFormat_R16G16B16_FLOAT = 11,
+    AmfFormat_R16G16B16_UNORM = 12,
+    AmfFormat_R16G16B16_UINT = 13,
+    AmfFormat_R16G16B16_SNORM = 14,
+    AmfFormat_R16G16B16_SINT = 15,
+    AmfFormat_R32G32_FLOAT = 16,
+    AmfFormat_R32G32_UINT = 17,
+    AmfFormat_R32G32_SINT = 18,
+    AmfFormat_R10G10B10A2_UNORM = 19,
+    AmfFormat_R10G10B10A2_UINT = 20,
+    AmfFormat_R11G11B10_FLOAT = 21,
+    AmfFormat_R8G8B8A8_UNORM = 22,
+    AmfFormat_R8G8B8A8_UNORM_SRGB = 23,
+    AmfFormat_R8G8B8A8_UINT = 24,
+    AmfFormat_R8G8B8A8_SNORM = 25,
+    AmfFormat_R8G8B8A8_SINT = 26,
+    AmfFormat_R16G16_FLOAT = 27,
+    AmfFormat_R16G16_UNORM = 28,
+    AmfFormat_R16G16_UINT = 29,
+    AmfFormat_R16G16_SNORM = 30,
+    AmfFormat_R16G16_SINT = 31,
+    AmfFormat_R32_FLOAT = 32,
+    AmfFormat_R32_UINT = 33,
+    AmfFormat_R32_SINT = 34,
+    AmfFormat_R8G8_UNORM = 35,
+    AmfFormat_R8G8_UINT = 36,
+    AmfFormat_R8G8_SNORM = 37,
+    AmfFormat_R8G8_SINT = 38,
+    AmfFormat_R16_FLOAT = 39,
+    AmfFormat_R16_UNORM = 40,
+    AmfFormat_R16_UINT = 41,
+    AmfFormat_R16_SNORM = 42,
+    AmfFormat_R16_SINT = 43,
+    AmfFormat_R8_UNORM = 44,
+    AmfFormat_R8_UINT = 45,
+    AmfFormat_R8_SNORM = 46,
+    AmfFormat_R8_SINT = 47,
+    AmfFormat_R32_UNIT_VEC_AS_FLOAT = 48,
+    AmfFormat_R32_R8G8B8A8_UNORM_AS_FLOAT = 49,
+    AmfFormat_R8G8B8A8_TANGENT_SPACE = 50,
+    AmfFormat_ForceSize = 0x7FFFFFFF
+} AmfFormat;
+
+#define STI_TYPE_HASH_AmfUsage 0x49BE3A72
+typedef enum{ // size: 4
+    AmfUsage_Unspecified = 0,
+    AmfUsage_Position = 1,
+    AmfUsage_TextureCoordinate = 2,
+    AmfUsage_Normal = 3,
+    AmfUsage_Tangent = 4,
+    AmfUsage_BiTangent = 5,
+    AmfUsage_TangentSpace = 6,
+    AmfUsage_BoneIndex = 7,
+    AmfUsage_BoneWeight = 8,
+    AmfUsage_Color = 9,
+    AmfUsage_WireRadius = 10,
+    AmfUsage_ForceSize = 0x7FFFFFFF
+} AmfUsage;
+
+#define STI_TYPE_HASH_AmfStreamAttribute 0xCD6F6402
+typedef struct AmfStreamAttribute{
+    const STITypeInfo* type_info_;
+    AmfUsage Usage; // offset: 0, size: 4
+    AmfFormat Format; // offset: 4, size: 4
+    uint8 StreamIndex; // offset: 8, size: 1
+    uint8 StreamOffset; // offset: 9, size: 1
+    uint8 StreamStride; // offset: 10, size: 1
+    uint8 PackingData[8]; // offset: 11, size: 8
+} AmfStreamAttribute; // size: 20
+
+#define STI_TYPE_HASH_AmfBoundingBox 0x08E31707
+typedef struct AmfBoundingBox{
+    const STITypeInfo* type_info_;
+    float32 Min[3]; // offset: 0, size: 12
+    float32 Max[3]; // offset: 12, size: 12
+} AmfBoundingBox; // size: 24
+
+#define STI_TYPE_HASH_AmfSubMesh 0xD004AC12
+typedef struct AmfSubMesh{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 SubMeshId; // offset: 0, size: 4
+    uint32 IndexCount; // offset: 4, size: 4
+    uint32 IndexStreamOffset; // offset: 8, size: 4
+    AmfBoundingBox BoundingBox; // offset: 12, size: 24
+} AmfSubMesh; // size: 36
+
+#define STI_TYPE_HASH_Array_AmfSubMesh 0xFBB375AE
+typedef struct Array_AmfSubMesh {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AmfSubMesh* items;
+} Array_AmfSubMesh; // size: 16
+
+#define STI_TYPE_HASH_Array_AmfStreamAttribute 0xD1C9E8DC
+typedef struct Array_AmfStreamAttribute {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AmfStreamAttribute* items;
+} Array_AmfStreamAttribute; // size: 16
+
+#define STI_TYPE_HASH_AmfMesh 0xB8E95039
+typedef struct AmfMesh{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 MeshTypeId; // offset: 0, size: 4
+    uint32 IndexCount; // offset: 4, size: 4
+    uint32 VertexCount; // offset: 8, size: 4
+    uint8 IndexBufferIndex; // offset: 12, size: 1
+    uint8 IndexBufferStride; // offset: 13, size: 1
+    uint32 IndexBufferOffset; // offset: 16, size: 4
+    Array_uint8 VertexBufferIndices; // offset: 24, size: 16
+    Array_uint8 VertexStreamStrides; // offset: 40, size: 16
+    Array_uint32 VertexStreamOffsets; // offset: 56, size: 16
+    float32 TextureDensities[3]; // offset: 72, size: 12
+    Deferred MeshProperties; // offset: 88, size: 16
+    Array_int16 BoneIndexLookup; // offset: 104, size: 16
+    Array_AmfSubMesh SubMeshes; // offset: 120, size: 16
+    Array_AmfStreamAttribute StreamAttributes; // offset: 136, size: 16
+} AmfMesh; // size: 152
+
+#define STI_TYPE_HASH_Array_AmfMesh 0x58482F62
+typedef struct Array_AmfMesh {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AmfMesh* items;
+} Array_AmfMesh; // size: 16
+
+#define STI_TYPE_HASH_AmfLodGroup 0x5E93771F
+typedef struct AmfLodGroup{
+    const STITypeInfo* type_info_;
+    uint32 LODIndex; // offset: 0, size: 4
+    Array_AmfMesh Meshes; // offset: 8, size: 16
+} AmfLodGroup; // size: 24
+
+#define STI_TYPE_HASH_Array_AmfLodGroup 0xC249939A
+typedef struct Array_AmfLodGroup {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AmfLodGroup* items;
+} Array_AmfLodGroup; // size: 16
+
+#define STI_TYPE_HASH_AmfMeshHeader 0xEA60065D
+typedef struct AmfMeshHeader{
+    const STITypeInfo* type_info_;
+    AmfBoundingBox BoundingBox; // offset: 0, size: 24
+    uint32 MemoryTag; // offset: 24, size: 4
+    Array_AmfLodGroup LodGroups; // offset: 32, size: 16
+    StringHash_48c5294d_4 HighLodPath; // offset: 48, size: 4
+} AmfMeshHeader; // size: 56
+
+#define STI_TYPE_HASH_AmfBuffer 0xD8D7382B
+typedef struct AmfBuffer{
+    const STITypeInfo* type_info_;
+    Array_uint8 Data; // offset: 0, size: 16
+    uint8 CreateSRV; // offset: 16, size: 1
+} AmfBuffer; // size: 24
+
+#define STI_TYPE_HASH_Array_AmfBuffer 0x62039D16
+typedef struct Array_AmfBuffer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AmfBuffer* items;
+} Array_AmfBuffer; // size: 16
+
+#define STI_TYPE_HASH_AmfMeshBuffers 0x67B3A453
+typedef struct AmfMeshBuffers{
+    const STITypeInfo* type_info_;
+    uint32 MemoryTag; // offset: 0, size: 4
+    Array_AmfBuffer IndexBuffers; // offset: 8, size: 16
+    Array_AmfBuffer VertexBuffers; // offset: 24, size: 16
+} AmfMeshBuffers; // size: 40
+
+#define STI_TYPE_HASH_AmfMaterial 0x11CE3318
+typedef struct AmfMaterial{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 Name; // offset: 0, size: 4
+    StringHash_48c5294d_4 RenderBlockId; // offset: 4, size: 4
+    Deferred Attributes; // offset: 8, size: 16
+    Array_StringHash_48c5294d_4 Textures; // offset: 24, size: 16
+} AmfMaterial; // size: 40
+
+#define STI_TYPE_HASH_Array_AmfMaterial 0x087472E5
+typedef struct Array_AmfMaterial {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AmfMaterial* items;
+} Array_AmfMaterial; // size: 16
+
+#define STI_TYPE_HASH_AmfModel 0xF7C20A69
+typedef struct AmfModel{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 Mesh; // offset: 0, size: 4
+    Array_uint8 LodSlots; // offset: 8, size: 16
+    uint32 MemoryTag; // offset: 24, size: 4
+    float32 LodFactor; // offset: 28, size: 4
+    Array_AmfMaterial Materials; // offset: 32, size: 16
+} AmfModel; // size: 48
+
+#define STI_TYPE_HASH_AmfModelVariant 0x7A9D926E
+typedef struct AmfModelVariant{
+    const STITypeInfo* type_info_;
+    AmfModel Data; // offset: 0, size: 48
+    Array_String Resources; // offset: 48, size: 16
+    Array_String HrResources; // offset: 64, size: 16
+} AmfModelVariant; // size: 80
+
+#define STI_TYPE_HASH_XLSSheet 0xD987FB8B
+typedef struct XLSSheet{
+    const STITypeInfo* type_info_;
+    uint32 Cols; // offset: 0, size: 4
+    uint32 Rows; // offset: 4, size: 4
+    Array_uint32 CellIndex; // offset: 8, size: 16
+    String Name; // offset: 24, size: 8
+} XLSSheet; // size: 32
+
+#define STI_TYPE_HASH_XLSCell 0x9AE3055D
+typedef struct XLSCell{
+    const STITypeInfo* type_info_;
+    uint16 Type; // offset: 0, size: 2
+    uint32 DataIndex; // offset: 4, size: 4
+    uint32 AttributeIndex; // offset: 8, size: 4
+} XLSCell; // size: 12
+
+#define STI_TYPE_HASH_XLSAttribute 0x8EE26A32
+typedef struct XLSAttribute{
+    const STITypeInfo* type_info_;
+    uint8 FGColorIndex; // offset: 0, size: 1
+    uint8 BGColorIndex; // offset: 1, size: 1
+} XLSAttribute; // size: 2
+
+#define STI_TYPE_HASH_Array_XLSSheet 0x08777DDD
+typedef struct Array_XLSSheet {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    XLSSheet* items;
+} Array_XLSSheet; // size: 16
+
+#define STI_TYPE_HASH_Array_XLSCell 0x85840D51
+typedef struct Array_XLSCell {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    XLSCell* items;
+} Array_XLSCell; // size: 16
+
+#define STI_TYPE_HASH_Array_XLSAttribute 0x061B813D
+typedef struct Array_XLSAttribute {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    XLSAttribute* items;
+} Array_XLSAttribute; // size: 16
+
+#define STI_TYPE_HASH_XLSBook 0x0B73315D
+typedef struct XLSBook{
+    const STITypeInfo* type_info_;
+    Array_XLSSheet Sheet; // offset: 0, size: 16
+    Array_XLSCell Cell; // offset: 16, size: 16
+    Array_String StringData; // offset: 32, size: 16
+    Array_float32 ValueData; // offset: 48, size: 16
+    Array_uint8 BoolData; // offset: 64, size: 16
+    Array_String DateData; // offset: 80, size: 16
+    Array_uint32 ColorData; // offset: 96, size: 16
+    Array_XLSAttribute Attribute; // offset: 112, size: 16
+} XLSBook; // size: 128
+
+#define STI_TYPE_HASH_StreamPatchMemoryType 0x5A6DE0C2
+typedef enum{ // size: 4
+    STREAM_PATCH_STATIC_POOL = 0,
+    STREAM_PATCH_DYNAMIC = 1,
+    STREAM_PATCH_USER = 2,
+    StreamPatchMemoryType_ForceSize = 0x7FFFFFFF
+} StreamPatchMemoryType;
+
+#define STI_TYPE_HASH_StreamPatchFileHeader 0x852D0D20
+typedef struct StreamPatchFileHeader{
+    const STITypeInfo* type_info_;
+    uint32 Version; // offset: 0, size: 4
+    int32 Size; // offset: 4, size: 4
+    uint32 DynamicMemoryRequirements; // offset: 8, size: 4
+    int32 PatchPositionX; // offset: 12, size: 4
+    int32 PatchPositionZ; // offset: 16, size: 4
+    int32 PatchLod; // offset: 20, size: 4
+} StreamPatchFileHeader; // size: 24
+
+#define STI_TYPE_HASH_StreamPatchBlockHeader 0x78CB76FD
+typedef struct StreamPatchBlockHeader{
+    const STITypeInfo* type_info_;
+    uint32 Version; // offset: 0, size: 4
+    StreamPatchMemoryType MemoryType; // offset: 4, size: 4
+    int32 MemorySize; // offset: 8, size: 4
+    int32 PatchPositionX; // offset: 12, size: 4
+    int32 PatchPositionZ; // offset: 16, size: 4
+    int32 PatchLod; // offset: 20, size: 4
+} StreamPatchBlockHeader; // size: 24
+
+#define STI_TYPE_HASH_WorldSettings 0xDB0ABA48
+typedef struct WorldSettings{
+    const STITypeInfo* type_info_;
+    uint32 WorldSize[3]; // offset: 0, size: 12
+    int32 PatchBaseLod; // offset: 12, size: 4
+    int32 PatchLodRange[2]; // offset: 16, size: 8
+    int32 StaticPatchMemoryRequirements; // offset: 24, size: 4
+} WorldSettings; // size: 28
+
+#define STI_TYPE_HASH_PhysicsStreamPatchType 0xC49009EE
+typedef struct PhysicsStreamPatchType{
+    const STITypeInfo* type_info_;
+    Array_uint8 ResourceContainer; // offset: 0, size: 16
+    uint32 ResourceContainerSizeUnpacked; // offset: 16, size: 4
+} PhysicsStreamPatchType; // size: 24
+
+#define STI_TYPE_HASH_TerrainOccluderMesh 0xB0E9518E
+typedef struct TerrainOccluderMesh{
+    const STITypeInfo* type_info_;
+    float32 BoundingBox[6]; // offset: 0, size: 24
+    Array_uint16 Vertices; // offset: 24, size: 16
+    Array_uint16 Indices; // offset: 40, size: 16
+    uint32 TriangleOmitted; // offset: 56, size: 4
+} TerrainOccluderMesh; // size: 64
+
+#define STI_TYPE_HASH_TerrainOccluderPackedMesh 0xA543D386
+typedef struct TerrainOccluderPackedMesh{
+    const STITypeInfo* type_info_;
+    Array_uint8 Data; // offset: 0, size: 16
+} TerrainOccluderPackedMesh; // size: 16
+
+#define STI_TYPE_HASH_RoadGraphNode 0xADE91332
+typedef struct RoadGraphNode{
+    const STITypeInfo* type_info_;
+    float32 Position[3]; // offset: 0, size: 12
+    uint16 EdgesOffset; // offset: 12, size: 2
+    uint16 EdgesCount; // offset: 14, size: 2
+} RoadGraphNode; // size: 16
+
+#define STI_TYPE_HASH_RoadGraphEdge 0x0A9F9A09
+typedef struct RoadGraphEdge{
+    const STITypeInfo* type_info_;
+    uint16 NodeA; // offset: 0, size: 2
+    uint16 NodeB; // offset: 2, size: 2
+    uint16 Length; // offset: 4, size: 2
+    uint16 Flags; // offset: 6, size: 2
+} RoadGraphEdge; // size: 8
+
+#define STI_TYPE_HASH_RoadGraphEdgeSample 0x9E0A91AC
+typedef struct RoadGraphEdgeSample{
+    const STITypeInfo* type_info_;
+    uint8 OffsetX; // offset: 0, size: 1
+    uint8 OffsetZ; // offset: 1, size: 1
+    uint16 Y; // offset: 2, size: 2
+    uint16 EdgeId; // offset: 4, size: 2
+} RoadGraphEdgeSample; // size: 6
+
+#define STI_TYPE_HASH_Array_RoadGraphEdgeSample 0x099F5EC1
+typedef struct Array_RoadGraphEdgeSample {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RoadGraphEdgeSample* items;
+} Array_RoadGraphEdgeSample; // size: 16
+
+#define STI_TYPE_HASH_RoadGraphEdgeSamples 0xB9E3B8BE
+typedef struct RoadGraphEdgeSamples{
+    const STITypeInfo* type_info_;
+    Array_RoadGraphEdgeSample Samples; // offset: 0, size: 16
+    uint32 PatchSize; // offset: 16, size: 4
+    uint32 PatchCount; // offset: 20, size: 4
+    Array_uint32 PatchOffsets; // offset: 24, size: 16
+} RoadGraphEdgeSamples; // size: 40
+
+#define STI_TYPE_HASH_Array_RoadGraphNode 0xAE4B125D
+typedef struct Array_RoadGraphNode {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RoadGraphNode* items;
+} Array_RoadGraphNode; // size: 16
+
+#define STI_TYPE_HASH_Array_RoadGraphEdge 0x850E7451
+typedef struct Array_RoadGraphEdge {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RoadGraphEdge* items;
+} Array_RoadGraphEdge; // size: 16
+
+#define STI_TYPE_HASH_Array_uint64 0x41D663A3
+typedef struct Array_uint64 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    uint64* items;
+} Array_uint64; // size: 16
+
+#define STI_TYPE_HASH_RoadGraph 0x7085C625
+typedef struct RoadGraph{
+    const STITypeInfo* type_info_;
+    String RoadType; // offset: 0, size: 8
+    uint32 RoadTypeHash; // offset: 8, size: 4
+    Array_RoadGraphNode Nodes; // offset: 16, size: 16
+    Array_RoadGraphEdge Edges; // offset: 32, size: 16
+    Array_uint16 NodeEdges; // offset: 48, size: 16
+    Array_uint64 EdgeMap; // offset: 64, size: 16
+    RoadGraphEdgeSamples EdgeSamples; // offset: 80, size: 40
+    Array_uint16 EdgeRegions; // offset: 120, size: 16
+} RoadGraph; // size: 136
+
+#define STI_TYPE_HASH_RoadInfoEx 0x6C34A509
+typedef struct RoadInfoEx{
+    const STITypeInfo* type_info_;
+    Array_float32 SplinePoints; // offset: 0, size: 16
+    float32 AABBMin[3]; // offset: 16, size: 12
+    float32 AABBMax[3]; // offset: 28, size: 12
+    uint64 GameObjectID; // offset: 40, size: 8
+    float32 Length; // offset: 48, size: 4
+    uint8 LaneCount; // offset: 52, size: 1
+    uint8 TraverseType; // offset: 53, size: 1
+    float32 LaneWidth; // offset: 56, size: 4
+    uint16 DistBetweenVehicles; // offset: 60, size: 2
+    float32 SpeedLimit; // offset: 64, size: 4
+} RoadInfoEx; // size: 72
+
+#define STI_TYPE_HASH_RoadToGraphLookup 0x5A92DA67
+typedef struct RoadToGraphLookup{
+    const STITypeInfo* type_info_;
+    Array_uint64 GameObjectIDs; // offset: 0, size: 16
+    Array_uint16 EdgeIds; // offset: 16, size: 16
+} RoadToGraphLookup; // size: 32
+
+#define STI_TYPE_HASH_Array_RoadInfoEx 0x58BD22FC
+typedef struct Array_RoadInfoEx {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RoadInfoEx* items;
+} Array_RoadInfoEx; // size: 16
+
+#define STI_TYPE_HASH_RoadGraphRoadExtraInfo 0x7CBE0434
+typedef struct RoadGraphRoadExtraInfo{
+    const STITypeInfo* type_info_;
+    Array_RoadInfoEx RoadInfos; // offset: 0, size: 16
+    RoadToGraphLookup GameObjectToEdgeTable; // offset: 16, size: 32
+} RoadGraphRoadExtraInfo; // size: 48
+
+#define STI_TYPE_HASH_PatchSampleList 0xA9C339D3
+typedef struct PatchSampleList{
+    const STITypeInfo* type_info_;
+    uint8 PatchX; // offset: 0, size: 1
+    uint8 PatchZ; // offset: 1, size: 1
+    uint16 NumSamples; // offset: 2, size: 2
+} PatchSampleList; // size: 4
+
+#define STI_TYPE_HASH_Array_PatchSampleList 0x86138DA9
+typedef struct Array_PatchSampleList {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PatchSampleList* items;
+} Array_PatchSampleList; // size: 16
+
+#define STI_TYPE_HASH_PersistentRoadSamples 0xFE9699DB
+typedef struct PersistentRoadSamples{
+    const STITypeInfo* type_info_;
+    Array_PatchSampleList Patches; // offset: 0, size: 16
+    Array_uint16 SampleIndices; // offset: 16, size: 16
+} PersistentRoadSamples; // size: 32
+
+#define STI_TYPE_HASH_Array_PersistentRoadSamples 0x3AA31483
+typedef struct Array_PersistentRoadSamples {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PersistentRoadSamples* items;
+} Array_PersistentRoadSamples; // size: 16
+
+#define STI_TYPE_HASH_PersistentDataEx 0x2FC9D465
+typedef struct PersistentDataEx{
+    const STITypeInfo* type_info_;
+    Array_PersistentRoadSamples PersistentInfo; // offset: 0, size: 16
+} PersistentDataEx; // size: 16
+
+#define STI_TYPE_HASH_RouteInput 0xE5E2EABF
+typedef struct RouteInput{
+    const STITypeInfo* type_info_;
+    uint64 GameObjectID; // offset: 0, size: 8
+    uint64 StartingRoadGameObjectID; // offset: 8, size: 8
+    uint16 IsReversed; // offset: 16, size: 2
+} RouteInput; // size: 24
+
+#define STI_TYPE_HASH_Array_RouteInput 0x39CB3995
+typedef struct Array_RouteInput {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RouteInput* items;
+} Array_RouteInput; // size: 16
+
+#define STI_TYPE_HASH_RouteInputsCollection 0x46A57B00
+typedef struct RouteInputsCollection{
+    const STITypeInfo* type_info_;
+    Array_RouteInput RouteInputs; // offset: 0, size: 16
+} RouteInputsCollection; // size: 16
+
+#define STI_TYPE_HASH_RoadInfo 0x2BC3C6A5
+typedef struct RoadInfo{
+    const STITypeInfo* type_info_;
+    uint16 EdgeId; // offset: 0, size: 2
+    uint16 IsReversed; // offset: 2, size: 2
+} RoadInfo; // size: 4
+
+#define STI_TYPE_HASH_Array_RoadInfo 0x8E4E12DA
+typedef struct Array_RoadInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RoadInfo* items;
+} Array_RoadInfo; // size: 16
+
+#define STI_TYPE_HASH_Route 0x3021C8AF
+typedef struct Route{
+    const STITypeInfo* type_info_;
+    uint64 GameObjectID; // offset: 0, size: 8
+    Array_RoadInfo RoadInfos; // offset: 8, size: 16
+    uint16 IsLooping; // offset: 24, size: 2
+    uint16 IsReversed; // offset: 26, size: 2
+} Route; // size: 32
+
+#define STI_TYPE_HASH_Array_Route 0x80330D9B
+typedef struct Array_Route {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    Route* items;
+} Array_Route; // size: 16
+
+#define STI_TYPE_HASH_RoutesCollection 0x830A093D
+typedef struct RoutesCollection{
+    const STITypeInfo* type_info_;
+    Array_Route Routes; // offset: 0, size: 16
+} RoutesCollection; // size: 16
+
+#define STI_TYPE_HASH_BitmapArea 0xB29E65D4
+typedef struct BitmapArea{
+    const STITypeInfo* type_info_;
+    int32 key; // offset: 0, size: 4
+    int32 X; // offset: 4, size: 4
+    int32 Y; // offset: 8, size: 4
+    int32 Size; // offset: 12, size: 4
+    Array_uint32 Tiles; // offset: 16, size: 16
+    float32 AabbMin[3]; // offset: 32, size: 12
+    float32 AabbMax[3]; // offset: 44, size: 12
+} BitmapArea; // size: 56
+
+#define STI_TYPE_HASH_Array_BitmapArea 0x2ACBA889
+typedef struct Array_BitmapArea {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BitmapArea* items;
+} Array_BitmapArea; // size: 16
+
+#define STI_TYPE_HASH_BitmapLayer 0x37920366
+typedef struct BitmapLayer{
+    const STITypeInfo* type_info_;
+    Array_BitmapArea Areas; // offset: 0, size: 16
+    Array_uint32 Bitfield; // offset: 16, size: 16
+    uint32 TypeHash; // offset: 32, size: 4
+} BitmapLayer; // size: 40
+
+#define STI_TYPE_HASH_Array_BitmapLayer 0xC148E455
+typedef struct Array_BitmapLayer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BitmapLayer* items;
+} Array_BitmapLayer; // size: 16
+
+#define STI_TYPE_HASH_BitmapData 0x6E9B42C0
+typedef struct BitmapData{
+    const STITypeInfo* type_info_;
+    int32 Width; // offset: 0, size: 4
+    int32 Height; // offset: 4, size: 4
+    Array_BitmapLayer Layers; // offset: 8, size: 16
+} BitmapData; // size: 24
+
+#define STI_TYPE_HASH_Vector2 0xBA9D34AF
+typedef struct Vector2{
+    const STITypeInfo* type_info_;
+    float32 X; // offset: 0, size: 4
+    float32 Y; // offset: 4, size: 4
+} Vector2; // size: 8
+
+#define STI_TYPE_HASH_SaveVector3 0x8AC5F08D
+typedef struct SaveVector3{
+    const STITypeInfo* type_info_;
+    float32 X; // offset: 0, size: 4
+    float32 Y; // offset: 4, size: 4
+    float32 Z; // offset: 8, size: 4
+} SaveVector3; // size: 12
+
+#define STI_TYPE_HASH_RegionData 0x12F120D7
+typedef struct RegionData{
+    const STITypeInfo* type_info_;
+    uint32 RegionHash; // offset: 0, size: 4
+    uint32 Status; // offset: 4, size: 4
+} RegionData; // size: 8
+
+#define STI_TYPE_HASH_ChildEquipment 0x35DB5D2A
+typedef struct ChildEquipment{
+    const STITypeInfo* type_info_;
+    uint32 ID; // offset: 0, size: 4
+    uint32 EquipmentHash; // offset: 4, size: 4
+} ChildEquipment; // size: 8
+
+#define STI_TYPE_HASH_OwnedEquipment1 0x48A4BB06
+typedef struct OwnedEquipment1{
+    const STITypeInfo* type_info_;
+    ChildEquipment ChildEquipment[8]; // offset: 0, size: 64
+    uint32 ID; // offset: 64, size: 4
+    uint32 EquipmentHash; // offset: 68, size: 4
+    uint32 Amount; // offset: 72, size: 4
+    uint8 ChildEquipmentCount; // offset: 76, size: 1
+    uint8 Column; // offset: 77, size: 1
+    uint8 Row; // offset: 78, size: 1
+} OwnedEquipment1; // size: 80
+
+#define STI_TYPE_HASH_OwnedEquipment2 0x84952D13
+typedef struct OwnedEquipment2{
+    const STITypeInfo* type_info_;
+    uint32 ChildEquipment[8]; // offset: 0, size: 32
+    uint32 ID; // offset: 32, size: 4
+    uint32 EquipmentHash; // offset: 36, size: 4
+    uint32 Amount; // offset: 40, size: 4
+    uint8 ChildEquipmentCount; // offset: 44, size: 1
+} OwnedEquipment2; // size: 48
+
+#define STI_TYPE_HASH_OwnedEquipment3 0x300F9A42
+typedef struct OwnedEquipment3{
+    const STITypeInfo* type_info_;
+    uint32 ChildEquipment[8]; // offset: 0, size: 32
+    uint32 ID; // offset: 32, size: 4
+    uint32 EquipmentHash; // offset: 36, size: 4
+    uint32 Amount; // offset: 40, size: 4
+    uint8 ChildEquipmentCount; // offset: 44, size: 1
+    uint8 RefinementLevels; // offset: 45, size: 1
+} OwnedEquipment3; // size: 48
+
+#define STI_TYPE_HASH_OwnedEquipment4 0xC3A541F4
+typedef struct OwnedEquipment4{
+    const STITypeInfo* type_info_;
+    uint64 PickupTimestamp; // offset: 0, size: 8
+    uint32 ChildEquipment[8]; // offset: 8, size: 32
+    uint32 ID; // offset: 40, size: 4
+    uint32 EquipmentHash; // offset: 44, size: 4
+    uint32 Amount; // offset: 48, size: 4
+    uint8 ChildEquipmentCount; // offset: 52, size: 1
+    uint8 RefinementLevels; // offset: 53, size: 1
+    uint8 Flags; // offset: 54, size: 1
+} OwnedEquipment4; // size: 56
+
+#define STI_TYPE_HASH_OwnedEquipment5 0x2FA2C75A
+typedef struct OwnedEquipment5{
+    const STITypeInfo* type_info_;
+    uint64 PickupTimestamp; // offset: 0, size: 8
+    uint32 ChildEquipment[8]; // offset: 8, size: 32
+    uint32 ID; // offset: 40, size: 4
+    uint32 EquipmentHash; // offset: 44, size: 4
+    uint32 Amount; // offset: 48, size: 4
+    uint32 Seed; // offset: 52, size: 4
+    uint8 ChildEquipmentCount; // offset: 56, size: 1
+    uint8 RefinementLevels; // offset: 57, size: 1
+    uint8 Flags; // offset: 58, size: 1
+} OwnedEquipment5; // size: 64
+
+#define STI_TYPE_HASH_VehicleData 0x103D282C
+typedef struct VehicleData{
+    const STITypeInfo* type_info_;
+    uint32 EquipmentHash; // offset: 0, size: 4
+    int32 Fuel; // offset: 4, size: 4
+    int32 Health; // offset: 8, size: 4
+} VehicleData; // size: 12
+
+#define STI_TYPE_HASH_SkillData 0xF1CA8682
+typedef struct SkillData{
+    const STITypeInfo* type_info_;
+    uint32 Hash; // offset: 0, size: 4
+    int32 Level; // offset: 4, size: 4
+} SkillData; // size: 8
+
+#define STI_TYPE_HASH_PlayerDecalData 0xCF763E73
+typedef struct PlayerDecalData{
+    const STITypeInfo* type_info_;
+    uint32 PartHash; // offset: 0, size: 4
+    uint32 DecalSlotHash; // offset: 4, size: 4
+    uint32 DecalHash; // offset: 8, size: 4
+} PlayerDecalData; // size: 12
+
+#define STI_TYPE_HASH_Array_OwnedEquipment4 0x165E736C
+typedef struct Array_OwnedEquipment4 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    OwnedEquipment4* items;
+} Array_OwnedEquipment4; // size: 16
+
+#define STI_TYPE_HASH_CompanionData1 0x3A22C501
+typedef struct CompanionData1{
+    const STITypeInfo* type_info_;
+    float32 Health; // offset: 0, size: 4
+    uint32 Loadout; // offset: 4, size: 4
+    uint32 Module; // offset: 8, size: 4
+    uint8 IsDeployed; // offset: 12, size: 1
+    Array_OwnedEquipment4 Inventory; // offset: 16, size: 16
+} CompanionData1; // size: 32
+
+#define STI_TYPE_HASH_Array_OwnedEquipment5 0x1D29051E
+typedef struct Array_OwnedEquipment5 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    OwnedEquipment5* items;
+} Array_OwnedEquipment5; // size: 16
+
+#define STI_TYPE_HASH_CompanionData2 0xF5F42122
+typedef struct CompanionData2{
+    const STITypeInfo* type_info_;
+    float32 Health; // offset: 0, size: 4
+    uint32 Loadout; // offset: 4, size: 4
+    uint32 Module; // offset: 8, size: 4
+    uint8 IsDeployed; // offset: 12, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 16, size: 16
+} CompanionData2; // size: 32
+
+#define STI_TYPE_HASH_CompanionData3 0xECAC71D9
+typedef struct CompanionData3{
+    const STITypeInfo* type_info_;
+    float32 Health; // offset: 0, size: 4
+    uint32 Components[8]; // offset: 4, size: 32
+    uint8 IsDeployed; // offset: 36, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 40, size: 16
+    uint8 Name[3]; // offset: 56, size: 3
+} CompanionData3; // size: 64
+
+#define STI_TYPE_HASH_CompanionData4 0x05C8E7FB
+typedef struct CompanionData4{
+    const STITypeInfo* type_info_;
+    float32 Health; // offset: 0, size: 4
+    uint32 Components[8]; // offset: 4, size: 32
+    uint8 IsDeployed; // offset: 36, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 40, size: 16
+    uint8 Name[3]; // offset: 56, size: 3
+    SaveVector3 Position; // offset: 60, size: 12
+} CompanionData4; // size: 72
+
+#define STI_TYPE_HASH_Array_PlayerDecalData 0xF70C7D60
+typedef struct Array_PlayerDecalData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PlayerDecalData* items;
+} Array_PlayerDecalData; // size: 16
+
+#define STI_TYPE_HASH_CharacterLooks 0x4D061095
+typedef struct CharacterLooks{
+    const STITypeInfo* type_info_;
+    Array_PlayerDecalData DecalData; // offset: 0, size: 16
+    Array_uint32 Parts; // offset: 16, size: 16
+    uint32 Character; // offset: 32, size: 4
+    uint32 SkinTone; // offset: 36, size: 4
+    uint32 Stereotype; // offset: 40, size: 4
+    uint32 FacePaint; // offset: 44, size: 4
+    uint8 Height; // offset: 48, size: 1
+    uint8 Gender; // offset: 49, size: 1
+} CharacterLooks; // size: 56
+
+#define STI_TYPE_HASH_PlayerPosition 0x34309F13
+typedef struct PlayerPosition{
+    const STITypeInfo* type_info_;
+    SaveVector3 Position; // offset: 0, size: 12
+    int32 ReserveId; // offset: 12, size: 4
+} PlayerPosition; // size: 16
+
+#define STI_TYPE_HASH_InventoryCategoryFilterData1 0x2EC3420F
+typedef struct InventoryCategoryFilterData1{
+    const STITypeInfo* type_info_;
+    uint32 CategoryId; // offset: 0, size: 4
+    uint32 PreferredMethodId; // offset: 4, size: 4
+    uint32 PreferredCriteriaId; // offset: 8, size: 4
+} InventoryCategoryFilterData1; // size: 12
+
+#define STI_TYPE_HASH_RaidLootSaveData 0x99BE971F
+typedef struct RaidLootSaveData{
+    const STITypeInfo* type_info_;
+    uint32 RaidId; // offset: 0, size: 4
+    uint32 RaidSeed; // offset: 4, size: 4
+} RaidLootSaveData; // size: 8
+
+#define STI_TYPE_HASH_RivalHistory1 0x1C7A5FCD
+typedef struct RivalHistory1{
+    const STITypeInfo* type_info_;
+    uint32 Hash; // offset: 0, size: 4
+    float32 Age; // offset: 4, size: 4
+} RivalHistory1; // size: 8
+
+#define STI_TYPE_HASH_Array_RivalHistory1 0x9E324918
+typedef struct Array_RivalHistory1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RivalHistory1* items;
+} Array_RivalHistory1; // size: 16
+
+#define STI_TYPE_HASH_Rival1 0x5E5D3657
+typedef struct Rival1{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint32 XP; // offset: 4, size: 4
+    uint8 SerialNumber; // offset: 8, size: 1
+    uint32 Title; // offset: 12, size: 4
+    uint32 PlayerKills; // offset: 16, size: 4
+    uint8 Dead; // offset: 20, size: 1
+    Array_RivalHistory1 History; // offset: 24, size: 16
+} Rival1; // size: 40
+
+#define STI_TYPE_HASH_Array_Rival1 0x13010931
+typedef struct Array_Rival1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    Rival1* items;
+} Array_Rival1; // size: 16
+
+#define STI_TYPE_HASH_RivalRegion1 0x8084CEB4
+typedef struct RivalRegion1{
+    const STITypeInfo* type_info_;
+    uint32 RegionHash; // offset: 0, size: 4
+    uint32 InsurrectionScore; // offset: 4, size: 4
+    float32 Cooldown; // offset: 8, size: 4
+    Array_Rival1 Rivals; // offset: 16, size: 16
+} RivalRegion1; // size: 32
+
+#define STI_TYPE_HASH_RivalMissionGroup1 0x840D4CE1
+typedef struct RivalMissionGroup1{
+    const STITypeInfo* type_info_;
+    uint32 GroupId; // offset: 0, size: 4
+    float32 Cooldown; // offset: 4, size: 4
+} RivalMissionGroup1; // size: 8
+
+#define STI_TYPE_HASH_ResourceStorageItem 0x08D2BAAA
+typedef struct ResourceStorageItem{
+    const STITypeInfo* type_info_;
+    uint32 Name; // offset: 0, size: 4
+    uint32 Amount; // offset: 4, size: 4
+} ResourceStorageItem; // size: 8
+
+#define STI_TYPE_HASH_ResourceStorageItem2 0x3F639D12
+typedef struct ResourceStorageItem2{
+    const STITypeInfo* type_info_;
+    uint32 Name; // offset: 0, size: 4
+    float32 Amount; // offset: 4, size: 4
+} ResourceStorageItem2; // size: 8
+
+#define STI_TYPE_HASH_CurrencySaveData1 0x71A0CF59
+typedef struct CurrencySaveData1{
+    const STITypeInfo* type_info_;
+    uint32 Name; // offset: 0, size: 4
+    int32 Amount; // offset: 4, size: 4
+} CurrencySaveData1; // size: 8
+
+#define STI_TYPE_HASH_MiniGameReplay1 0x2BDFDA68
+typedef struct MiniGameReplay1{
+    const STITypeInfo* type_info_;
+    uint16 Version; // offset: 0, size: 2
+    uint32 Seed; // offset: 4, size: 4
+    Array_uint8 Inputs; // offset: 8, size: 16
+} MiniGameReplay1; // size: 24
+
+#define STI_TYPE_HASH_MiniGameScore1 0xAAB95C99
+typedef struct MiniGameScore1{
+    const STITypeInfo* type_info_;
+    uint8 Name[16]; // offset: 0, size: 16
+    uint32 Score; // offset: 16, size: 4
+    MiniGameReplay1 Replay; // offset: 24, size: 24
+} MiniGameScore1; // size: 48
+
+#define STI_TYPE_HASH_MiniGameSaveData1 0xC3A155EB
+typedef struct MiniGameSaveData1{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    MiniGameScore1 HighScores[10]; // offset: 8, size: 480
+    MiniGameScore1 LastScore; // offset: 488, size: 48
+} MiniGameSaveData1; // size: 536
+
+#define STI_TYPE_HASH_HealthBuildingComponentSaveData1 0x535A906B
+typedef struct HealthBuildingComponentSaveData1{
+    const STITypeInfo* type_info_;
+    float32 Health; // offset: 0, size: 4
+} HealthBuildingComponentSaveData1; // size: 4
+
+#define STI_TYPE_HASH_HealthBuildingComponentSaveData2 0x5F654CA1
+typedef struct HealthBuildingComponentSaveData2{
+    const STITypeInfo* type_info_;
+    float32 Health; // offset: 0, size: 4
+    Array_float32 SecondaryHealths; // offset: 8, size: 16
+} HealthBuildingComponentSaveData2; // size: 24
+
+#define STI_TYPE_HASH_RepairBuildingComponentSaveData1 0x88085078
+typedef struct RepairBuildingComponentSaveData1{
+    const STITypeInfo* type_info_;
+    uint8 Repairing; // offset: 0, size: 1
+} RepairBuildingComponentSaveData1; // size: 1
+
+#define STI_TYPE_HASH_DismantleBuildingComponentSaveData1 0x47635897
+typedef struct DismantleBuildingComponentSaveData1{
+    const STITypeInfo* type_info_;
+    uint8 Dismantling; // offset: 0, size: 1
+} DismantleBuildingComponentSaveData1; // size: 1
+
+#define STI_TYPE_HASH_Array_ResourceStorageItem 0xDDA12564
+typedef struct Array_ResourceStorageItem {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ResourceStorageItem* items;
+} Array_ResourceStorageItem; // size: 16
+
+#define STI_TYPE_HASH_InventoryBuildingComponentSaveData1 0xD277F506
+typedef struct InventoryBuildingComponentSaveData1{
+    const STITypeInfo* type_info_;
+    Array_ResourceStorageItem Resources; // offset: 0, size: 16
+} InventoryBuildingComponentSaveData1; // size: 16
+
+#define STI_TYPE_HASH_Array_ResourceStorageItem2 0xDA53C3A9
+typedef struct Array_ResourceStorageItem2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ResourceStorageItem2* items;
+} Array_ResourceStorageItem2; // size: 16
+
+#define STI_TYPE_HASH_InventoryBuildingComponentSaveData2 0x529D7FC3
+typedef struct InventoryBuildingComponentSaveData2{
+    const STITypeInfo* type_info_;
+    Array_ResourceStorageItem2 Resources; // offset: 0, size: 16
+} InventoryBuildingComponentSaveData2; // size: 16
+
+#define STI_TYPE_HASH_InventoryBuildingComponentSaveData3 0xC48F2F8D
+typedef struct InventoryBuildingComponentSaveData3{
+    const STITypeInfo* type_info_;
+    Array_ResourceStorageItem2 Resources; // offset: 0, size: 16
+    Array_OwnedEquipment4 Items; // offset: 16, size: 16
+} InventoryBuildingComponentSaveData3; // size: 32
+
+#define STI_TYPE_HASH_InventoryBuildingComponentSaveData4 0x8A9EED01
+typedef struct InventoryBuildingComponentSaveData4{
+    const STITypeInfo* type_info_;
+    Array_ResourceStorageItem2 Resources; // offset: 0, size: 16
+    Array_OwnedEquipment5 Items; // offset: 16, size: 16
+} InventoryBuildingComponentSaveData4; // size: 32
+
+#define STI_TYPE_HASH_ValueOccurance 0xE289C362
+typedef struct ValueOccurance{
+    const STITypeInfo* type_info_;
+    Array_uint32 Hashes; // offset: 0, size: 16
+    Array_uint32 HashAmounts; // offset: 16, size: 16
+    Array_uint32 Ints; // offset: 32, size: 16
+    Array_uint32 IntAmounts; // offset: 48, size: 16
+    Array_uint8 Bools; // offset: 64, size: 16
+    Array_uint32 BoolAmounts; // offset: 80, size: 16
+} ValueOccurance; // size: 96
+
+#define STI_TYPE_HASH_Array_ValueOccurance 0x0B213CEA
+typedef struct Array_ValueOccurance {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ValueOccurance* items;
+} Array_ValueOccurance; // size: 16
+
+#define STI_TYPE_HASH_Array_MissionSaveData 0x000639DC
+typedef struct Array_MissionSaveData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    MissionSaveData* items;
+} Array_MissionSaveData; // size: 16
+
+#define STI_TYPE_HASH_MissionSaveData 0x3173765E
+typedef struct MissionSaveData{
+    const STITypeInfo* type_info_;
+    int32 Id; // offset: 0, size: 4
+    uint32 CompletionsDone; // offset: 4, size: 4
+    uint8 TrackingState; // offset: 8, size: 1
+    uint8 CompletionState; // offset: 9, size: 1
+    Array_uint32 ValueOccuranceIds; // offset: 16, size: 16
+    Array_ValueOccurance ValueOccurences; // offset: 32, size: 16
+    Array_MissionSaveData Children; // offset: 48, size: 16
+} MissionSaveData; // size: 64
+
+#define STI_TYPE_HASH_Array_MissionSaveData2 0x25BED5E6
+typedef struct Array_MissionSaveData2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    MissionSaveData2* items;
+} Array_MissionSaveData2; // size: 16
+
+#define STI_TYPE_HASH_MissionSaveData2 0x96CF2AD4
+typedef struct MissionSaveData2{
+    const STITypeInfo* type_info_;
+    Array_MissionSaveData2 Children; // offset: 0, size: 16
+    Array_uint32 ValueOccuranceIds; // offset: 16, size: 16
+    Array_ValueOccurance ValueOccurences; // offset: 32, size: 16
+    int32 Id; // offset: 48, size: 4
+    uint32 ContentHash; // offset: 52, size: 4
+    uint32 CompletionsDone; // offset: 56, size: 4
+    uint8 TrackingState; // offset: 60, size: 1
+    uint8 CompletionState; // offset: 61, size: 1
+} MissionSaveData2; // size: 64
+
+#define STI_TYPE_HASH_Array_MissionSaveData3 0x02BE0A9F
+typedef struct Array_MissionSaveData3 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    MissionSaveData3* items;
+} Array_MissionSaveData3; // size: 16
+
+#define STI_TYPE_HASH_MissionSaveData3 0x728B321B
+typedef struct MissionSaveData3{
+    const STITypeInfo* type_info_;
+    Array_MissionSaveData3 Children; // offset: 0, size: 16
+    Array_uint32 ValueOccuranceIds; // offset: 16, size: 16
+    Array_ValueOccurance ValueOccurences; // offset: 32, size: 16
+    uint64 LastUpdatedTimestamp; // offset: 48, size: 8
+    int32 Id; // offset: 56, size: 4
+    uint32 ContentHash; // offset: 60, size: 4
+    uint32 CompletionsDone; // offset: 64, size: 4
+    uint8 TrackingState; // offset: 68, size: 1
+    uint8 CompletionState; // offset: 69, size: 1
+} MissionSaveData3; // size: 72
+
+#define STI_TYPE_HASH_Array_MissionSaveData4 0xB841E48B
+typedef struct Array_MissionSaveData4 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    MissionSaveData4* items;
+} Array_MissionSaveData4; // size: 16
+
+#define STI_TYPE_HASH_MissionSaveData4 0x5057173E
+typedef struct MissionSaveData4{
+    const STITypeInfo* type_info_;
+    Array_MissionSaveData4 Children; // offset: 0, size: 16
+    Array_uint32 ValueOccuranceIds; // offset: 16, size: 16
+    Array_ValueOccurance ValueOccurences; // offset: 32, size: 16
+    uint64 LastUpdatedTimestamp; // offset: 48, size: 8
+    int32 Id; // offset: 56, size: 4
+    uint32 ContentHash; // offset: 60, size: 4
+    uint32 CompletionsDone; // offset: 64, size: 4
+    uint8 TrackingState; // offset: 68, size: 1
+    uint8 CompletionState; // offset: 69, size: 1
+    uint8 New; // offset: 70, size: 1
+} MissionSaveData4; // size: 72
+
+#define STI_TYPE_HASH_Array_MissionSaveData5 0x566BFFB8
+typedef struct Array_MissionSaveData5 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    MissionSaveData5* items;
+} Array_MissionSaveData5; // size: 16
+
+#define STI_TYPE_HASH_MissionSaveData5 0x8AF7666E
+typedef struct MissionSaveData5{
+    const STITypeInfo* type_info_;
+    Array_MissionSaveData5 Children; // offset: 0, size: 16
+    Array_uint32 ValueOccuranceIds; // offset: 16, size: 16
+    Array_ValueOccurance ValueOccurences; // offset: 32, size: 16
+    uint64 LastUpdatedTimestamp; // offset: 48, size: 8
+    int32 Id; // offset: 56, size: 4
+    uint32 ContentHash; // offset: 60, size: 4
+    uint32 CompletionsDone; // offset: 64, size: 4
+    uint8 TrackingState; // offset: 68, size: 1
+    uint8 CompletionState; // offset: 69, size: 1
+    uint8 New; // offset: 70, size: 1
+} MissionSaveData5; // size: 72
+
+#define STI_TYPE_HASH_GateBuildingComponentSaveData1 0xE9D72126
+typedef struct GateBuildingComponentSaveData1{
+    const STITypeInfo* type_info_;
+    uint8 IsOpen; // offset: 0, size: 1
+    uint8 IsManual; // offset: 1, size: 1
+} GateBuildingComponentSaveData1; // size: 2
+
+#define STI_TYPE_HASH_BuildingSaveData1 0x7ABAFC5D
+typedef struct BuildingSaveData1{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint32 BuildingTypeHash; // offset: 4, size: 4
+    uint8 ActiveState; // offset: 8, size: 1
+    HealthBuildingComponentSaveData1 HealthComponent; // offset: 12, size: 4
+    RepairBuildingComponentSaveData1 RepairComponent; // offset: 16, size: 1
+    DismantleBuildingComponentSaveData1 DismantleComponent; // offset: 17, size: 1
+} BuildingSaveData1; // size: 20
+
+#define STI_TYPE_HASH_BuildingSaveData2 0x6F4858F7
+typedef struct BuildingSaveData2{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint32 BuildingTypeHash; // offset: 4, size: 4
+    uint8 ActiveState; // offset: 8, size: 1
+    HealthBuildingComponentSaveData1 HealthComponent; // offset: 12, size: 4
+    RepairBuildingComponentSaveData1 RepairComponent; // offset: 16, size: 1
+    DismantleBuildingComponentSaveData1 DismantleComponent; // offset: 17, size: 1
+    InventoryBuildingComponentSaveData1 InventoryComponent; // offset: 24, size: 16
+} BuildingSaveData2; // size: 40
+
+#define STI_TYPE_HASH_BuildingSaveData3 0xF2FF3568
+typedef struct BuildingSaveData3{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint32 BuildingTypeHash; // offset: 4, size: 4
+    uint8 ActiveState; // offset: 8, size: 1
+    HealthBuildingComponentSaveData1 HealthComponent; // offset: 12, size: 4
+    InventoryBuildingComponentSaveData1 InventoryComponent; // offset: 16, size: 16
+} BuildingSaveData3; // size: 32
+
+#define STI_TYPE_HASH_BuildingSaveData4 0xFCAB6EB4
+typedef struct BuildingSaveData4{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint32 BuildingTypeHash; // offset: 4, size: 4
+    uint8 ActiveState; // offset: 8, size: 1
+    HealthBuildingComponentSaveData1 HealthComponent; // offset: 12, size: 4
+    InventoryBuildingComponentSaveData2 InventoryComponent; // offset: 16, size: 16
+} BuildingSaveData4; // size: 32
+
+#define STI_TYPE_HASH_BuildingSaveData5 0x95D150F8
+typedef struct BuildingSaveData5{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint32 BuildingTypeHash; // offset: 4, size: 4
+    uint8 ActiveState; // offset: 8, size: 1
+    HealthBuildingComponentSaveData1 HealthComponent; // offset: 12, size: 4
+    InventoryBuildingComponentSaveData2 InventoryComponent; // offset: 16, size: 16
+    GateBuildingComponentSaveData1 GateComponent; // offset: 32, size: 2
+} BuildingSaveData5; // size: 40
+
+#define STI_TYPE_HASH_BuildingSaveData6 0xBDD9B0F2
+typedef struct BuildingSaveData6{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint32 BuildingTypeHash; // offset: 4, size: 4
+    uint8 ActiveState; // offset: 8, size: 1
+    HealthBuildingComponentSaveData1 HealthComponent; // offset: 12, size: 4
+    InventoryBuildingComponentSaveData3 InventoryComponent; // offset: 16, size: 32
+    GateBuildingComponentSaveData1 GateComponent; // offset: 48, size: 2
+} BuildingSaveData6; // size: 56
+
+#define STI_TYPE_HASH_BuildingSaveData7 0x79EC78C3
+typedef struct BuildingSaveData7{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint32 BuildingTypeHash; // offset: 4, size: 4
+    uint8 ActiveState; // offset: 8, size: 1
+    HealthBuildingComponentSaveData2 HealthComponent; // offset: 16, size: 24
+    InventoryBuildingComponentSaveData3 InventoryComponent; // offset: 40, size: 32
+    GateBuildingComponentSaveData1 GateComponent; // offset: 72, size: 2
+} BuildingSaveData7; // size: 80
+
+#define STI_TYPE_HASH_BuildingSaveData8 0x260C2E78
+typedef struct BuildingSaveData8{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint32 BuildingTypeHash; // offset: 4, size: 4
+    uint8 ActiveState; // offset: 8, size: 1
+    HealthBuildingComponentSaveData2 HealthComponent; // offset: 16, size: 24
+    InventoryBuildingComponentSaveData4 InventoryComponent; // offset: 40, size: 32
+    GateBuildingComponentSaveData1 GateComponent; // offset: 72, size: 2
+} BuildingSaveData8; // size: 80
+
+#define STI_TYPE_HASH_BuildContainer1 0x89CC2B53
+typedef struct BuildContainer1{
+    const STITypeInfo* type_info_;
+    uint32 BuildingId; // offset: 0, size: 4
+    float32 Rotation; // offset: 4, size: 4
+    uint32 Row; // offset: 8, size: 4
+    uint32 Col; // offset: 12, size: 4
+} BuildContainer1; // size: 16
+
+#define STI_TYPE_HASH_BuildContainer2 0x7DF2364E
+typedef struct BuildContainer2{
+    const STITypeInfo* type_info_;
+    uint32 BuildingId; // offset: 0, size: 4
+    uint8 Rotation; // offset: 4, size: 1
+    uint32 Row; // offset: 8, size: 4
+    uint32 Col; // offset: 12, size: 4
+} BuildContainer2; // size: 16
+
+#define STI_TYPE_HASH_Array_BuildContainer1 0x76477CED
+typedef struct Array_BuildContainer1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildContainer1* items;
+} Array_BuildContainer1; // size: 16
+
+#define STI_TYPE_HASH_BuildingGridSaveData1 0x5C929317
+typedef struct BuildingGridSaveData1{
+    const STITypeInfo* type_info_;
+    Array_BuildContainer1 Buildings; // offset: 0, size: 16
+} BuildingGridSaveData1; // size: 16
+
+#define STI_TYPE_HASH_Array_BuildContainer2 0x4D224FDC
+typedef struct Array_BuildContainer2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildContainer2* items;
+} Array_BuildContainer2; // size: 16
+
+#define STI_TYPE_HASH_BuildingGridSaveData2 0xB2B1B1E1
+typedef struct BuildingGridSaveData2{
+    const STITypeInfo* type_info_;
+    Array_BuildContainer2 Buildings; // offset: 0, size: 16
+} BuildingGridSaveData2; // size: 16
+
+#define STI_TYPE_HASH_BaseConfigSaveData1 0xB7EADBA6
+typedef struct BaseConfigSaveData1{
+    const STITypeInfo* type_info_;
+    uint8 Index; // offset: 0, size: 1
+    uint8 Cooldown; // offset: 1, size: 1
+} BaseConfigSaveData1; // size: 2
+
+#define STI_TYPE_HASH_Array_BuildingSaveData1 0xA3A38BEC
+typedef struct Array_BuildingSaveData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildingSaveData1* items;
+} Array_BuildingSaveData1; // size: 16
+
+#define STI_TYPE_HASH_ControlPointSaveData1 0x625B2FC5
+typedef struct ControlPointSaveData1{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData1 Buildings; // offset: 32, size: 16
+} ControlPointSaveData1; // size: 48
+
+#define STI_TYPE_HASH_Array_BuildingSaveData2 0x73F6F13D
+typedef struct Array_BuildingSaveData2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildingSaveData2* items;
+} Array_BuildingSaveData2; // size: 16
+
+#define STI_TYPE_HASH_ControlPointSaveData2 0x1F8BA734
+typedef struct ControlPointSaveData2{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData2 Buildings; // offset: 32, size: 16
+} ControlPointSaveData2; // size: 48
+
+#define STI_TYPE_HASH_Array_BuildingSaveData3 0x32242945
+typedef struct Array_BuildingSaveData3 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildingSaveData3* items;
+} Array_BuildingSaveData3; // size: 16
+
+#define STI_TYPE_HASH_ControlPointSaveData3 0xDDA7B5AB
+typedef struct ControlPointSaveData3{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData3 Buildings; // offset: 32, size: 16
+} ControlPointSaveData3; // size: 48
+
+#define STI_TYPE_HASH_Array_BuildingSaveData4 0xE24BA4D3
+typedef struct Array_BuildingSaveData4 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildingSaveData4* items;
+} Array_BuildingSaveData4; // size: 16
+
+#define STI_TYPE_HASH_ControlPointSaveData4 0x5622EE87
+typedef struct ControlPointSaveData4{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData4 Buildings; // offset: 32, size: 16
+} ControlPointSaveData4; // size: 48
+
+#define STI_TYPE_HASH_ControlPointSaveData5 0xA6AAAEAA
+typedef struct ControlPointSaveData5{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData4 Buildings; // offset: 32, size: 16
+    uint8 HordeModeActive; // offset: 48, size: 1
+} ControlPointSaveData5; // size: 56
+
+#define STI_TYPE_HASH_Array_BaseConfigSaveData1 0x6BBDC99E
+typedef struct Array_BaseConfigSaveData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BaseConfigSaveData1* items;
+} Array_BaseConfigSaveData1; // size: 16
+
+#define STI_TYPE_HASH_ControlPointSaveData6 0xF88D8B60
+typedef struct ControlPointSaveData6{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData4 Buildings; // offset: 32, size: 16
+    uint8 HordeModeActive; // offset: 48, size: 1
+    Array_BaseConfigSaveData1 BaseConfigsData; // offset: 56, size: 16
+} ControlPointSaveData6; // size: 72
+
+#define STI_TYPE_HASH_Array_BuildingSaveData5 0xFEBE19C7
+typedef struct Array_BuildingSaveData5 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildingSaveData5* items;
+} Array_BuildingSaveData5; // size: 16
+
+#define STI_TYPE_HASH_ControlPointSaveData7 0x375EBEB0
+typedef struct ControlPointSaveData7{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData5 Buildings; // offset: 32, size: 16
+    uint8 HordeModeActive; // offset: 48, size: 1
+    Array_BaseConfigSaveData1 BaseConfigsData; // offset: 56, size: 16
+} ControlPointSaveData7; // size: 72
+
+#define STI_TYPE_HASH_Array_BuildingSaveData6 0xD0342791
+typedef struct Array_BuildingSaveData6 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildingSaveData6* items;
+} Array_BuildingSaveData6; // size: 16
+
+#define STI_TYPE_HASH_ControlPointSaveData8 0xE3B6BE6A
+typedef struct ControlPointSaveData8{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData6 Buildings; // offset: 32, size: 16
+    uint8 HordeModeActive; // offset: 48, size: 1
+    Array_BaseConfigSaveData1 BaseConfigsData; // offset: 56, size: 16
+} ControlPointSaveData8; // size: 72
+
+#define STI_TYPE_HASH_ControlPointSaveData9 0x17FCC9BA
+typedef struct ControlPointSaveData9{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData6 Buildings; // offset: 32, size: 16
+    uint8 HordeModeActive; // offset: 48, size: 1
+    Array_BaseConfigSaveData1 BaseConfigsData; // offset: 56, size: 16
+    uint32 Xp; // offset: 72, size: 4
+} ControlPointSaveData9; // size: 80
+
+#define STI_TYPE_HASH_ControlPointSaveData10 0xAC8FD660
+typedef struct ControlPointSaveData10{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData6 Buildings; // offset: 32, size: 16
+    uint8 HordeModeActive; // offset: 48, size: 1
+    Array_BaseConfigSaveData1 BaseConfigsData; // offset: 56, size: 16
+    uint32 Xp; // offset: 72, size: 4
+    uint32 ProceduralGenerationSeed; // offset: 76, size: 4
+} ControlPointSaveData10; // size: 80
+
+#define STI_TYPE_HASH_Array_BuildingSaveData7 0x17C49299
+typedef struct Array_BuildingSaveData7 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildingSaveData7* items;
+} Array_BuildingSaveData7; // size: 16
+
+#define STI_TYPE_HASH_ControlPointSaveData11 0x94813A2E
+typedef struct ControlPointSaveData11{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData1 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData7 Buildings; // offset: 32, size: 16
+    uint8 HordeModeActive; // offset: 48, size: 1
+    Array_BaseConfigSaveData1 BaseConfigsData; // offset: 56, size: 16
+    uint32 Xp; // offset: 72, size: 4
+    uint32 ProceduralGenerationSeed; // offset: 76, size: 4
+} ControlPointSaveData11; // size: 80
+
+#define STI_TYPE_HASH_ControlPointSaveData12 0x52D96175
+typedef struct ControlPointSaveData12{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData2 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData7 Buildings; // offset: 32, size: 16
+    uint8 HordeModeActive; // offset: 48, size: 1
+    Array_BaseConfigSaveData1 BaseConfigsData; // offset: 56, size: 16
+    uint32 Xp; // offset: 72, size: 4
+    uint32 ProceduralGenerationSeed; // offset: 76, size: 4
+} ControlPointSaveData12; // size: 80
+
+#define STI_TYPE_HASH_Array_BuildingSaveData8 0x1EDEE576
+typedef struct Array_BuildingSaveData8 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BuildingSaveData8* items;
+} Array_BuildingSaveData8; // size: 16
+
+#define STI_TYPE_HASH_ControlPointSaveData13 0x51ECD458
+typedef struct ControlPointSaveData13{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData2 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData8 Buildings; // offset: 32, size: 16
+    uint8 HordeModeActive; // offset: 48, size: 1
+    Array_BaseConfigSaveData1 BaseConfigsData; // offset: 56, size: 16
+    uint32 Xp; // offset: 72, size: 4
+    uint32 ProceduralGenerationSeed; // offset: 76, size: 4
+} ControlPointSaveData13; // size: 80
+
+#define STI_TYPE_HASH_ControlPointSaveData14 0xE9D26444
+typedef struct ControlPointSaveData14{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 OwnerFaction; // offset: 8, size: 4
+    BuildingGridSaveData2 Grid; // offset: 16, size: 16
+    Array_BuildingSaveData8 Buildings; // offset: 32, size: 16
+    float32 HordeModeCooldown; // offset: 48, size: 4
+    Array_BaseConfigSaveData1 BaseConfigsData; // offset: 56, size: 16
+    uint32 Xp; // offset: 72, size: 4
+    uint32 ProceduralGenerationSeed; // offset: 76, size: 4
+} ControlPointSaveData14; // size: 80
+
+#define STI_TYPE_HASH_FactionSaveData1 0xAC9CD509
+typedef struct FactionSaveData1{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    float32 Resources[4]; // offset: 8, size: 16
+} FactionSaveData1; // size: 24
+
+#define STI_TYPE_HASH_Array_FactionSaveData1 0x7874D912
+typedef struct Array_FactionSaveData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    FactionSaveData1* items;
+} Array_FactionSaveData1; // size: 16
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData14 0xF160F9CC
+typedef struct Array_ControlPointSaveData14 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData14* items;
+} Array_ControlPointSaveData14; // size: 16
+
+#define STI_TYPE_HASH_WarSeason1 0x47A92A2E
+typedef struct WarSeason1{
+    const STITypeInfo* type_info_;
+    int32 SeasonId; // offset: 0, size: 4
+    Array_FactionSaveData1 Factions; // offset: 8, size: 16
+    Array_ControlPointSaveData14 ControlPoints; // offset: 24, size: 16
+    uint32 NextBuildingId; // offset: 40, size: 4
+} WarSeason1; // size: 48
+
+#define STI_TYPE_HASH_WarSaveData1 0x2F2A0E0E
+typedef struct WarSaveData1{
+    const STITypeInfo* type_info_;
+    WarSeason1 CurrentSeason; // offset: 0, size: 48
+} WarSaveData1; // size: 48
+
+#define STI_TYPE_HASH_BadLuckProtection1 0x2589F422
+typedef struct BadLuckProtection1{
+    const STITypeInfo* type_info_;
+    uint32 Tag; // offset: 0, size: 4
+    uint16 Failures; // offset: 4, size: 2
+} BadLuckProtection1; // size: 8
+
+#define STI_TYPE_HASH_StatisticInfo 0x8978CF31
+typedef struct StatisticInfo{
+    const STITypeInfo* type_info_;
+    uint32 NameHash; // offset: 0, size: 4
+    uint32 Value; // offset: 4, size: 4
+} StatisticInfo; // size: 8
+
+#define STI_TYPE_HASH_ProceduralMissionSaveData1 0xDC50C2BF
+typedef struct ProceduralMissionSaveData1{
+    const STITypeInfo* type_info_;
+    int32 MissionId; // offset: 0, size: 4
+    uint32 Location; // offset: 4, size: 4
+} ProceduralMissionSaveData1; // size: 8
+
+#define STI_TYPE_HASH_ProceduralMissionSaveData2 0xE6160AD8
+typedef struct ProceduralMissionSaveData2{
+    const STITypeInfo* type_info_;
+    int32 MissionId; // offset: 0, size: 4
+    uint32 Location; // offset: 4, size: 4
+    uint32 UniqueId; // offset: 8, size: 4
+} ProceduralMissionSaveData2; // size: 12
+
+#define STI_TYPE_HASH_ProceduralMissionSaveData3 0x79C19092
+typedef struct ProceduralMissionSaveData3{
+    const STITypeInfo* type_info_;
+    int32 MissionId; // offset: 0, size: 4
+    uint32 Location; // offset: 4, size: 4
+    uint32 UniqueId; // offset: 8, size: 4
+    int32 MissionTemplateId; // offset: 12, size: 4
+} ProceduralMissionSaveData3; // size: 16
+
+#define STI_TYPE_HASH_ProceduralMissionSaveData4 0x53694E58
+typedef struct ProceduralMissionSaveData4{
+    const STITypeInfo* type_info_;
+    int32 MissionId; // offset: 0, size: 4
+    uint32 Location; // offset: 4, size: 4
+    uint32 UniqueId; // offset: 8, size: 4
+    int32 MissionTemplateId; // offset: 12, size: 4
+    uint8 IsCompleted; // offset: 16, size: 1
+} ProceduralMissionSaveData4; // size: 20
+
+#define STI_TYPE_HASH_ProceduralMissionSaveData5 0x8E3D61DF
+typedef struct ProceduralMissionSaveData5{
+    const STITypeInfo* type_info_;
+    int32 MissionId; // offset: 0, size: 4
+    uint32 Location; // offset: 4, size: 4
+    int32 InstanceGroupId; // offset: 8, size: 4
+    uint32 UniqueId; // offset: 12, size: 4
+    int32 MissionTemplateId; // offset: 16, size: 4
+    uint8 IsCompleted; // offset: 20, size: 1
+} ProceduralMissionSaveData5; // size: 24
+
+#define STI_TYPE_HASH_Array_OwnedEquipment1 0x8EC2A5B7
+typedef struct Array_OwnedEquipment1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    OwnedEquipment1* items;
+} Array_OwnedEquipment1; // size: 16
+
+#define STI_TYPE_HASH_Array_VehicleData 0x6DD2F5AE
+typedef struct Array_VehicleData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VehicleData* items;
+} Array_VehicleData; // size: 16
+
+#define STI_TYPE_HASH_Array_PlayerPosition 0xB92A82A1
+typedef struct Array_PlayerPosition {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PlayerPosition* items;
+} Array_PlayerPosition; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile1 0xC9D783B8
+typedef struct CharacterProfile1{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment1 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[16]; // offset: 792, size: 64
+    Array_VehicleData VehicleData; // offset: 856, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 872, size: 1
+    uint8 BackpackSizeColumns; // offset: 873, size: 1
+    uint8 BackpackSizeRows; // offset: 874, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 880, size: 16
+    uint32 EmoteSlots[8]; // offset: 896, size: 32
+    Array_uint64 Collectables; // offset: 928, size: 16
+    float32 DistanceTravelled; // offset: 944, size: 4
+    float32 TimeOfDay; // offset: 948, size: 4
+    float32 WeatherTime; // offset: 952, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 960, size: 16
+    uint64 LastLevelUpTS; // offset: 976, size: 8
+    Array_uint32 GivenDLCItems; // offset: 984, size: 16
+} CharacterProfile1; // size: 1000
+
+#define STI_TYPE_HASH_Array_RaidLootSaveData 0xDD57E55A
+typedef struct Array_RaidLootSaveData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RaidLootSaveData* items;
+} Array_RaidLootSaveData; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile2 0xAA8F3A44
+typedef struct CharacterProfile2{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment1 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[16]; // offset: 792, size: 64
+    Array_VehicleData VehicleData; // offset: 856, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 872, size: 1
+    uint8 BackpackSizeColumns; // offset: 873, size: 1
+    uint8 BackpackSizeRows; // offset: 874, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 880, size: 16
+    uint32 EmoteSlots[8]; // offset: 896, size: 32
+    Array_uint64 Collectables; // offset: 928, size: 16
+    float32 DistanceTravelled; // offset: 944, size: 4
+    float32 TimeOfDay; // offset: 948, size: 4
+    float32 WeatherTime; // offset: 952, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 960, size: 16
+    uint64 LastLevelUpTS; // offset: 976, size: 8
+    Array_uint32 GivenDLCItems; // offset: 984, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1000, size: 16
+} CharacterProfile2; // size: 1016
+
+#define STI_TYPE_HASH_CharacterProfile3 0xDFBC06E1
+typedef struct CharacterProfile3{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment1 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[16]; // offset: 792, size: 64
+    Array_VehicleData VehicleData; // offset: 856, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 872, size: 1
+    uint8 BackpackSizeColumns; // offset: 873, size: 1
+    uint8 BackpackSizeRows; // offset: 874, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 880, size: 16
+    uint32 EmoteSlots[8]; // offset: 896, size: 32
+    Array_uint64 Collectables; // offset: 928, size: 16
+    float32 DistanceTravelled; // offset: 944, size: 4
+    float32 TimeOfDay; // offset: 948, size: 4
+    float32 WeatherTime; // offset: 952, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 960, size: 16
+    uint64 LastLevelUpTS; // offset: 976, size: 8
+    Array_uint32 GivenDLCItems; // offset: 984, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1000, size: 16
+    uint32 ActiveTitle; // offset: 1016, size: 4
+} CharacterProfile3; // size: 1024
+
+#define STI_TYPE_HASH_Array_OwnedEquipment2 0x3C667799
+typedef struct Array_OwnedEquipment2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    OwnedEquipment2* items;
+} Array_OwnedEquipment2; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile4 0x59A1CEA7
+typedef struct CharacterProfile4{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment2 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[16]; // offset: 792, size: 64
+    Array_VehicleData VehicleData; // offset: 856, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 872, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 880, size: 16
+    uint32 EmoteSlots[8]; // offset: 896, size: 32
+    Array_uint64 Collectables; // offset: 928, size: 16
+    float32 DistanceTravelled; // offset: 944, size: 4
+    float32 TimeOfDay; // offset: 948, size: 4
+    float32 WeatherTime; // offset: 952, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 960, size: 16
+    uint64 LastLevelUpTS; // offset: 976, size: 8
+    Array_uint32 GivenDLCItems; // offset: 984, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1000, size: 16
+    uint32 ActiveTitle; // offset: 1016, size: 4
+} CharacterProfile4; // size: 1024
+
+#define STI_TYPE_HASH_CharacterProfile5 0x8651DCB6
+typedef struct CharacterProfile5{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment2 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[16]; // offset: 792, size: 64
+    uint32 InventorySlotPreferredItem[16]; // offset: 856, size: 64
+    Array_VehicleData VehicleData; // offset: 920, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 936, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 944, size: 16
+    uint32 EmoteSlots[8]; // offset: 960, size: 32
+    Array_uint64 Collectables; // offset: 992, size: 16
+    float32 DistanceTravelled; // offset: 1008, size: 4
+    float32 TimeOfDay; // offset: 1012, size: 4
+    float32 WeatherTime; // offset: 1016, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1024, size: 16
+    uint64 LastLevelUpTS; // offset: 1040, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1048, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1064, size: 16
+    uint32 ActiveTitle; // offset: 1080, size: 4
+} CharacterProfile5; // size: 1088
+
+#define STI_TYPE_HASH_Array_OwnedEquipment3 0xA52092CD
+typedef struct Array_OwnedEquipment3 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    OwnedEquipment3* items;
+} Array_OwnedEquipment3; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile6 0x3CA808FF
+typedef struct CharacterProfile6{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment3 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[16]; // offset: 792, size: 64
+    uint32 InventorySlotPreferredItem[16]; // offset: 856, size: 64
+    Array_VehicleData VehicleData; // offset: 920, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 936, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 944, size: 16
+    uint32 EmoteSlots[8]; // offset: 960, size: 32
+    Array_uint64 Collectables; // offset: 992, size: 16
+    float32 DistanceTravelled; // offset: 1008, size: 4
+    float32 TimeOfDay; // offset: 1012, size: 4
+    float32 WeatherTime; // offset: 1016, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1024, size: 16
+    uint64 LastLevelUpTS; // offset: 1040, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1048, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1064, size: 16
+    uint32 ActiveTitle; // offset: 1080, size: 4
+} CharacterProfile6; // size: 1088
+
+#define STI_TYPE_HASH_CharacterProfile7 0xA3F0D890
+typedef struct CharacterProfile7{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment3 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+} CharacterProfile7; // size: 1104
+
+#define STI_TYPE_HASH_CharacterProfile8 0xCBC8B916
+typedef struct CharacterProfile8{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment3 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+} CharacterProfile8; // size: 1104
+
+#define STI_TYPE_HASH_CharacterProfile9 0xC2A8B7EB
+typedef struct CharacterProfile9{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment4 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+} CharacterProfile9; // size: 1104
+
+#define STI_TYPE_HASH_CharacterProfile10 0x6700C8A9
+typedef struct CharacterProfile10{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment4 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    uint32 WarTokens; // offset: 1104, size: 4
+} CharacterProfile10; // size: 1112
+
+#define STI_TYPE_HASH_Array_BadLuckProtection1 0xB115B4F6
+typedef struct Array_BadLuckProtection1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    BadLuckProtection1* items;
+} Array_BadLuckProtection1; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile11 0x4196AF63
+typedef struct CharacterProfile11{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment4 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    uint32 WarTokens; // offset: 1104, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1112, size: 16
+} CharacterProfile11; // size: 1128
+
+#define STI_TYPE_HASH_Array_StatisticInfo 0xB959E093
+typedef struct Array_StatisticInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    StatisticInfo* items;
+} Array_StatisticInfo; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile12 0xC67FBDB9
+typedef struct CharacterProfile12{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment4 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    MissionSaveData5 Challenges; // offset: 1136, size: 72
+} CharacterProfile12; // size: 1208
+
+#define STI_TYPE_HASH_EquipmentNotes1 0xAC7204A0
+typedef struct EquipmentNotes1{
+    const STITypeInfo* type_info_;
+    uint32 EquipmentHash; // offset: 0, size: 4
+    uint8 Flags; // offset: 4, size: 1
+} EquipmentNotes1; // size: 8
+
+#define STI_TYPE_HASH_Array_EquipmentNotes1 0x8714BE20
+typedef struct Array_EquipmentNotes1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EquipmentNotes1* items;
+} Array_EquipmentNotes1; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile13 0xBCF55BC0
+typedef struct CharacterProfile13{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment4 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    MissionSaveData5 Challenges; // offset: 1136, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1208, size: 16
+} CharacterProfile13; // size: 1224
+
+#define STI_TYPE_HASH_Array_CompanionData1 0x19D38072
+typedef struct Array_CompanionData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    CompanionData1* items;
+} Array_CompanionData1; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile14 0xA8E50830
+typedef struct CharacterProfile14{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment4 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    MissionSaveData5 Challenges; // offset: 1136, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1208, size: 16
+    Array_CompanionData1 CompanionData; // offset: 1224, size: 16
+} CharacterProfile14; // size: 1240
+
+#define STI_TYPE_HASH_Array_CompanionData2 0x1F167BF6
+typedef struct Array_CompanionData2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    CompanionData2* items;
+} Array_CompanionData2; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile15 0x4404ECEE
+typedef struct CharacterProfile15{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    MissionSaveData5 Challenges; // offset: 1136, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1208, size: 16
+    Array_CompanionData2 CompanionData; // offset: 1224, size: 16
+} CharacterProfile15; // size: 1240
+
+#define STI_TYPE_HASH_PityCounter1 0x673F867A
+typedef struct PityCounter1{
+    const STITypeInfo* type_info_;
+    uint64 Key; // offset: 0, size: 8
+    uint8 Count; // offset: 8, size: 1
+} PityCounter1; // size: 16
+
+#define STI_TYPE_HASH_Array_PityCounter1 0xF97908F7
+typedef struct Array_PityCounter1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PityCounter1* items;
+} Array_PityCounter1; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile16 0x6B363C92
+typedef struct CharacterProfile16{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    MissionSaveData5 Challenges; // offset: 1136, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1208, size: 16
+    Array_CompanionData2 CompanionData; // offset: 1224, size: 16
+    Array_PityCounter1 PityCounters; // offset: 1240, size: 16
+} CharacterProfile16; // size: 1256
+
+#define STI_TYPE_HASH_CharacterProfile17 0xA731E829
+typedef struct CharacterProfile17{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    MissionSaveData5 Challenges; // offset: 1136, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1208, size: 16
+    Array_CompanionData2 CompanionData; // offset: 1224, size: 16
+    Array_PityCounter1 PityCounters; // offset: 1240, size: 16
+    uint32 FixVersion; // offset: 1256, size: 4
+} CharacterProfile17; // size: 1264
+
+#define STI_TYPE_HASH_CharacterProfile18 0x3FE6DE43
+typedef struct CharacterProfile18{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    MissionSaveData5 Challenges; // offset: 1136, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1208, size: 16
+    CompanionData3 CompanionData[1]; // offset: 1224, size: 64
+    Array_PityCounter1 PityCounters; // offset: 1288, size: 16
+    uint32 FixVersion; // offset: 1304, size: 4
+} CharacterProfile18; // size: 1312
+
+#define STI_TYPE_HASH_CharacterProfile19 0xB52CDE6E
+typedef struct CharacterProfile19{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    MissionSaveData5 Challenges; // offset: 1136, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1208, size: 16
+    CompanionData4 CompanionData[1]; // offset: 1224, size: 72
+    Array_PityCounter1 PityCounters; // offset: 1296, size: 16
+    uint32 FixVersion; // offset: 1312, size: 4
+} CharacterProfile19; // size: 1320
+
+#define STI_TYPE_HASH_CharacterProfile20 0x0F6BCC92
+typedef struct CharacterProfile20{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 1136, size: 16
+    MissionSaveData5 Challenges; // offset: 1152, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1224, size: 16
+    CompanionData4 CompanionData[1]; // offset: 1240, size: 72
+    Array_PityCounter1 PityCounters; // offset: 1312, size: 16
+    uint32 FixVersion; // offset: 1328, size: 4
+} CharacterProfile20; // size: 1336
+
+#define STI_TYPE_HASH_Array_CurrencySaveData1 0xECA3F390
+typedef struct Array_CurrencySaveData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    CurrencySaveData1* items;
+} Array_CurrencySaveData1; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile21 0xAA85A0D0
+typedef struct CharacterProfile21{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 1136, size: 16
+    MissionSaveData5 Challenges; // offset: 1152, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1224, size: 16
+    CompanionData4 CompanionData[1]; // offset: 1240, size: 72
+    Array_PityCounter1 PityCounters; // offset: 1312, size: 16
+    uint32 FixVersion; // offset: 1328, size: 4
+    Array_CurrencySaveData1 Currencies; // offset: 1336, size: 16
+} CharacterProfile21; // size: 1352
+
+#define STI_TYPE_HASH_CharacterProfile22 0x324D874E
+typedef struct CharacterProfile22{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_uint32 GivenDLCItems; // offset: 1064, size: 16
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1080, size: 16
+    uint32 ActiveTitle; // offset: 1096, size: 4
+    uint32 CharacterPlayTime; // offset: 1100, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1104, size: 16
+    Array_StatisticInfo Statistics; // offset: 1120, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 1136, size: 16
+    MissionSaveData5 Challenges; // offset: 1152, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1224, size: 16
+    CompanionData4 CompanionData[1]; // offset: 1240, size: 72
+    uint32 FixVersion; // offset: 1312, size: 4
+    Array_CurrencySaveData1 Currencies; // offset: 1320, size: 16
+} CharacterProfile22; // size: 1336
+
+#define STI_TYPE_HASH_CharacterProfile23 0xC217BF8F
+typedef struct CharacterProfile23{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 Xp; // offset: 768, size: 4
+    uint16 Level; // offset: 772, size: 2
+    uint8 Created; // offset: 774, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 776, size: 16
+    uint32 PPInventorySlot[18]; // offset: 792, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 864, size: 72
+    Array_VehicleData VehicleData; // offset: 936, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 952, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 960, size: 16
+    uint32 EmoteSlots[8]; // offset: 976, size: 32
+    Array_uint64 Collectables; // offset: 1008, size: 16
+    float32 DistanceTravelled; // offset: 1024, size: 4
+    float32 TimeOfDay; // offset: 1028, size: 4
+    float32 WeatherTime; // offset: 1032, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1040, size: 16
+    uint64 LastLevelUpTS; // offset: 1056, size: 8
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1064, size: 16
+    uint32 ActiveTitle; // offset: 1080, size: 4
+    uint32 CharacterPlayTime; // offset: 1084, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1088, size: 16
+    Array_StatisticInfo Statistics; // offset: 1104, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 1120, size: 16
+    MissionSaveData5 Challenges; // offset: 1136, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1208, size: 16
+    CompanionData4 CompanionData[1]; // offset: 1224, size: 72
+    uint32 FixVersion; // offset: 1296, size: 4
+    Array_CurrencySaveData1 Currencies; // offset: 1304, size: 16
+} CharacterProfile23; // size: 1320
+
+#define STI_TYPE_HASH_Array_SkillData 0x5CEB66B6
+typedef struct Array_SkillData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    SkillData* items;
+} Array_SkillData; // size: 16
+
+#define STI_TYPE_HASH_CharacterProfile24 0x4CEFFED0
+typedef struct CharacterProfile24{
+    const STITypeInfo* type_info_;
+    CharacterLooks CharacterLooks; // offset: 0, size: 56
+    uint32 Skills[128]; // offset: 56, size: 512
+    uint8 SkillLevel[128]; // offset: 568, size: 128
+    uint32 SkillPointsSpent[16]; // offset: 696, size: 64
+    uint32 SkillPoints; // offset: 760, size: 4
+    uint32 ActiveSkill; // offset: 764, size: 4
+    uint32 ActiveArchetypeHash; // offset: 768, size: 4
+    Array_SkillData SkillLevels; // offset: 776, size: 16
+    uint32 Xp; // offset: 792, size: 4
+    uint16 Level; // offset: 796, size: 2
+    uint8 Created; // offset: 798, size: 1
+    Array_OwnedEquipment5 Inventory; // offset: 800, size: 16
+    uint32 PPInventorySlot[18]; // offset: 816, size: 72
+    uint32 InventorySlotPreferredItem[18]; // offset: 888, size: 72
+    Array_VehicleData VehicleData; // offset: 960, size: 16
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 976, size: 1
+    Array_uint32 EmotesUnlocked; // offset: 984, size: 16
+    uint32 EmoteSlots[8]; // offset: 1000, size: 32
+    Array_uint64 Collectables; // offset: 1032, size: 16
+    float32 DistanceTravelled; // offset: 1048, size: 4
+    float32 TimeOfDay; // offset: 1052, size: 4
+    float32 WeatherTime; // offset: 1056, size: 4
+    Array_PlayerPosition PlayerPositions; // offset: 1064, size: 16
+    uint64 LastLevelUpTS; // offset: 1080, size: 8
+    Array_RaidLootSaveData RaidLootAcquired; // offset: 1088, size: 16
+    uint32 ActiveTitle; // offset: 1104, size: 4
+    uint32 CharacterPlayTime; // offset: 1108, size: 4
+    Array_BadLuckProtection1 BadLuckProtection; // offset: 1112, size: 16
+    Array_StatisticInfo Statistics; // offset: 1128, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 1144, size: 16
+    MissionSaveData5 Challenges; // offset: 1160, size: 72
+    Array_EquipmentNotes1 EquipmentNotes; // offset: 1232, size: 16
+    CompanionData4 CompanionData[1]; // offset: 1248, size: 72
+    uint32 FixVersion; // offset: 1320, size: 4
+    Array_CurrencySaveData1 Currencies; // offset: 1328, size: 16
+} CharacterProfile24; // size: 1344
+
+#define STI_TYPE_HASH_AnimalDamageablePartSaveData 0x9858DE73
+typedef struct AnimalDamageablePartSaveData{
+    const STITypeInfo* type_info_;
+    uint64 PartId; // offset: 0, size: 8
+    float32 Health; // offset: 8, size: 4
+} AnimalDamageablePartSaveData; // size: 16
+
+#define STI_TYPE_HASH_AnimalRepopulateSaveData 0xD78B6D39
+typedef struct AnimalRepopulateSaveData{
+    const STITypeInfo* type_info_;
+    uint8 Loadout; // offset: 0, size: 1
+} AnimalRepopulateSaveData; // size: 1
+
+#define STI_TYPE_HASH_AnimalPopulationSaveData 0xA56B4D42
+typedef struct AnimalPopulationSaveData{
+    const STITypeInfo* type_info_;
+    uint32 NameHashId; // offset: 0, size: 4
+    AnimalRepopulateSaveData RepopulateData[64]; // offset: 4, size: 64
+    uint32 RepopulateCount; // offset: 68, size: 4
+} AnimalPopulationSaveData; // size: 72
+
+#define STI_TYPE_HASH_Array_AnimalRepopulateSaveData 0x799AB336
+typedef struct Array_AnimalRepopulateSaveData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AnimalRepopulateSaveData* items;
+} Array_AnimalRepopulateSaveData; // size: 16
+
+#define STI_TYPE_HASH_AnimalPopulationSaveData2 0x40690AC2
+typedef struct AnimalPopulationSaveData2{
+    const STITypeInfo* type_info_;
+    uint32 NameHashId; // offset: 0, size: 4
+    Array_AnimalRepopulateSaveData RepopulateData; // offset: 8, size: 16
+} AnimalPopulationSaveData2; // size: 24
+
+#define STI_TYPE_HASH_AnimalGroupSaveData 0x7A2135E7
+typedef struct AnimalGroupSaveData{
+    const STITypeInfo* type_info_;
+    uint32 PopulationNameHashId; // offset: 0, size: 4
+    int32 SpawnAreaId; // offset: 4, size: 4
+} AnimalGroupSaveData; // size: 8
+
+#define STI_TYPE_HASH_MachinePersistentStatsEncounterData 0xC519FB33
+typedef struct MachinePersistentStatsEncounterData{
+    const STITypeInfo* type_info_;
+    uint64 PlayerPlatformID; // offset: 0, size: 8
+    uint16 Count; // offset: 8, size: 2
+    float32 UnitDamageReceived; // offset: 12, size: 4
+} MachinePersistentStatsEncounterData; // size: 16
+
+#define STI_TYPE_HASH_MachinePersistentStatsData 0x29363BD5
+typedef struct MachinePersistentStatsData{
+    const STITypeInfo* type_info_;
+    float32 Age; // offset: 0, size: 4
+    MachinePersistentStatsEncounterData Encounters[16]; // offset: 8, size: 256
+    uint32 EncountersCount; // offset: 264, size: 4
+} MachinePersistentStatsData; // size: 272
+
+#define STI_TYPE_HASH_AnimalSaveData 0xC3B60F44
+typedef struct AnimalSaveData{
+    const STITypeInfo* type_info_;
+    uint32 PopulationNameHashId; // offset: 0, size: 4
+    uint32 GroupIndex; // offset: 4, size: 4
+    uint8 Loadout; // offset: 8, size: 1
+    uint32 VisualVariationSeed; // offset: 12, size: 4
+    AnimalDamageablePartSaveData Parts[64]; // offset: 16, size: 1024
+    uint8 PartsCount; // offset: 1040, size: 1
+    uint8 DynamicMaterialWeights[64]; // offset: 1041, size: 64
+    MachinePersistentStatsData PersistentStats; // offset: 1112, size: 272
+} AnimalSaveData; // size: 1384
+
+#define STI_TYPE_HASH_AnimalSaveData2 0x8567D007
+typedef struct AnimalSaveData2{
+    const STITypeInfo* type_info_;
+    uint32 PopulationNameHashId; // offset: 0, size: 4
+    uint32 GroupIndex; // offset: 4, size: 4
+    uint8 Loadout; // offset: 8, size: 1
+    uint32 VisualVariationSeed; // offset: 12, size: 4
+    AnimalDamageablePartSaveData Parts[64]; // offset: 16, size: 1024
+    uint8 PartsCount; // offset: 1040, size: 1
+    uint8 DynamicMaterialWeights[64]; // offset: 1041, size: 64
+    MachinePersistentStatsData PersistentStats; // offset: 1112, size: 272
+    uint32 RivalId; // offset: 1384, size: 4
+} AnimalSaveData2; // size: 1392
+
+#define STI_TYPE_HASH_Array_AnimalPopulationSaveData 0x0C312EDA
+typedef struct Array_AnimalPopulationSaveData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AnimalPopulationSaveData* items;
+} Array_AnimalPopulationSaveData; // size: 16
+
+#define STI_TYPE_HASH_Array_AnimalGroupSaveData 0xCFB0F2B7
+typedef struct Array_AnimalGroupSaveData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AnimalGroupSaveData* items;
+} Array_AnimalGroupSaveData; // size: 16
+
+#define STI_TYPE_HASH_Array_AnimalSaveData 0xF328F417
+typedef struct Array_AnimalSaveData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AnimalSaveData* items;
+} Array_AnimalSaveData; // size: 16
+
+#define STI_TYPE_HASH_AnimalPopulationsSaveData 0xE0835B0D
+typedef struct AnimalPopulationsSaveData{
+    const STITypeInfo* type_info_;
+    Array_AnimalPopulationSaveData Populations; // offset: 0, size: 16
+    Array_AnimalGroupSaveData Groups; // offset: 16, size: 16
+    Array_AnimalSaveData Animals; // offset: 32, size: 16
+} AnimalPopulationsSaveData; // size: 48
+
+#define STI_TYPE_HASH_Array_AnimalPopulationSaveData2 0xB99504F2
+typedef struct Array_AnimalPopulationSaveData2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AnimalPopulationSaveData2* items;
+} Array_AnimalPopulationSaveData2; // size: 16
+
+#define STI_TYPE_HASH_AnimalPopulationsSaveData2 0x8135731B
+typedef struct AnimalPopulationsSaveData2{
+    const STITypeInfo* type_info_;
+    Array_AnimalPopulationSaveData2 Populations; // offset: 0, size: 16
+    Array_AnimalGroupSaveData Groups; // offset: 16, size: 16
+    Array_AnimalSaveData Animals; // offset: 32, size: 16
+} AnimalPopulationsSaveData2; // size: 48
+
+#define STI_TYPE_HASH_Array_AnimalSaveData2 0x92E6BDA5
+typedef struct Array_AnimalSaveData2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AnimalSaveData2* items;
+} Array_AnimalSaveData2; // size: 16
+
+#define STI_TYPE_HASH_AnimalPopulationsSaveData3 0xF581DB01
+typedef struct AnimalPopulationsSaveData3{
+    const STITypeInfo* type_info_;
+    Array_AnimalPopulationSaveData2 Populations; // offset: 0, size: 16
+    Array_AnimalGroupSaveData Groups; // offset: 16, size: 16
+    Array_AnimalSaveData2 Animals; // offset: 32, size: 16
+} AnimalPopulationsSaveData3; // size: 48
+
+#define STI_TYPE_HASH_FogOfWar 0x585E62B9
+typedef struct FogOfWar{
+    const STITypeInfo* type_info_;
+    uint8 Mask[65536]; // offset: 0, size: 65536
+    int32 ReserveId; // offset: 65536, size: 4
+} FogOfWar; // size: 65540
+
+#define STI_TYPE_HASH_CodexInfo 0x54936891
+typedef struct CodexInfo{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint8 Status; // offset: 4, size: 1
+    uint8 Category; // offset: 5, size: 1
+} CodexInfo; // size: 8
+
+#define STI_TYPE_HASH_IconInfo 0x0972A334
+typedef struct IconInfo{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    uint8 State; // offset: 8, size: 1
+} IconInfo; // size: 16
+
+#define STI_TYPE_HASH_Array_IconInfo 0x5200E26F
+typedef struct Array_IconInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    IconInfo* items;
+} Array_IconInfo; // size: 16
+
+#define STI_TYPE_HASH_ReseveIconInfo 0x70952331
+typedef struct ReseveIconInfo{
+    const STITypeInfo* type_info_;
+    Array_IconInfo IconInfos; // offset: 0, size: 16
+    int32 ReserveId; // offset: 16, size: 4
+} ReseveIconInfo; // size: 24
+
+#define STI_TYPE_HASH_ContextualHelpInfo 0x1D72E59B
+typedef struct ContextualHelpInfo{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint8 State; // offset: 4, size: 1
+} ContextualHelpInfo; // size: 8
+
+#define STI_TYPE_HASH_ContextualHelpInfo2 0xF98BCD9F
+typedef struct ContextualHelpInfo2{
+    const STITypeInfo* type_info_;
+    uint32 Id; // offset: 0, size: 4
+    uint8 State; // offset: 4, size: 1
+    uint8 New; // offset: 5, size: 1
+} ContextualHelpInfo2; // size: 8
+
+#define STI_TYPE_HASH_LocationState 0xCC86C468
+typedef struct LocationState{
+    const STITypeInfo* type_info_;
+    uint32 NameHash; // offset: 0, size: 4
+    uint8 Enabled; // offset: 4, size: 1
+} LocationState; // size: 8
+
+#define STI_TYPE_HASH_LocationSummarySaveData 0x6C66D9B5
+typedef struct LocationSummarySaveData{
+    const STITypeInfo* type_info_;
+    uint32 LocationId; // offset: 0, size: 4
+    uint8 Activated; // offset: 4, size: 1
+    uint32 NrRequiredLootCrates; // offset: 8, size: 4
+    Array_uint64 FoundLootCrates; // offset: 16, size: 16
+    Array_uint64 FoundItemIds; // offset: 32, size: 16
+    Array_uint64 FoundWeaponTokens; // offset: 48, size: 16
+    Array_uint64 FoundCollectables; // offset: 64, size: 16
+    Array_uint64 FoundNests; // offset: 80, size: 16
+    Array_uint64 FoundWorldMissionTokens; // offset: 96, size: 16
+} LocationSummarySaveData; // size: 112
+
+#define STI_TYPE_HASH_PlayerRaidStatsSaveData 0x71A37500
+typedef struct PlayerRaidStatsSaveData{
+    const STITypeInfo* type_info_;
+    uint64 ProfileTrackingId; // offset: 0, size: 8
+    int32 TotalKills; // offset: 8, size: 4
+    int32 TotalAssists; // offset: 12, size: 4
+    int32 Heals; // offset: 16, size: 4
+    int32 Revives; // offset: 20, size: 4
+    int32 TickKills; // offset: 24, size: 4
+    int32 ScoutKills; // offset: 28, size: 4
+    int32 RunnerKills; // offset: 32, size: 4
+    int32 HunterKills; // offset: 36, size: 4
+    int32 HarvesterKills; // offset: 40, size: 4
+    int32 TankKills; // offset: 44, size: 4
+} PlayerRaidStatsSaveData; // size: 48
+
+#define STI_TYPE_HASH_PlayerRaidStatsSaveData2 0xB459CBCD
+typedef struct PlayerRaidStatsSaveData2{
+    const STITypeInfo* type_info_;
+    uint64 ProfileTrackingId; // offset: 0, size: 8
+    int32 TotalKills; // offset: 8, size: 4
+    int32 TotalAssists; // offset: 12, size: 4
+    int32 Heals; // offset: 16, size: 4
+    int32 Revives; // offset: 20, size: 4
+    int32 TickKills; // offset: 24, size: 4
+    int32 ScoutKills; // offset: 28, size: 4
+    int32 RunnerKills; // offset: 32, size: 4
+    int32 HunterKills; // offset: 36, size: 4
+    int32 HarvesterKills; // offset: 40, size: 4
+    int32 TankKills; // offset: 44, size: 4
+    int32 LynxKills; // offset: 48, size: 4
+    int32 WolfKills; // offset: 52, size: 4
+} PlayerRaidStatsSaveData2; // size: 56
+
+#define STI_TYPE_HASH_Array_PlayerRaidStatsSaveData 0xB95E8510
+typedef struct Array_PlayerRaidStatsSaveData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PlayerRaidStatsSaveData* items;
+} Array_PlayerRaidStatsSaveData; // size: 16
+
+#define STI_TYPE_HASH_RaidSaveData 0x45FDACC5
+typedef struct RaidSaveData{
+    const STITypeInfo* type_info_;
+    uint32 RaidId; // offset: 0, size: 4
+    uint32 StartedWithSeed; // offset: 4, size: 4
+    uint32 CompletedWithSeed; // offset: 8, size: 4
+    Array_PlayerRaidStatsSaveData PlayerRaidStartingStats; // offset: 16, size: 16
+} RaidSaveData; // size: 32
+
+#define STI_TYPE_HASH_RaidSaveData2 0x50653E41
+typedef struct RaidSaveData2{
+    const STITypeInfo* type_info_;
+    uint32 RaidId; // offset: 0, size: 4
+    uint32 StartedWithSeed; // offset: 4, size: 4
+    uint32 CompletedWithSeed; // offset: 8, size: 4
+    uint64 ElapsedTime; // offset: 16, size: 8
+    Array_PlayerRaidStatsSaveData PlayerRaidStartingStats; // offset: 24, size: 16
+} RaidSaveData2; // size: 40
+
+#define STI_TYPE_HASH_Array_PlayerRaidStatsSaveData2 0x773B126E
+typedef struct Array_PlayerRaidStatsSaveData2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    PlayerRaidStatsSaveData2* items;
+} Array_PlayerRaidStatsSaveData2; // size: 16
+
+#define STI_TYPE_HASH_RaidSaveData3 0xFF9BB5B8
+typedef struct RaidSaveData3{
+    const STITypeInfo* type_info_;
+    uint32 RaidId; // offset: 0, size: 4
+    uint32 StartedWithSeed; // offset: 4, size: 4
+    uint32 CompletedWithSeed; // offset: 8, size: 4
+    uint64 ElapsedTime; // offset: 16, size: 8
+    Array_PlayerRaidStatsSaveData2 PlayerRaidStartingStats; // offset: 24, size: 16
+} RaidSaveData3; // size: 40
+
+#define STI_TYPE_HASH_TimerSaveData1 0xC3AFBFA1
+typedef struct TimerSaveData1{
+    const STITypeInfo* type_info_;
+    uint64 Id; // offset: 0, size: 8
+    int32 TimeLeft; // offset: 8, size: 4
+} TimerSaveData1; // size: 16
+
+#define STI_TYPE_HASH_ProfileSaveData1 0x1CFEB8DC
+typedef struct ProfileSaveData1{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_int32 Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+} ProfileSaveData1; // size: 120
+
+#define STI_TYPE_HASH_ProfileSaveData2 0x8A583246
+typedef struct ProfileSaveData2{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_int32 Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+} ProfileSaveData2; // size: 120
+
+#define STI_TYPE_HASH_ProfileSaveData3 0xC3D54813
+typedef struct ProfileSaveData3{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_int32 Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment1 SafehouseStorage; // offset: 136, size: 16
+    uint8 SafehouseStorageSizeColumns; // offset: 152, size: 1
+    uint8 SafehouseStorageSizeRows; // offset: 153, size: 1
+} ProfileSaveData3; // size: 160
+
+#define STI_TYPE_HASH_ProfileSaveData4 0x4942B541
+typedef struct ProfileSaveData4{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_int32 Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment1 SafehouseStorage; // offset: 136, size: 16
+    uint8 SafehouseStorageSizeColumns; // offset: 152, size: 1
+    uint8 SafehouseStorageSizeRows; // offset: 153, size: 1
+    uint32 FixVersion; // offset: 156, size: 4
+} ProfileSaveData4; // size: 160
+
+#define STI_TYPE_HASH_SettingNameValuePair 0xE034A9D2
+typedef struct SettingNameValuePair{
+    const STITypeInfo* type_info_;
+    uint32 Name; // offset: 0, size: 4
+    uint32 Value; // offset: 4, size: 4
+} SettingNameValuePair; // size: 8
+
+#define STI_TYPE_HASH_Array_SettingNameValuePair 0x96663D9E
+typedef struct Array_SettingNameValuePair {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    SettingNameValuePair* items;
+} Array_SettingNameValuePair; // size: 16
+
+#define STI_TYPE_HASH_ProfileSaveData5 0xE929635D
+typedef struct ProfileSaveData5{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment1 SafehouseStorage; // offset: 136, size: 16
+    uint8 SafehouseStorageSizeColumns; // offset: 152, size: 1
+    uint8 SafehouseStorageSizeRows; // offset: 153, size: 1
+    uint32 FixVersion; // offset: 156, size: 4
+} ProfileSaveData5; // size: 160
+
+#define STI_TYPE_HASH_ProfileSaveData6 0x5DA072F2
+typedef struct ProfileSaveData6{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    uint8 EULA_PP_HASH[64]; // offset: 115, size: 64
+    Array_ResourceStorageItem ResourceStorage; // offset: 184, size: 16
+    Array_OwnedEquipment1 SafehouseStorage; // offset: 200, size: 16
+    uint8 SafehouseStorageSizeColumns; // offset: 216, size: 1
+    uint8 SafehouseStorageSizeRows; // offset: 217, size: 1
+    uint32 FixVersion; // offset: 220, size: 4
+} ProfileSaveData6; // size: 224
+
+#define STI_TYPE_HASH_ProfileSaveData7 0x3BE671E0
+typedef struct ProfileSaveData7{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    uint8 EULA_PP_HASH[64]; // offset: 115, size: 64
+    Array_ResourceStorageItem ResourceStorage; // offset: 184, size: 16
+    Array_OwnedEquipment2 SafehouseStorage; // offset: 200, size: 16
+    uint32 FixVersion; // offset: 216, size: 4
+} ProfileSaveData7; // size: 224
+
+#define STI_TYPE_HASH_AcceptedPolicyPair 0xD6A60493
+typedef struct AcceptedPolicyPair{
+    const STITypeInfo* type_info_;
+    uint32 Name; // offset: 0, size: 4
+    uint8 Hash[64]; // offset: 4, size: 64
+} AcceptedPolicyPair; // size: 68
+
+#define STI_TYPE_HASH_Array_AcceptedPolicyPair 0xEC0454FF
+typedef struct Array_AcceptedPolicyPair {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    AcceptedPolicyPair* items;
+} Array_AcceptedPolicyPair; // size: 16
+
+#define STI_TYPE_HASH_ProfileSaveData8 0x5031BC71
+typedef struct ProfileSaveData8{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment2 SafehouseStorage; // offset: 136, size: 16
+    uint32 FixVersion; // offset: 152, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 160, size: 16
+} ProfileSaveData8; // size: 176
+
+#define STI_TYPE_HASH_ProfileSaveData9 0x1A8A1C09
+typedef struct ProfileSaveData9{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment3 SafehouseStorage; // offset: 136, size: 16
+    uint32 FixVersion; // offset: 152, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 160, size: 16
+} ProfileSaveData9; // size: 176
+
+#define STI_TYPE_HASH_ProfileSaveData10 0x39F22B38
+typedef struct ProfileSaveData10{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment3 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment3 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+} ProfileSaveData10; // size: 192
+
+#define STI_TYPE_HASH_ProfileSaveData11 0xE3C78DBF
+typedef struct ProfileSaveData11{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment3 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment3 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+} ProfileSaveData11; // size: 200
+
+#define STI_TYPE_HASH_ProfileSaveData12 0x366CFF5C
+typedef struct ProfileSaveData12{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment3 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment3 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+} ProfileSaveData12; // size: 200
+
+#define STI_TYPE_HASH_Array_InventoryCategoryFilterData1 0xAD450B03
+typedef struct Array_InventoryCategoryFilterData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    InventoryCategoryFilterData1* items;
+} Array_InventoryCategoryFilterData1; // size: 16
+
+#define STI_TYPE_HASH_ProfileSaveData13 0xC763F108
+typedef struct ProfileSaveData13{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment3 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment3 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 200, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 216, size: 16
+} ProfileSaveData13; // size: 232
+
+#define STI_TYPE_HASH_ProfileSaveData14 0x3E7478EA
+typedef struct ProfileSaveData14{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment4 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment4 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 200, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 216, size: 16
+} ProfileSaveData14; // size: 232
+
+#define STI_TYPE_HASH_ProfileSaveData15 0x3D36DF2B
+typedef struct ProfileSaveData15{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment4 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment4 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 200, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 216, size: 16
+    Array_CurrencySaveData1 Currencies; // offset: 232, size: 16
+} ProfileSaveData15; // size: 248
+
+#define STI_TYPE_HASH_Array_CodexInfo 0x99831F86
+typedef struct Array_CodexInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    CodexInfo* items;
+} Array_CodexInfo; // size: 16
+
+#define STI_TYPE_HASH_ProfileSaveData16 0xF0BC56DB
+typedef struct ProfileSaveData16{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment4 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment4 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 200, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 216, size: 16
+    Array_CurrencySaveData1 Currencies; // offset: 232, size: 16
+    MissionSaveData5 Achievements; // offset: 248, size: 72
+    Array_CodexInfo CodexInfos; // offset: 320, size: 16
+} ProfileSaveData16; // size: 336
+
+#define STI_TYPE_HASH_ClaimedSocialReward1 0x08275D4B
+typedef struct ClaimedSocialReward1{
+    const STITypeInfo* type_info_;
+    uint32 EventId; // offset: 0, size: 4
+    uint32 MessageId; // offset: 4, size: 4
+} ClaimedSocialReward1; // size: 8
+
+#define STI_TYPE_HASH_Array_ClaimedSocialReward1 0x63A2A6AD
+typedef struct Array_ClaimedSocialReward1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ClaimedSocialReward1* items;
+} Array_ClaimedSocialReward1; // size: 16
+
+#define STI_TYPE_HASH_ProfileSaveData17 0x8F75BA0E
+typedef struct ProfileSaveData17{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment4 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment4 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 200, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 216, size: 16
+    Array_CurrencySaveData1 Currencies; // offset: 232, size: 16
+    MissionSaveData5 Achievements; // offset: 248, size: 72
+    Array_CodexInfo CodexInfos; // offset: 320, size: 16
+    Array_ClaimedSocialReward1 ClaimedSocialRewards; // offset: 336, size: 16
+} ProfileSaveData17; // size: 352
+
+#define STI_TYPE_HASH_ProfileSaveData18 0x95C28915
+typedef struct ProfileSaveData18{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment4 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment4 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 200, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 216, size: 16
+    Array_CurrencySaveData1 Currencies; // offset: 232, size: 16
+    MissionSaveData5 Achievements; // offset: 248, size: 72
+    Array_CodexInfo CodexInfos; // offset: 320, size: 16
+    Array_ClaimedSocialReward1 ClaimedSocialRewards; // offset: 336, size: 16
+    Array_uint32 SeenNewsItems; // offset: 352, size: 16
+} ProfileSaveData18; // size: 368
+
+#define STI_TYPE_HASH_ProfileSaveData19 0xFD8E96BC
+typedef struct ProfileSaveData19{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment5 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment5 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 200, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 216, size: 16
+    Array_CurrencySaveData1 Currencies; // offset: 232, size: 16
+    MissionSaveData5 Achievements; // offset: 248, size: 72
+    Array_CodexInfo CodexInfos; // offset: 320, size: 16
+    Array_ClaimedSocialReward1 ClaimedSocialRewards; // offset: 336, size: 16
+    Array_uint32 SeenNewsItems; // offset: 352, size: 16
+} ProfileSaveData19; // size: 368
+
+#define STI_TYPE_HASH_ProfileSaveData20 0xA2A9030E
+typedef struct ProfileSaveData20{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment5 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment5 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 200, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 216, size: 16
+    Array_CurrencySaveData1 Currencies; // offset: 232, size: 16
+    MissionSaveData5 Achievements; // offset: 248, size: 72
+    Array_CodexInfo CodexInfos; // offset: 320, size: 16
+    Array_ClaimedSocialReward1 ClaimedSocialRewards; // offset: 336, size: 16
+    Array_uint32 SeenNewsItems; // offset: 352, size: 16
+} ProfileSaveData20; // size: 368
+
+#define STI_TYPE_HASH_ProfileSaveData21 0x35AF868B
+typedef struct ProfileSaveData21{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment5 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment5 ApexStorage; // offset: 152, size: 16
+    uint32 FixVersion; // offset: 168, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 176, size: 16
+    uint8 ResourceStorageLevel; // offset: 192, size: 1
+    uint8 SafehouseStorageLevel; // offset: 193, size: 1
+    uint32 ProfilePlayTime; // offset: 196, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 200, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 216, size: 16
+    Array_CurrencySaveData1 Currencies; // offset: 232, size: 16
+    MissionSaveData5 Achievements; // offset: 248, size: 72
+    Array_CodexInfo CodexInfos; // offset: 320, size: 16
+    Array_ClaimedSocialReward1 ClaimedSocialRewards; // offset: 336, size: 16
+    Array_uint32 SeenNewsItems; // offset: 352, size: 16
+    Array_uint32 GivenDLCItems; // offset: 368, size: 16
+} ProfileSaveData21; // size: 384
+
+#define STI_TYPE_HASH_ProfileSaveData22 0x58211108
+typedef struct ProfileSaveData22{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment5 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment5 ApexStorage; // offset: 152, size: 16
+    Array_OwnedEquipment5 ItemStash; // offset: 168, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 184, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 200, size: 16
+    uint32 FixVersion; // offset: 216, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 224, size: 16
+    uint8 ResourceStorageLevel; // offset: 240, size: 1
+    uint8 SafehouseStorageLevel; // offset: 241, size: 1
+    uint32 ProfilePlayTime; // offset: 244, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 248, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 264, size: 16
+    Array_CurrencySaveData1 Currencies; // offset: 280, size: 16
+    MissionSaveData5 Achievements; // offset: 296, size: 72
+    Array_CodexInfo CodexInfos; // offset: 368, size: 16
+    Array_ClaimedSocialReward1 ClaimedSocialRewards; // offset: 384, size: 16
+    Array_uint32 SeenNewsItems; // offset: 400, size: 16
+    Array_uint32 GivenDLCItems; // offset: 416, size: 16
+} ProfileSaveData22; // size: 432
+
+#define STI_TYPE_HASH_OfflineAssignment1 0x6A1ADB7F
+typedef struct OfflineAssignment1{
+    const STITypeInfo* type_info_;
+    uint32 ID; // offset: 0, size: 4
+    uint32 TemplateNameHash; // offset: 4, size: 4
+    uint64 EndTime; // offset: 8, size: 8
+    uint32 Score; // offset: 16, size: 4
+    uint8 Status; // offset: 20, size: 1
+} OfflineAssignment1; // size: 24
+
+#define STI_TYPE_HASH_Array_OfflineAssignment1 0x7DE0B529
+typedef struct Array_OfflineAssignment1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    OfflineAssignment1* items;
+} Array_OfflineAssignment1; // size: 16
+
+#define STI_TYPE_HASH_ProfileSaveData23 0xDFAC0D39
+typedef struct ProfileSaveData23{
+    const STITypeInfo* type_info_;
+    Array_uint64 Collectables; // offset: 0, size: 16
+    Array_uint32 EmotesUnlocked; // offset: 16, size: 16
+    uint32 EmoteSlots[8]; // offset: 32, size: 32
+    uint64 TrackingId; // offset: 64, size: 8
+    Array_SettingNameValuePair Settings; // offset: 72, size: 16
+    Array_uint32 CompletedBounties; // offset: 88, size: 16
+    int64 LastLogin; // offset: 104, size: 8
+    uint8 SocialDisabled; // offset: 112, size: 1
+    uint8 VehiclePreferedCameraThirdPerson; // offset: 113, size: 1
+    uint8 TrackingEnabled; // offset: 114, size: 1
+    uint8 ShownTrackingOptIn; // offset: 114, size: 1
+    uint8 CrashReportingEnabled; // offset: 114, size: 1
+    uint8 ShownCrashReportingEnabledOptIn; // offset: 114, size: 1
+    uint8 AcceptedEULA; // offset: 114, size: 1
+    Array_ResourceStorageItem ResourceStorage; // offset: 120, size: 16
+    Array_OwnedEquipment5 SafehouseStorage; // offset: 136, size: 16
+    Array_OwnedEquipment5 ApexStorage; // offset: 152, size: 16
+    Array_OwnedEquipment5 ItemStash; // offset: 168, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 184, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 200, size: 16
+    uint32 FixVersion; // offset: 216, size: 4
+    Array_AcceptedPolicyPair AcceptedPolicies; // offset: 224, size: 16
+    uint8 ResourceStorageLevel; // offset: 240, size: 1
+    uint8 SafehouseStorageLevel; // offset: 241, size: 1
+    uint32 ProfilePlayTime; // offset: 244, size: 4
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 248, size: 16
+    Array_int32 MapFavoriteFilters; // offset: 264, size: 16
+    Array_CurrencySaveData1 Currencies; // offset: 280, size: 16
+    MissionSaveData5 Achievements; // offset: 296, size: 72
+    Array_CodexInfo CodexInfos; // offset: 368, size: 16
+    Array_ClaimedSocialReward1 ClaimedSocialRewards; // offset: 384, size: 16
+    Array_uint32 SeenNewsItems; // offset: 400, size: 16
+    Array_uint32 GivenDLCItems; // offset: 416, size: 16
+    Array_OfflineAssignment1 OfflineAssignments; // offset: 432, size: 16
+    uint32 OfflineAssignmentFreeId; // offset: 448, size: 4
+} ProfileSaveData23; // size: 456
+
+#define STI_TYPE_HASH_Array_RegionData 0xF33CC2F5
+typedef struct Array_RegionData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RegionData* items;
+} Array_RegionData; // size: 16
+
+#define STI_TYPE_HASH_Array_LocationState 0x5FFD080C
+typedef struct Array_LocationState {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    LocationState* items;
+} Array_LocationState; // size: 16
+
+#define STI_TYPE_HASH_Array_ReseveIconInfo 0xDC70913E
+typedef struct Array_ReseveIconInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ReseveIconInfo* items;
+} Array_ReseveIconInfo; // size: 16
+
+#define STI_TYPE_HASH_Array_ContextualHelpInfo2 0x5CAA2834
+typedef struct Array_ContextualHelpInfo2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ContextualHelpInfo2* items;
+} Array_ContextualHelpInfo2; // size: 16
+
+#define STI_TYPE_HASH_Array_LocationSummarySaveData 0xF10552F5
+typedef struct Array_LocationSummarySaveData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    LocationSummarySaveData* items;
+} Array_LocationSummarySaveData; // size: 16
+
+#define STI_TYPE_HASH_Array_TimerSaveData1 0xDF216242
+typedef struct Array_TimerSaveData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    TimerSaveData1* items;
+} Array_TimerSaveData1; // size: 16
+
+#define STI_TYPE_HASH_Array_RivalRegion1 0x41CFE53B
+typedef struct Array_RivalRegion1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RivalRegion1* items;
+} Array_RivalRegion1; // size: 16
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData12 0xF18086C0
+typedef struct Array_ControlPointSaveData12 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData12* items;
+} Array_ControlPointSaveData12; // size: 16
+
+#define STI_TYPE_HASH_Array_RivalMissionGroup1 0x0FD8107D
+typedef struct Array_RivalMissionGroup1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RivalMissionGroup1* items;
+} Array_RivalMissionGroup1; // size: 16
+
+#define STI_TYPE_HASH_WorldProfile1 0xD11E65DE
+typedef struct WorldProfile1{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData12 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+} WorldProfile1; // size: 296
+
+#define STI_TYPE_HASH_Array_ProceduralMissionSaveData1 0xD27003C3
+typedef struct Array_ProceduralMissionSaveData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ProceduralMissionSaveData1* items;
+} Array_ProceduralMissionSaveData1; // size: 16
+
+#define STI_TYPE_HASH_WorldProfile2 0xC05A7A5A
+typedef struct WorldProfile2{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData12 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData1 ProceduralMissions; // offset: 296, size: 16
+} WorldProfile2; // size: 312
+
+#define STI_TYPE_HASH_Array_MiniGameSaveData1 0x082F150C
+typedef struct Array_MiniGameSaveData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    MiniGameSaveData1* items;
+} Array_MiniGameSaveData1; // size: 16
+
+#define STI_TYPE_HASH_WorldProfile3 0x8FA056BE
+typedef struct WorldProfile3{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData12 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData1 ProceduralMissions; // offset: 296, size: 16
+    Array_MiniGameSaveData1 MiniGames; // offset: 312, size: 16
+} WorldProfile3; // size: 328
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData13 0x70E39C98
+typedef struct Array_ControlPointSaveData13 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData13* items;
+} Array_ControlPointSaveData13; // size: 16
+
+#define STI_TYPE_HASH_WorldProfile4 0x11A587AA
+typedef struct WorldProfile4{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData13 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData1 ProceduralMissions; // offset: 296, size: 16
+    Array_MiniGameSaveData1 MiniGames; // offset: 312, size: 16
+} WorldProfile4; // size: 328
+
+#define STI_TYPE_HASH_Array_ProceduralMissionSaveData2 0x20A22581
+typedef struct Array_ProceduralMissionSaveData2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ProceduralMissionSaveData2* items;
+} Array_ProceduralMissionSaveData2; // size: 16
+
+#define STI_TYPE_HASH_WorldProfile5 0x0531E704
+typedef struct WorldProfile5{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData13 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData2 ProceduralMissions; // offset: 296, size: 16
+    Array_MiniGameSaveData1 MiniGames; // offset: 312, size: 16
+} WorldProfile5; // size: 328
+
+#define STI_TYPE_HASH_Array_ProceduralMissionSaveData3 0x65060D13
+typedef struct Array_ProceduralMissionSaveData3 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ProceduralMissionSaveData3* items;
+} Array_ProceduralMissionSaveData3; // size: 16
+
+#define STI_TYPE_HASH_WorldProfile6 0xEE79FF7E
+typedef struct WorldProfile6{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData13 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData3 ProceduralMissions; // offset: 296, size: 16
+    Array_MiniGameSaveData1 MiniGames; // offset: 312, size: 16
+} WorldProfile6; // size: 328
+
+#define STI_TYPE_HASH_WorldProfile7 0x29A1E5DA
+typedef struct WorldProfile7{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData13 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData3 ProceduralMissions; // offset: 296, size: 16
+    Array_MiniGameSaveData1 MiniGames; // offset: 312, size: 16
+    uint32 FixVersion; // offset: 328, size: 4
+} WorldProfile7; // size: 336
+
+#define STI_TYPE_HASH_Array_ProceduralMissionSaveData4 0xC634611E
+typedef struct Array_ProceduralMissionSaveData4 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ProceduralMissionSaveData4* items;
+} Array_ProceduralMissionSaveData4; // size: 16
+
+#define STI_TYPE_HASH_WorldProfile8 0x39A9820B
+typedef struct WorldProfile8{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData13 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData4 ProceduralMissions; // offset: 296, size: 16
+    Array_MiniGameSaveData1 MiniGames; // offset: 312, size: 16
+    uint32 FixVersion; // offset: 328, size: 4
+} WorldProfile8; // size: 336
+
+#define STI_TYPE_HASH_Array_ProceduralMissionSaveData5 0xEFC9A96C
+typedef struct Array_ProceduralMissionSaveData5 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ProceduralMissionSaveData5* items;
+} Array_ProceduralMissionSaveData5; // size: 16
+
+#define STI_TYPE_HASH_WorldProfile9 0xECBA6F0D
+typedef struct WorldProfile9{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData13 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData5 ProceduralMissions; // offset: 296, size: 16
+    Array_MiniGameSaveData1 MiniGames; // offset: 312, size: 16
+    uint32 FixVersion; // offset: 328, size: 4
+} WorldProfile9; // size: 336
+
+#define STI_TYPE_HASH_WorldProfile10 0xEDE9B8FB
+typedef struct WorldProfile10{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData14 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData5 ProceduralMissions; // offset: 296, size: 16
+    Array_MiniGameSaveData1 MiniGames; // offset: 312, size: 16
+    uint32 FixVersion; // offset: 328, size: 4
+} WorldProfile10; // size: 336
+
+#define STI_TYPE_HASH_WorldProfile11 0x475C421E
+typedef struct WorldProfile11{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_LocationState Locations; // offset: 88, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 104, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 120, size: 16
+    uint8 ContextualHelpActive; // offset: 136, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 144, size: 16
+    Array_TimerSaveData1 Timers; // offset: 160, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 176, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 192, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 208, size: 16
+    Array_ControlPointSaveData14 ControlPoints; // offset: 224, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 240, size: 16
+    Array_MissionSaveData5 MissionCampaigns; // offset: 256, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 272, size: 16
+    uint32 WarTokens; // offset: 288, size: 4
+    Array_ProceduralMissionSaveData5 ProceduralMissions; // offset: 296, size: 16
+    Array_MiniGameSaveData1 MiniGames; // offset: 312, size: 16
+    uint32 FixVersion; // offset: 328, size: 4
+    uint8 FinalMissionEdgeCaseFlags; // offset: 332, size: 1
+} WorldProfile11; // size: 336
+
+#define STI_TYPE_HASH_Array_FogOfWar 0x51816FEB
+typedef struct Array_FogOfWar {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    FogOfWar* items;
+} Array_FogOfWar; // size: 16
+
+#define STI_TYPE_HASH_Array_ContextualHelpInfo 0x9E5F7769
+typedef struct Array_ContextualHelpInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ContextualHelpInfo* items;
+} Array_ContextualHelpInfo; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData1 0x7B62E644
+typedef struct WorldSaveData1{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+} WorldSaveData1; // size: 216
+
+#define STI_TYPE_HASH_WorldSaveData2 0xA5ABA935
+typedef struct WorldSaveData2{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+} WorldSaveData2; // size: 216
+
+#define STI_TYPE_HASH_Array_RaidSaveData 0xEA00DAB9
+typedef struct Array_RaidSaveData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RaidSaveData* items;
+} Array_RaidSaveData; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData3 0xD2966D76
+typedef struct WorldSaveData3{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData Raids; // offset: 216, size: 16
+} WorldSaveData3; // size: 232
+
+#define STI_TYPE_HASH_Array_RaidSaveData2 0x513F57AC
+typedef struct Array_RaidSaveData2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RaidSaveData2* items;
+} Array_RaidSaveData2; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData4 0x47512ED2
+typedef struct WorldSaveData4{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+} WorldSaveData4; // size: 232
+
+#define STI_TYPE_HASH_WorldSaveData5 0x830EBB35
+typedef struct WorldSaveData5{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+} WorldSaveData5; // size: 248
+
+#define STI_TYPE_HASH_WorldSaveData6 0xD3B9313C
+typedef struct WorldSaveData6{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData2 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+} WorldSaveData6; // size: 264
+
+#define STI_TYPE_HASH_WorldSaveData7 0xCA977B94
+typedef struct WorldSaveData7{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+} WorldSaveData7; // size: 296
+
+#define STI_TYPE_HASH_WorldSaveData8 0x2338422B
+typedef struct WorldSaveData8{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+} WorldSaveData8; // size: 304
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData1 0xFDF5F6EC
+typedef struct Array_ControlPointSaveData1 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData1* items;
+} Array_ControlPointSaveData1; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData9 0xF861AEA3
+typedef struct WorldSaveData9{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData1 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData9; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData2 0x34DE30B0
+typedef struct Array_ControlPointSaveData2 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData2* items;
+} Array_ControlPointSaveData2; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData10 0x032EE90F
+typedef struct WorldSaveData10{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData2 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData10; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData3 0xD24F05AD
+typedef struct Array_ControlPointSaveData3 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData3* items;
+} Array_ControlPointSaveData3; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData11 0x18EC6CF4
+typedef struct WorldSaveData11{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData3 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData11; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData4 0x2DBE67D2
+typedef struct Array_ControlPointSaveData4 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData4* items;
+} Array_ControlPointSaveData4; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData12 0x4EE7F834
+typedef struct WorldSaveData12{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData4 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData12; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData5 0xBEFF0BED
+typedef struct Array_ControlPointSaveData5 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData5* items;
+} Array_ControlPointSaveData5; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData13 0x0E1FA4EA
+typedef struct WorldSaveData13{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData5 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData13; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData6 0x8B53CE74
+typedef struct Array_ControlPointSaveData6 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData6* items;
+} Array_ControlPointSaveData6; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData14 0x7CCB558F
+typedef struct WorldSaveData14{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData2 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData6 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData14; // size: 336
+
+#define STI_TYPE_HASH_Array_RaidSaveData3 0x6C87E660
+typedef struct Array_RaidSaveData3 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    RaidSaveData3* items;
+} Array_RaidSaveData3; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData15 0xCFB56D39
+typedef struct WorldSaveData15{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData3 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData6 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData15; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData7 0x0B0BAAD5
+typedef struct Array_ControlPointSaveData7 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData7* items;
+} Array_ControlPointSaveData7; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData16 0xDEA5C394
+typedef struct WorldSaveData16{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData3 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData7 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData16; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData8 0xE322099C
+typedef struct Array_ControlPointSaveData8 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData8* items;
+} Array_ControlPointSaveData8; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData17 0x235A61B1
+typedef struct WorldSaveData17{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData3 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData8 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData17; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData9 0x582275E5
+typedef struct Array_ControlPointSaveData9 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData9* items;
+} Array_ControlPointSaveData9; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData18 0xAC9193D3
+typedef struct WorldSaveData18{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData3 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData9 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData18; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData10 0xD5008B48
+typedef struct Array_ControlPointSaveData10 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData10* items;
+} Array_ControlPointSaveData10; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData19 0x1B4758E3
+typedef struct WorldSaveData19{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData3 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData10 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData19; // size: 336
+
+#define STI_TYPE_HASH_Array_ControlPointSaveData11 0xA9F9ADCA
+typedef struct Array_ControlPointSaveData11 {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ControlPointSaveData11* items;
+} Array_ControlPointSaveData11; // size: 16
+
+#define STI_TYPE_HASH_WorldSaveData20 0x76E2D6FB
+typedef struct WorldSaveData20{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData3 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData11 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData20; // size: 336
+
+#define STI_TYPE_HASH_WorldSaveData21 0x5DF4A72B
+typedef struct WorldSaveData21{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData3 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData11 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData21; // size: 336
+
+#define STI_TYPE_HASH_WorldSaveData22 0xC02FD029
+typedef struct WorldSaveData22{
+    const STITypeInfo* type_info_;
+    Array_RegionData Regions; // offset: 0, size: 16
+    AnimalPopulationsSaveData3 AnimalPopulations; // offset: 16, size: 48
+    Array_uint64 Collectables; // offset: 64, size: 16
+    uint32 LootSeed; // offset: 80, size: 4
+    Array_FogOfWar FogOfWar; // offset: 88, size: 16
+    int32 ReserveId; // offset: 104, size: 4
+    Array_LocationState Locations; // offset: 112, size: 16
+    Array_CodexInfo CodexInfos; // offset: 128, size: 16
+    Array_ReseveIconInfo PlayerFoundIcons; // offset: 144, size: 16
+    Array_StatisticInfo Statistics; // offset: 160, size: 16
+    Array_ContextualHelpInfo2 ContextualHelpInfos; // offset: 176, size: 16
+    uint8 ContextualHelpActive; // offset: 192, size: 1
+    Array_LocationSummarySaveData LocationSummaries; // offset: 200, size: 16
+    Array_RaidSaveData3 Raids; // offset: 216, size: 16
+    Array_TimerSaveData1 Timers; // offset: 232, size: 16
+    Array_uint64 PlayerSpawnPoints; // offset: 248, size: 16
+    Array_RivalRegion1 RivalRegions; // offset: 264, size: 16
+    uint64 RivalUsedNumbers[2]; // offset: 280, size: 16
+    uint32 DifficultyLevel; // offset: 296, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 300, size: 1
+    Array_ControlPointSaveData12 ControlPoints; // offset: 304, size: 16
+    Array_RivalMissionGroup1 RivalMissionGroups; // offset: 320, size: 16
+} WorldSaveData22; // size: 336
+
+#define STI_TYPE_HASH_WorldSaveData23 0x4F40CD06
+typedef struct WorldSaveData23{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile1 Worlds[4]; // offset: 32, size: 1184
+    uint32 ActiveWorldIndex; // offset: 1216, size: 4
+} WorldSaveData23; // size: 1224
+
+#define STI_TYPE_HASH_WorldSaveData24 0x837D487D
+typedef struct WorldSaveData24{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile2 Worlds[4]; // offset: 32, size: 1248
+    uint32 ActiveWorldIndex; // offset: 1280, size: 4
+} WorldSaveData24; // size: 1288
+
+#define STI_TYPE_HASH_WorldSaveData25 0x6B20564C
+typedef struct WorldSaveData25{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile3 Worlds[4]; // offset: 32, size: 1312
+    uint32 ActiveWorldIndex; // offset: 1344, size: 4
+} WorldSaveData25; // size: 1352
+
+#define STI_TYPE_HASH_WorldSaveData26 0x7450C05A
+typedef struct WorldSaveData26{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile4 Worlds[4]; // offset: 32, size: 1312
+    uint32 ActiveWorldIndex; // offset: 1344, size: 4
+} WorldSaveData26; // size: 1352
+
+#define STI_TYPE_HASH_WorldSaveData27 0x2051C038
+typedef struct WorldSaveData27{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile5 Worlds[4]; // offset: 32, size: 1312
+    uint32 ActiveWorldIndex; // offset: 1344, size: 4
+} WorldSaveData27; // size: 1352
+
+#define STI_TYPE_HASH_WorldSaveData28 0x0CB4D790
+typedef struct WorldSaveData28{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile6 Worlds[4]; // offset: 32, size: 1312
+    uint32 ActiveWorldIndex; // offset: 1344, size: 4
+} WorldSaveData28; // size: 1352
+
+#define STI_TYPE_HASH_WorldSaveData29 0xA871208C
+typedef struct WorldSaveData29{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile7 Worlds[4]; // offset: 32, size: 1344
+    uint32 ActiveWorldIndex; // offset: 1376, size: 4
+} WorldSaveData29; // size: 1384
+
+#define STI_TYPE_HASH_WorldSaveData30 0xD24E794F
+typedef struct WorldSaveData30{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile8 Worlds[4]; // offset: 32, size: 1344
+    uint32 ActiveWorldIndex; // offset: 1376, size: 4
+} WorldSaveData30; // size: 1384
+
+#define STI_TYPE_HASH_WorldSaveData31 0x9BF9BE6C
+typedef struct WorldSaveData31{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile8 Worlds[4]; // offset: 32, size: 1344
+    uint32 ActiveWorldIndex; // offset: 1376, size: 4
+    Array_uint64 PlayerSpawnPoints; // offset: 1384, size: 16
+} WorldSaveData31; // size: 1400
+
+#define STI_TYPE_HASH_WorldSaveData32 0xE54ED3AE
+typedef struct WorldSaveData32{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile9 Worlds[4]; // offset: 32, size: 1344
+    uint32 ActiveWorldIndex; // offset: 1376, size: 4
+    Array_uint64 PlayerSpawnPoints; // offset: 1384, size: 16
+    Array_int32 CompletedTutorialMissions; // offset: 1400, size: 16
+} WorldSaveData32; // size: 1416
+
+#define STI_TYPE_HASH_WorldSaveData33 0xD064C707
+typedef struct WorldSaveData33{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile10 Worlds[4]; // offset: 32, size: 1344
+    uint32 ActiveWorldIndex; // offset: 1376, size: 4
+    Array_uint64 PlayerSpawnPoints; // offset: 1384, size: 16
+    Array_int32 CompletedTutorialMissions; // offset: 1400, size: 16
+} WorldSaveData33; // size: 1416
+
+#define STI_TYPE_HASH_WorldSaveData34 0x04D2FE5B
+typedef struct WorldSaveData34{
+    const STITypeInfo* type_info_;
+    int32 ReserveId; // offset: 0, size: 4
+    Array_StatisticInfo Statistics; // offset: 8, size: 16
+    uint32 DifficultyLevel; // offset: 24, size: 4
+    uint8 DifficultyScaleByPlayers; // offset: 28, size: 1
+    WorldProfile11 Worlds[4]; // offset: 32, size: 1344
+    uint32 ActiveWorldIndex; // offset: 1376, size: 4
+    Array_uint64 PlayerSpawnPoints; // offset: 1384, size: 16
+    Array_int32 CompletedTutorialMissions; // offset: 1400, size: 16
+} WorldSaveData34; // size: 1416
+
+#define STI_TYPE_HASH_CharactersSaveData1 0xE23ECACE
+typedef struct CharactersSaveData1{
+    const STITypeInfo* type_info_;
+    CharacterProfile1 Characters[4]; // offset: 0, size: 4000
+    uint32 EquipmentIDCounter; // offset: 4000, size: 4
+    Array_OwnedEquipment1 ItemStash; // offset: 4008, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4024, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4040, size: 4
+    Array_MissionSaveData MissionCampaigns; // offset: 4048, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4064, size: 16
+} CharactersSaveData1; // size: 4080
+
+#define STI_TYPE_HASH_CharactersSaveData2 0x8C9469B0
+typedef struct CharactersSaveData2{
+    const STITypeInfo* type_info_;
+    CharacterProfile2 Characters[4]; // offset: 0, size: 4064
+    uint32 EquipmentIDCounter; // offset: 4064, size: 4
+    Array_OwnedEquipment1 ItemStash; // offset: 4072, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4088, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4104, size: 4
+    Array_MissionSaveData MissionCampaigns; // offset: 4112, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4128, size: 16
+} CharactersSaveData2; // size: 4144
+
+#define STI_TYPE_HASH_CharactersSaveData3 0x7E0A0FED
+typedef struct CharactersSaveData3{
+    const STITypeInfo* type_info_;
+    CharacterProfile2 Characters[4]; // offset: 0, size: 4064
+    uint32 EquipmentIDCounter; // offset: 4064, size: 4
+    Array_OwnedEquipment1 ItemStash; // offset: 4072, size: 16
+    Array_OwnedEquipment1 UnknownItemsStash; // offset: 4088, size: 16
+    Array_OwnedEquipment1 InaccessibleItems; // offset: 4104, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4120, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4136, size: 4
+    Array_MissionSaveData MissionCampaigns; // offset: 4144, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4160, size: 16
+} CharactersSaveData3; // size: 4176
+
+#define STI_TYPE_HASH_CharactersSaveData4 0x438C0703
+typedef struct CharactersSaveData4{
+    const STITypeInfo* type_info_;
+    CharacterProfile2 Characters[4]; // offset: 0, size: 4064
+    uint32 EquipmentIDCounter; // offset: 4064, size: 4
+    Array_OwnedEquipment1 ItemStash; // offset: 4072, size: 16
+    Array_OwnedEquipment1 UnknownItemsStash; // offset: 4088, size: 16
+    Array_OwnedEquipment1 InaccessibleItems; // offset: 4104, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4120, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4136, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4144, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4160, size: 16
+} CharactersSaveData4; // size: 4176
+
+#define STI_TYPE_HASH_CharactersSaveData5 0x719780FF
+typedef struct CharactersSaveData5{
+    const STITypeInfo* type_info_;
+    CharacterProfile3 Characters[4]; // offset: 0, size: 4096
+    uint32 EquipmentIDCounter; // offset: 4096, size: 4
+    Array_OwnedEquipment1 ItemStash; // offset: 4104, size: 16
+    Array_OwnedEquipment1 UnknownItemsStash; // offset: 4120, size: 16
+    Array_OwnedEquipment1 InaccessibleItems; // offset: 4136, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4152, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4168, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4176, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4192, size: 16
+} CharactersSaveData5; // size: 4208
+
+#define STI_TYPE_HASH_CharactersSaveData6 0x40E96F21
+typedef struct CharactersSaveData6{
+    const STITypeInfo* type_info_;
+    CharacterProfile4 Characters[4]; // offset: 0, size: 4096
+    uint32 EquipmentIDCounter; // offset: 4096, size: 4
+    Array_OwnedEquipment2 ItemStash; // offset: 4104, size: 16
+    Array_OwnedEquipment2 UnknownItemsStash; // offset: 4120, size: 16
+    Array_OwnedEquipment2 InaccessibleItems; // offset: 4136, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4152, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4168, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4176, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4192, size: 16
+} CharactersSaveData6; // size: 4208
+
+#define STI_TYPE_HASH_CharactersSaveData7 0xF106ED5C
+typedef struct CharactersSaveData7{
+    const STITypeInfo* type_info_;
+    CharacterProfile5 Characters[4]; // offset: 0, size: 4352
+    uint32 EquipmentIDCounter; // offset: 4352, size: 4
+    Array_OwnedEquipment2 ItemStash; // offset: 4360, size: 16
+    Array_OwnedEquipment2 UnknownItemsStash; // offset: 4376, size: 16
+    Array_OwnedEquipment2 InaccessibleItems; // offset: 4392, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4408, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4424, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4432, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4448, size: 16
+} CharactersSaveData7; // size: 4464
+
+#define STI_TYPE_HASH_CharactersSaveData8 0x9AB00D3B
+typedef struct CharactersSaveData8{
+    const STITypeInfo* type_info_;
+    CharacterProfile6 Characters[4]; // offset: 0, size: 4352
+    uint32 EquipmentIDCounter; // offset: 4352, size: 4
+    Array_OwnedEquipment3 ItemStash; // offset: 4360, size: 16
+    Array_OwnedEquipment3 UnknownItemsStash; // offset: 4376, size: 16
+    Array_OwnedEquipment3 InaccessibleItems; // offset: 4392, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4408, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4424, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4432, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4448, size: 16
+} CharactersSaveData8; // size: 4464
+
+#define STI_TYPE_HASH_CharactersSaveData9 0x248CFA23
+typedef struct CharactersSaveData9{
+    const STITypeInfo* type_info_;
+    CharacterProfile7 Characters[4]; // offset: 0, size: 4416
+    uint32 EquipmentIDCounter; // offset: 4416, size: 4
+    Array_OwnedEquipment3 ItemStash; // offset: 4424, size: 16
+    Array_OwnedEquipment3 UnknownItemsStash; // offset: 4440, size: 16
+    Array_OwnedEquipment3 InaccessibleItems; // offset: 4456, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4472, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4488, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4496, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4512, size: 16
+} CharactersSaveData9; // size: 4528
+
+#define STI_TYPE_HASH_CharactersSaveData10 0xE5ECB19D
+typedef struct CharactersSaveData10{
+    const STITypeInfo* type_info_;
+    CharacterProfile7 Characters[4]; // offset: 0, size: 4416
+    uint32 EquipmentIDCounter; // offset: 4416, size: 4
+    Array_OwnedEquipment3 ItemStash; // offset: 4424, size: 16
+    Array_OwnedEquipment3 UnknownItemsStash; // offset: 4440, size: 16
+    Array_OwnedEquipment3 InaccessibleItems; // offset: 4456, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4472, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4488, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4496, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4512, size: 16
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 4528, size: 16
+} CharactersSaveData10; // size: 4544
+
+#define STI_TYPE_HASH_CharactersSaveData11 0x82391488
+typedef struct CharactersSaveData11{
+    const STITypeInfo* type_info_;
+    CharacterProfile8 Characters[4]; // offset: 0, size: 4416
+    uint32 EquipmentIDCounter; // offset: 4416, size: 4
+    Array_OwnedEquipment3 ItemStash; // offset: 4424, size: 16
+    Array_OwnedEquipment3 UnknownItemsStash; // offset: 4440, size: 16
+    Array_OwnedEquipment3 InaccessibleItems; // offset: 4456, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4472, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4488, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4496, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4512, size: 16
+    Array_InventoryCategoryFilterData1 InventoryCategoryFilters; // offset: 4528, size: 16
+} CharactersSaveData11; // size: 4544
+
+#define STI_TYPE_HASH_CharactersSaveData12 0xADA359E9
+typedef struct CharactersSaveData12{
+    const STITypeInfo* type_info_;
+    CharacterProfile8 Characters[4]; // offset: 0, size: 4416
+    uint32 EquipmentIDCounter; // offset: 4416, size: 4
+    Array_OwnedEquipment3 ItemStash; // offset: 4424, size: 16
+    Array_OwnedEquipment3 UnknownItemsStash; // offset: 4440, size: 16
+    Array_OwnedEquipment3 InaccessibleItems; // offset: 4456, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4472, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4488, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4496, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4512, size: 16
+} CharactersSaveData12; // size: 4528
+
+#define STI_TYPE_HASH_CharactersSaveData13 0x32D5DCE2
+typedef struct CharactersSaveData13{
+    const STITypeInfo* type_info_;
+    CharacterProfile9 Characters[4]; // offset: 0, size: 4416
+    uint32 EquipmentIDCounter; // offset: 4416, size: 4
+    Array_OwnedEquipment4 ItemStash; // offset: 4424, size: 16
+    Array_OwnedEquipment4 UnknownItemsStash; // offset: 4440, size: 16
+    Array_OwnedEquipment4 InaccessibleItems; // offset: 4456, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4472, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4488, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4496, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4512, size: 16
+} CharactersSaveData13; // size: 4528
+
+#define STI_TYPE_HASH_CharactersSaveData14 0x2C35193A
+typedef struct CharactersSaveData14{
+    const STITypeInfo* type_info_;
+    CharacterProfile10 Characters[4]; // offset: 0, size: 4448
+    uint32 EquipmentIDCounter; // offset: 4448, size: 4
+    Array_OwnedEquipment4 ItemStash; // offset: 4456, size: 16
+    Array_OwnedEquipment4 UnknownItemsStash; // offset: 4472, size: 16
+    Array_OwnedEquipment4 InaccessibleItems; // offset: 4488, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4504, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4520, size: 4
+    Array_MissionSaveData2 MissionCampaigns; // offset: 4528, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4544, size: 16
+} CharactersSaveData14; // size: 4560
+
+#define STI_TYPE_HASH_CharactersSaveData15 0x5663DC75
+typedef struct CharactersSaveData15{
+    const STITypeInfo* type_info_;
+    CharacterProfile10 Characters[4]; // offset: 0, size: 4448
+    uint32 EquipmentIDCounter; // offset: 4448, size: 4
+    Array_OwnedEquipment4 ItemStash; // offset: 4456, size: 16
+    Array_OwnedEquipment4 UnknownItemsStash; // offset: 4472, size: 16
+    Array_OwnedEquipment4 InaccessibleItems; // offset: 4488, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4504, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4520, size: 4
+    Array_MissionSaveData3 MissionCampaigns; // offset: 4528, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4544, size: 16
+} CharactersSaveData15; // size: 4560
+
+#define STI_TYPE_HASH_CharactersSaveData16 0xA9C5440E
+typedef struct CharactersSaveData16{
+    const STITypeInfo* type_info_;
+    CharacterProfile10 Characters[4]; // offset: 0, size: 4448
+    uint32 EquipmentIDCounter; // offset: 4448, size: 4
+    Array_OwnedEquipment4 ItemStash; // offset: 4456, size: 16
+    Array_OwnedEquipment4 UnknownItemsStash; // offset: 4472, size: 16
+    Array_OwnedEquipment4 InaccessibleItems; // offset: 4488, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4504, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4520, size: 4
+    Array_MissionSaveData4 MissionCampaigns; // offset: 4528, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4544, size: 16
+} CharactersSaveData16; // size: 4560
+
+#define STI_TYPE_HASH_CharactersSaveData17 0x4B704205
+typedef struct CharactersSaveData17{
+    const STITypeInfo* type_info_;
+    CharacterProfile11 Characters[4]; // offset: 0, size: 4512
+    uint32 EquipmentIDCounter; // offset: 4512, size: 4
+    Array_OwnedEquipment4 ItemStash; // offset: 4520, size: 16
+    Array_OwnedEquipment4 UnknownItemsStash; // offset: 4536, size: 16
+    Array_OwnedEquipment4 InaccessibleItems; // offset: 4552, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4568, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4584, size: 4
+    Array_MissionSaveData4 MissionCampaigns; // offset: 4592, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4608, size: 16
+} CharactersSaveData17; // size: 4624
+
+#define STI_TYPE_HASH_CharactersSaveData18 0x54828B1D
+typedef struct CharactersSaveData18{
+    const STITypeInfo* type_info_;
+    CharacterProfile11 Characters[4]; // offset: 0, size: 4512
+    uint32 EquipmentIDCounter; // offset: 4512, size: 4
+    Array_OwnedEquipment4 ItemStash; // offset: 4520, size: 16
+    Array_OwnedEquipment4 UnknownItemsStash; // offset: 4536, size: 16
+    Array_OwnedEquipment4 InaccessibleItems; // offset: 4552, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4568, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4584, size: 4
+    Array_MissionSaveData5 MissionCampaigns; // offset: 4592, size: 16
+    Array_int32 MissionCampaignsReserveIds; // offset: 4608, size: 16
+} CharactersSaveData18; // size: 4624
+
+#define STI_TYPE_HASH_CharactersSaveData19 0x78A94208
+typedef struct CharactersSaveData19{
+    const STITypeInfo* type_info_;
+    CharacterProfile12 Characters[4]; // offset: 0, size: 4832
+    uint32 EquipmentIDCounter; // offset: 4832, size: 4
+    Array_OwnedEquipment4 ItemStash; // offset: 4840, size: 16
+    Array_OwnedEquipment4 UnknownItemsStash; // offset: 4856, size: 16
+    Array_OwnedEquipment4 InaccessibleItems; // offset: 4872, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4888, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4904, size: 4
+} CharactersSaveData19; // size: 4912
+
+#define STI_TYPE_HASH_CharactersSaveData20 0xB13CDF67
+typedef struct CharactersSaveData20{
+    const STITypeInfo* type_info_;
+    CharacterProfile13 Characters[4]; // offset: 0, size: 4896
+    uint32 EquipmentIDCounter; // offset: 4896, size: 4
+    Array_OwnedEquipment4 ItemStash; // offset: 4904, size: 16
+    Array_OwnedEquipment4 UnknownItemsStash; // offset: 4920, size: 16
+    Array_OwnedEquipment4 InaccessibleItems; // offset: 4936, size: 16
+    Array_uint32 GivenDLCItems; // offset: 4952, size: 16
+    uint32 ActiveCharacterIndex; // offset: 4968, size: 4
+} CharactersSaveData20; // size: 4976
+
+#define STI_TYPE_HASH_CharactersSaveData21 0x323BB07C
+typedef struct CharactersSaveData21{
+    const STITypeInfo* type_info_;
+    CharacterProfile14 Characters[4]; // offset: 0, size: 4960
+    uint32 EquipmentIDCounter; // offset: 4960, size: 4
+    Array_OwnedEquipment4 ItemStash; // offset: 4968, size: 16
+    Array_OwnedEquipment4 UnknownItemsStash; // offset: 4984, size: 16
+    Array_OwnedEquipment4 InaccessibleItems; // offset: 5000, size: 16
+    Array_uint32 GivenDLCItems; // offset: 5016, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5032, size: 4
+} CharactersSaveData21; // size: 5040
+
+#define STI_TYPE_HASH_CharactersSaveData22 0xD5397C8D
+typedef struct CharactersSaveData22{
+    const STITypeInfo* type_info_;
+    CharacterProfile15 Characters[4]; // offset: 0, size: 4960
+    uint32 EquipmentIDCounter; // offset: 4960, size: 4
+    Array_OwnedEquipment5 ItemStash; // offset: 4968, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 4984, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 5000, size: 16
+    Array_uint32 GivenDLCItems; // offset: 5016, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5032, size: 4
+} CharactersSaveData22; // size: 5040
+
+#define STI_TYPE_HASH_CharactersSaveData23 0xCE0F9B30
+typedef struct CharactersSaveData23{
+    const STITypeInfo* type_info_;
+    CharacterProfile16 Characters[4]; // offset: 0, size: 5024
+    uint32 EquipmentIDCounter; // offset: 5024, size: 4
+    Array_OwnedEquipment5 ItemStash; // offset: 5032, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 5048, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 5064, size: 16
+    Array_uint32 GivenDLCItems; // offset: 5080, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5096, size: 4
+} CharactersSaveData23; // size: 5104
+
+#define STI_TYPE_HASH_CharactersSaveData24 0xF777DDDF
+typedef struct CharactersSaveData24{
+    const STITypeInfo* type_info_;
+    CharacterProfile17 Characters[4]; // offset: 0, size: 5056
+    uint32 EquipmentIDCounter; // offset: 5056, size: 4
+    Array_OwnedEquipment5 ItemStash; // offset: 5064, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 5080, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 5096, size: 16
+    Array_uint32 GivenDLCItems; // offset: 5112, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5128, size: 4
+} CharactersSaveData24; // size: 5136
+
+#define STI_TYPE_HASH_CharactersSaveData25 0xF7716000
+typedef struct CharactersSaveData25{
+    const STITypeInfo* type_info_;
+    CharacterProfile18 Characters[4]; // offset: 0, size: 5248
+    uint32 EquipmentIDCounter; // offset: 5248, size: 4
+    Array_OwnedEquipment5 ItemStash; // offset: 5256, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 5272, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 5288, size: 16
+    Array_uint32 GivenDLCItems; // offset: 5304, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5320, size: 4
+} CharactersSaveData25; // size: 5328
+
+#define STI_TYPE_HASH_CharactersSaveData26 0xCC26FBE5
+typedef struct CharactersSaveData26{
+    const STITypeInfo* type_info_;
+    CharacterProfile19 Characters[4]; // offset: 0, size: 5280
+    uint32 EquipmentIDCounter; // offset: 5280, size: 4
+    Array_OwnedEquipment5 ItemStash; // offset: 5288, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 5304, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 5320, size: 16
+    Array_uint32 GivenDLCItems; // offset: 5336, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5352, size: 4
+} CharactersSaveData26; // size: 5360
+
+#define STI_TYPE_HASH_CharactersSaveData27 0xE82C4A7A
+typedef struct CharactersSaveData27{
+    const STITypeInfo* type_info_;
+    CharacterProfile20 Characters[4]; // offset: 0, size: 5344
+    uint32 EquipmentIDCounter; // offset: 5344, size: 4
+    Array_OwnedEquipment5 ItemStash; // offset: 5352, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 5368, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 5384, size: 16
+    Array_uint32 GivenDLCItems; // offset: 5400, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5416, size: 4
+} CharactersSaveData27; // size: 5424
+
+#define STI_TYPE_HASH_CharactersSaveData28 0x56110977
+typedef struct CharactersSaveData28{
+    const STITypeInfo* type_info_;
+    CharacterProfile21 Characters[4]; // offset: 0, size: 5408
+    uint32 EquipmentIDCounter; // offset: 5408, size: 4
+    Array_OwnedEquipment5 ItemStash; // offset: 5416, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 5432, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 5448, size: 16
+    Array_uint32 GivenDLCItems; // offset: 5464, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5480, size: 4
+} CharactersSaveData28; // size: 5488
+
+#define STI_TYPE_HASH_CharactersSaveData29 0xFBA630E6
+typedef struct CharactersSaveData29{
+    const STITypeInfo* type_info_;
+    CharacterProfile22 Characters[4]; // offset: 0, size: 5344
+    uint32 EquipmentIDCounter; // offset: 5344, size: 4
+    Array_OwnedEquipment5 ItemStash; // offset: 5352, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 5368, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 5384, size: 16
+    Array_uint32 GivenDLCItems; // offset: 5400, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5416, size: 4
+} CharactersSaveData29; // size: 5424
+
+#define STI_TYPE_HASH_CharactersSaveData30 0xABE49002
+typedef struct CharactersSaveData30{
+    const STITypeInfo* type_info_;
+    CharacterProfile23 Characters[4]; // offset: 0, size: 5280
+    uint32 EquipmentIDCounter; // offset: 5280, size: 4
+    Array_OwnedEquipment5 ItemStash; // offset: 5288, size: 16
+    Array_OwnedEquipment5 UnknownItemsStash; // offset: 5304, size: 16
+    Array_OwnedEquipment5 InaccessibleItems; // offset: 5320, size: 16
+    uint32 ActiveCharacterIndex; // offset: 5336, size: 4
+} CharactersSaveData30; // size: 5344
+
+#define STI_TYPE_HASH_CharactersSaveData31 0x104E36F7
+typedef struct CharactersSaveData31{
+    const STITypeInfo* type_info_;
+    CharacterProfile23 Characters[4]; // offset: 0, size: 5280
+    uint32 ActiveCharacterIndex; // offset: 5280, size: 4
+} CharactersSaveData31; // size: 5288
+
+#define STI_TYPE_HASH_CharactersSaveData32 0xE1F71C89
+typedef struct CharactersSaveData32{
+    const STITypeInfo* type_info_;
+    CharacterProfile24 Characters[4]; // offset: 0, size: 5376
+    uint32 ActiveCharacterIndex; // offset: 5376, size: 4
+} CharactersSaveData32; // size: 5384
+
+#define STI_TYPE_HASH_SaveGameData1 0x4D75E188
+typedef struct SaveGameData1{
+    const STITypeInfo* type_info_;
+    Deferred Characters; // offset: 0, size: 16
+    Deferred Profile; // offset: 16, size: 16
+    Deferred World; // offset: 32, size: 16
+} SaveGameData1; // size: 48
+
+#define STI_TYPE_HASH_SaveGameData2 0x8878829F
+typedef struct SaveGameData2{
+    const STITypeInfo* type_info_;
+    Deferred Characters; // offset: 0, size: 16
+    Deferred Profile; // offset: 16, size: 16
+    Deferred World; // offset: 32, size: 16
+    Deferred War; // offset: 48, size: 16
+} SaveGameData2; // size: 64
+
+#define STI_TYPE_HASH_SaveGameRoot 0x1605F39E
+typedef struct SaveGameRoot{
+    const STITypeInfo* type_info_;
+    Deferred SaveData; // offset: 0, size: 16
+} SaveGameRoot; // size: 16
+
+#define STI_TYPE_HASH_LightInfo 0x30B45553
+typedef struct LightInfo{
+    const STITypeInfo* type_info_;
+    float32 Position[3]; // offset: 0, size: 12
+    uint8 Diffuse[3]; // offset: 12, size: 3
+    uint8 Radius; // offset: 15, size: 1
+    uint8 HasDistantLod; // offset: 16, size: 1
+    uint64 ObjectID; // offset: 24, size: 8
+    uint32 Ordinal; // offset: 32, size: 4
+    uint16 CellIndex; // offset: 36, size: 2
+} LightInfo; // size: 40
+
+#define STI_TYPE_HASH_Array_LightInfo 0x9580A0DB
+typedef struct Array_LightInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    LightInfo* items;
+} Array_LightInfo; // size: 16
+
+#define STI_TYPE_HASH_AllLights 0x94625F53
+typedef struct AllLights{
+    const STITypeInfo* type_info_;
+    Array_LightInfo Lights; // offset: 0, size: 16
+} AllLights; // size: 16
+
+#define STI_TYPE_HASH_EffectRTRenderInfo 0xC47ADDF4
+typedef struct EffectRTRenderInfo{
+    const STITypeInfo* type_info_;
+    uint32 RenderBlockTypeHash; // offset: 0, size: 4
+    uint16 VertexBufferHeaderSize; // offset: 4, size: 2
+    uint16 ParticleVertexMemorySize; // offset: 6, size: 2
+    Array_uint32 RenderBlockData; // offset: 8, size: 16
+} EffectRTRenderInfo; // size: 24
+
+#define STI_TYPE_HASH_EffectRTLocalParam 0x8E3EB952
+typedef struct EffectRTLocalParam{
+    const STITypeInfo* type_info_;
+    uint32 Hash; // offset: 0, size: 4
+    uint16 Index; // offset: 4, size: 2
+    uint16 NumParams; // offset: 6, size: 2
+} EffectRTLocalParam; // size: 8
+
+#define STI_TYPE_HASH_Array_EffectRTLocalParam 0x0073CA09
+typedef struct Array_EffectRTLocalParam {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTLocalParam* items;
+} Array_EffectRTLocalParam; // size: 16
+
+#define STI_TYPE_HASH_EffectRTParameters 0x15C3EBC7
+typedef struct EffectRTParameters{
+    const STITypeInfo* type_info_;
+    Array_uint16 FloatParamIndices; // offset: 0, size: 16
+    Array_int32 Int32Params; // offset: 16, size: 16
+    Array_EffectRTLocalParam LocalParams; // offset: 32, size: 16
+    uint32 LocalParamsSize; // offset: 48, size: 4
+    Array_uint32 TimelineConnections; // offset: 56, size: 16
+} EffectRTParameters; // size: 72
+
+#define STI_TYPE_HASH_Array_EffectRTRenderInfo 0xEF57B84F
+typedef struct Array_EffectRTRenderInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTRenderInfo* items;
+} Array_EffectRTRenderInfo; // size: 16
+
+#define STI_TYPE_HASH_EffectRTInstantiator 0x7320C0F6
+typedef struct EffectRTInstantiator{
+    const STITypeInfo* type_info_;
+    EffectRTParameters Parameters; // offset: 0, size: 72
+    Array_EffectRTRenderInfo RenderInfos; // offset: 72, size: 16
+    uint32 TypeHash; // offset: 88, size: 4
+    uint16 ExtraMemPerParticle; // offset: 92, size: 2
+    uint16 TrimIndex; // offset: 94, size: 2
+} EffectRTInstantiator; // size: 96
+
+#define STI_TYPE_HASH_EffectRTEmitterTemplate 0xF421C359
+typedef struct EffectRTEmitterTemplate{
+    const STITypeInfo* type_info_;
+    Array_uint16 EmitterParams; // offset: 0, size: 16
+    Array_uint32 EmitterTimelineConnections; // offset: 16, size: 16
+    Array_uint8 ParticleModifiers; // offset: 32, size: 16
+    uint32 EmitterLifetimeIndex; // offset: 48, size: 4
+    uint32 StartTime; // offset: 52, size: 4
+    Array_uint8 AliveInstantiators; // offset: 56, size: 16
+    Array_uint8 OnDeathInstantiators; // offset: 72, size: 16
+    uint16 MaxParticles; // offset: 88, size: 2
+    uint8 Flags; // offset: 90, size: 1
+    uint32 TypeHash; // offset: 92, size: 4
+    uint32 LocalParamsSize; // offset: 96, size: 4
+    Array_EffectRTLocalParam LocalParams; // offset: 104, size: 16
+} EffectRTEmitterTemplate; // size: 120
+
+#define STI_TYPE_HASH_EffectRTEmitter 0x9F160F8C
+typedef struct EffectRTEmitter{
+    const STITypeInfo* type_info_;
+    uint16 EmitterTemplateIndex; // offset: 0, size: 2
+    uint8 Flags; // offset: 2, size: 1
+    Array_uint8 EmitterModifiers; // offset: 8, size: 16
+    Array_uint32 StartInOutputBuffer; // offset: 24, size: 16
+} EffectRTEmitter; // size: 40
+
+#define STI_TYPE_HASH_EffectRTModifier 0x190BFAA5
+typedef struct EffectRTModifier{
+    const STITypeInfo* type_info_;
+    EffectRTParameters Parameters; // offset: 0, size: 72
+    uint32 TypeHash; // offset: 72, size: 4
+    uint32 Flags; // offset: 76, size: 4
+} EffectRTModifier; // size: 80
+
+#define STI_TYPE_HASH_EffectRTTimeline 0x326A2784
+typedef struct EffectRTTimeline{
+    const STITypeInfo* type_info_;
+    int8 ControlPointsY[16]; // offset: 0, size: 16
+    float32 StartX[4]; // offset: 16, size: 16
+    float32 EndX[4]; // offset: 32, size: 16
+    float32 XScaleRecip[4]; // offset: 48, size: 16
+} EffectRTTimeline; // size: 64
+
+#define STI_TYPE_HASH_EffectRTSpecialEffect 0x31696983
+typedef struct EffectRTSpecialEffect{
+    const STITypeInfo* type_info_;
+    Array_uint16 FloatParamIndices; // offset: 0, size: 16
+    Array_uint32 EmitterTimelineConnections; // offset: 16, size: 16
+    Array_uint8 Modifiers; // offset: 32, size: 16
+    int32 Params[29]; // offset: 48, size: 116
+    uint32 Hash; // offset: 164, size: 4
+} EffectRTSpecialEffect; // size: 168
+
+#define STI_TYPE_HASH_EffectRTBatchDescriptor 0xE4F9CF13
+typedef struct EffectRTBatchDescriptor{
+    const STITypeInfo* type_info_;
+    uint32 OutputBufferOffset; // offset: 0, size: 4
+    uint32 RenderBlockTypeHash; // offset: 4, size: 4
+    uint32 OutBufferHeaderSize; // offset: 8, size: 4
+    uint32 ConstantRenderBlockSize; // offset: 12, size: 4
+    uint32* ConstantRenderBlockData; // offset: 16, size: 8
+} EffectRTBatchDescriptor; // size: 24
+
+#define STI_TYPE_HASH_EffectRTSpecialEffectData 0x863552C1
+typedef struct EffectRTSpecialEffectData{
+    const STITypeInfo* type_info_;
+    Array_uint32 ConstantData; // offset: 0, size: 16
+    uint32 Hash; // offset: 16, size: 4
+} EffectRTSpecialEffectData; // size: 24
+
+#define STI_TYPE_HASH_Array_EffectRTBatchDescriptor 0xF2C6BB8D
+typedef struct Array_EffectRTBatchDescriptor {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTBatchDescriptor* items;
+} Array_EffectRTBatchDescriptor; // size: 16
+
+#define STI_TYPE_HASH_Array_EffectRTSpecialEffectData 0xCB5CEA2E
+typedef struct Array_EffectRTSpecialEffectData {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTSpecialEffectData* items;
+} Array_EffectRTSpecialEffectData; // size: 16
+
+#define STI_TYPE_HASH_EffectRTOutputBufferDescriptor 0x433F04D3
+typedef struct EffectRTOutputBufferDescriptor{
+    const STITypeInfo* type_info_;
+    uint32 OutputBufferSize; // offset: 0, size: 4
+    Array_EffectRTBatchDescriptor BatchDescriptors; // offset: 8, size: 16
+    Array_EffectRTSpecialEffectData SpecialEffectData; // offset: 24, size: 16
+} EffectRTOutputBufferDescriptor; // size: 40
+
+#define STI_TYPE_HASH_EffectRTParamHandler 0x09AFEC54
+typedef struct EffectRTParamHandler{
+    const STITypeInfo* type_info_;
+    Array_uint16 FloatParamIndices; // offset: 0, size: 16
+    Array_uint32 Timelines; // offset: 16, size: 16
+    float32 Age; // offset: 32, size: 4
+    Array_uint32 ParamHash; // offset: 40, size: 16
+} EffectRTParamHandler; // size: 56
+
+#define STI_TYPE_HASH_Array_EffectRTEmitterTemplate 0x6F01237F
+typedef struct Array_EffectRTEmitterTemplate {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTEmitterTemplate* items;
+} Array_EffectRTEmitterTemplate; // size: 16
+
+#define STI_TYPE_HASH_Array_EffectRTEmitter 0x8F771246
+typedef struct Array_EffectRTEmitter {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTEmitter* items;
+} Array_EffectRTEmitter; // size: 16
+
+#define STI_TYPE_HASH_Array_EffectRTModifier 0xEE9E1E94
+typedef struct Array_EffectRTModifier {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTModifier* items;
+} Array_EffectRTModifier; // size: 16
+
+#define STI_TYPE_HASH_Array_EffectRTTimeline 0xF14CBAEA
+typedef struct Array_EffectRTTimeline {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTTimeline* items;
+} Array_EffectRTTimeline; // size: 16
+
+#define STI_TYPE_HASH_Array_EffectRTInstantiator 0x3ABFFB90
+typedef struct Array_EffectRTInstantiator {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTInstantiator* items;
+} Array_EffectRTInstantiator; // size: 16
+
+#define STI_TYPE_HASH_Array_EffectRTSpecialEffect 0x75D1B9A9
+typedef struct Array_EffectRTSpecialEffect {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTSpecialEffect* items;
+} Array_EffectRTSpecialEffect; // size: 16
+
+#define STI_TYPE_HASH_Array_EffectRTParamHandler 0x0FED0DD8
+typedef struct Array_EffectRTParamHandler {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    EffectRTParamHandler* items;
+} Array_EffectRTParamHandler; // size: 16
+
+#define STI_TYPE_HASH_EffectRTSystem 0x3A6CFD95
+typedef struct EffectRTSystem{
+    const STITypeInfo* type_info_;
+    Array_EffectRTEmitterTemplate EmitterTemplates; // offset: 0, size: 16
+    Array_EffectRTEmitter Emitters; // offset: 16, size: 16
+    Array_EffectRTModifier Modifiers; // offset: 32, size: 16
+    Array_EffectRTTimeline Timelines; // offset: 48, size: 16
+    Array_EffectRTInstantiator Instantiators; // offset: 64, size: 16
+    Array_EffectRTSpecialEffect SpecialEffects; // offset: 80, size: 16
+    Array_EffectRTParamHandler ParamHandler; // offset: 96, size: 16
+    Array_float32 Params; // offset: 112, size: 16
+    EffectRTOutputBufferDescriptor OutputBufferDescriptor; // offset: 128, size: 40
+    Array_EffectRTLocalParam NamedParameters; // offset: 168, size: 16
+    uint32 NamedParametersSize; // offset: 184, size: 4
+    Array_StringHash_48c5294d_4 Dependencies; // offset: 192, size: 16
+    Array_float32 Properties; // offset: 208, size: 16
+} EffectRTSystem; // size: 224
+
+#define STI_TYPE_HASH_EffectVertexArray 0xCA0AD610
+typedef struct EffectVertexArray{
+    const STITypeInfo* type_info_;
+    Array_float32 Array; // offset: 0, size: 16
+} EffectVertexArray; // size: 16
+
+#define STI_TYPE_HASH_EffectTrimData 0x5EE06CAE
+typedef struct EffectTrimData{
+    const STITypeInfo* type_info_;
+    uint8 AnimFramesX; // offset: 0, size: 1
+    uint8 AnimFramesY; // offset: 1, size: 1
+    EffectVertexArray Vertices[2]; // offset: 8, size: 32
+} EffectTrimData; // size: 40
+
+#define STI_TYPE_HASH_MemAllocator 0x52EEFC8D
+typedef enum{ // size: 4
+    E_MEMALLOCATOR_CPU = 0,
+    E_MEMALLOCATOR_SHARED = 1,
+    E_MEMALLOCATOR_GPU = 2,
+    MemAllocator_ForceSize = 0x7FFFFFFF
+} MemAllocator;
+
+#define STI_TYPE_HASH_CompressedData 0x56500CAA
+typedef struct CompressedData{
+    const STITypeInfo* type_info_;
+    uint32 UncompressedSize; // offset: 0, size: 4
+    Array_uint8 Data; // offset: 8, size: 16
+    MemAllocator UncompressAllocator; // offset: 24, size: 4
+} CompressedData; // size: 32
+
+#define STI_TYPE_HASH_TerrainMesh 0x962828FC
+typedef struct TerrainMesh{
+    const STITypeInfo* type_info_;
+    float32 BoundingBox[6]; // offset: 0, size: 24
+    CompressedData Indices; // offset: 24, size: 32
+    uint32 IndexTypeSize; // offset: 56, size: 4
+    CompressedData Vertices; // offset: 64, size: 32
+    CompressedData Vertices2; // offset: 96, size: 32
+    CompressedData QuadInfos; // offset: 128, size: 32
+    CompressedData TriangleIndices; // offset: 160, size: 32
+    CompressedData GroupTriIndices; // offset: 192, size: 32
+} TerrainMesh; // size: 224
+
+#define STI_TYPE_HASH_Array_TerrainPrimitive 0x80B0FEC7
+typedef struct Array_TerrainPrimitive {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    TerrainPrimitive* items;
+} Array_TerrainPrimitive; // size: 16
+
+#define STI_TYPE_HASH_BlockCompressionType 0xD97AAC30
+typedef enum{ // size: 4
+    E_BLOCKCOMPRESSIONTYPE_NONE = 0,
+    E_BLOCKCOMPRESSIONTYPE_BC3 = 1,
+    E_BLOCKCOMPRESSIONTYPE_BC7 = 2,
+    BlockCompressionType_ForceSize = 0x7FFFFFFF
+} BlockCompressionType;
+
+#define STI_TYPE_HASH_TerrainTexture 0x0D811C0C
+typedef struct TerrainTexture{
+    const STITypeInfo* type_info_;
+    uint32 Width; // offset: 0, size: 4
+    uint32 Height; // offset: 4, size: 4
+    BlockCompressionType BlockCompressionType; // offset: 8, size: 4
+    uint32 Tiled; // offset: 12, size: 4
+    uint32 Srgb; // offset: 12, size: 4
+    CompressedData Data; // offset: 16, size: 32
+} TerrainTexture; // size: 48
+
+#define STI_TYPE_HASH_TerrainPatch 0xFD31E1DB
+typedef struct TerrainPatch{
+    const STITypeInfo* type_info_;
+    TerrainMesh TerrainMesh; // offset: 0, size: 224
+    Array_TerrainPrimitive TerrainPrimitive; // offset: 224, size: 16
+    TerrainTexture TerrainDisplacementTexture; // offset: 240, size: 48
+    TerrainTexture TerrainNormalTexture; // offset: 288, size: 48
+    TerrainTexture TerrainTriangleMapTexture; // offset: 336, size: 48
+    TerrainTexture TerrainMaterialDuplexTexture; // offset: 384, size: 48
+    TerrainTexture TerrainColorTexture; // offset: 432, size: 48
+    TerrainTexture TerrainQualityTexture; // offset: 480, size: 48
+    TerrainTexture TerrainIndirectionTexture; // offset: 528, size: 48
+    TerrainTexture TerrainSSDFAtlas; // offset: 576, size: 48
+    uint32 DisplacementDownsampled; // offset: 624, size: 4
+} TerrainPatch; // size: 632
+
+#define STI_TYPE_HASH_TerrainPrimitive 0x45FEA6F5
+typedef struct TerrainPrimitive{
+    const STITypeInfo* type_info_;
+    float32 AABBMin[3]; // offset: 0, size: 12
+    float32 AABBMax[3]; // offset: 12, size: 12
+    float32 MinW; // offset: 24, size: 4
+    float32 MaxW; // offset: 28, size: 4
+} TerrainPrimitive; // size: 32
+
+#define STI_TYPE_HASH_Array_InstanceDataLayer 0x766E412E
+typedef struct Array_InstanceDataLayer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    InstanceDataLayer* items;
+} Array_InstanceDataLayer; // size: 16
+
+#define STI_TYPE_HASH_Array_TerrainPatchInfo 0x6032D156
+typedef struct Array_TerrainPatchInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    TerrainPatchInfo* items;
+} Array_TerrainPatchInfo; // size: 16
+
+#define STI_TYPE_HASH_InstanceDataPatch 0xFD88832A
+typedef struct InstanceDataPatch{
+    const STITypeInfo* type_info_;
+    int32 PatchX; // offset: 0, size: 4
+    int32 PatchZ; // offset: 4, size: 4
+    int32 PatchLod; // offset: 8, size: 4
+    Array_InstanceDataLayer InstanceDataLayers; // offset: 16, size: 16
+    Array_TerrainPatchInfo TerrainPatchInfo; // offset: 32, size: 16
+} InstanceDataPatch; // size: 48
+
+#define STI_TYPE_HASH_Array_VegetationSystemInstance 0xEA0A66F0
+typedef struct Array_VegetationSystemInstance {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationSystemInstance* items;
+} Array_VegetationSystemInstance; // size: 16
+
+#define STI_TYPE_HASH_VegetationBillboardLayerStats 0xA553A921
+typedef struct VegetationBillboardLayerStats{
+    const STITypeInfo* type_info_;
+    uint8 IsRidge; // offset: 0, size: 1
+    uint32 NumInstances; // offset: 4, size: 4
+    uint32 NumOnTreeLine; // offset: 8, size: 4
+    uint32 NumOnRidges; // offset: 12, size: 4
+    uint32 NumCulledBySize; // offset: 16, size: 4
+    uint32 NumCulledByForestMesh; // offset: 20, size: 4
+    uint32 NumCulledBySeaLevel; // offset: 24, size: 4
+    uint32 NumCulledByThinout; // offset: 28, size: 4
+} VegetationBillboardLayerStats; // size: 32
+
+#define STI_TYPE_HASH_VegetationDebugData 0xC7D58849
+typedef struct VegetationDebugData{
+    const STITypeInfo* type_info_;
+    Array_uint16 LocationIndices; // offset: 0, size: 16
+    Array_String LocationNames; // offset: 16, size: 16
+    VegetationBillboardLayerStats Stats; // offset: 32, size: 32
+} VegetationDebugData; // size: 64
+
+#define STI_TYPE_HASH_InstanceDataLayer 0xF8DD7138
+typedef struct InstanceDataLayer{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 Name; // offset: 0, size: 4
+    float32 BoundingMin[3]; // offset: 4, size: 12
+    float32 BoundingMax[3]; // offset: 16, size: 12
+    Array_VegetationSystemInstance Instances; // offset: 32, size: 16
+    Array_uint32 UsedTypes; // offset: 48, size: 16
+    VegetationDebugData VegetationDebugData; // offset: 64, size: 64
+} InstanceDataLayer; // size: 128
+
+#define STI_TYPE_HASH_VegetationSystemInstance 0x1F783B17
+typedef struct VegetationSystemInstance{
+    const STITypeInfo* type_info_;
+    uint16 X; // offset: 0, size: 2
+    uint16 Z; // offset: 2, size: 2
+    uint32 Y; // offset: 4, size: 4
+    uint8 ZoneIndex; // offset: 8, size: 1
+    uint8 IsPlanted; // offset: 8, size: 1
+    uint8 IsDestroyed; // offset: 8, size: 1
+    uint32 Rotation; // offset: 12, size: 4
+    uint8 Color_R; // offset: 16, size: 1
+    uint8 Color_G; // offset: 17, size: 1
+    uint8 Color_B; // offset: 18, size: 1
+    StringHash_48c5294d_4 NameHash; // offset: 20, size: 4
+} VegetationSystemInstance; // size: 24
+
+#define STI_TYPE_HASH_Array_ArrayAABB 0x573FA4BF
+typedef struct Array_ArrayAABB {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ArrayAABB* items;
+} Array_ArrayAABB; // size: 16
+
+#define STI_TYPE_HASH_TerrainPatchInfo 0xB9D80AD4
+typedef struct TerrainPatchInfo{
+    const STITypeInfo* type_info_;
+    int32 PatchX; // offset: 0, size: 4
+    int32 PatchZ; // offset: 4, size: 4
+    int32 PatchLod; // offset: 8, size: 4
+    Array_uint32 TriangleIndices; // offset: 16, size: 16
+    Array_ArrayAABB TriangleQuadTree; // offset: 32, size: 16
+} TerrainPatchInfo; // size: 48
+
+#define STI_TYPE_HASH_ArrayAABB 0x200D0BC9
+typedef struct ArrayAABB{
+    const STITypeInfo* type_info_;
+    uint32 X; // offset: 0, size: 4
+    uint32 Z; // offset: 4, size: 4
+    uint32 Size; // offset: 8, size: 4
+    uint32 Index; // offset: 12, size: 4
+    uint32 Count; // offset: 16, size: 4
+    int16 Children[4]; // offset: 20, size: 8
+} ArrayAABB; // size: 28
 
 #define STI_TYPE_HASH_Array_WorldAudioPatchZoneData 0x165A5795
 typedef struct Array_WorldAudioPatchZoneData {
@@ -8241,37 +12474,33 @@ typedef struct WorldAudioPatchZoneNormalData{
     float32 MedianNormal[3]; // offset: 60, size: 12
 } WorldAudioPatchZoneNormalData; // size: 72
 
-#define STI_TYPE_HASH_AwarenessEventThreats 0x86ECC040
-typedef struct AwarenessEventThreats{
+#define STI_TYPE_HASH_VegetationDataBuffer 0x8F581B21
+typedef struct VegetationDataBuffer{
     const STITypeInfo* type_info_;
-    float32 Death; // offset: 0, size: 4
-    float32 SelfDamaged; // offset: 4, size: 4
-    float32 OthersDamaged; // offset: 8, size: 4
-    float32 CharacterCollision; // offset: 12, size: 4
-    float32 CollideWithPlayerVehicle; // offset: 16, size: 4
-    float32 ThreatPropagation; // offset: 20, size: 4
-    float32 SelfHitByDistraction; // offset: 24, size: 4
-    float32 SelfHitByEMP; // offset: 28, size: 4
-    float32 SelfHitByStun; // offset: 32, size: 4
-    float32 ForcePulse; // offset: 36, size: 4
-    float32 IncomingBullet; // offset: 40, size: 4
-} AwarenessEventThreats; // size: 44
+    Array_uint8 Buffer; // offset: 0, size: 16
+} VegetationDataBuffer; // size: 16
 
-#define STI_TYPE_HASH_PerceptionSettings_E51D96BC 0xE51D96BC
-typedef struct PerceptionSettings_E51D96BC{
+#define STI_TYPE_HASH_Array_ForestVertex 0xDAEE84C4
+typedef struct Array_ForestVertex {
     const STITypeInfo* type_info_;
-    DataLifespans Lifespans; // offset: 0, size: 68
-    AwarenessEventRanges EventRanges; // offset: 68, size: 64
-    AwarenessEventThreats EventThreats; // offset: 132, size: 44
-} PerceptionSettings_E51D96BC; // size: 176
+    uint32 count;
+    ForestVertex* items;
+} Array_ForestVertex; // size: 16
 
-#define STI_TYPE_HASH_AIGlobals_2B15A93E 0x2B15A93E
-typedef struct AIGlobals_2B15A93E{
+#define STI_TYPE_HASH_ForestMesh 0xC2D93166
+typedef struct ForestMesh{
     const STITypeInfo* type_info_;
-    PerceptionSettings_E51D96BC Perception; // offset: 0, size: 176
-    ActionTokenList ActionTokens; // offset: 176, size: 16
-    BlackboardVarList BlackboardVariables; // offset: 192, size: 64
-} AIGlobals_2B15A93E; // size: 256
+    Array_ForestVertex Vertices; // offset: 0, size: 16
+    float32 BoundingMin[3]; // offset: 16, size: 12
+    float32 BoundingMax[3]; // offset: 28, size: 12
+} ForestMesh; // size: 40
+
+#define STI_TYPE_HASH_ForestVertex 0x291C7A90
+typedef struct ForestVertex{
+    const STITypeInfo* type_info_;
+    uint16 Y; // offset: 0, size: 2
+    uint8 Slope[2]; // offset: 2, size: 2
+} ForestVertex; // size: 4
 
 #define STI_TYPE_HASH_Array_WorldAudioZone 0xD576CE35
 typedef struct Array_WorldAudioZone {
@@ -8294,9 +12523,9 @@ typedef struct WorldAudioInfo{
 #define STI_TYPE_HASH_WorldAudioZone 0x18BAF172
 typedef struct WorldAudioZone{
     const STITypeInfo* type_info_;
-    String Name; // offset: 0, size: 16
-    String LoopGuid; // offset: 8, size: 16
-    String DetailGuid; // offset: 16, size: 16
+    String Name; // offset: 0, size: 8
+    String LoopGuid; // offset: 8, size: 8
+    String DetailGuid; // offset: 16, size: 8
     float32 SortBias; // offset: 24, size: 4
     float32 DepthRadius; // offset: 28, size: 4
     float32 Radius; // offset: 32, size: 4
@@ -8317,6 +12546,438 @@ typedef struct WorldAudioZone{
     float32 DebugColor[3]; // offset: 92, size: 12
     uint8 IsAllowedUnderwater; // offset: 104, size: 1
 } WorldAudioZone; // size: 112
+
+#define STI_TYPE_HASH_Array_ImpostorInfo 0x826D2C79
+typedef struct Array_ImpostorInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ImpostorInfo* items;
+} Array_ImpostorInfo; // size: 16
+
+#define STI_TYPE_HASH_ImpostorCollection 0x10074530
+typedef struct ImpostorCollection{
+    const STITypeInfo* type_info_;
+    Array_ImpostorInfo Impostors; // offset: 0, size: 16
+} ImpostorCollection; // size: 16
+
+#define STI_TYPE_HASH_Array_ImpostorVertex 0x940AA886
+typedef struct Array_ImpostorVertex {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ImpostorVertex* items;
+} Array_ImpostorVertex; // size: 16
+
+#define STI_TYPE_HASH_ImpostorMesh 0xE3FD79AC
+typedef struct ImpostorMesh{
+    const STITypeInfo* type_info_;
+    Array_uint16 Indices; // offset: 0, size: 16
+    Array_ImpostorVertex Vertices; // offset: 16, size: 16
+    float32 Size[2]; // offset: 32, size: 8
+    float32 Offset[3]; // offset: 40, size: 12
+    uint8 Single; // offset: 52, size: 1
+} ImpostorMesh; // size: 56
+
+#define STI_TYPE_HASH_ImpostorInfo 0xAA6D6A0E
+typedef struct ImpostorInfo{
+    const STITypeInfo* type_info_;
+    ImpostorMesh ImpostorMesh; // offset: 0, size: 56
+    float32 Transmission; // offset: 56, size: 4
+    float32 SphereNormalInfluence; // offset: 60, size: 4
+    uint16 TreeId; // offset: 64, size: 2
+} ImpostorInfo; // size: 72
+
+#define STI_TYPE_HASH_ImpostorVertex 0x1CFB60D3
+typedef struct ImpostorVertex{
+    const STITypeInfo* type_info_;
+    float32 Position[2]; // offset: 0, size: 8
+    float32 Uvs[2]; // offset: 8, size: 8
+    float32 Normal[2]; // offset: 16, size: 8
+} ImpostorVertex; // size: 24
+
+#define STI_TYPE_HASH_TerrainTextureInfo 0x510C5C3A
+typedef struct TerrainTextureInfo{
+    const STITypeInfo* type_info_;
+    Array_uint8 Data; // offset: 0, size: 16
+    uint32 Width; // offset: 16, size: 4
+    uint32 Height; // offset: 20, size: 4
+    uint32 NumSlices; // offset: 24, size: 4
+} TerrainTextureInfo; // size: 32
+
+#define STI_TYPE_HASH_Array_TerrainColor 0x46DD6C99
+typedef struct Array_TerrainColor {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    TerrainColor* items;
+} Array_TerrainColor; // size: 16
+
+#define STI_TYPE_HASH_Array_ShaderRules 0xD956C9F9
+typedef struct Array_ShaderRules {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ShaderRules* items;
+} Array_ShaderRules; // size: 16
+
+#define STI_TYPE_HASH_TerrainSystem 0x21237EA8
+typedef struct TerrainSystem{
+    const STITypeInfo* type_info_;
+    TerrainTextureInfo TerrainDisplacementTexture; // offset: 0, size: 32
+    TerrainTextureInfo TerrainVariationTexture; // offset: 32, size: 32
+    TerrainTextureInfo TerrainNormalMapTexture; // offset: 64, size: 32
+    float32 TextureTilingMid; // offset: 96, size: 4
+    float32 TextureTilingDetail; // offset: 100, size: 4
+    Array_TerrainColor TerrainMeanColor; // offset: 104, size: 16
+    Array_ShaderRules ShaderRules; // offset: 120, size: 16
+} TerrainSystem; // size: 136
+
+#define STI_TYPE_HASH_TerrainColor 0x8B031E4A
+typedef struct TerrainColor{
+    const STITypeInfo* type_info_;
+    uint8 Red; // offset: 0, size: 1
+    uint8 Green; // offset: 1, size: 1
+    uint8 Blue; // offset: 2, size: 1
+} TerrainColor; // size: 3
+
+#define STI_TYPE_HASH_TerrainMaterial 0x03F547B9
+typedef struct TerrainMaterial{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
+    StringHash_48c5294d_4 VegetationSet; // offset: 4, size: 4
+    StringHash_48c5294d_4 GameMaterial; // offset: 8, size: 4
+    uint8 TextureNearIndex; // offset: 12, size: 1
+    uint8 TextureMidIndex; // offset: 13, size: 1
+    float32 Transmissive; // offset: 16, size: 4
+    float32 ColorInfluence; // offset: 20, size: 4
+    uint8 ColorNear[3]; // offset: 24, size: 3
+    uint8 ColorMid[3]; // offset: 27, size: 3
+    uint8 GroundHaze; // offset: 30, size: 1
+    float32 NormalDampening; // offset: 32, size: 4
+    float32 DisplacementScale; // offset: 36, size: 4
+    float32 DisplacementBias; // offset: 40, size: 4
+    uint8 DisplacementMip; // offset: 44, size: 1
+    float32 BlendScale; // offset: 48, size: 4
+    float32 BlendBias; // offset: 52, size: 4
+} TerrainMaterial; // size: 56
+
+#define STI_TYPE_HASH_ShaderRules 0x12448329
+typedef struct ShaderRules{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
+    StringHash_48c5294d_4 AudioZone; // offset: 4, size: 4
+    uint8 TopographyIndex; // offset: 8, size: 1
+    float32 Rotation[2]; // offset: 12, size: 8
+    uint8 RotationIndex; // offset: 20, size: 1
+    TerrainMaterial VariationMaterials[4]; // offset: 24, size: 224
+    uint8 VariationIndex; // offset: 248, size: 1
+    uint8 InvertVariation; // offset: 249, size: 1
+    uint8 TransitionSlot; // offset: 250, size: 1
+    float32 SlotBlendFactor; // offset: 252, size: 4
+    float32 NormalDetailBalance; // offset: 256, size: 4
+    TerrainMaterial PrimitiveMaterials[4]; // offset: 260, size: 224
+    float32 VariationSlotCenters[4]; // offset: 484, size: 16
+    float32 NormalSlotCenters[4]; // offset: 500, size: 16
+    float32 PrimitiveSlotCenters[4]; // offset: 516, size: 16
+    uint8 ColorNear[3]; // offset: 532, size: 3
+    uint8 ColorMid[3]; // offset: 535, size: 3
+    uint8 DebugColor[3]; // offset: 538, size: 3
+    uint8 ProjectionType; // offset: 541, size: 1
+    float32 DisplacementScale; // offset: 544, size: 4
+    float32 DisplacementBias; // offset: 548, size: 4
+    uint8 DisplacementMip; // offset: 552, size: 1
+    float32 BlendScale; // offset: 556, size: 4
+    float32 BlendBias; // offset: 560, size: 4
+} ShaderRules; // size: 564
+
+#define STI_TYPE_HASH_Array_VegetationForestLayer 0x980B9F7A
+typedef struct Array_VegetationForestLayer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationForestLayer* items;
+} Array_VegetationForestLayer; // size: 16
+
+#define STI_TYPE_HASH_Array_VegetationBillboardLayer 0x05DBB0E4
+typedef struct Array_VegetationBillboardLayer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationBillboardLayer* items;
+} Array_VegetationBillboardLayer; // size: 16
+
+#define STI_TYPE_HASH_Array_VegetationModelLayer 0x918B782D
+typedef struct Array_VegetationModelLayer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationModelLayer* items;
+} Array_VegetationModelLayer; // size: 16
+
+#define STI_TYPE_HASH_Array_VegetationPhysicsLayer 0xE707093D
+typedef struct Array_VegetationPhysicsLayer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationPhysicsLayer* items;
+} Array_VegetationPhysicsLayer; // size: 16
+
+#define STI_TYPE_HASH_VegetationLayers 0x3394E18F
+typedef struct VegetationLayers{
+    const STITypeInfo* type_info_;
+    Array_VegetationForestLayer VegetationForestLayer; // offset: 0, size: 16
+    Array_VegetationBillboardLayer VegetationBillboardLayer; // offset: 16, size: 16
+    Array_VegetationModelLayer VegetationModelLayer; // offset: 32, size: 16
+    Array_VegetationPhysicsLayer VegetationPhysicsLayer; // offset: 48, size: 16
+} VegetationLayers; // size: 64
+
+#define STI_TYPE_HASH_Array_VegetationZone 0x0EF1B60A
+typedef struct Array_VegetationZone {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationZone* items;
+} Array_VegetationZone; // size: 16
+
+#define STI_TYPE_HASH_Array_VegetationObject 0xC5E3777F
+typedef struct Array_VegetationObject {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationObject* items;
+} Array_VegetationObject; // size: 16
+
+#define STI_TYPE_HASH_Array_VegetationSet 0xBEDA8528
+typedef struct Array_VegetationSet {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationSet* items;
+} Array_VegetationSet; // size: 16
+
+#define STI_TYPE_HASH_VegetationZone 0x3DE7F6F8
+typedef struct VegetationZone{
+    const STITypeInfo* type_info_;
+    Array_VegetationSet VegetationSets; // offset: 0, size: 16
+} VegetationZone; // size: 16
+
+#define STI_TYPE_HASH_Array_VegetationIndex 0x8F8B460B
+typedef struct Array_VegetationIndex {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationIndex* items;
+} Array_VegetationIndex; // size: 16
+
+#define STI_TYPE_HASH_VegetationWorld 0x22A653FD
+typedef struct VegetationWorld{
+    const STITypeInfo* type_info_;
+    VegetationLayers VegetationLayers; // offset: 0, size: 64
+    Array_VegetationZone VegetationZones; // offset: 64, size: 16
+    Array_VegetationObject VegetationObjects; // offset: 80, size: 16
+    VegetationZone DefaultVegetationZone; // offset: 96, size: 16
+    Array_VegetationIndex VegetationIndex; // offset: 112, size: 16
+    String BillboardAtlasDiffuse; // offset: 128, size: 8
+    String BillboardAtlasNormal; // offset: 136, size: 8
+    float32 WorldSize[3]; // offset: 144, size: 12
+    ImpostorCollection ImpostorCollection; // offset: 160, size: 16
+} VegetationWorld; // size: 176
+
+#define STI_TYPE_HASH_VegetationForestLayer 0x1D3D4A42
+typedef struct VegetationForestLayer{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
+    int32 ConstructionPipelineWidth; // offset: 4, size: 4
+    int32 PatchLod; // offset: 8, size: 4
+    int32 PatchMapWidth; // offset: 12, size: 4
+    float32 Range; // offset: 16, size: 4
+    float32 Density; // offset: 20, size: 4
+    float32 FadeInStart; // offset: 24, size: 4
+    float32 FadeInRange; // offset: 28, size: 4
+    float32 FadeOutStart; // offset: 32, size: 4
+    float32 FadeOutRange; // offset: 36, size: 4
+    float32 NormalStrength; // offset: 40, size: 4
+    uint32 GlobalTextureTiling; // offset: 44, size: 4
+    String NormalDisplacementMap; // offset: 48, size: 8
+    int32 TextureWidth; // offset: 56, size: 4
+    int32 MeshNumVertices; // offset: 60, size: 4
+} VegetationForestLayer; // size: 64
+
+#define STI_TYPE_HASH_VegetationBillboardLayer 0xDBB46F58
+typedef struct VegetationBillboardLayer{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
+    int32 Channel; // offset: 4, size: 4
+    int32 ConstructionPipelineWidth; // offset: 8, size: 4
+    int32 PatchLod; // offset: 12, size: 4
+    int32 PatchMapWidth; // offset: 16, size: 4
+    float32 Range; // offset: 20, size: 4
+    float32 FadeInStart; // offset: 24, size: 4
+    float32 FadeInRange; // offset: 28, size: 4
+    float32 FadeOutStart; // offset: 32, size: 4
+    float32 FadeOutRange; // offset: 36, size: 4
+    uint32 SourceLayerHash; // offset: 40, size: 4
+} VegetationBillboardLayer; // size: 44
+
+#define STI_TYPE_HASH_VegetationModelLayer 0x2E907B52
+typedef struct VegetationModelLayer{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
+    int32 Channel; // offset: 4, size: 4
+    int32 ConstructionPipelineWidth; // offset: 8, size: 4
+    int32 PatchLod; // offset: 12, size: 4
+    int32 PatchMapWidth; // offset: 16, size: 4
+    float32 Range; // offset: 20, size: 4
+    float32 Density; // offset: 24, size: 4
+    float32 EndFadeRange; // offset: 28, size: 4
+    float32 CrossFadeRange; // offset: 32, size: 4
+    int16 DebugObject; // offset: 36, size: 2
+    float32 OffsetRadius; // offset: 40, size: 4
+    float32 FadeOutStart; // offset: 44, size: 4
+    float32 FadeOutEnd; // offset: 48, size: 4
+} VegetationModelLayer; // size: 52
+
+#define STI_TYPE_HASH_VegetationPhysicsLayer 0xD10F0420
+typedef struct VegetationPhysicsLayer{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
+    int32 ConstructionPipelineWidth; // offset: 4, size: 4
+    int32 PatchLod; // offset: 8, size: 4
+    int32 PatchMapWidth; // offset: 12, size: 4
+    float32 Range; // offset: 16, size: 4
+    uint32 SourceLayerHash; // offset: 20, size: 4
+} VegetationPhysicsLayer; // size: 24
+
+#define STI_TYPE_HASH_Array_ProbabilityBuffer 0x21B7D13F
+typedef struct Array_ProbabilityBuffer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ProbabilityBuffer* items;
+} Array_ProbabilityBuffer; // size: 16
+
+#define STI_TYPE_HASH_VegetationSet 0x63D49D28
+typedef struct VegetationSet{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
+    Array_ProbabilityBuffer ProbabilityBuffer; // offset: 8, size: 16
+    float32 ModelGrassClustering; // offset: 24, size: 4
+} VegetationSet; // size: 32
+
+#define STI_TYPE_HASH_ProbabilityBuffer 0xD94A182E
+typedef struct ProbabilityBuffer{
+    const STITypeInfo* type_info_;
+    Array_int16 Buffer; // offset: 0, size: 16
+    uint8 AnyValidVariation; // offset: 16, size: 1
+} ProbabilityBuffer; // size: 24
+
+#define STI_TYPE_HASH_VegetationModel 0xD69BFB2D
+typedef struct VegetationModel{
+    const STITypeInfo* type_info_;
+    uint16 ModelIndex; // offset: 0, size: 2
+    uint16 ModelHandle; // offset: 2, size: 2
+    uint16 ModelExtraLodsHandle; // offset: 4, size: 2
+    uint8 ShadowCascadeLimit; // offset: 6, size: 1
+    int8 LodCount; // offset: 7, size: 1
+    float32 LodFactor; // offset: 8, size: 4
+    float32 LodBias; // offset: 12, size: 4
+    float32 HalfExtents[3]; // offset: 16, size: 12
+    uint8 ForestColor[3]; // offset: 28, size: 3
+    StringHash_48c5294d_4 ModelFilenameHash; // offset: 32, size: 4
+    StringHash_48c5294d_4 ModelExtraLodsFilenameHash; // offset: 36, size: 4
+    float32 TerrainColoringFactor; // offset: 40, size: 4
+    int16 Impostor; // offset: 44, size: 2
+    uint8 UseBillboard; // offset: 46, size: 1
+    uint8 FarLayer; // offset: 47, size: 1
+    float32 BillboardSize[2]; // offset: 48, size: 8
+    float32 SwayFactor; // offset: 56, size: 4
+    uint8 GlobalIlluminationMask; // offset: 60, size: 1
+    uint8 AlphaBlendLodMask; // offset: 61, size: 1
+    uint8 AlphaFadeLodMask; // offset: 62, size: 1
+    uint8 AlphaThreshold[5]; // offset: 63, size: 5
+    float32 AlphaMultiplier; // offset: 68, size: 4
+    float32 NormalFadeDistance; // offset: 72, size: 4
+    float32 NormalBendNear; // offset: 76, size: 4
+    float32 NormalBendFar; // offset: 80, size: 4
+    float32 SphereNormalFadeInStart; // offset: 84, size: 4
+    float32 SphereNormalFadeInEnd; // offset: 88, size: 4
+    uint32 Flags; // offset: 92, size: 4
+} VegetationModel; // size: 96
+
+#define STI_TYPE_HASH_VegetationPhysics 0xCFC07A39
+typedef struct VegetationPhysics{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 PfxFile; // offset: 0, size: 4
+    StringHash_48c5294d_4 NavmeshPfxFile; // offset: 4, size: 4
+    StringHash_48c5294d_4 StumpFile; // offset: 8, size: 4
+    StringHash_48c5294d_4 PfxStumpFile; // offset: 12, size: 4
+    Array_StringHash_48c5294d_4 BrokenFile; // offset: 16, size: 16
+    Array_StringHash_48c5294d_4 BrokenPfxFile; // offset: 32, size: 16
+    uint16 PhysicsHandle; // offset: 48, size: 2
+    float32 ImpulseLimitPassThrough; // offset: 52, size: 4
+    float32 ImpulseThreshold; // offset: 56, size: 4
+    float32 BreakByBulletLimit; // offset: 60, size: 4
+    float32 BreakByExplosionLimit; // offset: 64, size: 4
+    float32 ExplosiveImpulseModifier; // offset: 68, size: 4
+    float32 AngularLimit; // offset: 72, size: 4
+    float32 Magnitude; // offset: 76, size: 4
+    uint8 BreaksOnCollision; // offset: 80, size: 1
+    uint8 TerrainNormal; // offset: 80, size: 1
+    uint8 HasCollisions; // offset: 80, size: 1
+    uint8 FarModel; // offset: 80, size: 1
+    uint8 IsPebble; // offset: 80, size: 1
+    uint8 IgnorePlayer; // offset: 80, size: 1
+    uint8 IsAiCover; // offset: 80, size: 1
+    uint8 StaticPathfinding; // offset: 81, size: 1
+    uint8 NavmeshUseHull2d; // offset: 82, size: 1
+} VegetationPhysics; // size: 88
+
+#define STI_TYPE_HASH_VegetationEffect 0x526A773D
+typedef struct VegetationEffect{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 BreakEffect; // offset: 0, size: 4
+    StringHash_48c5294d_4 CollideEffect; // offset: 4, size: 4
+    StringHash_48c5294d_4 PassThroughEffect; // offset: 8, size: 4
+    StringHash_48c5294d_4 FastThroughEffect; // offset: 12, size: 4
+    float32 BreakEffectOffset[3]; // offset: 16, size: 12
+    float32 CollideEffectOffset[3]; // offset: 28, size: 12
+    float32 PassThroughEffectOffset[3]; // offset: 40, size: 12
+    String BreakSound; // offset: 56, size: 8
+    String CollideSound; // offset: 64, size: 8
+    String PassThroughSound; // offset: 72, size: 8
+    String FastThroughSound; // offset: 80, size: 8
+    StringHash_48c5294d_4 FallingLeavesEffect; // offset: 88, size: 4
+    int32 PassThroughSoundVolume; // offset: 92, size: 4
+    int32 FoliageDensity; // offset: 96, size: 4
+    StringHash_48c5294d_4 LocatorFile; // offset: 100, size: 4
+} VegetationEffect; // size: 104
+
+#define STI_TYPE_HASH_VegetationPlacementFlags 0x02E7777D
+typedef enum{ // size: 4
+    E_VEGETATIONPLACEMENTFLAGS_NONE = 0,
+    E_VEGETATIONPLACEMENTFLAGS_FLOATS = 1,
+    VegetationPlacementFlags_ForceSize = 0x7FFFFFFF
+} VegetationPlacementFlags;
+
+#define STI_TYPE_HASH_VegetationPlacementSettings 0x1D0F3744
+typedef struct VegetationPlacementSettings{
+    const STITypeInfo* type_info_;
+    float32 SafeRadius; // offset: 0, size: 4
+    float32 TerrainSlopeInfluence; // offset: 4, size: 4
+    float32 ModelColorBegin[3]; // offset: 8, size: 12
+    float32 ModelColorEnd[3]; // offset: 20, size: 12
+    float32 SlopeRangeMaxCos; // offset: 32, size: 4
+    float32 SlopeRangeMinCos; // offset: 36, size: 4
+    float32 HeightVariation; // offset: 40, size: 4
+    VegetationPlacementFlags Flags; // offset: 44, size: 4
+} VegetationPlacementSettings; // size: 48
+
+#define STI_TYPE_HASH_VegetationObject 0xC89F980E
+typedef struct VegetationObject{
+    const STITypeInfo* type_info_;
+    uint8 Index; // offset: 0, size: 1
+    StringHash_48c5294d_4 NameHash; // offset: 4, size: 4
+    StringHash_48c5294d_4 LayerHash; // offset: 8, size: 4
+    VegetationModel Model; // offset: 12, size: 96
+    VegetationPhysics Physics; // offset: 112, size: 88
+    VegetationEffect Effects; // offset: 200, size: 104
+    VegetationPlacementSettings PlacementSettings; // offset: 304, size: 48
+} VegetationObject; // size: 352
+
+#define STI_TYPE_HASH_VegetationIndex 0x083BCB19
+typedef struct VegetationIndex{
+    const STITypeInfo* type_info_;
+    int16 VegetationSetIndex; // offset: 0, size: 2
+    int16 ClimateZoneIndex; // offset: 2, size: 2
+} VegetationIndex; // size: 4
 
 #define STI_TYPE_HASH_GeneralMeshConstants 0x15EEC9DE
 typedef struct GeneralMeshConstants{
@@ -8357,181 +13018,6 @@ typedef struct GeneralR2Constants{
     uint32 UISurface; // offset: 28, size: 4
     uint32 UseColorMask; // offset: 28, size: 4
 } GeneralR2Constants; // size: 32
-
-#define STI_TYPE_HASH_Array_HitEntitySpawn 0xB3B621AD
-typedef struct Array_HitEntitySpawn {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    HitEntitySpawn* items;
-} Array_HitEntitySpawn; // size: 16
-
-#define STI_TYPE_HASH_Array_ProjectileEntitySpawn 0x0D62D9A4
-typedef struct Array_ProjectileEntitySpawn {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ProjectileEntitySpawn* items;
-} Array_ProjectileEntitySpawn; // size: 16
-
-#define STI_TYPE_HASH_CurveAbscissa 0x3E68D2C5
-typedef struct CurveAbscissa{
-    const STITypeInfo* type_info_;
-    float32 distance; // offset: 0, size: 4
-    float32 lifetime; // offset: 4, size: 4
-    float32 charge; // offset: 8, size: 4
-} CurveAbscissa; // size: 12
-
-#define STI_TYPE_HASH_AreaBulletSettings 0xC275272D
-typedef struct AreaBulletSettings{
-    const STITypeInfo* type_info_;
-    float32 hit_radius_start; // offset: 0, size: 4
-    float32 despawn_radius_start; // offset: 4, size: 4
-    float32 despawn_radius_end; // offset: 8, size: 4
-    float32 despawn_sphere_margin; // offset: 12, size: 4
-    uint8 hit_holey_materials; // offset: 16, size: 1
-    uint8 holey_materials_stop_bullet; // offset: 17, size: 1
-} AreaBulletSettings; // size: 20
-
-#define STI_TYPE_HASH_AmmunitionRecoilSettings 0x56B8D197
-typedef struct AmmunitionRecoilSettings{
-    const STITypeInfo* type_info_;
-    float32 recoil_multiplier; // offset: 0, size: 4
-    float32 recoil_first_shot_multiplier; // offset: 4, size: 4
-    float32 recoil_precision_aim_multiplier; // offset: 8, size: 4
-    float32 recoil_recover_perc_multiplier; // offset: 12, size: 4
-    float32 recoil_recover_speed_multiplier; // offset: 16, size: 4
-    float32 recoil_apply_speed_multiplier; // offset: 20, size: 4
-    float32 recoil_sway_multiplier; // offset: 24, size: 4
-} AmmunitionRecoilSettings; // size: 28
-
-#define STI_TYPE_HASH_AmmunitionMagazineSettings 0x07C23A2F
-typedef struct AmmunitionMagazineSettings{
-    const STITypeInfo* type_info_;
-    int32 increased_mag_size; // offset: 0, size: 4
-} AmmunitionMagazineSettings; // size: 4
-
-#define STI_TYPE_HASH_AmmunitionFireModeSettings 0x9B821F83
-typedef struct AmmunitionFireModeSettings{
-    const STITypeInfo* type_info_;
-    float32 fire_delay_multiplier; // offset: 0, size: 4
-} AmmunitionFireModeSettings; // size: 4
-
-#define STI_TYPE_HASH_AmmunitionTuning_51265C00 0x51265C00
-typedef struct AmmunitionTuning_51265C00{
-    const STITypeInfo* type_info_;
-    float32 max_range; // offset: 0, size: 4
-    float32 diameter; // offset: 4, size: 4
-    float32 length; // offset: 8, size: 4
-    float32 ballistic_coefficient_front; // offset: 12, size: 4
-    float32 ballistic_coefficient_side; // offset: 16, size: 4
-    float32 drag_coefficient; // offset: 20, size: 4
-    float32 kinetic_energy; // offset: 24, size: 4
-    float32 mass; // offset: 28, size: 4
-    float32 projectile_damage; // offset: 32, size: 4
-    float32 armour_damage_multiplier; // offset: 36, size: 4
-    float32 organ_damage_multiplier; // offset: 40, size: 4
-    float32 propagate_leftover_damage; // offset: 44, size: 4
-    uint8 projectiles_per_shot; // offset: 48, size: 1
-    String projectile_model_path; // offset: 56, size: 16
-    float32 hit_radius; // offset: 64, size: 4
-    String hit_entity_spawn_tag; // offset: 72, size: 16
-    Array_HitEntitySpawn hit_entity_spawns_on_requirement; // offset: 80, size: 16
-    uint8 hit_entity_spawn_method; // offset: 96, size: 1
-    uint8 hit_entity_spawn_max_count; // offset: 97, size: 1
-    uint8 hit_entity_spawn_on_kill_hit; // offset: 98, size: 1
-    uint8 hit_entity_use_bullet_model; // offset: 99, size: 1
-    uint8 trigger_non_attached_entities; // offset: 100, size: 1
-    uint8 spawn_hit_entity_weapon_controller_only; // offset: 101, size: 1
-    uint8 use_arc_movement; // offset: 102, size: 1
-    uint8 use_staggered_arming; // offset: 103, size: 1
-    uint8 pierce_armor_pieces; // offset: 104, size: 1
-    uint8 spawn_both_bullet_and_projectile_entity; // offset: 105, size: 1
-    String projectile_entity_spawn_tag; // offset: 112, size: 16
-    Array_ProjectileEntitySpawn projectile_entity_spawn_tag_on_requirement; // offset: 120, size: 16
-    float32 scatter_multiplier; // offset: 136, size: 4
-    float32 multi_projectile_scatter_angle; // offset: 140, size: 4
-    Spline5 damage_falloff_curve; // offset: 144, size: 80
-    CurveAbscissa damage_falloff_curve_abscissa; // offset: 224, size: 12
-    Spline5 penetration_falloff_curve; // offset: 236, size: 80
-    CurveAbscissa penetration_falloff_curve_abscissa; // offset: 316, size: 12
-    MissileArcSettings missile_arc_settings; // offset: 328, size: 12
-    ClusterAmmunitionSettings cluster_ammunition_settings; // offset: 344, size: 24
-    AreaBulletSettings area_bullet_settings; // offset: 368, size: 20
-    float32 noise_multiplier; // offset: 388, size: 4
-    AmmunitionRecoilSettings recoil_settings; // offset: 392, size: 28
-    AmmunitionMagazineSettings mag_settings; // offset: 420, size: 4
-    AmmunitionFireModeSettings fire_settings; // offset: 424, size: 4
-} AmmunitionTuning_51265C00; // size: 432
-
-#define STI_TYPE_HASH_Requirement 0x482B29E5
-typedef struct Requirement{
-    const STITypeInfo* type_info_;
-    float32 charge; // offset: 0, size: 4
-    float32 damage; // offset: 4, size: 4
-    float32 lifetime; // offset: 8, size: 4
-} Requirement; // size: 12
-
-#define STI_TYPE_HASH_HitEntity 0x0E2CDB1F
-typedef struct HitEntity{
-    const STITypeInfo* type_info_;
-    String spawn_tag; // offset: 0, size: 16
-} HitEntity; // size: 8
-
-#define STI_TYPE_HASH_HitEntitySpawn 0xD54F2716
-typedef struct HitEntitySpawn{
-    const STITypeInfo* type_info_;
-    Requirement requirement; // offset: 0, size: 12
-    HitEntity hit_entity; // offset: 16, size: 8
-} HitEntitySpawn; // size: 24
-
-#define STI_TYPE_HASH_ProjectileEntitySpawn 0x6ECC35B5
-typedef struct ProjectileEntitySpawn{
-    const STITypeInfo* type_info_;
-    Requirement requirement; // offset: 0, size: 12
-    String spawn_tag; // offset: 16, size: 16
-} ProjectileEntitySpawn; // size: 24
-
-#define STI_TYPE_HASH_ForcePulseSettings_39C734DF 0x39C734DF
-typedef struct ForcePulseSettings_39C734DF{
-    const STITypeInfo* type_info_;
-    uint32 PlayerDamage; // offset: 0, size: 4
-    float32 PlayerDamageRadius; // offset: 4, size: 4
-    float32 PlayerDamageRadiusPercentageMax; // offset: 8, size: 4
-    float32 PlayerDamageRadiusMin; // offset: 12, size: 4
-    uint32 AIDamage; // offset: 16, size: 4
-    float32 AIDamageRadius; // offset: 20, size: 4
-    float32 AIDamageRadiusPercentageMax; // offset: 24, size: 4
-    float32 AIDamageRadiusMin; // offset: 28, size: 4
-    float32 AIAwarenessEventRange; // offset: 32, size: 4
-    String HitEntitySpawnTag; // offset: 40, size: 16
-    String PlayerHitEntitySpawnTag; // offset: 48, size: 16
-    String AIHitEntitySpawnTag; // offset: 56, size: 16
-    uint8 HitEntityAttach; // offset: 64, size: 1
-    uint8 HitEntityTriggerNonAttached; // offset: 65, size: 1
-} ForcePulseSettings_39C734DF; // size: 72
-
-#define STI_TYPE_HASH_CombinedEffectSettings 0x4BCC09AF
-typedef struct CombinedEffectSettings{
-    const STITypeInfo* type_info_;
-    float32 MinImpulseVelocity; // offset: 0, size: 4
-    float32 MaxImpulseVelocity; // offset: 4, size: 4
-    float32 MaxImpulseMass; // offset: 8, size: 4
-    float32 MinScrape; // offset: 12, size: 4
-    float32 MaxScrape; // offset: 16, size: 4
-    float32 FilterTime; // offset: 20, size: 4
-    float32 MinRadius; // offset: 24, size: 4
-    float32 MaxRadius; // offset: 28, size: 4
-    float32 Priority; // offset: 32, size: 4
-    float32 MaxRingingTime; // offset: 36, size: 4
-} CombinedEffectSettings; // size: 40
-
-#define STI_TYPE_HASH_RigidObjectEffects 0xFDCF8095
-typedef struct RigidObjectEffects{
-    const STITypeInfo* type_info_;
-    CombinedEffectSettings Impact; // offset: 0, size: 40
-    CombinedEffectSettings WaterImpact; // offset: 40, size: 40
-    CombinedEffectSettings Sliding; // offset: 80, size: 40
-    float32 SpinningSpeedThreshold; // offset: 120, size: 4
-} RigidObjectEffects; // size: 124
 
 #define STI_TYPE_HASH_GeneralMkIIIConstants 0xD01A8371
 typedef struct GeneralMkIIIConstants{
@@ -8714,231 +13200,6 @@ typedef struct CarPaintMMConstants{
     uint16 Rotating; // offset: 320, size: 2
 } CarPaintMMConstants; // size: 324
 
-#define STI_TYPE_HASH_MotorbikeTurnSettings 0xB10C6BB1
-typedef struct MotorbikeTurnSettings{
-    const STITypeInfo* type_info_;
-    float32 max_turn_angle; // offset: 0, size: 4
-    float32 turn_directional_spring_coeff; // offset: 4, size: 4
-    float32 turn_directional_scale; // offset: 8, size: 4
-} MotorbikeTurnSettings; // size: 12
-
-#define STI_TYPE_HASH_MotorbikeLeanSettings 0x753EAF11
-typedef struct MotorbikeLeanSettings{
-    const STITypeInfo* type_info_;
-    float32 max_lean_angle; // offset: 0, size: 4
-    float32 lean_time_spring_coeff; // offset: 4, size: 4
-    float32 lean_directional_spring_coeff; // offset: 8, size: 4
-    float32 lean_directional_scale; // offset: 12, size: 4
-    float32 max_roll_speed; // offset: 16, size: 4
-    float32 steering_influence; // offset: 20, size: 4
-    float32 roll_speed_influence; // offset: 24, size: 4
-    float32 roll_angle_influence; // offset: 28, size: 4
-} MotorbikeLeanSettings; // size: 32
-
-#define STI_TYPE_HASH_MotorbikeTiltSettings 0x79FB1A03
-typedef struct MotorbikeTiltSettings{
-    const STITypeInfo* type_info_;
-    float32 tilt_time_offset; // offset: 0, size: 4
-    float32 max_tilt_angle; // offset: 4, size: 4
-    float32 tilt_time_spring_coeff; // offset: 8, size: 4
-    float32 tilt_directional_spring_coeff; // offset: 12, size: 4
-    float32 tilt_directional_scale; // offset: 16, size: 4
-    float32 max_pitch_acceleration; // offset: 20, size: 4
-    float32 steering_influence; // offset: 24, size: 4
-    float32 pitch_acceleration_influence; // offset: 28, size: 4
-    float32 pitch_angle_influence; // offset: 32, size: 4
-    float32 max_vertical_acceleration; // offset: 36, size: 4
-    float32 vertical_acceleration_influence; // offset: 40, size: 4
-} MotorbikeTiltSettings; // size: 44
-
-#define STI_TYPE_HASH_MotorbikeAimSettings 0x3B12E100
-typedef struct MotorbikeAimSettings{
-    const STITypeInfo* type_info_;
-    float32 aim_play_speed; // offset: 0, size: 4
-    float32 no_aim_angle_threshold; // offset: 4, size: 4
-    float32 no_aim_ease_in_speed; // offset: 8, size: 4
-    float32 no_aim_ease_out_speed; // offset: 12, size: 4
-} MotorbikeAimSettings; // size: 16
-
-#define STI_TYPE_HASH_MotorbikeMotionComponents 0x7DF9CB35
-typedef struct MotorbikeMotionComponents{
-    const STITypeInfo* type_info_;
-    float32 turn_mid_to_left; // offset: 0, size: 4
-    float32 turn_left_to_mid; // offset: 4, size: 4
-    float32 turn_mid_to_right; // offset: 8, size: 4
-    float32 turn_right_to_mid; // offset: 12, size: 4
-    float32 lean_mid_to_left; // offset: 16, size: 4
-    float32 lean_left_to_mid; // offset: 20, size: 4
-    float32 lean_mid_to_right; // offset: 24, size: 4
-    float32 lean_right_to_mid; // offset: 28, size: 4
-    float32 tilt_bwd_to_fwd; // offset: 32, size: 4
-    float32 tilt_fwd_to_bwd; // offset: 36, size: 4
-    float32 wind_effect; // offset: 40, size: 4
-    float32 exist_effect; // offset: 44, size: 4
-    float32 base_motion; // offset: 48, size: 4
-    float32 aim_cw_to_ccw; // offset: 52, size: 4
-    float32 no_aim_partial; // offset: 56, size: 4
-    float32 recoil_partial; // offset: 60, size: 4
-} MotorbikeMotionComponents; // size: 64
-
-#define STI_TYPE_HASH_MotorbikeDebugSettings 0x7791749E
-typedef struct MotorbikeDebugSettings{
-    const STITypeInfo* type_info_;
-    MotorbikeMotionComponents OverrideNormalizedTimes; // offset: 0, size: 64
-    MotorbikeMotionComponents OverrideWeights; // offset: 64, size: 64
-} MotorbikeDebugSettings; // size: 128
-
-#define STI_TYPE_HASH_CharacterRealizationSettings 0xEBF8A9A3
-typedef struct CharacterRealizationSettings{
-    const STITypeInfo* type_info_;
-    MotorbikeTurnSettings TurnSettings; // offset: 0, size: 12
-    MotorbikeLeanSettings LeanSettings; // offset: 12, size: 32
-    MotorbikeTiltSettings TiltSettings; // offset: 44, size: 44
-    MotorbikeAimSettings AimSettings; // offset: 88, size: 16
-    MotorbikeDebugSettings DebugSettings; // offset: 104, size: 128
-} CharacterRealizationSettings; // size: 232
-
-#define STI_TYPE_HASH_MotorbikeFuelSettings 0xF6434BF3
-typedef struct MotorbikeFuelSettings{
-    const STITypeInfo* type_info_;
-    float32 fuel_base_consumption; // offset: 0, size: 4
-    float32 fuel_velocity_consumption_per_second; // offset: 4, size: 4
-} MotorbikeFuelSettings; // size: 8
-
-#define STI_TYPE_HASH_VehicleMisc_1805B2BE 0x1805B2BE
-typedef struct VehicleMisc_1805B2BE{
-    const STITypeInfo* type_info_;
-    float32 open_door_duration_s; // offset: 0, size: 4
-    float32 close_door_duration_s; // offset: 4, size: 4
-    Array_VehicleDoor doors; // offset: 8, size: 16
-    float32 official_top_speed; // offset: 24, size: 4
-    float32 full_nitro_refill_time; // offset: 28, size: 4
-    float32 nitro_refill_min_speed_kph; // offset: 32, size: 4
-    float32 full_nitro_use_time; // offset: 36, size: 4
-    float32 full_nitro_use_time_upgraded; // offset: 40, size: 4
-    float32 turbo_jump_cooldown; // offset: 44, size: 4
-    float32 turbo_jump_cooldown_upgraded; // offset: 48, size: 4
-    float32 max_landing_speed_kmph; // offset: 52, size: 4
-    float32 max_take_off_speed_kmph; // offset: 56, size: 4
-    float32 max_tilt_to_land_deg; // offset: 60, size: 4
-    float32 min_damage_speed_kph; // offset: 64, size: 4
-    float32 max_damage_speed_kph; // offset: 68, size: 4
-    int32 damage_at_min_speed; // offset: 72, size: 4
-    int32 damage_at_max_speed; // offset: 76, size: 4
-    float32 impulse_resistance; // offset: 80, size: 4
-    MotorbikeFuelSettings fuel_settings; // offset: 84, size: 8
-    PatchProvision patch_provision; // offset: 92, size: 80
-} VehicleMisc_1805B2BE; // size: 176
-
-#define STI_TYPE_HASH_VehicleEffects 0xDBF90EF3
-typedef struct VehicleEffects{
-    const STITypeInfo* type_info_;
-    CombinedEffectSettings Impact; // offset: 0, size: 40
-    CombinedEffectSettings WaterImpact; // offset: 40, size: 40
-    CombinedEffectSettings Sliding; // offset: 80, size: 40
-    CombinedEffectSettings Deform; // offset: 120, size: 40
-    CombinedEffectSettings UnderCarriageImpact; // offset: 160, size: 40
-    CombinedEffectSettings UnderCarriageSlide; // offset: 200, size: 40
-    CombinedEffectSettings PieceImpact; // offset: 240, size: 40
-    CombinedEffectSettings PieceSliding; // offset: 280, size: 40
-    float32 SpinningSpeedThreshold; // offset: 320, size: 4
-} VehicleEffects; // size: 324
-
-#define STI_TYPE_HASH_DriverLean_0A44C93E 0x0A44C93E
-typedef struct DriverLean_0A44C93E{
-    const STITypeInfo* type_info_;
-    float32 t_to_full_lean_min_speed_s; // offset: 0, size: 4
-    float32 t_to_full_lean_max_speed_s; // offset: 4, size: 4
-    float32 lean_start_speed_kmph; // offset: 8, size: 4
-    float32 lean_max_speed_kmph; // offset: 12, size: 4
-    float32 counterlean_speed_factor; // offset: 16, size: 4
-    float32 zerolean_speed_factor; // offset: 20, size: 4
-    float32 lean_speedcurve_falloff; // offset: 24, size: 4
-    float32 max_lean_angle_deg; // offset: 28, size: 4
-    float32 max_drift_lean_angle_deg; // offset: 32, size: 4
-    float32 drift_factor_lean_power; // offset: 36, size: 4
-    float32 lean_damping; // offset: 40, size: 4
-    float32 lean_ratio_for_max_steer; // offset: 44, size: 4
-    float32 lean_p; // offset: 48, size: 4
-    float32 lean_i; // offset: 52, size: 4
-    float32 lean_d; // offset: 56, size: 4
-    float32 lean_pid_max_output; // offset: 60, size: 4
-    float32 max_lean_extra_damping; // offset: 64, size: 4
-    float32 roll_speed_soft_clamp; // offset: 68, size: 4
-} DriverLean_0A44C93E; // size: 72
-
-#define STI_TYPE_HASH_WeaponModTuningSettings 0xEF0C9EDF
-typedef struct WeaponModTuningSettings{
-    const STITypeInfo* type_info_;
-    float32 noise_multiplier; // offset: 0, size: 4
-    float32 muzzle_velocity_multiplier; // offset: 4, size: 4
-    float32 weapon_spread_multiplier; // offset: 8, size: 4
-    float32 recoil_multiplier; // offset: 12, size: 4
-    float32 aim_wobble_multiplier; // offset: 16, size: 4
-    float32 recoil_first_shot_multiplier; // offset: 20, size: 4
-    uint32 increased_mag_size; // offset: 24, size: 4
-    float32 damage_multiplier; // offset: 28, size: 4
-} WeaponModTuningSettings; // size: 32
-
-#define STI_TYPE_HASH_Array_WeaponAttachData 0xFF569B1D
-typedef struct Array_WeaponAttachData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    WeaponAttachData* items;
-} Array_WeaponAttachData; // size: 16
-
-#define STI_TYPE_HASH_ScopeOffsetTransform 0xB5BB6B1C
-typedef struct ScopeOffsetTransform{
-    const STITypeInfo* type_info_;
-    float32 X; // offset: 0, size: 4
-    float32 Y; // offset: 4, size: 4
-    float32 Z; // offset: 8, size: 4
-} ScopeOffsetTransform; // size: 12
-
-#define STI_TYPE_HASH_AttachData 0x463452F1
-typedef struct AttachData{
-    const STITypeInfo* type_info_;
-    Array_WeaponAttachData Weapons; // offset: 0, size: 16
-    ScopeOffsetTransform ScopeCenterOffset; // offset: 16, size: 12
-} AttachData; // size: 32
-
-#define STI_TYPE_HASH_WeaponAttachData 0x8A3548E2
-typedef struct WeaponAttachData{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 WeaponKey; // offset: 0, size: 4
-    StringHash_48c5294d_4 ScopeAttachementBone; // offset: 4, size: 4
-    ScopeOffsetTransform ScopeOffset; // offset: 8, size: 12
-    ScopeOffsetTransform RailOffset; // offset: 20, size: 12
-    ScopeOffsetTransform ScopeAdapterOffset; // offset: 32, size: 12
-} WeaponAttachData; // size: 44
-
-#define STI_TYPE_HASH_Array_EnvParam 0x70C80904
-typedef struct Array_EnvParam {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    EnvParam* items;
-} Array_EnvParam; // size: 16
-
-#define STI_TYPE_HASH_EnvironmentParameters 0xE998CACE
-typedef struct EnvironmentParameters{
-    const STITypeInfo* type_info_;
-    String Name; // offset: 0, size: 16
-    uint32 RenderFeatures; // offset: 8, size: 4
-    Array_EnvParam Parameters; // offset: 16, size: 16
-} EnvironmentParameters; // size: 32
-
-#define STI_TYPE_HASH_EnvParam 0xF0C1376C
-typedef struct EnvParam{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 Name; // offset: 0, size: 4
-    Array_float32 Keys; // offset: 8, size: 16
-    Array_float32 Values; // offset: 24, size: 16
-    int8 Type; // offset: 40, size: 1
-    int8 Curve; // offset: 41, size: 1
-    int8 Blend; // offset: 42, size: 1
-    int8 Operation; // offset: 43, size: 1
-} EnvParam; // size: 48
-
 #define STI_TYPE_HASH_Array_AdfBool 0x05A488F8
 typedef struct Array_AdfBool {
     const STITypeInfo* type_info_;
@@ -8985,7 +13246,7 @@ typedef struct Collection{
 typedef struct CollectibleInfo{
     const STITypeInfo* type_info_;
     uint64 ID; // offset: 0, size: 8
-    String Name; // offset: 8, size: 16
+    String Name; // offset: 8, size: 8
     int8 Type; // offset: 16, size: 1
     uint32 ContentKey; // offset: 20, size: 4
     float32 Position[3]; // offset: 24, size: 12
@@ -8997,160 +13258,6 @@ typedef struct NetworkedCollectible{
     uint64 ID; // offset: 0, size: 8
     uint8 SaveFlags; // offset: 8, size: 1
 } NetworkedCollectible; // size: 16
-
-#define STI_TYPE_HASH_Array_HunterMission_3A58C0DF 0x3A58C0DF
-typedef struct Array_HunterMission_3A58C0DF {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    HunterMission_393FF444* items;
-} Array_HunterMission_3A58C0DF; // size: 16
-
-#define STI_TYPE_HASH_HunterMissionData_C34D2AD9 0xC34D2AD9
-typedef struct HunterMissionData_C34D2AD9{
-    const STITypeInfo* type_info_;
-    Array_HunterMission_3A58C0DF Missions; // offset: 0, size: 16
-} HunterMissionData_C34D2AD9; // size: 16
-
-#define STI_TYPE_HASH_Array_HunterMissionObjective_2F4FAC15 0x2F4FAC15
-typedef struct Array_HunterMissionObjective_2F4FAC15 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    HunterMissionObjective_02D34CF1* items;
-} Array_HunterMissionObjective_2F4FAC15; // size: 16
-
-#define STI_TYPE_HASH_Array_HunterMissionAttachment_978A2639 0x978A2639
-typedef struct Array_HunterMissionAttachment_978A2639 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    HunterMissionAttachment_0A4CE1D3* items;
-} Array_HunterMissionAttachment_978A2639; // size: 16
-
-#define STI_TYPE_HASH_Array_HunterMissionRandomizer 0x3C76FCD6
-typedef struct Array_HunterMissionRandomizer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    HunterMissionRandomizer* items;
-} Array_HunterMissionRandomizer; // size: 16
-
-#define STI_TYPE_HASH_Array_HunterMissionVariable 0xADFD371E
-typedef struct Array_HunterMissionVariable {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    HunterMissionVariable* items;
-} Array_HunterMissionVariable; // size: 16
-
-#define STI_TYPE_HASH_HunterMission_393FF444 0x393FF444
-typedef struct HunterMission_393FF444{
-    const STITypeInfo* type_info_;
-    int32 Id; // offset: 0, size: 4
-    uint8 Enabled; // offset: 4, size: 1
-    uint8 Required; // offset: 5, size: 1
-    uint8 Visible; // offset: 6, size: 1
-    StringHash_48c5294d_4 Type; // offset: 8, size: 4
-    StringHash_48c5294d_4 Name; // offset: 12, size: 4
-    StringHash_48c5294d_4 NameShort; // offset: 16, size: 4
-    StringHash_48c5294d_4 AchievementId; // offset: 20, size: 4
-    StringHash_99cfa095_6 ActivationEvent; // offset: 24, size: 6
-    StringHash_99cfa095_6 CancelEvent; // offset: 30, size: 6
-    Array_SpecificEvent SpecificCancelEvents; // offset: 40, size: 16
-    int32 TimeLimit; // offset: 56, size: 4
-    StringHash_48c5294d_4 Summary; // offset: 60, size: 4
-    StringHash_48c5294d_4 Description; // offset: 64, size: 4
-    StringHash_99cfa095_6 Reward; // offset: 68, size: 6
-    Array_StringHash_48c5294d_4 Locations; // offset: 80, size: 16
-    Array_StringHash_48c5294d_4 Regions; // offset: 96, size: 16
-    uint64 WarboardRegion; // offset: 112, size: 8
-    StringHash_48c5294d_4 WarboardSubType; // offset: 120, size: 4
-    String Banner; // offset: 128, size: 16
-    StringHash_48c5294d_4 Character; // offset: 136, size: 4
-    StringHash_48c5294d_4 ContentKey; // offset: 140, size: 4
-    Array_int32 DependenciesRequired; // offset: 144, size: 16
-    Array_int32 DependenciesOptional; // offset: 160, size: 16
-    uint32 ContentHash; // offset: 176, size: 4
-    uint8 CarryOver; // offset: 180, size: 1
-    uint8 CanCancelCompleted; // offset: 181, size: 1
-    uint8 CanSaveState; // offset: 182, size: 1
-    uint8 ShowInLog; // offset: 183, size: 1
-    Array_HunterMissionObjective_2F4FAC15 Objectives; // offset: 184, size: 16
-    Array_HunterMissionEvent Events; // offset: 200, size: 16
-    Array_HunterMissionAttachment_978A2639 Attachments; // offset: 216, size: 16
-    Array_HunterMissionRandomizer Randomizers; // offset: 232, size: 16
-    Array_HunterMissionVariable Variables; // offset: 248, size: 16
-} HunterMission_393FF444; // size: 264
-
-#define STI_TYPE_HASH_HunterMissionObjective_02D34CF1 0x02D34CF1
-typedef struct HunterMissionObjective_02D34CF1{
-    const STITypeInfo* type_info_;
-    int32 Id; // offset: 0, size: 4
-    uint8 ForceActive; // offset: 4, size: 1
-    uint8 Enabled; // offset: 5, size: 1
-    uint8 Required; // offset: 6, size: 1
-    uint8 Visible; // offset: 7, size: 1
-    uint8 VisibleOnStart; // offset: 8, size: 1
-    uint8 ShowProgression; // offset: 9, size: 1
-    StringHash_48c5294d_4 Name; // offset: 12, size: 4
-    StringHash_48c5294d_4 NameShort; // offset: 16, size: 4
-    int32 TimeLimit; // offset: 20, size: 4
-    uint8 ShowTimer; // offset: 24, size: 1
-    uint8 ShowExclusively; // offset: 25, size: 1
-    uint8 ShowInLog; // offset: 26, size: 1
-    String MarkerName; // offset: 32, size: 16
-    StringHash_99cfa095_6 ShowMarker; // offset: 40, size: 6
-    StringHash_99cfa095_6 HideMarker; // offset: 46, size: 6
-    StringHash_99cfa095_6 ResetEvent; // offset: 52, size: 6
-    StringHash_99cfa095_6 Reward; // offset: 58, size: 6
-    uint8 MultiplayerCompletionMode; // offset: 64, size: 1
-    StringHash_99cfa095_6 ActivateEvent; // offset: 66, size: 6
-    int32 CountRequired; // offset: 72, size: 4
-    int32 InitialCount; // offset: 76, size: 4
-    Array_int32 DependenciesRequired; // offset: 80, size: 16
-    Array_int32 DependenciesOptional; // offset: 96, size: 16
-    HunterMissionRulesGroup Conditions; // offset: 112, size: 24
-    StringHash_99cfa095_6 ForceCompleteEvent; // offset: 136, size: 6
-} HunterMissionObjective_02D34CF1; // size: 144
-
-#define STI_TYPE_HASH_HunterMissionAttachment_0A4CE1D3 0x0A4CE1D3
-typedef struct HunterMissionAttachment_0A4CE1D3{
-    const STITypeInfo* type_info_;
-    int32 Id; // offset: 0, size: 4
-    uint8 ForceActive; // offset: 4, size: 1
-    StringHash_48c5294d_4 Name; // offset: 8, size: 4
-    StringHash_48c5294d_4 NameShort; // offset: 12, size: 4
-    int32 Type; // offset: 16, size: 4
-    StringHash_99cfa095_6 Event; // offset: 20, size: 6
-    StringHash_48c5294d_4 Text; // offset: 28, size: 4
-    StringHash_99cfa095_6 Reward; // offset: 32, size: 6
-    StringHash_99cfa095_6 PlayAudioEvent; // offset: 38, size: 6
-    StringHash_99cfa095_6 StopAudioEvent; // offset: 44, size: 6
-    uint8 Enabled; // offset: 50, size: 1
-    String Image; // offset: 56, size: 16
-    String Entity; // offset: 64, size: 16
-    Array_int32 DependenciesRequired; // offset: 72, size: 16
-    Array_int32 DependenciesOptional; // offset: 88, size: 16
-    uint8 Persist; // offset: 104, size: 1
-} HunterMissionAttachment_0A4CE1D3; // size: 112
-
-#define STI_TYPE_HASH_HunterMissionRandomizer 0x558F4BCD
-typedef struct HunterMissionRandomizer{
-    const STITypeInfo* type_info_;
-    int32 Id; // offset: 0, size: 4
-    StringHash_48c5294d_4 NameShort; // offset: 4, size: 4
-    uint8 Enabled; // offset: 8, size: 1
-    Array_int32 DependenciesRequired; // offset: 16, size: 16
-    Array_int32 DependenciesOptional; // offset: 32, size: 16
-} HunterMissionRandomizer; // size: 48
-
-#define STI_TYPE_HASH_HunterMissionVariable 0x0B39A901
-typedef struct HunterMissionVariable{
-    const STITypeInfo* type_info_;
-    int32 Id; // offset: 0, size: 4
-    StringHash_48c5294d_4 NameShort; // offset: 4, size: 4
-    uint8 Enabled; // offset: 8, size: 1
-    Array_int32 DependenciesRequired; // offset: 16, size: 16
-    Array_int32 DependenciesOptional; // offset: 32, size: 16
-    StringHash_48c5294d_4 Type; // offset: 48, size: 4
-    String Default; // offset: 56, size: 16
-} HunterMissionVariable; // size: 64
 
 #define STI_TYPE_HASH_HairConstants 0x55204F03
 typedef struct HairConstants{
@@ -9302,7 +13409,7 @@ typedef struct Currency{
     uint32 DisplayName; // offset: 12, size: 4
     uint32 DisplayShortName; // offset: 16, size: 4
     uint32 EarnDescription; // offset: 20, size: 4
-    String DisplayIcon; // offset: 24, size: 16
+    String DisplayIcon; // offset: 24, size: 8
 } Currency; // size: 32
 
 #define STI_TYPE_HASH_Array_DifficultyLevel 0xCC2DCA23
@@ -9415,7 +13522,7 @@ typedef struct CraftingData{
     const STITypeInfo* type_info_;
     int32 EquipmentCraftingCategory; // offset: 0, size: 4
     int32 StorageStacking; // offset: 4, size: 4
-    String ImageFileString; // offset: 8, size: 16
+    String ImageFileString; // offset: 8, size: 8
     Array_CraftingResourceData RequiredResources; // offset: 16, size: 16
     Array_CraftingResourceData RecyclingResources; // offset: 32, size: 16
     Array_CraftingItemOption ItemOptions; // offset: 48, size: 16
@@ -9432,13 +13539,13 @@ typedef enum{ // size: 4
 #define STI_TYPE_HASH_Equipment 0xA8872358
 typedef struct Equipment{
     const STITypeInfo* type_info_;
-    String EquipmentName; // offset: 0, size: 16
+    String EquipmentName; // offset: 0, size: 8
     uint32 EquipmentHash; // offset: 8, size: 4
     uint32 EquipmentNoQualityHash; // offset: 12, size: 4
     uint32 DisplayNameHash; // offset: 16, size: 4
     uint32 DisplayDescriptionHash; // offset: 20, size: 4
     uint32 DisplayIconHash; // offset: 24, size: 4
-    String DisplayIconString; // offset: 32, size: 16
+    String DisplayIconString; // offset: 32, size: 8
     uint32 DisplayCompatibilityHash; // offset: 40, size: 4
     uint32 AmmoTypeHash; // offset: 44, size: 4
     uint32 CashPrice; // offset: 48, size: 4
@@ -9458,7 +13565,7 @@ typedef struct Equipment{
     uint8 Quality; // offset: 108, size: 1
     uint32 XPWhenUsed; // offset: 112, size: 4
     uint32 SubCategoryHash; // offset: 116, size: 4
-    String SoundEvent; // offset: 120, size: 16
+    String SoundEvent; // offset: 120, size: 8
     uint8 AcceptsVisionModule; // offset: 128, size: 1
     uint32 AugmentCapacity; // offset: 132, size: 4
     UseMethod UsableFromInventory; // offset: 136, size: 4
@@ -9470,12 +13577,12 @@ typedef struct Equipment{
     uint32 PrimaryColor; // offset: 224, size: 4
     uint32 SecondaryColor; // offset: 228, size: 4
     uint32 DetailColor; // offset: 232, size: 4
-    String FPModelMale; // offset: 240, size: 16
-    String FPModelFemale; // offset: 248, size: 16
-    String TPModelMale; // offset: 256, size: 16
-    String TPModelFemale; // offset: 264, size: 16
-    String DecalSlots; // offset: 272, size: 16
-    String AttributeFile; // offset: 280, size: 16
+    String FPModelMale; // offset: 240, size: 8
+    String FPModelFemale; // offset: 248, size: 8
+    String TPModelMale; // offset: 256, size: 8
+    String TPModelFemale; // offset: 264, size: 8
+    String DecalSlots; // offset: 272, size: 8
+    String AttributeFile; // offset: 280, size: 8
 } Equipment; // size: 288
 
 #define STI_TYPE_HASH_CraftingResourceData 0xCC05F050
@@ -9541,7 +13648,7 @@ typedef struct EquipmentEntity{
 typedef struct EntityDisplayStat{
     const STITypeInfo* type_info_;
     uint32 DisplayName; // offset: 0, size: 4
-    String DisplayText; // offset: 8, size: 16
+    String DisplayText; // offset: 8, size: 8
     uint8 IsNegative; // offset: 16, size: 1
 } EntityDisplayStat; // size: 24
 
@@ -9594,84 +13701,9 @@ typedef struct POIInfo{
     uint32 ToolTipId; // offset: 40, size: 4
     Array_uint64 GlobalShowEvent; // offset: 48, size: 16
     Array_uint64 GlobalHideEvent; // offset: 64, size: 16
-    String LabelKey; // offset: 80, size: 16
-    String DescriptionKey; // offset: 88, size: 16
+    String LabelKey; // offset: 80, size: 8
+    String DescriptionKey; // offset: 88, size: 8
 } POIInfo; // size: 96
-
-#define STI_TYPE_HASH_PlayerHealthSettings_A5910678 0xA5910678
-typedef struct PlayerHealthSettings_A5910678{
-    const STITypeInfo* type_info_;
-    float32 Health; // offset: 0, size: 4
-    float32 InstantKillProtectionThreshold; // offset: 4, size: 4
-    float32 InstantKillProtectionHealth; // offset: 8, size: 4
-    float32 InstantKillProtectionDuration; // offset: 12, size: 4
-    float32 InstantKillHealthMemoryTime; // offset: 16, size: 4
-    Spline5 FallDamageCurve; // offset: 20, size: 80
-    Spline5 DamageCurve; // offset: 100, size: 80
-} PlayerHealthSettings_A5910678; // size: 180
-
-#define STI_TYPE_HASH_EncumbranceSettings 0xB3665C5F
-typedef struct EncumbranceSettings{
-    const STITypeInfo* type_info_;
-    float32 NoStaminaMoveSpeedMul; // offset: 0, size: 4
-    Spline5 MoveStaminaCost; // offset: 4, size: 80
-} EncumbranceSettings; // size: 84
-
-#define STI_TYPE_HASH_Array_StorageLevel 0x4CDBE823
-typedef struct Array_StorageLevel {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    StorageLevel* items;
-} Array_StorageLevel; // size: 16
-
-#define STI_TYPE_HASH_StorageSettings_0884DC88 0x0884DC88
-typedef struct StorageSettings_0884DC88{
-    const STITypeInfo* type_info_;
-    EncumbranceSettings EncumbranceSettings; // offset: 0, size: 84
-    Array_StorageLevel SafehouseStorageLevels; // offset: 88, size: 16
-    Array_StorageLevel ResourceStorageLevels; // offset: 104, size: 16
-} StorageSettings_0884DC88; // size: 120
-
-#define STI_TYPE_HASH_CompanionSchematicCurrencySettings 0x71EE6B0E
-typedef struct CompanionSchematicCurrencySettings{
-    const STITypeInfo* type_info_;
-    uint8 SmallMachineKill; // offset: 0, size: 1
-    uint8 LargeMachineKill; // offset: 1, size: 1
-    uint8 RivalKill; // offset: 2, size: 1
-    uint8 ReaperKill; // offset: 3, size: 1
-    float32 TravelDistance; // offset: 4, size: 4
-    uint8 TravelReward; // offset: 8, size: 1
-} CompanionSchematicCurrencySettings; // size: 12
-
-#define STI_TYPE_HASH_SchematicCurrencySettings 0x68BBFA36
-typedef struct SchematicCurrencySettings{
-    const STITypeInfo* type_info_;
-    CompanionSchematicCurrencySettings CompanionSchematicCurrencySettings; // offset: 0, size: 12
-} SchematicCurrencySettings; // size: 12
-
-#define STI_TYPE_HASH_PlayerSettings_F0FEED9D 0xF0FEED9D
-typedef struct PlayerSettings_F0FEED9D{
-    const STITypeInfo* type_info_;
-    String LocalPlayerExpentity; // offset: 0, size: 16
-    String RemotePlayerExpentity; // offset: 8, size: 16
-    uint8 DisableCharacterCustomization; // offset: 16, size: 1
-    float32 DownedAbandonTime; // offset: 20, size: 4
-    float32 CustomGravity; // offset: 24, size: 4
-    float32 KnockDownForceThreshold; // offset: 28, size: 4
-    PlayerHealthSettings_A5910678 PlayerHealthSettings; // offset: 32, size: 180
-    LowHealthScreenEffectSettings LowHealthScreenEffectSettings; // offset: 212, size: 28
-    PlayerMusicSettings PlayerMusicSettings; // offset: 240, size: 68
-    DamageOverTimeEffectSettings DamageOverTimeEffectSettings; // offset: 308, size: 40
-    StorageSettings_0884DC88 StorageSettings; // offset: 352, size: 120
-    SchematicCurrencySettings SchematicCurrencySettings; // offset: 472, size: 12
-} PlayerSettings_F0FEED9D; // size: 488
-
-#define STI_TYPE_HASH_StorageLevel 0x3ECFAA6B
-typedef struct StorageLevel{
-    const STITypeInfo* type_info_;
-    float32 Capacity; // offset: 0, size: 4
-    String UpgradeCost; // offset: 8, size: 16
-} StorageLevel; // size: 16
 
 #define STI_TYPE_HASH_Array_ProceduralMission 0xC7FBAA69
 typedef struct Array_ProceduralMission {
@@ -9709,8 +13741,8 @@ typedef struct ProceduralMissionInstance{
     uint32 Location; // offset: 20, size: 4
     uint8 TestOnly; // offset: 24, size: 1
     Vec3 Position; // offset: 28, size: 12
-    String MapIconLabel; // offset: 40, size: 16
-    String MapIconDesc; // offset: 48, size: 16
+    String MapIconLabel; // offset: 40, size: 8
+    String MapIconDesc; // offset: 48, size: 8
     int32 ContentKey; // offset: 56, size: 4
     int32 MissionDependency; // offset: 60, size: 4
     uint32 Name; // offset: 64, size: 4
@@ -9760,7 +13792,7 @@ typedef struct Array_AdfShape {
 #define STI_TYPE_HASH_ProceduralSpawn 0x55BBC217
 typedef struct ProceduralSpawn{
     const STITypeInfo* type_info_;
-    String SpawnTag; // offset: 0, size: 16
+    String SpawnTag; // offset: 0, size: 8
     uint32 ContentKey; // offset: 8, size: 4
     MaterialOverride Default; // offset: 12, size: 24
     Array_MaterialOverride Overrides; // offset: 40, size: 16
@@ -10012,51 +14044,6 @@ typedef struct SchematicTreeNode{
     uint8 DisplayMode; // offset: 46, size: 1
 } SchematicTreeNode; // size: 48
 
-#define STI_TYPE_HASH_Array_GlobalFilter 0xEDA5B7A8
-typedef struct Array_GlobalFilter {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    GlobalFilter* items;
-} Array_GlobalFilter; // size: 16
-
-#define STI_TYPE_HASH_Array_Type 0xE85AF305
-typedef struct Array_Type {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    Type* items;
-} Array_Type; // size: 16
-
-#define STI_TYPE_HASH_Settings 0x1B7640FE
-typedef struct Settings{
-    const STITypeInfo* type_info_;
-    Array_GlobalFilter GlobalFilters; // offset: 0, size: 16
-    Array_Type Types; // offset: 16, size: 16
-} Settings; // size: 32
-
-#define STI_TYPE_HASH_GlobalFilter 0x6C575AC6
-typedef struct GlobalFilter{
-    const STITypeInfo* type_info_;
-    float32 MinRetriggerTime; // offset: 0, size: 4
-    float32 MaxRetriggerTime; // offset: 4, size: 4
-    String EnableEvent; // offset: 8, size: 16
-    String DisableEvent; // offset: 16, size: 16
-} GlobalFilter; // size: 24
-
-#define STI_TYPE_HASH_Type 0x38E7C2DB
-typedef struct Type{
-    const STITypeInfo* type_info_;
-    uint32 SettingsNameHash; // offset: 0, size: 4
-    float32 PreDelay; // offset: 4, size: 4
-    float32 MinRetriggerTime; // offset: 8, size: 4
-    float32 MaxRetriggerTime; // offset: 12, size: 4
-    Array_uint32 GlobalFilters; // offset: 16, size: 16
-    uint32 Type; // offset: 32, size: 4
-    uint32 Flags; // offset: 36, size: 4
-    float32 MaxDistance; // offset: 40, size: 4
-    uint32 Priority; // offset: 44, size: 4
-    uint32 MaxTriggerCount; // offset: 48, size: 4
-} Type; // size: 56
-
 #define STI_TYPE_HASH_FoliageMeshConstants 0xA7CACE80
 typedef struct FoliageMeshConstants{
     const STITypeInfo* type_info_;
@@ -10127,106 +14114,6 @@ typedef struct BarkConstants{
     uint8 IgnoreColorTint; // offset: 156, size: 1
 } BarkConstants; // size: 160
 
-#define STI_TYPE_HASH_RcTickSettings 0xBF45821A
-typedef struct RcTickSettings{
-    const STITypeInfo* type_info_;
-    float32 maximum_signal_range; // offset: 0, size: 4
-    float32 warning_signal_range; // offset: 4, size: 4
-    Spline10 signal_strength_noise; // offset: 8, size: 140
-    float32 remote_control_maximum_time; // offset: 148, size: 4
-    float32 camera_delay_start; // offset: 152, size: 4
-    float32 camera_delay_end; // offset: 156, size: 4
-    float32 jump_strength[2]; // offset: 160, size: 8
-    float32 jump_local_to_aim; // offset: 168, size: 4
-} RcTickSettings; // size: 172
-
-#define STI_TYPE_HASH_CompanionSettings 0xBA658830
-typedef struct CompanionSettings{
-    const STITypeInfo* type_info_;
-    int32 heal_amount; // offset: 0, size: 4
-    float32 heal_cooldown; // offset: 4, size: 4
-    float32 heal_duration; // offset: 8, size: 4
-    float32 heal_threshold; // offset: 12, size: 4
-    float32 spot_duration; // offset: 16, size: 4
-    float32 spot_xp_mult; // offset: 20, size: 4
-    float32 spot_damage_mult; // offset: 24, size: 4
-    float32 spot_cooldown; // offset: 28, size: 4
-    float32 scavenge_range; // offset: 32, size: 4
-    float32 scavenge_height; // offset: 36, size: 4
-    float32 scavenge_duration; // offset: 40, size: 4
-    float32 calm_player_range; // offset: 44, size: 4
-    float32 calm_run_range; // offset: 48, size: 4
-    float32 alert_player_range; // offset: 52, size: 4
-    float32 alert_duration; // offset: 56, size: 4
-    float32 teleport_range; // offset: 60, size: 4
-    float32 shutdown_health; // offset: 64, size: 4
-    float32 base_health; // offset: 68, size: 4
-} CompanionSettings; // size: 72
-
-#define STI_TYPE_HASH_FirebirdSettings 0x9B2FBF77
-typedef struct FirebirdSettings{
-    const STITypeInfo* type_info_;
-    float32 bomb_run_desired_height; // offset: 0, size: 4
-    float32 strafe_chance; // offset: 4, size: 4
-} FirebirdSettings; // size: 8
-
-#define STI_TYPE_HASH_WolfSettings 0x11F0041A
-typedef struct WolfSettings{
-    const STITypeInfo* type_info_;
-    float32 chance_reposition; // offset: 0, size: 4
-    float32 heal_weapon_cooldown[2]; // offset: 4, size: 8
-} WolfSettings; // size: 12
-
-#define STI_TYPE_HASH_MachineSettings_CB3BAD92 0xCB3BAD92
-typedef struct MachineSettings_CB3BAD92{
-    const STITypeInfo* type_info_;
-    float32 lured_attack_range; // offset: 0, size: 4
-    float32 check_last_seen_heard; // offset: 4, size: 4
-    int32 max_target_count; // offset: 8, size: 4
-    float32 melee_weapon_range; // offset: 12, size: 4
-    float32 melee_weapon_cooldown[2]; // offset: 16, size: 8
-    float32 support_weapon_range; // offset: 24, size: 4
-    float32 support_weapon_cooldown[2]; // offset: 28, size: 8
-    float32 ranged_weapon_aim_prediction_multiplier; // offset: 36, size: 4
-    float32 machine_damage_multiplier; // offset: 40, size: 4
-} MachineSettings_CB3BAD92; // size: 44
-
-#define STI_TYPE_HASH_AITuningSettings_31B2542A 0x31B2542A
-typedef struct AITuningSettings_31B2542A{
-    const STITypeInfo* type_info_;
-    RcTickSettings RcTickSettings; // offset: 0, size: 172
-    CompanionSettings Companion_Settings; // offset: 172, size: 72
-    FirebirdSettings Firebird_Settings; // offset: 244, size: 8
-    LynxSettings Lynx_Settings; // offset: 252, size: 8
-    HunterAttackSettings Hunter_Attack_Settings; // offset: 260, size: 12
-    DreaAttackSettings DreadnoughtAttackSettings; // offset: 272, size: 8
-    DreaChargeSettings DreadnoughtChargeSettings; // offset: 280, size: 12
-    DreaThermobaricSettings DreadnoughtThermobaricSettings; // offset: 292, size: 32
-    HarvesterSettings HarvesterSettings; // offset: 324, size: 24
-    WolfSettings WolfSettings; // offset: 348, size: 12
-    SmallMachineSettings SmallMachineSettings; // offset: 360, size: 16
-    MachineSettings_CB3BAD92 Machine_Settings; // offset: 376, size: 44
-} AITuningSettings_31B2542A; // size: 420
-
-#define STI_TYPE_HASH_CharacterPhysicsEffects 0x6C5739CA
-typedef struct CharacterPhysicsEffects{
-    const STITypeInfo* type_info_;
-    CombinedEffectSettings RagdollImpact; // offset: 0, size: 40
-    CombinedEffectSettings RagdollSliding; // offset: 40, size: 40
-    float32 SpinningSpeedThreshold; // offset: 80, size: 4
-} CharacterPhysicsEffects; // size: 84
-
-#define STI_TYPE_HASH_SoundFalloff 0x6FFEF00C
-typedef struct SoundFalloff{
-    const STITypeInfo* type_info_;
-    float32 Radius; // offset: 0, size: 4
-    float32 MaxDistance; // offset: 4, size: 4
-    float32 Linearity; // offset: 8, size: 4
-    float32 EnergyRadius; // offset: 12, size: 4
-    float32 VolumeSumBias; // offset: 16, size: 4
-    uint8 DebugPlot; // offset: 20, size: 1
-} SoundFalloff; // size: 24
-
 #define STI_TYPE_HASH_LandmarkConstants 0xE73F3C81
 typedef struct LandmarkConstants{
     const STITypeInfo* type_info_;
@@ -10255,383 +14142,6 @@ typedef struct GeneralConstants{
     uint16 DiffuseChannel; // offset: 8, size: 2
     uint16 AOChannel; // offset: 8, size: 2
 } GeneralConstants; // size: 12
-
-#define STI_TYPE_HASH_StaminaThresholds 0xEF81DAE4
-typedef struct StaminaThresholds{
-    const STITypeInfo* type_info_;
-    float32 SprintThreshold; // offset: 0, size: 4
-} StaminaThresholds; // size: 4
-
-#define STI_TYPE_HASH_CharacterSplineControlPoint 0x39408479
-typedef struct CharacterSplineControlPoint{
-    const STITypeInfo* type_info_;
-    float32 x; // offset: 0, size: 4
-    float32 y; // offset: 4, size: 4
-    float32 y2; // offset: 8, size: 4
-} CharacterSplineControlPoint; // size: 12
-
-#define STI_TYPE_HASH_CharacterSpline10 0xB83445A2
-typedef struct CharacterSpline10{
-    const STITypeInfo* type_info_;
-    float32 x_min; // offset: 0, size: 4
-    float32 x_max; // offset: 4, size: 4
-    float32 y_min; // offset: 8, size: 4
-    float32 y_max; // offset: 12, size: 4
-    int8 number_of_control_points; // offset: 16, size: 1
-    CharacterSplineControlPoint control_points[10]; // offset: 20, size: 120
-} CharacterSpline10; // size: 140
-
-#define STI_TYPE_HASH_WeaponSkillSettings 0x4CB92B3B
-typedef struct WeaponSkillSettings{
-    const STITypeInfo* type_info_;
-    float32 RestingHeartRate; // offset: 0, size: 4
-    float32 MaxHeartRate; // offset: 4, size: 4
-    float32 HeartRateRecoveryCooldown; // offset: 8, size: 4
-    float32 HeartRateRecoverySpeed; // offset: 12, size: 4
-    float32 HeartRateIncreaseSpeed; // offset: 16, size: 4
-    float32 JumpHeartRatePenalty; // offset: 20, size: 4
-    float32 HoldBreathHeartRateThreshold; // offset: 24, size: 4
-    float32 MaxBreathOutPenalty; // offset: 28, size: 4
-    float32 BreathOutPenaltyRate; // offset: 32, size: 4
-    float32 HoldBreathDurationPenaltyScale; // offset: 36, size: 4
-    float32 HoldBreathHeartRatePenalty; // offset: 40, size: 4
-    float32 HoldBreathWobbleScale; // offset: 44, size: 4
-    float32 MinBreathingWobbleScale; // offset: 48, size: 4
-    float32 WobbleEaseInSpeed; // offset: 52, size: 4
-    float32 WobbleEaseOutSpeed; // offset: 56, size: 4
-    float32 StandingWoobleModifier; // offset: 60, size: 4
-    float32 CrouchWoobleModifier; // offset: 64, size: 4
-    float32 CrawlWoobleModifier; // offset: 68, size: 4
-    float32 CameraRotationPenalty; // offset: 72, size: 4
-    float32 CameraAngleDiffForPenalty; // offset: 76, size: 4
-    float32 PenaltyEaseOutSpeed; // offset: 80, size: 4
-    float32 MaxPenalty; // offset: 84, size: 4
-} WeaponSkillSettings; // size: 88
-
-#define STI_TYPE_HASH_Array_MovementSteeringParams 0xFD038990
-typedef struct Array_MovementSteeringParams {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    MovementSteeringParams* items;
-} Array_MovementSteeringParams; // size: 16
-
-#define STI_TYPE_HASH_CharacterFpsSettings 0x7F8C57CA
-typedef struct CharacterFpsSettings{
-    const STITypeInfo* type_info_;
-    StaminaThresholds StaminaThresholds; // offset: 0, size: 4
-    float32 AimSpeedModifier; // offset: 4, size: 4
-    float32 JumpSpeed; // offset: 8, size: 4
-    CharacterSpline10 InputToMovementSpeedCurve; // offset: 12, size: 140
-    WeaponSkillSettings WeaponSkillSettings; // offset: 152, size: 88
-    Array_MovementSteeringParams MovementParams; // offset: 240, size: 16
-} CharacterFpsSettings; // size: 256
-
-#define STI_TYPE_HASH_CharacterOnFootSettings 0x5BF7B765
-typedef struct CharacterOnFootSettings{
-    const STITypeInfo* type_info_;
-    float32 WalkSpeed; // offset: 0, size: 4
-    float32 WalkMaxVelocity; // offset: 4, size: 4
-    float32 WalkMinInput; // offset: 8, size: 4
-    float32 JogMaxVelocity; // offset: 12, size: 4
-    float32 RunSpeed; // offset: 16, size: 4
-    float32 MaxSpeedToPlayStartAnim; // offset: 20, size: 4
-    float32 EnableStarts; // offset: 24, size: 4
-    float32 EnablePlants; // offset: 28, size: 4
-    float32 EnableStops; // offset: 32, size: 4
-} CharacterOnFootSettings; // size: 36
-
-#define STI_TYPE_HASH_CharacterSwimSettings 0xD2314AB5
-typedef struct CharacterSwimSettings{
-    const STITypeInfo* type_info_;
-    float32 SurfaceSwimFullDeflection; // offset: 0, size: 4
-    float32 SurfaceToUnderwaterPitch; // offset: 4, size: 4
-    float32 SurfaceSwimNoInputToStopTime; // offset: 8, size: 4
-} CharacterSwimSettings; // size: 12
-
-#define STI_TYPE_HASH_VelocityFilterSettings 0x534F7900
-typedef struct VelocityFilterSettings{
-    const STITypeInfo* type_info_;
-    float32 gain; // offset: 0, size: 4
-    float32 max_speed; // offset: 4, size: 4
-    float32 max_acceleration; // offset: 8, size: 4
-} VelocityFilterSettings; // size: 12
-
-#define STI_TYPE_HASH_Array_CharacterNavigationSettings 0xB8E51EBA
-typedef struct Array_CharacterNavigationSettings {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    CharacterNavigationSettings* items;
-} Array_CharacterNavigationSettings; // size: 16
-
-#define STI_TYPE_HASH_Array_MovementType 0x146D96CD
-typedef struct Array_MovementType {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    MovementType* items;
-} Array_MovementType; // size: 16
-
-#define STI_TYPE_HASH_CharacterMovementSettings 0x8C3760D4
-typedef struct CharacterMovementSettings{
-    const STITypeInfo* type_info_;
-    CharacterFpsSettings FpsSettings; // offset: 0, size: 256
-    CharacterOnFootSettings OnFootSettings; // offset: 256, size: 36
-    CharacterSwimSettings SwimSettings; // offset: 292, size: 12
-    VelocityFilterSettings VelocityFilterSettings; // offset: 304, size: 12
-    Array_CharacterNavigationSettings NavigationSettings; // offset: 320, size: 16
-    Array_MovementType MovementTypes; // offset: 336, size: 16
-} CharacterMovementSettings; // size: 352
-
-#define STI_TYPE_HASH_MovementSteeringParams 0xD3D817F0
-typedef struct MovementSteeringParams{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_8 MovementType; // offset: 0, size: 8
-    StringHash_48c5294d_8 StanceType; // offset: 8, size: 8
-    float32 Friction; // offset: 16, size: 4
-    float32 Acceleration; // offset: 20, size: 4
-    float32 MinMovementSpeed; // offset: 24, size: 4
-    float32 MaxMovementSpeed; // offset: 28, size: 4
-    float32 MinAnimationSpeed; // offset: 32, size: 4
-    float32 MaxAnimationSpeed; // offset: 36, size: 4
-    float32 TargetHeartRate; // offset: 40, size: 4
-} MovementSteeringParams; // size: 48
-
-#define STI_TYPE_HASH_AvoidanceSettings 0x1D0668F1
-typedef struct AvoidanceSettings{
-    const STITypeInfo* type_info_;
-    float32 WallFollowingAngle; // offset: 0, size: 4
-    float32 DodgingPenalty; // offset: 4, size: 4
-    float32 VelocityHysteresis; // offset: 8, size: 4
-    float32 SidednessChangingPenalty; // offset: 12, size: 4
-    float32 CollisionPenalty; // offset: 16, size: 4
-    float32 PenetrationPenalty; // offset: 20, size: 4
-} AvoidanceSettings; // size: 24
-
-#define STI_TYPE_HASH_CharacterNavigationSettings 0x5244E18C
-typedef struct CharacterNavigationSettings{
-    const STITypeInfo* type_info_;
-    uint8 KinematicConstraintType; // offset: 0, size: 1
-    float32 MinLinearSpeed; // offset: 4, size: 4
-    float32 MaxLinearSpeed; // offset: 8, size: 4
-    float32 MaxLinearAcceleration; // offset: 12, size: 4
-    float32 MaxLinearDeceleration; // offset: 16, size: 4
-    float32 MaxAngularSpeed; // offset: 20, size: 4
-    float32 LeftTurnRadius; // offset: 24, size: 4
-    float32 RightTurnRadius; // offset: 28, size: 4
-    AvoidanceSettings AvoidanceSettings; // offset: 32, size: 24
-} CharacterNavigationSettings; // size: 56
-
-#define STI_TYPE_HASH_MovementType 0x36B033EF
-typedef struct MovementType{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 MovementTypeID; // offset: 0, size: 4
-    float32 DesiredHorizontalSpeed; // offset: 4, size: 4
-    float32 DesiredVerticalSpeed; // offset: 8, size: 4
-    float32 DesiredAltitude; // offset: 12, size: 4
-    float32 DesiredTreeAltitude; // offset: 16, size: 4
-    float32 MinLinearSpeed; // offset: 20, size: 4
-    float32 MaxLinearSpeed; // offset: 24, size: 4
-    float32 MaxLinearAcceleration; // offset: 28, size: 4
-    float32 MaxLinearDeceleration; // offset: 32, size: 4
-    float32 MaxAngularSpeed; // offset: 36, size: 4
-    float32 MaxAngularAcceleration; // offset: 40, size: 4
-    float32 MaxSteeringAngle; // offset: 44, size: 4
-} MovementType; // size: 48
-
-#define STI_TYPE_HASH_Array_BoneData 0x799DEDF7
-typedef struct Array_BoneData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    BoneData* items;
-} Array_BoneData; // size: 16
-
-#define STI_TYPE_HASH_GroundAlignmentBoneAdjustment 0xC72C29CC
-typedef struct GroundAlignmentBoneAdjustment{
-    const STITypeInfo* type_info_;
-    Array_BoneData GroundAlignmentBoneData; // offset: 0, size: 16
-} GroundAlignmentBoneAdjustment; // size: 16
-
-#define STI_TYPE_HASH_GroundAlignmentDataSplines 0xABF9943C
-typedef struct GroundAlignmentDataSplines{
-    const STITypeInfo* type_info_;
-    Spline10 X; // offset: 0, size: 140
-    Spline10 Y; // offset: 140, size: 140
-    Spline10 Z; // offset: 280, size: 140
-} GroundAlignmentDataSplines; // size: 420
-
-#define STI_TYPE_HASH_BoneData 0x82F08092
-typedef struct BoneData{
-    const STITypeInfo* type_info_;
-    Array_StringHash_48c5294d_4 Bones; // offset: 0, size: 16
-    uint8 LocalOrModelSpaceRotation; // offset: 16, size: 1
-    GroundAlignmentDataSplines Position; // offset: 20, size: 420
-    GroundAlignmentDataSplines Rotation; // offset: 440, size: 420
-} BoneData; // size: 864
-
-#define STI_TYPE_HASH_DataSplines 0x80768771
-typedef struct DataSplines{
-    const STITypeInfo* type_info_;
-    Spline10 X; // offset: 0, size: 140
-    Spline10 Y; // offset: 140, size: 140
-    Spline10 Z; // offset: 280, size: 140
-} DataSplines; // size: 420
-
-#define STI_TYPE_HASH_PositionRotation 0x1CBF3642
-typedef struct PositionRotation{
-    const STITypeInfo* type_info_;
-    String Bone; // offset: 0, size: 16
-    DataSplines Position; // offset: 8, size: 420
-    DataSplines Rotation; // offset: 428, size: 420
-} PositionRotation; // size: 848
-
-#define STI_TYPE_HASH_CharacterAimingSettings 0x13DE2B36
-typedef struct CharacterAimingSettings{
-    const STITypeInfo* type_info_;
-    uint8 DebugDraw; // offset: 0, size: 1
-    PositionRotation OffsetPivot; // offset: 8, size: 848
-    PositionRotation OffsetSpineIk; // offset: 856, size: 848
-    PositionRotation OffsetHeadIk; // offset: 1704, size: 848
-    float32 LeftWeight; // offset: 2552, size: 4
-    float32 RightWeight; // offset: 2556, size: 4
-    float32 UpWeight; // offset: 2560, size: 4
-    float32 DownWeight; // offset: 2564, size: 4
-    float32 AimTimer; // offset: 2568, size: 4
-    float32 NoAimUpMinAngle; // offset: 2572, size: 4
-    float32 NoAimUpMaxAngle; // offset: 2576, size: 4
-    float32 NoAimDownMinAngle; // offset: 2580, size: 4
-    float32 NoAimDownMaxAngle; // offset: 2584, size: 4
-    float32 AimUpMinAngle; // offset: 2588, size: 4
-    float32 AimUpMaxAngle; // offset: 2592, size: 4
-    float32 AimDownMinAngle; // offset: 2596, size: 4
-    float32 AimDownMaxAngle; // offset: 2600, size: 4
-} CharacterAimingSettings; // size: 2608
-
-#define STI_TYPE_HASH_CameraInputParams_F42BA99B 0xF42BA99B
-typedef struct CameraInputParams_F42BA99B{
-    const STITypeInfo* type_info_;
-    float32 MaxHorizontalAngularSpeed; // offset: 0, size: 4
-    float32 MaxVerticalAngularSpeed; // offset: 4, size: 4
-    CameraSpline10 InputCurve; // offset: 8, size: 140
-    float32 InputAcceleration; // offset: 148, size: 4
-    float32 InputAccelerationStartAt; // offset: 152, size: 4
-    float32 StaticMouseSensitivity; // offset: 156, size: 4
-    float32 StaticControllerSensitivity; // offset: 160, size: 4
-    float32 ProportionalMouseSensitivity; // offset: 164, size: 4
-    float32 ProportionalControllerSensitivity; // offset: 168, size: 4
-} CameraInputParams_F42BA99B; // size: 172
-
-#define STI_TYPE_HASH_ThirdPersonCameraModifierParams_C9D843E6 0xC9D843E6
-typedef struct ThirdPersonCameraModifierParams_C9D843E6{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    CameraInputParams_F42BA99B InputParams; // offset: 4, size: 172
-    float32 WorldFOV; // offset: 176, size: 4
-    uint8 UseGameSettingsWorldFov; // offset: 180, size: 1
-    String AimAdjustmentSegments[3]; // offset: 184, size: 24
-    AimAssistParams AimAssist; // offset: 208, size: 24
-} ThirdPersonCameraModifierParams_C9D843E6; // size: 232
-
-#define STI_TYPE_HASH_BalloonSettings 0x19E00E29
-typedef struct BalloonSettings{
-    const STITypeInfo* type_info_;
-    float32 InflationTime; // offset: 0, size: 4
-    float32 DeflationTime; // offset: 4, size: 4
-    float32 InflateForce; // offset: 8, size: 4
-    float32 FloatForce; // offset: 12, size: 4
-    float32 FloatHeight; // offset: 16, size: 4
-    float32 FloatBounceDuration; // offset: 20, size: 4
-    float32 FloatBounceStrength; // offset: 24, size: 4
-    float32 FloatDriftResistance; // offset: 28, size: 4
-} BalloonSettings; // size: 32
-
-#define STI_TYPE_HASH_VehicleRumbleEffects 0xAD92D81A
-typedef struct VehicleRumbleEffects{
-    const STITypeInfo* type_info_;
-    float32 BumpDecaySpeed; // offset: 0, size: 4
-    float32 MaxBump; // offset: 4, size: 4
-    float32 DoorCloseBump; // offset: 8, size: 4
-    float32 GearChangeBump; // offset: 12, size: 4
-    float32 MinImpactBumpImpulse; // offset: 16, size: 4
-    float32 ImpactBumpAmount; // offset: 20, size: 4
-    float32 MinScrapeFactor; // offset: 24, size: 4
-    float32 ScrapeBumpAmount; // offset: 28, size: 4
-    float32 RpmHFMinAmount; // offset: 32, size: 4
-    float32 RpmLFAmount; // offset: 36, size: 4
-    float32 RpmLFModulateAmount; // offset: 40, size: 4
-    float32 RpmLFModulateSpeed; // offset: 44, size: 4
-    float32 RpmHFAmount; // offset: 48, size: 4
-    float32 RpmHFModulateAmount; // offset: 52, size: 4
-    float32 RpmHFModulateSpeed; // offset: 56, size: 4
-    float32 LoadLFAmount; // offset: 60, size: 4
-    float32 LoadLFModulateAmount; // offset: 64, size: 4
-    float32 LoadLFModulateSpeed; // offset: 68, size: 4
-    float32 GroundScale; // offset: 72, size: 4
-    float32 GroundModulateSpeed; // offset: 76, size: 4
-    float32 GroundModulateAmount; // offset: 80, size: 4
-    float32 WheelSuspensionAmount; // offset: 84, size: 4
-} VehicleRumbleEffects; // size: 88
-
-#define STI_TYPE_HASH_FirstPersonCameraModifierParams_68D20F76 0x68D20F76
-typedef struct FirstPersonCameraModifierParams_68D20F76{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    CameraInputParams_F42BA99B InputParams; // offset: 4, size: 172
-    float32 ForegroundFOV; // offset: 176, size: 4
-    float32 WorldFOV; // offset: 180, size: 4
-    uint8 UseGameSettingsWorldFov; // offset: 184, size: 1
-    String ForegroundBBKey; // offset: 192, size: 16
-    uint8 ForegroundPitchEnabled; // offset: 200, size: 1
-    String AimAdjustmentSegments[3]; // offset: 208, size: 24
-    uint8 AlignToSurface; // offset: 232, size: 1
-    float32 AlignToSurfaceStiffness; // offset: 236, size: 4
-    float32 ProneAllowedHeightPushUp; // offset: 240, size: 4
-    float32 PronePushUpRayLength; // offset: 244, size: 4
-    float32 PronePushUpRayBackOffset; // offset: 248, size: 4
-    AimAssistParams AimAssist; // offset: 252, size: 24
-} FirstPersonCameraModifierParams_68D20F76; // size: 280
-
-#define STI_TYPE_HASH_FirstPersonVehicleCameraModifierParams_FAE9418D 0xFAE9418D
-typedef struct FirstPersonVehicleCameraModifierParams_FAE9418D{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    CameraInputParams_F42BA99B InputParams; // offset: 4, size: 172
-    float32 ForeGroundFOV; // offset: 176, size: 4
-    float32 WorldFOV; // offset: 180, size: 4
-    uint8 UseGameSettingsWorldFov; // offset: 184, size: 1
-    String ForegroundBBKey; // offset: 192, size: 16
-    float32 VehicleFovMaxIncrease; // offset: 200, size: 4
-    float32 MaxFovOneAngle; // offset: 204, size: 4
-    float32 MaxFovZeroAngle; // offset: 208, size: 4
-    float32 FovVehicleMinSpeed; // offset: 212, size: 4
-    float32 FovVehicleMaxSpeed; // offset: 216, size: 4
-    float32 VehiclePitchScale; // offset: 220, size: 4
-    float32 VehicleRollScale; // offset: 224, size: 4
-    float32 VehiclePitchScaleDotThreshold; // offset: 228, size: 4
-    float32 VehicleRollScaleDotThreshold; // offset: 232, size: 4
-    float32 AutoAlignTime; // offset: 236, size: 4
-    float32 AutoAlignDelay; // offset: 240, size: 4
-    float32 AutoAlignSafeAngle; // offset: 244, size: 4
-    float32 AutoAlignMinimumSpeed; // offset: 248, size: 4
-} FirstPersonVehicleCameraModifierParams_FAE9418D; // size: 256
-
-#define STI_TYPE_HASH_ChaseCameraModifierParams_47801B1C 0x47801B1C
-typedef struct ChaseCameraModifierParams_47801B1C{
-    const STITypeInfo* type_info_;
-    uint8 DrawDebug; // offset: 0, size: 1
-    uint8 BypassModifier; // offset: 1, size: 1
-    CameraInputParams_F42BA99B InputParams; // offset: 4, size: 172
-    float32 SpringCoeffX; // offset: 176, size: 4
-    float32 SpringCoeffY; // offset: 180, size: 4
-    float32 ChaseDelayAfterInput; // offset: 184, size: 4
-    float32 SpeedThreshold; // offset: 188, size: 4
-    float32 MaxSpeed; // offset: 192, size: 4
-    float32 MaxDeltaDolly; // offset: 196, size: 4
-    CameraSpring DollySpring; // offset: 200, size: 12
-    float32 MaxDeltaFOV; // offset: 212, size: 4
-    CameraSpring FOVSpring; // offset: 216, size: 12
-} ChaseCameraModifierParams_47801B1C; // size: 228
 
 
 extern STITypeInfoMap ADF_TYPES_type_info;

@@ -29,7 +29,7 @@ bool SArchive__get_file(const SArchive *archive, const String *path, MemoryBuffe
 
 bool SArchive__get_file_by_hash(const SArchive *archive, const uint32 hash, MemoryBuffer *out) {
     const SArcEntry *entry = DM_get(&archive->entries, hash);
-    if (entry == NULL) return false;
+    if (entry == NULL || entry->offset == 0) return false;
     uint64 buffer_size = 0;
     if (archive->buffer->getsize(archive->buffer, &buffer_size) != BUFFER_SUCCESS)return false;
     if (entry->offset + entry->size > buffer_size) {
@@ -52,7 +52,7 @@ bool SArchive__get_file_by_hash(const SArchive *archive, const uint32 hash, Memo
 const String *SArchive__get_name(const SArchive *archive) {
     StringView name = find_name32_sv(archive->hash);
     if (sv_is_null(name)) {
-        String* tmp_name = String_new(32);
+        String *tmp_name = String_new(32);
         String_format(tmp_name, "SARC 0x%08X", archive->hash);
         return tmp_name;
     }

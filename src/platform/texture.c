@@ -42,6 +42,7 @@ void Texture__decode_texture(Texture *texture, const uint8 *input, const uint32 
 
     switch (format) {
         case DXGI_FORMAT_R16G16B16A16_FLOAT:
+            texture->is_float=true;
         case DXGI_FORMAT_R16G16B16A16_UNORM:
         case DXGI_FORMAT_R16G16B16A16_UINT:
         case DXGI_FORMAT_R16G16B16A16_SNORM:
@@ -333,6 +334,37 @@ void Texture_from_dxgi(Texture *texture, const DDSDXGIFormat format, const int32
     TracyCZoneEnd(ctx);
 }
 
+float32 float16_to_float32(uint16 v) {
+    uint32 sign = (v & 0x8000) << 16;
+    uint32 exponent = (v & 0x7C00) >> 10;
+    uint32 mantissa = v & 0x03FF;
+
+    if (exponent == 0) {
+        if (mantissa == 0) {
+            // Zero
+            return *(float32 *)&sign;
+        } else {
+            // Subnormal number
+            while ((mantissa & 0x0400) == 0) {
+                mantissa <<= 1;
+                exponent--;
+            }
+            exponent++;
+            mantissa &= ~0x0400;
+        }
+    } else if (exponent == 31) {
+        uint32 tmp = (sign | 0x7F800000 | (mantissa << 13));
+        // Inf or NaN
+        return *(float32 *)&tmp;
+    }
+
+    exponent = exponent + (127 - 15);
+    mantissa = mantissa << 13;
+
+    uint32 result = sign | (exponent << 23) | mantissa;
+    return *(float32 *)&result;
+}
+
 void Texture_save(const Texture *texture, const String *path_without_ext) {
     TracyCZoneN(ctx, "Texture_save", 1);
     if (texture->data == NULL || texture->data_size == 0) {
@@ -345,8 +377,19 @@ void Texture_save(const Texture *texture, const String *path_without_ext) {
     Path_ensure_parent_dirs(&path_png);
     if (texture->bpc >= 2 && texture->is_float) {
         String_append_cstr(&path_png, ".hdr");
+        // Expand float16 to float32
+        float* float_image = mp_malloc(texture->width * texture->height * texture->channel_count * sizeof(float));
+        const uint16 *src = (const uint16 *) texture->data;
+        float *dst = float_image;
+        const int pixel_count = texture->width * texture->height;
+        for (int i = 0; i < pixel_count * texture->channel_count; ++i) {
+            dst[i] = float16_to_float32(src[i]);
+        }
+
+
         stbi_write_hdr(String_cstr(&path_png), texture->width, texture->height, texture->channel_count,
-                       (float32 *) texture->data);
+                       float_image);
+        mp_free(float_image);
     } else {
         int32 comp = texture->channel_count;
         if (comp != 1 && comp != 2 && comp != 3 && comp != 4) {

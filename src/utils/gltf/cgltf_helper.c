@@ -8,6 +8,7 @@
 #include "utils/string.h"
 
 #include "assert.h"
+#include "../../../cmake-build-debug-wsl/_deps/cglm-src/include/cglm/affine.h"
 #include "platform/logger.h"
 #include "platform/texture.h"
 #include "utils/hash_helper.h"
@@ -566,7 +567,7 @@ GL_ID GLTFContext_node_add(const GLTFContext *ctx, const char *name_opt, const b
     cgltf_node *n = DA_append_get(&ctx->nodes);
     memset(n, 0, sizeof(*n));
     if (name_opt) {
-        n->name = (char*) (copy_name ? GLTFContext_dupe_cstring(name_opt) : name_opt);
+        n->name = (char *) (copy_name ? GLTFContext_dupe_cstring(name_opt) : name_opt);
     }
     return (GL_ID){ctx->nodes.count - 1};
 }
@@ -593,10 +594,18 @@ void GLTFContext_node_set_parent(const GLTFContext *ctx, const GL_ID node_id, co
     }
 }
 
+// Decompose and set as TRS values
 void GLTFContext_node_set_matrix(const GLTFContext *ctx, const GL_ID node_id, const float *matrix_4x4) {
-    cgltf_node *n = &ctx->nodes.items[node_id.v];
-    memcpy(n->matrix, matrix_4x4, sizeof(n->matrix));
-    n->has_matrix = true;
+    mat4 local_copy;
+    memcpy(local_copy, matrix_4x4, sizeof(mat4));
+    vec4 translation;
+    mat4 m_rotation;
+    vec4 scale;
+    glm_decompose(local_copy, translation, m_rotation, scale);
+
+    versor rotation;
+    glm_mat4_quat(m_rotation, rotation);
+    GLTFContext_node_set_trs(ctx, node_id, translation, rotation, scale);
 }
 
 void GLTFContext_node_set_trs(const GLTFContext *ctx, const GL_ID node_id, const vec3 pos, const versor rot,

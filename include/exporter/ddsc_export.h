@@ -10,7 +10,7 @@
 
 Texture* convert_ddsc(AppState* app_state, uint32 hash);
 
-void export_ddsc(AppState* app_state, uint32 hash, MemoryBuffer *mb);
+void export_ddsc(const AppState* app_state, uint32 hash, MemoryBuffer *mb);
 
 
 #endif //APEXPREDATOR_DDSC_EXPORT_H

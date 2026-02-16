@@ -192,7 +192,7 @@ uint64 RuntimeNode_get_prop_by_hash_objid(const RuntimeNode *node, const uint32 
     return prop->value.objid_value;
 }
 
-DynamicArray_Event *RuntimeNode_get_prop_by_hash_event(const RuntimeNode *node, const uint32 hash) {
+DynamicArray_RuntimeEvent *RuntimeNode_get_prop_by_hash_event(const RuntimeNode *node, const uint32 hash) {
     RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
     if (prop == NULL || prop->type != PROP_TYPE_EVENT) {
         return NULL;
@@ -248,7 +248,7 @@ uint64 RuntimeNode_get_prop_objid(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_objid(node, hash_cstring(name));
 }
 
-DynamicArray_Event *RuntimeNode_get_prop_event(const RuntimeNode *node, const char *name) {
+DynamicArray_RuntimeEvent *RuntimeNode_get_prop_event(const RuntimeNode *node, const char *name) {
     return RuntimeNode_get_prop_by_hash_event(node, hash_cstring(name));
 }
 

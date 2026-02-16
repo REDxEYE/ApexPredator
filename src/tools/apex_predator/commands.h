@@ -141,7 +141,7 @@ static const CommandArgument search_arguments[] = {
 
 void extract_handler(AppState* app_state, const CliResult* cli_res);
 void extract_anims_handler(AppState* app_state, const CliResult* cli_res);
-void search_handler(AppState* app_state, const CliResult* cli_res);
+void search_handler(const AppState* app_state, const CliResult* cli_res);
 
 
 static const SubCommand sub_commands[] = {
@@ -167,7 +167,5 @@ static const SubCommand sub_commands[] = {
         .arguments = search_arguments,
     }
 };
-
-extern const CliSpec cli_spec;
 
 #endif //APEXPREDATOR_COMMANDS_H

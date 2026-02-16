@@ -82,11 +82,18 @@ void process_children(AppState *app_state,
     }
 }
 
-void set_world_matrix(GLTFContext *context, const GL_ID gltf_node, RuntimeNode *node) {
+bool static is_identity_mat(mat4 mat) {
+    return glm_vec4_eqv_eps(mat[0], (vec4){1.0f, 0.0f, 0.0f, 0.0f}) &&
+           glm_vec4_eqv_eps(mat[1], (vec4){0.0f, 1.0f, 0.0f, 0.0f}) &&
+           glm_vec4_eqv_eps(mat[2], (vec4){0.0f, 0.0f, 1.0f, 0.0f}) &&
+           glm_vec4_eqv_eps(mat[3], (vec4){0.0f, 0.0f, 0.0f, 1.0f});
+}
+
+void set_world_matrix(const GLTFContext *context, const GL_ID gltf_node, const RuntimeNode *node) {
     if (!RuntimeNode_has_prop(node, "world"))
         return;
     const float32 *matrix = RuntimeNode_get_prop_mat4x4(node, "world");
-    if (matrix != NULL && memcmp(IDENTITY_MAT, matrix, sizeof(mat4)) != 0)
+    if (matrix != NULL && !is_identity_mat((vec4 *) matrix))
         GLTFContext_node_set_matrix(context, gltf_node, matrix);
 }
 

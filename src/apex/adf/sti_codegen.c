@@ -40,38 +40,37 @@ void STI_start_type_dump(STI_TypeLibrary *lib) {
 
 
 bool is_complex_type(const STI_TypeLibrary *lib, const STI_Type *type) {
-    bool res = false;
     if (type->type == STI_Structure) {
+        bool res = false;
         for (int i = 0; i < type->data.struct_data.members.count; ++i) {
             const STI_Type *member_type = DM_get(&lib->types, type->data.struct_data.members.items[i].type_hash);
-            if (member_type->type == STI_Array) {
+            if (member_type->type == STI_Array || member_type->type == STI_StringType) {
                 return true;
             }
             res |= is_complex_type(lib, member_type);
         }
+        return res;
     }
-    else if (type->type == STI_InlineArray) {
+    if (type->type == STI_InlineArray) {
         const STI_Type *inner_type = DM_get(&lib->types, type->data.array_data.type_hash);
-        res |= is_complex_type(lib, inner_type);
+        return is_complex_type(lib, inner_type) || inner_type->type==STI_StringType;
     }
-    else if (type->type == STI_Pointer) {
+    if (type->type == STI_Pointer) {
         const STI_Type *inner_type = DM_get(&lib->types, type->data.deferred_data.type_hash);
-        res |= is_complex_type(lib, inner_type);
+        return is_complex_type(lib, inner_type);
     }
-    else if (type->type == STI_Alias) {
+    if (type->type == STI_Alias) {
         const STI_Type *inner_type = DM_get(&lib->types, type->data.deferred_data.type_hash);
-        res |= is_complex_type(lib, inner_type);
+        return is_complex_type(lib, inner_type);
     }
-    else if (type->type == STI_Enumeration ||
-             type->type == STI_Primitive ||
-             type->type == STI_Bitfield ||
-             type->type == STI_StringHash) {
-        res = false;
+    if (type->type == STI_Enumeration ||
+        type->type == STI_Primitive ||
+        type->type == STI_Bitfield ||
+        type->type == STI_StringType ||
+        type->type == STI_StringHash) {
+        return false;
     }
-    else {
-        res = true;
-    }
-    return res;
+    return true;
 }
 
 
@@ -133,7 +132,7 @@ void STI_dump_type(STI_TypeLibrary *lib, const STI_Type *type, FILE *output) {
             for (int i = 0; i < members.count; ++i) {
                 fprintf(output, "    %s = %u,\n", String_cstr(&members.items[i].name), members.items[i].value);
             }
-            const uint32 size_force_value = (1 << (type->size * 8 - 1))-1;
+            const uint32 size_force_value = (1 << (type->size * 8 - 1)) - 1;
             fprintf(output, "    %s_ForceSize = 0x%08X\n", String_cstr(&type->name), size_force_value);
             fprintf(output, "} %s;\n", String_cstr(&type->name));
             fprintf(output, "\n");
@@ -170,14 +169,18 @@ void STI_dump_type(STI_TypeLibrary *lib, const STI_Type *type, FILE *output) {
             printf("Unknown type %i\n", type->type);
             assert(false && "Unknown type");
         }
-        fprintf(output, "extern STITypeInfo %s_TI;\n", String_cstr(&type->name));
-
+            fprintf(output, "extern STITypeInfo %s_TI;\n", String_cstr(&type->name));
     }
 }
 
 void STI_generate_init_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output) {
     const bool need_init = is_complex_type(lib, type) || type->type == STI_Array || type->type == STI_Structure;
-    if (!need_init || type->type == STI_InlineArray || type->type == STI_DeferredType || type->type == STI_Alias) {
+    if (!need_init ||
+        type->type == STI_InlineArray ||
+        type->type == STI_DeferredType ||
+        type->type == STI_Alias ||
+        type->type == STI_StringType
+    ) {
         return;
     }
 
@@ -194,11 +197,14 @@ void STI_generate_init_function(const STI_TypeLibrary *lib, const STI_Type *type
             const bool member_is_complex = is_complex_type(lib, member_type);
             const bool member_need_init = member_is_complex || member_type->type == STI_Array || member_type->type ==
                                           STI_Structure;
+
             switch (member_type->type) {
                 case STI_InlineArray: {
                     if (member_need_init) {
-                        const STI_Type *inner_type = STI_TypeLibrary_get_type(
-                            lib, member_type->data.array_data.type_hash);
+                        const STI_Type *inner_type = STI_TypeLibrary_get_type(lib, member_type->data.array_data.type_hash);
+                        if (inner_type->type==STI_StringType) {
+                            continue;
+                        }
                         fprintf(output, "    for(int i = 0; i < %i; ++i) {\n", member_type->data.array_data.count);
                         fprintf(output, "        %s_init(&obj->%s[i]);\n", String_cstr(&inner_type->name),
                                 String_cstr(member_name));
@@ -235,6 +241,7 @@ void STI_generate_read_function(const STI_TypeLibrary *lib, const STI_Type *type
         type->type == STI_Primitive ||
         type->type == STI_Alias ||
         type->type == STI_Bitfield ||
+        type->type == STI_StringType ||
         type->type == STI_StringHash ||
         type->type == STI_DeferredType
     ) {
@@ -379,7 +386,12 @@ void STI_generate_read_function(const STI_TypeLibrary *lib, const STI_Type *type
 
 void STI_generate_free_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output) {
     const bool is_complex = is_complex_type(lib, type);
-    if (!is_complex || type->type == STI_InlineArray || type->type == STI_DeferredType || type->type == STI_Alias) {
+    if (!is_complex ||
+        type->type == STI_InlineArray ||
+        type->type == STI_DeferredType ||
+        type->type == STI_Alias ||
+        type->type == STI_StringType
+        ) {
         return;
     }
 
@@ -391,7 +403,7 @@ void STI_generate_free_function(const STI_TypeLibrary *lib, const STI_Type *type
             const STI_Type *member_type = STI_TypeLibrary_get_type(lib, member->type_hash);
             const String *member_name = &member->name;
 
-            const bool member_is_complex = is_complex_type(lib, member_type);
+            const bool member_is_complex = is_complex_type(lib, member_type) || member_type->type==STI_StringType;
             if (member_is_complex) {
                 switch (member_type->type) {
                     case STI_InlineArray: {
@@ -414,7 +426,7 @@ void STI_generate_free_function(const STI_TypeLibrary *lib, const STI_Type *type
     }
     else if (type->type == STI_Array) {
         const STI_Type *inner_type = STI_TypeLibrary_get_type(lib, type->data.array_data.type_hash);
-        if (is_complex_type(lib, inner_type)) {
+        if (is_complex_type(lib, inner_type) || inner_type->type==STI_StringType) {
             fprintf(output, "    for (uint32 i = 0; i < obj->count; ++i) {\n");
             fprintf(output, "        %s_free(&obj->items[i]);\n", String_cstr(&inner_type->name));
             fprintf(output, "    }\n");
@@ -432,6 +444,7 @@ void STI_generate_print_function(const STI_TypeLibrary *lib, const STI_Type *typ
         type->type == STI_Bitfield ||
         type->type == STI_StringHash ||
         type->type == STI_Alias ||
+        type->type == STI_StringType ||
         type->type == STI_InlineArray
     ) {
         return;
@@ -453,7 +466,7 @@ void STI_generate_print_function(const STI_TypeLibrary *lib, const STI_Type *typ
                 const STI_Type *inner_type = STI_TypeLibrary_get_type(
                     lib, member_type->data.array_data.type_hash);
                 fprintf(output,
-                        "    jsonBeginCompactObject(ctx);\n"
+                        "    jsonBeginCompactArray(ctx);\n"
                         "    for (uint32 i = 0; i < %i; ++i) {\n"
                         "        %s_print(&obj->%s[i], ctx);\n"
                         "    }\n"
@@ -485,6 +498,24 @@ void STI_generate_print_function(const STI_TypeLibrary *lib, const STI_Type *typ
                 String_cstr(&inner_array_type->name)
         );
     }
+    else if (type->type == STI_Enumeration) {
+        if (type->data.enum_data.members.count > 0) {
+            fprintf(output,
+                    "    switch(*obj) {\n");
+            const DynamicArray_STI_EnumMember members = type->data.enum_data.members;
+            for (int i = 0; i < members.count; ++i) {
+                fprintf(output,
+                        "        case %s: jsonValueStr(ctx, \"%s\"); break;\n",
+                        String_cstr(&members.items[i].name), String_cstr(&members.items[i].name));
+            }
+            fprintf(output,
+                    "        default: jsonValueNum(ctx, *obj); break;\n"
+                    "    }\n");
+        }
+        else {
+            fprintf(output, "    jsonValueNum(ctx, *obj);\n");
+        }
+    }
     fprintf(output, "}\n\n");
 }
 
@@ -504,6 +535,7 @@ void STI_generate_register_function(STI_TypeLibrary *lib, const String *namespac
             type->type == STI_Alias ||
             type->type == STI_Bitfield ||
             type->type == STI_Pointer ||
+            type->type == STI_StringType ||
             type->type == STI_DeferredType
         ) {
             continue;
@@ -531,6 +563,7 @@ void forward_declare_functions(const STI_TypeLibrary *lib, const STI_Type *type,
         type->type == STI_Alias ||
         type->type == STI_StringHash ||
         type->type == STI_Bitfield ||
+        type->type == STI_StringType ||
         type->type == STI_DeferredType
     ) {
         return;
@@ -572,7 +605,10 @@ void generate_type_info(const STI_TypeLibrary *lib, const STI_Type *type, FILE *
     //     const char* name;
     // }STITypeInfo;
     fprintf(out, "STITypeInfo %s_TI = {\n", String_cstr(&type->name));
-    if (is_complex_type(lib, type)) {
+    const bool is_complex = is_complex_type(lib, type);
+    const bool need_init = is_complex || type->type == STI_Array || type->type == STI_Structure;
+
+    if (need_init) {
         fprintf(out, "    .init = (initSTIObject)%s_init,\n", String_cstr(&type->name));
     }
     else {
