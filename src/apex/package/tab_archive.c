@@ -83,15 +83,28 @@ TabArchive *TabArchive_new(const String *path) {
     return ar;
 }
 
+void TabArchives_init(const ArchiveManager *manager, const String *game_root) {
+    TracyCZoneN(ctx, "TabArchives_init", 1);
+    DynamicArray_Path archive_paths = {0};
+
+    static String tab_ext = {0};
+    if (String_size(&tab_ext)==0) {
+        String_from_cstr(&tab_ext, ".tab");
+    }
+
+    Path_rglob(game_root, &tab_ext, &archive_paths);
+    for (uint32 i = 0; i < archive_paths.count; ++i) {
+        TabArchive* archive = TabArchive_new(DA_at(&archive_paths, i));
+        ArchiveManager_add(manager, (Archive*)archive);
+    }
+    DA_free_with_inner(&archive_paths, { String_free(it); });
+    TracyCZoneEnd(ctx);
+}
+
 void TabArchive__open(TabArchive *ar, const String *path) {
     TracyCZoneN(ctx, "TabArchive__open", 1);
     GLog_Info("Opening tab archive: %s", String_cstr(path));
     String_copy_from(&ar->tab_path, path);
-
-    String arc_path = {0};
-    Path_replace_extension(path, "arc", &arc_path);
-    FileBuffer_open_read(&ar->arc_buffer, String_cstr(&arc_path));
-    String_free(&arc_path);
 
     FileBuffer tab_buffer = {0};
     if (FileBuffer_open_read(&tab_buffer, String_cstr(path)) != BUFFER_SUCCESS) {
@@ -100,13 +113,17 @@ void TabArchive__open(TabArchive *ar, const String *path) {
         return;
     }
 
+    String arc_path = {0};
+    Path_replace_extension(path, "arc", &arc_path);
+    FileBuffer_open_read(&ar->arc_buffer, String_cstr(&arc_path));
+    String_free(&arc_path);
+    
     TabHeader header;
     tab_buffer.read(&tab_buffer, &header, sizeof(header),NULL);
     TabEntry entry;
 
     BufferError error;
     const uint32 entry_count = Buffer_remaining((Buffer *) &tab_buffer, &error) / sizeof(TabEntry);
-    // GLog_Info("Tab archive version: %u.%u, entry count: %u", header.wMajorVersion, header.wMinorVersion, entry_count);
     DM_init(&ar->entries, TabEntry, entry_count);
     for (int i = 0; i < entry_count; i++) {
         error = tab_buffer.read(&tab_buffer, &entry, sizeof(TabEntry), NULL);
@@ -118,7 +135,6 @@ void TabArchive__open(TabArchive *ar, const String *path) {
         *(TabEntry *) DM_insert(&ar->entries, entry.hash) = entry;
     }
     tab_buffer.close(&tab_buffer);
-    // GLog_Info("Loaded %u entries from tab archive: %s", ar->entries.values.count, String_cstr(path));
     TracyCZoneEnd(ctx);
 }
 
@@ -131,8 +147,8 @@ bool TabArchive__get_file(TabArchive *ar, const String *path, MemoryBuffer *mb) 
     return TabArchive__get_file_by_hash(ar, hash, mb);
 }
 
-bool TabArchive__get_file_by_hash(TabArchive *ar, const uint32 key, MemoryBuffer *mb) {
-    const TabEntry *entry = Archive__find_entry(ar, key);
+bool TabArchive__get_file_by_hash(TabArchive *ar, const uint32 hash, MemoryBuffer *mb) {
+    const TabEntry *entry = Archive__find_entry(ar, hash);
     if (entry == NULL) {
         return false;
     }
@@ -152,7 +168,7 @@ bool TabArchive__get_file_by_hash(TabArchive *ar, const uint32 key, MemoryBuffer
 }
 
 bool TabArchive__has_file(const TabArchive *ar, const String *path) {
-    uint32 hash = hash_string(path);
+    const uint32 hash = hash_string(path);
     return DM_get(&ar->entries, hash) != NULL;
 }
 

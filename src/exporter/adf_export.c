@@ -275,7 +275,7 @@ void export_terrain_patch(AppState *app_state, const StreamPatchBlockHeader *hea
                                                               false,
                                                               12,
                                                               0);
-    GLTFContext_primitive_set_attribute_accessor(context, mesh_id, 0, 0, positions_accessor, "POSITION");
+    GLTFContext_primitive_set_attribute_accessor(context, mesh_id, 0, 0, positions_accessor, "POSITION", cgltf_attribute_type_position);
 
     GL_ID normals_accessor = GLTFContext_accessor_from_data(context,
                                                             DA_get_buffer(&normals),
@@ -288,7 +288,7 @@ void export_terrain_patch(AppState *app_state, const StreamPatchBlockHeader *hea
                                                             false,
                                                             12,
                                                             0);
-    GLTFContext_primitive_set_attribute_accessor(context, mesh_id, 0, 1, normals_accessor, "NORMAL");
+    GLTFContext_primitive_set_attribute_accessor(context, mesh_id, 0, 1, normals_accessor, "NORMAL", cgltf_attribute_type_normal);
 
     GL_ID uv_accessor = GLTFContext_accessor_from_data(context,
                                                        DA_get_buffer(&uv),
@@ -301,7 +301,7 @@ void export_terrain_patch(AppState *app_state, const StreamPatchBlockHeader *hea
                                                        false,
                                                        8,
                                                        0);
-    GLTFContext_primitive_set_attribute_accessor(context, mesh_id, 0, 2, uv_accessor, "TEXCOORD_0");
+    GLTFContext_primitive_set_attribute_accessor(context, mesh_id, 0, 2, uv_accessor, "TEXCOORD_0", cgltf_attribute_type_texcoord);
 
     GL_ID indices_accessor = GLTFContext_create_indices_accessor_from_data(
         context,

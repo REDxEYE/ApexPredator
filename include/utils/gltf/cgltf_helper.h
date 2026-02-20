@@ -67,6 +67,7 @@ DYNAMIC_ARRAY_STRUCT(GL_ID, GL_ID);
 typedef struct GLTFContext {
     cgltf_data *data;
     cgltf_options options;
+    bool merge_buffers;
 
     String save_path;
 
@@ -92,7 +93,7 @@ typedef struct GLTFContext {
 static inline TagGL_ID gltf_tag_index(const GL_ID idx) { return (TagGL_ID){(void *) (uintptr_t) (idx.v + 1u)}; }
 static inline GL_ID gltf_untag_index(void *p) { return (GL_ID){((uintptr_t) p) - 1u}; }
 static inline TagD_ID gltf_tag_data_id(const D_ID id) { return (TagD_ID){(void *) (uintptr_t) (id.v + 1u)}; }
-static inline D_ID gltf_untag_data_id(const char *p) { return (D_ID){((uintptr_t) p) - 1u}; }
+static inline D_ID gltf_untag_data_id(void *p) { return (D_ID){((uintptr_t) p) - 1u}; }
 
 char *GLTFContext_dupe_cstring(const char *name);
 
@@ -173,7 +174,8 @@ void GLTFContext_accessor_set_minmax(const GLTFContext *ctx, GL_ID accessor_id, 
                                      const float *max_values);
 
 void GLTFContext_primitive_set_attribute_accessor(const GLTFContext *ctx, GL_ID mesh_id, uint32 prim_index,
-                                                  uint32 attribute_index, GL_ID accessor_id, const char *name);
+                                                  uint32 attribute_index, GL_ID accessor_id,
+                                                  const char *name, cgltf_attribute_type type);
 
 bool GLTFContext_write_and_free(GLTFContext *ctx);
 

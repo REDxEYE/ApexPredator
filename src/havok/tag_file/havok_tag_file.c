@@ -20,14 +20,6 @@ TagHeader expect_tag(Buffer *buffer, const char *expected_ident) {
     }
     if (memcmp(header.ident, expected_ident, 4) != 0) {
         GLog_Error("Expected tag %.4s but got %.4s", expected_ident, header.ident);
-        FILE *tmp = fopen("weird_file.tag", "wb");
-        buffer->set_position(buffer, 0, BUFFER_ORIGIN_START);
-        uint8 buf[1024];
-        uint32 read_bytes = 0;
-        while ((buffer->read(buffer, buf, 1024, &read_bytes) == BUFFER_SUCCESS) && read_bytes > 0) {
-            fwrite(buf, 1, read_bytes, tmp);
-        }
-        fclose(tmp);
         abort();
     }
     return header;
@@ -43,7 +35,7 @@ int64 read_compressed_int(Buffer *buffer) {
         return b0;
     }
 
-    uint8 b0_shift3 = b0 >> 3;
+    const uint8 b0_shift3 = b0 >> 3;
     switch (b0_shift3) {
         case 0x10:
         case 0x11:

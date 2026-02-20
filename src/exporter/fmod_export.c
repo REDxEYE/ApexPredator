@@ -1,6 +1,6 @@
 // Created by RED on 09.02.2026.
 
-#include "exporter/export_fmod.h"
+#include "exporter/fmod_export.h"
 #include "apex/hashes.h"
 
 #include "platform/logger.h"
@@ -8,6 +8,7 @@
 #include "vorbis_headers.h"
 
 #include "ogg/ogg.h"
+#include "utils/simple_fileio.h"
 #include "vorbis/codec.h"
 
 
@@ -172,8 +173,6 @@ static int ilog2_u32(uint32_t x) {
     }
     return r;
 }
-
-/* --------------------------- header construction -------------------------- */
 
 static int build_id_header(ogg_packet *op, const uint8_t channels, const uint32_t rate,
                            const uint32_t block_short, const uint32_t block_long,
@@ -497,14 +496,8 @@ void process_fsb(RIFFContext *ctx, MemoryBuffer *mb) {
     }
 }
 
-void export_fmod_bank(const AppState *app_state, const uint32 path_hash) {
+void export_fmod_bank(const AppState *app_state, const uint32 path_hash, MemoryBuffer *buffer) {
     CHECK_APP_STATE(app_state);
-
-    MemoryBuffer mb = {0};
-    if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, path_hash, &mb)) {
-        GLog_Error("Failed to read FMOD bank with hash %u", path_hash);
-        return;
-    }
 
     String bank_output_path = {0};
     String_copy_from(&bank_output_path, &app_state->export_path);
@@ -521,7 +514,7 @@ void export_fmod_bank(const AppState *app_state, const uint32 path_hash) {
     Path_ensure_dirs(&bank_output_path);
 
     RIFFHeader riff_header;
-    R_CHECK(mb.read(&mb, &riff_header, sizeof(RIFFHeader), NULL), "Failed to read RIFF header from FMOD bank");
+    R_CHECK(buffer->read(buffer, &riff_header, sizeof(RIFFHeader), NULL), "Failed to read RIFF header from FMOD bank");
 
     if (memcmp(riff_header.chunk_id, "RIFF", 4) != 0) {
         GLog_Error("Invalid RIFF header in FMOD bank with hash %u", path_hash);
@@ -534,24 +527,24 @@ void export_fmod_bank(const AppState *app_state, const uint32 path_hash) {
     }
     RIFFContext ctx = {0};
 
-    while (mb.position < mb.size) {
-        // process_chunk(&ctx, (Buffer*)&mb);
+    while (buffer->position < buffer->size) {
+        // process_chunk(&ctx, (Buffer*)buffer);
         RIFFChunk chunk;
-        R_CHECK(mb.read(&mb, &chunk,sizeof(RIFFChunk), NULL), "Failed to read RIFF chunk header from FMOD bank");
+        R_CHECK(buffer->read(buffer, &chunk,sizeof(RIFFChunk), NULL), "Failed to read RIFF chunk header from FMOD bank");
         if (memcmp(chunk.id, "SND ", 4) == 0) {
             int64 data_offset;
-            R_CHECK(mb.get_position(&mb, &data_offset), "Failed to get current position in FMOD bank for SND chunk");
+            R_CHECK(buffer->get_position(buffer, &data_offset), "Failed to get current position in FMOD bank for SND chunk");
             // Align offset to 16
             const int64 aligned_offset = (data_offset + 31) & ~31;
             const int64 fsb_size = chunk.size - (aligned_offset - data_offset);
             MemoryBuffer *fsb_subbuffer = MemoryBuffer_new();
-            R_CHECK(MemoryBuffer_make_sub_buffer(fsb_subbuffer, &mb, aligned_offset, fsb_size),
+            R_CHECK(MemoryBuffer_make_sub_buffer(fsb_subbuffer, buffer, aligned_offset, fsb_size),
                     "Failed to create sub-buffer for SND chunk data in FMOD bank");
-            R_CHECK(mb.skip(&mb, chunk.size), "Failed to skip SND chunk data in FMOD bank");
+            R_CHECK(buffer->skip(buffer, chunk.size), "Failed to skip SND chunk data in FMOD bank");
             process_fsb(&ctx, fsb_subbuffer);
         }
         else {
-            R_CHECK(mb.skip(&mb, chunk.size), "Failed to skip RIFF chunk data in FMOD bank");
+            R_CHECK(buffer->skip(buffer, chunk.size), "Failed to skip RIFF chunk data in FMOD bank");
         }
     }
     Path_ensure_dirs(&bank_output_path);
@@ -567,16 +560,9 @@ void export_fmod_bank(const AppState *app_state, const uint32 path_hash) {
         MemoryBuffer *ogg_buffer = MemoryBuffer_new();
         MemoryBuffer_allocate(ogg_buffer, 1024 * 1024); // 1 MB initial size, will grow if needed
         if (rebuild_fsb_vorbis_to_ogg(sample, ogg_buffer)) {
-            FILE *f = fopen(String_cstr(&sample_output_path), "wb");
-            if (f) {
-                fwrite(ogg_buffer->data, 1, ogg_buffer->position, f);
-                fclose(f);
-                GLog_Info("Exported sample \"%s\" to \"%s\"", String_cstr(&sample->name),
-                          String_cstr(&sample_output_path));
-            }
-            else {
-                GLog_Error("Failed to open file for writing Ogg data for sample in FMOD bank: %s",
-                           String_cstr(&sample_output_path));
+
+            if (!write_file(String_cstr(&sample_output_path), ogg_buffer->data, ogg_buffer->position)) {
+                GLog_Error("Failed to write Ogg file for sample in FMOD bank: %s", String_cstr(&sample_output_path));
             }
             ogg_buffer->close(ogg_buffer);
         }
@@ -589,5 +575,5 @@ void export_fmod_bank(const AppState *app_state, const uint32 path_hash) {
 
     RIFFContext_free(&ctx);
 
-    mb.close(&mb);
+    buffer->close(buffer);
 }

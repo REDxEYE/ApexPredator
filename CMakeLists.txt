@@ -56,10 +56,6 @@ FetchContent_Declare(
         GIT_TAG v1.3.6
 )
 FetchContent_MakeAvailable(ogg)
-#
-#if(TARGET ogg AND NOT TARGET Ogg::ogg)
-#    add_library(Ogg::ogg ALIAS ogg)
-#endif()
 
 set(OGG_FOUND TRUE CACHE BOOL "" FORCE)
 set(OGG_INCLUDE_DIR "${ogg_SOURCE_DIR}/include" CACHE PATH "" FORCE)
@@ -82,8 +78,6 @@ add_library(AdfLib STATIC
         src/utils/memory_profiler.c
         src/utils/memory_tracker.c
         src/apex/adf/adf_support_types.c
-        src/tools/builtin_adf_dumper/patterns.c
-        src/tools/builtin_adf_dumper/patterns.h
 )
 
 add_library(HavokLib STATIC
@@ -107,9 +101,9 @@ SET(CommonFiles
         src/apex/package/tab_archive.c
         src/apex/rtpc.c
         src/apex/sarc.c
+        src/havok/havok_types.c
         src/havok/tag_file/havok_tag_file.c
         src/havok/tag_file/havok_tag_types.c
-        src/havok/havok_types.c
         src/platform/app_state.c
         src/platform/archive.c
         src/platform/archive_manager.c
@@ -130,13 +124,12 @@ SET(CommonFiles
         src/utils/memory_profiler.c
         src/utils/memory_tracker.c
         src/utils/path.c
-        src/utils/ply_writer.c
+        src/utils/simple_fileio.c
         src/utils/sqlite_wrapper.c
         src/utils/stb.c
         src/utils/string.c
-        src/utils/zlib_wrapper.c
         src/utils/string_view.c
-        include/utils/string_view.h
+        src/utils/zlib_wrapper.c
 )
 
 add_executable(ApexPredator
@@ -146,9 +139,9 @@ add_executable(ApexPredator
         src/exporter/amf_export.c
         src/exporter/common_export.c
         src/exporter/ddsc_export.c
-        src/exporter/epe_export.c
+        src/exporter/rtpc_export.c
         src/exporter/havok_export.c
-        src/exporter/export_fmod.c
+        src/exporter/fmod_export.c
 
         ${CommonFiles}
         src/tools/apex_predator/commands/extract.c

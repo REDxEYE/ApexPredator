@@ -60,7 +60,7 @@ static BufferError Buffer__read_double(Buffer *buffer, float64 *value) {
 
 BufferError Buffer__read_cstring(Buffer *buffer, String *string) {
     assert(buffer!=NULL && "buffer is null");
-    String_init(string, 0);
+    String_reserve(string, 20);
     while (1) {
         char buff[32] = {0};
         uint32 readResult;

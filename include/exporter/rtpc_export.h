@@ -8,9 +8,9 @@
 #include "utils/gltf/cgltf_helper.h"
 
 
-void process_epe_node(AppState* app_state, RuntimeNode *node, uint32 path_hash, GL_ID parent_gltf_node);
+void process_rtpc_node(AppState* app_state, RuntimeNode *node, uint32 path_hash, GL_ID parent_gltf_node);
 
-GL_ID export_epe(AppState* app_state, RuntimeNode *root_node,uint32 path_hash);
+GL_ID export_rtpc(AppState* app_state, Buffer *buffer, uint32 path_hash);
 
 
 #endif //APEXPREDATOR_EPE_EXPORT_H

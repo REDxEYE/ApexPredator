@@ -183,12 +183,13 @@ GL_ID export_amf_mesh(AppState *app_state, uint32 path_hash,
                     float32 bbox_min[3] = {0, 0, 0};
                     float32 bbox_max[3] = {0, 0, 0};
                     bool use_bbox = false;
-
+                    cgltf_attribute_type attr_type = cgltf_attribute_type_invalid;
                     uint32 stride;
                     switch (amf_attribute->Usage) {
                         case AmfUsage_Position: {
                             data_type = cgltf_type_vec3;
                             comp_type = cgltf_component_type_r_32f;
+                            attr_type = cgltf_attribute_type_position;
                             normalized = false;
                             use_bbox = true;
                             stride = 12;
@@ -238,6 +239,7 @@ GL_ID export_amf_mesh(AppState *app_state, uint32 path_hash,
                         case AmfUsage_TextureCoordinate: {
                             data_type = cgltf_type_vec2;
                             comp_type = cgltf_component_type_r_32f;
+                            attr_type = cgltf_attribute_type_texcoord;
                             normalized = false;
                             stride = 8;
                             String_from_cstr(&attr_name, "TEXCOORD_");
@@ -266,6 +268,7 @@ GL_ID export_amf_mesh(AppState *app_state, uint32 path_hash,
                         case AmfUsage_Normal: {
                             data_type = cgltf_type_vec3;
                             comp_type = cgltf_component_type_r_32f;
+                            attr_type = cgltf_attribute_type_normal;
                             normalized = false;
                             stride = 12;
                             String_from_cstr(&attr_name, "NORMAL");
@@ -307,6 +310,7 @@ GL_ID export_amf_mesh(AppState *app_state, uint32 path_hash,
                         case AmfUsage_Color: {
                             data_type = cgltf_type_vec4;
                             comp_type = cgltf_component_type_r_8u;
+                            attr_type = cgltf_attribute_type_color;
                             normalized = true;
                             stride = 4;
                             String_from_cstr(&attr_name, "_COLOR_0");
@@ -344,6 +348,7 @@ GL_ID export_amf_mesh(AppState *app_state, uint32 path_hash,
                         case AmfUsage_BoneIndex: {
                             data_type = cgltf_type_vec4;
                             comp_type = cgltf_component_type_r_16u;
+                            attr_type = cgltf_attribute_type_joints;
                             normalized = false;
                             stride = 4 * sizeof(uint16);
                             String_from_cstr(&attr_name, "JOINTS_0");
@@ -370,6 +375,7 @@ GL_ID export_amf_mesh(AppState *app_state, uint32 path_hash,
                         case AmfUsage_BoneWeight: {
                             data_type = cgltf_type_vec4;
                             comp_type = cgltf_component_type_r_32f;
+                            attr_type = cgltf_attribute_type_weights;
                             normalized = false;
                             stride = 4 * sizeof(float32);
                             String_from_cstr(&attr_name, "WEIGHTS_0");
@@ -384,11 +390,6 @@ GL_ID export_amf_mesh(AppState *app_state, uint32 path_hash,
                                             bone_weight_data[i * 4 + j] = (float32) vertex_data[j] / 255.0f;
                                             weight_sum += bone_weight_data[i * 4 + j];
                                         }
-                                        // Normalize weights
-                                        // if (weight_sum==0.0f) {
-                                        //     bone_weight_data[i * 4 + 0] = 1.0f;
-                                        //     printf("AAAAAAAAAA\n");
-                                        // }
                                         if (weight_sum > 0.0f) {
                                             for (int j = 0; j < 4; ++j) {
                                                 bone_weight_data[i * 4 + j] /= weight_sum;
@@ -438,7 +439,7 @@ GL_ID export_amf_mesh(AppState *app_state, uint32 path_hash,
                     if (use_bbox)
                         GLTFContext_accessor_set_minmax(context, buffer_view_id, bbox_min, bbox_max);
                     GLTFContext_primitive_set_attribute_accessor(context, gl_mesh_id, sub_mesh_id, attr_id,
-                                                                 buffer_view_id, String_cstr(&attr_name));
+                                                                 buffer_view_id, String_cstr(&attr_name), attr_type);
                     String_free(&attr_name);
                     if (attribute_data != NULL)
                         mp_free(attribute_data);
@@ -486,7 +487,6 @@ GL_ID export_amf_model(AppState *app_state, const AmfModel *amf_model, const uin
         snprintf(tmp_buff, sizeof(tmp_buff), "model_%08X", path_hash);
         model_root_node_id = GLTFContext_node_add(context, tmp_buff, true);
     }
-
 
     for (int mat_id = 0; mat_id < amf_model->Materials.count; ++mat_id) {
         const AmfMaterial *amf_material = &amf_model->Materials.items[mat_id];
@@ -635,6 +635,8 @@ GL_ID export_amf_model(AppState *app_state, const AmfModel *amf_model, const uin
             }
             String_free(render_block_id);
         }
+
+        String_free(material_name);
     }
 
 

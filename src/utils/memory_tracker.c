@@ -47,15 +47,6 @@ static size_t mp_hash_ptr(const void* p) {
 #endif
     return (size_t)x;
 }
-
-static inline void mp_entry_free_frames(MpEntry* e) {
-    for (uint32_t i = 0; i < e->nframes; ++i) {
-        free(e->frames[i]);
-        e->frames[i] = NULL;
-    }
-    e->nframes = 0;
-}
-
 static inline char* mp_strdup_(const char* s) {
     if (!s) return NULL;
     size_t n = strlen(s);
@@ -91,26 +82,6 @@ static void mp_symbolize_dladdr(char *out, size_t out_sz, void *addr) {
     }
 }
 #endif
-
-static inline void mp_capture_frames_symbolized(MpEntry* e, uint32_t skip) {
-    mp_entry_free_frames(e);
-
-#ifdef _WIN32
-#else
-    void* addrs[MP_MAX_FRAMES];
-    int n = backtrace(addrs, (int)MP_MAX_FRAMES);
-    if (n <= (int)skip) return;
-
-    for (int i = (int)skip; i < n && e->nframes < MP_MAX_FRAMES; ++i) {
-        char buf[512];
-        mp_symbolize_dladdr(buf, sizeof(buf), addrs[i]);
-
-        e->frames[e->nframes] = mp_strdup_(buf);
-        if (!e->frames[e->nframes]) break;
-        e->nframes++;
-    }
-#endif
-}
 
 static size_t mp_next_pow2(size_t v) {
     if (v < 8) return 8;
@@ -229,8 +200,6 @@ int mp_track_resize(MpTrack* t, void* p, const size_t new_size, const MpSite whe
         return 0;
     }
 
-    mp_entry_free_frames(e);
-    mp_capture_frames_symbolized(e, 0);
     e->size = new_size;
     e->site = where;
     return 1;
@@ -249,7 +218,6 @@ int mp_track_alloc(MpTrack* t, void* p, const size_t n, const MpSite where, MpTr
         return 0;
     }
 
-    mp_capture_frames_symbolized(e, 0);
     if (e->key == MP_EMPTY) t->used++;
     e->key = p;
     e->size = n;
@@ -269,7 +237,6 @@ int mp_track_free(MpTrack* t, void* p, const MpSite where, MpTrackIssue* out_iss
         return 0;
     }
 
-    mp_entry_free_frames(e);
     e->key = MP_TOMB;
     e->site = (MpSite){0};
     e->size = 0;

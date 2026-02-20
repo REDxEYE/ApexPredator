@@ -58,7 +58,7 @@ int main(int argc, const char *argv[]) {
     // #endif
     //         printf("\rWaiting for tracy;");
     //     }
-    printf("\n");
+    // printf("\n");
     TracyCZoneN(ctx, "App", 1);
 
     String db_path = {0};

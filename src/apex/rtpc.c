@@ -59,26 +59,24 @@ RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
     }
 
     RuntimeNode *root_node = RuntimeNode_new();
-    RuntimeNode_init(root_node);
     RuntimeNode__from_buffer(root_node, buffer);
     TracyCZoneEnd(ctx);
     return root_node;
 }
 
 RuntimeNode *RuntimeNode_new() {
-    RuntimeNode *node = mp_malloc(sizeof(RuntimeNode));
+    RuntimeNode *node = mp_calloc(1, sizeof(RuntimeNode));
     if (node == NULL) {
         GLog_Error("Failed to allocate memory");
         abort();
     }
-    memset(node, 0, sizeof(RuntimeNode));
     node->heap_allocated = 1;
     return node;
 }
 
-void RuntimeNode_init(RuntimeNode *node) {
-    DA_init(&node->props, RuntimeProp, 4);
-    DA_init(&node->children, RuntimeNode, 1);
+void RuntimeNode_init(RuntimeNode *node, const uint32 prop_count, const uint32 children_count) {
+    DA_init(&node->props, RuntimeProp, prop_count);
+    DA_init(&node->children, RuntimeNode, children_count);
 }
 
 RuntimeProp *RuntimeNode_get_prop(const RuntimeNode *node, const char *name) {
@@ -281,11 +279,9 @@ void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
         abort();
     }
 
-    RuntimeNode_init(node);
+    RuntimeNode_init(node, header.prop_count, header.child_count);
 
     node->name_hash = header.name_hash;
-    DA_reserve(&node->props, header.prop_count);
-    DA_reserve(&node->children, header.child_count);
     int64 orig_pos;
     if (buffer->get_position(buffer, &orig_pos) != BUFFER_SUCCESS) {
         GLog_Error("Failed to get current buffer position");
@@ -531,24 +527,24 @@ void RuntimeProp_init(RuntimeProp *prop, const PropType type) {
             break;
         }
         case PROP_TYPE_STR: {
-            String_init(&prop->value.string_value, 64);
+            String_init(&prop->value.string_value, 16);
             break;
         }
 
         case PROP_TYPE_ARRAY_U32: {
-            DA_init(&prop->value.uint32_array_value, uint32, 4);
+            DA_init(&prop->value.uint32_array_value, uint32, 0);
             break;
         }
         case PROP_TYPE_ARRAY_F32: {
-            DA_init(&prop->value.float32_array_value, float32, 4);
+            DA_init(&prop->value.float32_array_value, float32, 0);
             break;
         }
         case PROP_TYPE_ARRAY_U8: {
-            DA_init(&prop->value.uint8_array_value, uint8, 4);
+            DA_init(&prop->value.uint8_array_value, uint8, 0);
             break;
         }
         case PROP_TYPE_EVENT: {
-            DA_init(&prop->value.event_value, uint64, 4);
+            DA_init(&prop->value.event_value, uint64, 0);
             break;
         }
         case PROP_TYPE_DEPRECIATED_12:

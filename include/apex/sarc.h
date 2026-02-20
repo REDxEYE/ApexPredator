@@ -3,7 +3,6 @@
 #ifndef APEXPREDATOR_SARC_H
 #define APEXPREDATOR_SARC_H
 #include "int_def.h"
-#include "adf/adf.h"
 #include "platform/archive.h"
 #include "utils/buffer/buffer.h"
 #include "utils/dynamic_map.h"

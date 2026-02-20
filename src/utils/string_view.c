@@ -26,7 +26,7 @@ StringView StringView_from_cstr(const char *str) {
     return sv;
 }
 
-StringView StringView_from_cstr2(const char *str, uint32 len) {
+StringView StringView_from_cstr2(const char *str, const uint32 len) {
     StringView sv = {0};
     if (!str) {
         sv.view.data = NULL;
@@ -69,7 +69,7 @@ void StringView_to_string(const StringView self, String *out) {
     String_from_cstr2(out, self.view.data, (uint32)self.view.len);
 }
 
-int32 StringView_find_subcstring(StringView self, const char *sub) {
+int32 StringView_find_subcstring(const StringView self, const char *sub) {
     if (!sub) return -1;
     const char *found = strstr(self.view.data, sub);
     if (!found) return -1;
@@ -83,12 +83,17 @@ bool StringView_equals(const StringView self, const StringView other) {
     return memcmp(self.view.data, other.view.data, self.view.len) == 0;
 }
 
-bool StringView_cequals(StringView self, const char *other) {
+bool StringView_cequals(const StringView self, const char *other) {
     if (!other) return false;
     const size_t other_len = strlen(other);
     if (self.view.len != other_len) return false;
 
     return memcmp(self.view.data, other, other_len) == 0;
+}
+
+bool StringView_cends_with(const StringView self, const char *suffix) {
+    if (!suffix) return false;
+    return zstr_view_ends_with(self.view, suffix);
 }
 
 void String_copy_from_view(String *string, const StringView view) {

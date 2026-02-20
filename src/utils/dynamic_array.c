@@ -10,9 +10,9 @@
 #include "platform/logger.h"
 #include "utils/memory_profiling.h"
 
-#define NULL_ITEM_CHECK  assert(da->items!=NULL && "Uninitialized dynamic array")
+#define INIT_ITEM_CHECK  assert(da->item_size!=0 && "Uninitialized dynamic array")
 
-DynamicArray__Base * DA_new_(const uint32 item_size, const uint32 initial_capacity) {
+DynamicArray__Base *DA_new_(const uint32 item_size, const uint32 initial_capacity) {
     DynamicArray__Base *da = mp_malloc(sizeof(DynamicArray__Base));
     memset(da, 0, sizeof(DynamicArray__Base));
     da->heap_allocated = 1;
@@ -21,7 +21,7 @@ DynamicArray__Base * DA_new_(const uint32 item_size, const uint32 initial_capaci
 }
 
 void DA_init_(DynamicArray__Base *da, const uint32 item_size, const uint32 initial_capacity) {
-    if (da->items!=NULL) {
+    if (da->items != NULL) {
         if (da->statically_allocated) {
             GLog_Error("Trying to reinitialize statically allocated dynamic array");
             abort();
@@ -34,14 +34,15 @@ void DA_init_(DynamicArray__Base *da, const uint32 item_size, const uint32 initi
     da->item_size = item_size;
     if (initial_capacity > 0) {
         da->items = mp_calloc(initial_capacity, da->item_size);
-    } else {
+    }
+    else {
         da->items = NULL;
     }
 }
 
 // Does copy element data to internal array
 void DA_append_(DynamicArray__Base *da, const void *element) {
-    NULL_ITEM_CHECK;
+    INIT_ITEM_CHECK;
     if (da->count >= da->capacity) {
         DA_reserve_(da, da->count + 1);
     }
@@ -53,7 +54,7 @@ void DA_append_(DynamicArray__Base *da, const void *element) {
 }
 
 void *DA_append_get_(DynamicArray__Base *da) {
-    NULL_ITEM_CHECK;
+    INIT_ITEM_CHECK;
     const uint32 index = da->count;
     if (da->count + 1 >= da->capacity) {
         DA_reserve_(da, da->count + 1);
@@ -64,9 +65,9 @@ void *DA_append_get_(DynamicArray__Base *da) {
 }
 
 void DA_reserve_(DynamicArray__Base *da, const uint32 needed_capacity) {
-    NULL_ITEM_CHECK;
+    INIT_ITEM_CHECK;
     if (needed_capacity > da->capacity) {
-        uint32 new_capacity = da->capacity;
+        uint32 new_capacity = da->capacity > 0 ? da->capacity : 1;
         while (new_capacity < needed_capacity) {
             new_capacity *= DA_GROW_MULT;
         }
@@ -82,7 +83,7 @@ void DA_reserve_(DynamicArray__Base *da, const uint32 needed_capacity) {
 }
 
 inline void *DA_at_(const DynamicArray__Base *da, const uint32 index) {
-    NULL_ITEM_CHECK;
+    INIT_ITEM_CHECK;
     if (index >= da->count) {
         return NULL;
     }
@@ -91,7 +92,8 @@ inline void *DA_at_(const DynamicArray__Base *da, const uint32 index) {
 }
 
 void DA_free_(DynamicArray__Base *da) {
-    if (da->items != NULL && !da->statically_allocated) mp_free(da->items);
+    if (da->items != NULL && !da->statically_allocated)
+        mp_free(da->items);
     da->items = 0;
     da->count = 0;
     da->capacity = 0;
@@ -102,7 +104,7 @@ void DA_free_(DynamicArray__Base *da) {
 }
 
 bool DA_contains_(DynamicArray__Base *da, const void *element, const DA_equal_fn equal_fn) {
-    NULL_ITEM_CHECK;
+    INIT_ITEM_CHECK;
     for (int i = 0; i < da->count; ++i) {
         const void *item = DA_at(da, i);
         if (equal_fn(item, element)) {
@@ -112,9 +114,9 @@ bool DA_contains_(DynamicArray__Base *da, const void *element, const DA_equal_fn
     return false;
 }
 
-void * DA_detach_buffer_(DynamicArray__Base *da) {
-    NULL_ITEM_CHECK;
-    void* items = da->items;
+void *DA_detach_buffer_(DynamicArray__Base *da) {
+    INIT_ITEM_CHECK;
+    void *items = da->items;
     da->items = NULL;
     da->count = 0;
     da->capacity = 0;
@@ -122,7 +124,7 @@ void * DA_detach_buffer_(DynamicArray__Base *da) {
     return items;
 }
 
-void * DA_get_buffer_(const DynamicArray__Base *da) {
-    NULL_ITEM_CHECK;
+void *DA_get_buffer_(const DynamicArray__Base *da) {
+    INIT_ITEM_CHECK;
     return da->items;
 }

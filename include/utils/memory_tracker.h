@@ -34,9 +34,6 @@ typedef struct MpEntry {
     void*  key;
     size_t size;
     MpSite site;
-
-    uint8_t nframes;
-    char*   frames[MP_MAX_FRAMES]; /* owned, malloc/free */
 } MpEntry;
 
 typedef struct MpTrack MpTrack;

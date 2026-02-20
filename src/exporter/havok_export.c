@@ -177,18 +177,22 @@ GL_ID export_animation_container(AppState* app_state, const hkaAnimationContaine
     return skeleton_id;
 }
 
-GL_ID export_havok_file(AppState* app_state, const TagFile *tag_file, const StringView path) {
+GL_ID export_havok_file(AppState* app_state, Buffer *buffer, const StringView path) {
     CHECK_APP_STATE(app_state);
-        CHECK_GLTF_STATE(&app_state->gltf_context);
+    CHECK_GLTF_STATE(&app_state->gltf_context);
     GLTFContext *context = &app_state->gltf_context;
 
-    const HKItem *item = &tag_file->items.items[1];
-    HKTagType *hk_tag_type = &tag_file->types.items[item->type];
+    TagFile tag_file = {0};
+    TagFile_from_buffer(&tag_file, buffer);
+
+    const HKItem *item = &tag_file.items.items[1];
+    HKTagType *hk_tag_type = &tag_file.types.items[item->type];
     const uint32 type_hash = hash_string(HKTagType_stable_name(hk_tag_type));
     const HavokTypeInfo *type_info = *(HavokTypeInfo **) DM_get(&HAVOK_TYPES_type_info, type_hash);
     void *item_obj = mp_malloc(type_info->size);
     type_info->init(item_obj);
-    type_info->read(item_obj, tag_file, &tag_file->data.items[item->offset]);
+    type_info->read(item_obj, &tag_file, &tag_file.data.items[item->offset]);
+
 
     GL_ID output_node_id = INVALID_GL_ID;
 
@@ -231,6 +235,7 @@ GL_ID export_havok_file(AppState* app_state, const TagFile *tag_file, const Stri
 
     type_info->free(item_obj);
     mp_free(item_obj);
+    TagFile_free(&tag_file);
 
     return output_node_id;
 }

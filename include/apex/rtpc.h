@@ -87,7 +87,7 @@ RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer);
 
 RuntimeNode *RuntimeNode_new(void);
 
-void RuntimeNode_init(RuntimeNode *node);
+void RuntimeNode_init(RuntimeNode *node, uint32 prop_count, uint32 children_count);
 RuntimeProp* RuntimeNode_get_prop(const RuntimeNode* node, const char* name);
 RuntimeProp* RuntimeNode_get_prop_by_hash(const RuntimeNode* node, uint32 hash);
 

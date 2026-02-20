@@ -6,6 +6,6 @@
 
 #define RIFF_MAGIC "RIFF"
 
-void export_fmod_bank(const AppState *app_state, uint32 path_hash);
+void export_fmod_bank(const AppState *app_state, uint32 path_hash, MemoryBuffer *buffer);
 
 #endif //APEXPREDATOR_EXPORT_FMOD_H

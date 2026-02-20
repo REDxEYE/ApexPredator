@@ -22,9 +22,14 @@ Encodes `src[0..len)` into Base64 and writes exactly base64_encoded_size(len)
 bytes to `dst`. The output is not NUL-terminated. Returns the number of bytes
 written. The caller must ensure `dst` has sufficient capacity.
 */
-static inline size_t base64_encode(const uint8_t* src, size_t len, char* dst) {
+static inline bool base64_encode(const uint8_t* src, const size_t len, char* dst, size_t *dst_size /* IN/OUT */) {
     size_t i = 0, o = 0;
     while (i + 3 <= len) {
+        if (o + 4 > *dst_size) {
+            *dst_size = o;
+            return false;
+        }
+
         uint32_t v = ((uint32_t)src[i] << 16) | ((uint32_t)src[i + 1] << 8) | (uint32_t)src[i + 2];
         dst[o++] = BASE64_TBL[(v >> 18) & 63];
         dst[o++] = BASE64_TBL[(v >> 12) & 63];
@@ -45,7 +50,8 @@ static inline size_t base64_encode(const uint8_t* src, size_t len, char* dst) {
         dst[o++] = BASE64_TBL[(v >> 6) & 63];
         dst[o++] = '=';
     }
-    return o;
+    *dst_size = o;
+    return true;
 }
 
 #endif //APEXPREDATOR_BASE64_H

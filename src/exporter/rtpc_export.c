@@ -1,6 +1,6 @@
 // Created by RED on 12.01.2026.
 
-#include "exporter/epe_export.h"
+#include "exporter/rtpc_export.h"
 
 #include "apex/hashes.h"
 #include "exporter/havok_export.h"
@@ -78,7 +78,7 @@ void process_children(AppState *app_state,
                       RuntimeNode *node, const uint32 path_hash,
                       const GL_ID parent_gltf_node) {
     DA_FORI(node->children, i) {
-        process_epe_node(app_state, DA_at(&node->children, i), path_hash, parent_gltf_node);
+        process_rtpc_node(app_state, DA_at(&node->children, i), path_hash, parent_gltf_node);
     }
 }
 
@@ -377,11 +377,11 @@ void handle_default(AppState *app_state, RuntimeNode *node, const uint32 path_ha
     }
 
     DA_FORI(node->children, i) {
-        process_epe_node(app_state, DA_at(&node->children, i), path_hash, output_node);
+        process_rtpc_node(app_state, DA_at(&node->children, i), path_hash, output_node);
     }
 }
 
-void process_epe_node(AppState *app_state,
+void process_rtpc_node(AppState *app_state,
                       RuntimeNode *node, const uint32 path_hash,
                       const GL_ID parent_gltf_node) {
     TracyCZoneN(ctx, "process_epe_node", 1);
@@ -422,11 +422,22 @@ void process_epe_node(AppState *app_state,
     TracyCZoneEnd(ctx);
 }
 
-GL_ID export_epe(AppState *app_state, RuntimeNode *root_node, const uint32 path_hash) {
+GL_ID export_rtpc(AppState *app_state, Buffer *buffer, const uint32 path_hash) {
     TracyCZoneN(ctx, "export_epe", 1);
     CHECK_APP_STATE(app_state);
     CHECK_GLTF_STATE(&app_state->gltf_context);
     GLTFContext *context = &app_state->gltf_context;
+
+    RuntimeNode *root_node = RuntimeContainer_from_buffer(buffer);
+    if (root_node == NULL) {
+        return INVALID_GL_ID;
+    }
+
+    // RuntimeNode_print(root_node, stdout, 0);
+    // String epe_json = {0};
+    // String_init(&epe_json, 8192);
+    // RuntimeNode_emit_json(root_node, &epe_json, 0);
+    // printf("%s\n", String_data(&epe_json));
 
     const StringView path = find_name32_sv(path_hash);
 
@@ -450,8 +461,9 @@ GL_ID export_epe(AppState *app_state, RuntimeNode *root_node, const uint32 path_
     const GL_ID epe_root_node_id = GLTFContext_node_add(context, "epe_root", true);
 
     DA_FORI(root_node->children, i) {
-        process_epe_node(app_state, DA_at(&root_node->children, i), path_hash, epe_root_node_id);
+        process_rtpc_node(app_state, DA_at(&root_node->children, i), path_hash, epe_root_node_id);
     }
+    RuntimeNode_free(root_node);
     TracyCZoneEnd(ctx);
     return epe_root_node_id;
 }

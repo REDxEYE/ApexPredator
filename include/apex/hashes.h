@@ -27,4 +27,6 @@ void store_file_parent_sv(uint64 key, StringView path, uint64 parent);
 void search_file_table(const char *pattern, char ***result, uint32 *count);
 bool get_file_parent(uint64 key, uint64 *out_parent, String **out_path);
 
+String* get_export_path(const String* base_export_path, uint32 hash, const char* ext);
+
 #endif //APEXPREDATOR_HASHES_H

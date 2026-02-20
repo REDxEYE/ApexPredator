@@ -19,32 +19,12 @@ DYNAMIC_INT_MAP_STRUCT(TabEntry, TabEntryMap);
 typedef struct {
     Archive;
     String tab_path;
-    // String arc_path;
     FileBuffer arc_buffer;
     DynamicIntMap_TabEntryMap entries;
 } TabArchive;
 TabArchive* TabArchive_new(const String* path);
 
-static inline void TabArchives_init(ArchiveManager *manager, const String *game_root) {
-    TracyCZoneN(ctx, "TabArchives_init", 1);
-    DynamicArray_Path archive_paths = {0};
-
-    static String tab_ext = {0};
-    if (String_size(&tab_ext)==0) {
-        String_from_cstr(&tab_ext, ".tab");
-    }
-
-    Path_rglob(game_root, &tab_ext, &archive_paths);
-    for (uint32 i = 0; i < archive_paths.count; ++i) {
-
-        TabArchive* archive = TabArchive_new(DA_at(&archive_paths, i));
-        ArchiveManager_add(manager, (Archive*)archive);
-    }
-    DA_free_with_inner(&archive_paths, {
-                       String_free(it);
-                       });
-    TracyCZoneEnd(ctx);
-}
+void TabArchives_init(const ArchiveManager *manager, const String *game_root);
 
 
 #endif //APEXPREDATOR_TAB_ARCHIVE_H

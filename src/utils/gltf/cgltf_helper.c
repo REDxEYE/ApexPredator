@@ -14,6 +14,7 @@
 #include "utils/hash_helper.h"
 #include "utils/path.h"
 #include "utils/memory_profiling.h"
+#include "utils/simple_fileio.h"
 
 char *GLTFContext_dupe_cstring(const char *name) {
     if (name == NULL) return NULL;
@@ -54,7 +55,7 @@ void GLTFContext_init(GLTFContext *ctx, const char *name) {
     ctx->data->scenes[0].nodes_count = 0;
     ctx->data->scene = &ctx->data->scenes[0];
     ctx->data->scene->name = name ? GLTFContext_dupe_cstring(name) : GLTFContext_dupe_cstring("model");
-
+    ctx->merge_buffers = true;
     ctx->finalized = false;
 }
 
@@ -71,6 +72,7 @@ void GLTFContext_set_save_path(GLTFContext *ctx, const String *path) {
         return;
     }
     String_copy_from(&ctx->save_path, path);
+    Path_normalize_native(&ctx->save_path);
 }
 
 void GLTFContext_set_save_cpath(GLTFContext *ctx, const char *path) {
@@ -78,6 +80,158 @@ void GLTFContext_set_save_cpath(GLTFContext *ctx, const char *path) {
         return;
     }
     String_from_cstr(&ctx->save_path, path);
+    Path_normalize_native(&ctx->save_path);
+}
+
+void fix_weights_and_boneids(GLTFContext *ctx, const cgltf_mesh *mesh) {
+    for (int prim_id = 0; prim_id < mesh->primitives_count; ++prim_id) {
+        const cgltf_primitive *prim = &mesh->primitives[prim_id];
+        const cgltf_attribute *weights_attr = NULL;
+        const cgltf_attribute *joints_attr = NULL;
+        for (int attr_id = 0; attr_id < prim->attributes_count; ++attr_id) {
+            const cgltf_attribute *attr = &prim->attributes[attr_id];
+            if (attr->type == cgltf_attribute_type_weights) {
+                weights_attr = attr;
+                continue;
+            }
+            if (attr->type == cgltf_attribute_type_joints) {
+                joints_attr = attr;
+                continue;
+            }
+            if (joints_attr != NULL && weights_attr != NULL) {
+                break;
+            }
+        }
+
+        if (weights_attr == NULL || joints_attr == NULL) {
+            continue;
+        }
+
+        const cgltf_buffer_view *weights_buffer_view = weights_attr->data->buffer_view;
+        uint8 *weights_data = ((uint8 *) DA_get_buffer(
+                                  &ctx->raw_buffers.items[gltf_untag_data_id(weights_buffer_view->buffer->data).v])) +
+                              weights_buffer_view->offset;
+        const cgltf_buffer_view *joints_buffer_view = joints_attr->data->buffer_view;
+        uint8 *joints_data = ((uint8 *) DA_get_buffer(
+                                 &ctx->raw_buffers.items[gltf_untag_data_id(joints_buffer_view->buffer->data).v])) +
+                             joints_buffer_view->offset;
+
+        if (weights_attr->data->component_type != cgltf_component_type_r_32f) {
+            GLog_Error("Unsupported bone weight component type: %d", weights_attr->data->component_type);
+            continue;
+        }
+        if (joints_attr->data->component_type != cgltf_component_type_r_16u) {
+            GLog_Error("Unsupported bone id component type: %d", joints_attr->data->component_type);
+            continue;
+        }
+
+        uint16 *joints = (uint16 *) joints_data;
+        float32 *weights = (float32 *) weights_data;
+
+        for (int i = 0; i < joints_attr->data->count; ++i) {
+            float32 weight_sum = 0.0f;
+            for (int j = 0; j < 4; ++j) {
+                const float32 weight = weights[i * 4 + j];
+                if (weight == 0.0f) {
+                    joints[i * 4 + j] = 0;
+                }
+                weight_sum += weight;
+            }
+            if (weight_sum > 0.0f) {
+                for (int j = 0; j < 4; ++j) {
+                    weights[i * 4 + j] /= weight_sum;
+                }
+            }
+        }
+    }
+}
+
+
+void merge_buffers(GLTFContext *ctx) {
+    cgltf_buffer *old_buffers = DA_detach_buffer(&ctx->buffers);
+    DynamicArray_uint8 *old_raw_buffers = DA_detach_buffer(&ctx->raw_buffers);
+    DA_init(&ctx->buffers, cgltf_buffer, 1);
+    DA_init(&ctx->raw_buffers, DynamicArray_uint8, 1);
+
+    cgltf_buffer_view **to_update = mp_calloc(ctx->buffer_views.count, sizeof(cgltf_buffer_view*));
+    uint32 to_update_count = 0;
+
+    uint32 total_buffer_size = 0;
+    for (int i = 0; i < ctx->buffer_views.count; ++i) {
+        cgltf_buffer_view *buffer_view = &ctx->buffer_views.items[i];
+        if (buffer_view->buffer != NULL) {
+            cgltf_buffer *buffer = &old_buffers[gltf_untag_index(buffer_view->buffer).v];
+
+            const StringView buffer_name = StringView_from_cstr(buffer->name);
+            const bool named_buffer = StringView_cends_with(buffer_name, ".png") ||
+                                      StringView_cends_with(buffer_name, ".bin");
+            if (named_buffer) {
+                //Re-add back
+                const DynamicArray_uint8 *old_raw_buffer = &old_raw_buffers[gltf_untag_data_id(buffer->data).v];
+                DA_append(&ctx->raw_buffers, old_raw_buffer);
+                buffer->data = gltf_tag_data_id((D_ID){ctx->raw_buffers.count - 1}).v;
+                DA_append(&ctx->buffers, buffer);
+                buffer_view->buffer = gltf_tag_index((GL_ID){ctx->buffers.count - 1}).v;
+            }
+            else {
+                const D_ID raw_data_id = gltf_untag_data_id(buffer->data);
+                if (IS_VALID_D_ID(raw_data_id)) {
+                    to_update[to_update_count++] = buffer_view;
+                    // Align each buffer to their component size
+                    uint32 align = 64;
+                    if (buffer_view->type == cgltf_buffer_view_type_indices) {
+                        align = 4;
+                    }
+                    else if (buffer_view->type == cgltf_buffer_view_type_vertices) {
+                        align = 16;
+                    }
+                    const uint32 aligned_buffer_size = ((old_raw_buffers[raw_data_id.v].count + align - 1) / align) * align;
+                    total_buffer_size += aligned_buffer_size;
+                }
+                if (buffer->name != NULL)
+                    mp_free(buffer->name);
+                if (buffer->extras.data != NULL)
+                    mp_free(buffer->extras.data);
+            }
+        }
+    }
+
+    uint8 *total_data_buffer = mp_calloc(total_buffer_size, sizeof(uint8));
+
+    uint32 offset = 0;
+    for (uint32 i = 0; i < to_update_count; ++i) {
+        cgltf_buffer_view *buffer_view = to_update[i];
+        cgltf_buffer *buffer = &old_buffers[gltf_untag_index(buffer_view->buffer).v];
+        const D_ID raw_data_id = gltf_untag_data_id(buffer->data);
+        DynamicArray_uint8 *raw_data = &old_raw_buffers[raw_data_id.v];
+        memcpy(&total_data_buffer[offset], DA_get_buffer(raw_data), raw_data->count);
+
+        buffer_view->offset = offset;
+
+        uint32 align = 64;
+        if (buffer_view->type == cgltf_buffer_view_type_indices) {
+            align = 4;
+        }
+        else if (buffer_view->type == cgltf_buffer_view_type_vertices) {
+            align = 16;
+        }
+
+        const uint32 aligned_buffer_size = ((raw_data->count + align - 1) / align) * align;
+        offset += aligned_buffer_size;
+        buffer->data = NULL;
+        DA_free(raw_data);
+    }
+
+    const GL_ID merged_buffer_id = GLTFContext_create_buffer(ctx, total_data_buffer, total_buffer_size,
+                                                             "data_buffer.bin");
+    mp_free(total_data_buffer);
+    for (uint32 i = 0; i < to_update_count; ++i) {
+        cgltf_buffer_view *buffer_view = to_update[i];
+        buffer_view->buffer = gltf_tag_index(merged_buffer_id).v;
+    }
+    mp_free(old_buffers);
+    mp_free(old_raw_buffers);
+    mp_free(to_update);
 }
 
 void GLTFContext_finalize(GLTFContext *ctx) {
@@ -86,6 +240,11 @@ void GLTFContext_finalize(GLTFContext *ctx) {
         GLog_Error("GLTFContext_finalize: already finalized");
         abort();
     }
+
+    if (ctx->merge_buffers) {
+        merge_buffers(ctx);
+    }
+
     ctx->finalized = true;
     ctx->data->meshes_count = ctx->meshes.count;
     ctx->data->meshes = DA_get_buffer(&ctx->meshes);
@@ -108,7 +267,7 @@ void GLTFContext_finalize(GLTFContext *ctx) {
     ctx->data->animations_count = ctx->animations.count;
     ctx->data->animations = DA_get_buffer(&ctx->animations);
 
-    // fix-up handles → real pointers (no realloc after this point)
+    // fix-up handles -> real pointers (no realloc after this point)
     for (uint32 i = 0; i < ctx->data->nodes_count; ++i) {
         cgltf_node *node = &ctx->data->nodes[i];
         if (node->mesh) {
@@ -284,111 +443,113 @@ void GLTFContext_finalize(GLTFContext *ctx) {
         }
         assert(root_index == root_count);
     }
+
+    for (int i = 0; i < ctx->meshes.count; ++i) {
+        fix_weights_and_boneids(ctx, &ctx->meshes.items[i]);
+    }
+}
+
+void write_buffer_as_base64(const GLTFContext *ctx, cgltf_buffer *buffer) {
+    const D_ID raw_data_id = gltf_untag_data_id(buffer->data);
+    const DynamicArray_uint8 *raw_data = &ctx->raw_buffers.items[raw_data_id.v];
+    const size_t encoded_size = base64_encoded_size(raw_data->count);
+    char *base64_data = mp_calloc(1, encoded_size + 1);
+    size_t total_size = encoded_size;
+    if (!base64_encode(DA_get_buffer(raw_data), raw_data->count, base64_data, &total_size)) {
+        GLog_Error("failed to base64 encode buffer data: output buffer too small");
+        mp_free(base64_data);
+        abort();
+    }
+    String buffer_uri = {0};
+    String_from_cstr(&buffer_uri, "data:application/octet-stream;base64,");
+    String_append_cstr(&buffer_uri, base64_data);
+    buffer->uri = String_detach(&buffer_uri);
+    buffer->data = NULL;
+    String_free(&buffer_uri);
+    mp_free(base64_data);
+}
+
+void write_buffer_as_file(const GLTFContext *ctx, cgltf_buffer *buffer, const String *data_path,
+                          const String *gltf_name) {
+    const D_ID raw_data_id = gltf_untag_data_id(buffer->data);
+    String bin_name = {0};
+
+    if (buffer->name != NULL) {
+        const StringView buffer_name = StringView_from_cstr(buffer->name);
+        const bool named_buffer = StringView_cends_with(buffer_name, ".png") ||
+                                  StringView_cends_with(buffer_name, ".bin");
+
+        String_from_cstr(&bin_name, buffer->name);
+        Path_replace_invalid_fs_chars(&bin_name, '_');
+        if (!named_buffer) {
+            String_append_format(&bin_name, "_%d.bin", raw_data_id.v);
+        }
+    }
+    else {
+        String_append_format(&bin_name, "buffer_%d.bin", raw_data_id.v);
+    }
+    String buffer_path = {0};
+    String_copy_from(&buffer_path, data_path);
+    Path_join(&buffer_path, &bin_name);
+    Path_normalize_native(&buffer_path);
+    Path_ensure_parent_dirs(&buffer_path);
+
+    const DynamicArray_uint8 *raw_data = &ctx->raw_buffers.items[raw_data_id.v];
+
+    if (!write_file(String_cstr(&buffer_path), DA_get_buffer(raw_data), raw_data->count)) {
+        GLog_Error("failed to write buffer file: %s", String_cstr(&buffer_path));
+        abort();
+    }
+
+    String_prepend_format(&bin_name, "%s_data/", String_cstr(gltf_name));
+    buffer->uri = String_detach(&bin_name);
+    String_free(&buffer_path);
+    String_free(&bin_name);
+    buffer->data = NULL; // cleanup after dispathing
 }
 
 bool GLTFContext_write_and_free(GLTFContext *ctx) {
     bool ok;
     if (ctx->meshes.count > 0 || ctx->nodes.count > 0) {
         if (String_size(&ctx->save_path) == 0) {
-            GLog_Error("GLTFContext_write_and_free: no save path set");
+            GLog_Error("no save path set");
             abort();
         }
         GLTFContext_finalize(ctx);
-        bool has_big_buffers = false;
+
+        String data_dir = {0};
+        Path_get_parent(&ctx->save_path, &data_dir);
+        String gltf_name = {0};
+        Path_filename(&ctx->save_path, &gltf_name);
+        String_append_format(&data_dir, "/%s_data", String_cstr(&gltf_name));
+        Path_ensure_dirs(&data_dir);
+
+        // Loop over buffers, named(.bin extension) buffer or png get written into "<gltf name>_data" subdirectory next to exported gltf and set data to NULL, leftovers will be written as base64 URIs
         for (int i = 0; i < ctx->data->buffers_count; ++i) {
-            const cgltf_buffer *buffer = &ctx->data->buffers[i];
+            cgltf_buffer *buffer = &ctx->data->buffers[i];
+
             const D_ID raw_data_id = gltf_untag_data_id(buffer->data);
             if (IS_VALID_D_ID(raw_data_id)) {
-                const DynamicArray_uint8 *raw_data = &ctx->raw_buffers.items[raw_data_id.v];
-                if (raw_data->count > 100 * 1024) {
-                    has_big_buffers = true;
-                    break;
+                const StringView buffer_name = StringView_from_cstr(buffer->name);
+                if (StringView_cends_with(buffer_name, ".png") ||
+                    StringView_cends_with(buffer_name, ".bin")) {
+                    write_buffer_as_file(ctx, buffer, &data_dir, &gltf_name);
                 }
             }
         }
-        if (has_big_buffers) {
-            String data_dir = {0};
-            Path_get_parent(&ctx->save_path, &data_dir);
-            String gltf_name = {0};
-            Path_filename(&ctx->save_path, &gltf_name);
-            String_append_format(&data_dir, "/%s_data", String_cstr(&gltf_name));
-            Path_ensure_dirs(&data_dir);
 
-            // Loop over buffers, named(.bin extension) buffer or png files larger 100kb get written into "<gltf name>_data" subdirectory next to exported gltf, other get base64 encoded into URI
-            for (int i = 0; i < ctx->data->buffers_count; ++i) {
-                cgltf_buffer *buffer = &ctx->data->buffers[i];
-
-                const D_ID raw_data_id = gltf_untag_data_id(buffer->data);
-                if (IS_VALID_D_ID(raw_data_id)) {
-                    String buffer_name = {0};
-                    String_from_cstr(&buffer_name, buffer->name);
-                    const DynamicArray_uint8 *raw_data = &ctx->raw_buffers.items[raw_data_id.v];
-                    if (raw_data->count <= 100 * 1024 || (
-                            !String_cends_with(&buffer_name, ".png") && !String_cends_with(&buffer_name, ".bin"))) {
-                        String buffer_uri = {0};
-                        String_from_cstr(&buffer_uri, "data:application/octet-stream;base64,");
-                        const size_t encoded_size = base64_encoded_size(raw_data->count);
-                        char *base64_data = mp_calloc(1, encoded_size + 1);
-                        const size_t actual_size = base64_encode(DA_get_buffer(raw_data), raw_data->count, base64_data);
-                        assert(actual_size <= encoded_size);
-                        String_append_cstr(&buffer_uri, base64_data);
-                        buffer->uri = String_detach(&buffer_uri);
-                        String_free(&buffer_uri);
-                        mp_free(base64_data);
-                    }
-                    else {
-                        String bin_name = {0};
-                        String_from_cstr(&bin_name, buffer->name);
-                        Path_replace_invalid_fs_chars(&bin_name, '_');
-                        String buffer_path = {0};
-                        Path_join(&buffer_path, &data_dir);
-                        Path_join(&buffer_path, &bin_name);
-                        Path_ensure_parent_dirs(&buffer_path);
-
-                        FILE *f = fopen(String_cstr(&buffer_path), "wb");
-                        if (f == NULL) {
-                            GLog_Error("GLTFContext_write_and_free: failed to open buffer file for writing: %s",
-                                       String_cstr(&buffer_path));
-                            abort();
-                        }
-                        fwrite(DA_get_buffer(raw_data), 1, raw_data->count, f);
-                        fclose(f);
-                        String_prepend_format(&bin_name, "%s_data/", String_cstr(&gltf_name));
-                        buffer->uri = String_detach(&bin_name);
-                        String_free(&buffer_path);
-                        String_free(&bin_name);
-                    }
-                    buffer->data = NULL; // cleanup after dispathing
-                    String_free(&buffer_name);
-                }
-                buffer->data = NULL;
-            }
-            String_free(&data_dir);
-            String_free(&gltf_name);
-        }
-        else {
-            // all buffers get base64 encoded into URI
-            for (int i = 0; i < ctx->data->buffers_count; ++i) {
-                cgltf_buffer *buffer = &ctx->data->buffers[i];
-
-                const D_ID raw_data_id = gltf_untag_data_id(buffer->data);
-                if (IS_VALID_D_ID(raw_data_id)) {
-                    String buffer_uri = {0};
-                    String_from_cstr(&buffer_uri, "data:application/octet-stream;base64,");
-                    const DynamicArray_uint8 *raw_data = &ctx->raw_buffers.items[raw_data_id.v];
-                    const size_t encoded_size = base64_encoded_size(raw_data->count);
-                    char *base64_data = mp_calloc(1, encoded_size + 1);
-                    const size_t actual_size = base64_encode(DA_get_buffer(raw_data), raw_data->count, base64_data);
-                    assert(actual_size <= encoded_size);
-                    String_append_cstr(&buffer_uri, base64_data);
-                    buffer->uri = String_detach(&buffer_uri);
-                    String_free(&buffer_uri);
-                    mp_free(base64_data);
-                    buffer->data = NULL; // cleanup after dispathing
-                }
-                buffer->data = NULL;
+        // all leftover buffers get base64 encoded into URI
+        for (int i = 0; i < ctx->data->buffers_count; ++i) {
+            cgltf_buffer *buffer = &ctx->data->buffers[i];
+            const D_ID raw_data_id = gltf_untag_data_id(buffer->data);
+            if (IS_VALID_D_ID(raw_data_id)) {
+                write_buffer_as_base64(ctx, buffer);
             }
         }
+
+        String_free(&data_dir);
+        String_free(&gltf_name);
+
         ctx->options.type = cgltf_file_type_gltf;
         GLog_Info("[INFO]: GLTF save path: %s", String_cstr(&ctx->save_path));
         ok = (cgltf_write_file(&ctx->options, String_cstr(&ctx->save_path), ctx->data) == cgltf_result_success);
@@ -515,7 +676,6 @@ GL_ID GLTFContext_create_buffer(GLTFContext *ctx, const void *data, const uint32
     const D_ID raw_buffer_id = {ctx->raw_buffers.count - 1};
 
     DA_init(raw_buffer, uint8, data_size);
-    DA_reserve(raw_buffer, data_size);
     memcpy(DA_get_buffer(raw_buffer), data, data_size);
     raw_buffer->count = data_size;
 
@@ -697,16 +857,19 @@ void GLTFContext_accessor_set_minmax(const GLTFContext *ctx, const GL_ID accesso
 }
 
 void GLTFContext_primitive_set_attribute_accessor(const GLTFContext *ctx, const GL_ID mesh_id,
-                                                  const uint32 primitive_id,
-                                                  const uint32 attribute_id, const GL_ID accessor_id,
-                                                  const char *name) {
+                                                  const uint32 prim_index,
+                                                  const uint32 attribute_index,
+                                                  const GL_ID accessor_id,
+                                                  const char *name,
+                                                  const cgltf_attribute_type type) {
     const cgltf_mesh *m = &ctx->meshes.items[mesh_id.v];
-    assert(primitive_id < m->primitives_count);
-    const cgltf_primitive *prim = &m->primitives[primitive_id];
-    assert(attribute_id < prim->attributes_count);
-    cgltf_attribute *attr = &prim->attributes[attribute_id];
+    assert(prim_index < m->primitives_count);
+    const cgltf_primitive *prim = &m->primitives[prim_index];
+    assert(attribute_index < prim->attributes_count);
+    cgltf_attribute *attr = &prim->attributes[attribute_index];
     attr->data = gltf_tag_index(accessor_id).v;
     attr->name = GLTFContext_dupe_cstring(name);
+    attr->type = type;
 }
 
 

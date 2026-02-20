@@ -11,7 +11,7 @@
 
 extern mat4 IDENTITY_MAT;
 
-GL_ID export_havok_file(AppState* app_state, const TagFile *tag_file, StringView path);
+GL_ID export_havok_file(AppState* app_state, Buffer *buffer, StringView path);
 
 void build_matrix(mat4 out, const hkQsTransform* transform);
 

@@ -34,6 +34,7 @@ void StringView_to_string(StringView self, String *out);
 int32 StringView_find_subcstring(StringView self, const char *sub);
 bool StringView_equals(StringView self, StringView other);
 bool StringView_cequals(StringView self, const char *other);
+bool StringView_cends_with(StringView self, const char *suffix);
 
 void String_copy_from_view(String* string, StringView view);
 

@@ -13,7 +13,7 @@
 #include "tracy/TracyC.h"
 #include "utils/common.h"
 
-Texture *convert_ddsc_from_buffer(const AppState *app_state, const uint32 hash, MemoryBuffer* mb) {
+Texture *convert_ddsc_from_buffer(const AppState *app_state, const uint32 hash, Buffer *mb) {
     CHECK_APP_STATE(app_state);
     TracyCZoneN(ctx, "convert_ddsc_from_buffer", 1);
 
@@ -101,7 +101,7 @@ Texture *convert_ddsc_from_buffer(const AppState *app_state, const uint32 hash, 
     return texture;
 }
 
-Texture *convert_ddsc(AppState *app_state, const uint32 hash) {
+Texture *convert_ddsc(const AppState *app_state, const uint32 hash) {
     CHECK_APP_STATE(app_state);
     MemoryBuffer mb = {0};
     const ArchiveManager *archive_manager = &app_state->archive_manager;
@@ -109,12 +109,12 @@ Texture *convert_ddsc(AppState *app_state, const uint32 hash) {
         GLog_Error("File not found");
         return NULL;
     }
-    Texture* tex = convert_ddsc_from_buffer(app_state, hash, &mb);
+    Texture* tex = convert_ddsc_from_buffer(app_state, hash, (Buffer*)&mb);
     mb.close(&mb);
     return tex;
 }
 
-void export_ddsc(const AppState *app_state, const uint32 hash, MemoryBuffer *mb) {
+void export_ddsc(const AppState *app_state, const uint32 hash, Buffer *mb) {
     Texture *tex = convert_ddsc_from_buffer(app_state, hash, mb);
     if (tex == NULL) {
         GLog_Error("Failed to convert AVTX texture with hash %08X", hash);

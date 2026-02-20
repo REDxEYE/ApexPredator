@@ -6,6 +6,7 @@
 
 #include "platform/common_arrays.h"
 #include "platform/logger.h"
+#include "utils/path.h"
 #include "utils/sqlite_wrapper.h"
 
 static assetdb_t *assets_db;
@@ -141,4 +142,22 @@ bool get_file_parent(const uint64 key, uint64 *out_parent, String **out_path) {
     }
 
     return true;
+}
+
+String * get_export_path(const String *base_export_path, const uint32 hash, const char* ext) {
+    String *result = String_new(64);
+    Path_join(result, base_export_path);
+    String *file_name = find_name32(hash);
+    if (file_name) {
+        Path_join(result, file_name);
+        String_free(file_name);
+    }
+    else {
+        String tmp = {0};
+        String_format(&tmp, "file_%08X", hash);
+        String_append_cstr(&tmp, ext);
+        Path_join(result, &tmp);
+        String_free(&tmp);
+    }
+    return result;
 }
