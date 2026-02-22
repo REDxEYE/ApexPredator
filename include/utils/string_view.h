@@ -4,7 +4,7 @@
 #define APEXPREDATOR_STRING_VIEW_H
 
 #include "int_def.h"
-#include "string.h"
+#include "utils/string.h"
 #include "zstr.h"
 
 typedef struct StringView {

@@ -31,7 +31,10 @@ static void char_print(const char *obj, JsonContext *ctx) {
     jsonValueStr(ctx, obj);
 }
 
-static void signed_char_read(char *obj, const TagFile *tf, const uint8 *src) {
+// static void signed_char_read(char *obj, const TagFile *tf, const uint8 *src) {
+//     memcpy(obj, src, sizeof(char));
+// }
+static void signed_char_read(signed char *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(char));
 }
 
@@ -231,7 +234,7 @@ static void ptr_read(void **dst, const TagFile *tf, const uint8 *src, uint32_t *
     const HKItem *item = &tf->items.items[index];
     HKTagType *tag_type = &tf->types.items[item->type];
     const uint32 type_hash = HKTagType_hash(tag_type);
-    const HavokTypeInfo **type_info_p = DM_get(&HAVOK_TYPES_type_info, type_hash);
+    const HavokTypeInfo **type_info_p = static_cast<const HavokTypeInfo **>(DM_get(&HAVOK_TYPES_type_info, type_hash));
     if (type_info_p == NULL) {
         GLog_Error("No type info for type hash 0x%08X", type_hash);
         abort();
@@ -242,7 +245,7 @@ static void ptr_read(void **dst, const TagFile *tf, const uint8 *src, uint32_t *
         GLog_Error("No read method for type hash 0x%08X", type_hash);
         exit(1);
     }
-    char *out = mp_malloc(type_info->size*item->count);
+    char *out = static_cast<char *>(mp_malloc(type_info->size*item->count));
     *dst = out;
     for (int i = 0; i < item->count; ++i) {
         if (type_info->init != NULL) {
@@ -258,7 +261,7 @@ static void ptr_read(void **dst, const TagFile *tf, const uint8 *src, uint32_t *
 
 static void ptr_free(void *obj) {
     if (obj == NULL)return;
-    const TypedPtr *ptr = obj;
+    const TypedPtr *ptr = static_cast<const TypedPtr *>(obj);
     if (ptr->type_info_->free!=NULL) {
         ptr->type_info_->free(obj);
     }
@@ -266,9 +269,9 @@ static void ptr_free(void *obj) {
 }
 
 static void hkArray_read(void *dst, const TagFile *tf, const uint8 *src) {
-    hkArray *array = dst;
+    hkArray *array = static_cast<hkArray *>(dst);
     uint32_t count = 0;
-    ptr_read((void *) &array->m_data, tf, src + 0, &count);
+    ptr_read(static_cast<void **>((void *) &array->m_data), tf, src + 0, &count);
     unsigned_int_read((uint32_t *) &array->m_size, tf, src + 8);
     unsigned_int_read((uint32_t *) &array->m_capacityAndFlags, tf, src + 12);
     array->m_size = (int32_t) count;
@@ -276,7 +279,7 @@ static void hkArray_read(void *dst, const TagFile *tf, const uint8 *src) {
 }
 
 static void hkArray_print(const void *obj, JsonContext *ctx) {
-    const hkArray *array = obj;
+    const hkArray *array = static_cast<const hkArray *>(obj);
     jsonBeginArray(ctx);
     const HavokTypeInfo* inner_type = array->inner_type_info;
     for (int i = 0; i < array->m_size; ++i) {
@@ -296,7 +299,7 @@ static void hkArray_print(const void *obj, JsonContext *ctx) {
 }
 
 static void hkArray_free(void *obj) {
-    hkArray *array = obj;
+    hkArray *array = static_cast<hkArray *>(obj);
     if (array->m_data != NULL) {
         if (array->inner_type_info->free != NULL) {
             for (int i = 0; i < array->m_size; ++i) {

@@ -10,12 +10,13 @@ typedef struct TrackBBOX {
     float max;
 } TrackBBOX;
 
-typedef enum TrackKind {
+enum class TrackKind {
+    None = 0,
     TRACK_VEC3_STATIC = 1,
     TRACK_VEC3_SPLINE_DYNAMIC = 2,
     TRACK_QUAT_STATIC = 3,
     TRACK_QUAT_SPLINE_DYNAMIC = 4,
-} TrackKind;
+};
 
 typedef struct Track {
     TrackKind kind;

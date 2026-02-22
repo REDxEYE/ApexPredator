@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
-project(ApexPredator C CXX)
+project(ApexPredator CXX)
 include(FetchContent)
-set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 FetchContent_Declare(sqlite3 GIT_REPOSITORY https://github.com/sjinks/sqlite3-cmake GIT_TAG v3.49.1)
 FetchContent_MakeAvailable(sqlite3)
@@ -74,103 +74,102 @@ SET(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/tinycpng)
 
 add_library(AdfLib STATIC
-        src/apex/adf/adf_types.c
-        src/utils/memory_profiler.c
-        src/utils/memory_tracker.c
-        src/apex/adf/adf_support_types.c
+        src/utils/memory_profiler.cpp
+        src/utils/memory_tracker.cpp
+        src/apex/adf/adf_support_types.cpp
+        src/apex/adf/adf_types.cpp
 )
 
 add_library(HavokLib STATIC
-        src/havok/animations/animation.c
-        src/havok/animations/spline.c
-        src/havok/animations/track.c
-        src/havok/generated/havok_generated.c
-        src/havok/havok_helpers.c
-        include/havok/havok_support_types_functions.h
-        src/utils/memory_profiler.c
-        src/utils/memory_tracker.c
+        src/havok/animations/animation.cpp
+        src/havok/animations/spline.cpp
+        src/havok/animations/track.cpp
+        src/havok/generated/havok_generated.cpp
+        src/havok/havok_helpers.cpp
+        src/utils/memory_profiler.cpp
+        src/utils/memory_tracker.cpp
 )
 
 SET(CommonFiles
-        src/apex/aaf/aaf.c
-        src/apex/adf/adf.c
-        src/apex/adf/sti.c
-        src/apex/adf/sti_shared.c
-        src/apex/avtx.c
-        src/apex/hashes.c
-        src/apex/package/tab_archive.c
-        src/apex/rtpc.c
-        src/apex/sarc.c
-        src/havok/havok_types.c
-        src/havok/tag_file/havok_tag_file.c
-        src/havok/tag_file/havok_tag_types.c
-        src/platform/app_state.c
-        src/platform/archive.c
-        src/platform/archive_manager.c
-        src/platform/cli_parser.c
-        src/platform/logger.c
-        src/platform/texture.c
-        src/platform/texture_ops.c
-        src/utils/buffer/buffer.c
-        src/utils/buffer/file_buffer.c
-        src/utils/buffer/memory_buffer.c
-        src/utils/common.c
-        src/utils/dynamic_array.c
-        src/utils/dynamic_map.c
-        src/utils/gltf/cgltf_helper.c
-        src/utils/hash_helper.c
-        src/utils/json.c
-        src/utils/lookup3.c
-        src/utils/memory_profiler.c
-        src/utils/memory_tracker.c
-        src/utils/path.c
-        src/utils/simple_fileio.c
-        src/utils/sqlite_wrapper.c
-        src/utils/stb.c
-        src/utils/string.c
-        src/utils/string_view.c
-        src/utils/zlib_wrapper.c
+        src/apex/aaf/aaf.cpp
+        src/apex/adf/adf.cpp
+        src/apex/adf/sti.cpp
+        src/apex/adf/sti_shared.cpp
+        src/apex/avtx.cpp
+        src/apex/hashes.cpp
+        src/apex/package/tab_archive.cpp
+        src/apex/rtpc.cpp
+        src/apex/sarc.cpp
+        src/havok/havok_types.cpp
+        src/havok/tag_file/havok_tag_file.cpp
+        src/havok/tag_file/havok_tag_types.cpp
+        src/platform/app_state.cpp
+        src/platform/archive.cpp
+        src/platform/archive_manager.cpp
+        src/platform/cli_parser.cpp
+        src/platform/logger.cpp
+        src/platform/texture.cpp
+        src/platform/texture_ops.cpp
+        src/utils/buffer/buffer.cpp
+        src/utils/buffer/file_buffer.cpp
+        src/utils/buffer/memory_buffer.cpp
+        src/utils/common.cpp
+        src/utils/dynamic_array.cpp
+        src/utils/dynamic_map.cpp
+        src/utils/gltf/cgltf_helper.cpp
+        src/utils/hash_helper.cpp
+        src/utils/json.cpp
+        src/utils/lookup3.cpp
+        src/utils/memory_profiler.cpp
+        src/utils/memory_tracker.cpp
+        src/utils/path.cpp
+        src/utils/simple_fileio.cpp
+        src/utils/sqlite_wrapper.cpp
+        src/utils/stb.cpp
+        src/utils/string.cpp
+        src/utils/string_view.cpp
+        src/utils/zlib_wrapper.cpp
 )
 
 add_executable(ApexPredator
-        src/tools/apex_predator/apex_predator.c
-        src/tools/apex_predator/commands.c
-        src/exporter/adf_export.c
-        src/exporter/amf_export.c
-        src/exporter/common_export.c
-        src/exporter/ddsc_export.c
-        src/exporter/rtpc_export.c
-        src/exporter/havok_export.c
-        src/exporter/fmod_export.c
+        src/tools/apex_predator/apex_predator.cpp
+        src/exporter/adf_export.cpp
+        src/exporter/amf_export.cpp
+        src/exporter/common_export.cpp
+        src/exporter/ddsc_export.cpp
+        src/exporter/rtpc_export.cpp
+        src/exporter/havok_export.cpp
+        src/exporter/fmod_export.cpp
 
         ${CommonFiles}
-        src/tools/apex_predator/commands/extract.c
-        src/tools/apex_predator/commands/extract_anim.c
-        src/tools/apex_predator/commands/search.c
+        src/tools/apex_predator/commands/extract.cpp
+        src/tools/apex_predator/commands/extract_anim.cpp
+        src/tools/apex_predator/commands/search.cpp
+        src/tools/apex_predator/commands/convert.cpp
 
 )
 
 add_executable(AdfTypeGenerator
-        src/tools/adf_type_gen.c
-        src/apex/adf/sti_codegen.c
-        src/utils/memory_tracker.c
+        src/tools/adf_type_gen.cpp
+        src/apex/adf/sti_codegen.cpp
+        src/utils/memory_tracker.cpp
         ${CommonFiles}
 )
 
 add_executable(HavokTypeGenerator
-        src/tools/havok_type_gen.c
-        src/havok/havok_codegen.c
+        src/tools/havok_type_gen.cpp
+        src/havok/havok_codegen.cpp
         ${CommonFiles}
 )
 
 add_executable(HashCollector
-        src/tools/hash_collector.c
+        src/tools/hash_collector.cpp
         ${CommonFiles}
 )
 
 add_executable(StringHasher
-        src/tools/string_hasher.c
-        src/utils/lookup3.c
+        src/tools/string_hasher.cpp
+        src/utils/lookup3.cpp
 )
 
 
@@ -244,9 +243,9 @@ if (WIN32)
     FetchContent_MakeAvailable(minhook)
 
     add_library(builtinAdfDumper SHARED
-            src/tools/builtin_adf_dumper/builtinAdfDumper.c
-            src/tools/builtin_adf_dumper/exports.c
-            src/tools/builtin_adf_dumper/patterns.c
+            src/tools/builtin_adf_dumper/builtinAdfDumper.cpp
+            src/tools/builtin_adf_dumper/exports.cpp
+            src/tools/builtin_adf_dumper/patterns.cpp
     )
     target_link_libraries(builtinAdfDumper PRIVATE minhook)
     target_link_directories(builtinAdfDumper PRIVATE external/detours/src)

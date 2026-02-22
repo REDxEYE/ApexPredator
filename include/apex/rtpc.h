@@ -13,7 +13,7 @@
 
 typedef struct RuntimeNode RuntimeNode;
 
-typedef enum {
+enum class PropType:uint8{
     PROP_TYPE_NONE = 0,
     PROP_TYPE_U32 = 1,
     PROP_TYPE_F32 = 2,
@@ -31,7 +31,7 @@ typedef enum {
     PROP_TYPE_EVENT = 14,
     PROP_TYPE_UNK_15 = 15,
     PROP_TYPE_UNK_16 = 16,
-} PropType;
+};
 
 typedef struct RuntimeEvent{
     uint32 a;

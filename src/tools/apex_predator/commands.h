@@ -138,33 +138,73 @@ static const CommandArgument search_arguments[] = {
     }
 };
 
+static const CommandArgument convert_arguments[] = {
+    {
+        .name = "input",
+        .description = "Path to the input file to convert.",
+        .type = COMMAND_ARG_TYPE_STRING,
+        .named = false,
+        .required = true,
+        .has_default = false,
+    },
+    {
+        .name = "out_dir",
+        .flag = "o",
+        .description = "Output directory for extracted assets.",
+        .type = COMMAND_ARG_TYPE_STRING,
+        .named = true,
+        .required = false,
+        .has_default = true,
+        .string_value = "./extracted",
+    },
+    {
+        .name = "v_output",
+        .flag = "v",
+        .description = "Virtual file path, will be used to calculate hashes. Actual output will be <out_dir>/<v_output>",
+        .type = COMMAND_ARG_TYPE_STRING,
+        .named = true,
+        .required = true,
+        .has_default = false,
+    }
+};
 
-void extract_handler(AppState* app_state, const CliResult* cli_res);
-void extract_anims_handler(AppState* app_state, const CliResult* cli_res);
-void search_handler(const AppState* app_state, const CliResult* cli_res);
+void extract_handler(AppState *app_state, const CliResult *cli_res);
+
+void extract_anims_handler(AppState *app_state, const CliResult *cli_res);
+
+void search_handler(const AppState *app_state, const CliResult *cli_res);
+
+void convert_handler(const AppState *app_state, const CliResult *cli_res);
 
 
 static const SubCommand sub_commands[] = {
     {
         .name = "extract",
         .description = "Extract assets.",
-        .execute = (execute_fn)extract_handler,
+        .execute = (execute_fn) extract_handler,
         .argument_count = sizeof(extract_arguments) / sizeof(CommandArgument),
         .arguments = extract_arguments,
     },
     {
         .name = "extract-anims",
         .description = "Extract animations from a Havok animation container.",
-        .execute = (execute_fn)extract_anims_handler,
+        .execute = (execute_fn) extract_anims_handler,
         .argument_count = sizeof(extract_anim_arguments) / sizeof(CommandArgument),
         .arguments = extract_anim_arguments,
     },
     {
         .name = "search",
         .description = "Search for assets by hash or path or pattern.",
-        .execute = (execute_fn)search_handler,
+        .execute = (execute_fn) search_handler,
         .argument_count = sizeof(search_arguments) / sizeof(CommandArgument),
         .arguments = search_arguments,
+    },
+    {
+        .name = "convert",
+        .description = "Converts input png to avtx texture, json into rtpc or adf",
+        .execute = (execute_fn) convert_handler,
+        .argument_count = sizeof(convert_arguments) / sizeof(CommandArgument),
+        .arguments = convert_arguments,
     }
 };
 

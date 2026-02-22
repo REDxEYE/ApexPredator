@@ -3,8 +3,8 @@
 
     <!-- zstr -->
     <Type Name="zstr">
-        <DisplayString Condition="is_long != 0">"{l.ptr,s8}" (len={l.len}, cap={l.cap})</DisplayString>
-        <DisplayString Condition="is_long == 0">"{s.buf,s8}" (len={s.len}, sso)</DisplayString>
+        <DisplayString Condition="is_long != 0">{l.ptr,s8} (len={l.len}, cap={l.cap})</DisplayString>
+        <DisplayString Condition="is_long == 0">{s.buf,s8} (len={s.len}, sso)</DisplayString>
 
         <!-- Make it show as a string in watch windows -->
         <StringView Condition="is_long != 0">l.ptr</StringView>
@@ -28,7 +28,7 @@
 
     <!-- Optional: show underlying layouts if you ever inspect them -->
     <Type Name="zstr_long">
-        <DisplayString>"{ptr,s8}" (len={len}, cap={cap})</DisplayString>
+        <DisplayString>{ptr,s8} (len={len}, cap={cap})</DisplayString>
         <StringView>ptr</StringView>
         <Expand>
             <Item Name="ptr">ptr</Item>
@@ -38,7 +38,7 @@
     </Type>
 
     <Type Name="zstr_short">
-        <DisplayString>"{buf,s8}" (len={len}, sso)</DisplayString>
+        <DisplayString>{buf,s8} (len={len}, sso)</DisplayString>
         <StringView>buf</StringView>
         <Expand>
             <ArrayItems>
@@ -52,8 +52,8 @@
 
     <!-- Your wrapper -->
     <Type Name="String">
-        <DisplayString Condition="s.is_long != 0">"{s.l.ptr,s8}" (len={s.l.len}, cap={s.l.cap}, heap={heap_allocated})</DisplayString>
-        <DisplayString Condition="s.is_long == 0">"{s.s.buf,s8}" (len={s.s.len}, sso, heap={heap_allocated})</DisplayString>
+        <DisplayString Condition="s.is_long != 0">{s.l.ptr,s8} (len={s.l.len}, cap={s.l.cap}, heap={heap_allocated})</DisplayString>
+        <DisplayString Condition="s.is_long == 0">{s.s.buf,s8} (len={s.s.len}, sso, heap={heap_allocated})</DisplayString>
 
         <StringView Condition="s.is_long != 0">s.l.ptr</StringView>
         <StringView Condition="s.is_long == 0">s.s.buf</StringView>

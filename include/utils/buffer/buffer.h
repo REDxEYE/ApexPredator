@@ -5,8 +5,8 @@
 
 #include "int_def.h"
 #include "utils/string.h"
-struct Buffer_s;
-struct BufferInterface_s;
+struct Buffer;
+struct BufferInterface;
 
 typedef enum {
     BUFFER_ORIGIN_START = 0,
@@ -92,7 +92,7 @@ typedef enum BufferType {
     BUFFER_TYPE_FILE,
 } BufferType;
 
-typedef struct BufferInterface_s {
+struct BufferInterface{
     BufferSetPositionFn set_position;
     BufferGetPositionFn get_position;
     BufferReadFn read;
@@ -125,11 +125,10 @@ typedef struct BufferInterface_s {
     WriteCStringFn write_cstring;
     WriteStringFn write_string;
     BufferType type;
-} BufferInterface;
+};
 
-typedef struct Buffer_s {
-    struct BufferInterface_s;
-} Buffer;
+struct Buffer : BufferInterface {
+};
 
 void Buffer_init(Buffer *buffer);
 

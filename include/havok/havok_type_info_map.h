@@ -17,8 +17,8 @@ typedef void (*printHavokObject)(void *obj, JsonContext *ctx);
 
 typedef struct HavokVTable {
     initHavokObject init;
-    readHavokObject read;
     freeHavokObject free;
+    readHavokObject read;
     printHavokObject print;
     uint32 size;
     uint32 disk_size:30;

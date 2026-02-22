@@ -6,11 +6,11 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#define jsonValueStr(_Ctx, _Value) jsonValue(_Ctx, (JsonValue) {.type = JsonType_String, .string = (_Value)})
-#define jsonValueNum(_Ctx, _Value) jsonValue(_Ctx, (JsonValue) {.type = JsonType_Integer, .integer = (_Value)})
-#define jsonValueFlt(_Ctx, _Value) jsonValue(_Ctx, (JsonValue) {.type = JsonType_Float, .float_ = (_Value)})
-#define jsonValueBool(_Ctx, _Value) jsonValue(_Ctx, (JsonValue) {.type = JsonType_Bool, .integer = (_Value)})
-#define jsonValueNull(_Ctx) jsonValue(_Ctx, (JsonValue) {.type = JsonType_Null})
+#define jsonValueStr(_Ctx, _Value) jsonValue(_Ctx, JsonValue{.type = JsonType_String, .string = (_Value)})
+#define jsonValueNum(_Ctx, _Value) jsonValue(_Ctx, JsonValue{.type = JsonType_Integer, .integer = (int64_t)(_Value)})
+#define jsonValueFlt(_Ctx, _Value) jsonValue(_Ctx, JsonValue{.type = JsonType_Float, .float_ = (_Value)})
+#define jsonValueBool(_Ctx, _Value) jsonValue(_Ctx, JsonValue{.type = JsonType_Bool, .integer = (_Value)})
+#define jsonValueNull(_Ctx) jsonValue(_Ctx, {.type = JsonType_Null})
 
 #define jsonBeginCompactObject(_Ctx) do { jsonBeginObject(_Ctx); jsonCompact(_Ctx, 1); } while (0)
 #define jsonEndCompactObject(_Ctx) do { jsonEndObject(_Ctx); jsonCompact(_Ctx, 0); } while (0)
@@ -59,12 +59,14 @@
         jsonBeginCompactArray(_Ctx);      \
     } while (0)
 
+enum class JsonScope : uint32_t;
+
 typedef struct JsonContext {
     FILE *stream;
     int compact;
     const char *name;
     size_t index;
-    int scopes[32];
+    JsonScope scopes[32];
 }JsonContext;
 
 enum JsonType {

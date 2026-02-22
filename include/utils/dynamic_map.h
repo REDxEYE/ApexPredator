@@ -3,7 +3,6 @@
 #ifndef APEXPREDATOR_DYNAMIC_INSERT_ONLY_MAP_H
 #define APEXPREDATOR_DYNAMIC_INSERT_ONLY_MAP_H
 
-#include <stddef.h>
 #include "utils/dynamic_array.h"
 
 DYNAMIC_ARRAY_STRUCT(uint64, DM_Key);

@@ -735,52 +735,56 @@ typedef struct EffectRTParamHandler EffectRTParamHandler;// size: 56
 typedef struct EffectRTSystem EffectRTSystem;// size: 224
 typedef struct EffectVertexArray EffectVertexArray;// size: 16
 typedef struct EffectTrimData EffectTrimData;// size: 40
-typedef struct TerrainPatch TerrainPatch;// size: 632
-typedef struct TerrainMesh TerrainMesh;// size: 224
 typedef struct CompressedData CompressedData;// size: 32
-typedef struct TerrainPrimitive TerrainPrimitive;// size: 32
+typedef struct TerrainMesh TerrainMesh;// size: 224
 typedef struct TerrainTexture TerrainTexture;// size: 48
-typedef struct InstanceDataPatch InstanceDataPatch;// size: 48
-typedef struct InstanceDataLayer InstanceDataLayer;// size: 128
-typedef struct VegetationSystemInstance VegetationSystemInstance;// size: 24
-typedef struct VegetationDebugData VegetationDebugData;// size: 64
-typedef struct VegetationBillboardLayerStats VegetationBillboardLayerStats;// size: 32
-typedef struct TerrainPatchInfo TerrainPatchInfo;// size: 48
-typedef struct ArrayAABB ArrayAABB;// size: 28
-typedef struct WorldAudioPatchData WorldAudioPatchData;// size: 16
-typedef struct WorldAudioPatchZoneData WorldAudioPatchZoneData;// size: 48
-typedef struct WorldAudioVector4 WorldAudioVector4;// size: 16
-typedef struct WorldAudioPatchNormalData WorldAudioPatchNormalData;// size: 16
-typedef struct WorldAudioPatchZoneNormalData WorldAudioPatchZoneNormalData;// size: 72
-typedef struct VegetationDataBuffer VegetationDataBuffer;// size: 16
-typedef struct ForestMesh ForestMesh;// size: 40
-typedef struct ForestVertex ForestVertex;// size: 4
-typedef struct WorldAudioInfo WorldAudioInfo;// size: 40
-typedef struct WorldAudioZone WorldAudioZone;// size: 112
-typedef struct ImpostorCollection ImpostorCollection;// size: 16
-typedef struct ImpostorInfo ImpostorInfo;// size: 72
-typedef struct ImpostorMesh ImpostorMesh;// size: 56
-typedef struct ImpostorVertex ImpostorVertex;// size: 24
-typedef struct TerrainSystem TerrainSystem;// size: 136
+typedef struct TerrainPatchTexelNeighborhood TerrainPatchTexelNeighborhood;// size: 8
+typedef struct TerrainPatchTexelConnectivity TerrainPatchTexelConnectivity;// size: 80
+typedef struct TerrainPatchType TerrainPatchType;// size: 464
+typedef struct TerrainPrimitive TerrainPrimitive;// size: 32
+typedef struct TerrainPatch TerrainPatch;// size: 632
 typedef struct TerrainTextureInfo TerrainTextureInfo;// size: 32
 typedef struct TerrainColor TerrainColor;// size: 3
-typedef struct ShaderRules ShaderRules;// size: 564
 typedef struct TerrainMaterial TerrainMaterial;// size: 56
-typedef struct VegetationWorld VegetationWorld;// size: 176
-typedef struct VegetationLayers VegetationLayers;// size: 64
+typedef struct ShaderRules ShaderRules;// size: 564
+typedef struct TerrainSystem TerrainSystem;// size: 136
+typedef struct WorldAudioZone WorldAudioZone;// size: 112
+typedef struct WorldAudioInfo WorldAudioInfo;// size: 40
+typedef struct WorldAudioVector4 WorldAudioVector4;// size: 16
+typedef struct WorldAudioPatchZoneData WorldAudioPatchZoneData;// size: 48
+typedef struct WorldAudioPatchZoneNormalData WorldAudioPatchZoneNormalData;// size: 72
+typedef struct WorldAudioPatchData WorldAudioPatchData;// size: 16
+typedef struct WorldAudioPatchNormalData WorldAudioPatchNormalData;// size: 16
+typedef struct ImpostorVertex ImpostorVertex;// size: 24
+typedef struct ImpostorMesh ImpostorMesh;// size: 56
+typedef struct ImpostorInfo ImpostorInfo;// size: 72
+typedef struct ImpostorCollection ImpostorCollection;// size: 16
+typedef struct VegetationModel VegetationModel;// size: 96
+typedef struct VegetationPlacementSettings VegetationPlacementSettings;// size: 48
+typedef struct VegetationEffect VegetationEffect;// size: 104
+typedef struct VegetationPhysics VegetationPhysics;// size: 88
+typedef struct VegetationObject VegetationObject;// size: 352
+typedef struct ProbabilityBuffer ProbabilityBuffer;// size: 24
+typedef struct VegetationSet VegetationSet;// size: 32
+typedef struct VegetationZone VegetationZone;// size: 16
+typedef struct VegetationIndex VegetationIndex;// size: 4
 typedef struct VegetationForestLayer VegetationForestLayer;// size: 64
 typedef struct VegetationBillboardLayer VegetationBillboardLayer;// size: 44
 typedef struct VegetationModelLayer VegetationModelLayer;// size: 52
 typedef struct VegetationPhysicsLayer VegetationPhysicsLayer;// size: 24
-typedef struct VegetationZone VegetationZone;// size: 16
-typedef struct VegetationSet VegetationSet;// size: 32
-typedef struct ProbabilityBuffer ProbabilityBuffer;// size: 24
-typedef struct VegetationObject VegetationObject;// size: 352
-typedef struct VegetationModel VegetationModel;// size: 96
-typedef struct VegetationPhysics VegetationPhysics;// size: 88
-typedef struct VegetationEffect VegetationEffect;// size: 104
-typedef struct VegetationPlacementSettings VegetationPlacementSettings;// size: 48
-typedef struct VegetationIndex VegetationIndex;// size: 4
+typedef struct VegetationLayers VegetationLayers;// size: 64
+typedef struct VegetationWorld VegetationWorld;// size: 176
+typedef struct VegetationSystemInstanceSrc VegetationSystemInstanceSrc;// size: 48
+typedef struct VegetationSystemInstance VegetationSystemInstance;// size: 24
+typedef struct ArrayAABB ArrayAABB;// size: 28
+typedef struct TerrainPatchInfo TerrainPatchInfo;// size: 48
+typedef struct VegetationBillboardLayerStats VegetationBillboardLayerStats;// size: 32
+typedef struct VegetationDebugData VegetationDebugData;// size: 64
+typedef struct InstanceDataLayer InstanceDataLayer;// size: 128
+typedef struct InstanceDataPatch InstanceDataPatch;// size: 48
+typedef struct ForestVertex ForestVertex;// size: 4
+typedef struct ForestMesh ForestMesh;// size: 40
+typedef struct VegetationDataBuffer VegetationDataBuffer;// size: 16
 typedef struct GeneralMeshConstants GeneralMeshConstants;// size: 8
 typedef struct GeneralR2Constants GeneralR2Constants;// size: 32
 typedef struct GeneralMkIIIConstants GeneralMkIIIConstants;// size: 320
@@ -12257,13 +12261,6 @@ typedef struct TerrainMesh{
     CompressedData GroupTriIndices; // offset: 192, size: 32
 } TerrainMesh; // size: 224
 
-#define STI_TYPE_HASH_Array_TerrainPrimitive 0x80B0FEC7
-typedef struct Array_TerrainPrimitive {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    TerrainPrimitive* items;
-} Array_TerrainPrimitive; // size: 16
-
 #define STI_TYPE_HASH_BlockCompressionType 0xD97AAC30
 typedef enum{ // size: 4
     E_BLOCKCOMPRESSIONTYPE_NONE = 0,
@@ -12283,6 +12280,63 @@ typedef struct TerrainTexture{
     CompressedData Data; // offset: 16, size: 32
 } TerrainTexture; // size: 48
 
+#define STI_TYPE_HASH_TerrainPatchTexelNeighborhood 0x6D19D407
+typedef struct TerrainPatchTexelNeighborhood{
+    const STITypeInfo* type_info_;
+    uint16 Flags; // offset: 0, size: 2
+    uint16 Count; // offset: 2, size: 2
+    uint32 Start; // offset: 4, size: 4
+} TerrainPatchTexelNeighborhood; // size: 8
+
+#define STI_TYPE_HASH_TerrainPatchTexelConnectivity 0xDD8B3562
+typedef struct TerrainPatchTexelConnectivity{
+    const STITypeInfo* type_info_;
+    Array_int32 TexelMap; // offset: 0, size: 16
+    Array_uint64 Neighborhoods; // offset: 16, size: 16
+    Array_uint32 NeighborhoodData; // offset: 32, size: 16
+    Array_uint64 AdjacentAtoms; // offset: 48, size: 16
+    Array_uint32 AdjacentAtomData; // offset: 64, size: 16
+} TerrainPatchTexelConnectivity; // size: 80
+
+#define STI_TYPE_HASH_Array_TerrainMesh 0x9962046F
+typedef struct Array_TerrainMesh {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    TerrainMesh* items;
+} Array_TerrainMesh; // size: 16
+
+#define STI_TYPE_HASH_TerrainPatchType 0xD1100928
+typedef struct TerrainPatchType{
+    const STITypeInfo* type_info_;
+    Array_TerrainMesh TerrainMesh; // offset: 0, size: 16
+    TerrainTexture TerrainDisplacementTexture; // offset: 16, size: 48
+    TerrainTexture TerrainNormalTexture; // offset: 64, size: 48
+    TerrainTexture TerrainTriangleMapTexture; // offset: 112, size: 48
+    TerrainTexture TerrainMaterialDuplexTexture; // offset: 160, size: 48
+    TerrainTexture TerrainQualityTexture; // offset: 208, size: 48
+    TerrainTexture TerrainIndirectionTexture; // offset: 256, size: 48
+    TerrainTexture TerrainSSDFAtlas; // offset: 304, size: 48
+    TerrainPatchTexelConnectivity TexelConnectivity; // offset: 352, size: 80
+    Array_float32 LegoVertices; // offset: 432, size: 16
+    Array_uint8 VertexFlags; // offset: 448, size: 16
+} TerrainPatchType; // size: 464
+
+#define STI_TYPE_HASH_TerrainPrimitive 0x45FEA6F5
+typedef struct TerrainPrimitive{
+    const STITypeInfo* type_info_;
+    float32 AABBMin[3]; // offset: 0, size: 12
+    float32 AABBMax[3]; // offset: 12, size: 12
+    float32 MinW; // offset: 24, size: 4
+    float32 MaxW; // offset: 28, size: 4
+} TerrainPrimitive; // size: 32
+
+#define STI_TYPE_HASH_Array_TerrainPrimitive 0x80B0FEC7
+typedef struct Array_TerrainPrimitive {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    TerrainPrimitive* items;
+} Array_TerrainPrimitive; // size: 16
+
 #define STI_TYPE_HASH_TerrainPatch 0xFD31E1DB
 typedef struct TerrainPatch{
     const STITypeInfo* type_info_;
@@ -12299,301 +12353,6 @@ typedef struct TerrainPatch{
     uint32 DisplacementDownsampled; // offset: 624, size: 4
 } TerrainPatch; // size: 632
 
-#define STI_TYPE_HASH_TerrainPrimitive 0x45FEA6F5
-typedef struct TerrainPrimitive{
-    const STITypeInfo* type_info_;
-    float32 AABBMin[3]; // offset: 0, size: 12
-    float32 AABBMax[3]; // offset: 12, size: 12
-    float32 MinW; // offset: 24, size: 4
-    float32 MaxW; // offset: 28, size: 4
-} TerrainPrimitive; // size: 32
-
-#define STI_TYPE_HASH_Array_InstanceDataLayer 0x766E412E
-typedef struct Array_InstanceDataLayer {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    InstanceDataLayer* items;
-} Array_InstanceDataLayer; // size: 16
-
-#define STI_TYPE_HASH_Array_TerrainPatchInfo 0x6032D156
-typedef struct Array_TerrainPatchInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    TerrainPatchInfo* items;
-} Array_TerrainPatchInfo; // size: 16
-
-#define STI_TYPE_HASH_InstanceDataPatch 0xFD88832A
-typedef struct InstanceDataPatch{
-    const STITypeInfo* type_info_;
-    int32 PatchX; // offset: 0, size: 4
-    int32 PatchZ; // offset: 4, size: 4
-    int32 PatchLod; // offset: 8, size: 4
-    Array_InstanceDataLayer InstanceDataLayers; // offset: 16, size: 16
-    Array_TerrainPatchInfo TerrainPatchInfo; // offset: 32, size: 16
-} InstanceDataPatch; // size: 48
-
-#define STI_TYPE_HASH_Array_VegetationSystemInstance 0xEA0A66F0
-typedef struct Array_VegetationSystemInstance {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationSystemInstance* items;
-} Array_VegetationSystemInstance; // size: 16
-
-#define STI_TYPE_HASH_VegetationBillboardLayerStats 0xA553A921
-typedef struct VegetationBillboardLayerStats{
-    const STITypeInfo* type_info_;
-    uint8 IsRidge; // offset: 0, size: 1
-    uint32 NumInstances; // offset: 4, size: 4
-    uint32 NumOnTreeLine; // offset: 8, size: 4
-    uint32 NumOnRidges; // offset: 12, size: 4
-    uint32 NumCulledBySize; // offset: 16, size: 4
-    uint32 NumCulledByForestMesh; // offset: 20, size: 4
-    uint32 NumCulledBySeaLevel; // offset: 24, size: 4
-    uint32 NumCulledByThinout; // offset: 28, size: 4
-} VegetationBillboardLayerStats; // size: 32
-
-#define STI_TYPE_HASH_VegetationDebugData 0xC7D58849
-typedef struct VegetationDebugData{
-    const STITypeInfo* type_info_;
-    Array_uint16 LocationIndices; // offset: 0, size: 16
-    Array_String LocationNames; // offset: 16, size: 16
-    VegetationBillboardLayerStats Stats; // offset: 32, size: 32
-} VegetationDebugData; // size: 64
-
-#define STI_TYPE_HASH_InstanceDataLayer 0xF8DD7138
-typedef struct InstanceDataLayer{
-    const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 Name; // offset: 0, size: 4
-    float32 BoundingMin[3]; // offset: 4, size: 12
-    float32 BoundingMax[3]; // offset: 16, size: 12
-    Array_VegetationSystemInstance Instances; // offset: 32, size: 16
-    Array_uint32 UsedTypes; // offset: 48, size: 16
-    VegetationDebugData VegetationDebugData; // offset: 64, size: 64
-} InstanceDataLayer; // size: 128
-
-#define STI_TYPE_HASH_VegetationSystemInstance 0x1F783B17
-typedef struct VegetationSystemInstance{
-    const STITypeInfo* type_info_;
-    uint16 X; // offset: 0, size: 2
-    uint16 Z; // offset: 2, size: 2
-    uint32 Y; // offset: 4, size: 4
-    uint8 ZoneIndex; // offset: 8, size: 1
-    uint8 IsPlanted; // offset: 8, size: 1
-    uint8 IsDestroyed; // offset: 8, size: 1
-    uint32 Rotation; // offset: 12, size: 4
-    uint8 Color_R; // offset: 16, size: 1
-    uint8 Color_G; // offset: 17, size: 1
-    uint8 Color_B; // offset: 18, size: 1
-    StringHash_48c5294d_4 NameHash; // offset: 20, size: 4
-} VegetationSystemInstance; // size: 24
-
-#define STI_TYPE_HASH_Array_ArrayAABB 0x573FA4BF
-typedef struct Array_ArrayAABB {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ArrayAABB* items;
-} Array_ArrayAABB; // size: 16
-
-#define STI_TYPE_HASH_TerrainPatchInfo 0xB9D80AD4
-typedef struct TerrainPatchInfo{
-    const STITypeInfo* type_info_;
-    int32 PatchX; // offset: 0, size: 4
-    int32 PatchZ; // offset: 4, size: 4
-    int32 PatchLod; // offset: 8, size: 4
-    Array_uint32 TriangleIndices; // offset: 16, size: 16
-    Array_ArrayAABB TriangleQuadTree; // offset: 32, size: 16
-} TerrainPatchInfo; // size: 48
-
-#define STI_TYPE_HASH_ArrayAABB 0x200D0BC9
-typedef struct ArrayAABB{
-    const STITypeInfo* type_info_;
-    uint32 X; // offset: 0, size: 4
-    uint32 Z; // offset: 4, size: 4
-    uint32 Size; // offset: 8, size: 4
-    uint32 Index; // offset: 12, size: 4
-    uint32 Count; // offset: 16, size: 4
-    int16 Children[4]; // offset: 20, size: 8
-} ArrayAABB; // size: 28
-
-#define STI_TYPE_HASH_Array_WorldAudioPatchZoneData 0x165A5795
-typedef struct Array_WorldAudioPatchZoneData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    WorldAudioPatchZoneData* items;
-} Array_WorldAudioPatchZoneData; // size: 16
-
-#define STI_TYPE_HASH_WorldAudioPatchData 0xB057437A
-typedef struct WorldAudioPatchData{
-    const STITypeInfo* type_info_;
-    Array_WorldAudioPatchZoneData ZoneData; // offset: 0, size: 16
-} WorldAudioPatchData; // size: 16
-
-#define STI_TYPE_HASH_Array_WorldAudioVector4 0x5EE422D0
-typedef struct Array_WorldAudioVector4 {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    WorldAudioVector4* items;
-} Array_WorldAudioVector4; // size: 16
-
-#define STI_TYPE_HASH_WorldAudioPatchZoneData 0xD7FF1C92
-typedef struct WorldAudioPatchZoneData{
-    const STITypeInfo* type_info_;
-    Array_WorldAudioVector4 Points; // offset: 0, size: 16
-    uint32 ZoneIndex; // offset: 16, size: 4
-    float32 MinBounds[3]; // offset: 20, size: 12
-    float32 MaxBounds[3]; // offset: 32, size: 12
-} WorldAudioPatchZoneData; // size: 48
-
-#define STI_TYPE_HASH_WorldAudioVector4 0x21A16FA4
-typedef struct WorldAudioVector4{
-    const STITypeInfo* type_info_;
-    float32 Vec[4]; // offset: 0, size: 16
-} WorldAudioVector4; // size: 16
-
-#define STI_TYPE_HASH_Array_WorldAudioPatchZoneNormalData 0x65950F52
-typedef struct Array_WorldAudioPatchZoneNormalData {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    WorldAudioPatchZoneNormalData* items;
-} Array_WorldAudioPatchZoneNormalData; // size: 16
-
-#define STI_TYPE_HASH_WorldAudioPatchNormalData 0x6D5409F0
-typedef struct WorldAudioPatchNormalData{
-    const STITypeInfo* type_info_;
-    Array_WorldAudioPatchZoneNormalData ZoneNormalData; // offset: 0, size: 16
-} WorldAudioPatchNormalData; // size: 16
-
-#define STI_TYPE_HASH_WorldAudioPatchZoneNormalData 0x2EEB55AC
-typedef struct WorldAudioPatchZoneNormalData{
-    const STITypeInfo* type_info_;
-    Array_WorldAudioVector4 Points; // offset: 0, size: 16
-    Array_WorldAudioVector4 Normals; // offset: 16, size: 16
-    uint32 ZoneIndex; // offset: 32, size: 4
-    float32 MinBounds[3]; // offset: 36, size: 12
-    float32 MaxBounds[3]; // offset: 48, size: 12
-    float32 MedianNormal[3]; // offset: 60, size: 12
-} WorldAudioPatchZoneNormalData; // size: 72
-
-#define STI_TYPE_HASH_VegetationDataBuffer 0x8F581B21
-typedef struct VegetationDataBuffer{
-    const STITypeInfo* type_info_;
-    Array_uint8 Buffer; // offset: 0, size: 16
-} VegetationDataBuffer; // size: 16
-
-#define STI_TYPE_HASH_Array_ForestVertex 0xDAEE84C4
-typedef struct Array_ForestVertex {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ForestVertex* items;
-} Array_ForestVertex; // size: 16
-
-#define STI_TYPE_HASH_ForestMesh 0xC2D93166
-typedef struct ForestMesh{
-    const STITypeInfo* type_info_;
-    Array_ForestVertex Vertices; // offset: 0, size: 16
-    float32 BoundingMin[3]; // offset: 16, size: 12
-    float32 BoundingMax[3]; // offset: 28, size: 12
-} ForestMesh; // size: 40
-
-#define STI_TYPE_HASH_ForestVertex 0x291C7A90
-typedef struct ForestVertex{
-    const STITypeInfo* type_info_;
-    uint16 Y; // offset: 0, size: 2
-    uint8 Slope[2]; // offset: 2, size: 2
-} ForestVertex; // size: 4
-
-#define STI_TYPE_HASH_Array_WorldAudioZone 0xD576CE35
-typedef struct Array_WorldAudioZone {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    WorldAudioZone* items;
-} Array_WorldAudioZone; // size: 16
-
-#define STI_TYPE_HASH_WorldAudioInfo 0x4317D9C4
-typedef struct WorldAudioInfo{
-    const STITypeInfo* type_info_;
-    float32 SortStability; // offset: 0, size: 4
-    uint32 AudibleLayerCount; // offset: 4, size: 4
-    float32 SampleStepSize; // offset: 8, size: 4
-    float32 DepthStepSize; // offset: 12, size: 4
-    float32 DropOffDistance; // offset: 16, size: 4
-    Array_WorldAudioZone Zones; // offset: 24, size: 16
-} WorldAudioInfo; // size: 40
-
-#define STI_TYPE_HASH_WorldAudioZone 0x18BAF172
-typedef struct WorldAudioZone{
-    const STITypeInfo* type_info_;
-    String Name; // offset: 0, size: 8
-    String LoopGuid; // offset: 8, size: 8
-    String DetailGuid; // offset: 16, size: 8
-    float32 SortBias; // offset: 24, size: 4
-    float32 DepthRadius; // offset: 28, size: 4
-    float32 Radius; // offset: 32, size: 4
-    float32 VolumeSumBias; // offset: 36, size: 4
-    float32 MaxDistance; // offset: 40, size: 4
-    float32 Linearity; // offset: 44, size: 4
-    float32 EnergyRadius; // offset: 48, size: 4
-    float32 DetailDensity; // offset: 52, size: 4
-    float32 DetailRadius; // offset: 56, size: 4
-    float32 DetailVolumeSumBias; // offset: 60, size: 4
-    float32 DetailMaxDistance; // offset: 64, size: 4
-    float32 DetailLinearity; // offset: 68, size: 4
-    float32 DetailEnergyRadius; // offset: 72, size: 4
-    float32 FadeOutTime; // offset: 76, size: 4
-    float32 FadeInTime; // offset: 80, size: 4
-    float32 ZoneHeight; // offset: 84, size: 4
-    uint32 ZoneType; // offset: 88, size: 4
-    float32 DebugColor[3]; // offset: 92, size: 12
-    uint8 IsAllowedUnderwater; // offset: 104, size: 1
-} WorldAudioZone; // size: 112
-
-#define STI_TYPE_HASH_Array_ImpostorInfo 0x826D2C79
-typedef struct Array_ImpostorInfo {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ImpostorInfo* items;
-} Array_ImpostorInfo; // size: 16
-
-#define STI_TYPE_HASH_ImpostorCollection 0x10074530
-typedef struct ImpostorCollection{
-    const STITypeInfo* type_info_;
-    Array_ImpostorInfo Impostors; // offset: 0, size: 16
-} ImpostorCollection; // size: 16
-
-#define STI_TYPE_HASH_Array_ImpostorVertex 0x940AA886
-typedef struct Array_ImpostorVertex {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ImpostorVertex* items;
-} Array_ImpostorVertex; // size: 16
-
-#define STI_TYPE_HASH_ImpostorMesh 0xE3FD79AC
-typedef struct ImpostorMesh{
-    const STITypeInfo* type_info_;
-    Array_uint16 Indices; // offset: 0, size: 16
-    Array_ImpostorVertex Vertices; // offset: 16, size: 16
-    float32 Size[2]; // offset: 32, size: 8
-    float32 Offset[3]; // offset: 40, size: 12
-    uint8 Single; // offset: 52, size: 1
-} ImpostorMesh; // size: 56
-
-#define STI_TYPE_HASH_ImpostorInfo 0xAA6D6A0E
-typedef struct ImpostorInfo{
-    const STITypeInfo* type_info_;
-    ImpostorMesh ImpostorMesh; // offset: 0, size: 56
-    float32 Transmission; // offset: 56, size: 4
-    float32 SphereNormalInfluence; // offset: 60, size: 4
-    uint16 TreeId; // offset: 64, size: 2
-} ImpostorInfo; // size: 72
-
-#define STI_TYPE_HASH_ImpostorVertex 0x1CFB60D3
-typedef struct ImpostorVertex{
-    const STITypeInfo* type_info_;
-    float32 Position[2]; // offset: 0, size: 8
-    float32 Uvs[2]; // offset: 8, size: 8
-    float32 Normal[2]; // offset: 16, size: 8
-} ImpostorVertex; // size: 24
-
 #define STI_TYPE_HASH_TerrainTextureInfo 0x510C5C3A
 typedef struct TerrainTextureInfo{
     const STITypeInfo* type_info_;
@@ -12602,32 +12361,6 @@ typedef struct TerrainTextureInfo{
     uint32 Height; // offset: 20, size: 4
     uint32 NumSlices; // offset: 24, size: 4
 } TerrainTextureInfo; // size: 32
-
-#define STI_TYPE_HASH_Array_TerrainColor 0x46DD6C99
-typedef struct Array_TerrainColor {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    TerrainColor* items;
-} Array_TerrainColor; // size: 16
-
-#define STI_TYPE_HASH_Array_ShaderRules 0xD956C9F9
-typedef struct Array_ShaderRules {
-    const STITypeInfo* type_info_;
-    uint32 count;
-    ShaderRules* items;
-} Array_ShaderRules; // size: 16
-
-#define STI_TYPE_HASH_TerrainSystem 0x21237EA8
-typedef struct TerrainSystem{
-    const STITypeInfo* type_info_;
-    TerrainTextureInfo TerrainDisplacementTexture; // offset: 0, size: 32
-    TerrainTextureInfo TerrainVariationTexture; // offset: 32, size: 32
-    TerrainTextureInfo TerrainNormalMapTexture; // offset: 64, size: 32
-    float32 TextureTilingMid; // offset: 96, size: 4
-    float32 TextureTilingDetail; // offset: 100, size: 4
-    Array_TerrainColor TerrainMeanColor; // offset: 104, size: 16
-    Array_ShaderRules ShaderRules; // offset: 120, size: 16
-} TerrainSystem; // size: 136
 
 #define STI_TYPE_HASH_TerrainColor 0x8B031E4A
 typedef struct TerrainColor{
@@ -12687,56 +12420,317 @@ typedef struct ShaderRules{
     float32 BlendBias; // offset: 560, size: 4
 } ShaderRules; // size: 564
 
-#define STI_TYPE_HASH_Array_VegetationForestLayer 0x980B9F7A
-typedef struct Array_VegetationForestLayer {
+#define STI_TYPE_HASH_Array_TerrainColor 0x46DD6C99
+typedef struct Array_TerrainColor {
     const STITypeInfo* type_info_;
     uint32 count;
-    VegetationForestLayer* items;
-} Array_VegetationForestLayer; // size: 16
+    TerrainColor* items;
+} Array_TerrainColor; // size: 16
 
-#define STI_TYPE_HASH_Array_VegetationBillboardLayer 0x05DBB0E4
-typedef struct Array_VegetationBillboardLayer {
+#define STI_TYPE_HASH_Array_ShaderRules 0xD956C9F9
+typedef struct Array_ShaderRules {
     const STITypeInfo* type_info_;
     uint32 count;
-    VegetationBillboardLayer* items;
-} Array_VegetationBillboardLayer; // size: 16
+    ShaderRules* items;
+} Array_ShaderRules; // size: 16
 
-#define STI_TYPE_HASH_Array_VegetationModelLayer 0x918B782D
-typedef struct Array_VegetationModelLayer {
+#define STI_TYPE_HASH_TerrainSystem 0x21237EA8
+typedef struct TerrainSystem{
+    const STITypeInfo* type_info_;
+    TerrainTextureInfo TerrainDisplacementTexture; // offset: 0, size: 32
+    TerrainTextureInfo TerrainVariationTexture; // offset: 32, size: 32
+    TerrainTextureInfo TerrainNormalMapTexture; // offset: 64, size: 32
+    float32 TextureTilingMid; // offset: 96, size: 4
+    float32 TextureTilingDetail; // offset: 100, size: 4
+    Array_TerrainColor TerrainMeanColor; // offset: 104, size: 16
+    Array_ShaderRules ShaderRules; // offset: 120, size: 16
+} TerrainSystem; // size: 136
+
+#define STI_TYPE_HASH_WorldAudioZone 0x18BAF172
+typedef struct WorldAudioZone{
+    const STITypeInfo* type_info_;
+    String Name; // offset: 0, size: 8
+    String LoopGuid; // offset: 8, size: 8
+    String DetailGuid; // offset: 16, size: 8
+    float32 SortBias; // offset: 24, size: 4
+    float32 DepthRadius; // offset: 28, size: 4
+    float32 Radius; // offset: 32, size: 4
+    float32 VolumeSumBias; // offset: 36, size: 4
+    float32 MaxDistance; // offset: 40, size: 4
+    float32 Linearity; // offset: 44, size: 4
+    float32 EnergyRadius; // offset: 48, size: 4
+    float32 DetailDensity; // offset: 52, size: 4
+    float32 DetailRadius; // offset: 56, size: 4
+    float32 DetailVolumeSumBias; // offset: 60, size: 4
+    float32 DetailMaxDistance; // offset: 64, size: 4
+    float32 DetailLinearity; // offset: 68, size: 4
+    float32 DetailEnergyRadius; // offset: 72, size: 4
+    float32 FadeOutTime; // offset: 76, size: 4
+    float32 FadeInTime; // offset: 80, size: 4
+    float32 ZoneHeight; // offset: 84, size: 4
+    uint32 ZoneType; // offset: 88, size: 4
+    float32 DebugColor[3]; // offset: 92, size: 12
+    uint8 IsAllowedUnderwater; // offset: 104, size: 1
+} WorldAudioZone; // size: 112
+
+#define STI_TYPE_HASH_Array_WorldAudioZone 0xD576CE35
+typedef struct Array_WorldAudioZone {
     const STITypeInfo* type_info_;
     uint32 count;
-    VegetationModelLayer* items;
-} Array_VegetationModelLayer; // size: 16
+    WorldAudioZone* items;
+} Array_WorldAudioZone; // size: 16
 
-#define STI_TYPE_HASH_Array_VegetationPhysicsLayer 0xE707093D
-typedef struct Array_VegetationPhysicsLayer {
+#define STI_TYPE_HASH_WorldAudioInfo 0x4317D9C4
+typedef struct WorldAudioInfo{
+    const STITypeInfo* type_info_;
+    float32 SortStability; // offset: 0, size: 4
+    uint32 AudibleLayerCount; // offset: 4, size: 4
+    float32 SampleStepSize; // offset: 8, size: 4
+    float32 DepthStepSize; // offset: 12, size: 4
+    float32 DropOffDistance; // offset: 16, size: 4
+    Array_WorldAudioZone Zones; // offset: 24, size: 16
+} WorldAudioInfo; // size: 40
+
+#define STI_TYPE_HASH_WorldAudioVector4 0x21A16FA4
+typedef struct WorldAudioVector4{
+    const STITypeInfo* type_info_;
+    float32 Vec[4]; // offset: 0, size: 16
+} WorldAudioVector4; // size: 16
+
+#define STI_TYPE_HASH_Array_WorldAudioVector4 0x5EE422D0
+typedef struct Array_WorldAudioVector4 {
     const STITypeInfo* type_info_;
     uint32 count;
-    VegetationPhysicsLayer* items;
-} Array_VegetationPhysicsLayer; // size: 16
+    WorldAudioVector4* items;
+} Array_WorldAudioVector4; // size: 16
 
-#define STI_TYPE_HASH_VegetationLayers 0x3394E18F
-typedef struct VegetationLayers{
+#define STI_TYPE_HASH_WorldAudioPatchZoneData 0xD7FF1C92
+typedef struct WorldAudioPatchZoneData{
     const STITypeInfo* type_info_;
-    Array_VegetationForestLayer VegetationForestLayer; // offset: 0, size: 16
-    Array_VegetationBillboardLayer VegetationBillboardLayer; // offset: 16, size: 16
-    Array_VegetationModelLayer VegetationModelLayer; // offset: 32, size: 16
-    Array_VegetationPhysicsLayer VegetationPhysicsLayer; // offset: 48, size: 16
-} VegetationLayers; // size: 64
+    Array_WorldAudioVector4 Points; // offset: 0, size: 16
+    uint32 ZoneIndex; // offset: 16, size: 4
+    float32 MinBounds[3]; // offset: 20, size: 12
+    float32 MaxBounds[3]; // offset: 32, size: 12
+} WorldAudioPatchZoneData; // size: 48
 
-#define STI_TYPE_HASH_Array_VegetationZone 0x0EF1B60A
-typedef struct Array_VegetationZone {
+#define STI_TYPE_HASH_WorldAudioPatchZoneNormalData 0x2EEB55AC
+typedef struct WorldAudioPatchZoneNormalData{
+    const STITypeInfo* type_info_;
+    Array_WorldAudioVector4 Points; // offset: 0, size: 16
+    Array_WorldAudioVector4 Normals; // offset: 16, size: 16
+    uint32 ZoneIndex; // offset: 32, size: 4
+    float32 MinBounds[3]; // offset: 36, size: 12
+    float32 MaxBounds[3]; // offset: 48, size: 12
+    float32 MedianNormal[3]; // offset: 60, size: 12
+} WorldAudioPatchZoneNormalData; // size: 72
+
+#define STI_TYPE_HASH_Array_WorldAudioPatchZoneData 0x165A5795
+typedef struct Array_WorldAudioPatchZoneData {
     const STITypeInfo* type_info_;
     uint32 count;
-    VegetationZone* items;
-} Array_VegetationZone; // size: 16
+    WorldAudioPatchZoneData* items;
+} Array_WorldAudioPatchZoneData; // size: 16
 
-#define STI_TYPE_HASH_Array_VegetationObject 0xC5E3777F
-typedef struct Array_VegetationObject {
+#define STI_TYPE_HASH_WorldAudioPatchData 0xB057437A
+typedef struct WorldAudioPatchData{
+    const STITypeInfo* type_info_;
+    Array_WorldAudioPatchZoneData ZoneData; // offset: 0, size: 16
+} WorldAudioPatchData; // size: 16
+
+#define STI_TYPE_HASH_Array_WorldAudioPatchZoneNormalData 0x65950F52
+typedef struct Array_WorldAudioPatchZoneNormalData {
     const STITypeInfo* type_info_;
     uint32 count;
-    VegetationObject* items;
-} Array_VegetationObject; // size: 16
+    WorldAudioPatchZoneNormalData* items;
+} Array_WorldAudioPatchZoneNormalData; // size: 16
+
+#define STI_TYPE_HASH_WorldAudioPatchNormalData 0x6D5409F0
+typedef struct WorldAudioPatchNormalData{
+    const STITypeInfo* type_info_;
+    Array_WorldAudioPatchZoneNormalData ZoneNormalData; // offset: 0, size: 16
+} WorldAudioPatchNormalData; // size: 16
+
+#define STI_TYPE_HASH_ImpostorVertex 0x1CFB60D3
+typedef struct ImpostorVertex{
+    const STITypeInfo* type_info_;
+    float32 Position[2]; // offset: 0, size: 8
+    float32 Uvs[2]; // offset: 8, size: 8
+    float32 Normal[2]; // offset: 16, size: 8
+} ImpostorVertex; // size: 24
+
+#define STI_TYPE_HASH_Array_ImpostorVertex 0x940AA886
+typedef struct Array_ImpostorVertex {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ImpostorVertex* items;
+} Array_ImpostorVertex; // size: 16
+
+#define STI_TYPE_HASH_ImpostorMesh 0xE3FD79AC
+typedef struct ImpostorMesh{
+    const STITypeInfo* type_info_;
+    Array_uint16 Indices; // offset: 0, size: 16
+    Array_ImpostorVertex Vertices; // offset: 16, size: 16
+    float32 Size[2]; // offset: 32, size: 8
+    float32 Offset[3]; // offset: 40, size: 12
+    uint8 Single; // offset: 52, size: 1
+} ImpostorMesh; // size: 56
+
+#define STI_TYPE_HASH_ImpostorInfo 0xAA6D6A0E
+typedef struct ImpostorInfo{
+    const STITypeInfo* type_info_;
+    ImpostorMesh ImpostorMesh; // offset: 0, size: 56
+    float32 Transmission; // offset: 56, size: 4
+    float32 SphereNormalInfluence; // offset: 60, size: 4
+    uint16 TreeId; // offset: 64, size: 2
+} ImpostorInfo; // size: 72
+
+#define STI_TYPE_HASH_Array_ImpostorInfo 0x826D2C79
+typedef struct Array_ImpostorInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ImpostorInfo* items;
+} Array_ImpostorInfo; // size: 16
+
+#define STI_TYPE_HASH_ImpostorCollection 0x10074530
+typedef struct ImpostorCollection{
+    const STITypeInfo* type_info_;
+    Array_ImpostorInfo Impostors; // offset: 0, size: 16
+} ImpostorCollection; // size: 16
+
+#define STI_TYPE_HASH_VegetationModel 0xD69BFB2D
+typedef struct VegetationModel{
+    const STITypeInfo* type_info_;
+    uint16 ModelIndex; // offset: 0, size: 2
+    uint16 ModelHandle; // offset: 2, size: 2
+    uint16 ModelExtraLodsHandle; // offset: 4, size: 2
+    uint8 ShadowCascadeLimit; // offset: 6, size: 1
+    int8 LodCount; // offset: 7, size: 1
+    float32 LodFactor; // offset: 8, size: 4
+    float32 LodBias; // offset: 12, size: 4
+    float32 HalfExtents[3]; // offset: 16, size: 12
+    uint8 ForestColor[3]; // offset: 28, size: 3
+    StringHash_48c5294d_4 ModelFilenameHash; // offset: 32, size: 4
+    StringHash_48c5294d_4 ModelExtraLodsFilenameHash; // offset: 36, size: 4
+    float32 TerrainColoringFactor; // offset: 40, size: 4
+    int16 Impostor; // offset: 44, size: 2
+    uint8 UseBillboard; // offset: 46, size: 1
+    uint8 FarLayer; // offset: 47, size: 1
+    float32 BillboardSize[2]; // offset: 48, size: 8
+    float32 SwayFactor; // offset: 56, size: 4
+    uint8 GlobalIlluminationMask; // offset: 60, size: 1
+    uint8 AlphaBlendLodMask; // offset: 61, size: 1
+    uint8 AlphaFadeLodMask; // offset: 62, size: 1
+    uint8 AlphaThreshold[5]; // offset: 63, size: 5
+    float32 AlphaMultiplier; // offset: 68, size: 4
+    float32 NormalFadeDistance; // offset: 72, size: 4
+    float32 NormalBendNear; // offset: 76, size: 4
+    float32 NormalBendFar; // offset: 80, size: 4
+    float32 SphereNormalFadeInStart; // offset: 84, size: 4
+    float32 SphereNormalFadeInEnd; // offset: 88, size: 4
+    uint32 Flags; // offset: 92, size: 4
+} VegetationModel; // size: 96
+
+#define STI_TYPE_HASH_VegetationPlacementFlags 0x02E7777D
+typedef enum{ // size: 4
+    E_VEGETATIONPLACEMENTFLAGS_NONE = 0,
+    E_VEGETATIONPLACEMENTFLAGS_FLOATS = 1,
+    VegetationPlacementFlags_ForceSize = 0x7FFFFFFF
+} VegetationPlacementFlags;
+
+#define STI_TYPE_HASH_VegetationPlacementSettings 0x1D0F3744
+typedef struct VegetationPlacementSettings{
+    const STITypeInfo* type_info_;
+    float32 SafeRadius; // offset: 0, size: 4
+    float32 TerrainSlopeInfluence; // offset: 4, size: 4
+    float32 ModelColorBegin[3]; // offset: 8, size: 12
+    float32 ModelColorEnd[3]; // offset: 20, size: 12
+    float32 SlopeRangeMaxCos; // offset: 32, size: 4
+    float32 SlopeRangeMinCos; // offset: 36, size: 4
+    float32 HeightVariation; // offset: 40, size: 4
+    VegetationPlacementFlags Flags; // offset: 44, size: 4
+} VegetationPlacementSettings; // size: 48
+
+#define STI_TYPE_HASH_VegetationEffect 0x526A773D
+typedef struct VegetationEffect{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 BreakEffect; // offset: 0, size: 4
+    StringHash_48c5294d_4 CollideEffect; // offset: 4, size: 4
+    StringHash_48c5294d_4 PassThroughEffect; // offset: 8, size: 4
+    StringHash_48c5294d_4 FastThroughEffect; // offset: 12, size: 4
+    float32 BreakEffectOffset[3]; // offset: 16, size: 12
+    float32 CollideEffectOffset[3]; // offset: 28, size: 12
+    float32 PassThroughEffectOffset[3]; // offset: 40, size: 12
+    String BreakSound; // offset: 56, size: 8
+    String CollideSound; // offset: 64, size: 8
+    String PassThroughSound; // offset: 72, size: 8
+    String FastThroughSound; // offset: 80, size: 8
+    StringHash_48c5294d_4 FallingLeavesEffect; // offset: 88, size: 4
+    int32 PassThroughSoundVolume; // offset: 92, size: 4
+    int32 FoliageDensity; // offset: 96, size: 4
+    StringHash_48c5294d_4 LocatorFile; // offset: 100, size: 4
+} VegetationEffect; // size: 104
+
+#define STI_TYPE_HASH_VegetationPhysics 0xCFC07A39
+typedef struct VegetationPhysics{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 PfxFile; // offset: 0, size: 4
+    StringHash_48c5294d_4 NavmeshPfxFile; // offset: 4, size: 4
+    StringHash_48c5294d_4 StumpFile; // offset: 8, size: 4
+    StringHash_48c5294d_4 PfxStumpFile; // offset: 12, size: 4
+    Array_StringHash_48c5294d_4 BrokenFile; // offset: 16, size: 16
+    Array_StringHash_48c5294d_4 BrokenPfxFile; // offset: 32, size: 16
+    uint16 PhysicsHandle; // offset: 48, size: 2
+    float32 ImpulseLimitPassThrough; // offset: 52, size: 4
+    float32 ImpulseThreshold; // offset: 56, size: 4
+    float32 BreakByBulletLimit; // offset: 60, size: 4
+    float32 BreakByExplosionLimit; // offset: 64, size: 4
+    float32 ExplosiveImpulseModifier; // offset: 68, size: 4
+    float32 AngularLimit; // offset: 72, size: 4
+    float32 Magnitude; // offset: 76, size: 4
+    uint8 BreaksOnCollision; // offset: 80, size: 1
+    uint8 TerrainNormal; // offset: 80, size: 1
+    uint8 HasCollisions; // offset: 80, size: 1
+    uint8 FarModel; // offset: 80, size: 1
+    uint8 IsPebble; // offset: 80, size: 1
+    uint8 IgnorePlayer; // offset: 80, size: 1
+    uint8 IsAiCover; // offset: 80, size: 1
+    uint8 StaticPathfinding; // offset: 81, size: 1
+    uint8 NavmeshUseHull2d; // offset: 82, size: 1
+} VegetationPhysics; // size: 88
+
+#define STI_TYPE_HASH_VegetationObject 0xC89F980E
+typedef struct VegetationObject{
+    const STITypeInfo* type_info_;
+    uint8 Index; // offset: 0, size: 1
+    StringHash_48c5294d_4 NameHash; // offset: 4, size: 4
+    StringHash_48c5294d_4 LayerHash; // offset: 8, size: 4
+    VegetationModel Model; // offset: 12, size: 96
+    VegetationPhysics Physics; // offset: 112, size: 88
+    VegetationEffect Effects; // offset: 200, size: 104
+    VegetationPlacementSettings PlacementSettings; // offset: 304, size: 48
+} VegetationObject; // size: 352
+
+#define STI_TYPE_HASH_ProbabilityBuffer 0xD94A182E
+typedef struct ProbabilityBuffer{
+    const STITypeInfo* type_info_;
+    Array_int16 Buffer; // offset: 0, size: 16
+    uint8 AnyValidVariation; // offset: 16, size: 1
+} ProbabilityBuffer; // size: 24
+
+#define STI_TYPE_HASH_Array_ProbabilityBuffer 0x21B7D13F
+typedef struct Array_ProbabilityBuffer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ProbabilityBuffer* items;
+} Array_ProbabilityBuffer; // size: 16
+
+#define STI_TYPE_HASH_VegetationSet 0x63D49D28
+typedef struct VegetationSet{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
+    Array_ProbabilityBuffer ProbabilityBuffer; // offset: 8, size: 16
+    float32 ModelGrassClustering; // offset: 24, size: 4
+} VegetationSet; // size: 32
 
 #define STI_TYPE_HASH_Array_VegetationSet 0xBEDA8528
 typedef struct Array_VegetationSet {
@@ -12751,26 +12745,12 @@ typedef struct VegetationZone{
     Array_VegetationSet VegetationSets; // offset: 0, size: 16
 } VegetationZone; // size: 16
 
-#define STI_TYPE_HASH_Array_VegetationIndex 0x8F8B460B
-typedef struct Array_VegetationIndex {
+#define STI_TYPE_HASH_VegetationIndex 0x083BCB19
+typedef struct VegetationIndex{
     const STITypeInfo* type_info_;
-    uint32 count;
-    VegetationIndex* items;
-} Array_VegetationIndex; // size: 16
-
-#define STI_TYPE_HASH_VegetationWorld 0x22A653FD
-typedef struct VegetationWorld{
-    const STITypeInfo* type_info_;
-    VegetationLayers VegetationLayers; // offset: 0, size: 64
-    Array_VegetationZone VegetationZones; // offset: 64, size: 16
-    Array_VegetationObject VegetationObjects; // offset: 80, size: 16
-    VegetationZone DefaultVegetationZone; // offset: 96, size: 16
-    Array_VegetationIndex VegetationIndex; // offset: 112, size: 16
-    String BillboardAtlasDiffuse; // offset: 128, size: 8
-    String BillboardAtlasNormal; // offset: 136, size: 8
-    float32 WorldSize[3]; // offset: 144, size: 12
-    ImpostorCollection ImpostorCollection; // offset: 160, size: 16
-} VegetationWorld; // size: 176
+    int16 VegetationSetIndex; // offset: 0, size: 2
+    int16 ClimateZoneIndex; // offset: 2, size: 2
+} VegetationIndex; // size: 4
 
 #define STI_TYPE_HASH_VegetationForestLayer 0x1D3D4A42
 typedef struct VegetationForestLayer{
@@ -12837,147 +12817,227 @@ typedef struct VegetationPhysicsLayer{
     uint32 SourceLayerHash; // offset: 20, size: 4
 } VegetationPhysicsLayer; // size: 24
 
-#define STI_TYPE_HASH_Array_ProbabilityBuffer 0x21B7D13F
-typedef struct Array_ProbabilityBuffer {
+#define STI_TYPE_HASH_Array_VegetationForestLayer 0x980B9F7A
+typedef struct Array_VegetationForestLayer {
     const STITypeInfo* type_info_;
     uint32 count;
-    ProbabilityBuffer* items;
-} Array_ProbabilityBuffer; // size: 16
+    VegetationForestLayer* items;
+} Array_VegetationForestLayer; // size: 16
 
-#define STI_TYPE_HASH_VegetationSet 0x63D49D28
-typedef struct VegetationSet{
+#define STI_TYPE_HASH_Array_VegetationBillboardLayer 0x05DBB0E4
+typedef struct Array_VegetationBillboardLayer {
     const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 NameHash; // offset: 0, size: 4
-    Array_ProbabilityBuffer ProbabilityBuffer; // offset: 8, size: 16
-    float32 ModelGrassClustering; // offset: 24, size: 4
-} VegetationSet; // size: 32
+    uint32 count;
+    VegetationBillboardLayer* items;
+} Array_VegetationBillboardLayer; // size: 16
 
-#define STI_TYPE_HASH_ProbabilityBuffer 0xD94A182E
-typedef struct ProbabilityBuffer{
+#define STI_TYPE_HASH_Array_VegetationModelLayer 0x918B782D
+typedef struct Array_VegetationModelLayer {
     const STITypeInfo* type_info_;
-    Array_int16 Buffer; // offset: 0, size: 16
-    uint8 AnyValidVariation; // offset: 16, size: 1
-} ProbabilityBuffer; // size: 24
+    uint32 count;
+    VegetationModelLayer* items;
+} Array_VegetationModelLayer; // size: 16
 
-#define STI_TYPE_HASH_VegetationModel 0xD69BFB2D
-typedef struct VegetationModel{
+#define STI_TYPE_HASH_Array_VegetationPhysicsLayer 0xE707093D
+typedef struct Array_VegetationPhysicsLayer {
     const STITypeInfo* type_info_;
-    uint16 ModelIndex; // offset: 0, size: 2
-    uint16 ModelHandle; // offset: 2, size: 2
-    uint16 ModelExtraLodsHandle; // offset: 4, size: 2
-    uint8 ShadowCascadeLimit; // offset: 6, size: 1
-    int8 LodCount; // offset: 7, size: 1
-    float32 LodFactor; // offset: 8, size: 4
-    float32 LodBias; // offset: 12, size: 4
-    float32 HalfExtents[3]; // offset: 16, size: 12
-    uint8 ForestColor[3]; // offset: 28, size: 3
-    StringHash_48c5294d_4 ModelFilenameHash; // offset: 32, size: 4
-    StringHash_48c5294d_4 ModelExtraLodsFilenameHash; // offset: 36, size: 4
-    float32 TerrainColoringFactor; // offset: 40, size: 4
-    int16 Impostor; // offset: 44, size: 2
-    uint8 UseBillboard; // offset: 46, size: 1
-    uint8 FarLayer; // offset: 47, size: 1
-    float32 BillboardSize[2]; // offset: 48, size: 8
-    float32 SwayFactor; // offset: 56, size: 4
-    uint8 GlobalIlluminationMask; // offset: 60, size: 1
-    uint8 AlphaBlendLodMask; // offset: 61, size: 1
-    uint8 AlphaFadeLodMask; // offset: 62, size: 1
-    uint8 AlphaThreshold[5]; // offset: 63, size: 5
-    float32 AlphaMultiplier; // offset: 68, size: 4
-    float32 NormalFadeDistance; // offset: 72, size: 4
-    float32 NormalBendNear; // offset: 76, size: 4
-    float32 NormalBendFar; // offset: 80, size: 4
-    float32 SphereNormalFadeInStart; // offset: 84, size: 4
-    float32 SphereNormalFadeInEnd; // offset: 88, size: 4
-    uint32 Flags; // offset: 92, size: 4
-} VegetationModel; // size: 96
+    uint32 count;
+    VegetationPhysicsLayer* items;
+} Array_VegetationPhysicsLayer; // size: 16
 
-#define STI_TYPE_HASH_VegetationPhysics 0xCFC07A39
-typedef struct VegetationPhysics{
+#define STI_TYPE_HASH_VegetationLayers 0x3394E18F
+typedef struct VegetationLayers{
     const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 PfxFile; // offset: 0, size: 4
-    StringHash_48c5294d_4 NavmeshPfxFile; // offset: 4, size: 4
-    StringHash_48c5294d_4 StumpFile; // offset: 8, size: 4
-    StringHash_48c5294d_4 PfxStumpFile; // offset: 12, size: 4
-    Array_StringHash_48c5294d_4 BrokenFile; // offset: 16, size: 16
-    Array_StringHash_48c5294d_4 BrokenPfxFile; // offset: 32, size: 16
-    uint16 PhysicsHandle; // offset: 48, size: 2
-    float32 ImpulseLimitPassThrough; // offset: 52, size: 4
-    float32 ImpulseThreshold; // offset: 56, size: 4
-    float32 BreakByBulletLimit; // offset: 60, size: 4
-    float32 BreakByExplosionLimit; // offset: 64, size: 4
-    float32 ExplosiveImpulseModifier; // offset: 68, size: 4
-    float32 AngularLimit; // offset: 72, size: 4
-    float32 Magnitude; // offset: 76, size: 4
-    uint8 BreaksOnCollision; // offset: 80, size: 1
-    uint8 TerrainNormal; // offset: 80, size: 1
-    uint8 HasCollisions; // offset: 80, size: 1
-    uint8 FarModel; // offset: 80, size: 1
-    uint8 IsPebble; // offset: 80, size: 1
-    uint8 IgnorePlayer; // offset: 80, size: 1
-    uint8 IsAiCover; // offset: 80, size: 1
-    uint8 StaticPathfinding; // offset: 81, size: 1
-    uint8 NavmeshUseHull2d; // offset: 82, size: 1
-} VegetationPhysics; // size: 88
+    Array_VegetationForestLayer VegetationForestLayer; // offset: 0, size: 16
+    Array_VegetationBillboardLayer VegetationBillboardLayer; // offset: 16, size: 16
+    Array_VegetationModelLayer VegetationModelLayer; // offset: 32, size: 16
+    Array_VegetationPhysicsLayer VegetationPhysicsLayer; // offset: 48, size: 16
+} VegetationLayers; // size: 64
 
-#define STI_TYPE_HASH_VegetationEffect 0x526A773D
-typedef struct VegetationEffect{
+#define STI_TYPE_HASH_Array_VegetationZone 0x0EF1B60A
+typedef struct Array_VegetationZone {
     const STITypeInfo* type_info_;
-    StringHash_48c5294d_4 BreakEffect; // offset: 0, size: 4
-    StringHash_48c5294d_4 CollideEffect; // offset: 4, size: 4
-    StringHash_48c5294d_4 PassThroughEffect; // offset: 8, size: 4
-    StringHash_48c5294d_4 FastThroughEffect; // offset: 12, size: 4
-    float32 BreakEffectOffset[3]; // offset: 16, size: 12
-    float32 CollideEffectOffset[3]; // offset: 28, size: 12
-    float32 PassThroughEffectOffset[3]; // offset: 40, size: 12
-    String BreakSound; // offset: 56, size: 8
-    String CollideSound; // offset: 64, size: 8
-    String PassThroughSound; // offset: 72, size: 8
-    String FastThroughSound; // offset: 80, size: 8
-    StringHash_48c5294d_4 FallingLeavesEffect; // offset: 88, size: 4
-    int32 PassThroughSoundVolume; // offset: 92, size: 4
-    int32 FoliageDensity; // offset: 96, size: 4
-    StringHash_48c5294d_4 LocatorFile; // offset: 100, size: 4
-} VegetationEffect; // size: 104
+    uint32 count;
+    VegetationZone* items;
+} Array_VegetationZone; // size: 16
 
-#define STI_TYPE_HASH_VegetationPlacementFlags 0x02E7777D
-typedef enum{ // size: 4
-    E_VEGETATIONPLACEMENTFLAGS_NONE = 0,
-    E_VEGETATIONPLACEMENTFLAGS_FLOATS = 1,
-    VegetationPlacementFlags_ForceSize = 0x7FFFFFFF
-} VegetationPlacementFlags;
-
-#define STI_TYPE_HASH_VegetationPlacementSettings 0x1D0F3744
-typedef struct VegetationPlacementSettings{
+#define STI_TYPE_HASH_Array_VegetationObject 0xC5E3777F
+typedef struct Array_VegetationObject {
     const STITypeInfo* type_info_;
-    float32 SafeRadius; // offset: 0, size: 4
-    float32 TerrainSlopeInfluence; // offset: 4, size: 4
-    float32 ModelColorBegin[3]; // offset: 8, size: 12
-    float32 ModelColorEnd[3]; // offset: 20, size: 12
-    float32 SlopeRangeMaxCos; // offset: 32, size: 4
-    float32 SlopeRangeMinCos; // offset: 36, size: 4
-    float32 HeightVariation; // offset: 40, size: 4
-    VegetationPlacementFlags Flags; // offset: 44, size: 4
-} VegetationPlacementSettings; // size: 48
+    uint32 count;
+    VegetationObject* items;
+} Array_VegetationObject; // size: 16
 
-#define STI_TYPE_HASH_VegetationObject 0xC89F980E
-typedef struct VegetationObject{
+#define STI_TYPE_HASH_Array_VegetationIndex 0x8F8B460B
+typedef struct Array_VegetationIndex {
     const STITypeInfo* type_info_;
-    uint8 Index; // offset: 0, size: 1
-    StringHash_48c5294d_4 NameHash; // offset: 4, size: 4
-    StringHash_48c5294d_4 LayerHash; // offset: 8, size: 4
-    VegetationModel Model; // offset: 12, size: 96
-    VegetationPhysics Physics; // offset: 112, size: 88
-    VegetationEffect Effects; // offset: 200, size: 104
-    VegetationPlacementSettings PlacementSettings; // offset: 304, size: 48
-} VegetationObject; // size: 352
+    uint32 count;
+    VegetationIndex* items;
+} Array_VegetationIndex; // size: 16
 
-#define STI_TYPE_HASH_VegetationIndex 0x083BCB19
-typedef struct VegetationIndex{
+#define STI_TYPE_HASH_VegetationWorld 0x22A653FD
+typedef struct VegetationWorld{
     const STITypeInfo* type_info_;
-    int16 VegetationSetIndex; // offset: 0, size: 2
-    int16 ClimateZoneIndex; // offset: 2, size: 2
-} VegetationIndex; // size: 4
+    VegetationLayers VegetationLayers; // offset: 0, size: 64
+    Array_VegetationZone VegetationZones; // offset: 64, size: 16
+    Array_VegetationObject VegetationObjects; // offset: 80, size: 16
+    VegetationZone DefaultVegetationZone; // offset: 96, size: 16
+    Array_VegetationIndex VegetationIndex; // offset: 112, size: 16
+    String BillboardAtlasDiffuse; // offset: 128, size: 8
+    String BillboardAtlasNormal; // offset: 136, size: 8
+    float32 WorldSize[3]; // offset: 144, size: 12
+    ImpostorCollection ImpostorCollection; // offset: 160, size: 16
+} VegetationWorld; // size: 176
+
+#define STI_TYPE_HASH_VegetationSystemInstanceSrc 0x8A7E7530
+typedef struct VegetationSystemInstanceSrc{
+    const STITypeInfo* type_info_;
+    float32 X; // offset: 0, size: 4
+    float32 Y; // offset: 4, size: 4
+    float32 Z; // offset: 8, size: 4
+    float32 Rotation[4]; // offset: 12, size: 16
+    float32 Color_R; // offset: 28, size: 4
+    float32 Color_G; // offset: 32, size: 4
+    float32 Color_B; // offset: 36, size: 4
+    StringHash_48c5294d_4 NameHash; // offset: 40, size: 4
+    uint8 ZoneIndex; // offset: 44, size: 1
+    uint8 IsPlanted; // offset: 45, size: 1
+} VegetationSystemInstanceSrc; // size: 48
+
+#define STI_TYPE_HASH_VegetationSystemInstance 0x1F783B17
+typedef struct VegetationSystemInstance{
+    const STITypeInfo* type_info_;
+    uint16 X; // offset: 0, size: 2
+    uint16 Z; // offset: 2, size: 2
+    uint32 Y; // offset: 4, size: 4
+    uint8 ZoneIndex; // offset: 8, size: 1
+    uint8 IsPlanted; // offset: 8, size: 1
+    uint8 IsDestroyed; // offset: 8, size: 1
+    uint32 Rotation; // offset: 12, size: 4
+    uint8 Color_R; // offset: 16, size: 1
+    uint8 Color_G; // offset: 17, size: 1
+    uint8 Color_B; // offset: 18, size: 1
+    StringHash_48c5294d_4 NameHash; // offset: 20, size: 4
+} VegetationSystemInstance; // size: 24
+
+#define STI_TYPE_HASH_ArrayAABB 0x200D0BC9
+typedef struct ArrayAABB{
+    const STITypeInfo* type_info_;
+    uint32 X; // offset: 0, size: 4
+    uint32 Z; // offset: 4, size: 4
+    uint32 Size; // offset: 8, size: 4
+    uint32 Index; // offset: 12, size: 4
+    uint32 Count; // offset: 16, size: 4
+    int16 Children[4]; // offset: 20, size: 8
+} ArrayAABB; // size: 28
+
+#define STI_TYPE_HASH_Array_ArrayAABB 0x573FA4BF
+typedef struct Array_ArrayAABB {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ArrayAABB* items;
+} Array_ArrayAABB; // size: 16
+
+#define STI_TYPE_HASH_TerrainPatchInfo 0xB9D80AD4
+typedef struct TerrainPatchInfo{
+    const STITypeInfo* type_info_;
+    int32 PatchX; // offset: 0, size: 4
+    int32 PatchZ; // offset: 4, size: 4
+    int32 PatchLod; // offset: 8, size: 4
+    Array_uint32 TriangleIndices; // offset: 16, size: 16
+    Array_ArrayAABB TriangleQuadTree; // offset: 32, size: 16
+} TerrainPatchInfo; // size: 48
+
+#define STI_TYPE_HASH_VegetationBillboardLayerStats 0xA553A921
+typedef struct VegetationBillboardLayerStats{
+    const STITypeInfo* type_info_;
+    uint8 IsRidge; // offset: 0, size: 1
+    uint32 NumInstances; // offset: 4, size: 4
+    uint32 NumOnTreeLine; // offset: 8, size: 4
+    uint32 NumOnRidges; // offset: 12, size: 4
+    uint32 NumCulledBySize; // offset: 16, size: 4
+    uint32 NumCulledByForestMesh; // offset: 20, size: 4
+    uint32 NumCulledBySeaLevel; // offset: 24, size: 4
+    uint32 NumCulledByThinout; // offset: 28, size: 4
+} VegetationBillboardLayerStats; // size: 32
+
+#define STI_TYPE_HASH_VegetationDebugData 0xC7D58849
+typedef struct VegetationDebugData{
+    const STITypeInfo* type_info_;
+    Array_uint16 LocationIndices; // offset: 0, size: 16
+    Array_String LocationNames; // offset: 16, size: 16
+    VegetationBillboardLayerStats Stats; // offset: 32, size: 32
+} VegetationDebugData; // size: 64
+
+#define STI_TYPE_HASH_Array_VegetationSystemInstance 0xEA0A66F0
+typedef struct Array_VegetationSystemInstance {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    VegetationSystemInstance* items;
+} Array_VegetationSystemInstance; // size: 16
+
+#define STI_TYPE_HASH_InstanceDataLayer 0xF8DD7138
+typedef struct InstanceDataLayer{
+    const STITypeInfo* type_info_;
+    StringHash_48c5294d_4 Name; // offset: 0, size: 4
+    float32 BoundingMin[3]; // offset: 4, size: 12
+    float32 BoundingMax[3]; // offset: 16, size: 12
+    Array_VegetationSystemInstance Instances; // offset: 32, size: 16
+    Array_uint32 UsedTypes; // offset: 48, size: 16
+    VegetationDebugData VegetationDebugData; // offset: 64, size: 64
+} InstanceDataLayer; // size: 128
+
+#define STI_TYPE_HASH_Array_InstanceDataLayer 0x766E412E
+typedef struct Array_InstanceDataLayer {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    InstanceDataLayer* items;
+} Array_InstanceDataLayer; // size: 16
+
+#define STI_TYPE_HASH_Array_TerrainPatchInfo 0x6032D156
+typedef struct Array_TerrainPatchInfo {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    TerrainPatchInfo* items;
+} Array_TerrainPatchInfo; // size: 16
+
+#define STI_TYPE_HASH_InstanceDataPatch 0xFD88832A
+typedef struct InstanceDataPatch{
+    const STITypeInfo* type_info_;
+    int32 PatchX; // offset: 0, size: 4
+    int32 PatchZ; // offset: 4, size: 4
+    int32 PatchLod; // offset: 8, size: 4
+    Array_InstanceDataLayer InstanceDataLayers; // offset: 16, size: 16
+    Array_TerrainPatchInfo TerrainPatchInfo; // offset: 32, size: 16
+} InstanceDataPatch; // size: 48
+
+#define STI_TYPE_HASH_ForestVertex 0x291C7A90
+typedef struct ForestVertex{
+    const STITypeInfo* type_info_;
+    uint16 Y; // offset: 0, size: 2
+    uint8 Slope[2]; // offset: 2, size: 2
+} ForestVertex; // size: 4
+
+#define STI_TYPE_HASH_Array_ForestVertex 0xDAEE84C4
+typedef struct Array_ForestVertex {
+    const STITypeInfo* type_info_;
+    uint32 count;
+    ForestVertex* items;
+} Array_ForestVertex; // size: 16
+
+#define STI_TYPE_HASH_ForestMesh 0xC2D93166
+typedef struct ForestMesh{
+    const STITypeInfo* type_info_;
+    Array_ForestVertex Vertices; // offset: 0, size: 16
+    float32 BoundingMin[3]; // offset: 16, size: 12
+    float32 BoundingMax[3]; // offset: 28, size: 12
+} ForestMesh; // size: 40
+
+#define STI_TYPE_HASH_VegetationDataBuffer 0x8F581B21
+typedef struct VegetationDataBuffer{
+    const STITypeInfo* type_info_;
+    Array_uint8 Buffer; // offset: 0, size: 16
+} VegetationDataBuffer; // size: 16
 
 #define STI_TYPE_HASH_GeneralMeshConstants 0x15EEC9DE
 typedef struct GeneralMeshConstants{

@@ -2,39 +2,38 @@
 
 #ifndef APEXPREDATOR_DYNAMIC_ARRAY_H
 #define APEXPREDATOR_DYNAMIC_ARRAY_H
-#include <stdbool.h>
-
 #include "int_def.h"
 
-typedef struct DynamicArray {
+struct DynamicArray__Base {
     void **items;
     uint32 item_size:24;
     uint32 statically_allocated:1;
     uint32 heap_allocated:1;
     uint32 count;
     uint32 capacity;
-} DynamicArray__Base;
+};
 
 enum {
     DA_GROW_MULT = 2,
 };
 
 #define DYNAMIC_ARRAY_STRUCT(element_type, name)\
-    typedef struct DynamicArray_##name{\
-        element_type* items;\
+    typedef struct DynamicArray_##name {\
+        element_type *items;\
         uint32 item_size:24;\
         uint32 statically_allocated:1;\
         uint32 heap_allocated:1;\
         uint32 count;\
         uint32 capacity;\
-    }DynamicArray_##name
+    } DynamicArray_##name
 
 typedef bool (*DA_equal_fn)(const void* a, const void* b);
 
 DynamicArray__Base* DA_new_(uint32 item_size, uint32 initial_capacity);
 void DA_init_(DynamicArray__Base *da, uint32 item_size, uint32 initial_capacity);
 void DA_append_(DynamicArray__Base *da, const void *element);
-void* DA_append_get_(DynamicArray__Base *da);
+
+void *DA_append_get_(DynamicArray__Base *da);
 void DA_reserve_(DynamicArray__Base *da, uint32 needed_capacity);
 void *DA_at_(const DynamicArray__Base *da, uint32 index);
 void DA_free_(DynamicArray__Base *da);

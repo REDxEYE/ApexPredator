@@ -11,14 +11,15 @@
 #include "utils/lookup3.h"
 #include "utils/buffer/memory_buffer.h"
 
-typedef struct Archive Archive;
+struct Archive;
+struct ArchiveEntry;
 
-typedef struct {
+struct ArchiveEntry{
     Archive *archive;
     String path;
     uint32 path_hash;
     uint32 size;
-} ArchiveEntry;
+};
 
 DYNAMIC_ARRAY_STRUCT(ArchiveEntry, ArchiveEntry);
 
@@ -60,9 +61,8 @@ typedef struct ArchiveInterface {
     ArchiveFreeFn free;
 } ArchiveInterface;
 
-typedef struct Archive {
-    struct ArchiveInterface;
-} Archive;
+struct Archive : ArchiveInterface {
+};
 
 // Shortcuts
 static inline void Archive_free(Archive *archive) {
@@ -128,13 +128,13 @@ static inline void Archive_print_files(const Archive *archive) {
 
 typedef bool (*foreach_callback)(const Archive *archive, const ArchiveEntry *entry, void *user_data);
 
-static inline bool Archive_foreach_file(const Archive* archive, const foreach_callback callback, void* user_data) {
+static inline bool Archive_foreach_file(const Archive *archive, const foreach_callback callback, void *user_data) {
     assert(archive!=NULL);
     DynamicArray_ArchiveEntry entries = {0};
     DA_init(&entries, ArchiveEntry, 16);
     Archive_get_all_entries(archive, &entries);
     for (size_t i = 0; i < entries.count; ++i) {
-        const ArchiveEntry* entry = &entries.items[i];
+        const ArchiveEntry *entry = &entries.items[i];
         if (!callback(archive, entry, user_data)) {
             DA_free(&entries);
             return false;
@@ -144,7 +144,7 @@ static inline bool Archive_foreach_file(const Archive* archive, const foreach_ca
     return true;
 }
 
-static inline uint32 Archive_get_hash(const Archive* archive) {
+static inline uint32 Archive_get_hash(const Archive *archive) {
     assert(archive!=NULL);
     if (archive->get_hash) {
         return archive->get_hash(archive);

@@ -2,8 +2,6 @@
 
 #ifndef APEXPREDATOR_ADF_H
 #define APEXPREDATOR_ADF_H
-#include <stdbool.h>
-
 #include "adf_type_info_map.h"
 #include "platform/common_arrays.h"
 

@@ -39,23 +39,33 @@ DYNAMIC_ARRAY_STRUCT(DynamicArray_uint8, data_buffer);
 
 DYNAMIC_ARRAY_STRUCT(uint32, rootNodeIds);
 
-typedef struct {
-    uint32_t v;
-} D_ID;
+struct D_ID {
+    uint32 v{0};
 
-typedef struct {
+    D_ID() = default;
+
+    D_ID(const size_t v) : v(static_cast<uint32>(v)) {
+    }
+};
+
+struct TagD_ID {
     void *v;
-} TagD_ID;
+};
 
-typedef struct {
-    uint32_t v;
-} GL_ID;
+struct GL_ID {
+    uint32 v{0};
 
-typedef struct {
+    GL_ID() = default;
+
+    GL_ID(const size_t v) : v(static_cast<uint32>(v)) {
+    }
+};
+
+struct TagGL_ID {
     void *v;
-} TagGL_ID;
+};
 
-#define INVALID_GL_ID (GL_ID){UINT32_MAX}
+#define INVALID_GL_ID (GL_ID{UINT32_MAX})
 
 #define IS_VALID_GL_ID(gl_id) ((gl_id).v != UINT32_MAX)
 #define IS_VALID_D_ID(d_id)  ((d_id).v != UINT32_MAX)
@@ -90,10 +100,10 @@ typedef struct GLTFContext {
     bool finalized;
 } GLTFContext;
 
-static inline TagGL_ID gltf_tag_index(const GL_ID idx) { return (TagGL_ID){(void *) (uintptr_t) (idx.v + 1u)}; }
-static inline GL_ID gltf_untag_index(void *p) { return (GL_ID){((uintptr_t) p) - 1u}; }
-static inline TagD_ID gltf_tag_data_id(const D_ID id) { return (TagD_ID){(void *) (uintptr_t) (id.v + 1u)}; }
-static inline D_ID gltf_untag_data_id(void *p) { return (D_ID){((uintptr_t) p) - 1u}; }
+static inline TagGL_ID gltf_tag_index(const GL_ID idx) { return TagGL_ID{(void *) (idx.v + 1u)}; }
+static inline GL_ID gltf_untag_index(void *p) { return GL_ID{(uint32) ((uintptr_t) p - 1u)}; }
+static inline TagD_ID gltf_tag_data_id(const D_ID id) { return TagD_ID{(void *) (id.v + 1u)}; }
+static inline D_ID gltf_untag_data_id(void *p) { return D_ID{(uint32) ((uintptr_t) p - 1u)}; }
 
 char *GLTFContext_dupe_cstring(const char *name);
 
@@ -245,12 +255,13 @@ GL_ID GLTFContext_animation_sampler_new(const GLTFContext *context, GL_ID animat
                                         cgltf_interpolation_type interpolation,
                                         GL_ID input_accessor_id,
                                         GL_ID output_accessor_id
-                                        );
+);
+
 GL_ID GLTFContext_animation_channel_new(const GLTFContext *context, GL_ID animation_id,
                                         GL_ID sampler_id,
                                         GL_ID target_node_id,
                                         cgltf_animation_path_type path_type
-                                        );
+);
 
 // Shortcuts
 GL_ID GLTFContext_create_indices_accessor_from_data(

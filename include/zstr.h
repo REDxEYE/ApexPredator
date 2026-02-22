@@ -960,18 +960,18 @@ static inline bool zstr_is_valid_utf8(const zstr *s)
 /* Views and Slices (Zero-Copy) */
 
 // Helper macro to create a view from a string literal.
-#define ZSV(lit) (zstr_view){ .data = (lit), .len = sizeof(lit) -1 }
+#define ZSV(lit) zstr_view{ .data = (lit), .len = sizeof(lit) -1 }
 
 // Creates a view from a C-string.
 static inline zstr_view zstr_view_from(const char *cstr)
 {
-    return (zstr_view){ .data = cstr, .len = strlen(cstr) };
+    return zstr_view{ .data = cstr, .len = strlen(cstr) };
 }
 
 // Creates a view covering the entire zstr.
 static inline zstr_view zstr_as_view(const zstr *s)
 {
-    return (zstr_view){ .data = zstr_cstr(s), .len = zstr_len(s) };
+    return zstr_view{ .data = zstr_cstr(s), .len = zstr_len(s) };
 }
 
 // Converts a view back into an owning zstr (allocates).
@@ -983,9 +983,9 @@ static inline zstr zstr_from_view(zstr_view v)
 // Returns a substring view.
 static inline zstr_view zstr_sub(zstr_view v, size_t start, size_t len)
 {
-    if (start >= v.len) return (zstr_view){ "", 0 };
+    if (start >= v.len) return zstr_view{ "", 0 };
     if (start + len > v.len) len = v.len - start;
-    return (zstr_view){ .data = v.data + start, .len = len };
+    return zstr_view{ .data = v.data + start, .len = len };
 }
 
 // Checks if view equals a C-string.
@@ -1037,7 +1037,7 @@ static inline zstr_view zstr_view_lstrip(zstr_view v)
     const char *start = v.data;
     const char *end = v.data + v.len;
     while (start < end && isspace((unsigned char)*start)) start++;
-    return (zstr_view){ .data = start, .len = (size_t)(end - start) };
+    return zstr_view{ .data = start, .len = (size_t)(end - start) };
 }
 
 // Trims whitespace from the end of the view.
@@ -1046,7 +1046,7 @@ static inline zstr_view zstr_view_rstrip(zstr_view v)
     const char *start = v.data;
     const char *end = v.data + v.len;
     while (end > start && isspace((unsigned char)*(end - 1))) end--;
-    return (zstr_view){ .data = start, .len = (size_t)(end - start) };
+    return zstr_view{ .data = start, .len = (size_t)(end - start) };
 }
 
 // Trims whitespace from both ends.
@@ -1090,7 +1090,7 @@ static inline bool zstr_view_to_int(zstr_view v, int *out)
 // Initializes an iterator for splitting a string.
 static inline zstr_split_iter zstr_split_init(zstr_view src, const char *delim) 
 {
-    return (zstr_split_iter){
+    return zstr_split_iter{
         .source = src,
         .delim = zstr_view_from(delim),
         .current_pos = 0,
@@ -1119,12 +1119,12 @@ static inline bool zstr_split_next(zstr_split_iter *it, zstr_view *out_part)
 
     if (found_at == remaining) 
     {
-        *out_part = (zstr_view){ .data = start, .len = remaining };
+        *out_part = zstr_view{ .data = start, .len = remaining };
         it->finished = true;
     }
     else 
     {
-        *out_part = (zstr_view){ .data = start, .len = found_at };
+        *out_part = zstr_view{ .data = start, .len = found_at };
         it->current_pos += found_at + it->delim.len;
     }
     

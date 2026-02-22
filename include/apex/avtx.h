@@ -3,6 +3,7 @@
 #ifndef APEXPREDATOR_AVTX_H
 #define APEXPREDATOR_AVTX_H
 #include "int_def.h"
+#include "platform/archive_manager.h"
 #include "platform/texture.h"
 #include "utils/buffer/buffer.h"
 
@@ -50,6 +51,8 @@ typedef struct {
 
 #pragma pack(pop)
 
-void AVTXTexture_from_buffer(Buffer *buffer, Texture *texture);
+Texture* AVTXTexture_from_buffer(Buffer *buffer, uint32 hash, const ArchiveManager* manager);
+
+void AVTXTexture_from_png(const String* png_path, const String* output_texture_name, const String *output_dir);
 
 #endif //APEXPREDATOR_AVTX_H

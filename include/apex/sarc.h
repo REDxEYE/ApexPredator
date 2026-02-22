@@ -25,14 +25,13 @@ typedef struct {
 DYNAMIC_ARRAY_STRUCT(SArcEntry, SArcEntry);
 DYNAMIC_INT_MAP_STRUCT(SArcEntry, SArcEntryMap);
 
-typedef struct {
-    struct ArchiveInterface;
+struct SArchive:ArchiveInterface {
     SArcHeader header;
     uint32 hash;
     char* strings;
     DynamicIntMap_SArcEntryMap entries;
     Buffer* buffer;
-}SArchive;
+};
 
 SArchive* SArchive_new(Buffer* buffer, uint32 self_hash);
 void SArchive_init(SArchive* archive, Buffer* buffer, uint32 self_hash);

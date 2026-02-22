@@ -14,15 +14,16 @@
 #include "utils/buffer/file_buffer.h"
 
 DYNAMIC_ARRAY_STRUCT(TabEntry, TabEntry);
+
 DYNAMIC_INT_MAP_STRUCT(TabEntry, TabEntryMap);
 
-typedef struct {
-    Archive;
+struct TabArchive : Archive {
     String tab_path;
     FileBuffer arc_buffer;
     DynamicIntMap_TabEntryMap entries;
-} TabArchive;
-TabArchive* TabArchive_new(const String* path);
+};
+
+TabArchive *TabArchive_new(const String *path);
 
 void TabArchives_init(const ArchiveManager *manager, const String *game_root);
 

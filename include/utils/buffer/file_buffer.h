@@ -9,24 +9,23 @@
 #define WIN32_LEAN_AND_MEAN
 #include "Windows.h"
 
-typedef struct {
-    struct Buffer_s;
+struct FileBuffer : Buffer {
     String path;
     HANDLE hFile;
-} FileBuffer;
+};
 
 
 #else
 #include <stdio.h>
 
-typedef struct {
-    struct Buffer_s;
+struct FileBuffer:Buffer {
     String path;
     FILE *file;
-} FileBuffer;
+} ;
 
 #endif
 
 BufferError FileBuffer_open_read(FileBuffer *fb, const char *path);
+
 BufferError FileBuffer_open_write(FileBuffer *fb, const char *path);
 #endif //APEXPREDATOR_FILE_BUFFER_H

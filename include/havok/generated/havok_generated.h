@@ -7,6 +7,7 @@
 #define TRACY_MEMORY
 #endif
 #include "havok/havok_helpers.h"
+
 #include "havok/havok_support_types.h"
 
 typedef struct hkRootLevelContainer hkRootLevelContainer;

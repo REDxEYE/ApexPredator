@@ -5,8 +5,7 @@
 
 #include "utils/buffer/buffer.h"
 
-typedef struct {
-    struct Buffer_s;
+struct MemoryBuffer : Buffer {
     uint8 *data;
     int64 size;
     int64 capacity;
@@ -14,7 +13,7 @@ typedef struct {
     uint32 heap_allocated: 1;
     uint32 owns_data: 1;
     uint32 read_only: 1;
-} MemoryBuffer;
+};
 
 
 MemoryBuffer *MemoryBuffer_new();

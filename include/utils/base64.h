@@ -5,8 +5,7 @@
 
 #include "int_def.h"
 
-static const char BASE64_TBL[64] =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static const char* BASE64_TBL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /*
 Computes the exact number of bytes required to Base64-encode a binary buffer,
