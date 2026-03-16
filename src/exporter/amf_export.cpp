@@ -2,6 +2,8 @@
 
 #include "exporter/amf_export.h"
 
+#include "apex/adf/generated/adf_types_fwd.h"
+
 #include "apex/hashes.h"
 #include "apex/adf/adf.h"
 #include "exporter/adf_export.h"
@@ -9,647 +11,566 @@
 #include "platform/logger.h"
 #include "platform/texture_ops.h"
 #include "utils/hash_helper.h"
-#include "utils/path.h"
-#include "utils/memory_profiling.h"
 
-DYNAMIC_ARRAY_STRUCT(AmfBuffer, AmfBuffer);
+#include <algorithm>
+#include <ranges>
 
-GL_ID export_amf_mesh(AppState *app_state, uint32 path_hash,
-                      const AmfMeshHeader *header, const AmfMeshBuffers *mesh_buffers) {
-    CHECK_APP_STATE(app_state);
-    CHECK_GLTF_STATE(&app_state->gltf_context);
-    GLTFContext *context = &app_state->gltf_context;
-    const ArchiveManager *archive_manager = &app_state->archive_manager;
+#include "tracy/Tracy.hpp"
+#include "utils/common.h"
 
-    String mesh_name = {};
-    const StringView path = find_name32_sv(path_hash);
-    if (sv_is_null(path)) {
-        Path_filename_sv(path, &mesh_name);
-    }
-    else {
-        String_from_cstr(&mesh_name, "mesh_");
-        String_append_format(&mesh_name, "%08X", path_hash);
-    }
-    GL_ID mesh_root_node_id = GLTFContext_node_add(context, String_cstr(&mesh_name), true);
 
-    DynamicArray_AmfBuffer all_vertex_buffer = {};
-    DA_init(&all_vertex_buffer, AmfBuffer, mesh_buffers->VertexBuffers.count);
+void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
+                    GltfHelper::Handle<tinygltf::Node> mesh_root_node, const ADFTypes::AmfLodGroup &lod_group,
+                    const int32 lod_id,
+                    const std::vector<ADFTypes::AmfBuffer> &all_index_buffer,
+                    const std::vector<ADFTypes::AmfBuffer> &all_vertex_buffer
+) {
+    for (const auto [mesh_id, mesh]: lod_group.Meshes | std::views::enumerate) {
+        auto lod_name = std::format("{}_lod_{}_mesh_{}", path_utils::stem(mesh_name), lod_id, mesh_id);
+        auto node = helper.make<tinygltf::Node>();
+        node->name = lod_name;
 
-    DynamicArray_AmfBuffer all_index_buffer = {};
-    DA_init(&all_index_buffer, AmfBuffer, mesh_buffers->IndexBuffers.count);
+        helper.set_parent(mesh_root_node, node);
 
-    AmfMeshBuffers *hi_res_buffers = NULL;
-    // hires fix
-    {
-        MemoryBuffer hi_res_buffer = {};
-        StringView hi_res_path_full = find_name32_sv(header->HighLodPath);
-        if (sv_is_not_null(hi_res_path_full)) {
-            if (StringView_find_subcstring(hi_res_path_full, "intermediate/") != UINT32_MAX) {
-                String hi_res_path = {};
+        // if (mesh.MeshProperties.type_hash == STI_TYPE_HASH_GeneralMeshConstants) {
+        //     // GeneralMeshConstants* constants = (GeneralMeshConstants*)mesh->MeshProperties.data;
+        // }
+        // else {
+        //     GLog_Warning("Unsupported mesh prop type: %08X", mesh->MeshProperties.type_hash);
+        // }
 
-                String_from_cstr(&hi_res_path, StringView_cstr(hi_res_path_full) + strlen("intermediate/"));
-                if (ArchiveManager_get_file_by_hash(archive_manager, hash_string(&hi_res_path), &hi_res_buffer)) {
-                    ADF hi_res_adf = {};
-                    ADF_from_buffer(&hi_res_adf, (Buffer *) &hi_res_buffer);
-                    ADFInstance *instance = ADF_get_instance(&hi_res_adf, 0);
-                    if (instance->type_hash == STI_TYPE_HASH_AmfMeshBuffers) {
-                        hi_res_buffers = static_cast<AmfMeshBuffers *>(ADF_read_instance(&hi_res_adf, instance, &hi_res_buffer, &ADF_TYPES_type_info));
+        uint32 vertex_count = mesh.VertexCount;
+        uint32 index_buffer_index = mesh.IndexBufferIndex;
+        if (index_buffer_index > all_index_buffer.size()) {
+            continue;
+        }
+
+        uint32 index_buffer_stride = mesh.IndexBufferStride;
+        uint32 index_buffer_offset = mesh.IndexBufferOffset;
+        auto &vertex_buffer_indices = mesh.VertexBufferIndices;
+        auto &vertex_buffer_strides = mesh.VertexStreamStrides;
+        auto &vertex_buffer_offsets = mesh.VertexStreamOffsets;
+        auto &bone_lookup = mesh.BoneIndexLookup;
+        auto &amf_attributes = mesh.StreamAttributes;
+
+        auto &used_index_buffer = all_index_buffer[index_buffer_index];
+
+        // auto mesh_type_name = find_name32_sv(mesh.MeshTypeId);
+
+        auto gl_mesh_name = find_name32(mesh.MeshTypeId).value_or(std::format("mesh_{:08X}", mesh.MeshTypeId.storage));
+        auto gl_mesh = helper.make<tinygltf::Mesh>();
+        gl_mesh->name = gl_mesh_name;
+        gl_mesh->primitives.resize(mesh.SubMeshes.size());
+        node->mesh = gl_mesh.index();
+
+        for (const auto &[sub_mesh_id, sub_mesh]: mesh.SubMeshes | std::views::enumerate) {
+            const auto material_name = find_name32(sub_mesh.SubMeshId).value_or(
+                std::format("material_{:08X}", sub_mesh.SubMeshId.storage));
+
+            auto material = helper.find<tinygltf::Material>(material_name);
+            auto &primitive = gl_mesh->primitives[sub_mesh_id];
+
+            if (material) {
+                primitive.material = material.index();
+            }
+            primitive.mode = TINYGLTF_MODE_TRIANGLES;
+            auto *index_data = used_index_buffer.Data.data() + index_buffer_offset + sub_mesh.IndexStreamOffset;
+            helper.set_primitive_indices_from_u8(gl_mesh.index(), sub_mesh_id, index_data,
+                                                 sub_mesh.IndexCount * index_buffer_stride,
+                                                 index_buffer_stride == 2
+                                                     ? TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT
+                                                     : TINYGLTF_COMPONENT_TYPE_INT,
+                                                 sub_mesh.IndexCount, 0, 0, "Indices"
+            );
+
+            uint32 uv_count = 0;
+            for (const auto &amf_attribute: amf_attributes) {
+                uint32 stream_index = vertex_buffer_indices[amf_attribute.StreamIndex];
+                uint32 stream_offset = amf_attribute.StreamOffset;
+                uint32 stream_stride = vertex_buffer_strides[amf_attribute.StreamIndex];
+
+                int32 data_type;
+                int32 comp_type;
+                bool normalized;
+                String attr_name = "_INVALID_ATTRIBUTE";
+                Buffer attribute_data = Buffer();
+                auto vertex_buffer = Buffer(all_vertex_buffer[stream_index].Data);
+                auto raw_vertex_buffer_data = vertex_buffer.view(
+                    vertex_buffer_offsets[amf_attribute.StreamIndex] + stream_offset, stream_stride * vertex_count);
+                float32 bbox_min[3] = {0, 0, 0};
+                float32 bbox_max[3] = {0, 0, 0};
+                bool use_bbox = false;
+                uint32 stride;
+                switch (amf_attribute.Usage) {
+                    case ADFTypes::AmfUsage::AmfUsage_Position: {
+                        data_type = TINYGLTF_TYPE_VEC3;
+                        comp_type = TINYGLTF_COMPONENT_TYPE_FLOAT;
+                        normalized = false;
+                        use_bbox = true;
+                        stride = 3 * sizeof(float32);
+                        attr_name = "POSITION";
+                        auto packing_data = reinterpret_cast<const float *>(amf_attribute.PackingData.data());;
+                        attribute_data.resize(vertex_count * stride);
+                        auto output_data = attribute_data.writable_view_as<float32>();
+                        switch (amf_attribute.Format) {
+                            case ADFTypes::AmfFormat::AmfFormat_R16G16B16_SNORM: {
+                                for (int i = 0; i < vertex_count; ++i) {
+                                    auto input_data = reinterpret_cast<int16 *>(
+                                        raw_vertex_buffer_data.data() + i * stream_stride);
+                                    float32 x = *packing_data * input_data[0] / 32767.0f;
+                                    float32 y = *packing_data * input_data[1] / 32767.0f;
+                                    float32 z = *packing_data * input_data[2] / 32767.0f;
+                                    // Update min/max
+                                    if (i == 0) {
+                                        bbox_min[0] = x;
+                                        bbox_min[1] = y;
+                                        bbox_min[2] = z;
+                                        bbox_max[0] = x;
+                                        bbox_max[1] = y;
+                                        bbox_max[2] = z;
+                                    }
+                                    else {
+                                        if (x < bbox_min[0]) bbox_min[0] = x;
+                                        if (y < bbox_min[1]) bbox_min[1] = y;
+                                        if (z < bbox_min[2]) bbox_min[2] = z;
+                                        if (x > bbox_max[0]) bbox_max[0] = x;
+                                        if (y > bbox_max[1]) bbox_max[1] = y;
+                                        if (z > bbox_max[2]) bbox_max[2] = z;
+                                    }
+                                    output_data[i * 3 + 0] = x;
+                                    output_data[i * 3 + 1] = y;
+                                    output_data[i * 3 + 2] = z;
+                                }
+                                break;
+                            }
+                            default: {
+                                GLog_Error("Unsupported position attribute format: {}",
+                                           to_string(amf_attribute.Format));
+                                abort();
+                            }
+                        }
+                        break;
                     }
-                    else {
-                        GLog_Warning("Unexpected hi-res mesh buffers type: %08X", instance->type_hash);
+                    case ADFTypes::AmfUsage::AmfUsage_TextureCoordinate: {
+                        data_type = TINYGLTF_TYPE_VEC2;
+                        comp_type = TINYGLTF_COMPONENT_TYPE_FLOAT;
+                        normalized = false;
+                        stride = 2 * sizeof(float32);
+                        attr_name = "TEXCOORD_" + std::to_string(uv_count);
+                        uv_count++;
+                        auto packing_data = reinterpret_cast<const float *>(amf_attribute.PackingData.data());;
+                        attribute_data.resize(vertex_count * stride);
+                        auto output_data = attribute_data.writable_view_as<float32>();
+                        switch (amf_attribute.Format) {
+                            case ADFTypes::AmfFormat::AmfFormat_R16G16_SNORM: {
+                                for (int i = 0; i < vertex_count; ++i) {
+                                    int16 *input_data = reinterpret_cast<int16 *>(
+                                        raw_vertex_buffer_data.data() + i * stream_stride);
+                                    output_data[i * 2 + 0] = input_data[0] / 32767.0f * packing_data[0];
+                                    output_data[i * 2 + 1] = input_data[1] / 32767.0f * packing_data[1];
+                                }
+                                break;
+                            }
+                            default: {
+                                GLog_Error("Unsupported texcoord attribute format: {}",
+                                           to_string(amf_attribute.Format));
+                                abort();
+                            }
+                        }
+                        break;
                     }
-                    ADF_free(&hi_res_adf);
-                    String_free(&hi_res_path);
-                    hi_res_buffer.close(&hi_res_buffer);
-                }
-                String_free(&hi_res_path);
-            }
-        }
-    }
+                    case ADFTypes::AmfUsage::AmfUsage_Normal: {
+                        data_type = TINYGLTF_TYPE_VEC3;
+                        comp_type = TINYGLTF_COMPONENT_TYPE_FLOAT;
+                        normalized = false;
+                        stride = 3 * sizeof(float32);
+                        attr_name = "NORMAL";
 
-    for (int i = 0; i < mesh_buffers->VertexBuffers.count; ++i) {
-        AmfBuffer *vertex_buffer = &mesh_buffers->VertexBuffers.items[i];
-        *(AmfBuffer *) DA_append_get(&all_vertex_buffer) = *vertex_buffer;
-    }
-    for (int i = 0; i < mesh_buffers->IndexBuffers.count; ++i) {
-        AmfBuffer *index_buffer = &mesh_buffers->IndexBuffers.items[i];
-        *(AmfBuffer *) DA_append_get(&all_index_buffer) = *index_buffer;
-    }
+                        attribute_data.resize(vertex_count * stride);
+                        auto output_data = attribute_data.writable_view_as<float32>();
+                        switch (amf_attribute.Format) {
+                            case ADFTypes::AmfFormat::AmfFormat_R32_UNIT_VEC_AS_FLOAT: {
+                                for (int i = 0; i < vertex_count; ++i) {
+                                    float32 input_data = *reinterpret_cast<float32 *>(
+                                        raw_vertex_buffer_data.data() + i * stream_stride);
+                                    float32 x = input_data;
+                                    float32 y = input_data * (1.0f / 256.f);
+                                    float32 z = input_data * (1.0f / (256.f * 256.f));
+                                    float32 bogus;
+                                    x = -1.f + 2.0f * modff(x, &bogus);
+                                    y = -1.f + 2.0f * modff(y, &bogus);
+                                    z = -1.f + 2.0f * modff(z, &bogus);
 
-
-    if (hi_res_buffers != NULL) {
-        for (int i = 0; i < hi_res_buffers->VertexBuffers.count; ++i) {
-            AmfBuffer *vertex_buffer = &hi_res_buffers->VertexBuffers.items[i];
-            *(AmfBuffer *) DA_append_get(&all_vertex_buffer) = *vertex_buffer;
-        }
-        for (int i = 0; i < hi_res_buffers->IndexBuffers.count; ++i) {
-            AmfBuffer *index_buffer = &hi_res_buffers->IndexBuffers.items[i];
-            *(AmfBuffer *) DA_append_get(&all_index_buffer) = *index_buffer;
-        }
-    }
-
-
-    String lod_name = {};
-    for (uint32 lod_id = header->LodGroups.count - 1; lod_id < header->LodGroups.count; ++lod_id) {
-        AmfLodGroup *lod_group = &header->LodGroups.items[lod_id];
-        for (int mesh_id = 0; mesh_id < lod_group->Meshes.count; ++mesh_id) {
-            AmfMesh *mesh = &lod_group->Meshes.items[mesh_id];
-            // String* mesh_type = find_name32(mesh->MeshTypeId);
-            String_init(&lod_name, 64);
-            String_copy_from(&lod_name, &mesh_name);
-            String_append_format(&lod_name, "_lod_%i_mesh_%i", lod_id, mesh_id);
-            GL_ID gl_node_id = GLTFContext_node_add(context, String_detach(&lod_name), false);
-            GLTFContext_node_set_parent(context, gl_node_id, mesh_root_node_id);
-
-            if (mesh->MeshProperties.type_hash == STI_TYPE_HASH_GeneralMeshConstants) {
-                // GeneralMeshConstants* constants = (GeneralMeshConstants*)mesh->MeshProperties.data;
-            }
-            else {
-                GLog_Warning("Unsupported mesh prop type: %08X", mesh->MeshProperties.type_hash);
-            }
-
-            uint32 vertex_count = mesh->VertexCount;
-            uint32 index_buffer_index = mesh->IndexBufferIndex;
-            if (index_buffer_index > all_index_buffer.count) {
-                continue;
-            }
-
-            uint32 index_buffer_stride = mesh->IndexBufferStride;
-            uint32 index_buffer_offset = mesh->IndexBufferOffset;
-            Array_uint8 *vertex_buffer_indices = &mesh->VertexBufferIndices;
-            Array_uint8 *vertex_buffer_strides = &mesh->VertexStreamStrides;
-            Array_uint32 *vertex_buffer_offsets = &mesh->VertexStreamOffsets;
-            Array_int16 *bone_lookup = &mesh->BoneIndexLookup;
-            Array_AmfStreamAttribute *amf_attributes = &mesh->StreamAttributes;
-            AmfBuffer *usedIndexBuffer = static_cast<AmfBuffer *>(DA_at(&all_index_buffer, index_buffer_index));
-
-            StringView mesh_type_name = find_name32_sv(mesh->MeshTypeId);
-
-            GL_ID gl_mesh_id;
-            if (sv_is_null(mesh_type_name)) {
-                char tmp_buff[64];
-                snprintf(tmp_buff, sizeof(tmp_buff), "mesh_%08X", mesh->MeshTypeId);
-                gl_mesh_id = GLTFContext_mesh_add(context, tmp_buff, mesh->SubMeshes.count);
-            }
-            else {
-                gl_mesh_id = GLTFContext_mesh_add(context, StringView_cstr(mesh_type_name), mesh->SubMeshes.count);
-            }
-
-            GLTFContext_node_set_mesh(context, gl_node_id, gl_mesh_id);
-
-            for (int sub_mesh_id = 0; sub_mesh_id < mesh->SubMeshes.count; ++sub_mesh_id) {
-                AmfSubMesh *sub_mesh = &mesh->SubMeshes.items[sub_mesh_id];
-                StringView material_name = find_name32_sv(sub_mesh->SubMeshId);
-
-                GL_ID material_id;
-                if (sv_is_null(material_name)) {
-                    char tmp_buff[64];
-                    snprintf(tmp_buff, sizeof(tmp_buff), "material_%08X", sub_mesh->SubMeshId);
-                    material_id = GLTFContext_material_find_by_name(context, tmp_buff);
-                }
-                else {
-                    material_id = GLTFContext_material_find_by_name(context, StringView_cstr(material_name));
-                }
-
-                cgltf_primitive *primitive = GLTFContext_mesh_get_primitive(context, gl_mesh_id, sub_mesh_id);
-                if (IS_VALID_GL_ID(material_id)) {
-                    GLTFContext_primitive_set_material(context, gl_mesh_id, sub_mesh_id, material_id);
-                }
-                primitive->type = cgltf_primitive_type_triangles;
-                GL_ID index_accessor_id = GLTFContext_create_indices_accessor_from_data(
-                    context,
-                    usedIndexBuffer->Data.items + index_buffer_offset + sub_mesh->IndexStreamOffset,
-                    sub_mesh->IndexCount * index_buffer_stride, sub_mesh->IndexCount, NULL,
-                    index_buffer_stride == 2 ? cgltf_component_type_r_16u : cgltf_component_type_r_32u,
-                    sub_mesh->IndexStreamOffset);
-                GLTFContext_set_primitive_indices_accessor(context, gl_mesh_id, sub_mesh_id, index_accessor_id);
-                GLTFContext_primitive_init_attributes(context, gl_mesh_id, sub_mesh_id, amf_attributes->count);
-                uint32 uv_count = 0;
-                for (int attr_id = 0; attr_id < amf_attributes->count; ++attr_id) {
-                    AmfStreamAttribute *amf_attribute = &amf_attributes->items[attr_id];
-                    uint32 stream_index = vertex_buffer_indices->items[amf_attribute->StreamIndex];
-                    uint32 stream_offset = amf_attribute->StreamOffset;
-                    uint32 stream_stride = vertex_buffer_strides->items[amf_attribute->StreamIndex];
-
-                    cgltf_type data_type;
-                    cgltf_component_type comp_type;
-                    bool normalized;
-                    String attr_name = {};
-                    String_from_cstr(&attr_name, "_INVALID_ATTRIBUTE");
-                    void *attribute_data = NULL;
-                    uint8 *raw_vertex_buffer_data =
-                            all_vertex_buffer.items[stream_index].Data.items + vertex_buffer_offsets->items[
-                                amf_attribute->StreamIndex] + stream_offset;
-                    float32 bbox_min[3] = {0, 0, 0};
-                    float32 bbox_max[3] = {0, 0, 0};
-                    bool use_bbox = false;
-                    cgltf_attribute_type attr_type = cgltf_attribute_type_invalid;
-                    uint32 stride;
-                    switch (amf_attribute->Usage) {
-                        case AmfUsage_Position: {
-                            data_type = cgltf_type_vec3;
-                            comp_type = cgltf_component_type_r_32f;
-                            attr_type = cgltf_attribute_type_position;
-                            normalized = false;
-                            use_bbox = true;
-                            stride = 12;
-                            String_from_cstr(&attr_name, "POSITION");
-                            float32 packing_data = *(float32 *) amf_attribute->PackingData;
-
-                            attribute_data = mp_malloc(vertex_count * 3 * 4);
-                            float32 *positions_data = static_cast<float32 *>(attribute_data);
-                            switch (amf_attribute->Format) {
-                                case AmfFormat_R16G16B16_SNORM: {
-                                    for (int i = 0; i < vertex_count; ++i) {
-                                        int16 *vertex_data = (int16 *) (raw_vertex_buffer_data + i * stream_stride);
-                                        float32 x = packing_data * (float32) vertex_data[0] / 32767.0f;
-                                        float32 y = packing_data * (float32) vertex_data[1] / 32767.0f;
-                                        float32 z = packing_data * (float32) vertex_data[2] / 32767.0f;
-                                        // Update min/max
-                                        if (i == 0) {
-                                            bbox_min[0] = x;
-                                            bbox_min[1] = y;
-                                            bbox_min[2] = z;
-                                            bbox_max[0] = x;
-                                            bbox_max[1] = y;
-                                            bbox_max[2] = z;
-                                        }
-                                        else {
-                                            if (x < bbox_min[0]) bbox_min[0] = x;
-                                            if (y < bbox_min[1]) bbox_min[1] = y;
-                                            if (z < bbox_min[2]) bbox_min[2] = z;
-                                            if (x > bbox_max[0]) bbox_max[0] = x;
-                                            if (y > bbox_max[1]) bbox_max[1] = y;
-                                            if (z > bbox_max[2]) bbox_max[2] = z;
-                                        }
-
-                                        positions_data[i * 3 + 0] = x;
-                                        positions_data[i * 3 + 1] = y;
-                                        positions_data[i * 3 + 2] = z;
+                                    float32 length = sqrtf(x * x + y * y + z * z);
+                                    if (length > 0.0f) {
+                                        x /= length;
+                                        y /= length;
+                                        z /= length;
                                     }
-                                    break;
-                                }
-                                default: {
-                                    GLog_Error("Unsupported position attribute format:%d", amf_attribute->Format);
-                                    abort();
-                                }
-                            }
-                            break;
-                        }
-                        case AmfUsage_TextureCoordinate: {
-                            data_type = cgltf_type_vec2;
-                            comp_type = cgltf_component_type_r_32f;
-                            attr_type = cgltf_attribute_type_texcoord;
-                            normalized = false;
-                            stride = 8;
-                            String_from_cstr(&attr_name, "TEXCOORD_");
-                            String_append_format(&attr_name, "%d", uv_count);
-                            uv_count++;
-                            float32 *packing_data = (float32 *) amf_attribute->PackingData;
 
-                            attribute_data = mp_malloc(vertex_count * 2 * 8);
-                            float32 *uv_data = static_cast<float32 *>(attribute_data);
-                            switch (amf_attribute->Format) {
-                                case AmfFormat_R16G16_SNORM: {
-                                    for (int i = 0; i < vertex_count; ++i) {
-                                        int16 *vertex_data = (int16 *) (raw_vertex_buffer_data + i * stream_stride);
-                                        uv_data[i * 2 + 0] = ((float32) vertex_data[0] / 32767.0f) * packing_data[0];
-                                        uv_data[i * 2 + 1] = ((float32) vertex_data[1] / 32767.0f) * packing_data[1];
+                                    output_data[i * 3 + 0] = x;
+                                    output_data[i * 3 + 1] = y;
+                                    output_data[i * 3 + 2] = z;
+                                }
+                                break;
+                            }
+                            default: {
+                                GLog_Error("Unsupported normal attribute format: {}",
+                                           to_string(amf_attribute.Format));
+                                abort();
+                            }
+                        }
+                        break;
+                    }
+                    case ADFTypes::AmfUsage::AmfUsage_Color: {
+                        data_type = TINYGLTF_TYPE_VEC4;
+                        comp_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
+                        normalized = true;
+                        stride = 4 * sizeof(uint8);
+                        attr_name = "_COLOR_0";
+                        attribute_data.resize(vertex_count * stride);
+                        auto output_data = attribute_data.writable_view_as<uint8>();
+                        switch (amf_attribute.Format) {
+                            case ADFTypes::AmfFormat::AmfFormat_R32_R8G8B8A8_UNORM_AS_FLOAT: {
+                                for (int i = 0; i < vertex_count; ++i) {
+                                    float32 vertex_data = *reinterpret_cast<int16 *>(
+                                        raw_vertex_buffer_data.data() + i * stream_stride);
+                                    float32 r = vertex_data;
+                                    float32 g = vertex_data * (1.0f / 256.f);
+                                    float32 b = vertex_data * (1.0f / 256.f * 256.f);
+                                    float32 a = vertex_data * (1.0f / 256.f * 256.f * 256.f);
+                                    float32 bogus;
+                                    r = modff(r, &bogus);
+                                    g = modff(g, &bogus);
+                                    b = modff(b, &bogus);
+                                    a = modff(a, &bogus);
+
+                                    output_data[i * 4 + 0] = static_cast<uint8>(r * 255.f);
+                                    output_data[i * 4 + 1] = static_cast<uint8>(g * 255.f);
+                                    output_data[i * 4 + 2] = static_cast<uint8>(b * 255.f);
+                                    output_data[i * 4 + 3] = static_cast<uint8>(a * 255.f);
+                                }
+                                break;
+                            }
+                            default: {
+                                GLog_Error("Unsupported color attribute format: {}",
+                                           to_string(amf_attribute.Format));
+                                abort();
+                            }
+                        }
+                        break;
+                    }
+                    case ADFTypes::AmfUsage::AmfUsage_BoneIndex: {
+                        data_type = TINYGLTF_TYPE_VEC4;
+                        comp_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT;
+                        normalized = false;
+                        stride = 4 * sizeof(uint16);
+                        attr_name = "JOINTS_0";
+                        attribute_data.resize(vertex_count * stride);
+                        auto output_data = attribute_data.writable_view_as<uint16>();
+                        switch (amf_attribute.Format) {
+                            case ADFTypes::AmfFormat::AmfFormat_R8G8B8A8_UINT: {
+                                for (int i = 0; i < vertex_count; ++i) {
+                                    uint8 *input_data = raw_vertex_buffer_data.data() + i * stream_stride;
+                                    for (int j = 0; j < 4; ++j) {
+                                        int16 bone_index = bone_lookup[input_data[j]];
+                                        output_data[i * 4 + j] = bone_index;
                                     }
-                                    break;
                                 }
-                                default: {
-                                    GLog_Error("Unsupported texcoord attribute format:%d", amf_attribute->Format);
-                                    abort();
-                                }
+                                break;
                             }
-                            break;
+                            default: {
+                                GLog_Error("Unsupported bone index attribute format: {}",
+                                           to_string(amf_attribute.Format));
+                                abort();
+                            }
                         }
-                        case AmfUsage_Normal: {
-                            data_type = cgltf_type_vec3;
-                            comp_type = cgltf_component_type_r_32f;
-                            attr_type = cgltf_attribute_type_normal;
-                            normalized = false;
-                            stride = 12;
-                            String_from_cstr(&attr_name, "NORMAL");
-
-                            attribute_data = mp_malloc(vertex_count * 3 * 4);
-                            float32 *normals_data = static_cast<float32 *>(attribute_data);
-                            switch (amf_attribute->Format) {
-                                case AmfFormat_R32_UNIT_VEC_AS_FLOAT: {
-                                    for (int i = 0; i < vertex_count; ++i) {
-                                        float32 vertex_data = *(float32 *) (raw_vertex_buffer_data + i * stream_stride);
-                                        float32 x = vertex_data;
-                                        float32 y = vertex_data * (1.0f / 256.f);
-                                        float32 z = vertex_data * (1.0f / (256.f * 256.f));
-                                        float32 bogus;
-                                        x = -1.f + 2.0f * modff(x, &bogus);
-                                        y = -1.f + 2.0f * modff(y, &bogus);
-                                        z = -1.f + 2.0f * modff(z, &bogus);
-
-                                        float32 length = sqrtf(x * x + y * y + z * z);
-                                        if (length > 0.0f) {
-                                            x /= length;
-                                            y /= length;
-                                            z /= length;
-                                        }
-
-                                        normals_data[i * 3 + 0] = x;
-                                        normals_data[i * 3 + 1] = y;
-                                        normals_data[i * 3 + 2] = z;
+                        break;
+                    }
+                    case ADFTypes::AmfUsage::AmfUsage_BoneWeight: {
+                        data_type = TINYGLTF_TYPE_VEC4;
+                        comp_type = TINYGLTF_COMPONENT_TYPE_FLOAT;
+                        normalized = false;
+                        stride = 4 * sizeof(float32);
+                        attr_name = "WEIGHTS_0";
+                        attribute_data.resize(vertex_count * stride);
+                        auto output_data = attribute_data.writable_view_as<float32>();
+                        switch (amf_attribute.Format) {
+                            case ADFTypes::AmfFormat::AmfFormat_R8G8B8A8_UNORM: {
+                                for (int i = 0; i < vertex_count; ++i) {
+                                    uint8 *input_data = raw_vertex_buffer_data.data() + i * stream_stride;
+                                    float32 weight_sum = 0.0f;
+                                    for (int j = 0; j < 4; ++j) {
+                                        output_data[i * 4 + j] = static_cast<float32>(input_data[j]) / 255.0f;
+                                        weight_sum += output_data[i * 4 + j];
                                     }
-                                    break;
-                                }
-                                default: {
-                                    GLog_Error("Unsupported normal attribute format:%d", amf_attribute->Format);
-                                    abort();
-                                }
-                            }
-                            break;
-                        }
-                        case AmfUsage_Color: {
-                            data_type = cgltf_type_vec4;
-                            comp_type = cgltf_component_type_r_8u;
-                            attr_type = cgltf_attribute_type_color;
-                            normalized = true;
-                            stride = 4;
-                            String_from_cstr(&attr_name, "_COLOR_0");
-
-                            attribute_data = mp_malloc(vertex_count * 4);
-                            uint8 *color_data = static_cast<uint8 *>(attribute_data);
-                            switch (amf_attribute->Format) {
-                                case AmfFormat_R32_R8G8B8A8_UNORM_AS_FLOAT: {
-                                    for (int i = 0; i < vertex_count; ++i) {
-                                        float32 vertex_data = *(float32 *) (raw_vertex_buffer_data + i * stream_stride);
-                                        float32 r = vertex_data;
-                                        float32 g = vertex_data * (1.0f / 256.f);
-                                        float32 b = vertex_data * (1.0f / 256.f * 256.f);
-                                        float32 a = vertex_data * (1.0f / 256.f * 256.f * 256.f);
-                                        float32 bogus;
-                                        r = modff(r, &bogus);
-                                        g = modff(g, &bogus);
-                                        b = modff(b, &bogus);
-                                        a = modff(a, &bogus);
-
-                                        color_data[i * 4 + 0] = (uint8) (r * 255.f);
-                                        color_data[i * 4 + 1] = (uint8) (g * 255.f);
-                                        color_data[i * 4 + 2] = (uint8) (b * 255.f);
-                                        color_data[i * 4 + 3] = (uint8) (a * 255.f);
-                                    }
-                                    break;
-                                }
-                                default: {
-                                    GLog_Error("Unsupported color attribute format:%d", amf_attribute->Format);
-                                    abort();
-                                }
-                            }
-                            break;
-                        }
-                        case AmfUsage_BoneIndex: {
-                            data_type = cgltf_type_vec4;
-                            comp_type = cgltf_component_type_r_16u;
-                            attr_type = cgltf_attribute_type_joints;
-                            normalized = false;
-                            stride = 4 * sizeof(uint16);
-                            String_from_cstr(&attr_name, "JOINTS_0");
-                            attribute_data = mp_malloc(vertex_count * 4 * sizeof(uint16));
-                            uint8 *bone_index_data = static_cast<uint8 *>(attribute_data);
-                            switch (amf_attribute->Format) {
-                                case AmfFormat_R8G8B8A8_UINT: {
-                                    for (int i = 0; i < vertex_count; ++i) {
-                                        uint8 *vertex_data = (uint8 *) (raw_vertex_buffer_data + i * stream_stride);
+                                    if (weight_sum > 0.0f) {
                                         for (int j = 0; j < 4; ++j) {
-                                            int16 bone_index = bone_lookup->items[vertex_data[j]];
-                                            ((uint16 *) bone_index_data)[i * 4 + j] = (uint16) bone_index;
+                                            output_data[i * 4 + j] /= weight_sum;
                                         }
                                     }
-                                    break;
                                 }
-                                default: {
-                                    GLog_Error("Unsupported bone index attribute format:%d", amf_attribute->Format);
-                                    abort();
-                                }
+                                break;
                             }
-                            break;
-                        }
-                        case AmfUsage_BoneWeight: {
-                            data_type = cgltf_type_vec4;
-                            comp_type = cgltf_component_type_r_32f;
-                            attr_type = cgltf_attribute_type_weights;
-                            normalized = false;
-                            stride = 4 * sizeof(float32);
-                            String_from_cstr(&attr_name, "WEIGHTS_0");
-                            attribute_data = mp_malloc(vertex_count * 4 * sizeof(float32));
-                            float32 *bone_weight_data = static_cast<float32 *>(attribute_data);
-                            switch (amf_attribute->Format) {
-                                case AmfFormat_R8G8B8A8_UNORM: {
-                                    for (int i = 0; i < vertex_count; ++i) {
-                                        uint8 *vertex_data = (uint8 *) (raw_vertex_buffer_data + i * stream_stride);
-                                        float32 weight_sum = 0.0f;
+                            case ADFTypes::AmfFormat::AmfFormat_R32G32B32A32_FLOAT: {
+                                for (int i = 0; i < vertex_count; ++i) {
+                                    auto input_data = reinterpret_cast<float32 *>(
+                                        raw_vertex_buffer_data.data() + i * stream_stride);
+                                    float32 weight_sum = 0.0f;
+                                    for (int j = 0; j < 4; ++j) {
+                                        output_data[i * 4 + j] = input_data[j];
+                                        weight_sum += input_data[j];
+                                    }
+                                    // Normalize weights
+                                    if (weight_sum > 0.0f) {
                                         for (int j = 0; j < 4; ++j) {
-                                            bone_weight_data[i * 4 + j] = (float32) vertex_data[j] / 255.0f;
-                                            weight_sum += bone_weight_data[i * 4 + j];
-                                        }
-                                        if (weight_sum > 0.0f) {
-                                            for (int j = 0; j < 4; ++j) {
-                                                bone_weight_data[i * 4 + j] /= weight_sum;
-                                            }
+                                            output_data[i * 4 + j] /= weight_sum;
                                         }
                                     }
-                                    break;
                                 }
-                                case AmfFormat_R32G32B32A32_FLOAT: {
-                                    for (int i = 0; i < vertex_count; ++i) {
-                                        float32 *vertex_data = (float32 *) (raw_vertex_buffer_data + i * stream_stride);
-                                        float32 weight_sum = 0.0f;
-                                        for (int j = 0; j < 4; ++j) {
-                                            bone_weight_data[i * 4 + j] = vertex_data[j];
-                                            weight_sum += vertex_data[j];
-                                        }
-                                        // Normalize weights
-                                        if (weight_sum > 0.0f) {
-                                            for (int j = 0; j < 4; ++j) {
-                                                bone_weight_data[i * 4 + j] /= weight_sum;
-                                            }
-                                        }
-                                    }
-                                    break;
-                                }
-                                default: {
-                                    GLog_Error("Unsupported bone weight attribute format:%d", amf_attribute->Format);
-                                    abort();
-                                }
+                                break;
                             }
-                            break;
+                            default: {
+                                throw std::runtime_error(std::format("Unsupported bone weight attribute format:{}",
+                                                                     to_string(amf_attribute.Format)));
+                            }
                         }
-                        default: {
-                            GLog_Warning("Unsupported attribute usage: %d", amf_attribute->Usage);
-                            String_free(&attr_name);
-                            continue;
-                            // abort();
-                        }
+                        break;
                     }
-
-                    GL_ID buffer_view_id = GLTFContext_accessor_from_data(context,
-                                                                          attribute_data, vertex_count * stride,
-                                                                          vertex_count, String_cstr(&attr_name),
-                                                                          data_type, comp_type,
-                                                                          cgltf_buffer_view_type_vertices, normalized,
-                                                                          stride, 0);
-                    if (use_bbox)
-                        GLTFContext_accessor_set_minmax(context, buffer_view_id, bbox_min, bbox_max);
-                    GLTFContext_primitive_set_attribute_accessor(context, gl_mesh_id, sub_mesh_id, attr_id,
-                                                                 buffer_view_id, String_cstr(&attr_name), attr_type);
-                    String_free(&attr_name);
-                    if (attribute_data != NULL)
-                        mp_free(attribute_data);
-                }
-            }
-            if (mesh->MeshProperties.type_hash == STI_TYPE_HASH_GeneralMeshConstants) {
-                const GeneralMeshConstants *constants = (GeneralMeshConstants *) mesh->MeshProperties.data;
-                if (constants->IsSkinnedMesh) {
-                    GL_ID current_skin = GLTFContext_current_skin(context);
-                    if (IS_VALID_GL_ID(current_skin)) {
-                        GLTFContext_node_set_skin(context, gl_node_id, current_skin);
-                    }
-                }
-            }
-        }
-    }
-
-    String_free(&mesh_name);
-
-    if (hi_res_buffers != NULL) {
-        hi_res_buffers->type_info_->free(hi_res_buffers);
-        mp_free(hi_res_buffers);
-    }
-    DA_free(&all_index_buffer);
-    DA_free(&all_vertex_buffer);
-
-    return mesh_root_node_id;
-}
-
-GL_ID export_amf_model(AppState *app_state, const AmfModel *amf_model, const uint32 path_hash) {
-    CHECK_APP_STATE(app_state);
-    CHECK_GLTF_STATE(&app_state->gltf_context);
-    GLTFContext *context = &app_state->gltf_context;
-    const ArchiveManager *archive_manager = &app_state->archive_manager;
-
-    GL_ID model_root_node_id;
-    StringView path = find_name32_sv(path_hash);
-    if (sv_is_not_null(path)) {
-        String model_name = {};
-        Path_filename_sv(path, &model_name);
-        model_root_node_id = GLTFContext_node_add(context, String_detach(&model_name), false);
-    }
-    else {
-        char tmp_buff[64];
-        snprintf(tmp_buff, sizeof(tmp_buff), "model_%08X", path_hash);
-        model_root_node_id = GLTFContext_node_add(context, tmp_buff, true);
-    }
-
-    for (int mat_id = 0; mat_id < amf_model->Materials.count; ++mat_id) {
-        const AmfMaterial *amf_material = &amf_model->Materials.items[mat_id];
-        String *material_name = find_name32(amf_material->Name);
-        GL_ID material_id;
-        if (material_name == NULL) {
-            material_name = String_new(16);
-            String_format(material_name, "material_%08X", amf_material->Name);
-        }
-        material_id = GLTFContext_material_find_by_name(context, String_cstr(material_name));
-
-        if (!IS_VALID_GL_ID(material_id)) {
-            material_id = GLTFContext_material_new(context, String_cstr(material_name));
-
-            String *render_block_id = find_name32(amf_material->RenderBlockId);
-
-            GLog_Info("Material %s -> %s", String_cstr(material_name), String_cstr(render_block_id));
-            for (int tex_id = 0; tex_id < amf_material->Textures.count; ++tex_id) {
-                const uint32 texture_hash = amf_material->Textures.items[tex_id];
-                StringView tex_path = find_name32_sv(texture_hash);
-                if (sv_is_null(tex_path)) {
-                    continue;
-                }
-                GLog_Info("\tSlot %i -> %s", tex_id, StringView_cstr(tex_path));
-            }
-
-            if (String_cequals(render_block_id, "GeneralR2")) {
-                if (!app_state->skip_textures) {
-                    if (amf_material->Attributes.type_hash != STI_TYPE_HASH_GeneralR2Constants) {
-                        GLog_Warning("Unsupported GeneralR2 material attribute type: %08X",
-                                     amf_material->Attributes.type_hash);
+                    default: {
+                        // GLog_Warning("Unsupported attribute usage: {}", std::to_underlying(amf_attribute.Usage));
                         continue;
                     }
-                    const GeneralR2Constants *constants = static_cast<const GeneralR2Constants *>(amf_material->Attributes.data);
-                    cgltf_material *mat = &context->materials.items[material_id.v];
-                    mat->has_pbr_metallic_roughness = true;
-                    mat->pbr_metallic_roughness.base_color_factor[0] = 1.0f;
-                    mat->pbr_metallic_roughness.base_color_factor[1] = 1.0f;
-                    mat->pbr_metallic_roughness.base_color_factor[2] = 1.0f;
-                    mat->pbr_metallic_roughness.base_color_factor[3] = 1.0f;
-                    mat->pbr_metallic_roughness.metallic_factor = 1.0f;
-                    mat->pbr_metallic_roughness.roughness_factor = 1.0f;
+                }
 
-                    if (amf_material->Textures.count >= 3) {
-                        Texture *diffuse_texture = NULL;
-                        Texture *normal_texture = NULL;
-                        Texture *orm_texture = NULL;
-                        Texture *emission_texture = NULL;
+                auto attribute_accessor = helper.set_primitive_attribute_from_u8(
+                    gl_mesh.index(), sub_mesh_id, attr_name,
+                    attribute_data.data(), attribute_data.size(), comp_type, data_type, vertex_count, normalized,
+                    stride, 0, std::format("{}_{}", mesh_name,attr_name));
 
-                        String *diffuse_path = find_name32(amf_material->Textures.items[0]);
-                        if (diffuse_path != NULL) {
-                            diffuse_texture = convert_ddsc(app_state, amf_material->Textures.items[0]);
-                            GLTFContext_material_set_diffuse_texture_from_data(
-                                context, StringView_from_string(diffuse_path), material_id, diffuse_texture);
-                            String_free(diffuse_path);
+                auto &attribute = helper.model().accessors[attribute_accessor.index()];
+                if (use_bbox) {
+                    attribute.minValues = {bbox_min[0], bbox_min[1], bbox_min[2]};
+                    attribute.maxValues = {bbox_max[0], bbox_max[1], bbox_max[2]};
+                }
+            }
+        }
+        if (const auto constants = ADF::as<ADFTypes::GeneralMeshConstants>(mesh.MeshProperties)) {
+            if (constants->IsSkinnedMesh) {
+                const auto skin = helper.current_skin();
+                if (skin.is_valid()) {
+                    node->skin = skin.index();
+                }
+            }
+        }
+    }
+}
+
+GltfHelper::Handle<tinygltf::Node> export_amf_mesh(AppState &app_state, uint32 path_hash,
+                                                   const ADFTypes::AmfMeshHeader *header,
+                                                   const ADFTypes::AmfMeshBuffers *mesh_buffers) {
+    ZoneScoped
+    auto &helper = app_state.helper();
+
+    std::string mesh_name = find_name32(path_hash).value_or(std::format("mesh_{:08X}", path_hash));
+    auto mesh_root_node = helper.make<tinygltf::Node>();
+    mesh_root_node->name = mesh_name;
+
+    std::vector<ADFTypes::AmfBuffer> all_vertex_buffer = {};
+    all_vertex_buffer.reserve(mesh_buffers->VertexBuffers.size());
+
+    std::vector<ADFTypes::AmfBuffer> all_index_buffer = {};
+    all_index_buffer.reserve(mesh_buffers->IndexBuffers.size());
+
+    for (const auto &buffer: mesh_buffers->VertexBuffers) {
+        all_vertex_buffer.emplace_back(buffer);
+    }
+
+    for (const auto &amf_buffer: mesh_buffers->IndexBuffers) {
+        all_index_buffer.emplace_back(amf_buffer);
+    }
+
+
+    // hires fix
+    if (const auto hi_res_path_full_tmp = find_name32_sv(header->HighLodPath)) {
+        const auto hi_res_path_full = hi_res_path_full_tmp.value();
+        if (hi_res_path_full.contains("intermediate/")) {
+            auto hi_res_path = hi_res_path_full.substr(strlen("intermediate/"));
+
+            if (auto hi_res_buffer = app_state.manager().get_file(hash_string(hi_res_path))) {
+                ADF::ADFFile hi_res_adf = ADF::ADFFile::from_buffer(std::move(hi_res_buffer));
+                const auto hi_res_buffers = std::move(hi_res_adf.read_instance<ADFTypes::AmfMeshBuffers>(0));
+                if (!hi_res_buffers) {
+                    GLog_Warning("Unexpected hi-res mesh buffers type: %08X", hi_res_adf.instances()[0].type_hash);
+                }
+
+                for (const auto &buffer: hi_res_buffers->VertexBuffers) {
+                    all_vertex_buffer.emplace_back(buffer);
+                }
+
+                for (const auto &amf_buffer: hi_res_buffers->IndexBuffers) {
+                    all_index_buffer.emplace_back(amf_buffer);
+                }
+            }
+        }
+    }
+
+    export_amf_lod(helper, mesh_name, mesh_root_node, header->LodGroups.back(), 0, all_index_buffer, all_vertex_buffer);
+
+    // for (const auto [lod_id, lod_group]: header->LodGroups | std::views::enumerate) {
+    //     export_amf_lod(helper, mesh_name, mesh_root_node, lod_group, lod_id, all_index_buffer, all_vertex_buffer);
+    // }
+
+    return mesh_root_node;
+}
+
+GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const ADFTypes::AmfModel *amf_model,
+                                                    const uint32 path_hash) {
+    ZoneScoped
+    auto &helper = app_state.helper();
+    auto model_root_node = helper.make<tinygltf::Node>();
+    const std::filesystem::path model_path = find_name32(path_hash).value_or(std::format("model_{:08X}", path_hash));
+    model_root_node->name = model_path.filename().string();
+
+    for (const auto &amf_material: amf_model->Materials) {
+        std::string material_name = find_name32(amf_material.Name).value_or(
+            std::format("material_{:08X}", amf_material.Name.storage));
+
+        auto material = helper.find<tinygltf::Material>(material_name);
+
+        if (!material) {
+            auto new_material = helper.make<tinygltf::Material>();
+            new_material->name = material_name;
+
+            std::string render_block_id = find_name32(amf_material.RenderBlockId).value_or(
+                std::format("renderblock_{:08X}", amf_material.RenderBlockId.storage));
+
+            GLog_Info("Material {} -> {}", material_name, render_block_id);
+            for (const auto [tex_id, texture]: amf_material.Textures | std::views::enumerate) {
+                auto tex_path = find_name64_sv(texture.storage);
+                if (!tex_path) {
+                    continue;
+                }
+                GLog_Info("\tSlot {} -> {}", tex_id, tex_path.value());
+            }
+
+            if (render_block_id == "GeneralR2") {
+                if (!app_state.skip_textures) {
+                    const auto constants = ADF::as<ADFTypes::GeneralR2Constants>(amf_material.Attributes);
+                    if (!constants) {
+                        const auto &type = typeid(*constants);
+                        GLog_Warning("Unsupported GeneralR2 material attribute type: {}", type.name());
+                        continue;
+                    }
+                    new_material->pbrMetallicRoughness.baseColorFactor[0] = 1.0f;
+                    new_material->pbrMetallicRoughness.baseColorFactor[1] = 1.0f;
+                    new_material->pbrMetallicRoughness.baseColorFactor[2] = 1.0f;
+                    new_material->pbrMetallicRoughness.baseColorFactor[3] = 1.0f;
+                    new_material->pbrMetallicRoughness.metallicFactor = 1.0f;
+                    new_material->pbrMetallicRoughness.roughnessFactor = 1.0f;
+
+                    if (amf_material.Textures.size() >= 3) {
+                        std::unique_ptr<Texture> diffuse_texture = nullptr;
+
+                        if (const auto diffuse_path = find_name32(amf_material.Textures[0])) {
+                            diffuse_texture = convert_ddsc(app_state, amf_material.Textures[0]);
+                            auto image = helper.create_texture_png_data(
+                                diffuse_texture->save_to_memory(MemoryFormat::PNG),
+                                std::format("{}_{:08X}.png", path_utils::filename(diffuse_path.value()),
+                                            hash_string(diffuse_path.value())));
+                            new_material->pbrMetallicRoughness.baseColorTexture.index = image.index();
                         }
-                        String *normal_path = find_name32(amf_material->Textures.items[1]);
-                        if (normal_path != NULL) {
-                            normal_texture = convert_ddsc(app_state, amf_material->Textures.items[1]);
-                            GLTFContext_material_set_normal_from_data(
-                                context, StringView_from_string(normal_path), material_id, normal_texture);
-                            String_free(normal_path);
+                        if (auto normal_path = find_name32(amf_material.Textures[1])) {
+                            auto normal_texture = convert_ddsc(app_state, amf_material.Textures[1]);
+                            auto image = helper.create_texture_png_data(
+                                normal_texture->save_to_memory(MemoryFormat::PNG),
+                                std::format("{}_{:08X}.png", path_utils::filename(normal_path.value()),
+                                            hash_string(normal_path.value())));
+                            new_material->normalTexture.index = image.index();
+                            new_material->normalTexture.scale = 1.0f;
                         }
 
-                        String *orm_path = find_name32(amf_material->Textures.items[2]);
-                        if (orm_path != NULL) {
-                            orm_texture = convert_ddsc(app_state, amf_material->Textures.items[2]);
-                            GLTFContext_material_set_roughness_metallic_from_data(
-                                context, StringView_from_string(orm_path), material_id, orm_texture);
-                            String_free(orm_path);
+                        if (auto orm_path = find_name32(amf_material.Textures[2])) {
+                            auto orm_texture = convert_ddsc(app_state, amf_material.Textures[2]);
+                            auto image = helper.create_texture_png_data(
+                                orm_texture->save_to_memory(MemoryFormat::PNG),
+                                std::format("{}_{:08X}.png", path_utils::filename(orm_path.value()),
+                                            hash_string(orm_path.value())));
+                            new_material->pbrMetallicRoughness.metallicRoughnessTexture.index = image.index();
                         }
                         if (constants->UseEmissive) {
-                            String *emission_path = find_name32(amf_material->Textures.items[4]);
-                            if (emission_path != NULL) {
-                                emission_texture = convert_ddsc(app_state, amf_material->Textures.items[4]);
-                                if (!constants->EmissiveTextureHasColor && diffuse_texture != NULL) {
-                                    Texture *new_emission_texture = TextureOps_multiply(
-                                        diffuse_texture, emission_texture);
+                            if (auto emission_path = find_name32(amf_material.Textures[4])) {
+                                const uint32 hash = hash_string(emission_path.value());
+                                auto texture_name = std::format("{}_{:08X}",
+                                                                path_utils::filename(emission_path.value()), hash);
+                                auto emission_texture = convert_ddsc(app_state, amf_material.Textures[4]);
+                                if (!constants->EmissiveTextureHasColor && diffuse_texture) {
+                                    auto new_emission_texture = TextureOps::multiply(
+                                        emission_texture.get(), diffuse_texture.get());
 
-                                    String *texture_save_path = GLTFContext_data_path(context);
-                                    const uint32 hash = hash_string(emission_path);
-                                    String tex_name = {};
-                                    Path_filename(emission_path, &tex_name);
-                                    String_append_format(texture_save_path, "/%s_%08X", String_cstr(&tex_name), hash);
-                                    String_free(&tex_name);
-                                    Texture_save(emission_texture, texture_save_path);
-                                    String_free(texture_save_path);
+                                    auto texture_save_path = app_state.export_path();
+                                    texture_save_path /= texture_name;
 
-                                    if (new_emission_texture != NULL) {
-                                        Texture_free(emission_texture);
-                                        emission_texture = new_emission_texture;
+                                    if (new_emission_texture) {
+                                        new_emission_texture->save(texture_save_path);
+                                        emission_texture = std::move(new_emission_texture);
                                     }
                                 }
-                                GLTFContext_material_set_emissive_from_data(
-                                    context, StringView_from_string(emission_path), material_id, emission_texture);
-                                String_free(emission_path);
+                                auto image = helper.create_texture_png_data(
+                                    emission_texture->save_to_memory(MemoryFormat::PNG), texture_name);
+                                new_material->emissiveTexture.index = image.index();
+                                new_material->emissiveFactor[0] = 1.0f;
+                                new_material->emissiveFactor[1] = 1.0f;
+                                new_material->emissiveFactor[2] = 1.0f;
+                                new_material->emissiveFactor[3] = 1.0f;
                             }
                         }
 
-                        if (constants->UseAlbedoDetail) {
-                            StringView albedo_detail_path = find_name32_sv(amf_material->Textures.items[5]);
-                            Texture *albedo_detail = convert_ddsc(app_state, amf_material->Textures.items[5]);
-                            String *texture_save_path = GLTFContext_data_path(context);
-                            const uint32 hash = hash_vstring(albedo_detail_path);
-                            String tex_name = {};
-                            Path_filename_sv(albedo_detail_path, &tex_name);
-                            String_append_format(texture_save_path, "/%s_%08X", String_cstr(&tex_name), hash);
-                            Texture_save(albedo_detail, texture_save_path);
-                            Texture_free(albedo_detail);
-                            String_free(&tex_name);
-                            String_free(texture_save_path);
-                        }
-                        if (constants->UseNormalDetail) {
-                            StringView normal_detail_path = find_name32_sv(amf_material->Textures.items[6]);
-                            Texture *normal_detail = convert_ddsc(app_state, amf_material->Textures.items[6]);
-                            String *texture_save_path = GLTFContext_data_path(context);
-                            const uint32 hash = hash_vstring(normal_detail_path);
-                            String tex_name = {};
-                            Path_filename_sv(normal_detail_path, &tex_name);
-                            String_append_format(texture_save_path, "/%s_%08X", String_cstr(&tex_name), hash);
-                            Texture_save(normal_detail, texture_save_path);
-                            Texture_free(normal_detail);
-                            String_free(&tex_name);
-                            String_free(texture_save_path);
-                        }
-
-                        if (diffuse_texture != NULL) {
-                            Texture_free(diffuse_texture);
-                        }
-                        if (normal_texture != NULL) {
-                            Texture_free(normal_texture);
-                        }
-                        if (orm_texture != NULL) {
-                            Texture_free(orm_texture);
-                        }
-                        if (emission_texture != NULL) {
-                            Texture_free(emission_texture);
-                        }
+                        // if (constants->UseAlbedoDetail) {
+                        //     StringView albedo_detail_path = find_name32_sv(amf_material.Textures.items[5]);
+                        //     Texture *albedo_detail = convert_ddsc(app_state, amf_material.Textures.items[5]);
+                        //     String *texture_save_path = GLTFContext_data_path(context);
+                        //     const uint32 hash = hash_vstring(albedo_detail_path);
+                        //     String tex_name = {};
+                        //     Path_filename_sv(albedo_detail_path, &tex_name);
+                        //     String_append_format(texture_save_path, "/%s_%08X", String_cstr(&tex_name), hash);
+                        //     Texture_save(albedo_detail, texture_save_path);
+                        //     Texture_free(albedo_detail);
+                        //     String_free(&tex_name);
+                        //     String_free(texture_save_path);
+                        // }
+                        // if (constants->UseNormalDetail) {
+                        //     StringView normal_detail_path = find_name32_sv(amf_material.Textures.items[6]);
+                        //     Texture *normal_detail = convert_ddsc(app_state, amf_material.Textures.items[6]);
+                        //     String *texture_save_path = GLTFContext_data_path(context);
+                        //     const uint32 hash = hash_vstring(normal_detail_path);
+                        //     String tex_name = {};
+                        //     Path_filename_sv(normal_detail_path, &tex_name);
+                        //     String_append_format(texture_save_path, "/%s_%08X", String_cstr(&tex_name), hash);
+                        //     Texture_save(normal_detail, texture_save_path);
+                        //     Texture_free(normal_detail);
+                        //     String_free(&tex_name);
+                        //     String_free(texture_save_path);
+                        // }
                     }
                 }
             }
             else {
-                GLog_Warning("Unsupported material render block: 0x%08X", amf_material->RenderBlockId);
-                String_free(render_block_id);
+                GLog_Warning("Unsupported material render block: 0x{:08X}", amf_material.RenderBlockId.storage);
                 continue;
             }
-            String_free(render_block_id);
         }
-
-        String_free(material_name);
     }
 
 
-    MemoryBuffer mb = {};
-    if (!ArchiveManager_get_file_by_hash(archive_manager, amf_model->Mesh, &mb)) {
+    auto mb = app_state.manager().get_file(amf_model->Mesh);
+    if (!mb) {
         GLog_Error("File not found");
-        return model_root_node_id;
+        return model_root_node;
     }
 
-    const GL_ID mesh_root_node = export_adf_file_from_buffer(app_state, amf_model->Mesh, &mb);
-    GLTFContext_node_set_parent(context, mesh_root_node, model_root_node_id);
+    const auto mesh_root_node = export_adf_file_from_buffer(app_state, amf_model->Mesh, std::move(mb));
+    helper.set_parent(model_root_node, mesh_root_node);
 
-    mb.close(&mb);
-
-    return model_root_node_id;
+    return model_root_node;
 }

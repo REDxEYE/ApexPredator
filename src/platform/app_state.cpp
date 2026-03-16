@@ -2,11 +2,14 @@
 
 #include "platform/app_state.h"
 
-void AppState_free(AppState *self) {
-    ArchiveManager_free(&self->archive_manager);
-    String_free(&self->game_root);
-    String_free(&self->export_path);
-    if (self->gltf_context.data!=NULL) {
-        GLTFContext_free(&self->gltf_context);
-    }
+ArchiveManager &AppState::manager() {
+    return m_archive_manager;
+}
+
+const std::filesystem::path & AppState::export_path() const {
+    return m_export_path;
+}
+
+void AppState::export_path(const std::filesystem::path &path) {
+    m_export_path = path;
 }

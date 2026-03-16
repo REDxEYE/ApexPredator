@@ -1,99 +1,79 @@
 // Created by RED on 16.02.2026.
 
+#include "../commands.h"
+#include "tiny_gltf.h"
 #include "exporter/common_export.h"
 #include "platform/app_state.h"
-#include "platform/cli_parser.h"
 #include "platform/logger.h"
+#include "tracy/Tracy.hpp"
 #include "utils/common.h"
 #include "utils/hash_helper.h"
-#include "utils/path.h"
+#include "utils/simple_fileio.h"
 
-void raw_export(const AppState *app_state, const uint32 asset_hash) {
-    String *asset_path = find_name32(asset_hash);
-    if (asset_path == NULL) {
-        asset_path = String_new(28);
-        String_format(asset_path, "%08X.bin", asset_hash);
-    }
-    Path_normalize_posix(asset_path);
+void raw_export(AppState &app_state, const uint32 asset_hash) {
+    ZoneScoped
+    const auto asset_path = find_name32(asset_hash)
+            .or_else([&] { return std::optional{std::format("{:08X}.bin", asset_hash)}; })
+            .value();
 
-    String save_path = {};
-    String_copy_from(&save_path, &app_state->export_path);
-    Path_join(&save_path, asset_path);
-    Path_ensure_parent_dirs(&save_path);
 
-    MemoryBuffer mb = {};
-    if (!ArchiveManager_get_file_by_hash(&app_state->archive_manager, asset_hash, &mb)) {
-        GLog_Error("File not found: %г", asset_hash);
-        String_free(asset_path);
-        String_free(&save_path);
+    const std::filesystem::path save_path = app_state.export_path() / asset_path;
+    std::filesystem::create_directories(save_path.parent_path());
+
+    const auto mb = app_state.manager().get_file(asset_hash);
+    if (!mb) {
+        GLog_Error("File not found: {}", asset_hash);
         return;
     }
 
-    FILE *f = fopen(String_cstr(&save_path), "wb");
-    if (f == NULL) {
-        GLog_Error("Failed to open file for writing: %s", String_cstr(&save_path));
-        mb.close(&mb);
-        String_free(asset_path);
-        String_free(&save_path);
-        return;
-    }
-    fwrite(mb.data, 1, mb.size, f);
-    fclose(f);
-    mb.close(&mb);
-    GLog_Info("File \"%u\" extracted to \"%s\"", asset_hash, String_cstr(&save_path));
-    String_free(&save_path);
+    write_file(save_path, mb->cbuffer());
+    GLog_Info("File \"{}\" extracted to \"{}\"", asset_hash, save_path.string());
 }
 
-void normal_export(AppState *app_state, const uint32 asset_hash) {
-    String *asset_path = find_name32(asset_hash);
-    if (asset_path == NULL) {
-        asset_path = String_new(28);
-        String_format(asset_path, "%08X.bin", asset_hash);
+void normal_export(AppState &app_state, const uint32 asset_hash) {
+    ZoneScoped
+    const auto asset_path = find_name32(asset_hash)
+            .or_else([&] { return std::optional{std::format("{:08X}.bin", asset_hash)}; })
+            .value();
+
+    std::filesystem::path save_path = app_state.export_path() / asset_path;
+    save_path.replace_extension("gltf");
+
+    auto &gltf_helper = app_state.helper();
+    const auto node = export_file(app_state, asset_hash);
+    if (node.is_valid()) {
+        gltf_helper.add_to_scene(node);
     }
-    Path_normalize_posix(asset_path);
 
-    GLTFContext_init(&app_state->gltf_context, "root");
-    Path_normalize_posix(asset_path);
-    String save_path = {};
-    String_copy_from(&save_path, &app_state->export_path);
-    Path_join(&save_path, asset_path);
-    Path_replace_extension_inplace(&save_path, "gltf");
-    GLTFContext_set_save_path(&app_state->gltf_context, &save_path);
-    String_free(&save_path);
-
-    export_file(app_state, asset_hash);
-
-    GLTFContext_write_and_free(&app_state->gltf_context);
-    String_free(asset_path);
+    if (!gltf_helper.model().scenes.empty() && !gltf_helper.model().nodes.empty()) {
+        tinygltf::TinyGLTF gltf_exporter;
+        gltf_exporter.WriteGltfSceneToFile(&gltf_helper.model(), save_path.string(), false, true, true, false);
+        GLog_Info("Written GLTF file: {}", save_path.string());
+    }
 }
 
-void extract_handler(AppState *app_state, const CliResult *cli_res) {
-    cli_get_bool(cli_res, "no_textures", &app_state->skip_textures);
+void ExtractCommand::handle() {
+    convert_to_wsl(m_game_root);
+    convert_to_wsl(m_export_path);
 
-    bool export_raw = false;
-    cli_get_bool(cli_res, "raw", &export_raw);
+    set_db_path(m_db_path.string().c_str());
+    AppState app_state(m_game_root);
+    app_state.skip_textures = m_skip_textures;
+    app_state.export_path(m_export_path);
 
-    const char **file_paths = NULL;
-    size_t file_path_count = 0;
-    cli_get_array_string(cli_res, "paths", &file_paths, &file_path_count);
-    for (int file_id = 0; file_id < file_path_count; ++file_id) {
-        const char *file_path_cstr = file_paths[file_id];
+    for (const auto &asset: m_assets) {
         uint32 file_hash;
-        if (is_hex(file_path_cstr)) {
-            file_hash = parse_hex_u32(file_path_cstr);
+        if (is_hex(asset.c_str())) {
+            file_hash = parse_hex_u32(asset.c_str());
         }
-        else if (is_digits(file_path_cstr)) {
-            file_hash = parse_digits_u32(file_path_cstr);
+        else if (is_digits(asset.c_str())) {
+            file_hash = parse_digits_u32(asset.c_str());
         }
         else {
-            String skeleton_path_tmp = {};
-            String_from_cstr(&skeleton_path_tmp, file_path_cstr);
-            Path_normalize_posix(&skeleton_path_tmp);
-            file_hash = hash_string(&skeleton_path_tmp);
-            String_free(&skeleton_path_tmp);
+            file_hash = hash_string(std::filesystem::path(asset));
         }
 
-        if (export_raw) {
+        if (m_extract_raw) {
             raw_export(app_state, file_hash);
         }
         else {

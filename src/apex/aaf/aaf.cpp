@@ -2,75 +2,63 @@
 
 #include "apex/aaf/aaf.h"
 
-#include "platform/logger.h"
+#include <string>
+
+#include "tracy/Tracy.hpp"
 #include "utils/zlib_wrapper.h"
 
-void AAFArchive_from_buffer(AAFArchive *archive, Buffer *buffer) {
-    TracyCZoneN(ctx, "AAFArchive_from_buffer", 1);
-    buffer->read(buffer, &archive->header, sizeof(AAFHeader), NULL);
-    if (strncmp(archive->header.ident, "AAF", 3) != 0) {
-        GLog_Error("Invalid AAF format");
-        abort();
+
+AAFArchive::AAFArchive(std::unique_ptr<IO::File> buffer) : m_buffer(std::move(buffer)) {
+    ZoneScoped
+    m_header = m_buffer->read_pod<AAFHeader>();
+
+    if (strncmp(m_header.ident, "AAF", 3) != 0) {
+        throw std::runtime_error("Invalid AAF format");
     }
-    if (archive->header.version != 1) {
-        GLog_Error("Unsupported AAF version: %d", archive->header.version);
-        abort();
+
+    if (m_header.version != 1) {
+        throw std::runtime_error("Unsupported AAF version: " + std::to_string(m_header.version));
     }
-    DA_init(&archive->sections, AAFSection, archive->header.section_count);
+
+    m_sections.reserve(m_header.section_count);
     uint64 total_size = 0;
-    int64 entry_offset = 0;
-    buffer->get_position(buffer, &entry_offset);
-    for (uint32 i = 0; i < archive->header.section_count; ++i) {
-        buffer->set_position(buffer, entry_offset, BUFFER_ORIGIN_START);
-        AAFSection *entry = (AAFSection*)DA_append_get(&archive->sections);
-        buffer->read(buffer, &entry->header, sizeof(AAFSectionHeader), NULL);
-        if (memcmp(entry->header.magic,"EWAM",4)!=0) {
-            GLog_Error("Invalid AAF section magic");
-            abort();
+    for (uint32 i = 0; i < m_header.section_count; ++i) {
+        auto start = m_buffer->get_position();
+        auto &[header, section_buffer] = m_sections.emplace_back();
+        header = m_buffer->read_pod<AAFSectionHeader>();
+        if (memcmp(header.magic, "EWAM", 4) != 0) {
+            throw std::runtime_error("Invalid AAF section magic");
         }
-        MemoryBuffer_allocate(&entry->buffer, entry->header.compressed_size);
-        buffer->read(buffer, entry->buffer.data, entry->header.compressed_size, NULL);
-        total_size += entry->header.uncompressed_size;
-        entry_offset+=entry->header.total_size;
+        section_buffer.resize(header.compressed_size);
+        m_buffer->read_exact(section_buffer);
+        total_size += header.uncompressed_size;
+        m_buffer->set_position(start+header.total_size);
     }
-    if (total_size != archive->header.uncompressed_size) {
-        GLog_Error("AAF archive uncompressed size mismatch, expected: %u, actual: %llu",
-               archive->header.uncompressed_size, total_size);
-        abort();
+
+    if (total_size != m_header.uncompressed_size) {
+        throw std::runtime_error(
+            "AAF archive uncompressed size mismatch, expected: " + std::to_string(m_header.uncompressed_size) +
+            ", actual: " + std::to_string(total_size));
     }
-    TracyCZoneEnd(ctx);
 }
 
-bool AAFArchive_get_data(AAFArchive *archive, MemoryBuffer *out) {
-    TracyCZoneN(ctx, "AAFArchive_get_data", 1);
-    if (MemoryBuffer_allocate(out, archive->header.uncompressed_size) != BUFFER_SUCCESS) {
-        return false;
-    }
+std::unique_ptr<IO::File> AAFArchive::get_data() {
+    ZoneScoped
+    auto out = std::vector<uint8>(m_header.uncompressed_size);
     uint64 offset = 0;
-    for (int index = 0; index < archive->header.section_count; ++index) {
-        const AAFSection *section = (AAFSection*)DA_at(&archive->sections, index);
-        if (section->buffer.size == 0 || section->buffer.data == NULL) return false;
-
-
-        const int res = inflate_exact_raw(section->buffer.data, section->buffer.size, out->data + offset,
-                                    section->header.uncompressed_size, NULL, NULL);
-        if (res != Z_OK) {
-            GLog_Error("Failed to decompress AAF section %u, zlib error: %d", index, res);
-            out->close(out);
-            TracyCZoneEnd(ctx);
-            return false;
+    for (size_t index = 0; index < m_sections.size(); ++index) {
+        const auto &[header, buffer] = m_sections[index];
+        if (buffer.empty()) {
+            throw std::runtime_error("Empty AAF section data");
         }
-        offset += section->header.uncompressed_size;
+
+        const int res = inflate_exact_raw(buffer.data(), buffer.size(), out.data() + offset,
+                                    header.uncompressed_size, nullptr, nullptr);
+        if (res != Z_OK) {
+            throw std::runtime_error("Failed to decompress AAF section " + std::to_string(index) + ", zlib error: " + std::to_string(res));
+        }
+        offset += header.uncompressed_size;
     }
 
-    TracyCZoneEnd(ctx);
-    return true;
-}
-
-void AAFArchive_free(AAFArchive *archive) {
-    for (uint32 i = 0; i < archive->sections.count; ++i) {
-        AAFSection *section = (AAFSection*)DA_at(&archive->sections, i);
-        section->buffer.close(&section->buffer);
-    }
-    DA_free(&archive->sections);
+    return std::make_unique<IO::MemoryFile>(std::move(out));
 }

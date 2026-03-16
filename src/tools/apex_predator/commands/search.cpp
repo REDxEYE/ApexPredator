@@ -1,22 +1,20 @@
 // Created by RED on 16.02.2026.
 #include "apex/hashes.h"
+#include "../commands.h"
 #include "platform/app_state.h"
-#include "platform/cli_parser.h"
 
-void search_handler(const AppState *app_state, const CliResult *cli_res) {
-    (void)app_state;
-
-    const char *query_cstr = NULL;
-    cli_get_cstring(cli_res, "query", &query_cstr);
-    char **results = NULL;
-    uint32 count = 0;
-    search_file_table(query_cstr, &results, &count);
-    if (count > 0 && results != NULL) {
-        printf("Search results(%u found) for query \"%s\":\n", count, query_cstr);
-        for (int i = 0; i < count; ++i) {
-            printf("  %s\n", results[i]);
-            mp_free(results[i]);
+void SearchCommand::handle() {
+    set_db_path(m_db_path.string().c_str());
+    std::vector<std::string> result;
+    search_file_table(m_search_query,result);
+    if (result.empty()) {
+        printf("No results found for query \"%s\".\n", m_search_query.c_str());
+    } else {
+        printf("Search results(%zu found) for query \"%s\":\n", result.size(), m_search_query.c_str());
+        for (const auto &entry : result) {
+            printf("  %s\n", entry.c_str());
         }
-        mp_free(results);
     }
+
 }
+

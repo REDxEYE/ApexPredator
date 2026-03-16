@@ -2,154 +2,46 @@
 
 #ifndef APEXPREDATOR_ARCHIVE_H
 #define APEXPREDATOR_ARCHIVE_H
-#include <assert.h>
+#include <memory>
+#include <functional>
 
 #include "int_def.h"
-#include "apex/hashes.h"
-#include "utils/string.h"
-#include "utils/dynamic_array.h"
-#include "utils/lookup3.h"
-#include "utils/buffer/memory_buffer.h"
+#include "utils/file/memory_buffer.h"
 
-struct Archive;
-struct ArchiveEntry;
-
-struct ArchiveEntry{
-    Archive *archive;
-    String path;
+struct ArchiveEntry {
     uint32 path_hash;
     uint32 size;
 };
 
-DYNAMIC_ARRAY_STRUCT(ArchiveEntry, ArchiveEntry);
 
-// Interface function typedefs
-// Has file path/hash
-typedef bool (*ArchiveHasFileFn)(const Archive *archive, const String *path);
+class Archive {
+public:
+    virtual ~Archive() = default;
 
-typedef bool (*ArchiveHasFileByHashFn)(const Archive *archive, uint32 hash);
+    [[nodiscard]] virtual bool has_file(std::string_view path) const = 0;
 
-// Get file data
-typedef bool (*ArchiveGetFileFn)(Archive *archive, const String *path, MemoryBuffer *out);
+    [[nodiscard]] virtual bool has_file(uint32 hash) const = 0;
 
-typedef bool (*ArchiveGetFileByHashFn)(Archive *archive, uint32 hash, MemoryBuffer *out);
+    virtual std::unique_ptr<IO::File> get_file(std::string_view path) = 0;
 
-// Get all entries from archive
-typedef void (*ArchiveGetAllEntriesFn)(const Archive *archive, DynamicArray_ArchiveEntry *entries);
+    virtual std::unique_ptr<IO::File> get_file(uint32 hash) = 0;
 
-// Get archive name
-typedef const String * (*ArchiveGetNameFn)(const Archive *archive);
+    virtual void all_entries(std::vector<ArchiveEntry> &entries) const = 0;
 
-// Print all of the files
-typedef void (*ArchivePrintAllFilesFn)(const Archive *archive);
+    [[nodiscard]] virtual std::string get_name() const = 0;
 
-// Free function
-typedef void (*ArchiveFreeFn)(Archive *archive);
+    virtual uint32 hash() = 0;
 
-// Get hash
-typedef uint32 (*ArchiveGetHashFn)(const Archive *archive);
-
-typedef struct ArchiveInterface {
-    ArchiveHasFileFn has_file;
-    ArchiveHasFileByHashFn has_file_by_hash;
-    ArchiveGetFileFn get_file;
-    ArchiveGetFileByHashFn get_file_by_hash;
-    ArchiveGetAllEntriesFn get_all_entries;
-    ArchiveGetNameFn get_name;
-    ArchivePrintAllFilesFn print_all_files;
-    ArchiveGetHashFn get_hash;
-    ArchiveFreeFn free;
-} ArchiveInterface;
-
-struct Archive : ArchiveInterface {
-};
-
-// Shortcuts
-static inline void Archive_free(Archive *archive) {
-    assert(archive!=NULL);
-    if (archive->free) {
-        archive->free(archive);
-    }
-}
-
-static inline bool Archive_has_file(const Archive *archive, const String *path) {
-    assert(archive!=NULL);
-    if (archive->has_file) {
-        return archive->has_file(archive, path);
-    }
-    return false;
-}
-
-static inline bool Archive_has_file_by_hash(const Archive *archive, const uint32 hash) {
-    assert(archive!=NULL);
-    if (archive->has_file_by_hash) {
-        return archive->has_file_by_hash(archive, hash);
-    }
-    return false;
-}
-
-static inline bool Archive_get_file(Archive *archive, const String *path, MemoryBuffer *out) {
-    assert(archive!=NULL);
-    if (archive->get_file) {
-        return archive->get_file(archive, path, out);
-    }
-    return false;
-}
-
-static inline bool Archive_get_file_by_hash(Archive *archive, const uint32 hash, MemoryBuffer *out) {
-    assert(archive!=NULL);
-    if (archive->get_file_by_hash) {
-        return archive->get_file_by_hash(archive, hash, out);
-    }
-    return false;
-}
-
-static inline void Archive_get_all_entries(const Archive *archive, DynamicArray_ArchiveEntry *entries) {
-    assert(archive!=NULL);
-    if (archive->get_all_entries) {
-        archive->get_all_entries(archive, entries);
-    }
-}
-
-static inline const String *Archive_get_name(const Archive *archive) {
-    assert(archive!=NULL);
-    if (archive->get_name) {
-        return archive->get_name(archive);
-    }
-    return NULL;
-}
-
-static inline void Archive_print_files(const Archive *archive) {
-    assert(archive!=NULL);
-    if (archive->print_all_files) {
-        archive->print_all_files(archive);
-    }
-}
-
-typedef bool (*foreach_callback)(const Archive *archive, const ArchiveEntry *entry, void *user_data);
-
-static inline bool Archive_foreach_file(const Archive *archive, const foreach_callback callback, void *user_data) {
-    assert(archive!=NULL);
-    DynamicArray_ArchiveEntry entries = {0};
-    DA_init(&entries, ArchiveEntry, 16);
-    Archive_get_all_entries(archive, &entries);
-    for (size_t i = 0; i < entries.count; ++i) {
-        const ArchiveEntry *entry = &entries.items[i];
-        if (!callback(archive, entry, user_data)) {
-            DA_free(&entries);
-            return false;
+    bool foreach_file(const std::function<bool (const ArchiveEntry &)> &callback) const {
+        std::vector<ArchiveEntry> entries;
+        all_entries(entries);
+        for (const auto &entry: entries) {
+            if (!callback(entry)) {
+                break;
+            }
         }
+        return true;
     }
-    DA_free(&entries);
-    return true;
-}
-
-static inline uint32 Archive_get_hash(const Archive *archive) {
-    assert(archive!=NULL);
-    if (archive->get_hash) {
-        return archive->get_hash(archive);
-    }
-    return 0;
-}
+};
 
 #endif //APEXPREDATOR_ARCHIVE_H

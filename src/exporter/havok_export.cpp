@@ -2,12 +2,15 @@
 
 #include "exporter/havok_export.h"
 
-#include "platform/logger.h"
-#include "utils/hash_helper.h"
-#include "utils/path.h"
+#include <string_view>
+#include <ranges>
 
-#include "cglm/cglm.h"
-#include "havok/animations/animation.h"
+#include "glm/glm.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "platform/logger.h"
+
+
 #include "havok/animations/spline.h"
 
 
@@ -15,302 +18,256 @@ typedef uint8_t u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
 
-mat4 IDENTITY_MAT = GLM_MAT4_IDENTITY_INIT;
+using namespace std::string_view_literals;
 
-DYNAMIC_ARRAY_STRUCT(vec3, vec3);
+auto IDENTITY_MAT = glm::identity<glm::mat4>();
 
-DYNAMIC_ARRAY_STRUCT(versor, versor);
 
-void export_spline_compressed_animation(AppState* app_state, const hkaSplineCompressedAnimation *spline_animation,
-                                        const hkaAnimationBinding *binding, const hkaSkeleton *skeleton,
-                                        const StringView animation_name) {
-    CHECK_APP_STATE(app_state);
-    CHECK_GLTF_STATE(&app_state->gltf_context);
-    GLTFContext *context = &app_state->gltf_context;
+void export_spline_compressed_animation(AppState &app_state,
+                                        const HavokTypes::hkaSplineCompressedAnimation *spline_animation,
+                                        const HavokTypes::hkaAnimationBinding *binding,
+                                        const HavokTypes::hkaSkeleton *skeleton,
+                                        const std::string_view animation_name) {
+    GltfHelper &gltf_helper = app_state.helper();
 
-    hkaSplineDecompressor decompressor = {};
-    hkaSplineDecompressor_assign(&decompressor, spline_animation);
+    hkaSplineDecompressor decompressor{};
+    decompressor.Assign(spline_animation);
     const float32 frame_duration = spline_animation->frameDuration;
 
-    const GL_ID animation_id = GLTFContext_animation_new(context, StringView_cstr(animation_name));
+    const auto animation = gltf_helper.make<tinygltf::Animation>();
+    animation->name = animation_name;
 
-    DynamicArray_float32 timestamps = {};
-    DynamicArray_vec3 positions = {};
-    DynamicArray_versor rotations = {};
-    DynamicArray_vec3 scales = {};
+    std::vector<float32> timestamps = {};
 
-    DA_init(&timestamps, float32, spline_animation->numFrames);
+
+    timestamps.reserve(spline_animation->numFrames);
 
     for (int frame_id = 0; frame_id < spline_animation->numFrames; ++frame_id) {
-        const float32 time = (float32) frame_id * frame_duration;
-        DA_append(&timestamps, &time);
+        timestamps.push_back(frame_id * frame_duration);
     }
 
-    const GL_ID timestamps_accessor = GLTFContext_accessor_from_data(context, DA_get_buffer(&timestamps),
-                                                                     sizeof(float32) * timestamps.count,
-                                                                     timestamps.count,
-                                                                     "spline_animation_timestamps",
-                                                                     cgltf_type_scalar,
-                                                                     cgltf_component_type_r_32f,
-                                                                     cgltf_buffer_view_type_invalid,
-                                                                     false, 0, 0);
-    const float t_min = 0;
-    const float t_max = spline_animation->duration;
-    GLTFContext_accessor_set_minmax(context, timestamps_accessor, &t_min, &t_max);
+    const auto timestamps_accessor = gltf_helper.create_accessor_chain_from_u8(
+        reinterpret_cast<const uint8 *>(timestamps.data()), timestamps.size() * sizeof(float32), 0,
+        TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_SCALAR, timestamps.size(), false, 0, 0,
+        "spline_animation_timestamps");
 
-    if (skeleton->bones.m_size!=binding->transformTrackToBoneIndices.m_size) {
-        GLog_Warning("Number of transform tracks in the animation binding does not match the number of bones in the skeleton. Some tracks will be skipped. %u in binding vs %u in animation",
-                     binding->transformTrackToBoneIndices.m_size, skeleton->bones.m_size);
-    }
+    timestamps_accessor.accessor->minValues = {0};
+    timestamps_accessor.accessor->maxValues = {spline_animation->duration};
 
-    for (int track_id = 0; track_id < binding->transformTrackToBoneIndices.m_size; ++track_id) {
-        const uint32 bone_id = binding->transformTrackToBoneIndices.m_data[track_id];
-        if ((track_id != 0 && bone_id == 0) || bone_id>=skeleton->bones.m_size) {
+    // if (skeleton->bones.size() != binding->transformTrackToBoneIndices.size()) {
+    //     GLog_Warning(
+    //         "Number of transform tracks in the animation binding does not match the number of bones in the skeleton. Some tracks will be skipped. {} in binding vs {} in animation",
+    //         binding->transformTrackToBoneIndices.size(), skeleton->bones.size());
+    // }
+
+    for (int track_id = 0; track_id < binding->transformTrackToBoneIndices.size(); ++track_id) {
+        std::vector<glm::vec3> positions = {};
+        std::vector<glm::quat> rotations = {};
+        std::vector<glm::vec3> scales = {};
+
+        const uint32 bone_id = binding->transformTrackToBoneIndices[track_id];
+        if ((track_id != 0 && bone_id == 0) || bone_id >= skeleton->bones.size()) {
             continue;
         }
-        const hkaBone *bone = &skeleton->bones.m_data[bone_id];
+        const HavokTypes::hkaBone &bone = skeleton->bones[bone_id];
 
-        const GL_ID bone_node = GLTFContext_node_find_by_name(context, bone->name.m_data);
-        if (!IS_VALID_GL_ID(bone_node)) {
+        auto bone_node = gltf_helper.find<tinygltf::Node>(bone.name.stringAndFlag);
+
+        if (!bone_node.is_valid()) {
             continue;
         }
 
-        DA_init(&positions, vec3, spline_animation->numFrames);
-        DA_init(&rotations, versor, spline_animation->numFrames);
-        DA_init(&scales, vec3, spline_animation->numFrames);
+        positions.reserve(spline_animation->numFrames);
+        rotations.reserve(spline_animation->numFrames);
+        scales.reserve(spline_animation->numFrames);
 
         for (int frame_id = 0; frame_id < spline_animation->numFrames; ++frame_id) {
-            uint32 block_id = frame_id/spline_animation->maxFramesPerBlock;
+            uint32 block_id = frame_id / spline_animation->maxFramesPerBlock;
 
-            if (block_id >= decompressor.blocks.count) {
-                block_id = decompressor.blocks.count - 1;
+            if (block_id >= decompressor.blocks.size()) {
+                block_id = decompressor.blocks.size() - 1;
             }
             uint32 local_frame = frame_id % spline_animation->maxFramesPerBlock;
 
-            const TransformSplineBlock *block = &decompressor.blocks.items[block_id];
-            QTransform transform = {};
-            TransformSplineBlock_get_value(block, track_id, local_frame, &transform);
+            const TransformSplineBlock *block = &decompressor.blocks[block_id];
+            auto [translation, rotation, scale] = block->GetValue(track_id, local_frame);
 
-            DA_append(&positions, &transform.translation);
-            DA_append(&rotations, &transform.rotation);
-            DA_append(&scales, &transform.scale);
+            positions.emplace_back(translation);
+            rotations.emplace_back(rotation);
+            scales.emplace_back(scale);
         }
 
-        const GL_ID positions_accessor = GLTFContext_accessor_from_data(context, DA_get_buffer(&positions),
-                                                                        sizeof(vec3) * positions.count,
-                                                                        positions.count,
-                                                                        "spline_animation_positions",
-                                                                        cgltf_type_vec3,
-                                                                        cgltf_component_type_r_32f,
-                                                                        cgltf_buffer_view_type_invalid,
-                                                                        false, 0, 0);
-        const GL_ID rotations_accessor = GLTFContext_accessor_from_data(context, DA_get_buffer(&rotations),
-                                                                        sizeof(versor) * rotations.count,
-                                                                        rotations.count,
-                                                                        "spline_animation_rotations",
-                                                                        cgltf_type_vec4,
-                                                                        cgltf_component_type_r_32f,
-                                                                        cgltf_buffer_view_type_invalid,
-                                                                        false, 0, 0);
-        const GL_ID scales_accessor = GLTFContext_accessor_from_data(context, DA_get_buffer(&scales),
-                                                                     sizeof(vec3) * scales.count,
-                                                                     scales.count,
-                                                                     "spline_animation_scales",
-                                                                     cgltf_type_vec3,
-                                                                     cgltf_component_type_r_32f,
-                                                                     cgltf_buffer_view_type_invalid,
-                                                                     false, 0, 0);
 
-        DA_free(&positions);
-        DA_free(&rotations);
-        DA_free(&scales);
+        const auto position_accessor = gltf_helper.create_accessor_chain_from_u8(
+            reinterpret_cast<uint8 *>(positions.data()), positions.size() * 3 * sizeof(float32), 0,
+            TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, positions.size(), false,
+            0, 0, "spline_animation_positions"
+        );
 
-        const GL_ID positions_sampler = GLTFContext_animation_sampler_new(context, animation_id,
-                                                                          cgltf_interpolation_type_linear,
-                                                                          timestamps_accessor,
-                                                                          positions_accessor);
-        const GL_ID rotations_sampler = GLTFContext_animation_sampler_new(context, animation_id,
-                                                                          cgltf_interpolation_type_linear,
-                                                                          timestamps_accessor,
-                                                                          rotations_accessor);
-        const GL_ID scales_sampler = GLTFContext_animation_sampler_new(context, animation_id,
-                                                                       cgltf_interpolation_type_linear,
-                                                                       timestamps_accessor,
-                                                                       scales_accessor);
+        const auto rotation_accessor = gltf_helper.create_accessor_chain_from_u8(
+            reinterpret_cast<uint8 *>(rotations.data()), rotations.size() * 4 * sizeof(float32), 0,
+            TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC4, rotations.size(), false,
+            0, 0, "spline_animation_rotations"
+        );
+
+        const auto scale_accessor = gltf_helper.create_accessor_chain_from_u8(
+            reinterpret_cast<uint8 *>(scales.data()), scales.size() * 3 * sizeof(float32), 0,
+            TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, scales.size(), false,
+            0, 0, "spline_animation_scales"
+        );
 
 
-        GLTFContext_animation_channel_new(context, animation_id, positions_sampler, bone_node,
-                                          cgltf_animation_path_type_translation);
-        GLTFContext_animation_channel_new(context, animation_id, rotations_sampler, bone_node,
-                                          cgltf_animation_path_type_rotation);
-        GLTFContext_animation_channel_new(context, animation_id, scales_sampler, bone_node,
-                                          cgltf_animation_path_type_scale);
+        auto &position_sampler = animation->samplers.emplace_back();
+        position_sampler.input = timestamps_accessor.accessor.index();
+        position_sampler.interpolation = "LINEAR";
+        position_sampler.output = position_accessor.accessor.index();
+
+        auto &position_channel = animation->channels.emplace_back();
+        position_channel.sampler = animation->samplers.size() - 1;
+        position_channel.target_node = bone_node.index();
+        position_channel.target_path = "translation";
+
+        auto &rotation_sampler = animation->samplers.emplace_back();
+        rotation_sampler.input = timestamps_accessor.accessor.index();
+        rotation_sampler.interpolation = "LINEAR";
+        rotation_sampler.output = rotation_accessor.accessor.index();
+
+        auto &rotation_channel = animation->channels.emplace_back();
+        rotation_channel.sampler = animation->samplers.size() - 1;
+        rotation_channel.target_node = bone_node.index();
+        rotation_channel.target_path = "rotation";
+
+        auto &scale_sampler = animation->samplers.emplace_back();
+        scale_sampler.input = timestamps_accessor.accessor.index();
+        scale_sampler.interpolation = "LINEAR";
+        scale_sampler.output = scale_accessor.accessor.index();
+
+        auto &scale_channel = animation->channels.emplace_back();
+        scale_channel.sampler = animation->samplers.size() - 1;
+        scale_channel.target_node = bone_node.index();
+        scale_channel.target_path = "scale";
     }
-
-    DA_free(&timestamps);
-    hkaSplineDecompressor_free(&decompressor);
 }
 
-void export_animation(AppState* app_state, const hkaAnimationBinding *binding, const hkaSkeleton *skeleton,
-                      const StringView animation_name) {
-    CHECK_APP_STATE(app_state);
-
+void export_animation(AppState &app_state, const HavokTypes::hkaAnimationBinding *binding,
+                      const HavokTypes::hkaSkeleton *skeleton,
+                      const std::string_view animation_name) {
     export_skeleton(app_state, skeleton);
 
-    const hkaAnimation *animation = binding->animation.ptr;
-    if (animation->type_info_->hash == hkaAnimation_HASH) {
-        GLog_Warning("Raw hkaAnimation cannot be exported");
-    }
-    else if (animation->type_info_->hash == hkaSplineCompressedAnimation_HASH) {
-        export_spline_compressed_animation(app_state, (hkaSplineCompressedAnimation *) animation, binding, skeleton,
+    if (const auto spline_compressed_animation = Havok::as<
+        HavokTypes::hkaSplineCompressedAnimation>(binding->animation)) {
+        export_spline_compressed_animation(app_state, spline_compressed_animation, binding, skeleton,
                                            animation_name);
     }
 }
 
-GL_ID export_animation_container(AppState* app_state, const hkaAnimationContainer *animation_container) {
-    CHECK_APP_STATE(app_state);
-
-    GL_ID skeleton_id = INVALID_GL_ID;
-    for (int i = 0; i < animation_container->skeletons.m_size; ++i) {
-        const hkaSkeleton *skeleton = animation_container->skeletons.m_data[i].ptr;
-        skeleton_id = export_skeleton(app_state, skeleton);
+GltfHelper::Handle<tinygltf::Node> export_animation_container(AppState &app_state,
+                                                              const HavokTypes::hkaAnimationContainer *
+                                                              animation_container) {
+    GltfHelper::Handle<tinygltf::Skin> skeleton_id = {};
+    for (int i = 0; i < animation_container->skeletons.size(); ++i) {
+        const auto &skeleton = animation_container->skeletons[i];
+        return export_skeleton(app_state, skeleton.get());
     }
-    // for (int i = 0; i < animation_container->bindings.m_size; ++i) {
-    //     const hkaAnimationBinding *binding = animation_container->bindings.m_data[i].ptr;
-    //     export_animation(binding);
+    // for (int i = 0; i < animation_container->bindings.size(); ++i) {
+    //     const auto *binding = animation_container->bindings[i].get();
+    //     export_animation(app_state, binding);
     // }
-    return skeleton_id;
+    return {};
 }
 
-GL_ID export_havok_file(AppState* app_state, Buffer *buffer, const StringView path) {
-    CHECK_APP_STATE(app_state);
-    CHECK_GLTF_STATE(&app_state->gltf_context);
-    GLTFContext *context = &app_state->gltf_context;
+GltfHelper::Handle<tinygltf::Node> export_havok_file(AppState &app_state,
+                                                     std::unique_ptr<IO::File> &&buffer,
+                                                     const std::string_view path) {
+    Havok::Tag::TagFile tag_file(std::move(buffer));
 
-    TagFile tag_file = {};
-    TagFile_from_buffer(&tag_file, buffer);
+    const auto item_obj = Havok::Tag::get_item(tag_file, 1);
 
-    const HKItem *item = &tag_file.items.items[1];
-    HKTagType *hk_tag_type = &tag_file.types.items[item->type];
-    const uint32 type_hash = hash_string(HKTagType_stable_name(hk_tag_type));
-    const HavokTypeInfo *type_info = *(HavokTypeInfo **) DM_get(&HAVOK_TYPES_type_info, type_hash);
-    void *item_obj = mp_malloc(type_info->size);
-    type_info->init(item_obj);
-    type_info->read(item_obj, &tag_file, &tag_file.data.items[item->offset]);
-
-
-    GL_ID output_node_id = INVALID_GL_ID;
-
-    if (String_cequals(&hk_tag_type->stable_name, "hkRootLevelContainer")) {
-        const hkRootLevelContainer *root_level_container = (hkRootLevelContainer *) item_obj;
-        for (int i = 0; i < root_level_container->namedVariants.m_size; ++i) {
-            const hkRootLevelContainer__NamedVariant *variant = &root_level_container->namedVariants.m_data[i];
-            if (strcmp(variant->className.m_data, "hkaAnimationContainer") == 0) {
-                const hkaAnimationContainer *animation_container = (hkaAnimationContainer *) variant->variant.ptr;
-                output_node_id = export_animation_container(app_state, animation_container);
-            }
+    if (const auto root_container = Havok::as<HavokTypes::hkRootLevelContainer>(item_obj)) {
+        if (root_container->namedVariants.empty()) {
+            throw std::runtime_error("No named variants in root container");
         }
-        String bsk_export_path = {};
-        Path_join(&bsk_export_path, &app_state->export_path);
-        Path_join_sv(&bsk_export_path, path);
-        Path_ensure_parent_dirs(&bsk_export_path);
-        String_append_cstr(&bsk_export_path, ".gltf");
-        GLTFContext_set_save_path(context, &bsk_export_path);
-        String_free(&bsk_export_path);
+        if (root_container->namedVariants.size() > 1) {
+            throw std::runtime_error("Multiple named variants in root container");
+        }
+        const auto &named_variant = root_container->namedVariants.front();
+        if (named_variant.className == "hkaAnimationContainer") {
+            if (const auto animation_container = Havok::as<HavokTypes::hkaAnimationContainer>(named_variant.variant)) {
+                return export_animation_container(app_state, animation_container);
+            }
+            const auto &ti = typeid(*named_variant.variant);
+            throw std::runtime_error(std::format(
+                "Malformed hkaAnimationContainer, supposed to have hkaAnimationContainer, but had {}", ti.name()));
+        }
     }
-    // else {
-    //     GLog_Warning("Unhandled havok type: %s", String_cstr(&hk_tag_type->stable_name));
-
-    JsonContext tmp;
-    String unk_file_export_path = {};
-    Path_join(&unk_file_export_path, &app_state->export_path);
-    Path_join_sv(&unk_file_export_path, path);
-    Path_ensure_parent_dirs(&unk_file_export_path);
-    String json_output = {};
-    Path_replace_extension(&unk_file_export_path, "json", &json_output);
-    FILE *f = fopen(String_cstr(&json_output), "wb");
-    jsonInit(&tmp, f);
-    jsonBeginObject(&tmp);
-    ((TypedPtr *) item_obj)->type_info_->print(item_obj, &tmp);
-    jsonEndObject(&tmp);
-    fclose(f);
-    String_free(&unk_file_export_path);
-    String_free(&json_output);
-    // }
-
-    type_info->free(item_obj);
-    mp_free(item_obj);
-    TagFile_free(&tag_file);
-
-    return output_node_id;
+    return {};
 }
 
-void build_matrix(mat4 out, const hkQsTransform *transform) {
-    hkVector4f translation = transform->translation;
-    hkVector4f rotation = transform->rotation.vec;
-    hkVector4f scale = transform->scale;
-    glm_mat4_identity(out);
-    glm_translate(out, &translation.x);
-    glm_quat_rotate(out, &rotation.x, out);
-    glm_scale(out, &scale.x);
+glm::mat4 build_matrix(const HavokTypes::hkQsTransform &transform) {
+    auto out = glm::identity<glm::mat4>();
+    out = glm::translate(out, glm::vec3(transform.translation));
+    out *= glm::mat4_cast(glm::quat(transform.rotation.vec));
+    out = glm::scale(out, glm::vec3(transform.scale));
+    return out;
 }
 
-GL_ID export_skeleton(AppState* app_state, const hkaSkeleton *skeleton) {
-    CHECK_APP_STATE(app_state);
-        CHECK_GLTF_STATE(&app_state->gltf_context);
-    GLTFContext *context = &app_state->gltf_context;
+GltfHelper::Handle<tinygltf::Node> export_skeleton(AppState &app_state,
+                                                   const HavokTypes::hkaSkeleton *skeleton) {
+    GltfHelper &helper = app_state.helper();
 
-    const GL_ID skeleton_root = GLTFContext_node_add(context, skeleton->name.m_data, true);
-    const GL_ID skin_id = GLTFContext_skin_new(context, "root", skeleton->bones.m_size);
-    GLTFContext_skin_set_skeleton(context, skin_id, skeleton_root);
+    const auto skeleton_node = helper.make<tinygltf::Node>();
+    skeleton_node->name = skeleton->name.stringAndFlag;
+    skeleton_node->name += "_Skeleton";
+    const auto skin = helper.make<tinygltf::Skin>();
+    skin->name = skeleton->name.stringAndFlag;
+    helper.add_to_scene(skeleton_node);
+    skin->skeleton = skeleton_node.index();
 
-    DynamicArray_GL_ID bone_ids = {};
-    DynamicArray_mat4 inverse_matrices = {};
-    DynamicArray_mat4 global_matrices = {};
-    DA_init(&bone_ids, GL_ID, skeleton->bones.m_size);
-    DA_init(&inverse_matrices, mat4, skeleton->bones.m_size);
-    DA_init(&global_matrices, mat4, skeleton->bones.m_size);
+    std::vector<GltfHelper::Handle<tinygltf::Node> > bones = {};
+    std::vector<glm::mat4> inverse_matrices = {};
+    std::vector<glm::mat4> global_matrices = {};
+    bones.reserve(skeleton->bones.size());
+    inverse_matrices.reserve(skeleton->bones.size());
+    global_matrices.reserve(skeleton->bones.size());
 
-    for (int i = 0; i < skeleton->bones.m_size; ++i) {
-        const hkaBone *bone = &skeleton->bones.m_data[i];
-        const GL_ID bone_node = GLTFContext_node_add(context, bone->name.m_data, true);
-        GLTFContext_skin_set_joint(context, skin_id, i, bone_node);
-        DA_append(&bone_ids, &bone_node);
-        const int16 bone_parent_id = skeleton->parentIndices.m_data[i];
+    for (const auto [bone_id, bone]: skeleton->bones | std::views::enumerate) {
+        const auto bone_node = helper.make<tinygltf::Node>();
+        bone_node->name = bone.name.stringAndFlag;
+        bones.emplace_back(bone_node);
+        skin->joints.emplace_back(bone_node.index());
+
+        const int16 bone_parent_id = skeleton->parentIndices[bone_id];
         if (bone_parent_id >= 0) {
-            GLTFContext_node_set_parent(context, bone_node, bone_ids.items[bone_parent_id]);
+            bones[bone_parent_id]->children.push_back(bone_node.index());
         }
         else {
-            GLTFContext_node_set_parent(context, bone_node, skeleton_root);
+            skeleton_node->children.push_back(bone_node.index());
         }
-        const hkQsTransform *transform = &skeleton->referencePose.m_data[i];
-        mat4 bone_matrix = {};
-        build_matrix(bone_matrix, transform);
+        const HavokTypes::hkQsTransform &transform = skeleton->referencePose[bone_id];
+        glm::mat4 bone_matrix = build_matrix(transform);
+        global_matrices.emplace_back(bone_matrix);
 
-        DA_append(&global_matrices, bone_matrix);
         if (bone_parent_id >= 0) {
-            glm_mat4_mul(global_matrices.items[bone_parent_id], bone_matrix, global_matrices.items[i]);
+            global_matrices[bone_id] = global_matrices[bone_parent_id] * bone_matrix;
         }
 
-        if (memcmp(IDENTITY_MAT, bone_matrix, sizeof(mat4)) != 0) {
-            // GLTFContext_node_set_matrix(context, bone_node, (float *) bone_matrix);
-            GLTFContext_node_set_trs(context, bone_node,
-                                     &transform->translation.x,
-                                     &transform->rotation.vec.x,
-                                     &transform->scale.x
-            );
+        if (bone_matrix != glm::identity<glm::mat4>()) {
+            GltfHelper::set_node_transform(*bone_node, transform.translation, transform.scale,
+                                           glm::quat(transform.rotation.vec));
         }
     }
-    for (int i = 0; i < skeleton->bones.m_size; ++i) {
-        mat4 inverse_matrix = {};
-        glm_mat4_inv(global_matrices.items[i], inverse_matrix);
-        inverse_matrix[3][3] = 1.0f;
-        DA_append(&inverse_matrices, inverse_matrix);
+    for (int i = 0; i < skeleton->bones.size(); ++i) {
+        glm::mat4 inverse_matrix = glm::inverse(global_matrices[i]);
+        inverse_matrices.push_back(inverse_matrix);
     }
+    auto accessor = helper.create_accessor_chain_from_u8(reinterpret_cast<uint8 *>(inverse_matrices.data()),
+                                                         inverse_matrices.size() * 16 * sizeof(float32), 0,
+                                                         TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_MAT4,
+                                                         inverse_matrices.size(), false, 0, 0,
+                                                         "inverse_matrices"
+    );
 
-    GLTFContext_skin_set_joint_inverse_matrices(context, skin_id, &inverse_matrices);
-    DA_free(&bone_ids);
-    DA_free(&inverse_matrices);
-    DA_free(&global_matrices);
-    return skin_id;
+    skin->inverseBindMatrices = accessor.accessor.index();
+    helper.push_skin(skin);
+    return skeleton_node;
 }

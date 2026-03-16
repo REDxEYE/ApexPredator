@@ -2,85 +2,153 @@
 
 #ifndef APEXPREDATOR_HAVOK_TYPES_H
 #define APEXPREDATOR_HAVOK_TYPES_H
+#include <array>
+#include <set>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <variant>
+#include <vector>
+#include <memory>
+#include <format>
+#include <utility>
 
-#include "havok/havok_type_info_map.h"
-#include "utils/dynamic_map.h"
+#include "int_def.h"
+#include "tag_file/havok_tag_file.h"
+
+namespace Havok::CodeGen {
+    class Type;
+
+    using SharedType = std::shared_ptr<Type>;
+    using WeakType = std::weak_ptr<Type>;
+
+    SharedType unwrap_weak(const WeakType &weak);
+
+    struct Member {
+        std::string name;
+        uint64 flags;
+        uint64 offset;
+
+        [[nodiscard]] SharedType type() const;
+
+        Member(std::string name, const uint64 flags, const uint64 offset, const SharedType &type)
+            : name(std::move(name)),
+              flags(flags),
+              offset(offset),
+              type_(type) {
+        }
+
+    private:
+        WeakType type_;
+    };
+
+    enum class MetaType:uint32 {
+        PRIMITIVE,
+        OPAQUE,
+        STRING,
+        BASIC,
+        POINTER,
+        RECORD,
+        FIXED_ARRAY,
+        ARRAY,
+        ENUM,
+        SPECIAL,
+        TYPE_COUNT,
+    };
 
 
-String *Havok_full_tag_type_name(const HKTagType *type);
+    static std::array<std::string_view, std::to_underlying(MetaType::TYPE_COUNT)> HavokTypeMetaTypeNames = {
+        "Primitive",
+        "OPAQUE",
+        "String",
+        "Basic"
+        "Pointer",
+        "Record",
+        "FixedArray",
+        "Array",
+        "Enum",
+        "Special",
+        "TYPE_COUNT",
+    };
 
-typedef struct HavokType HavokType;
+    inline std::ostream &operator<<(std::ostream &os, const MetaType &value) {
+        os << HavokTypeMetaTypeNames[std::to_underlying(value)];
+        return os;
+    }
 
-typedef struct {
-    String name;
-    uint32 type_hash;
-    uint32 flags;
-    uint32 offset;
-} HavokRecordMember;
+    struct TypeAndLen {
+        int64 length;
+        WeakType type;
+    };
 
-void HavokRecordMember_free(HavokRecordMember *member);
+    using ValueOfType = std::variant<
+        int64,
+        WeakType
+    >;
 
-DYNAMIC_ARRAY_STRUCT(HavokRecordMember, HavokRecordMember);
+    struct TemplateArgument {
+        std::string name;
+        ValueOfType value;
+    };
 
-typedef enum {
-    HK_PRIMITIVE,
-    HK_RECORD,
-    HK_FIXED_ARRAY,
-    HK_ARRAY,
-    HK_PTR,
-    HK_STRING,
-    HK_ENUM,
-    HK_BASIC,
-    HK_TYPE_COUNT
-} HavokTypeMetaType;
+    using TypeData = std::variant<
+        std::vector<Member>, // members
+        std::monostate
+    >;
 
-static const char *HavokTypeMetaTypeNames[HK_TYPE_COUNT] = {
-    "Primitive",
-    "Record",
-    "FixedArray",
-    "Array",
-    "Pointer",
-    "String",
-    "Enum",
-    "Basic"
+    class Type {
+    public:
+        MetaType type;
+        uint32 hash{0};
+        uint32 size{0};
+        uint32 align{0};
+        WeakType parent_{};
+        std::vector<TemplateArgument> template_args{};
+        TypeData data{};
+
+        [[nodiscard]] std::string name() const;
+
+        [[nodiscard]] std::string type_name() const;
+
+        [[nodiscard]] std::string full_name() const;
+
+        [[nodiscard]] std::vector<std::string> name_parts() const;
+
+        [[nodiscard]] int64 size_without_padding() const;
+
+        [[nodiscard]] SharedType parent() const;
+
+
+        Type(const std::string &name, MetaType type, uint32 hash,
+             uint32 size, uint32 align, const SharedType &parent);
+
+    private:
+        std::string m_name;
+    };
+
+    class TypeLibrary {
+    public:
+        TypeLibrary() = default;
+
+        void register_types(const Tag::TagFile &tag_file);
+
+        SharedType register_type(const Tag::TagFile &tag_file, const Tag::SharedType &tag_type);
+
+        [[nodiscard]] const std::unordered_map<uint32, SharedType> &types() const;
+
+        bool is_type(std::string_view name) const;
+
+    private:
+        std::unordered_map<uint32, SharedType> m_types;
+        std::set<uint32> m_exported_hashes;
+    };
+}
+
+template<>
+struct std::formatter<Havok::CodeGen::MetaType> : std::formatter<std::string_view> {
+    auto format(const Havok::CodeGen::MetaType &value, std::format_context &ctx) const {
+        return std::formatter<std::string_view>::format(
+            Havok::CodeGen::HavokTypeMetaTypeNames[std::to_underlying(value)], ctx);
+    }
 };
-
-
-typedef struct HavokType{
-    String name;
-    uint32 hash;
-    uint32 parent_hash;
-    uint32 size;
-    uint32 align;
-    uint32 array_size; // Fixed array size
-    uint32 inner_type_hash;
-    DynamicArray_HavokRecordMember members;
-    HavokTypeMetaType type;
-} HavokType;
-
-HavokType *HavokType_init(HavokType *type);
-
-uint32 HavokType_hash(const HavokType *type);
-
-void HavokType_free(HavokType *type);
-
-DYNAMIC_ARRAY_STRUCT(HavokType, HavokType);
-
-DYNAMIC_INT_MAP_STRUCT(HavokType, HavokType);
-
-typedef struct Havok_TypeLibrary Havok_TypeLibrary;
-
-struct Havok_TypeLibrary {
-    DynamicIntMap_HavokType types;
-    DynamicArray_uint64 exported_hashes;
-};
-
-void Havok_TypeLibrary_init(Havok_TypeLibrary *lib);
-
-void Havok_TypeLibrary_free(Havok_TypeLibrary *lib);
-
-HavokType *Havok_TypeLibrary_find_by_name(const Havok_TypeLibrary *lib, const char *name);
-
-void Havok_TypeLibrary_copy_from_tag_file(Havok_TypeLibrary *lib, TagFile *tf);
-
 #endif //APEXPREDATOR_HAVOK_TYPES_H

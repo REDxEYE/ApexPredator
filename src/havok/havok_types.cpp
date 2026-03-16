@@ -2,258 +2,380 @@
 
 #include "havok/havok_types.h"
 
-#include <assert.h>
-
-#include "apex/adf/sti.h"
+#include "havok/tag_file/havok_tag_file.h"
 #include "platform/logger.h"
-#include "utils/common.h"
 #include "utils/hash_helper.h"
 
-String *Havok_full_tag_type_name(const HKTagType *type) {
-    String *full_name = String_new(16);
-    if (String_cstarts_with(&type->name, "T*")) {
-        assert(type->template_args.count==1);
-        String_append_str(full_name, &type->template_args.items[0].type->name);
-        String_append_cstr(full_name, "*");
-        return full_name;
+#include <ranges>
+#include <format>
+#include <stdexcept>
+#include <string>
+#include <string_view>
+#include <utility>
+#include <variant>
+#include <vector>
+
+namespace Havok::CodeGen {
+    static inline SharedType lock_or_null(const WeakType &w) noexcept {
+        return w.expired() ? SharedType{} : w.lock();
     }
-    String_append_str(full_name, &type->name);
-    DA_FORI(type->template_args, i) {
-        const HKTagTemplateArgument *arg = &type->template_args.items[i];
-        if (arg->is_class) {
-            assert(arg->type != NULL);
-            String_append_cstr(full_name, "_");
-            String_append_str(full_name, &arg->type->name);
+
+    SharedType unwrap_weak(const WeakType &weak) {
+        return lock_or_null(weak);
+    }
+
+    [[nodiscard]] SharedType Member::type() const {
+        return lock_or_null(type_);
+    }
+} // namespace Havok::CodeGen
+
+static Havok::CodeGen::MetaType convert_meta_type(const Havok::Tag::DataType value) {
+    using DT = Havok::Tag::DataType;
+    using MT = Havok::CodeGen::MetaType;
+
+    switch (value) {
+        case DT::PRIMITIVE: return MT::PRIMITIVE;
+        case DT::OPAQUE: return MT::OPAQUE;
+        case DT::BOOL: return MT::BASIC;
+        case DT::STRING: return MT::STRING;
+        case DT::BASIC: return MT::BASIC;
+        case DT::FLOAT: return MT::BASIC;
+        case DT::POINTER: return MT::POINTER;
+        case DT::RECORD: return MT::RECORD;
+        case DT::ARRAY: return MT::ARRAY;
+    }
+
+    throw std::runtime_error(std::format(
+        "Unknown Havok data type: {}",
+        Havok::Tag::DataType_Names[std::to_underlying(value)]));
+}
+
+namespace Havok::CodeGen {
+    static inline const WeakType &require_type_arg(std::string_view owner, const TemplateArgument &arg) {
+        if (!std::holds_alternative<WeakType>(arg.value)) {
+            throw std::runtime_error(std::format("{} has non-type template argument", owner));
         }
-        else if (arg->is_number) {
-            String_append_format(full_name, "_%u", arg->number);
+        return std::get<WeakType>(arg.value);
+    }
+
+    static inline int64 require_i64_arg(std::string_view owner, const TemplateArgument &arg) {
+        if (!std::holds_alternative<int64>(arg.value)) {
+            throw std::runtime_error(std::format("{} has non-int template argument", owner));
         }
-        else {
-            String_append_cstr(full_name, "_");
-            String_append_str(full_name, &arg->name);
+        return std::get<int64>(arg.value);
+    }
+
+    std::string Type::name() const {
+        if (type == MetaType::PRIMITIVE || type == MetaType::BASIC) {
+            return m_name;
         }
-    }
-    return full_name;
-}
+        // if (type==MetaType::POINTER) {
+        //     if (template_args.size() == 1) {
+        //         const auto &inner = lock_or_null(require_type_arg(m_name, template_args[0]));
+        //         if (!inner) return std::format("{}_Ptr", m_name);
+        //         if (inner->name() == "void") return std::format("{}_Ptr", m_name);
+        //         return std::format("{}_Ptr", inner->name());
+        //     }
+        //      return std::format("{}_Ptr", m_name);
+        // }
 
-
-void HavokRecordMember_free(HavokRecordMember *member) {
-    String_free(&member->name);
-    member->type_hash = 0;
-    member->flags = 0;
-    member->offset = 0;
-}
-
-HavokType *HavokType_init(HavokType *type) {
-    String_init(&type->name, 32);
-    type->hash = 0;
-    type->parent_hash = 0;
-    type->size = 0;
-    type->align = 0;
-    // DA_init(&type->template_arguments, HavokTemplateArgument, 4);
-    DA_init(&type->members, HavokRecordMember, 8);
-    return type;
-}
-
-uint32 HavokType_hash(const HavokType *type) {
-    return type->hash;
-}
-
-void HavokType_free(HavokType *type) {
-    String_free(&type->name);
-    // DA_free_with_inner(&type->template_arguments, {HavokTemplateArgument_free(it);});
-    DA_free_with_inner(&type->members, {HavokRecordMember_free((HavokRecordMember*)it);});
-}
-
-void Havok_TypeLibrary_init(Havok_TypeLibrary *lib) {
-    TracyCZoneN(ctx, "Havok_TypeLibrary_init", 1);
-    DM_init(&lib->types, HavokType, 1024);
-    DA_init(&lib->exported_hashes, uint64, 1024);
-    TracyCZoneEnd(ctx);
-}
-
-void Havok_TypeLibrary_free(Havok_TypeLibrary *lib) {
-    TracyCZoneN(ctx, "Havok_TypeLibrary_free", 1);
-    for (int i = 0; i < lib->types.values.count; ++i) {
-        HavokType *type = (HavokType *)DA_at(&lib->types.values, i);
-        HavokType_free(type);
-    }
-    DM_free(&lib->types);
-    DA_free(&lib->exported_hashes);
-    TracyCZoneEnd(ctx);
-}
-
-HavokType *Havok_TypeLibrary_find_by_name(const Havok_TypeLibrary *lib, const char *name) {
-    const uint64 type_hash = hash_cstring(name);
-    return (HavokType *)DM_get(&lib->types, type_hash);
-}
-
-HavokType *Havok_TypeLibrary__register_type(Havok_TypeLibrary *lib, HKTagType *tf_type);
-
-HavokType *Havok_TypeLibrary__register_type(Havok_TypeLibrary *lib, HKTagType *tf_type) {
-    const String *tf_name = &tf_type->name;
-    const uint32 type_hash = HKTagType_hash(tf_type);
-    HavokType *existing_type;
-    if ((existing_type = (HavokType *)DM_get(&lib->types, type_hash)) != NULL) {
-        return existing_type;
-    }
-
-    const String *type_name = HKTagType_stable_name(tf_type);
-    HavokType new_type = {};
-    HavokType_init(&new_type);
-    String_copy_from(&new_type.name, type_name);
-    if (String_cstarts_with(tf_name, "hkArray")) {
-        new_type.type = HK_ARRAY;
-        const HavokType *inner_type = Havok_TypeLibrary__register_type(lib, tf_type->template_args.items[0].type);
-        new_type.inner_type_hash = HavokType_hash(inner_type);
-    }
-    else if (String_cequals(tf_name, "hkStringPtr")) {
-        new_type.type = HK_STRING;
-    }
-    else if (tf_type->members.count > 0 || tf_type->data_type == HKTYPE_RECORD) {
-        new_type.type = HK_RECORD;
-        DA_reserve(&new_type.members, tf_type->members.count);
-    }
-    else if ((String_cequals(&new_type.name, "voidPtr") && tf_type->data_type == HKTYPE_POINTER)) {
-        new_type.type = HK_BASIC;
-    }
-    else if (String_cequals(tf_name, "T*")) {
-        new_type.type = HK_PTR;
-        const HavokType *inner_type = Havok_TypeLibrary__register_type(lib, tf_type->template_args.items[0].type);
-        new_type.inner_type_hash = HavokType_hash(inner_type);
-    }
-    else if (String_cstarts_with(tf_name, "T[N]")) {
-        new_type.type = HK_FIXED_ARRAY;
-        const HavokType *inner_type = Havok_TypeLibrary__register_type(lib, tf_type->template_args.items[0].type);
-        new_type.inner_type_hash = HavokType_hash(inner_type);
-        new_type.array_size = tf_type->template_args.items[1].number;
-    }
-    else if (String_cequals(tf_name, "const_char*")) {
-        new_type.type = HK_BASIC;
-    }
-    else if (String_cequals(tf_name, "hkEnum")) {
-        HKTagType *tag_inner_type = tf_type->template_args.items[0].type;
-        HKTagType *tag_storage_type = tf_type->template_args.items[1].type;
-        const HavokType *storage_type = Havok_TypeLibrary__register_type(lib, tag_storage_type);
-        const uint32 storage_hash = HavokType_hash(storage_type);
-        HavokType *inner_type = Havok_TypeLibrary__register_type(lib, tag_inner_type);
-        if (inner_type == NULL || storage_type == NULL) {
-            GLog_Error("Failed to register hkEnum inner or storage type for %s", String_cstr(type_name));
-            return NULL;
-        }
-        if (inner_type->type == HK_BASIC && !String_cequals(&inner_type->name, "void")) {
-            inner_type->type = HK_PRIMITIVE;
-            inner_type->parent_hash = storage_hash;
-        }
-        new_type.type = HK_ENUM;
-    }
-    else if (String_cequals(tf_name, "hkFlags")) {
-        HKTagType *tag_inner_type = tf_type->template_args.items[0].type;
-        HKTagType *tag_storage_type = tf_type->template_args.items[1].type;
-        const HavokType *storage_type = Havok_TypeLibrary__register_type(lib, tag_storage_type);
-        const uint32 storage_hash = HavokType_hash(storage_type);
-        HavokType *inner_type = Havok_TypeLibrary__register_type(lib, tag_inner_type);
-        if (inner_type == NULL || storage_type == NULL) {
-            GLog_Error("Failed to register hkFlags inner or storage type for %s", String_cstr(type_name));
-            return NULL;
-        }
-        if (inner_type->type == HK_BASIC && !String_cequals(&inner_type->name, "void")) {
-            inner_type->type = HK_PRIMITIVE;
-            inner_type->parent_hash = storage_hash;
-        }
-        new_type.type = HK_ENUM;
-    }
-    else if (tf_type->data_type == HKTYPE_BASIC ||
-             tf_type->data_type == HKTYPE_OPAQUE ||
-             tf_type->data_type == HKTYPE_FLOAT ||
-             String_cequals(&tf_type->name, "hkVector4f") ||
-             String_cequals(&tf_type->name, "hkRotationImpl") ||
-             (String_cequals(tf_name, "void") && tf_type->data_type == HKTYPE_PRIMITIVE)
-    ) {
-        new_type.type = HK_BASIC;
-    }
-    else if (tf_type->data_type == HKTYPE_PRIMITIVE) {
-        new_type.type = HK_PRIMITIVE;
-    }
-    else if (tf_type->data_type == HKTYPE_OPAQUE) {
-        new_type.type = HK_BASIC;
-    }
-    else {
-        printf("Unhandled case -> %s  [%s]\n", String_cstr(tf_name), HKTAGTYPE_NAMES[tf_type->data_type]);
-        return NULL;
-    }
-    new_type.hash = type_hash;
-    new_type.size = tf_type->size;
-    new_type.align = tf_type->align;
-    new_type.hash = type_hash;
-    if (tf_type->parent != NULL) {
-        const HavokType *parent_type = Havok_TypeLibrary__register_type(lib, tf_type->parent);
-        if (parent_type != NULL) {
-            new_type.parent_hash = HavokType_hash(parent_type);
-            if (new_type.size == 0) {
-                new_type.size = parent_type->size;
+        if (type == MetaType::ARRAY) {
+            if (template_args.size() == 2) {
+                const auto &inner = lock_or_null(require_type_arg(m_name, template_args[0]));
+                if (!inner) return std::format("{}_Array", m_name);
+                return std::format("{}_Array", inner->name());
             }
-            if (new_type.align == 0) {
-                new_type.align = parent_type->align;
+            return m_name;
+        }
+
+        if (type == MetaType::FIXED_ARRAY) {
+            if (template_args.size() != 2) {
+                throw std::runtime_error(std::format("Fixed Array type {} has invalid number of template arguments",
+                                                     m_name));
+            }
+            const auto &inner = lock_or_null(require_type_arg(m_name, template_args[0]));
+            const int64 len = require_i64_arg(m_name, template_args[1]);
+            if (!inner) return std::format("{}_{}_FixedArray", m_name, len);
+            return std::format("{}_{}_FixedArray", inner->name(), len);
+        }
+
+        return m_name;
+    }
+
+    std::string Type::type_name() const {
+        if (type == MetaType::POINTER) {
+            if (template_args.size() == 1) {
+                const auto &inner = lock_or_null(require_type_arg(m_name, template_args[0]));
+                if (!inner) return "hkPtr<BaseType>";
+                if (inner->type_name() == "void") return "hkPtr<BaseType>";
+                return std::format("hkPtr<{}>", inner->type_name());
+            }
+            return std::format("hkPtr<{}>", name());
+        }
+
+        if (type == MetaType::FIXED_ARRAY) {
+            if (template_args.size() == 2) {
+                const auto &inner = lock_or_null(require_type_arg(m_name, template_args[0]));
+                const int64 len = require_i64_arg(m_name, template_args[1]);
+                const auto inner_name = inner ? inner->type_name() : std::string{"void"};
+                return std::format("std::array<{}, {}>", inner_name, len);
             }
         }
-        else {
-            GLog_Error("Failed to register parent type for %s", String_cstr(&new_type.name));
-            return NULL;
-        }
-    }
-    if (String_cequals(tf_name, "hkEnum")) {
-        HKTagType *tag_storage_type = tf_type->template_args.items[1].type;
-        const HavokType *storage_type = Havok_TypeLibrary__register_type(lib, tag_storage_type);
-        new_type.parent_hash = storage_type->hash;
-    }
-    else if (String_cequals(tf_name, "hkFlags")) {
-        HKTagType *tag_storage_type = tf_type->template_args.items[1].type;
-        const HavokType *storage_type = Havok_TypeLibrary__register_type(lib, tag_storage_type);
-        new_type.parent_hash = storage_type->hash;
-    }
 
-    // printf("Registering type -> %s [%s]\n", String_data(&new_type.name), HavokTypeMetaTypeNames[new_type.type]);
-
-    HavokType *slot = (HavokType *)DM_insert(&lib->types, type_hash);
-    *slot = new_type;
-
-    if (tf_type->members.count > 0 || tf_type->data_type == HKTYPE_RECORD) {
-        DA_FORI(tf_type->members, i) {
-            const HKTagTypeMember *tf_member = &tf_type->members.items[i];
-            Havok_TypeLibrary__register_type(lib, tf_member->type);
-        }
-        HavokType *tmp_slot = (HavokType *)DM_insert(&lib->types, type_hash);
-        DA_FORI(tf_type->members, i) {
-            const HKTagTypeMember *tf_member = &tf_type->members.items[i];
-            HavokRecordMember new_member = {};
-            if (String_cequals(&tf_member->name, "bool")) {
-                String_init(&new_member.name, 8);
-                String_from_cstr(&new_member.name, "_bool");
+        if (type == MetaType::ARRAY) {
+            if (template_args.size() == 2) {
+                const auto &inner = lock_or_null(require_type_arg(m_name, template_args[0]));
+                const auto &alloc = lock_or_null(require_type_arg(m_name, template_args[1]));
+                const auto inner_name = inner ? inner->type_name() : std::string{"void"};
+                const auto alloc_name = alloc ? alloc->type_name() : std::string{"void"};
+                return std::format("hkArray<{}, {}>", inner_name, alloc_name);
             }
-            else {
-                String_copy_from(&new_member.name, &tf_member->name);
+            return m_name;
+        }
+
+        if (type == MetaType::STRING) {
+            return "hkString";
+        }
+
+        if (!template_args.empty()) {
+            std::string out;
+            out.reserve(m_name.size() + 2 + template_args.size() * 8);
+            out.append(m_name).append("<");
+            for (size_t i = 0; i < template_args.size(); ++i) {
+                const auto &arg = template_args[i];
+                std::visit([&](const auto &v) {
+                    using V = std::decay_t<decltype(v)>;
+                    if constexpr (std::is_same_v<V, int64>) {
+                        out += std::to_string(v);
+                    }
+                    else if constexpr (std::is_same_v<V, WeakType>) {
+                        const auto t = lock_or_null(v);
+                        out += t ? t->type_name() : "void";
+                    }
+                }, arg.value);
+
+                if (i + 1 != template_args.size()) out.append(", ");
             }
-            const HavokType *member_type = Havok_TypeLibrary__register_type(lib, tf_member->type);
-            new_member.type_hash = HavokType_hash(member_type);
-            new_member.offset = tf_member->offset;
-            new_member.flags = tf_member->flags;
-            DA_append(&tmp_slot->members, &new_member);
+            out.append(">");
+            return out;
+        }
+
+        return m_name;
+    }
+
+    std::string Type::full_name() const {
+        std::string out = type_name();
+        size_t index;
+        while ((index = out.find(",")) != std::string::npos) {
+            out.replace(index, 1, "_");
+        }
+        while ((index = out.find("<")) != std::string::npos) {
+            out.replace(index, 1, "_");
+        }
+        while ((index = out.find(">")) != std::string::npos) {
+            out.replace(index, 1, "_");
+        }
+        // erase spaces
+        std::erase_if(out, ::isspace);
+
+
+        return out;
+    }
+
+    std::vector<std::string> Type::name_parts() const {
+        std::vector<std::string> parts;
+        size_t start = 0;
+        const auto &n = name();
+        for (size_t i = 0; i < n.size(); ++i) {
+            if (n[i] == ':') {
+                if (i + 1 < n.size() && n[i + 1] == ':') {
+                    parts.emplace_back(n.data() + start, i - start);
+                    start = i + 2;
+                    ++i;
+                }
+            }
+        }
+        parts.emplace_back(n.data() + start, n.size() - start);
+        return parts;
+    }
+
+    int64 Type::size_without_padding() const {
+        switch (type) {
+            case MetaType::RECORD: {
+                const auto &members = std::get<std::vector<Member> >(data);
+                if (members.empty()) return size;
+                const auto &last = members.back();
+                const auto last_t = last.type();
+                return static_cast<int64>(last.offset) + (last_t ? last_t->size : 0);
+            }
+
+            case MetaType::BASIC:
+            case MetaType::ENUM:
+            case MetaType::POINTER:
+            case MetaType::STRING:
+            case MetaType::OPAQUE:
+            case MetaType::ARRAY:
+            case MetaType::SPECIAL:
+                return size;
+
+            case MetaType::PRIMITIVE: {
+                const auto p = parent();
+                return p ? p->size_without_padding() : size;
+            }
+
+            case MetaType::FIXED_ARRAY: {
+                if (template_args.size() != 2) {
+                    throw std::runtime_error(std::format(
+                        "Fixed Array type {} has invalid number of template arguments", m_name));
+                }
+                const auto &inner = lock_or_null(require_type_arg(m_name, template_args[0]));
+                const int64 len = require_i64_arg(m_name, template_args[1]);
+                if (!inner) return 0;
+                return inner->size_without_padding() * len;
+            }
+
+            default:
+                throw std::runtime_error(std::format(
+                    "size_without_padding is only valid for record/array-ish types, but {} is of type {}",
+                    name(), HavokTypeMetaTypeNames[std::to_underlying(type)]));
         }
     }
 
-    return slot;
-}
-
-void Havok_TypeLibrary_copy_from_tag_file(Havok_TypeLibrary *lib, TagFile *tf) {
-    DA_FORI(tf->types, i) {
-        if (i == 0)continue;
-        HKTagType *tf_type = (HKTagType *)DA_at(&tf->types, i);
-        Havok_TypeLibrary__register_type(lib, tf_type);
+    SharedType Type::parent() const {
+        return lock_or_null(parent_);
     }
-}
 
-void register_type_info(TypeInfoMap *map, const uint32 hash, const HavokTypeInfo *type_info) {
-    const HavokTypeInfo **slot = (const HavokTypeInfo **)DM_insert(map, hash);
-    *slot = type_info;
-}
+    Type::Type(const std::string &name, const MetaType type_, const uint32 hash_, const uint32 size_,
+               const uint32 align_, const SharedType &parent)
+        : type(type_)
+          , hash(hash_)
+          , size(size_)
+          , align(align_)
+          , parent_(parent)
+          , m_name(name) {
+        if (name == "T[N]") {
+            type = MetaType::FIXED_ARRAY;
+        }
+
+        auto index = 0;
+        while (true) {
+            index = m_name.find("::", index);
+            if (index == std::string::npos) break;
+            m_name.replace(index, 2, "_");
+            index += 1;
+        }
+
+    }
+
+    void TypeLibrary::register_types(const Tag::TagFile &tag_file) {
+        for (auto &t: tag_file.types()) {
+            (void) register_type(tag_file, t);
+        }
+    }
+
+    std::shared_ptr<Type> TypeLibrary::register_type(const Tag::TagFile &tag_file, const Tag::SharedType &tag_type) {
+        (void) tag_file;
+
+        const auto unique_id = tag_type->unique_id();
+        const uint32 key = hash_string(unique_id);
+
+        if (auto it = m_types.find(key); it != m_types.end()) {
+            if (it->second->hash == 0) {
+                it->second->hash = tag_type->hash;
+            }
+            return it->second;
+        }
+
+        const SharedType parent_type = tag_type->parent ? register_type(tag_file, tag_type->parent) : nullptr;
+
+        auto new_type = std::make_shared<Type>(
+            tag_type->name,
+            convert_meta_type(tag_type->data_type),
+            tag_type->hash,
+            tag_type->size(),
+            tag_type->align(),
+            parent_type
+        );
+
+        m_types.emplace(key, new_type);
+
+        // Members -> make it a RECORD unless it's a pointer wrapper.
+        if (!tag_type->members.empty() && tag_type->data_type != Tag::DataType::POINTER) {
+            std::vector<Member> members;
+            members.reserve(tag_type->members.size());
+            for (auto &m: tag_type->members) {
+                members.emplace_back(m.name, m.flags, m.offset, register_type(tag_file, m.type()));
+            }
+            new_type->data = std::move(members);
+            new_type->type = MetaType::RECORD;
+        }
+
+        // Template args
+        if (!tag_type->template_args.empty()) {
+            new_type->template_args.reserve(tag_type->template_args.size());
+            for (const auto &[t_name, v_value]: tag_type->template_args) {
+                if (const auto *pi = std::get_if<int64>(&v_value)) {
+                    new_type->template_args.push_back({t_name, *pi});
+                    continue;
+                }
+                if (const auto *pw = std::get_if<Tag::WeakType>(&v_value)) {
+                    auto inner_tag = pw->lock();
+                    auto inner_type = inner_tag ? register_type(tag_file, inner_tag) : SharedType{};
+                    new_type->template_args.push_back({t_name, inner_type});
+                    continue;
+                }
+            }
+        }
+
+        // Normalization rules
+        if (new_type->type_name().starts_with("hkArray<")) {
+            new_type->type = MetaType::ARRAY;
+        }
+        // if (new_type->name().starts_with("hkRefVariant")) {
+        //     new_type->type = MetaType::BASIC;
+        // }
+        if (new_type->type_name().starts_with("hkFreeListArrayElement")) {
+            new_type->type = MetaType::BASIC;
+        }
+        if (new_type->name() == "hkaiIndex") {
+            new_type->type = MetaType::SPECIAL;
+        }
+        if (new_type->name() == "hkRefVariant") {
+            new_type->type = MetaType::SPECIAL;
+        }
+        if (new_type->name() == "hkaiPackedKey_") {
+            new_type->type = MetaType::SPECIAL;
+        }
+        if (new_type->name() == "hkBool" || new_type->name() == "hkBaseObject") {
+            new_type->type = MetaType::BASIC;
+        }
+        if (new_type->name() == "hkString") {
+            new_type->type = MetaType::STRING;
+        }
+        if (new_type->type == MetaType::PRIMITIVE) {
+            const auto tn = new_type->type_name();
+            if (tn.starts_with("hkFlags<") || tn.starts_with("hkEnum<")) {
+                new_type->type = MetaType::ENUM;
+            }
+        }
+
+        // Replace noisy stdout with your logger if you want.
+        // GLog_Info("Registered {}: {}", new_type->type, new_type->type_name());
+
+        return new_type;
+    }
+
+    const std::unordered_map<uint32, SharedType> &TypeLibrary::types() const {
+        return m_types;
+    }
+
+    bool TypeLibrary::is_type(const std::string_view name) const{
+        for (const auto &type: m_types | std::views::values) {
+            auto name_parts = type->name_parts();
+            if (name_parts.at(name_parts.size() - 1) == name) {
+                return true;
+            }
+        }
+        return false;
+    }
+} // namespace Havok::CodeGen

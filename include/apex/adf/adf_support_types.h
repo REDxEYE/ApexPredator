@@ -2,76 +2,177 @@
 
 #ifndef APEXPREDATOR_ADF_SUPPORT_TYPES_H
 #define APEXPREDATOR_ADF_SUPPORT_TYPES_H
-#include <stdbool.h>
+#include <format>
+#include <string>
+#include <optional>
+#include <functional>
+#include <unordered_map>
 
-#include "sti_shared.h"
-#include "utils/buffer/buffer.h"
+#include "adf_base_type.h"
+#include "apex/hashes.h"
+#include "utils/file/file.h"
 
-bool int8_read(int8 *out, Buffer* buffer);
+using String = std::string;
 
-bool uint8_read(uint8 *out, Buffer* buffer);
 
-bool int16_read(int16 *out, Buffer* buffer);
+template<class E>
+requires std::is_enum_v<E>
+std::string to_string(E e) {
+    return std::format("{}", e); // uses std::formatter<E>
+}
 
-bool uint16_read(uint16 *out, Buffer* buffer);
+template<uint32 hash, uint32 width>
+struct StringHash : ADF::BaseType {
+    uint64 storage{0};
 
-bool int32_read(int32 *out, Buffer* buffer);
 
-bool uint32_read(uint32 *out, Buffer* buffer);
+    void read(IO::File &buffer) override {
+        if constexpr (width == 4) {
+            storage = buffer.read_pod<uint32>();
+            return;
+        }
+        else if constexpr (width == 6 || width == 8) {
+            storage = buffer.read_pod<uint64>();
+            return;
+        }
 
-bool StringHash_48c5294d_4_read(StringHash_48c5294d_4 *out, Buffer* buffer);
+        static_assert(width == 4 || width == 6 || width == 8, "Unsupported StringHash width");
+        throw std::runtime_error("Unsupported StringHash width");
+    };
 
-bool StringHash_99cfa095_6_read(StringHash_99cfa095_6 *out, Buffer* buffer);
+    void print(std::ostream &out) const override {
+        if (const auto str = find_name64_sv(storage)) {
+            out << *str;
+        }
+        else {
+            out << std::format("0x{:0{}X}", storage, width * 2);
+        }
+    };
 
-bool StringHash_48c5294d_8_read(StringHash_48c5294d_8 *out, Buffer* buffer);
+    void to_json(std::ostream &out) const override {
+        if (const auto str = find_name64_sv(storage)) {
+            out << std::format("\"{}\"", *str);
+        }
+        else {
+            out << std::format("\"0x{:0{}X}\"", storage, width * 2);
+        }
+    }
 
-bool int64_read(int64 *out, Buffer* buffer);
 
-bool uint64_read(uint64 *out, Buffer* buffer);
+    operator int64() const {
+        return static_cast<int64>(storage);
+    }
+};
 
-bool float32_read(float32 *out, Buffer* buffer);
+struct Deferred {
+    uint32 offset;
+    uint32 size;
+    uint32 type_hash;
+    uint32 pad;
 
-bool float64_read(float64 *out, Buffer* buffer);
+    static std::unique_ptr<ADF::BaseType> read(IO::File &buffer);
+};
 
-bool String_read(STI_String *out, Buffer* buffer);
 
-bool Deferred_read(Deferred *out, Buffer* buffer);
+template<class T, class = void>
+inline constexpr bool is_dataset_v = false;
 
-void STI_String_free(String *obj);
+template<class T>
+inline constexpr bool is_dataset_v<T, std::void_t<decltype(sizeof(T))> > = std::is_base_of_v<ADF::BaseType, T>;
 
-void Deferred_free(Deferred *obj);
+template<typename T>
+class Vector : public std::vector<T>, public ADF::BaseType {
+public:
+    void read(IO::File &buffer) override {
+        const auto offset = buffer.read_pod<uint32>();
+        const auto unk0 = buffer.read_pod<uint32>();
+        const auto count = buffer.read_pod<uint32>();
+        const auto unk1 = buffer.read_pod<uint32>();
 
-void Deferred_init(Deferred *obj);
+        (void) unk0;
+        (void) unk1;
 
-void int8_print(const int8 *obj, JsonContext* ctx);
+        const std::streamoff original_offset = buffer.get_position();
+        buffer.set_position(offset,std::ios::beg);
+        this->resize(count);
+        if constexpr (std::is_same_v<T, std::string>) {
+            for (uint32 i = 0; i < count; ++i) {
+                std::string &str = this->operator[](i);
+                buffer.read_cstring(str);
+            }
+        }
+        else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType>>) {
+            for (uint32 i = 0; i < count; ++i) {
+                std::unique_ptr<BaseType> &ptr = this->operator[](i);
+                ptr = Deferred::read(buffer);
+            }
+        }
+        else if constexpr(is_dataset_v<T>) {
+            for (uint32 i = 0; i < count; ++i) {
+                this->operator[](i).read(buffer);
+            }
+        }
+        else {
+            buffer.read_exact<T>(*this);
+        }
+        buffer.set_position(original_offset, std::ios::beg);
+    }
 
-void uint8_print(const uint8 *obj, JsonContext* ctx);
+    void print(std::ostream &out) const override {
+        out << "[";
+        for (size_t i = 0; i < this->size(); ++i) {
+            const auto& ptr = this->operator[](i);
+            if constexpr (std::is_same_v<T, std::string>) {
+                out << std::quoted(ptr);
+            }
+            else if constexpr(is_dataset_v<T>) {
+                ptr.print(out);
+            }
+            else if constexpr(std::is_same_v<T, std::unique_ptr<BaseType>>) {
+                if (ptr) {
+                    ptr->print(out);
+                }
+                else {
+                    out << "null";
+                }
+            }
+            else {
+                out << std::to_string(ptr);
+            }
+            if (i < this->size() - 1) {
+                out << ", ";
+            }
+        }
+        out << "]";
+    }
 
-void int16_print(const int16 *obj, JsonContext* ctx);
-
-void uint16_print(const uint16 *obj, JsonContext* ctx);
-
-void int32_print(const int32 *obj, JsonContext* ctx);
-
-void uint32_print(const uint32 *obj, JsonContext* ctx);
-
-void StringHash_48c5294d_4_print(const StringHash_48c5294d_4 *obj, JsonContext* ctx);
-
-void StringHash_99cfa095_6_print(const StringHash_99cfa095_6 *obj, JsonContext* ctx);
-
-void StringHash_48c5294d_8_print(const StringHash_48c5294d_8 *obj, JsonContext* ctx);
-
-void int64_print(const int64 *obj, JsonContext* ctx);
-
-void uint64_print(const uint64 *obj, JsonContext* ctx);
-
-void float32_print(const float32 *obj, JsonContext* ctx);
-
-void float64_print(const float64 *obj, JsonContext* ctx);
-
-void String_print(const STI_String *obj, JsonContext* ctx);
-
-void Deferred_print(const Deferred *obj, JsonContext* ctx);
-
+    void to_json(std::ostream &out) const override {
+        out << "[";
+        for (size_t i = 0; i < this->size(); ++i) {
+            const auto& ptr = this->operator[](i);
+            if constexpr (std::is_same_v<T, std::string>) {
+                out << std::quoted(ptr);
+            }
+            else if constexpr(is_dataset_v<T>) {
+                ptr.to_json(out);
+            }
+            else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType>>) {
+                if (ptr) {
+                    ptr->to_json(out);
+                }
+                else {
+                    out << "null";
+                }
+            }
+            else {
+                out << std::to_string(ptr);
+            }
+            if (i < this->size() - 1) {
+                out << ", ";
+            }
+        }
+        out << "]";
+    }
+};
 
 #endif //APEXPREDATOR_ADF_SUPPORT_TYPES_H

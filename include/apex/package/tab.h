@@ -7,7 +7,7 @@
 
 #pragma pack(push, 1)
 typedef struct {
-    uint32 dwMagic; // 0x424154 (TAB\0)
+    char dwMagic[4]; // 0x424154 (TAB\0)
     int16 wMajorVersion; // 2
     int16 wMinorVersion; // 1
     int32 dwAligment; // 2048

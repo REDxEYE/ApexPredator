@@ -2,46 +2,44 @@
 
 #ifndef APEXPREDATOR_AAF_H
 #define APEXPREDATOR_AAF_H
-
+#include <memory>
 #include "int_def.h"
-#include "utils/dynamic_array.h"
-#include "utils/buffer/memory_buffer.h"
+#include "utils/file/memory_buffer.h"
 
 #define AAF_MAGIC "AAF\0"
 
-typedef struct {
+struct AAFHeader {
     char ident[4];
     uint32 version;
     char awesome[28];
     uint32 uncompressed_size;
     uint32 section_size;
     uint32 section_count;
-}AAFHeader;
+};
 
-typedef struct {
+struct AAFSectionHeader {
     uint32 compressed_size;
     uint32 uncompressed_size;
     uint32 total_size;
     char magic[4];
-}AAFSectionHeader;
+};
 
-typedef struct {
+struct AAFSection {
     AAFSectionHeader header;
-    MemoryBuffer buffer;
-}AAFSection;
+    std::vector<uint8> buffer;
+};
 
-DYNAMIC_ARRAY_STRUCT(AAFSection, AAFSection);
 
-typedef struct {
-    AAFHeader header;
-    MemoryBuffer buffer;
-    DynamicArray_AAFSection sections;
-}AAFArchive;
+class AAFArchive {
+public:
+    explicit AAFArchive(std::unique_ptr<IO::File>buffer);
 
-void AAFArchive_from_buffer(AAFArchive *archive, Buffer* buffer);
+    std::unique_ptr<IO::File> get_data();
+private:
+    AAFHeader m_header{};
+    std::unique_ptr<IO::File> m_buffer;
+    std::vector<AAFSection> m_sections;
+};
 
-bool AAFArchive_get_data(AAFArchive *archive, MemoryBuffer *out);
-
-void AAFArchive_free(AAFArchive *archive);
 
 #endif //APEXPREDATOR_AAF_H

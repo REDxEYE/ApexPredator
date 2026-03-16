@@ -1,211 +1,161 @@
 // Created by RED on 12.02.2026.
+#pragma once
 
-#ifndef APEXPREDATOR_COMMANDS_H
-#define APEXPREDATOR_COMMANDS_H
+#include "CLI/CLI.hpp"
+
 #include "platform/app_state.h"
-#include "platform/cli_parser.h"
 
-static const CommandArgument extract_arguments[] = {
-    {
-        .name = "game_root",
-        .flag = "g",
-        .description = "Path to the root directory of the game assets (enerationZero\\archives_win64).",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "paths",
-        .flag = NULL,
-        .description = "Paths to the assets to extract.",
-        .type = COMMAND_ARG_TYPE_ARRAY_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "no_textures",
-        .flag = "n",
-        .description = "Don't export textures.",
-        .type = COMMAND_ARG_TYPE_BOOL,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .bool_value = false,
-    },
-    {
-        .name = "raw",
-        .flag = "r",
-        .description = "Export raw data without converting to glTF.",
-        .type = COMMAND_ARG_TYPE_BOOL,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .bool_value = false,
-    },
-    {
-        .name = "out_dir",
-        .flag = "o",
-        .description = "Output directory for extracted assets.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./extracted",
-    },
-    {
-        .name = "db_path",
-        .flag = "d",
-        .description =
-        "Path to the hashes.db file for resolving asset paths from hashes. Required if using hashes instead of paths.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./hashes.db",
+class Command {
+public:
+    Command(const std::string_view name,
+            const std::string_view description) : m_name(name), m_description(description) {
     }
+
+    virtual ~Command() = default;
+
+    void register_(CLI::App &app) {
+        auto *sub_command = app.add_subcommand(m_name, m_description);
+        customize(*sub_command);
+        sub_command->callback([this] { handle(); });
+    }
+
+protected:
+    virtual void customize(CLI::App &app) = 0;
+
+    virtual void handle() = 0;
+
+private:
+    std::string m_name;
+    std::string m_description;
 };
 
-static const CommandArgument extract_anim_arguments[] = {
-    {
-        .name = "game_root",
-        .flag = "g",
-        .description = "Path to the root directory of the game assets (enerationZero\\archives_win64).",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "skeleton-path",
-        .description = "Path(or hash) to the Havok animation container file containing the skeleton.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "animations",
-        .description = "Paths(or hashes) to the Havok animation container files to extract animations from.",
-        .type = COMMAND_ARG_TYPE_ARRAY_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "out_dir",
-        .flag = "o",
-        .description = "Output directory for extracted animations.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./extracted",
-    },
-    {
-        .name = "db_path",
-        .flag = "d",
-        .description =
-        "Path to the hashes.db file for resolving asset paths from hashes. Required if using hashes instead of paths.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./hashes.db",
+class DatabaseDependantCommand : public Command {
+public:
+    DatabaseDependantCommand(const std::string_view &name, const std::string_view &description)
+        : Command(name, description) {
     }
+
+    ~DatabaseDependantCommand() override = default;
+
+    void customize(CLI::App &app) override {
+        app.add_option("-d,--db_path", m_db_path, "Path to hashes.db for resolving asset paths from hashes.");
+    }
+
+protected:
+    std::filesystem::path m_db_path;
 };
 
-static const CommandArgument search_arguments[] = {
-    {
-        .name = "query",
-        .description = "Hash or path or pattern to search for. Uses sqlite3 syntax for wildcards (%)",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "db_path",
-        .flag = "d",
-        .description =
-        "Path to the hashes.db file for resolving asset paths from hashes. Required if using hashes instead of paths.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./hashes.db",
+class GameCommand : public DatabaseDependantCommand {
+public:
+    GameCommand(const std::string_view &name, const std::string_view &description)
+        : DatabaseDependantCommand(name, description) {
     }
+
+    ~GameCommand() override = default;
+
+protected:
+    void customize(CLI::App &app) override {
+        DatabaseDependantCommand::customize(app);
+        app.add_option("game_root", m_game_root,
+                       "Path to the root directory of the game assets (generationZero\\archives_win64).")->required();
+        app.add_option("-o,--out_dir", m_export_path, "Output directory for extracted assets.");
+    }
+
+    std::filesystem::path m_game_root;
+    std::filesystem::path m_export_path;
 };
 
-static const CommandArgument convert_arguments[] = {
-    {
-        .name = "input",
-        .description = "Path to the input file to convert.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = false,
-        .required = true,
-        .has_default = false,
-    },
-    {
-        .name = "out_dir",
-        .flag = "o",
-        .description = "Output directory for extracted assets.",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = false,
-        .has_default = true,
-        .string_value = "./extracted",
-    },
-    {
-        .name = "v_output",
-        .flag = "v",
-        .description = "Virtual file path, will be used to calculate hashes. Actual output will be <out_dir>/<v_output>",
-        .type = COMMAND_ARG_TYPE_STRING,
-        .named = true,
-        .required = true,
-        .has_default = false,
+class ExtractCommand : public GameCommand {
+public:
+    ExtractCommand(const std::string_view &name, const std::string_view &description)
+        : GameCommand(name, description), m_skip_textures(false), m_extract_raw(false) {
     }
+
+    ~ExtractCommand() override = default;
+
+protected:
+    void customize(CLI::App &app) override {
+        GameCommand::customize(app);
+        app.add_flag("-n,--no_textures", m_skip_textures, "Don't export textures.");
+        app.add_flag("-r,--raw", m_extract_raw, "Export raw data without converting to glTF.");
+        app.add_option("assets", m_assets, "Paths or hashes to assets to extract.")->required()->expected(-1);
+    }
+
+    void handle() override;
+
+private:
+    bool m_skip_textures;
+    bool m_extract_raw;
+    std::vector<std::string> m_assets{};
 };
 
-void extract_handler(AppState *app_state, const CliResult *cli_res);
-
-void extract_anims_handler(AppState *app_state, const CliResult *cli_res);
-
-void search_handler(const AppState *app_state, const CliResult *cli_res);
-
-void convert_handler(const AppState *app_state, const CliResult *cli_res);
-
-
-static const SubCommand sub_commands[] = {
-    {
-        .name = "extract",
-        .description = "Extract assets.",
-        .execute = (execute_fn) extract_handler,
-        .argument_count = sizeof(extract_arguments) / sizeof(CommandArgument),
-        .arguments = extract_arguments,
-    },
-    {
-        .name = "extract-anims",
-        .description = "Extract animations from a Havok animation container.",
-        .execute = (execute_fn) extract_anims_handler,
-        .argument_count = sizeof(extract_anim_arguments) / sizeof(CommandArgument),
-        .arguments = extract_anim_arguments,
-    },
-    {
-        .name = "search",
-        .description = "Search for assets by hash or path or pattern.",
-        .execute = (execute_fn) search_handler,
-        .argument_count = sizeof(search_arguments) / sizeof(CommandArgument),
-        .arguments = search_arguments,
-    },
-    {
-        .name = "convert",
-        .description = "Converts input png to avtx texture, json into rtpc or adf",
-        .execute = (execute_fn) convert_handler,
-        .argument_count = sizeof(convert_arguments) / sizeof(CommandArgument),
-        .arguments = convert_arguments,
+class ExtractAnimationCommand : public GameCommand {
+public:
+    ExtractAnimationCommand(const std::string_view &name, const std::string_view &description)
+        : GameCommand(name, description) {
     }
+
+    ~ExtractAnimationCommand() override = default;
+
+protected:
+    void customize(CLI::App &app) override {
+        GameCommand::customize(app);
+        app.add_option("skeleton-path", m_skeleton_path,
+                       "Path or hash to the Havok container containing the skeleton.")
+                ->required();
+
+        app.add_option("animations", m_animations, "Paths or hashes to animation containers.")
+                ->required();
+    }
+
+    void handle() override;
+
+private:
+    std::string m_skeleton_path;
+    std::vector<std::string> m_animations;
 };
 
-#endif //APEXPREDATOR_COMMANDS_H
+class SearchCommand : public DatabaseDependantCommand {
+public:
+    SearchCommand(const std::string_view &name, const std::string_view &description)
+        : DatabaseDependantCommand(name, description) {
+    }
+
+    ~SearchCommand() override = default;
+
+protected:
+    void customize(CLI::App &app) override {
+        DatabaseDependantCommand::customize(app);
+        app.add_option("query", m_search_query, "Hash or path or pattern (% wildcards).")->required();
+    }
+
+    void handle() override;
+private:
+    std::string m_search_query;
+};
+
+class ConvertCommand : public GameCommand {
+public:
+    ConvertCommand(const std::string_view &name, const std::string_view &description)
+        : GameCommand(name, description) {
+    }
+
+    ~ConvertCommand() override = default;
+
+protected:
+    void customize(CLI::App &app) override {
+        GameCommand::customize(app);
+        app.add_option("input", input_file, "Path to input file.")
+                ->required();
+        app.add_option("-v,--v_output", v_output, "Virtual output path used for hashing.")
+                ->required();
+    }
+
+    void handle() override {
+
+    }
+
+private:
+    std::string input_file;
+    std::string v_output;
+};

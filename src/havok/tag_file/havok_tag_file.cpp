@@ -2,41 +2,58 @@
 
 #include "havok/tag_file/havok_tag_file.h"
 
-#include <assert.h>
-#include <math.h>
+#include <cassert>
+#include <unordered_map>
 
-#include "havok/havok_types.h"
-#include "platform/common_arrays.h"
+#include "havok/havok_base_type.h"
 #include "platform/logger.h"
-#include "utils/buffer/memory_buffer.h"
+#include "utils/file/memory_buffer.h"
 #include "utils/endian.h"
 #include "utils/hash_helper.h"
 
-TagHeader expect_tag(Buffer *buffer, const char *expected_ident) {
-    TagHeader header;
-    if (!TagHeader_from_buffer(&header, buffer)) {
-        GLog_Error("Failed to read tag header");
-        abort();
-    }
-    if (memcmp(header.ident, expected_ident, 4) != 0) {
-        GLog_Error("Expected tag %.4s but got %.4s", expected_ident, header.ident);
-        abort();
+namespace HavokTypes {
+    struct hkContainerHeapAllocator;
+}
+
+using namespace Havok::Tag;
+
+static TagHeader expect_tag(std::unique_ptr<IO::File> &buffer, const char expected_ident[5]) {
+    TagHeader header(buffer);
+    if (std::memcmp(header.ident, expected_ident, 4) != 0) {
+        GLog_Error("Expected tag {:.4s} but got {:.4s}", expected_ident, header.ident);
+        throw std::runtime_error("Unexpected tag");
     }
     return header;
 }
 
-int64 read_compressed_int(Buffer *buffer) {
-    uint8 b0, b1, b2, b3, b4, b5, b6, b7, b8;
+static void skip(const TagHeader &h, const std::unique_ptr<IO::File> &buffer) {
+    if (h.size < 8) throw std::runtime_error("Invalid tag size");
+    buffer->skip(h.size - 8);
+}
 
-    if (buffer->read(buffer, &b0, 1, NULL) != BUFFER_SUCCESS) {
-        return 0;
-    }
-    if ((b0 & 0x80) == 0) {
-        return b0;
-    }
+static std::unique_ptr<IO::File> slice_tag(const TagHeader &h, const std::unique_ptr<IO::File> &buffer) {
+    if (h.size < 8) throw std::runtime_error("Invalid tag size");
+    std::vector<uint8> tag_buffer(h.size - 8);
+    buffer->read_exact(tag_buffer);
+    return std::make_unique<IO::MemoryFile>(std::move(tag_buffer));
+}
 
-    const uint8 b0_shift3 = b0 >> 3;
-    switch (b0_shift3) {
+static uint64 read_u8(const std::unique_ptr<IO::File> &buffer) { return buffer->read_pod<uint8>(); }
+
+int64 read_compressed_int(const std::unique_ptr<IO::File> &buffer) {
+    const uint64 b0 = read_u8(buffer);
+
+    if ((b0 & 0x80u) == 0) return static_cast<int64>(b0);
+
+    const uint64 top = b0 >> 3;
+
+    auto read_be = [&](int n) -> uint64 {
+        uint64 v = b0;
+        for (int i = 0; i < n; ++i) v = (v << 8) | read_u8(buffer);
+        return v;
+    };
+
+    switch (top) {
         case 0x10:
         case 0x11:
         case 0x12:
@@ -45,716 +62,384 @@ int64 read_compressed_int(Buffer *buffer) {
         case 0x15:
         case 0x16:
         case 0x17:
-            if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS) { return 0; }
+            return static_cast<int64>(read_be(1) & 0x3FFFu);
 
-            return ((b0 << 8) | b1) & 0x3FFF;
         case 0x18:
         case 0x19:
         case 0x1A:
         case 0x1B:
-            if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS) { return 0; }
+            return static_cast<int64>(read_be(2) & 0x1FFFFFu);
 
-            return ((b0 << 16) | (b1 << 8) | b2) & 0x1FFFFF;
         case 0x1C:
-            if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b3, 1, NULL) != BUFFER_SUCCESS) { return 0; }
+            return static_cast<int64>(read_be(3) & 0x7FFFFFFu);
 
-            return ((b0 << 24) | (b1 << 16) | (b2 << 8) | b3) & 0x7FFFFFF;
         case 0x1D:
-            if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b3, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b4, 1, NULL) != BUFFER_SUCCESS) { return 0; }
+            return static_cast<int64>(read_be(4) & 0x7FFFFFFFFull);
 
-            return (((uint64) b0 << 32) | ((uint64) b1 << 24) | ((uint64) b2 << 16) | ((uint64) b3 << 8) | b4) &
-                   0x7FFFFFFFFULL;
         case 0x1E:
-            if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b3, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b4, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b5, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b6, 1, NULL) != BUFFER_SUCCESS ||
-                buffer->read(buffer, &b7, 1, NULL) != BUFFER_SUCCESS) { return 0; }
+            // b0 + 7 bytes
+            return static_cast<int64>(read_be(7) & 0x7FFFFFFFFFFFFFFull);
 
-            return (((uint64) b0 << 56) | ((uint64) b1 << 48) | ((uint64) b2 << 40) | ((uint64) b3 << 32) |
-                    ((uint64) b4 << 24) | ((uint64) b5 << 16) | ((uint64) b6 << 8) | b7) & 0x7FFFFFFFFFFFFFFULL;
         case 0x1F: {
-            int v6 = b0 & 7;
+            const uint64 v6 = b0 & 7u;
             if (v6 == 0) {
-                if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b3, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b4, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b5, 1, NULL) != BUFFER_SUCCESS) { return 0; }
-
-                return (((uint64) b0 << 40) | ((uint64) b1 << 32) | ((uint64) b2 << 24) | ((uint64) b3 << 16) |
-                        ((uint64) b4 << 8) | b5) & 0xFFFFFFFFFFULL;
+                return static_cast<int64>(read_be(5) & 0xFFFFFFFFFFull); // b0 + 5 bytes
             }
             if (v6 == 1) {
-                if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b3, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b4, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b5, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b6, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b7, 1, NULL) != BUFFER_SUCCESS ||
-                    buffer->read(buffer, &b8, 1, NULL) != BUFFER_SUCCESS) { return 0; }
-
-                return (((uint64) b1 << 56) | ((uint64) b2 << 48) | ((uint64) b3 << 40) | ((uint64) b4 << 32) |
-                        ((uint64) b5 << 24) | ((uint64) b6 << 16) | ((uint64) b7 << 8) | b8);
+                // full 64-bit in next 8 bytes (ignores b0)
+                uint64 v = 0;
+                for (int i = 0; i < 8; ++i) v = (v << 8) | read_u8(buffer);
+                return static_cast<int64>(v);
             }
-
             return 0;
         }
-        default: {
-        }
+        default:
+            break;
     }
 
-    if ((b0 & 0xc0) == 0x80) {
-        if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS) { return 0; }
-
-        return ((b0 & 0x3f) << 8) | b1;
+    // Legacy fallback paths you had:
+    if ((b0 & 0xC0u) == 0x80u) {
+        const uint64 b1 = read_u8(buffer);
+        return static_cast<int64>(((b0 & 0x3Fu) << 8) | b1);
     }
-    if ((b0 & 0xe0) == 0xc0) {
-        if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-            buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS) { return 0; }
-
-        return ((b0 & 0x1f) << 16) | (b1 << 8) | b2;
+    if ((b0 & 0xE0u) == 0xC0u) {
+        const uint64 b1 = read_u8(buffer);
+        const uint64 b2 = read_u8(buffer);
+        return static_cast<int64>(((b0 & 0x1Fu) << 16) | (b1 << 8) | b2);
     }
-    if ((b0 & 0xf0) == 0xe0) {
-        if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-            buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS ||
-            buffer->read(buffer, &b3, 1, NULL) != BUFFER_SUCCESS) { return 0; }
-
-        return ((b0 & 0x0f) << 24) | (b1 << 16) | (b2 << 8) | b3;
+    if ((b0 & 0xF0u) == 0xE0u) {
+        const uint64 b1 = read_u8(buffer);
+        const uint64 b2 = read_u8(buffer);
+        const uint64 b3 = read_u8(buffer);
+        return static_cast<int64>(((b0 & 0x0Fu) << 24) | (b1 << 16) | (b2 << 8) | b3);
     }
 
     return 0;
 }
 
-int32 read_compressed_int3(Buffer *buffer) {
-    uint8 firstInt;
-    int32 resultInt = 0;
-
-    if (buffer->read(buffer, &firstInt, 1, NULL) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to read first byte");
-        return -1;
-    }
-
-    bool flag1 = (firstInt & 0x80) == 0x80;
-    bool flag2 = (firstInt & 0xC0) == 0xC0;
-    bool flag3 = (firstInt & 0xE0) == 0xE0;
-
-    if (flag3) {
-        if (buffer->read(buffer, &resultInt, 4, NULL) != BUFFER_SUCCESS) {
-            GLog_Error("Failed to read compressed int");
-            return -1;
-        }
-        resultInt |= (firstInt & 0xf) << 4;
-    } else if (flag2) {
-        GLog_Error("Unhandled int compression : 0xC0!");
-        return -1;
-    } else if (flag1) {
-        uint8 secondInt;
-        if (buffer->read(buffer, &secondInt, 1, NULL) != BUFFER_SUCCESS) {
-            GLog_Error("Failed to read second byte");
-            return -1;
-        }
-        resultInt = secondInt | (((int32) firstInt & 0xf) << 8);
-    } else {
-        resultInt = firstInt;
-    }
-
-    return resultInt;
-}
-
-uint32 read_compressed_int2(Buffer *buffer) {
-    uint8 b0;
-    if (buffer->read(buffer, &b0, 1, NULL) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to read first byte");
-        return -1;
-    }
-    if ((b0 & 0x80) == 0) {
-        return b0;
-    }
-
-    uint8 b1, b2, b3;
-    uint32 result = 0;
-    uint8 b0_shift3 = b0 >> 3;
-
-    if (b0_shift3 >= 0x10 && b0_shift3 <= 0x17) {
-        if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS) {
-            GLog_Error("Failed to read second byte");
-            return -1;
-        }
-        result = ((b0 << 8) | b1) & 0x3fff;
-        return result;
-    }
-    if (b0_shift3 >= 0x18 && b0_shift3 <= 0x1B) {
-        if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-            buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS) {
-            GLog_Error("Failed to read bytes");
-            return -1;
-        }
-        result = ((b0 << 16) | (b1 << 8) | b2) & 0x1fffff;
-        return result;
-    }
-
-    if ((b0 & 0xc0) == 0x80) {
-        if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS) {
-            GLog_Error("Failed to read second byte");
-            return -1;
-        }
-        result = ((b0 & 0x3f) << 8) | b1;
-        return result;
-    }
-    if ((b0 & 0xe0) == 0xc0) {
-        if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-            buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS) {
-            GLog_Error("Failed to read bytes");
-            return -1;
-        }
-        result = ((b0 & 0x1f) << 16) | (b1 << 8) | b2;
-        return result;
-    }
-    if ((b0 & 0xf0) == 0xe0) {
-        if (buffer->read(buffer, &b1, 1, NULL) != BUFFER_SUCCESS ||
-            buffer->read(buffer, &b2, 1, NULL) != BUFFER_SUCCESS ||
-            buffer->read(buffer, &b3, 1, NULL) != BUFFER_SUCCESS) {
-            GLog_Error("Failed to read bytes");
-            return -1;
-        }
-        result = ((b0 & 0x0f) << 24) | (b1 << 16) | (b2 << 8) | b3;
-        return result;
-    }
-    GLog_Error("Unsupported packed value: 0x%02x", b0);
-    return -1;
-}
-
-
-void hk_print_indent(FILE *out, uint32 indent) {
-    for (uint32 i = 0; i < indent; ++i) {
-        fputc(' ', out);
-    }
-}
-
-void print_type_variable(const HKTagType *type, FILE *out) {
-    fprintf(out, "%s", String_cstr(&type->name));
-    DA_FORI(type->template_args, j) {
-        const HKTagTemplateArgument *arg = &type->template_args.items[j];
-        if (arg->is_class) {
-            assert(arg->type != NULL);
-            fprintf(out, "_%s", String_cstr(&arg->type->name));
-        } else if (arg->is_number) {
-            fprintf(out, "_%u", arg->number);
-        } else {
-            fprintf(out, "_%s", String_cstr(&arg->name));
-        }
-    }
-}
-
-void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent) {
-    if (type->members.count > 0) {
-        // fprintf(out, "struct %s { // size: %d, flags: %d\n", String_data(&type->name), type->size, type->flags);
-        fprintf(out, "typedef struct ");
-        print_type_variable(type, out);
-        fprintf(out, " { // size: %d, flags: %d, type: %s, format: %i\n", type->size, type->flags,
-                HKTAGTYPE_NAMES[type->data_type], type->format);
-        if (type->parent != NULL) {
-            hk_print_indent(out, indent + 4);
-            fprintf(out, "struct %s;\n", String_cstr(&type->parent->name));
-        }
-        DA_FORI(type->members, i) {
-            const HKTagTypeMember *member = &type->members.items[i];
-            hk_print_indent(out, indent + 4);
-            if (member->type == NULL) {
-                fprintf(out, "/* %s: UNKNOWN_TYPE */;\n", String_cstr(&member->name));
-            } else {
-                if (member->type->template_args.count > 0) {
-                    if (member->type->data_type == HKTYPE_ARRAY) {
-                        assert(member->type->template_args.count==2);
-                        const HKTagTemplateArgument *inner_type = &member->type->template_args.items[0];
-                        const HKTagTemplateArgument *size_arg = &member->type->template_args.items[1];
-                        assert(inner_type->is_class && inner_type->type!=NULL);
-                        if (size_arg->is_number) {
-                            fprintf(out, "%s %s[%u]; // offset: %d, flags: %d, size: %d\n",
-                                    String_cstr(&inner_type->type->name),
-                                    String_cstr(&member->name), size_arg->number, member->offset, member->flags,
-                                    member->type->size);
-                        } else {
-                            print_type_variable(member->type, out);
-
-                            fprintf(out, " %s; // offset: %d, flags: %d, size: %d\n",
-                                    String_cstr(&member->name), member->offset,
-                                    member->flags, member->type->size);
-                        }
-                    } else {
-                        if (member->type->data_type == HKTYPE_POINTER) {
-                            fprintf(out, "ItemId %s_id; // offset: %d, flags: %d, size: %d\n",
-                                    // String_data(&member->type->template_args.items[0].type->name),
-                                    String_cstr(&member->name), member->offset, member->flags, member->type->size);
-                        } else {
-                            fprintf(out, "%s", String_cstr(&member->type->name));
-                            for (uint32 j = 0; j < member->type->template_args.count; ++j) {
-                                const HKTagTemplateArgument *arg = &member->type->template_args.items[j];
-                                if (arg->is_class) {
-                                    assert(arg->type != NULL);
-                                    fprintf(out, "_%s", String_cstr(&arg->type->name));
-                                } else if (arg->is_number) {
-                                    fprintf(out, "_%u", arg->number);
-                                } else {
-                                    fprintf(out, "_%s", String_cstr(&arg->name));
-                                }
-                            }
-                            fprintf(out, " %s; // offset: %d, flags: %d, size: %d\n", String_cstr(&member->name),
-                                    member->offset, member->flags, member->type->size);
-
-                            // fprintf(out, "/* %s: GENERIC_TYPE */; // offset: %d, flags: %d, size: %d\n",
-                            //         String_data(&member->name), member->offset, member->flags, member->type->size);
-                        }
-                    }
-                } else {
-                    fprintf(out, "%s %s; // offset: %d, flags: %d, size: %d\n", String_cstr(&member->type->name),
-                            String_cstr(&member->name), member->offset, member->flags, member->type->size);
-                }
-            }
-        }
-        fprintf(out, "} ");
-        print_type_variable(type, out);
-        fprintf(out, ";\n");
-        return;
-    }
-
-    switch (type->data_type) {
-        case HKTYPE_POINTER: {
-            assert(type->template_args.count==1);
-            const HKTagTemplateArgument *inner_type = &type->template_args.items[0];
-            assert(inner_type->is_class && inner_type->type!=NULL);
-            // fprintf(out, "/* POINTER %s* */", String_data(&inner_type->type->name));
-            break;
-        }
-        case HKTYPE_RECORD: {
-            if (type->parent != NULL) {
-                fprintf(out, "typedef struct %s %s; // Size: %d", String_cstr(&type->parent->name),
-                        String_cstr(&type->name), type->size);
-            } else {
-                fprintf(out, "typedef struct %s {\n", String_cstr(&type->name));
-                hk_print_indent(out, indent + 4);
-                switch (type->size) {
-                    case 1: {
-                        fprintf(out, "uint8 unk0;\n");
-                        break;
-                    }
-                    case 8: {
-                        fprintf(out, "uint64 unk0;\n");
-                        break;
-                    }
-                    default: {
-                        fprintf(out, "uint8 data[%d];\n", type->size);
-                        break;
-                    }
-                }
-
-                fprintf(out, "} %s; // Size: %d", String_cstr(&type->name), type->size);
-                // fprintf(out, "/* EMPTY Record %s */", String_data(&type->name));
-            }
-            break;
-        }
-        case HKTYPE_STRING: {
-            // fprintf(out, "/* Simple string %s */", String_data(&type->name));
-            break;
-        }
-        case HKTYPE_FLOAT:
-        case HKTYPE_PRIMITIVE: {
-            if (type->parent != NULL) {
-                fprintf(out, "typedef %s ", String_cstr(&type->parent->name));
-                print_type_variable(type, out);
-                fprintf(out, ";");
-            } else {
-                // fprintf(out, "/* PRIMITIVE %s */", String_data(&type->name));
-            }
-            break;
-        }
-        case HKTYPE_BASIC: {
-            // fprintf(out, "/* UNK4 %s */", String_data(&type->name));
-            break;
-        }
-        case HKTYPE_OPAQUE: {
-            // fprintf(out, "/* UNK1 %s */", String_data(&type->name));
-            break;
-        }
-        case HKTYPE_ARRAY: {
-            if (type->template_args.count == 2) {
-                assert(type->template_args.count==2);
-                const HKTagTemplateArgument *inner_type = &type->template_args.items[0];
-                const HKTagTemplateArgument *size_arg = &type->template_args.items[1];
-                assert(inner_type->is_class && inner_type->type!=NULL);
-                if (size_arg->is_number) {
-                    // fprintf(out, "/* ARRAY %s[%u] */", String_data(&inner_type->type->name), size_arg->number);
-                } else {
-                    // fprintf(out, "/* ARRAY %s[%s] */", String_data(&inner_type->type->name),
-                    //         String_data(&size_arg->name));
-                }
-            } else if (type->template_args.count == 0) {
-                // fprintf(out, "/* ARRAY %s */", String_data(&type->name));
-            }
-            break;
-        }
-        default: {
-            GLog_Error("Unsupported data type: %s", HKTAGTYPE_NAMES[type->data_type]);
-            abort();
-        };
-    }
-    fprintf(out, "\n");
-}
-
-
-bool TagHeader_from_buffer(TagHeader *header, Buffer *buffer) {
-    uint32 size_and_flags;
-    if (buffer->read_uint32(buffer, &size_and_flags) != BUFFER_SUCCESS)return false;
-    // Size is havok tag files is in big endian;
+TagHeader::TagHeader(std::unique_ptr<IO::File> &buffer) {
+    auto size_and_flags = buffer->read_pod<uint32>();
     size_and_flags = BE32TOH(size_and_flags);
-    header->size = (size_and_flags & 0x0FFFFFFF);
-    header->flags = size_and_flags >> 28;
-    if (buffer->read(buffer, header->ident, 4, NULL) != BUFFER_SUCCESS)return false;
-    return true;
+    size = (size_and_flags & 0x0FFFFFFF);
+    flags = size_and_flags >> 28;
+    buffer->read(ident, 4);
 }
 
-bool SkipChunk_from_buffer(Buffer *buffer) {
-    TagHeader header;
-    TagHeader_from_buffer(&header, buffer);
-    if (buffer->skip(buffer, header.size - 8) != BUFFER_SUCCESS)return false;
-    return true;
+HKItem::HKItem(std::unique_ptr<IO::File> &buffer, const std::vector<SharedType> &types) {
+    const auto type_and_flags = buffer->read_pod<uint32>();
+    const uint32 type_id = (type_and_flags & 0xFFFFFF);
+    type_ = types[type_id];
+    flags = type_and_flags >> 24;
+    offset = buffer->read_pod<uint32>();
+    count = buffer->read_pod<uint32>();
 }
 
-bool SDKVTag_from_buffer(TagFile *tf, Buffer *buffer) {
-    const TagHeader type_header = expect_tag(buffer, "SDKV");
-    if (type_header.size - 8 < 8) {
-        GLog_Error("Invalid SDKV tag size: %d", type_header.size);
-        return false;
-    }
-    if (buffer->read(buffer, tf->ver, 8, NULL) != BUFFER_SUCCESS)return false;
-    return true;
+SharedType HKItem::type() const {
+    if (auto sp = type_.lock()) return sp;
+    throw std::runtime_error("Type for item is expired");
 }
 
-bool DATATag_from_buffer(TagFile *tf, Buffer *buffer) {
-    const TagHeader data_header = expect_tag(buffer, "DATA");
-    DA_init(&tf->data, uint8, data_header.size-8);
-    if (buffer->read(buffer, tf->data.items, data_header.size - 8, NULL) != BUFFER_SUCCESS)return false;
-    return true;
+void HKItem::type(const SharedType &type) {
+    type_ = type;
 }
 
-bool Strings_from_buffer(const TagHeader *header, DynamicArray_String *strings, Buffer *buffer) {
-    DA_init(strings, String, 1);
-    uint32 strings_data_left = header->size - 8;
-    while (strings_data_left > 0) {
-        String *str = (String *)DA_append_get(strings);
-        if (buffer->read_cstring(buffer, str) != BUFFER_SUCCESS)return false;
-        strings_data_left -= (String_size(str) + 1);
-    }
-    Buffer_align(buffer, 4);
-    return true;
+TagFile::TagFile(std::unique_ptr<IO::File> &&buffer) {
+    expect_tag(buffer, "TAG0");
+    read_SDKV_tag(buffer);
+    read_DATA_tag(buffer);
+    read_TYPE_tag(buffer);
+    read_INDX_tag(buffer);
+    post_process_types();
 }
 
-#define CHECK_RANGE(index, da, msg)  \
-    if (index < 0 || index >= (int64) da->count) { \
-        GLog_Error("" msg ": %lli", index); \
-        return false; \
+std::vector<std::string> read_strings(std::unique_ptr<IO::File> &buffer) {
+    std::vector<std::string> out;
+    while (buffer->remaining() > 0) {
+        std::string s;
+        buffer->read_cstring(s);
+        out.push_back(std::move(s));
     }
-
-bool read_type_identity(MemoryBuffer *mb, DynamicArray_HKTagType *types, const DynamicArray_String *class_names) {
-    Buffer *buffer = (Buffer *) mb;
-    const uint32 type_count = read_compressed_int(buffer);
-    if (type_count == 0) {
-        GLog_Error("Type count is zero");
-        abort();
-    }
-    DA_init(types, HKTagType, type_count);
-    types->count = type_count;
-    for (int i = 1; i < type_count; ++i) {
-        HKTagType *type = (HKTagType *)DA_at(types, i);
-        const int64 name_id = read_compressed_int(buffer);
-        const int64 template_args_count = read_compressed_int(buffer);
-        CHECK_RANGE(name_id, class_names, "Invalid type name id");
-        HKTagType_init(type, &class_names->items[name_id]);
-        DA_reserve(&type->template_args, template_args_count);
-        for (int j = 0; j < template_args_count; ++j) {
-            const int64 template_name_id = read_compressed_int(buffer);
-            const int64 template_type_id = read_compressed_int(buffer);
-            CHECK_RANGE(template_name_id, class_names, "Invalid template arg name id");
-            HKTagTemplateArgument *arg = (HKTagTemplateArgument *)DA_append_get(&type->template_args);
-            HKTagTemplateArgument_init(arg, &class_names->items[template_name_id]);
-            if (arg->is_class) {
-                if (template_type_id == 0) {
-                    GLog_Error("Template type id cannot be zero");
-                    return false;
-                }
-
-                if (template_type_id < 0 || template_type_id >= (int32) types->count) {
-                    GLog_Error("""Invalid template arg type id"": %lli", template_type_id);
-                    return false;
-                }
-                HKTagType *template_type = &types->items[template_type_id];
-                arg->type = template_type;
-            } else if (arg->is_number) {
-                arg->number = template_type_id;
-            } else {
-                GLog_Error("Unsupported template arg type");
-                return false;
-            }
-        }
-    }
-    Buffer_align(buffer, 4);
-    BufferError error;
-    const uint64 buffer_remaining = Buffer_remaining(buffer, &error);
-    if (buffer_remaining > 0) {
-        uint64 buffer_size;
-        buffer->getsize(buffer, &buffer_size);
-        GLog_Error("TNAM did not read entire buffer, expected %lld but got %lld", buffer_size,
-               buffer_size - buffer_remaining);
-        return false;
-    }
-    return true;
+    return out;
 }
 
-bool read_type_body(MemoryBuffer *mb, const DynamicArray_HKTagType *types, const DynamicArray_String *member_names) {
-    Buffer *buffer = (Buffer *) mb;
-    BufferError error;
-    while (Buffer_remaining(buffer, &error) > 0) {
-        if (error != BUFFER_SUCCESS) {
-            GLog_Error("Failed to get remaining size of TBOD data");
-            return false;
-        }
-        const int64 type_id = read_compressed_int(buffer);
-        CHECK_RANGE(type_id, types, "Invalid type id in TBOD");
-        if (type_id == 0)
+const HKItem &TagFile::get_item_info(uint32 i) {
+    if (i >= m_items.size()) {
+        GLog_Error("Item index {} out of range", i);
+        throw std::runtime_error("Item index out of range");
+    }
+    return m_items[i];
+}
+
+IO::MemoryViewFile TagFile::get_item_buffer(uint32 i) const {
+    if (i == 0 || i >= m_items.size()) {
+        GLog_Error("Item index {} out of range", i);
+        throw std::runtime_error("Item index out of range");
+    }
+    const auto &item = m_items[i];
+    return m_data->take_span(item.type()->size() * item.count, item.offset);
+}
+
+void TagFile::read_SDKV_tag(std::unique_ptr<IO::File> &buffer) {
+    const auto header = expect_tag(buffer, "SDKV");
+    if (header.size - 8 < 8) {
+        GLog_Error("Invalid SDKV tag size: {}", header.size);
+        throw std::runtime_error("Invalid SDKV tag size");
+    }
+    buffer->read(m_ver, 8);
+}
+
+void TagFile::read_DATA_tag(std::unique_ptr<IO::File> &buffer) {
+    const auto header = expect_tag(buffer, "DATA");
+    std::vector<uint8> data(header.size - 8);
+    buffer->read_exact(data);
+    m_data = std::make_unique<IO::MemoryFile>(std::move(data));
+}
+
+static void read_type_identities(std::unique_ptr<IO::File> &buffer,
+                                 const std::vector<std::string> &names,
+                                 std::vector<SharedType> &types) {
+    const auto type_count64 = read_compressed_int(buffer);
+    if (type_count64 <= 0) throw std::runtime_error("Type count is zero");
+    const size_t type_count = static_cast<size_t>(type_count64);
+
+    types.clear();
+    types.reserve(type_count);
+    types.emplace_back(std::make_shared<Type>()); // id 0 sentinel
+
+    for (size_t i = 1; i < type_count; ++i) {
+        types.emplace_back(std::make_shared<Type>(buffer, names));
+    }
+
+    buffer->align(4);
+    if (buffer->remaining() != 0) {
+        GLog_Error("TNAM did not read entire buffer, size={} remaining={}", buffer->get_size(), buffer->remaining());
+        throw std::runtime_error("TNAM did not read entire buffer");
+    }
+}
+
+template<typename T>
+const T &check_id_range(const uint64 id, const std::vector<T> &array) {
+    if (id >= array.size()) {
+        throw std::runtime_error("ID out of range");
+    }
+    return array[id];
+}
+
+
+void read_type_bodies(std::unique_ptr<IO::File> &buffer, std::vector<std::shared_ptr<Type> > &types,
+                      const std::vector<std::string> &member_names) {
+    while (buffer->remaining()) {
+        const auto type_id = read_compressed_int(buffer);
+        if (type_id == 0) {
             break;
-        const int64 parent_id = read_compressed_int(buffer);
-        CHECK_RANGE(type_id, types, "Invalid type id in TBOD");
-        HKTagType *type = &types->items[type_id];
-        if (parent_id != 0) {
-            type->parent = &types->items[parent_id];
         }
-        const HKTagFlags flags = (HKTagFlags)read_compressed_int(buffer);
-        if (flags & Format) {
-            int64 format = read_compressed_int(buffer);
-            uint8 data_type = format & 0xF;
+        const auto &type = check_id_range(type_id, types);
+        if (const auto parent_id = read_compressed_int(buffer); parent_id != 0) {
+            type->parent = check_id_range(parent_id, types);
+        }
+        const auto flags = static_cast<TypeFlags>(read_compressed_int(buffer));
+        if (flags & TypeFlags::Format) {
+            const auto format = read_compressed_int(buffer);
             type->format = format >> 4;
-            type->data_type = (HKTagDataType)data_type;
+            type->data_type = static_cast<DataType>(format & 0xF);
         }
-        if (flags & SubType) {
+        if (flags & TypeFlags::SubType) {
             type->sub_type = read_compressed_int(buffer);
         }
-        if (flags & Version) {
+        if (flags & TypeFlags::Version) {
             type->version = read_compressed_int(buffer);
         }
-        if (flags & SizeAlign) {
-            type->size = read_compressed_int(buffer);
-            type->align = read_compressed_int(buffer) & 0xFF;
+        if (flags & TypeFlags::SizeAlign) {
+            type->size(read_compressed_int(buffer));
+            type->align(read_compressed_int(buffer) & 0xFF);
         }
-
-        if (flags & Flags) {
+        if (flags & TypeFlags::Flags) {
             type->flags = read_compressed_int(buffer);
         }
+        if (flags & TypeFlags::Fields) {
+            const auto encoded = read_compressed_int(buffer);
+            const auto field_count = encoded & 0xffff;
+            const auto prop_count = encoded >> 16;
+            if (prop_count > 0) {
+                GLog_Warning("Unsupported properties in type body, prop count: {}", prop_count);
+            }
 
-        if (flags & Fields) {
-            const uint32 field_count = read_compressed_int(buffer);
-            DA_reserve(&type->members, field_count);
-            for (int i = 0; i < field_count; ++i) {
-                const int64 member_name_id = read_compressed_int(buffer);
-                const int64 member_flags = read_compressed_int(buffer);
-                const int64 member_offset = read_compressed_int(buffer);
-                const int64 member_unk = read_compressed_int(buffer);
-                CHECK_RANGE(member_name_id, member_names, "Invalid member name id");
-                HKTagTypeMember *member = (HKTagTypeMember *)DA_append_get(&type->members);
-                HKTagTypeMember_init(member, &member_names->items[member_name_id]);
-                member->flags = member_flags;
-                member->offset = member_offset;
-                assert(member_unk>0);
-                member->type = &types->items[member_unk];
+            type->members.reserve(field_count);
+            auto &members = type->members;
+            for (uint32 i = 0; i < field_count; i++) {
+                const auto member_name_id = read_compressed_int(buffer);
+                const auto member_flags = read_compressed_int(buffer);
+                const auto member_offset = read_compressed_int(buffer);
+                const auto member_type_id = read_compressed_int(buffer);
+                members.emplace_back(check_id_range(member_name_id, member_names),
+                                     member_flags, member_offset,
+                                     check_id_range(member_type_id, types));
             }
         }
-
-        if (flags & Interfaces) {
-            const int64 iface_count = read_compressed_int(buffer);
-            DA_reserve(&type->interfaces, iface_count);
-            for (int i = 0; i < iface_count; ++i) {
-                const int64 iface_type_id = read_compressed_int(buffer);
-                const int64 offset = read_compressed_int(buffer);
-                HKTagInterface *iface = (HKTagInterface *)DA_append_get(&type->interfaces);
-                iface->offset = offset;
-                iface->type = &types->items[iface_type_id];
+        if (flags & TypeFlags::Interfaces) {
+            const auto iface_count = read_compressed_int(buffer);
+            type->interfaces.reserve(iface_count);
+            auto &interfaces = type->interfaces;
+            for (uint32 i = 0; i < iface_count; i++) {
+                const auto iface_type_id = read_compressed_int(buffer);
+                const auto offset = read_compressed_int(buffer);
+                interfaces.emplace_back(iface_type_id, offset);
             }
         }
-        if (flags & Attribute) {
-            assert(false);
+        if (flags & TypeFlags::Attribute) {
+            GLog_Error("Unsupported Attribute flag in type body");
+            throw std::runtime_error("Unsupported Attribute flag in type body");
         }
     }
-    return true;
 }
 
-bool read_type_hashes(MemoryBuffer *mb, const DynamicArray_HKTagType *types) {
-    Buffer *buffer = (Buffer *) mb;
-    const int64 count = read_compressed_int(buffer);
-    for (int i = 0; i < count; i++) {
-        const int64 type_id = read_compressed_int(buffer);
-        uint32 hash;
-        if (buffer->read_uint32(buffer, &hash) != BUFFER_SUCCESS) {
-            GLog_Error("Failed to read type hash");
-            return false;
+void read_type_hashes(const std::unique_ptr<IO::File> &buffer, const std::vector<std::shared_ptr<Type> > &types) {
+    const auto count = read_compressed_int(buffer);
+    for (uint32 i = 0; i < count; i++) {
+        const auto type_id = read_compressed_int(buffer);
+        const auto hash = buffer->read_pod<uint32>();
+        if (type_id == 0 || type_id > types.size()) {
+            GLog_Error("Invalid type id in THSH: {}", type_id);
+            throw std::runtime_error("Invalid type id in THSH");
         }
-        CHECK_RANGE(type_id, types, "Invalid type id in THSH");
-        HKTagType *type = &types->items[type_id];
-        type->hash = hash;
+        types[type_id]->hash = hash;
     }
-    return true;
 }
 
-#define CHUNK_SLICE(buffer, slice_buffer, tag_name, FAIL_EXIT_LABEL){\
-const TagHeader tag_header = expect_tag(buffer, tag_name);\
-MemoryBuffer_allocate(slice_buffer, tag_header.size - 8);\
-Buffer *body_buffer = (Buffer *) slice_buffer;\
-if (buffer->read(buffer, slice_buffer->data, tag_header.size - 8, NULL) != BUFFER_SUCCESS) {\
-    GLog_Error("Failed to read TBOD buffer");\
-    goto FAIL_EXIT_LABEL;\
-}\
+SDKVersion TagFile::version() const {
+    if (!std::memcmp(m_ver, "2015", 4)) return SDKVersion::SDK2015;
+    if (!std::memcmp(m_ver, "2016", 4)) return SDKVersion::SDK2016;
+    if (!std::memcmp(m_ver, "2017", 4)) return SDKVersion::SDK2017;
+
+    GLog_Error("Unsupported SDK version: {:.8}", m_ver);
+    throw std::runtime_error("Unsupported SDK version");
 }
-bool TYPETag_from_buffer(TagFile *tf, Buffer *buffer) {
-    bool result = true;
-    MemoryBuffer *body_slice = MemoryBuffer_new();
+
+void TagFile::read_TYPE_tag(std::unique_ptr<IO::File> &buffer) {
     expect_tag(buffer, "TYPE");
+    skip(expect_tag(buffer, "TPTR"), buffer);
 
-    DynamicArray_String class_names = {};
-    DynamicArray_String member_names = {};
+    auto strings_buffer = slice_tag(expect_tag(buffer, "TSTR"), buffer);
+    const std::vector<std::string> class_names = read_strings(strings_buffer);
 
-    SkipChunk_from_buffer(buffer);
-    const TagHeader tstr_header = expect_tag(buffer, "TSTR");
-    Strings_from_buffer(&tstr_header, &class_names, buffer);
+    auto type_identity_buffer = slice_tag(expect_tag(buffer, "TNAM"), buffer);
+    read_type_identities(type_identity_buffer, class_names, m_types);
 
-    TagHeader fstr_header = {};
-    CHUNK_SLICE(buffer, body_slice, "TNAM", FAILED);
-    if (!read_type_identity(body_slice, &tf->types, &class_names)) {
-        GLog_Error("Failed to read TNAM data");
-        goto FAILED;
-    }
+    auto member_names_buffer = slice_tag(expect_tag(buffer, "FSTR"), buffer);
+    const std::vector<std::string> member_names = read_strings(member_names_buffer);
 
-    fstr_header = expect_tag(buffer, "FSTR");
-    Strings_from_buffer(&fstr_header, &member_names, buffer);
+    auto type_body_buffer = slice_tag(expect_tag(buffer, "TBOD"), buffer);
+    read_type_bodies(type_body_buffer, m_types, member_names);
 
-    CHUNK_SLICE(buffer, body_slice, "TBOD", FAILED);
-    if (!read_type_body(body_slice, &tf->types, &member_names)) {
-        GLog_Error("Failed to read TBOD data");
-        goto FAILED;
-    }
+    auto type_hashes_buffer = slice_tag(expect_tag(buffer, "THSH"), buffer);
+    read_type_hashes(type_hashes_buffer, m_types);
 
-    CHUNK_SLICE(buffer, body_slice, "THSH", FAILED);
-    if (!read_type_hashes(body_slice, &tf->types)) {
-        GLog_Error(": Failed to read type hashes");
-        goto FAILED;
-    }
-    // printf("i, Type Name, flags, size, align, format, Data Type\n");
-    // for (uint32 i = type_tag->types.count - 1; i > 0; i--) {
-    //     const HKType *type = &type_tag->types.items[i];
-    //     // printf as below, but in CSV format
-    //     // printf("%i, %s, 0x%08X, %d, %d, %d, %s\n", i, String_data(&type->name), type->flags, type->size, type->align,
-    //     // type->format, HKTYPE_NAMES[type->data_type]);
-    //     HKType_print(type, stdout, 0);
-    //     // printf("Type %d: %s, flags: 0x%08X, size: %d, align: %d, format: %d\n", i, String_data(&type->name), type->flags, type->size, type->align, type->format);
-    // }
-
-    SkipChunk_from_buffer(buffer);
-    goto EXIT;
-FAILED:
-    result = false;
-EXIT:
-    DA_free_with_inner(&class_names, {String_free((String*)it);});
-    DA_free_with_inner(&member_names, {String_free((String*)it);});
-    body_slice->close(body_slice);
-    return result;
+    skip(expect_tag(buffer, "TPAD"), buffer);
 }
 
-bool IndexTag_from_buffer(TagFile *tf, Buffer *buffer) {
-    TagHeader index_header;
-    TagHeader_from_buffer(&index_header, buffer);
-
-    if (memcmp(index_header.ident, "INDX", 4) != 0) {
-        GLog_Error(": Invalid INDX tag ident: %.4s", index_header.ident);
-        abort();
+void TagFile::read_INDX_tag(std::unique_ptr<IO::File> &buffer) {
+    auto index_chunk_buffer = slice_tag(expect_tag(buffer, "INDX"), buffer);
+    auto index_items_buffer = slice_tag(expect_tag(index_chunk_buffer, "ITEM"), index_chunk_buffer);
+    const auto item_count = index_items_buffer->get_size() / 12;
+    m_items.reserve(item_count);
+    for (uint32 i = 0; i < item_count; i++) {
+        m_items.emplace_back(index_items_buffer, m_types);
     }
-    uint32 approx_count = 0;
-    MemoryBuffer *mb = MemoryBuffer_new();
-    CHUNK_SLICE(buffer, mb, "ITEM", FAILED);
-    approx_count = mb->size / sizeof(HKItem);
-    DA_init(&tf->items, HKItem, approx_count);
-    while (Buffer_remaining((Buffer *) mb, NULL)) {
-        HKItem *item = (HKItem *)DA_append_get(&tf->items);
-        mb->read(mb, item, sizeof(HKItem), NULL);
-    }
-    SkipChunk_from_buffer(buffer);
-    mb->close(mb);
-    return true;
-FAILED:
-    mb->close(mb);
-    return false;
+    skip(expect_tag(index_chunk_buffer, "PTCH"), index_chunk_buffer);
 }
 
-bool TAG0Tag_from_buffer(TagFile *tf, Buffer *buffer) {
-    expect_tag(buffer, "TAG0");
-
-    if (!SDKVTag_from_buffer(tf, buffer)) {
-        GLog_Error(": Failed to read SDKV tag");
-        return false;
-    }
-    if (!DATATag_from_buffer(tf, buffer)) {
-        printf("[ERROR]: Failed to read DATA tag\n");
-        return false;
-    }
-    if (!TYPETag_from_buffer(tf, buffer)) {
-        printf("[ERROR]: Failed to read TYPE tag\n");
-        return false;
-    }
-    if (!IndexTag_from_buffer(tf, buffer)) {
-        printf("[ERROR]: Failed to read INDX tag\n");
-        return false;
+void TagFile::post_process_types() {
+    // Pass 0: resolve template arg ids -> WeakType
+    for (const auto &t: m_types) {
+        if (!t) continue;
+        for (auto &ta: t->template_args) {
+            if (ta.name.empty()) continue;
+            if (ta.name[0] == 't') {
+                const auto type_id = std::get<int64>(ta.value);
+                if (type_id <= 0 || type_id >= static_cast<int64>(m_types.size())) {
+                    GLog_Error("Invalid template argument type id: {}", type_id);
+                    throw std::runtime_error("Invalid template argument type id");
+                }
+                ta.value = WeakType{m_types[static_cast<size_t>(type_id)]};
+            }
+        }
     }
 
-    // DA_FORI(tf->items, i) {
-    //     if (i == 0)continue;
-    //     const HKItem *item = &tf->items.items[i];
-    //     const HKTagType type = tf->types.items[item->type];
-    //     printf("Index Item %d: type: %d (%s), flags: 0x%02X, offset: %d, count: %d\n", i, item->type,
-    //            type.name.buffer, item->flags, item->offset, item->count);
-    // }
+    // Canonicalize by unique_id
+    std::unordered_map<std::string, SharedType> canonical;
+    canonical.reserve(m_types.size());
 
-    return true;
-}
+    std::unordered_map<SharedType, SharedType> remap;
+    remap.reserve(m_types.size());
 
+    std::vector<SharedType> unique;
+    unique.reserve(m_types.size());
 
-bool TagFile_from_buffer(TagFile *tf, Buffer *buffer) {
-    TAG0Tag_from_buffer(tf, buffer);
-    return true;
-}
+    for (auto &t: m_types) {
+        if (!t) continue;
 
-HK_SDKVersion TagFile_get_sdk_version(TagFile *tf) {
-    if (memcmp(tf->ver, "2015", 4) == 0) {
-        return HK_SDK2015;
+        auto [it, inserted] = canonical.emplace(t->unique_id(), t);
+        if (inserted) {
+            unique.push_back(t);
+            continue;
+        }
+
+        SharedType &keep = it->second;
+
+        if (!t->members.empty() && keep->members.empty()) {
+            keep->members = t->members;
+        }
+        if (!t->template_args.empty() && keep->template_args.empty()) {
+            keep->template_args = t->template_args;
+        }
+
+        remap.emplace(t, keep);
     }
-    if (memcmp(tf->ver, "2016", 4) == 0) {
-        return HK_SDK2016;
-    }
-    if (memcmp(tf->ver, "2017", 4) == 0) {
-        return HK_SDK2017;
+
+    auto resolve_shared = [&](SharedType p) -> SharedType {
+        while (p) {
+            auto it = remap.find(p);
+            if (it == remap.end() || it->second == p) break;
+            p = it->second;
+        }
+        return p;
+    };
+
+    auto resolve_weak_inplace = [&](WeakType &w) {
+        if (auto sp = w.lock()) {
+            auto rsp = resolve_shared(sp);
+            if (rsp != sp) w = WeakType{rsp};
+        }
+    };
+
+    // Rewrite all references in canonical set
+    for (const auto &t: unique) {
+        if (!t) continue;
+
+        for (auto &ta: t->template_args) {
+            if (std::holds_alternative<WeakType>(ta.value)) {
+                resolve_weak_inplace(std::get<WeakType>(ta.value));
+            }
+        }
+
+        for (auto &m: t->members) {
+            auto mt = m.type();
+            auto rmt = resolve_shared(mt);
+            if (rmt != mt) m.type(rmt);
+        }
+
+        if (t->parent) {
+            auto rp = resolve_shared(t->parent);
+            if (rp != t->parent) t->parent = rp;
+        }
     }
 
-    printf("[ERROR]: Unsupported SDK version: %.8s\n", tf->ver);
-    abort();
-}
+    // Rewrite HKItem refs
+    for (auto &item: m_items) {
+        auto t = item.type();
+        auto rt = resolve_shared(t);
+        if (rt != t) item.type(rt);
+    }
 
-void TagFile_free(TagFile *tf) {
-    DA_free(&tf->data);
-    DA_free(&tf->items);
-    DA_free_with_inner(&tf->types, {HKTagType_free((HKTagType*)it);});
+    m_types = std::move(unique);
 }

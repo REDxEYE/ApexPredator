@@ -4,157 +4,122 @@
 
 #include "apex/hashes.h"
 #include "platform/logger.h"
-#include "utils/memory_profiling.h"
-#include "tracy/TracyC.h"
+#include "tracy/Tracy.hpp"
+#include "utils/hash_helper.h"
 
-void ArchiveManager_init(ArchiveManager *manager) {
-    DA_init(&manager->archives, Archive*, 4);
-}
+#include <ranges>
+#include <algorithm>
 
-void ArchiveManager_set_archive_loader_function(ArchiveManager *manager, const load_archive_fn func) {
-    manager->load_archive = func;
-}
-
-bool ArchiveManager_mounted(const ArchiveManager *manager, const uint32 hash) {
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        const Archive *ar = manager->archives.items[i];
-        uint32 ar_hash = 0;
-        if (ar->get_hash != NULL) {
-            ar_hash = ar->get_hash(ar);
-        }
-        if (ar_hash == hash) {
-            return true;
-        }
+bool ArchiveManager::is_mounted(const uint32 archive_hash) const {
+    for (const auto &archive: m_archives | std::views::values) {
+        if (archive->hash() == archive_hash) return true;
     }
     return false;
 }
 
-void ArchiveManager_add(const ArchiveManager *manager, Archive *archive) {
-    *(Archive **) DA_append_get(&manager->archives) = archive;
+void ArchiveManager::mount(std::unique_ptr<Archive> archive) {
+    m_archives.emplace(archive->hash(), std::move(archive));
 }
 
-// #define VERBOSE_ENSURE_PARENTS_LOADED
-
-void ensure_parents_loaded(const ArchiveManager *manager, const uint32 file_hash) {
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        const Archive *ar = manager->archives.items[i];
-        if (Archive_has_file_by_hash(ar, file_hash)) {
-            return;
-        }
-    }
-    uint64 parent_id = 0;
-#ifdef VERBOSE_ENSURE_PARENTS_LOADED
-    String* out_name;
-    if (!get_file_parent(file_hash, &parent_id, &out_name)) {
-        GLog_Warning("Failed to get parent for file hash 0x%08X", file_hash);
-        return;
-    }
-    String* parent_name =NULL;
-    if (parent_id!=0)
-        parent_name = find_name32((uint32) parent_id);
-
-    if (out_name!=NULL) {
-        GLog_Info("File \"%s\" not found, trying to load parent archive \"%s\"",
-                  String_cstr(out_name),
-                  parent_name!=NULL ? String_cstr(parent_name) : "unknown");
-        String_free(out_name);
-    } else {
-        GLog_Info("File with hash 0x%08X not found, trying to load parent archive \"%s\"",
-                  file_hash,
-                  parent_name!=NULL ? String_cstr(parent_name) : "unknown");
-    }
-
-    if (parent_id == 0) {
-        return;
-    }
-    String_free(parent_name);
-#else
-    if (!get_file_parent(file_hash, &parent_id, NULL)) {
-        GLog_Warning("Failed to get parent for file hash 0x%08X", file_hash);
-        return;
-    }
-
-    if (parent_id == 0) {
-        return;
-    }
-#endif
-
-    if (manager->load_archive != NULL) {
-        manager->load_archive(manager, parent_id);
-    }
+void ArchiveManager::unmount(const uint32 archive_hash) {
+    forget_dynamic_mount(archive_hash);
+    m_archives.erase(archive_hash);
 }
 
-bool ArchiveManager_get_file_by_hash(const ArchiveManager *manager, const uint32 path, MemoryBuffer *mb) {
-    TracyCZoneN(ctx, "ArchiveManager_get_file_by_hash", 1);
+void ArchiveManager::unmount(const std::string_view name) {
+    unmount(hash_string(name));
+}
 
-    ensure_parents_loaded(manager, path);
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        Archive *ar = manager->archives.items[i];
-        if (Archive_get_file_by_hash(ar, path, mb)) {
-            // String *filename = find_name32(path);
-            // if (filename != NULL) {
-            //     // GLog_Info("File \"%s\" found in archive \"%s\"", String_cstr(filename),
-            //     //        String_cstr(Archive_get_name(ar)));
-            //     String_free(filename);
-            // }
-            // else
-            //     GLog_Info("File with hash %08X found in archive \"%s\"", path,
-            //            String_cstr(Archive_get_name(ar)));
-            TracyCZoneEnd(ctx)
-            return true;
-        }
+bool ArchiveManager::has_file(const uint32 hash) const {
+    ZoneScoped;
+    for (const auto &archive: m_archives | std::views::values) {
+        if (archive->has_file(hash)) return true;
     }
-    GLog_Error("File with hash %08X not found in any archive", path);
-    TracyCZoneEnd(ctx)
     return false;
 }
 
-bool ArchiveManager_has_file_by_hash(const ArchiveManager *manager, const uint32 hash) {
-    TracyCZoneN(ctx, "ArchiveManager_has_file_by_hash", 1);
-    ensure_parents_loaded(manager, hash);
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        const Archive *ar = manager->archives.items[i];
-        if (Archive_has_file_by_hash(ar, hash)) {
-            TracyCZoneEnd(ctx)
-            return true;
-        }
-    }
-    // Try to load parents and try again
-    ensure_parents_loaded(manager, hash);
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        const Archive *ar = manager->archives.items[i];
-        if (Archive_has_file_by_hash(ar, hash)) {
-            TracyCZoneEnd(ctx)
-            return true;
-        }
-    }
-    TracyCZoneEnd(ctx)
-    return false;
+bool ArchiveManager::has_file(const std::string_view name) const {
+    return has_file(hash_string(name));
 }
 
-void ArchiveManager_get_all_entries(const ArchiveManager *manager, DynamicArray_ArchiveEntry *entries) {
-    DA_init(entries, ArchiveEntry, 16);
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        const Archive *ar = manager->archives.items[i];
-        Archive_get_all_entries(ar, entries);
+std::unique_ptr<IO::File> ArchiveManager::get_file(const uint32 hash) {
+    ZoneScoped
+    ensure_parent_loaded(hash);
+
+    for (const auto &archive: m_archives | std::views::values) {
+        if (auto file = archive->get_file(hash); file) {
+            return std::move(file);
+        }
+    }
+    GLog_Error("File with hash 0x{:08X} not found in any archive", hash);
+    return nullptr;
+}
+
+std::unique_ptr<IO::File> ArchiveManager::get_file(const std::string_view name) {
+    return get_file(hash_string(name));
+}
+
+void ArchiveManager::all_entries(std::vector<ArchiveEntry> &entries) const {
+    ZoneScoped;
+    for (const auto &archive: m_archives | std::views::values) {
+        archive->all_entries(entries);
     }
 }
 
-void ArchiveManager_foreach_file(const ArchiveManager *manager,
-                                 const foreach_callback callback,
-                                 void *user_data) {
-    for (uint32 i = 0; i < manager->archives.count; ++i) {
-        const Archive *ar = manager->archives.items[i];
-        if (!Archive_foreach_file(ar, callback, user_data)) {
-            break;
+std::pair<bool, uint32> ArchiveManager::ensure_parent_loaded(const uint32 hash) {
+    auto parent_opt = get_file_parent(hash);
+    if (!parent_opt || *parent_opt == 0) return {false, 0};
+
+    const auto parent_hash = *parent_opt;
+    const auto was_mounted = is_mounted(parent_hash);
+    const auto mounted = m_load_archive(*this, parent_hash);
+
+    if (mounted.first) {
+        touch_dynamic_mount(mounted.second != 0 ? mounted.second : parent_hash);
+        evict_dynamic_mounts();
+    }
+    else if (was_mounted && m_dynamic_mount_set.contains(parent_hash)) {
+        touch_dynamic_mount(parent_hash);
+    }
+
+    return mounted;
+}
+
+void ArchiveManager::touch_dynamic_mount(const uint32 hash) {
+    if (!m_dynamic_mount_set.insert(hash).second) {
+        const auto it = std::ranges::find(m_dynamic_mount_order, hash);
+        if (it != m_dynamic_mount_order.end()) {
+            m_dynamic_mount_order.erase(it);
+        }
+    }
+    m_dynamic_mount_order.push_back(hash);
+}
+
+void ArchiveManager::evict_dynamic_mounts() {
+    while (m_dynamic_mount_order.size() > MAX_DYNAMIC_MOUNTS) {
+        const auto oldest_hash = m_dynamic_mount_order.front();
+        m_dynamic_mount_order.pop_front();
+        m_dynamic_mount_set.erase(oldest_hash);
+
+        for (auto it = m_archives.begin(); it != m_archives.end();) {
+            if (it->second->hash() == oldest_hash) {
+                GLog_Info("Evicting {}", it->second->get_name());
+                it = m_archives.erase(it);
+            }
+            else {
+                ++it;
+            }
         }
     }
 }
 
-void ArchiveManager_free(ArchiveManager *manager) {
-    DA_free_with_inner(&manager->archives, {
-                       Archive** ar= ( Archive**)it;
-                       Archive_free(*ar);
-                       mp_free(*ar);
-                       });
+void ArchiveManager::forget_dynamic_mount(const uint32 hash) {
+    if (!m_dynamic_mount_set.erase(hash)) {
+        return;
+    }
+
+    const auto it = std::ranges::find(m_dynamic_mount_order, hash);
+    if (it != m_dynamic_mount_order.end()) {
+        m_dynamic_mount_order.erase(it);
+    }
 }

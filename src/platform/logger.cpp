@@ -1,150 +1,62 @@
 // Created by RED on 17.01.2026.
 
-#include <stdio.h>
 #include "platform/logger.h"
+#include <format>
+#include <string_view>
+#include <iostream>
+#include <memory>
 
-#include "int_def.h"
+// Logger implementation
+Logger::Logger(std::ostream& output) : output_(&output) {}
 
-struct Logger {
-    FILE *output;
-};
-
-
-void Log_init(Logger *log, FILE *output) {
-    log->output = output;
+void Logger::set_output(std::ostream& output) {
+    output_ = &output;
 }
 
-void Log_write(const Logger *log, const char *prefix, const char *source, uint32 source_line, const char *fmt,
-               va_list va) {
-    if (source != NULL) {
-        fprintf(log->output, "%s [%s:%d]: ", prefix, source, source_line);
+void Logger::log(const LogLevel level, const std::string_view message) const {
+    log_s(level, "", 0, message);
+}
+
+void Logger::log_s(const LogLevel level, std::string_view source, uint32 source_line, std::string_view message) const {
+    std::string_view prefix;
+    switch (level) {
+        case LogLevel::Info:    prefix = "[INFO ]"; break;
+        case LogLevel::Warning: prefix = "[WARN ]"; break;
+        case LogLevel::Error:   prefix = "[ERROR]"; break;
+    }
+
+    if (!source.empty() && source_line > 0) {
+        *output_ << std::format("{} [{}:{}]: {}\n", prefix, source, source_line, message);
     } else {
-        fprintf(log->output, "%s: ", prefix);
+        *output_ << std::format("{}: {}\n", prefix, message);
     }
-    vfprintf(log->output, fmt, va);
-    fprintf(log->output, "\n");
+    output_->flush();
 }
 
-void Log_info(const Logger *log, const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_info_va(log, fmt, args);
-    va_end(args);
-}
-
-void Log_warning(const Logger *log, const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_warning_va(log, fmt, args);
-    va_end(args);
-}
-
-void Log_error(const Logger *log, const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_error_va(log, fmt, args);
-    va_end(args);
-}
-
-void Log_info_s(const Logger *log, const char* source, uint32 source_line, const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_info_s_va(log, source, source_line, fmt, args);
-    va_end(args);
-}
-
-void Log_warning_s(const Logger *log, const char* source, uint32 source_line, const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_warning_s_va(log, source, source_line, fmt, args);
-    va_end(args);
-}
-
-void Log_error_s(const Logger *log, const char* source, uint32 source_line, const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_error_s_va(log, source, source_line, fmt, args);
-    va_end(args);
-}
-
-void Log_info_va(const Logger *log, const char *fmt, va_list va) {
-    Log_write(log, "[INFO ]", NULL, 0, fmt, va);
-}
-
-void Log_warning_va(const Logger *log, const char *fmt, va_list va) {
-    Log_write(log, "[WARN ]", NULL, 0, fmt, va);
-}
-
-void Log_error_va(const Logger *log, const char *fmt, va_list va) {
-    Log_write(log, "[ERROR]", NULL, 0, fmt, va);
-}
-
-void Log_info_s_va(const Logger* log, const char* source, uint32 source_line, const char* fmt, va_list va) {
-    Log_write(log, "[INFO ]", source, source_line, fmt, va);
-}
-void Log_warning_s_va(const Logger* log, const char* source, uint32 source_line, const char* fmt, va_list va) {
-    Log_write(log, "[WARN ]", source, source_line, fmt, va);
-}
-void Log_error_s_va(const Logger* log, const char* source, uint32 source_line, const char* fmt, va_list va) {
-    Log_write(log, "[ERROR]", source, source_line, fmt, va);
-}
-
-
-Logger *GLog_get() {
-    static Logger g_Logger = {};
-    if (g_Logger.output == NULL) {
-        Log_init(&g_Logger, stdout);
+// Global logger namespace implementation
+namespace GLog {
+    namespace {
+        std::unique_ptr<Logger> g_logger;
     }
-    return &g_Logger;
-}
 
+    void init(std::ostream& output) {
+        g_logger = std::make_unique<Logger>(output);
+    }
 
-void GLog_info(const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_info_va(GLog_get(), fmt, args);
-    va_end(args);
-}
-
-void GLog_warning(const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_warning_va(GLog_get(), fmt, args);
-    va_end(args);
-}
-
-void GLog_error(const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_error_va(GLog_get(), fmt, args);
-    va_end(args);
-}
-
-void GLog_info_s(const char* source, uint32 source_line, const char* fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_info_s_va(GLog_get(), source, source_line, fmt, args);
-    va_end(args);
-}
-void GLog_warning_s(const char* source, uint32 source_line, const char* fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_warning_s_va(GLog_get(), source, source_line, fmt, args);
-    va_end(args);
-}
-void GLog_error_s(const char* source, uint32 source_line, const char* fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    Log_error_s_va(GLog_get(), source, source_line, fmt, args);
-    va_end(args);
-}
-
-const char * GLog_file_name(const char *name) {
-    const char* last_slash = name;
-    for (const char* c = name; *c != '\0'; c++) {
-        if (*c == '/' || *c == '\\') {
-            last_slash = c + 1;
+    Logger& get() {
+        if (!g_logger) {
+            g_logger = std::make_unique<Logger>(std::cout);
         }
+        return *g_logger;
     }
-    return last_slash;
+
+    std::string_view file_name(const std::string_view name) {
+        size_t last_slash = 0;
+        for (size_t i = 0; i < name.size(); ++i) {
+            if (name[i] == '/' || name[i] == '\\') {
+                last_slash = i + 1;
+            }
+        }
+        return name.substr(last_slash);
+    }
 }

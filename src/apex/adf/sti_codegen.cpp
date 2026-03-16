@@ -1,682 +1,632 @@
-// // Created by RED on 07.10.2025.
-#include <stdio.h>
+// Created by RED on 07.10.2025.
+#include <vector>
+#include <filesystem>
+#include <fstream>
+#include <ranges>
+#include <set>
 
-#include "utils/common.h"
 #include "utils/lookup3.h"
 #include "apex/adf/sti.h"
 #include "platform/logger.h"
-#include "utils/string.h"
 
-void STI_dump_type(STI_TypeLibrary *lib, const STI_Type *type, FILE *output);
+using namespace STI;
 
-void STI_generate_init_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output);
+static std::set<uint32> g_processed_hashes{};
 
-void STI_generate_read_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output);
+// Forward declarations
+void emit_type(const TypeLibrary &lib, const Type &type, std::ofstream &header_stream);
 
-void STI_generate_free_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output);
-
-void STI_generate_print_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output);
-
-void STI_generate_register_function(STI_TypeLibrary *lib, const String *namespace_, FILE *output);
-
-
-void STI_start_type_dump(STI_TypeLibrary *lib) {
-    DA_init(&lib->exported_hashes, uint32, 64);
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_INT8;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_UINT8;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_INT16;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_UINT16;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_INT32;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_UINT32;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_INT64;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_UINT64;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_FLOAT32;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_FLOAT64;
-    *(uint32 *) (DA_append_get(&lib->exported_hashes)) = STI_TYPE_HASH_STRING;
+// Helper functions
+static const Type &get_type_or_throw(const TypeLibrary &lib, uint32 type_hash) {
+    const auto type_opt = lib.get_type(type_hash);
+    if (!type_opt) {
+        GLog_Error("Failed to find type with hash 0x{:08X}", type_hash);
+        throw std::runtime_error("Failed to find type");
+    }
+    return type_opt->get();
 }
 
+static bool should_skip_type_info(DataType type) {
+    return type == DataType::Bitfield ||
+           type == DataType::Primitive ||
+           type == DataType::Pointer ||
+           type == DataType::DeferredType ||
+           type == DataType::StringType;
+}
 
-bool is_complex_type(const STI_TypeLibrary *lib, const STI_Type *type) {
-    if (type->type == STI_Structure) {
-        bool res = false;
-        for (int i = 0; i < type->data.struct_data.members.count; ++i) {
-            const STI_Type *member_type = static_cast<const STI_Type *>(DM_get(&lib->types, type->data.struct_data.members.items[i].type_hash));
-            if (member_type->type == STI_Array || member_type->type == STI_StringType) {
-                return true;
+static bool is_simple_type(DataType type) {
+    return type == DataType::Primitive ||
+           type == DataType::Bitfield ||
+           type == DataType::StringType ||
+           type == DataType::StringHash ||
+           type == DataType::DeferredType;
+}
+
+void emit_type_forward_declaration(const Type &type, std::ofstream &header_stream) {
+    if (type.type == DataType::Structure) {
+        header_stream << std::format("struct {}; // size: {}\n", type.type_name(), type.size);
+    }else if (type.type==DataType::Enumeration) {
+        header_stream << std::format("enum class {}: uint{};\n", type.type_name(), type.size * 8);
+    }
+}
+
+void emit_struct(const TypeLibrary &lib, const Type &type, std::ofstream &header_stream) {
+    const auto &members = std::get<std::vector<StructMember> >(type.data);
+
+    // Emit dependencies first
+    for (const auto &member: members) {
+        const Type &member_type = get_type_or_throw(lib, member.type_hash);
+        emit_type(lib, member_type, header_stream);
+    }
+
+    header_stream << "extern ADF::TypeInfo " << type.type_name() << "_TI;\n";
+    header_stream << std::format("struct {}: ADF::BaseType {{\n", type.type_name());
+
+    // Emit member declarations
+    for (const auto &member: members) {
+        const Type &member_type = get_type_or_throw(lib, member.type_hash);
+
+        switch (member_type.type) {
+            case DataType::Primitive:
+            case DataType::Bitfield:
+            case DataType::StringType:
+            case DataType::StringHash:
+            case DataType::Enumeration:
+            case DataType::Pointer:
+            case DataType::Structure:
+                header_stream << std::format("    {} {}; // offset: {}, size: {}\n",
+                                             member_type.type_name(), member.name, member.offset, member.size);
+                break;
+
+            case DataType::Array: {
+                const auto &type_info = std::get<TypeAndSize>(member_type.data);
+                const Type &inner_type = get_type_or_throw(lib, type_info.type_hash);
+                header_stream << std::format("    Vector<{}> {}; // offset: {}, size: {}\n",
+                                             inner_type.type_name(), member.name, member.offset, member.size);
+                break;
             }
-            res |= is_complex_type(lib, member_type);
+
+            case DataType::InlineArray: {
+                const auto &type_info = std::get<TypeAndSize>(member_type.data);
+                const Type &inner_type = get_type_or_throw(lib, type_info.type_hash);
+                header_stream << std::format("    std::array<{}, {}> {}; // offset: {}, size: {}\n",
+                                             inner_type.type_name(), type_info.count, member.name, member.offset,
+                                             member.size);
+                break;
+            }
+
+            case DataType::DeferredType:
+                header_stream << std::format("    std::unique_ptr<ADF::BaseType> {}; // offset: {}, size: {}\n",
+                                             member.name, member.offset, member.size);
+                break;
+
+            case DataType::Recursive:
+                GLog_Error("Type {} is not supported yet", member_type.type_name());
+                break;
         }
-        return res;
     }
-    if (type->type == STI_InlineArray) {
-        const STI_Type *inner_type = static_cast<const STI_Type *>(DM_get(&lib->types, type->data.array_data.type_hash));
-        return is_complex_type(lib, inner_type) || inner_type->type == STI_StringType;
-    }
-    if (type->type == STI_Pointer) {
-        const STI_Type *inner_type = static_cast<const STI_Type *>(DM_get(&lib->types, type->data.deferred_data.type_hash));
-        return is_complex_type(lib, inner_type);
-    }
-    if (type->type == STI_Alias) {
-        const STI_Type *inner_type = static_cast<const STI_Type *>(DM_get(&lib->types, type->data.deferred_data.type_hash));
-        return is_complex_type(lib, inner_type);
-    }
-    if (type->type == STI_Enumeration ||
-        type->type == STI_Primitive ||
-        type->type == STI_Bitfield ||
-        type->type == STI_StringType ||
-        type->type == STI_StringHash) {
-        return false;
-    }
-    return true;
+
+    header_stream << "    void read(IO::File& buffer) override;\n";
+    header_stream << "    void print(std::ostream &out) const override;\n";
+    header_stream << "    void to_json(std::ostream &out) const override;\n";
+
+    header_stream << "}; // size: " << type.size << "\n\n";
 }
 
+void emit_array_type(const TypeLibrary &lib, const Type &type, std::ofstream &header_stream,
+                     const std::string &array_kind) {
+    const auto &type_info = std::get<TypeAndSize>(type.data);
+    const Type &inner_type = get_type_or_throw(lib, type_info.type_hash);
+    emit_type(lib, inner_type, header_stream);
 
-void STI_dump_type(STI_TypeLibrary *lib, const STI_Type *type, FILE *output) {
-    if (DA_contains(&lib->exported_hashes, &type->hash, compare_hashes)) {
+    header_stream << "// " << array_kind << " of " << inner_type.type_name() << "\n";
+    header_stream << "extern ADF::TypeInfo " << type.name() << "_TI;\n\n";
+}
+
+void emit_array(const TypeLibrary &lib, const Type &type, std::ofstream &header_stream) {
+    emit_array_type(lib, type, header_stream, "Array");
+}
+
+void emit_inline_array(const TypeLibrary &lib, const Type &type, std::ofstream &header_stream) {
+    emit_array_type(lib, type, header_stream, "Inline array");
+}
+
+void emit_enum(const Type &type, std::ofstream &header_stream) {
+    const auto &members = std::get<std::vector<EnumMember> >(type.data);
+    header_stream << std::format("enum class {}: uint{} {{\n", type.type_name(), type.size * 8);
+    for (const auto &member: members) {
+        header_stream << std::format("    {} = {},\n", member.name, member.value);
+    }
+    header_stream << "};\n\n";
+    header_stream << "extern ADF::TypeInfo " << type.type_name() << "_TI;\n\n";
+}
+
+void emit_string_hash(const Type &type, std::ofstream &header_stream) {
+    header_stream << "extern ADF::TypeInfo " << type.name() << "_TI;\n\n";
+}
+
+void emit_type(const TypeLibrary &lib, const Type &type, std::ofstream &header_stream) {
+    if (g_processed_hashes.contains(type.hash)) {
         return;
     }
-    DA_append(&lib->exported_hashes, &type->hash);
-    switch (type->type) {
-        case STI_Structure: {
-            const DynamicArray_STI_StructMember *members = &type->data.struct_data.members;
-            for (int i = 0; i < members->count; ++i) {
-                const STI_StructMember *member = &members->items[i];
-                const STI_Type *member_type = static_cast<const STI_Type *>(DM_get(&lib->types, member->type_hash));
-                if (member_type == NULL) {
-                    GLog_Error("Failed to find type with hash 0x%08X", member->type_hash);
-                    continue;
-                }
-                STI_dump_type(lib, member_type, output);
-            }
-            fprintf(output, "#define STI_TYPE_HASH_%s 0x%08X\n", String_cstr(&type->name), type->hash);
-            fprintf(output, "typedef struct %s{\n", String_cstr(&type->name));
-            fprintf(output, "    const STITypeInfo* type_info_;\n");
-            for (int i = 0; i < members->count; ++i) {
-                const STI_StructMember *member = &members->items[i];
-                const STI_Type *member_type = STI_TypeLibrary_get_type(lib, member->type_hash);
-                const String *member_name = &member->name;
-                const String *type_name = &member_type->name;
+    g_processed_hashes.emplace(type.hash);
 
-
-                switch (member_type->type) {
-                    case STI_InlineArray: {
-                        const STI_Type *inner_type = STI_TypeLibrary_get_type(
-                            lib, member_type->data.array_data.type_hash);
-                        fprintf(output, "    %s %s[%i];", String_cstr(&inner_type->name),
-                                String_cstr(member_name), member_type->data.array_data.count);
-                        break;
-                    }
-                    case STI_Array: {
-                        fprintf(output, "    %s %s;", String_cstr(&member_type->name),
-                                String_cstr(member_name));
-                        break;
-                    }
-                    default: {
-                        fprintf(output, "    %s %s;", String_cstr(type_name), String_cstr(member_name));
-                        break;
-                    }
-                }
-                fprintf(output, " // offset: %i, size: %i\n", member->offset, member_type->size);
-            }
-            fprintf(output, "} %s; // size: %i\n", String_cstr(&type->name), type->size);
-            fprintf(output, "\n");
+    switch (type.type) {
+        case DataType::Structure:
+            emit_struct(lib, type, header_stream);
             break;
-        }
-        case STI_Enumeration: {
-            fprintf(output, "#define STI_TYPE_HASH_%s 0x%08X\n", String_cstr(&type->name), type->hash);
-            fprintf(output, "typedef enum{ // size: %i\n", type->size);
-            const DynamicArray_STI_EnumMember members = type->data.enum_data.members;
-            for (int i = 0; i < members.count; ++i) {
-                fprintf(output, "    %s = %u,\n", String_cstr(&members.items[i].name), members.items[i].value);
-            }
-            const uint32 size_force_value = (1 << (type->size * 8 - 1)) - 1;
-            fprintf(output, "    %s_ForceSize = 0x%08X\n", String_cstr(&type->name), size_force_value);
-            fprintf(output, "} %s;\n", String_cstr(&type->name));
-            fprintf(output, "\n");
+        case DataType::Primitive:
+        case DataType::StringType:
+        case DataType::Pointer:
+        case DataType::Bitfield:
+        case DataType::DeferredType:
+            // Do nothing
             break;
-        }
-        case STI_Array: {
-            const STI_Type *inner_array_type = STI_TypeLibrary_get_type(lib, type->data.array_data.type_hash);
-            fprintf(output, "#define STI_TYPE_HASH_%s 0x%08X\n", String_cstr(&type->name), type->hash);
-            fprintf(output, "typedef struct %s {\n", String_cstr(&type->name));
-            fprintf(output, "    const STITypeInfo* type_info_;\n");
-            fprintf(output, "    uint32 count;\n");
-            fprintf(output, "    %s* items;\n", String_cstr(&inner_array_type->name));
-            fprintf(output, "} %s; // size: %i\n", String_cstr(&type->name), type->size);
-            fprintf(output, "\n");
-            // STI_dump_type(lib, inner_array_type, output);
+        case DataType::InlineArray:
+            emit_inline_array(lib, type, header_stream);
             break;
-        }
-        case STI_DeferredType:
-        case STI_Primitive: {
+        case DataType::Array:
+            emit_array(lib, type, header_stream);
             break;
-        }
-        case STI_InlineArray: {
-            const STI_Type *inner_array_type = STI_TypeLibrary_get_type(lib, type->data.array_data.type_hash);
-            STI_dump_type(lib, inner_array_type, output);
+        case DataType::Enumeration:
+            emit_enum(type, header_stream);
             break;
-        }
-        case STI_StringHash:
-        case STI_Bitfield:
-        case STI_Alias:
-        case STI_Pointer: {
-            return;
-        }
-        default: {
-            printf("Unknown type %i\n", type->type);
-            assert(false && "Unknown type");
-        }
-            fprintf(output, "extern STITypeInfo %s_TI;\n", String_cstr(&type->name));
+        case DataType::StringHash:
+            emit_string_hash(type, header_stream);
+            break;
+        default:
+            throw std::runtime_error("Unsupported type");
     }
 }
 
-void STI_generate_init_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output) {
-    const bool need_init = is_complex_type(lib, type) || type->type == STI_Array || type->type == STI_Structure;
-    if (!need_init ||
-        type->type == STI_InlineArray ||
-        type->type == STI_DeferredType ||
-        type->type == STI_Alias ||
-        type->type == STI_StringType
-    ) {
-        return;
+void emit_types(const TypeLibrary &lib, std::ofstream &fwd_decl_stream, std::ofstream &header_stream) {
+    fwd_decl_stream << "namespace ADFTypes {\n\n";
+    for (const auto &type: lib.types() | std::views::values) {
+        emit_type_forward_declaration(type, fwd_decl_stream);
+    }
+    fwd_decl_stream << "};\n";
+
+    header_stream << "namespace ADFTypes {\n\n";
+    header_stream << "\n";
+
+    for (const auto &type: lib.types() | std::views::values) {
+        emit_type(lib, type, header_stream);
     }
 
-    printf("%s\n", String_cstr(&type->name));
-    fprintf(output, "void %s_init(%s *obj) {\n", String_cstr(&type->name), String_cstr(&type->name));
-    if (type->type == STI_Structure) {
-        fprintf(output, "    obj->type_info_ = &%s_TI;\n", String_cstr(&type->name));
-        const DynamicArray_STI_StructMember *members = &type->data.struct_data.members;
-        for (int i = 0; i < members->count; ++i) {
-            const STI_StructMember *member = &members->items[i];
-            const STI_Type *member_type = STI_TypeLibrary_get_type(lib, member->type_hash);
-            const String *member_name = &member->name;
-
-            const bool member_is_complex = is_complex_type(lib, member_type);
-            const bool member_need_init = member_is_complex || member_type->type == STI_Array || member_type->type ==
-                                          STI_Structure;
-
-            switch (member_type->type) {
-                case STI_InlineArray: {
-                    if (member_need_init) {
-                        const STI_Type *inner_type = STI_TypeLibrary_get_type(
-                            lib, member_type->data.array_data.type_hash);
-                        if (inner_type->type == STI_StringType) {
-                            continue;
-                        }
-                        fprintf(output, "    for(int i = 0; i < %i; ++i) {\n", member_type->data.array_data.count);
-                        fprintf(output, "        %s_init(&obj->%s[i]);\n", String_cstr(&inner_type->name),
-                                String_cstr(member_name));
-                        fprintf(output, "    }\n");
-                    }
-                    break;
-                }
-                case STI_Array: {
-                    fprintf(output, "    %s_init(&obj->%s);\n", String_cstr(&member_type->name),
-                            String_cstr(member_name));
-                    break;
-                }
-                default: {
-                    if (member_need_init) {
-                        fprintf(output, "    %s_init(&obj->%s);\n", String_cstr(&member_type->name),
-                                String_cstr(member_name));
-                    }
-                    break;
-                }
-            }
-        }
-    }
-    else if (type->type == STI_Array) {
-        fprintf(output, "    obj->type_info_ = &%s_TI;\n", String_cstr(&type->name));
-        fprintf(output, "    obj->count = 0;\n");
-        fprintf(output, "    obj->items = NULL;\n");
-    }
-    fprintf(output, "}\n\n");
-}
-
-void STI_generate_read_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output) {
-    if (type->type == STI_InlineArray ||
-        type->type == STI_Pointer ||
-        type->type == STI_Primitive ||
-        type->type == STI_Alias ||
-        type->type == STI_Bitfield ||
-        type->type == STI_StringType ||
-        type->type == STI_StringHash ||
-        type->type == STI_DeferredType
-    ) {
-        return;
-    }
-    fprintf(output,
-            "bool %s_read(%s *obj, Buffer* buffer) {\n",
-            String_cstr(&type->name), String_cstr(&type->name));
-    if (type->type == STI_Structure) {
-        const DynamicArray_STI_StructMember *members = &type->data.struct_data.members;
-        uint32 running_offset = 0;
-        for (uint32 i = 0; i < members->count; ++i) {
-            const STI_StructMember *member = &members->items[i];
-            const STI_Type *member_type = STI_TypeLibrary_get_type(lib, member->type_hash);
-            const String *member_name = &member->name;
-
-            if (running_offset != member->offset) {
-                const uint32 pad_size = member->offset - running_offset;
-                fprintf(output, "    buffer->skip(buffer, %i);\n", pad_size);
-                running_offset += pad_size;
-            }
-
-            switch (member_type->type) {
-                case STI_InlineArray: {
-                    const STI_Type *inner_type = STI_TypeLibrary_get_type(
-                        lib, member_type->data.array_data.type_hash);
-                    fprintf(output, "    for(int i = 0; i < %i; ++i) {\n", member_type->data.array_data.count);
-                    fprintf(output, "        %s_read(&obj->%s[i], buffer);\n", String_cstr(&inner_type->name),
-                            String_cstr(member_name));
-                    fprintf(output, "    }\n");
-                    running_offset += member_type->size != 0 ? member_type->size : member->size;
-                    break;
-                }
-                case STI_Bitfield: {
-                    fprintf(output, "{\n");
-                    const uint32 first_bit_member = i;
-                    uint32 last_bit_member = i;
-                    const STI_Type *total_type = STI_TypeLibrary_get_type(lib, members->items[i].type_hash);
-                    for (uint32 j = i; j < members->count; j++) {
-                        const STI_StructMember *bit_member = &members->items[j];
-                        const STI_Type *bit_member_type = STI_TypeLibrary_get_type(lib, bit_member->type_hash);
-                        if (bit_member_type->type == STI_Bitfield) {
-                            last_bit_member = j;
-                        }
-                        else {
-                            last_bit_member = j - 1;
-                            break;
-                        }
-                    }
-                    const String *bit_type_name = &total_type->name;
-                    fprintf(output,
-                            "        %s bitfield_value = 0;\n"
-                            "        %s_read(&bitfield_value, buffer);\n",
-                            String_cstr(bit_type_name),
-                            String_cstr(bit_type_name));
-                    uint32 bit_offset = 0;
-                    for (uint32 j = first_bit_member; j <= last_bit_member; ++j) {
-                        const STI_StructMember *bit_member = &members->items[j];
-                        const STI_Type *bit_member_type = STI_TypeLibrary_get_type(lib, bit_member->type_hash);
-                        fprintf(output,
-                                "        obj->%s = (bitfield_value >> %i) & 0x%X;\n",
-                                String_cstr(&bit_member->name), bit_offset,
-                                (1u << bit_member_type->data.bits_data) - 1);
-                        bit_offset += bit_member_type->data.bits_data;
-                    }
-                    running_offset += total_type->size;
-                    i = last_bit_member;
-                    fprintf(output, "}\n");
-                    break;
-                }
-                case STI_Pointer: {
-                    // assert(false && "Pointers are not supported yet");
-                    fprintf(output,
-                            "    assert(false && \"Pointers are not supported yet\"); // Unknown how pointers work\n");
-                    running_offset += member_type->size != 0 ? member_type->size : member->size;
-                    break;
-                }
-                default: {
-                    fprintf(output, "    %s_read(&obj->%s, buffer);\n", String_cstr(&member_type->name),
-                            String_cstr(member_name));
-                    running_offset += member_type->size != 0 ? member_type->size : member->size;
-                    break;
-                }
-            }
-        }
-        if (running_offset != type->size) {
-            const uint32 pad_size = type->size - running_offset;
-            fprintf(output, "    buffer->skip(buffer, %i);\n", pad_size);
-        }
-    }
-    else if (type->type == STI_Array) {
-        const STI_Type *inner_array_type = STI_TypeLibrary_get_type(lib, type->data.array_data.type_hash);
-        const bool is_inner_complex = inner_array_type->type == STI_Structure | inner_array_type->type == STI_Array;
-        fprintf(output,
-                "    uint32 count = 0;\n"
-                "    uint32 unk0 = 0;\n"
-                "    uint32 offset = 0;\n"
-                "    uint32 unk1 = 0;\n"
-                "    if (!uint32_read(&offset, buffer)) return false;\n"
-                "    if (!uint32_read(&unk0, buffer)) return false;\n"
-                "    if (!uint32_read(&count, buffer)) return false;\n"
-                "    if (!uint32_read(&unk1, buffer)) return false;\n"
-                "    obj->count = count;\n"
-                "    if(count>0){\n"
-                "       int64 original_offset = 0;\n"
-                "       obj->items = (%s*)mp_calloc(sizeof(%s), count);\n"
-                "       if(buffer->get_position(buffer, &original_offset)!=BUFFER_SUCCESS) return false;\n"
-                "       if(buffer->set_position(buffer, offset, BUFFER_ORIGIN_START)!=BUFFER_SUCCESS) return false;\n"
-                "       for (uint32 i = 0; i < count; ++i) {\n",
-                String_cstr(&inner_array_type->name), String_cstr(&inner_array_type->name)
-        );
-        if (is_inner_complex) {
-            fprintf(output,
-                    "           %s_init(&obj->items[i]);\n",
-                    String_cstr(&inner_array_type->name)
-            );
-        }
-        fprintf(output,
-                "           %s_read(&obj->items[i], buffer);\n"
-                "       }\n"
-                "       if(buffer->set_position(buffer, original_offset, BUFFER_ORIGIN_START)!=BUFFER_SUCCESS) return false;\n"
-                "    }\n",
-                String_cstr(&inner_array_type->name)
-        );
-    }
-    else if (type->type == STI_Enumeration) {
-        if (type->size == 4)
-            fprintf(output, "    if (!uint32_read((uint32*)obj, buffer)) return false;\n");
-        else if (type->size == 2)
-            fprintf(output, "    if (!uint16_read((uint16*)obj, buffer)) return false;\n");
-        else if (type->size == 1)
-            fprintf(output, "    if (!uint8_read((uint8*)obj, buffer)) return false;\n");
-        else
-            assert(false && "Unhandled enum size");
-    }
-    else {
-        assert(false && "Unhandled");
-    }
-    fprintf(output, "    return true;\n");
-    fprintf(output, "}\n\n");
-}
-
-void STI_generate_free_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output) {
-    const bool is_complex = is_complex_type(lib, type);
-    if (!is_complex ||
-        type->type == STI_InlineArray ||
-        type->type == STI_DeferredType ||
-        type->type == STI_Alias ||
-        type->type == STI_StringType
-    ) {
-        return;
-    }
-
-    fprintf(output, "void %s_free(%s *obj) {\n", String_cstr(&type->name), String_cstr(&type->name));
-    if (type->type == STI_Structure) {
-        const DynamicArray_STI_StructMember *members = &type->data.struct_data.members;
-        for (int i = 0; i < members->count; ++i) {
-            const STI_StructMember *member = &members->items[i];
-            const STI_Type *member_type = STI_TypeLibrary_get_type(lib, member->type_hash);
-            const String *member_name = &member->name;
-
-            const bool member_is_complex = is_complex_type(lib, member_type) || member_type->type == STI_StringType;
-            if (member_is_complex) {
-                switch (member_type->type) {
-                    case STI_InlineArray: {
-                        const STI_Type *inner_type = STI_TypeLibrary_get_type(
-                            lib, member_type->data.array_data.type_hash);
-                        fprintf(output, "    for(int i = 0; i < %i; ++i) {\n", member_type->data.array_data.count);
-                        fprintf(output, "        %s_free(&obj->%s[i]);\n", String_cstr(&inner_type->name),
-                                String_cstr(member_name));
-                        fprintf(output, "    }\n");
-                        break;
-                    }
-                    default: {
-                        fprintf(output, "    %s_free(&obj->%s);\n", String_cstr(&member_type->name),
-                                String_cstr(member_name));
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    else if (type->type == STI_Array) {
-        const STI_Type *inner_type = STI_TypeLibrary_get_type(lib, type->data.array_data.type_hash);
-        if (is_complex_type(lib, inner_type) || inner_type->type == STI_StringType) {
-            fprintf(output, "    for (uint32 i = 0; i < obj->count; ++i) {\n");
-            fprintf(output, "        %s_free(&obj->items[i]);\n", String_cstr(&inner_type->name));
-            fprintf(output, "    }\n");
-        }
-
-        fprintf(output, "    mp_free(obj->items);\n");
-    }
-    fprintf(output, "}\n\n");
-}
-
-void STI_generate_print_function(const STI_TypeLibrary *lib, const STI_Type *type, FILE *output) {
-    if (type->type == STI_Primitive ||
-        type->type == STI_DeferredType ||
-        type->type == STI_Pointer ||
-        type->type == STI_Bitfield ||
-        type->type == STI_StringHash ||
-        type->type == STI_Alias ||
-        type->type == STI_StringType ||
-        type->type == STI_InlineArray
-    ) {
-        return;
-    }
-
-    fprintf(output, "void %s_print(%s *obj, JsonContext* ctx) {\n",
-            String_cstr(&type->name), String_cstr(&type->name));
-
-    if (type->type == STI_Structure) {
-        fprintf(output, "    jsonBeginObject(ctx);\n");
-        const DynamicArray_STI_StructMember *members = &type->data.struct_data.members;
-        for (int i = 0; i < members->count; ++i) {
-            const STI_StructMember *member = &members->items[i];
-            const STI_Type *member_type = STI_TypeLibrary_get_type(lib, member->type_hash);
-            const String *member_name = &member->name;
-
-            fprintf(output, "    jsonName(ctx, \"%s\");\n", String_cstr(member_name));
-            if (member_type->type == STI_InlineArray) {
-                const STI_Type *inner_type = STI_TypeLibrary_get_type(
-                    lib, member_type->data.array_data.type_hash);
-                fprintf(output,
-                        "    jsonBeginCompactArray(ctx);\n"
-                        "    for (uint32 i = 0; i < %i; ++i) {\n"
-                        "        %s_print(&obj->%s[i], ctx);\n"
-                        "    }\n"
-                        "    jsonEndCompactArray(ctx);\n",
-                        member_type->data.array_data.count,
-                        String_cstr(&inner_type->name),
-                        String_cstr(member_name)
-                );
-            }
-            else if (member_type->type == STI_Pointer) {
-                fprintf(output,
-                        "    assert(false && \"Pointers are not supported yet\"); // Unknown how pointers work\n");
-            }
-            else {
-                fprintf(output, "    %s_print(&obj->%s, ctx);\n", String_cstr(&member_type->name),
-                        String_cstr(member_name));
-            }
-        }
-        fprintf(output, "    jsonEndObject(ctx);\n");
-    }
-    else if (type->type == STI_Array) {
-        const STI_Type *inner_array_type = STI_TypeLibrary_get_type(lib, type->data.array_data.type_hash);
-        fprintf(output,
-                "    jsonBeginArray(ctx);\n"
-                "    for (uint32 i = 0; i < obj->count; ++i) {\n"
-                "        %s_print(&obj->items[i], ctx);\n"
-                "    }\n"
-                "    jsonEndArray(ctx);\n",
-                String_cstr(&inner_array_type->name)
-        );
-    }
-    else if (type->type == STI_Enumeration) {
-        if (type->data.enum_data.members.count > 0) {
-            fprintf(output,
-                    "    switch(*obj) {\n");
-            const DynamicArray_STI_EnumMember members = type->data.enum_data.members;
-            for (int i = 0; i < members.count; ++i) {
-                fprintf(output,
-                        "        case %s: jsonValueStr(ctx, \"%s\"); break;\n",
-                        String_cstr(&members.items[i].name), String_cstr(&members.items[i].name));
-            }
-            fprintf(output,
-                    "        default: jsonValueNum(ctx, *obj); break;\n"
-                    "    }\n");
-        }
-        else {
-            fprintf(output, "    jsonValueNum(ctx, *obj);\n");
-        }
-    }
-    fprintf(output, "}\n\n");
-}
-
-void STI_generate_register_function(STI_TypeLibrary *lib, const String *namespace_, FILE *output) {
-    fprintf(output,
-            "static inline void register_type_info(STITypeInfoMap *map, const uint32 hash, const STITypeInfo *type_info) {\n");
-    fprintf(output, "    const STITypeInfo **slot = (const STITypeInfo **)DM_insert(map, hash);\n");
-    fprintf(output, "    *slot = type_info;\n");
-    fprintf(output, "}\n\n");
-    fprintf(output, "STITypeInfoMap %s_type_info;\n", String_cstr(namespace_));
-
-    fprintf(output, "void STI_%s_register_functions(){\n", String_cstr(namespace_));
-    fprintf(output, "    DM_init(&ADF_TYPES_type_info, STITypeInfo, %u);\n", DM_count(&lib->types));
-    for (int i = 0; i < DM_count(&lib->types); ++i) {
-        const STI_Type *type = static_cast<const STI_Type *>(DM_get_value(&lib->types, i));
-        if (type->type == STI_InlineArray ||
-            type->type == STI_Alias ||
-            type->type == STI_Bitfield ||
-            type->type == STI_Pointer ||
-            type->type == STI_StringType ||
-            type->type == STI_DeferredType
-        ) {
+    header_stream << "enum class ADFHashes:uint32 {\n";
+    for (const auto &type: lib.types() | std::views::values) {
+        if (type.type == DataType::Array ||
+            type.type == DataType::InlineArray ||
+            type.type == DataType::Primitive ||
+            type.type == DataType::Bitfield ||
+            type.type == DataType::Pointer) {
             continue;
         }
-        fprintf(output, "    register_type_info(&%s_type_info, 0x%08X, &%s_TI);\n", String_cstr(namespace_), type->hash,
-                String_cstr(&type->name));
+        header_stream << std::format("    {} = 0x{:08X},\n", type.name(), type.hash);
     }
-    fprintf(output, "}\n\n");
+    header_stream << "};\n";
+    header_stream << "};\n\n";
 }
 
-void STI_generate_struct_forward_declaration(const STI_Type *type, FILE *output) {
-    if (type->type != STI_Structure) {
-        return;
-    }
+void emit_type_infos(const std::unordered_map<uint32, Type> &types, std::ostream &stream) {
+    for (const auto &type: types | std::views::values) {
+        if (should_skip_type_info(type.type)) {
+            continue;
+        }
 
-    const String *type_name = &type->name;
-    fprintf(output, "typedef struct %s %s;// size: %i\n", String_cstr(type_name), String_cstr(type_name),
-            type->size);
-}
-
-void forward_declare_functions(const STI_TypeLibrary *lib, const STI_Type *type, FILE *out) {
-    if (type->type == STI_InlineArray ||
-        type->type == STI_Pointer ||
-        type->type == STI_Primitive ||
-        type->type == STI_Alias ||
-        type->type == STI_StringHash ||
-        type->type == STI_Bitfield ||
-        type->type == STI_StringType ||
-        type->type == STI_DeferredType
-    ) {
-        return;
-    }
-
-    const bool is_complex = is_complex_type(lib, type);
-    const bool need_init = is_complex || type->type == STI_Array || type->type == STI_Structure;
-
-    if (need_init) {
-        fprintf(out, "void %s_init(%s *obj);\n", String_cstr(&type->name), String_cstr(&type->name));
-    }
-    fprintf(out, "bool %s_read(%s *obj, Buffer* buffer);\n", String_cstr(&type->name), String_cstr(&type->name));
-    fprintf(out, "void %s_print(%s *obj, JsonContext* ctx);\n", String_cstr(&type->name),
-            String_cstr(&type->name));
-    if (is_complex) {
-        fprintf(out, "void %s_free(%s *obj);\n", String_cstr(&type->name), String_cstr(&type->name));
+        stream << std::format("ADF::TypeInfo ADFTypes::{}_TI = {{\n", type.name());
+        if (type.type == DataType::Structure || type.type == DataType::Array) {
+            stream << std::format("    .new_instance = {}_new_instance,\n", type.name());
+        }
+        else {
+            stream << "    .new_instance = nullptr,\n";
+        }
+        stream << std::format("    .hash = 0x{:08X},\n", type.hash);
+        stream << std::format("    .name = \"{}\"\n", type.name());
+        stream << "};\n\n";
     }
 }
 
-void generate_type_info(const STI_TypeLibrary *lib, const STI_Type *type, FILE *out) {
-    if (type->type == STI_InlineArray ||
-        type->type == STI_Alias ||
-        type->type == STI_Bitfield ||
-        type->type == STI_Pointer ||
-        type->type == STI_DeferredType
-    ) {
-        return;
-    }
-    // typedef struct STITypeInfo {
-    //     initSTIObject init;
-    //     readSTIObject read;
-    //     freeSTIObject free;
-    //     printSTIObject print;
-    //     uint32 size;
-    //     uint32 disk_size:30;
-    //     uint32 is_struct:1;
-    //     uint32 is_array:1;
-    //     uint32 hash;
-    //     const char* name;
-    // }STITypeInfo;
-    fprintf(out, "STITypeInfo %s_TI = {\n", String_cstr(&type->name));
-    const bool is_complex = is_complex_type(lib, type);
-    const bool need_init = is_complex || type->type == STI_Array || type->type == STI_Structure;
+void emit_type_info_table(const std::unordered_map<uint32, Type> &types,
+                          std::ofstream &header_stream,
+                          std::ofstream &impl_stream) {
+    header_stream << "extern ADF::TypeInfoMap adf_type_info;\n\n";
+    header_stream << "void init_adf_type_info();\n\n";
 
-    if (need_init) {
-        fprintf(out, "    .init = (initSTIObject)%s_init,\n", String_cstr(&type->name));
+    impl_stream << "ADF::TypeInfoMap adf_type_info;\n\n";
+    impl_stream << "void init_adf_type_info() {\n";
+    impl_stream << std::format("    adf_type_info.reserve({});\n", types.size());
+
+    for (const auto &type: types | std::views::values) {
+        if (should_skip_type_info(type.type)) {
+            continue;
+        }
+        impl_stream << std::format("    adf_type_info.emplace(0x{:08X}, &ADFTypes::{}_TI);\n", type.hash, type.name());
+    }
+
+    impl_stream << "}\n";
+}
+
+// Function generation helpers
+void emit_array_print_helper(const TypeLibrary &lib, const Type &member_type,
+                             const std::string &member_name, std::ofstream &impl_stream) {
+    impl_stream << std::format("    out << \"{}: [\" << \"\\n\";\n", member_name);
+    impl_stream << std::format("    for (const auto& item: {}) {{\n", member_name);
+
+    const Type &inner_type = get_type_or_throw(lib, std::get<TypeAndSize>(member_type.data).type_hash);
+
+    if (inner_type.type == DataType::Primitive) {
+        impl_stream << "        out << std::to_string(item) << \"\\n\";\n";
+    }
+    else if (inner_type.type == DataType::StringType) {
+        impl_stream << "        out << item << \"\\n\";\n";
+    }
+    else if (inner_type.type == DataType::Structure ||
+             inner_type.type == DataType::Array ||
+             inner_type.type == DataType::StringHash) {
+        impl_stream << "        item.print(out);\n";
+    }
+    else if (inner_type.type == DataType::DeferredType) {
+        impl_stream << "        if (item) {\n";
+        impl_stream << "            item->print(out);\n";
+        impl_stream << "        }\n";
     }
     else {
-        fprintf(out, "    .init = NULL,\n");
+        throw std::runtime_error("Unsupported array inner type for printing");
     }
-    fprintf(out, "    .read = (readSTIObject)%s_read,\n", String_cstr(&type->name));
-    if (is_complex_type(lib, type)) {
-        fprintf(out, "    .free = (freeSTIObject)%s_free,\n", String_cstr(&type->name));
-    }
-    else {
-        fprintf(out, "    .free = NULL,\n");
-    }
-    fprintf(out, "    .print = (printSTIObject)%s_print,\n", String_cstr(&type->name));
-    fprintf(out, "    .size = sizeof(%s),\n", String_cstr(&type->name));
-    fprintf(out, "    .disk_size = %i,\n", type->size);
-    fprintf(out, "    .is_struct = %i,\n", type->type == STI_Structure ? 1 : 0);
-    fprintf(out, "    .is_array = %i,\n", type->type == STI_Array ? 1 : 0);
-    fprintf(out, "    .hash = 0x%08X,\n", type->hash);
-    fprintf(out, "    .name = \"%s\"\n", String_cstr(&type->name));
-    fprintf(out, "};\n\n");
+
+    impl_stream << "    }\n";
+    impl_stream << "    out << \"]\" << \"\\n\";\n";
 }
 
-void STI_TypeLibrary_generate_types(STI_TypeLibrary *lib, const String *namespace_, FILE *header_output,
-                                    const String *relative_header_path, FILE *impl_output) {
-    fprintf(header_output, "// This file is autogenerated\n");
-    fprintf(header_output, "#ifndef %s_GUARD\n", String_cstr(namespace_));
-    fprintf(header_output, "#define %s_GUARD\n\n", String_cstr(namespace_));
-    fprintf(header_output, "#include \"apex/adf/sti.h\"\n");
-    fprintf(header_output, "#include \"apex/adf/sti_shared.h\"\n");
-    fprintf(header_output, "#include \"apex/adf/adf_type_info_map.h\"\n");
+void emit_struct_print_function(const TypeLibrary &lib, const Type &type,
+                                const std::vector<StructMember> &members,
+                                const std::string &type_name,
+                                std::ofstream &impl_stream) {
+    impl_stream << std::format("void {}::print(std::ostream &out) const {{\n", type_name);
 
-    fprintf(header_output, "void STI_%s_register_functions();\n\n",
-            String_cstr(namespace_));
+    for (const auto &member: members) {
+        const Type &member_type = get_type_or_throw(lib, member.type_hash);
 
+        switch (member_type.type) {
+            case DataType::Primitive:
+            case DataType::Bitfield:
+            case DataType::StringType:
+                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n",
+                                           member.name, member.name);
+                break;
 
-    fprintf(impl_output, "// This file is autogenerated\n");
-    fprintf(impl_output, "#include \"%s\"\n\n", String_cstr(relative_header_path));
-    fprintf(impl_output, "#include \"apex/adf/adf_support_types.h\"\n");
-    fprintf(impl_output, "#include \"utils/dynamic_map.h\"\n");
-    fprintf(impl_output, "#include \"utils/memory_profiling.h\"\n");
-    fprintf(impl_output, "#include \"utils/json.h\"\n");
-    fprintf(impl_output, "#include <assert.h>\n");
+            case DataType::Structure:
+                impl_stream << std::format("    {}.print(out);\n", member.name);
+                break;
 
-    for (int32 i = 0; i < STI_TypeLibrary_types_count(lib); i++) {
-        const STI_Type *type = static_cast<const STI_Type *>(DM_get_value(&lib->types, i));
-        STI_generate_struct_forward_declaration(type, header_output);
+            case DataType::Pointer:
+                impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
+                break;
+
+            case DataType::Array:
+            case DataType::InlineArray:
+                emit_array_print_helper(lib, member_type, member.name, impl_stream);
+                break;
+
+            case DataType::Enumeration:
+                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n",
+                                           member.name, member.name);
+                break;
+
+            case DataType::StringHash:
+                impl_stream << std::format("    out << \"{}: \";\n", member.name);
+                impl_stream << std::format("    {}.print(out);\n", member.name);
+                impl_stream << "    out << \"\\n\";\n";
+                break;
+
+            case DataType::DeferredType:
+                impl_stream << std::format("    out << \"{}: \" << \"\\n\";\n", member.name);
+                impl_stream << std::format("    if ({}) {{\n", member.name);
+                impl_stream << std::format("        {}->print(out);\n", member.name);
+                impl_stream << "    }\n";
+                break;
+
+            case DataType::Recursive:
+                throw std::runtime_error("Recursive types are not supported yet");
+        }
     }
-    fprintf(header_output, "\n");
-    for (int32 i = 0; i < STI_TypeLibrary_types_count(lib); i++) {
-        const STI_Type *type = static_cast<const STI_Type *>(DM_get_value(&lib->types, i));
-        STI_dump_type(lib, type, header_output);
-    }
-    fprintf(header_output, "\n");
 
-    for (int32 i = 0; i < STI_TypeLibrary_types_count(lib); i++) {
-        const STI_Type *type = static_cast<const STI_Type *>(DM_get_value(&lib->types, i));
-        forward_declare_functions(lib, type, impl_output);
-        generate_type_info(lib, type, impl_output);
-    }
-    fprintf(impl_output, "\n\n");
+    impl_stream << "}\n\n";
+}
 
-    for (int32 i = 0; i < STI_TypeLibrary_types_count(lib); i++) {
-        const STI_Type *type = static_cast<const STI_Type *>(DM_get_value(&lib->types, i));
-        STI_generate_init_function(lib, type, impl_output);
-        STI_generate_read_function(lib, type, impl_output);
-        STI_generate_free_function(lib, type, impl_output);
-        STI_generate_print_function(lib, type, impl_output);
-    }
-    STI_generate_register_function(lib, namespace_, impl_output);
-    fprintf(header_output, "extern STITypeInfoMap %s_type_info;\n\n", String_cstr(namespace_));
+void emit_struct_to_json_function(const std::string &type_name, std::ofstream &impl_stream) {
+    impl_stream << std::format("void {}::to_json(std::ostream &out) const {{\n", type_name);
+    impl_stream << "    throw std::runtime_error(\"Not implemented\");\n";
+    impl_stream << "}\n\n";
+}
 
-    fprintf(header_output, "#endif //%s_GUARD\n", String_cstr(namespace_));
+void emit_enum_formatter(const Type &type, const std::string &type_name, std::ofstream &fwd_decl_stream, std::ofstream &impl_stream) {
+    const auto &members = std::get<std::vector<EnumMember> >(type.data);
+
+    fwd_decl_stream << std::format("constexpr std::string_view to_string({} v) noexcept;\n",type_name);
+    fwd_decl_stream << std::format("std::ostream& operator<<(std::ostream &os, {} value);\n",type_name);
+
+    impl_stream << std::format("constexpr std::string_view to_string({} v) noexcept{{\n", type_name);
+    impl_stream << "    using namespace std::literals;\n";
+    impl_stream << "    switch (v) {\n";
+    for (const auto &member: members) {
+        impl_stream << std::format("        case {}::{}: return \"{}\"sv;\n", type_name, member.name, member.name);
+    }
+    impl_stream << "        default: return \"Unknown\";\n";
+    impl_stream << "    }\n";
+    impl_stream << "}\n\n";
+
+    impl_stream << std::format("std::ostream& operator<<(std::ostream &os, const {} value) {{\n",type_name);
+    impl_stream << "    return os << to_string(value);\n";
+    impl_stream << "}\n\n";
+
+
+    // fwd_decl_stream << "template<>\n";
+    // fwd_decl_stream << std::format("struct std::formatter<{}>: std::formatter<std::string_view> {{\n", type_name);
+    // fwd_decl_stream << std::format("    auto format(const ADFTypes::{} value, std::format_context &ctx) {{\n",
+    //                            type.type_name());
+    // fwd_decl_stream << "        std::string_view str_value = to_string(value);\n";
+    // fwd_decl_stream << "        return std::formatter<std::string_view>::format(str_value, ctx);\n";
+    // fwd_decl_stream << "    }\n";
+    // fwd_decl_stream << "};\n\n";
+
+}
+
+void emit_new_instance_function(const std::string &type_name, const std::string &name, std::ofstream &impl_stream) {
+    impl_stream << std::format("static std::unique_ptr<{}> {}_new_instance() {{\n", type_name, name);
+    impl_stream << std::format("    return std::make_unique<{}>();\n", type_name);
+    impl_stream << "}\n\n";
+}
+
+std::string get_qualified_type_name(const Type &type, const Type &inner_type) {
+    if (is_simple_type(inner_type.type)) {
+        return inner_type.type_name();
+    }
+    return "ADFTypes::" + inner_type.type_name();
+}
+
+void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
+                               const std::vector<StructMember> &members,
+                               const std::string &type_name,
+                               std::ofstream &impl_stream) {
+    impl_stream << std::format("void {}::read(IO::File& buffer) {{\n", type_name);
+    uint32 offset = 0;
+
+    for (uint32 i = 0; i < members.size(); ++i) {
+        const auto &member = members[i];
+        const Type &member_type = get_type_or_throw(lib, member.type_hash);
+
+        // Handle padding
+        if (member.offset != offset) {
+            if (offset > member.offset) {
+                throw std::runtime_error(std::format(
+                    "Overlapping members in struct {}, member {} has offset {}, expected {}",
+                    type.type_name(), member.name, member.offset, offset));
+            }
+            uint32 pad_size = member.offset - offset;
+            impl_stream << std::format("    buffer.skip({});\n", pad_size);
+            offset += pad_size;
+        }
+
+        // Read member based on type
+        switch (member_type.type) {
+            case DataType::Primitive:
+                impl_stream << std::format("    {} = buffer.read_pod<{}>();\n",
+                                           member.name, member_type.type_name());
+                break;
+
+            case DataType::Array:
+            case DataType::Structure:
+            case DataType::StringHash:
+                impl_stream << std::format("    {}.read(buffer);\n", member.name);
+                break;
+
+            case DataType::Pointer:
+                impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
+                break;
+
+            case DataType::InlineArray: {
+                const Type &inner_type = get_type_or_throw(lib, std::get<TypeAndSize>(member_type.data).type_hash);
+                impl_stream << std::format("    for(int i = 0; i < {}; ++i) {{\n",
+                                           std::get<TypeAndSize>(member_type.data).count);
+                if (inner_type.type == DataType::Structure || inner_type.type == DataType::Array) {
+                    impl_stream << std::format("        {}[i].read(buffer);\n", member.name);
+                }
+                else if (inner_type.type == DataType::Primitive) {
+                    impl_stream << std::format("        {}[i] = buffer.read_pod<{}>();\n",
+                                               member.name, inner_type.type_name());
+                }
+                else if (inner_type.type == DataType::StringType) {
+                    impl_stream << std::format("        {}[i] = buffer.read_cstring();\n", member.name);
+                }
+                else {
+                    impl_stream << "        throw std::runtime_error(\"Unsupported inline array inner type\");\n";
+                }
+                impl_stream << "    }\n";
+                break;
+            }
+
+            case DataType::StringType:
+                impl_stream << "    {\n";
+                impl_stream << "        std::streamoff original_offset = buffer.get_position();\n";
+                impl_stream << "        uint32 string_offset = buffer.read_pod<uint32>();\n";
+                impl_stream << "        uint32 unk = buffer.read_pod<uint32>();\n";
+                impl_stream << "        buffer.set_position(string_offset, std::ios::beg);\n";
+                impl_stream << std::format("        {} = buffer.read_cstring();\n", member.name);
+                impl_stream << "        buffer.set_position(original_offset, std::ios::beg);\n";
+                impl_stream << "    }\n";
+                break;
+
+            case DataType::DeferredType:
+                impl_stream << std::format("    {} = std::move(Deferred::read(buffer));\n", member.name);
+                break;
+
+            case DataType::Bitfield: {
+                const Type &total_member = member_type;
+                uint32 j = i;
+                for (; j < members.size(); ++j) {
+                    const auto &bitfield_member = members[j];
+                    const Type &bitfield_member_type = get_type_or_throw(lib, bitfield_member.type_hash);
+                    if (bitfield_member_type.type != DataType::Bitfield ||
+                        bitfield_member_type.size != total_member.size) {
+                        break;
+                    }
+                }
+
+                impl_stream << "    {\n";
+                impl_stream << std::format("        const uint{} bitfield_value = buffer.read_pod<uint{}>();\n",
+                                           total_member.size * 8, total_member.size * 8);
+                uint32 bit_offset = 0;
+                for (uint32 k = i; k < j; ++k) {
+                    const auto &bitfield_member = members[k];
+                    const Type &bitfield_member_type = get_type_or_throw(lib, bitfield_member.type_hash);
+                    if (bitfield_member_type.type != DataType::Bitfield) {
+                        throw std::runtime_error("Expected bitfield type");
+                    }
+                    uint32 bit_width = std::get<uint32>(bitfield_member_type.data);
+                    impl_stream << std::format("        {} = (bitfield_value >> {}) & ((1ULL << {}) - 1);\n",
+                                               bitfield_member.name, bit_offset, bit_width);
+                    bit_offset += bit_width;
+                }
+                impl_stream << "    }\n";
+                i = j - 1;
+                break;
+            }
+
+            case DataType::Enumeration: {
+                const char *uint_types[] = {"uint8", "uint16", "uint32", "uint64"};
+                uint32 size_index = 0;
+                if (member_type.size == 2) size_index = 1;
+                else if (member_type.size == 4) size_index = 2;
+                else if (member_type.size == 8) size_index = 3;
+                else if (member_type.size != 1) throw std::runtime_error("Unsupported enum size");
+
+                impl_stream << std::format("    {} = static_cast<ADFTypes::{}>(buffer.read_pod<{}>());\n",
+                                           member.name, member_type.type_name(), uint_types[size_index]);
+                break;
+            }
+
+            case DataType::Recursive:
+                break;
+        }
+        offset += member_type.size;
+    }
+
+    // Handle final padding
+    if (offset != type.size) {
+        if (offset > type.size) {
+            throw std::runtime_error(std::format(
+                "Struct {} is larger than expected, expected size {}, actual size {}",
+                type.type_name(), type.size, offset));
+        }
+        uint32 pad_size = type.size - offset;
+        impl_stream << std::format("    buffer.skip({});\n", pad_size);
+    }
+
+    impl_stream << "}\n\n";
+}
+
+void emit_functions(const TypeLibrary &lib, std::ofstream &fwd_decl_stream, std::ofstream &impl_stream, std::ofstream &formatter_out) {
+    for (const auto &type: lib.types() | std::views::values) {
+        // Skip types that don't need function generation
+        if (type.type == DataType::Bitfield ||
+            type.type == DataType::Pointer ||
+            type.type == DataType::Primitive) {
+            continue;
+        }
+
+        std::string type_name;
+
+        switch (type.type) {
+            case DataType::Structure: {
+                type_name = "ADFTypes::" + type.type_name();
+                const auto &members = std::get<std::vector<StructMember> >(type.data);
+
+                // Generate read, print, and to_json functions
+                emit_struct_read_function(lib, type, members, type_name, impl_stream);
+                emit_struct_print_function(lib, type, members, type_name, impl_stream);
+                emit_struct_to_json_function(type_name, impl_stream);
+                break;
+            }
+
+            case DataType::Array: {
+                const auto &type_and_size = std::get<TypeAndSize>(type.data);
+                const Type &inner_type = get_type_or_throw(lib, type_and_size.type_hash);
+                type_name = std::format("Vector<{}>", get_qualified_type_name(type, inner_type));
+                break;
+            }
+
+            // case DataType::InlineArray: {
+            //     const auto &type_and_size = std::get<TypeAndSize>(type.data);
+            //     const Type &inner_type = get_type_or_throw(lib, type_and_size.type_hash);
+            //     type_name = std::format("std::array<{}, {}>",
+            //                            get_qualified_type_name(type, inner_type),
+            //                            type_and_size.count);
+            //     // InlineArray doesn't need new_instance
+            //     continue;
+            // }
+
+            case DataType::Enumeration: {
+                type_name = "ADFTypes::" + type.type_name();
+                emit_enum_formatter(type, type_name, fwd_decl_stream, formatter_out);
+                // Enumeration doesn't need new_instance
+                continue;
+            }
+
+            default:
+                continue;
+        }
+
+        // Generate new_instance function for types that need it
+        emit_new_instance_function(type_name, type.name(), impl_stream);
+    }
+}
+
+void STI::generate_code(const TypeLibrary &lib,
+                        const std::filesystem::path &sources_path,
+                        const std::filesystem::path &headers_path) {
+    std::filesystem::create_directories(sources_path);
+    std::filesystem::create_directories(headers_path);
+
+    auto header_output = headers_path / "adf_types.h";
+    auto fwd_decl_output = headers_path / "adf_types_fwd.h";
+    auto impl_output = sources_path / "adf_types.cpp";
+    auto formatters_output = sources_path / "adf_types_formatters.cpp";
+
+    std::ofstream header_stream(header_output);
+    std::ofstream fwd_decl_stream(fwd_decl_output);
+    std::ofstream impl_stream(impl_output);
+    std::ofstream formatter_stream(formatters_output);
+
+    header_stream << "// This file is autogenerated\n";
+    header_stream << "#pragma once\n";
+    header_stream << "#include <array>\n";
+    header_stream << "#include \"apex/adf/adf_base_type.h\"\n";
+    header_stream << "#include \"apex/adf/adf_support_types.h\"\n\n";
+    header_stream << "#include \"apex/adf/generated/adf_types_fwd.h\"\n\n";
+
+    impl_stream << "// This file is autogenerated\n";
+    impl_stream << "#include \"apex/adf/generated/adf_types.h\"\n\n";
+    impl_stream << "#include <stdexcept>\n\n";
+    impl_stream << "#include \"apex/adf/adf_support_types.h\"\n";
+    impl_stream << "using namespace ADF;\n\n";
+
+    formatter_stream << "// This file is autogenerated\n";
+    formatter_stream << "#include <iostream>\n";
+    formatter_stream << "#include <format>\n";
+    formatter_stream << "#include <string>\n";
+    formatter_stream << "#include <string_view>\n\n";
+    formatter_stream << "#include \"apex/adf/generated/adf_types.h\"\n\n";
+
+    fwd_decl_stream << "// This file is autogenerated\n";
+    fwd_decl_stream << "#include <iostream>\n";
+    fwd_decl_stream << "#include <format>\n";
+    fwd_decl_stream << "#include <string_view>\n\n";
+    fwd_decl_stream << "#include \"apex/adf/generated/adf_types.h\"\n\n";
+
+    emit_types(lib, fwd_decl_stream, header_stream);
+    emit_functions(lib, fwd_decl_stream, impl_stream, formatter_stream);
+    emit_type_infos(lib.types(), impl_stream);
+    emit_type_info_table(lib.types(), header_stream, impl_stream);
 }

@@ -2,7 +2,8 @@
 
 #include "utils/common.h"
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <format>
 
 bool compare_hashes(const uint32 *a, const uint32 *b) {
     return *a == *b;
@@ -54,4 +55,26 @@ uint32 parse_hex_u32(const char *str) {
 
 uint32 parse_digits_u32(const char *str) {
     return strtoll(str, NULL, 10);
+}
+
+void convert_to_wsl(std::filesystem::path &path) {
+#ifndef WSL_ENV
+    return;
+#else
+    if (path.string().empty()) {
+        return;
+    }
+    const std::string tmp_path = path.string();
+
+    if (tmp_path[0] == '.')return;
+    const char drive_tmp[2] = {(char) (tmp_path[0] > 'A' ? tmp_path[0] + ' ' : tmp_path[0]), 0};
+    const std::string drive = std::string(drive_tmp, 1);
+
+    auto tmp = std::format("/mnt/{}{}", drive, tmp_path.c_str() + 2);
+    for (char &c : tmp) {
+        if (c == '\\') c = '/';
+    }
+    path = std::filesystem::path(tmp);
+
+#endif
 }

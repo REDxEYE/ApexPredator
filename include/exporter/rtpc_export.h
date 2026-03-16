@@ -5,12 +5,12 @@
 #include "apex/rtpc.h"
 #include "apex/adf/sti.h"
 #include "platform/app_state.h"
-#include "utils/gltf/cgltf_helper.h"
 
 
-void process_rtpc_node(AppState* app_state, RuntimeNode *node, uint32 path_hash, GL_ID parent_gltf_node);
+void process_rtpc_node(AppState &app_state, const RuntimeNode &node, uint32 path_hash,
+                       const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node);
 
-GL_ID export_rtpc(AppState* app_state, Buffer *buffer, uint32 path_hash);
+GltfHelper::Handle<tinygltf::Node> export_rtpc(AppState& app_state, const std::unique_ptr<IO::File> &&buffer, uint32 path_hash);
 
 
 #endif //APEXPREDATOR_EPE_EXPORT_H

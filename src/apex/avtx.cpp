@@ -2,114 +2,109 @@
 
 #include "apex/avtx.h"
 
+#include "apex/hashes.h"
+
 #include "tinycpng/public/library.h"
 #include "tinycpng/public/error_utils.h"
 #include "tinycpng/public/file_utils.h"
-#include "tinycpng/public/mytypes.h"
 
 #include "platform/logger.h"
+#include "tracy/Tracy.hpp"
 #include "utils/common.h"
 #include "utils/hash_helper.h"
-#include "utils/path.h"
 
-Texture *AVTXTexture_from_buffer(Buffer *buffer, const uint32 hash, const ArchiveManager *manager) {
-    TracyCZoneN(ctx, "AVTXTexture_from_buffer", 1);
-    AVTXHeader header;
-    buffer->read(buffer, &header, sizeof(header), NULL);
-    if (strncmp(header.ident, "AVTX", 4) != 0) {
+#include <filesystem>
+#include <cstring>
+
+
+using namespace AVTX;
+
+
+bool operator&(AVATextureFlag lhs, AVATextureFlag rhs) {
+    return (static_cast<uint32>(lhs) & static_cast<uint32>(rhs)) != 0;
+}
+
+std::unique_ptr<Texture> AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, const uint32 hash, ArchiveManager &manager) {
+    ZoneScoped
+    const auto header = buffer->read_pod<Header>();
+    if (std::memcmp(header.ident, "AVTX", 4) != 0) {
         GLog_Error("Invalid AVTX texture format");
-        TracyCZoneEnd(ctx);
-        return NULL;
+        return nullptr;
     }
     if (header.version != 1) {
-        GLog_Error("Unsupported AVTX version: %d", header.version);
-        TracyCZoneEnd(ctx);
-        return NULL;
+        GLog_Error("Unsupported AVTX version: {}", header.version);
+        return nullptr;
     }
 
-    uint32 actual_body_size = 0;
-    uint8 *compressed_data;
-    Texture *texture = Texture_new();
-    if (header.flags & E_AVATEXTURE_FLAG_STREAMED) {
-        String atx_path = {};
-        const AVTXStream *highest_mip_stream = NULL;
-        for (int i = 7; i > 0; --i) {
-            const AVTXStream *stream = &header.streams[i];
+    std::vector<uint8> compressed_data;
+    if (header.flags & AVATextureFlag::STREAMED) {
+        std::filesystem::path atx_path = {};
+        const TextureStream *highest_mip_stream = nullptr;
+        for (int i = 7; i >= 0; --i) {
+            const TextureStream *stream = &header.streams[i];
             if (stream->size == 0) {
                 continue;
             }
             highest_mip_stream = stream;
             break;
         }
-
-        const StringView path = find_name32_sv(hash);
-        Path_remove_extension_sv(path, &atx_path);
-        String_append_format(&atx_path, ".atx%i", highest_mip_stream->source);
-        if (!ArchiveManager_has_file_by_hash(manager, hash_string(&atx_path))) {
-            GLog_Error("Expected ATX file not found for streamed AVTX texture: %s", String_cstr(&atx_path));
-            String_free(&atx_path);
+        if (highest_mip_stream==nullptr) {
             goto BUILTIN_MIPS;
         }
-        MemoryBuffer atx_buffer = {};
-        ArchiveManager_get_file_by_hash(manager, hash_string(&atx_path), &atx_buffer);
 
+        const auto path = find_name32_sv(hash);
+        if (path->empty()) {
+            return nullptr;
+        }
 
-        const int64 largest_mip_size = Texture_calculate_mip_size(0, header.width, header.height, header.format);
+        atx_path = *path;
+        atx_path.replace_extension(std::format("atx{}", highest_mip_stream->source));
+        auto atx_buffer = manager.get_file(hash_string(atx_path));
+        if (!atx_buffer) {
+            GLog_Error("Expected ATX file not found for streamed AVTX texture: {}", atx_path.string());
+            goto BUILTIN_MIPS;
+        }
+
+        const int64 largest_mip_size = Texture::calculate_mip_size(0, header.width, header.height, header.format);
         const int64 aligned_largest_mip_size = ALIGN_UP(largest_mip_size, highest_mip_stream->alignment);
         if (aligned_largest_mip_size != highest_mip_stream->size) {
-            GLog_Error("Expected mip size does not match stream size, expected: %u, actual: %u",
+            GLog_Error("Expected mip size does not match stream size, expected: {}, actual: {}",
                        aligned_largest_mip_size,
                        highest_mip_stream->size);
-            atx_buffer.close(&atx_buffer);
-            String_free(&atx_path);
             goto BUILTIN_MIPS;
         }
-        atx_buffer.set_position(&atx_buffer, highest_mip_stream->offset, BUFFER_ORIGIN_START);
-        compressed_data = (uint8*)mp_malloc(highest_mip_stream->size);
-        atx_buffer.read(&atx_buffer, compressed_data, highest_mip_stream->size, &actual_body_size);
-
-        atx_buffer.close(&atx_buffer);
-        String_free(&atx_path);
-
-        if (actual_body_size < highest_mip_stream->size) {
-            GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.streams[0].size,
-                       actual_body_size);
-            goto CLEANUP;
-        }
+        atx_buffer->set_position(highest_mip_stream->offset);
+        compressed_data.resize(highest_mip_stream->size);
+        atx_buffer->read_exact(compressed_data);
+        atx_buffer->close();
     }
     else {
     BUILTIN_MIPS:
-        buffer->set_position(buffer, header.streams[0].offset, BUFFER_ORIGIN_START);
-        compressed_data = (uint8*)mp_malloc(header.streams[0].size);
-        buffer->read(buffer, compressed_data, header.streams[0].size, &actual_body_size);
-        if (actual_body_size != header.streams[0].size) {
-            GLog_Error("Failed to read AVTX texture data, expected size: %u, actual size: %u", header.streams[0].size,
-                       actual_body_size);
-            goto CLEANUP;
+        const std::optional non_streamed_stream = [&]() {
+            for (int i = 7; i >= 0; --i) {
+                if (header.streams[i].source == 0 && header.streams[i].size != 0) {
+                    return &header.streams[i];
+                }
+            }
+            return static_cast<const TextureStream *>(nullptr);
+        }();
+        if (!non_streamed_stream) {
+            return nullptr;
         }
+        buffer->set_position(non_streamed_stream.value()->offset);
+        compressed_data.resize(non_streamed_stream.value()->size);
+        buffer->read_exact(compressed_data);
     }
 
-    Texture_from_dxgi(texture, header.format, header.width, header.height, header.depth,
-                      compressed_data, actual_body_size);
-
-    TracyCZoneEnd(ctx);
-    return texture;
-
-CLEANUP:
-    if (compressed_data != NULL)
-        mp_free(compressed_data);
-    buffer->close(buffer);
-
-    TracyCZoneEnd(ctx);
-    return NULL;
+    return std::make_unique<Texture>(Texture::from_dxgi(header.format, compressed_data, header.width, header.height,
+                                                        header.depth));
 }
 
-void AVTXTexture_from_png(const String* png_path, const String* output_texture_name, const String *output_dir) {
-
-    FILE* file = fopen(String_cstr(png_path), "rb");
-    UserIO user_io = UserIO{.read_func = native_file_read, .write_func = native_file_write, .user_file = file};
-    PNGFile png = {};
-    png_read(&user_io, &png);
-
-    png_free(&png);
-}
+// void AVTXTexture_from_png(const String *png_path, const String *output_texture_name, const String *output_dir) {
+//     FILE *file = fopen(String_cstr(png_path), "rb");
+//     UserIO user_io = UserIO{.read_func = native_file_read, .write_func = native_file_write, .user_file = file};
+//     PNGFile png = {};
+//     png_read(&user_io, &png);
+//
+//     png_free(&png);
+// }

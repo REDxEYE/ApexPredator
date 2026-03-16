@@ -1,67 +1,30 @@
 // Created by RED on 30.01.2026.
 
+// Taken from PredatorCZ/Spike and PredatorCZ/HavokLib
+
+#include <cstring>
+#include <ranges>
+#include <numbers>
+
 #include "havok/animations/spline.h"
 
-
-u8 rd_u8(const u8 **p) {
-    const u8 v = **p;
-    *p += 1;
-    return v;
+constexpr float GetFraction(const size_t num_bits) {
+    return 1.f / static_cast<float>((1ULL << num_bits) - 1);
 }
 
-u16 rd_u16_le(const u8 **p) {
-    u16 v;
-    memcpy(&v, *p, 2);
-    *p += 2;
-    return v;
-}
+glm::vec4 Read32Quat(IO::File &buffer) {
+    constexpr uint32 rMask = (1u << 10) - 1u;
+    constexpr float rFrac = GetFraction(10);
+    constexpr float fPI2 = 0.50f * std::numbers::pi_v<float>;
+    constexpr float fPI4 = 0.25f * std::numbers::pi_v<float>;
+    constexpr float phiFrac = fPI2 / 511.0f;
 
-float rd_f32_le(const u8 **p) {
-    float v;
-    memcpy(&v, *p, 4);
-    *p += 4;
-    return v;
-}
+    const auto cVal = buffer.read_pod<uint32>();
 
-size_t compute_padding_ptr(const void *ptr, const int alignment) {
-    const uintptr_t cur = (uintptr_t) ptr;
-    const size_t r = (size_t) (cur & (uintptr_t) (alignment - 1));
-    return r ? (size_t) alignment - r : 0;
-}
-
-
-void apply_padding(const u8 **p, int alignment) {
-    *p += compute_padding_ptr(*p, alignment);
-}
-
-void apply_padding4(const u8 **p) { apply_padding(p, 4); }
-void apply_padding2(const u8 **p) { apply_padding(p, 2); }
-
-static u32 rd_u32_le(const u8 **p) { u32 v; memcpy(&v, *p, 4); *p += 4; return v; }
-
-static u64 rd_u40_le(const u8 **p) {
-    const u8 *b = *p;
-    u64 v = (u64)b[0] | ((u64)b[1] << 8) | ((u64)b[2] << 16) | ((u64)b[3] << 24) | ((u64)b[4] << 32);
-    *p += 5;
-    return v;
-}
-static int16_t rd_i16_le_ptr(const u8 *p) { int16_t v; memcpy(&v, p, 2); return v; }
-
-static void Read32Quat_C(const u8 **p, float out[4]) {
-    const u32 cVal = rd_u32_le(p);
-
-    const u32 rMask = (1u << 10) - 1u;
-    const float rFrac = 1.0f / 1023.0f;
-
-    const float fPI  = 3.14159265f;
-    const float fPI2 = 0.5f * fPI;
-    const float fPI4 = 0.5f * fPI2;        /* pi/4 */
-    const float phiFrac = fPI2 / 511.0f;   /* (pi/2)/511 */
-
-    float R = (float)((cVal >> 18) & rMask) * rFrac;
+    float R = static_cast<float>((cVal >> 18) & rMask) * rFrac;
     R = 1.0f - (R * R);
 
-    const float phiTheta = (float)(cVal & 0x3FFFFu);
+    const auto phiTheta = static_cast<float>(cVal & 0x3FFFFu);
 
     float phi = floorf(sqrtf(phiTheta));
     float theta = 0.0f;
@@ -71,382 +34,397 @@ static void Read32Quat_C(const u8 **p, float out[4]) {
         phi = phiFrac * phi;
     }
 
-    const float magnitude = sqrtf(fmaxf(0.0f, 1.0f - R * R));
+    const float magnitude = sqrtf(1.0f - R * R);
     const float sPhi = sinf(phi);
     const float cPhi = cosf(phi);
     const float sTheta = sinf(theta);
     const float cTheta = cosf(theta);
 
-    float x = sPhi * cTheta * magnitude;
-    float y = sPhi * sTheta * magnitude;
-    float z = cPhi * magnitude;
-    float w = R;
+    const glm::vec4 retVal0 =
+            glm::vec4(sPhi, sPhi, cPhi, R) *
+            glm::vec4(cTheta, sTheta, 1.0f, 1.0f) *
+            glm::vec4(magnitude, magnitude, magnitude, 1.0f);
 
-    /* sign bits 28..31 */
-    if (cVal & 0x10000000u) x = -x;
-    if (cVal & 0x20000000u) y = -y;
-    if (cVal & 0x40000000u) z = -z;
-    if (cVal & 0x80000000u) w = -w;
+    const glm::bvec4 negate(
+        (cVal & 0x10000000u) != 0,
+        (cVal & 0x20000000u) != 0,
+        (cVal & 0x40000000u) != 0,
+        (cVal & 0x80000000u) != 0
+    );
 
-    out[0] = x; out[1] = y; out[2] = z; out[3] = w;
+    return glm::mix(retVal0, -retVal0, negate);
 }
 
-static void Read40Quat_C(const u8 **p, float out[4]) {
-    const u64 cVal = rd_u40_le(p);
-
-    const float fractal = 0.000345436f; /* matches your C++ constant */
-
-    const u32 a = (u32)((cVal >> 0)  & 0xFFFu);
-    const u32 b = (u32)((cVal >> 12) & 0xFFFu);
-    const u32 c = (u32)((cVal >> 24) & 0xFFFu);
-
-    /* Center to roughly [-2048, 2047] (your SIMD did "- (1<<11) - 1"; close enough).
-       If you want bit-exact behavior, change bias to 2049. */
-    const int ia = (int)a - 2048;
-    const int ib = (int)b - 2048;
-    const int ic = (int)c - 2048;
-
-    float v0 = (float)ia * fractal;
-    float v1 = (float)ib * fractal;
-    float v2 = (float)ic * fractal;
-
-    const u32 resultShift = (u32)((cVal >> 36) & 3u);
-    const float wsign = ((cVal >> 38) & 1u) ? -1.0f : 1.0f;
-
-    const float sumsq = v0*v0 + v1*v1 + v2*v2;
-    const float missing = sqrtf(fmaxf(0.0f, 1.0f - sumsq)) * wsign;
-
-    /* Build like your SSE: tmp is [v0,v1,v2,missing], then shuffle based on resultShift */
-    switch (resultShift) {
-        case 0: out[0] = missing; out[1] = v0;      out[2] = v1;      out[3] = v2;      break; /* [w,x,y,z] */
-        case 1: out[0] = v0;      out[1] = missing; out[2] = v1;      out[3] = v2;      break; /* [x,w,y,z] */
-        case 2: out[0] = v0;      out[1] = v1;      out[2] = missing; out[3] = v2;      break; /* [x,y,w,z] */
-        default:out[0] = v0;      out[1] = v1;      out[2] = v2;      out[3] = missing; break; /* [x,y,z,w] */
-    }
+static constexpr glm::uvec4 shr(const glm::uvec4 &v, const uint32_t bits) {
+    return {v.x >> bits, v.y >> bits, v.z >> bits, v.w >> bits};
 }
 
-static void Read48Quat_C(const u8 **p, float out[4]) {
-    const u8 *b = *p;
+static glm::vec4 compute_w(glm::vec4 v) {
+    const float dot = glm::dot(v, v);
+    const float res0 = 1.0f - dot;
+    const float res1 = res0 > 0.0001f ? std::sqrt(res0) : 0.0f;
+    return {v.x, v.y, v.z, res1};
+}
 
-    /* 3x little-endian int16 */
-    const int16_t X = rd_i16_le_ptr(b + 0);
-    const int16_t Y = rd_i16_le_ptr(b + 2);
-    const int16_t Z = rd_i16_le_ptr(b + 4);
-    *p += 6;
+glm::vec4 Read40Quat(IO::File &buffer) {
+    constexpr float fractal = 0.000345436f;
+    constexpr glm::vec4 fract(fractal, fractal, fractal, 0.0f);
 
-    const float fractal = 0.000043161f; /* matches your C++ constant */
-    const u32 mask = (1u << 15) - 1u;
+    uint64_t cVal0 =
+            static_cast<uint64_t>(buffer.read_pod<uint8>()) |
+            (static_cast<uint64_t>(buffer.read_pod<uint8>()) << 8) |
+            (static_cast<uint64_t>(buffer.read_pod<uint8>()) << 16) |
+            (static_cast<uint64_t>(buffer.read_pod<uint8>()) << 24) |
+            (static_cast<uint64_t>(buffer.read_pod<uint8>()) << 32);
 
-    const u32 ux = (u16)X;
-    const u32 uy = (u16)Y;
-    const u32 uz = (u16)Z;
+    const auto cVal1 = static_cast<uint32_t>(cVal0 >> 24);
 
-    const u32 resultShift = ((uy >> 14) & 2u) | ((ux >> 15) & 1u);
-    const float wsign = ((uz >> 15) != 0) ? -1.0f : 1.0f;
+    const glm::uvec4 packed(
+        static_cast<uint32_t>(cVal0),
+        static_cast<uint32_t>(cVal0),
+        cVal1,
+        0u
+    );
 
-    const int ix = (int)(ux & mask) - (int)(mask >> 1) - 1; /* center ~[-16384,16383] */
-    const int iy = (int)(uy & mask) - (int)(mask >> 1) - 1;
-    const int iz = (int)(uz & mask) - (int)(mask >> 1) - 1;
+    constexpr glm::uvec4 mul(1u << 20, 1u << 8, 1u << 20, 0u);
 
-    float v0 = (float)ix * fractal;
-    float v1 = (float)iy * fractal;
-    float v2 = (float)iz * fractal;
+    const glm::uvec4 tmpVal = shr(packed * mul, 20);
+    const glm::ivec4 tmpVal1 = glm::ivec4(tmpVal) - glm::ivec4((1 << 11) + 1);
+    const glm::vec4 tmpVal2 = compute_w(glm::vec4(tmpVal1) * fract);
 
-    const float sumsq = v0*v0 + v1*v1 + v2*v2;
-    const float missing = sqrtf(fmaxf(0.0f, 1.0f - sumsq)) * wsign;
+    const size_t resultShift = cVal0 >> 36 & 3;
+    const glm::vec4 wmul(1.0f, 1.0f, 1.0f, ((cVal0 >> 38) & 1) ? -1.0f : 1.0f);
+    const glm::vec4 retVal = wmul * tmpVal2;
 
     switch (resultShift) {
-        case 0: out[0] = missing; out[1] = v0;      out[2] = v1;      out[3] = v2;      break;
-        case 1: out[0] = v0;      out[1] = missing; out[2] = v1;      out[3] = v2;      break;
-        case 2: out[0] = v0;      out[1] = v1;      out[2] = missing; out[3] = v2;      break;
-        default:out[0] = v0;      out[1] = v1;      out[2] = v2;      out[3] = missing; break;
-    }
-}
-
-void ReadQuat_C(const QuantizationType qt, const u8 **p, float out[4]) {
-    switch (qt) {
-        case QT_32bit:
-            Read32Quat_C(p, out);
-            break;
-        case QT_40bit:
-            Read40Quat_C(p, out);
-            break;
-        case QT_48bit:
-            Read48Quat_C(p, out);
-            break;
-        case QT_Uncompressed:
-            out[0] = rd_f32_le(p);
-            out[1] = rd_f32_le(p);
-            out[2] = rd_f32_le(p);
-            out[3] = rd_f32_le(p);
-            break;
+        case 0:
+            return {retVal.w, retVal.x, retVal.y, retVal.z};
+        case 1:
+            return {retVal.x, retVal.w, retVal.y, retVal.z};
+        case 2:
+            return {retVal.x, retVal.y, retVal.w, retVal.z};
         default:
-            out[0] = 0.0f;
-            out[1] = 0.0f;
-            out[2] = 0.0f;
-            out[3] = 1.0f;
-            break;
+            return retVal;
     }
 }
 
+glm::vec4 Read48Quat(IO::File &buffer) {
+    constexpr int mask = (1 << 15) - 1;
+    constexpr float fractal = 0.000043161f;
+    constexpr glm::vec4 fract(fractal, fractal, fractal, 0.0f);
 
-static Track make_vec3_track(
-    const TransformMask *m,
-    QuantizationType qtype,
-    float defVal,
-    int is_scale, /* 0=pos, 1=scale */
-    const u8 **p
-) {
-    const SplineTrackType tx = is_scale ? TransformMask_GetSubTrackType_Scale(m, 0) : TransformMask_GetSubTrackType_Pos(m, 0);
-    const SplineTrackType ty = is_scale ? TransformMask_GetSubTrackType_Scale(m, 1) : TransformMask_GetSubTrackType_Pos(m, 1);
-    const SplineTrackType tz = is_scale ? TransformMask_GetSubTrackType_Scale(m, 2) : TransformMask_GetSubTrackType_Pos(m, 2);
+    static_assert(sizeof(glm::i16vec3) == 6, "Invalid size");
+    auto cVal = buffer.read_pod<glm::i16vec3>();
 
-    const int useSpline = (tx == STT_DYNAMIC) || (ty == STT_DYNAMIC) || (tz == STT_DYNAMIC);
+    const int resultShift = ((static_cast<uint16_t>(cVal.y) >> 14) & 2) |
+                            ((static_cast<uint16_t>(cVal.x) >> 15) & 1);
+    const bool rSign = (static_cast<uint16_t>(cVal.z) >> 15) != 0;
 
-    if (useSpline) {
-        SplineDynamicVec3 *s = (SplineDynamicVec3 *) mp_calloc(1, sizeof(*s));
-        const u16 numItems = rd_u16_le(p);
-        s->num_items = (u32) numItems;
+    const glm::ivec4 retVal0(cVal.x, cVal.y, cVal.z, 0);
+    glm::vec4 retVal1 =
+            glm::vec4((retVal0 & glm::ivec4(mask)) - glm::ivec4(mask >> 1)) * fract;
 
-        s->degree = rd_u8(p);
+    retVal1 = compute_w(retVal1);
 
-        const u32 knots_len = (u32) numItems + (u32) s->degree + 2u;
-        s->knots = *p;
-        s->knots_len = knots_len;
-        *p += knots_len;
-        apply_padding4(p);
+    const glm::vec4 wmul(1.0f, 1.0f, 1.0f, rSign ? -1.0f : 1.0f);
+    const glm::vec4 retVal = wmul * retVal1;
 
-        TrackBBOX extremes[3] = {};
-
-        s->x_dynamic = (tx == STT_DYNAMIC);
-        s->y_dynamic = (ty == STT_DYNAMIC);
-        s->z_dynamic = (tz == STT_DYNAMIC);
-
-        if (tx == STT_DYNAMIC) {
-            extremes[0].min = rd_f32_le(p);
-            extremes[0].max = rd_f32_le(p);
-            s->x = (float *) mp_malloc(sizeof(float) * (s->num_items + 1u));
-        }
-        else {
-            s->x = NULL;
-        }
-
-        if (ty == STT_DYNAMIC) {
-            extremes[1].min = rd_f32_le(p);
-            extremes[1].max = rd_f32_le(p);
-            s->y = (float *) mp_malloc(sizeof(float) * (s->num_items + 1u));
-        }
-        else {
-            s->y = NULL;
-        }
-
-        if (tz == STT_DYNAMIC) {
-            extremes[2].min = rd_f32_le(p);
-            extremes[2].max = rd_f32_le(p);
-            s->z = (float *) mp_malloc(sizeof(float) * (s->num_items + 1u));
-        }
-        else {
-            s->z = NULL;
-        }
-
-        float x_static = defVal, y_static = defVal, z_static = defVal;
-        if (tx == STT_STATIC) x_static = rd_f32_le(p);
-        if (ty == STT_STATIC) y_static = rd_f32_le(p);
-        if (tz == STT_STATIC) z_static = rd_f32_le(p);
-
-        if (tx == STT_DYNAMIC) {
-            for (u32 i = 0; i <= s->num_items; i++) s->x[i] = x_static;
-        }
-        if (ty == STT_DYNAMIC) {
-            for (u32 i = 0; i <= s->num_items; i++) s->y[i] = y_static;
-        }
-        if (tz == STT_DYNAMIC) {
-            for (u32 i = 0; i <= s->num_items; i++) s->z[i] = z_static;
-        }
-
-        if (qtype == QT_8bit) {
-            const float fract = 1.0f / 255.0f;
-            for (u32 t = 0; t <= s->num_items; t++) {
-                if (tx == STT_DYNAMIC) {
-                    const float d = (float) rd_u8(p) * fract;
-                    s->x[t] = extremes[0].min + (extremes[0].max - extremes[0].min) * d;
-                }
-                if (ty == STT_DYNAMIC) {
-                    const float d = (float) rd_u8(p) * fract;
-                    s->y[t] = extremes[1].min + (extremes[1].max - extremes[1].min) * d;
-                }
-                if (tz == STT_DYNAMIC) {
-                    const float d = (float) rd_u8(p) * fract;
-                    s->z[t] = extremes[2].min + (extremes[2].max - extremes[2].min) * d;
-                }
-            }
-        }
-        else {
-            const float fract = 1.0f / 65535.0f;
-            for (u32 t = 0; t <= s->num_items; t++) {
-                if (tx == STT_DYNAMIC) {
-                    const float d = (float) rd_u16_le(p) * fract;
-                    s->x[t] = extremes[0].min + (extremes[0].max - extremes[0].min) * d;
-                }
-                if (ty == STT_DYNAMIC) {
-                    const float d = (float) rd_u16_le(p) * fract;
-                    s->y[t] = extremes[1].min + (extremes[1].max - extremes[1].min) * d;
-                }
-                if (tz == STT_DYNAMIC) {
-                    const float d = (float) rd_u16_le(p) * fract;
-                    s->z[t] = extremes[2].min + (extremes[2].max - extremes[2].min) * d;
-                }
-            }
-        }
-
-        apply_padding4(p);
-
-        Track out = {};
-        out.kind = TrackKind::TRACK_VEC3_SPLINE_DYNAMIC;
-        out.impl = s;
-        return out;
+    switch (resultShift) {
+        case 0:
+            return {retVal.w, retVal.x, retVal.y, retVal.z};
+        case 1:
+            return {retVal.x, retVal.w, retVal.y, retVal.z};
+        case 2:
+            return {retVal.x, retVal.y, retVal.w, retVal.z};
+        default:
+            return retVal;
     }
-
-    SplineStaticVec3 *st = (SplineStaticVec3 *) mp_calloc(1, sizeof(*st));
-    st->item[0] = (tx == STT_STATIC) ? rd_f32_le(p) : defVal;
-    st->item[1] = (ty == STT_STATIC) ? rd_f32_le(p) : defVal;
-    st->item[2] = (tz == STT_STATIC) ? rd_f32_le(p) : defVal;
-
-    Track out = {};
-    out.kind = TrackKind::TRACK_VEC3_STATIC;
-    out.impl = st;
-    return out;
 }
 
-static Track make_quat_track(const TransformMask *m, const u8 **p) {
-    const SplineTrackType rt = TransformMask_GetSubTrackType_Rotation(m);
+glm::vec4 ReadQuat(const QuantizationType qType, IO::File &buffer) {
+    switch (qType) {
+        case QuantizationType::QT_32bit:
+            return Read32Quat(buffer);
+        case QuantizationType::QT_40bit:
+            return Read40Quat(buffer);
+        case QuantizationType::QT_48bit:
+            return Read48Quat(buffer);
+        case QuantizationType::QT_Uncompressed:
+            return buffer.read_pod<glm::vec4>();
+        default:
+            return {0.0f, 0.0f, 0.0f, 1.0f};
+    }
+}
 
-    if (rt == STT_DYNAMIC) {
-        SplineDynamicQuat *r = (SplineDynamicQuat *) mp_calloc(1, sizeof(*r));
+// Algorithm A2.1 The NURBS Book 2nd edition, page 68
+int FindKnotSpan(const int degree, const float value, const int cPointsSize,
+                 const std::span<const uint8> &knots) {
+    if (value >= static_cast<float>(knots[cPointsSize]))
+        return cPointsSize - 1;
 
-        const u16 numItems = rd_u16_le(p);
-        r->num_items = (u32) numItems;
+    int low = degree;
+    int high = cPointsSize;
+    int mid = (low + high) / 2;
 
-        r->degree = rd_u8(p);
+    while (value < static_cast<float>(knots[mid]) || value >= static_cast<float>(knots[mid + 1])) {
+        if (value < static_cast<float>(knots[mid]))
+            high = mid;
+        else
+            low = mid;
 
-        const u32 knots_len = (u32) numItems + (u32) r->degree + 2u;
-        r->knots = *p;
-        r->knots_len = knots_len;
-        *p += knots_len;
+        mid = (low + high) / 2;
+    }
 
-        const QuantizationType qt = TransformMask_GetRotQuantizationType(m);
-        if (qt == QT_48bit || qt == QT_16bitQuat) apply_padding2(p);
-        else if (qt == QT_32bit || qt == QT_Uncompressed) apply_padding4(p);
+    return mid;
+}
 
-        r->q = (Quat *) mp_malloc(sizeof(Quat) * (r->num_items + 1u));
-        for (u32 t = 0; t <= r->num_items; t++) {
-            ReadQuat_C(qt, p, r->q[t]);
+// Basis_ITS1, GetPoint_NR1, TIME-EFFICIENT NURBS CURVE EVALUATION ALGORITHMS,
+// pages 64 & 65
+template<class C>
+C GetSinglePoint(const int knotSpanIndex, const int degree, const float frame,
+                 const std::span<const uint8> &knots, std::vector<C> &cPoints) {
+    float N[5] = {1.0f};
+
+    for (int i = 1; i <= degree; i++)
+        for (int j = i - 1; j >= 0; j--) {
+            const float denom = static_cast<float>(knots[knotSpanIndex + i - j]) - static_cast<float>(knots[
+                                    knotSpanIndex - j]);
+            const float A = (denom != 0.0f) ? ((frame - static_cast<float>(knots[knotSpanIndex - j])) / denom) : 0.0f;
+            const float tmp = N[j] * A;
+            N[j + 1] += N[j] - tmp;
+            N[j] = tmp;
         }
 
-        Track out = {};
-        out.kind = TrackKind::TRACK_QUAT_SPLINE_DYNAMIC;
-        out.impl = r;
-        return out;
-    }
+    C retVal{0};
 
-    SplineStaticQuat *st = (SplineStaticQuat *) mp_calloc(1, sizeof(*st));
+    for (int i = 0; i <= degree; i++)
+        retVal += cPoints[knotSpanIndex - i] * N[i];
 
-    if (rt == STT_STATIC) {
-        ReadQuat_C(TransformMask_GetRotQuantizationType(m), p, st->item);
-    }
+    return retVal;
+}
+
+glm::vec4 SplineDynamicTrackQuat::GetValue(const float localFrame) {
+    int knotSpan = FindKnotSpan(degree, localFrame, static_cast<int>(track.size()), knots);
+    return GetSinglePoint(knotSpan, degree, localFrame, knots, track);
+}
+
+glm::vec3 SplineDynamicTrackVector::GetValue(const float localFrame) {
+    glm::vec3 out;
+    int knotSpan = -1;
+
+    int cSize = static_cast<int>(tracks[0].size());
+
+    if (cSize == 1)
+        out.x = tracks[0][0];
     else {
-        st->item[0] = 0;
-        st->item[1] = 0;
-        st->item[2] = 0;
-        st->item[3] = 1;
+        knotSpan = FindKnotSpan(degree, localFrame, cSize, knots);
+        out.x = GetSinglePoint(knotSpan, degree, localFrame, knots, tracks[0]);
     }
 
-    Track out = {};
-    out.kind = TrackKind::TRACK_QUAT_STATIC;
-    out.impl = st;
+    cSize = static_cast<int>(tracks[1].size());
+
+    if (cSize == 1)
+        out.y = tracks[1][0];
+    else {
+        if (knotSpan < 0)
+            knotSpan = FindKnotSpan(degree, localFrame, cSize, knots);
+
+        out.y = GetSinglePoint(knotSpan, degree, localFrame, knots, tracks[1]);
+    }
+
+    cSize = static_cast<int>(tracks[2].size());
+
+    if (cSize == 1)
+        out.z = tracks[2][0];
+    else {
+        if (knotSpan < 0)
+            knotSpan = FindKnotSpan(degree, localFrame, cSize, knots);
+
+        out.z = GetSinglePoint(knotSpan, degree, localFrame, knots, tracks[2]);
+    }
+
     return out;
 }
 
-void TransformSplineBlock_free(TransformSplineBlock *self) {
-    if (!self) return;
-    if (self->tracks) {
-        for (u32 i = 0; i < self->track_count; i++) {
-            Track_free(&self->tracks[i].position);
-            Track_free(&self->tracks[i].rotation);
-            Track_free(&self->tracks[i].scale);
+void ApplyPadding(IO::File &buffer, const int alignment = 4) {
+    const size_t iterPos = buffer.get_position();
+    const size_t result = iterPos & (alignment - 1);
+    if (!result)
+        return;
+    buffer.skip(alignment - result);
+}
+
+void ApplyPadding(const char *&buffer, const int alignment = 4) {
+    const size_t iterPos = reinterpret_cast<intptr_t>(buffer);
+    const size_t result = iterPos & (alignment - 1);
+
+    if (!result)
+        return;
+
+    buffer += alignment - result;
+}
+
+struct TrackBBOX {
+    float min, max;
+};
+
+void TransformSplineBlock::Assign(IO::File &buffer, size_t numTracks,
+                                  const size_t numFloatTracks) {
+    masks.resize(numTracks);
+    buffer.read_exact(masks);
+    buffer.skip(numFloatTracks);
+    ApplyPadding(buffer);
+
+    tracks.resize(numTracks);
+
+    for (auto [m, track]: std::views::zip(masks, tracks)) {
+        auto MakeTrack = [&]<typename stype>(const QuantizationType qtype, const float defVal,
+                                             stype) -> TransformTrack::TrackType<glm::vec3> {
+            const bool useSpline =
+                    m.GetSubTrackType(stype::X) == SplineTrackType::DYNAMIC ||
+                    m.GetSubTrackType(stype::Y) == SplineTrackType::DYNAMIC ||
+                    m.GetSubTrackType(stype::Z) == SplineTrackType::DYNAMIC;
+
+            if (useSpline) {
+                auto sTrack = std::make_unique<SplineDynamicTrackVector>();
+                const auto numItems = buffer.read_pod<uint16>();
+                sTrack->degree = buffer.read_pod<uint8>();
+                const size_t bufferSkip = numItems + sTrack->degree + 2;
+                sTrack->knots.resize(bufferSkip);
+                buffer.read_exact(sTrack->knots);
+                ApplyPadding(buffer);
+
+                TrackBBOX extremes[3] = {};
+
+                auto MakeSubTrack = [&](auto type, const size_t id) {
+                    const auto ttype =
+                            m.GetSubTrackType(static_cast<TransformType>(type));
+
+                    if (ttype == SplineTrackType::DYNAMIC) {
+                        extremes[id] = buffer.read_pod<TrackBBOX>();
+                        sTrack->tracks[id].resize(numItems + 1);
+                    }
+                    else if (ttype == SplineTrackType::STATIC) {
+                        sTrack->tracks[id].push_back(buffer.read_pod<float32>());
+                    }
+                    else {
+                        sTrack->tracks[id].push_back(defVal);
+                    }
+                };
+
+                MakeSubTrack(stype::X, 0);
+                MakeSubTrack(stype::Y, 1);
+                MakeSubTrack(stype::Z, 2);
+
+                auto UnpackPoints8 = [&](auto type, const size_t id, const size_t sid) {
+                    constexpr float fractal = 1.0f / 255.0f;
+                    const auto ttype = m.GetSubTrackType(static_cast<TransformType>(type));
+                    if (ttype == SplineTrackType::DYNAMIC) {
+                        const float dVar = static_cast<float>(buffer.read_pod<uint8>()) * fractal;
+                        sTrack->tracks[id][sid] = extremes[id].min + (extremes[id].max - extremes[id].min) * dVar;
+                    }
+                };
+
+                auto UnpackPoints16 = [&](auto type, const size_t id, const size_t sid) {
+                    constexpr float fractal = 1.0f / 0xffff;
+                    const auto ttype = m.GetSubTrackType(static_cast<TransformType>(type));
+                    if (ttype == SplineTrackType::DYNAMIC) {
+                        const float dVar = static_cast<float>(buffer.read_pod<uint16>()) * fractal;
+                        sTrack->tracks[id][sid] = extremes[id].min + (extremes[id].max - extremes[id].min) * dVar;
+                    }
+                };
+
+                if (qtype == QuantizationType::QT_8bit) {
+                    for (int t = 0; t <= numItems; t++) {
+                        UnpackPoints8(stype::X, 0, t);
+                        UnpackPoints8(stype::Y, 1, t);
+                        UnpackPoints8(stype::Z, 2, t);
+                    }
+                }
+                else {
+                    for (int t = 0; t <= numItems; t++) {
+                        UnpackPoints16(stype::X, 0, t);
+                        UnpackPoints16(stype::Y, 1, t);
+                        UnpackPoints16(stype::Z, 2, t);
+                    }
+                }
+
+                ApplyPadding(buffer);
+                return sTrack;
+            }
+
+            auto sTrack = std::make_unique<SplineStaticTrack<glm::vec3> >();
+            auto MakeSubTrack = [&](auto type, const int32 id) {
+                const auto ttype = m.GetSubTrackType(type);
+
+                if (ttype == SplineTrackType::STATIC) {
+                    sTrack->item[id] = buffer.read_pod<float32>();
+                }
+                else {
+                    sTrack->item[id] = defVal;
+                }
+            };
+
+            MakeSubTrack(stype::X, 0);
+            MakeSubTrack(stype::Y, 1);
+            MakeSubTrack(stype::Z, 2);
+
+            return sTrack;
+        };
+
+        track.pos = MakeTrack(m.GetPosQuantizationType(), 0.f, TransformTypePos{});
+
+        if (m.GetSubTrackType(TransformType::Rotation) == SplineTrackType::DYNAMIC) {
+            const auto rTrack = new SplineDynamicTrackQuat();
+            track.rotation = TransformTrack::TrackType<glm::vec4>(rTrack);
+            const auto numItems = buffer.read_pod<uint16>();
+            rTrack->degree = buffer.read_pod<uint8>();
+            const size_t knot_count = numItems + rTrack->degree + 2;
+            rTrack->knots.resize(knot_count);
+            buffer.read_exact(rTrack->knots);
+
+            const QuantizationType quantType = m.GetRotQuantizationType();
+
+            if (quantType == QuantizationType::QT_48bit || quantType == QuantizationType::QT_16bitQuat)
+                ApplyPadding(buffer, 2);
+            else if (quantType == QuantizationType::QT_32bit || quantType == QuantizationType::QT_Uncompressed)
+                ApplyPadding(buffer);
+
+            rTrack->track.resize(numItems + 1);
+
+            for (int t = 0; t <= numItems; t++) {
+                rTrack->track[t] = ReadQuat(quantType, buffer);
+            }
         }
-        mp_free(self->tracks);
-    }
-    self->masks = NULL;
-    self->mask_count = 0;
-    self->tracks = NULL;
-    self->track_count = 0;
-}
+        else {
+            auto rTrack = std::make_unique<SplineStaticTrack<glm::vec4> >();
 
-bool TransformSplineBlock_assign(TransformSplineBlock *self, const uint8 *data,
-                                 const uint32 track_count,
-                                 const uint32 float_track_count) {
-    if (!self || !data) return false;
+            if (m.GetSubTrackType(TransformType::Rotation) == SplineTrackType::STATIC) {
+                rTrack->item = ReadQuat(m.GetRotQuantizationType(), buffer);
+            }
+            else {
+                rTrack->item.w = 1.0f;
+            }
 
-    TransformSplineBlock_free(self);
+            track.rotation = std::move(rTrack);
+        }
 
-    const TransformMask *track_start = (const TransformMask *) data;
-    const u8 *p = data + sizeof(TransformMask) * (size_t) track_count + (size_t) float_track_count;
-    apply_padding4(&p);
+        ApplyPadding(buffer);
 
-    self->masks = track_start;
-    self->mask_count = track_count;
-
-    self->tracks = (TransformTrack *) mp_calloc(track_count, sizeof(TransformTrack));
-    self->track_count = track_count;
-
-    for (u32 i = 0; i < track_count; i++) {
-        const TransformMask *m = &track_start[i];
-
-        self->tracks[i].position = make_vec3_track(
-            m,
-            TransformMask_GetPosQuantizationType(m),
-            0.0f,
-            0,
-            &p
-        );
-
-        self->tracks[i].rotation = make_quat_track(m, &p);
-
-        apply_padding4(&p);
-
-        self->tracks[i].scale = make_vec3_track(
-            m,
-            TransformMask_GetScaleQuantizationType(m),
-            1.0f,
-            1,
-            &p
-        );
-    }
-    return true;
-}
-
-void TransformSplineBlock_get_value(const TransformSplineBlock *self, u32 trackID, float time, QTransform *out) {
-    Track_get_value_quat(&self->tracks[trackID].rotation, time, out->rotation);
-    Track_get_value_vec3(&self->tracks[trackID].position, time, out->translation);
-    Track_get_value_vec3(&self->tracks[trackID].scale,    time, out->scale);
-}
-
-
-void hkaSplineDecompressor_assign(hkaSplineDecompressor *self, const hkaSplineCompressedAnimation *input) {
-    DA_init(&self->blocks, TransformSplineBlock, input->numBlocks);
-    const uint8 *raw_data = input->data.m_data;
-    for (int i = 0; i < input->numBlocks; ++i) {
-        const uint32 block_offset = input->blockOffsets.m_data[i];
-        TransformSplineBlock *block = static_cast<TransformSplineBlock *>(DA_append_get(&self->blocks));
-        TransformSplineBlock_assign(block, raw_data + block_offset, input->numberOfTransformTracks,
-                                    input->numberOfFloatTracks);
+        track.scale = MakeTrack(m.GetScaleQuantizationType(), 1.f, TransformTypeScale{});
     }
 }
 
-void hkaSplineDecompressor_free(hkaSplineDecompressor *self) {
-    for (uint32 i = 0; i < self->blocks.count; ++i) {
-        TransformSplineBlock_free(&self->blocks.items[i]);
+void hkaSplineDecompressor::Assign(
+    const HavokTypes::hkaSplineCompressedAnimation *input) {
+    const auto blockOffsets = input->blockOffsets;
+    const auto data_buffer = Buffer::wrap(input->data);
+    blocks.resize(blockOffsets.size());
+    int cBlock = 0;
+
+    for (auto &b: blocks) {
+        IO::MemoryViewFile block_view(data_buffer.readonly_view(blockOffsets[cBlock]));
+        b.Assign(block_view, input->numberOfTransformTracks, input->numberOfFloatTracks);
+        cBlock++;
     }
-    DA_free(&self->blocks);
 }

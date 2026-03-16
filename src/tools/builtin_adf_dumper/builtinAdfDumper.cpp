@@ -31,7 +31,7 @@ uint64_t *g_all_files = NULL;
 uint32_t g_all_files_capacity = 100;
 uint32_t g_all_files_count = 0;
 
-bool string_is_printable(const char* str, const uint64_t str_len) {
+bool string_is_printable(const char *str, const uint64_t str_len) {
     for (uint64_t i = 0; i < str_len; i++) {
         if (str[i] < 32 || str[i] > 126) {
             return false;
@@ -42,7 +42,7 @@ bool string_is_printable(const char* str, const uint64_t str_len) {
 
 uint64_t __fastcall hashlittle_hook(const char *str, const uint64_t str_len, const int initial) {
     if (*str && string_is_printable(str, str_len)) {
-        fprintf(g_hashes_file, "%.*s\n", (int)str_len, str);
+        fprintf(g_hashes_file, "%.*s\n", (int) str_len, str);
     }
     uint64_t hash = g_hashlittle_fn_orig(str, str_len, initial);
     return hash;
@@ -76,7 +76,7 @@ __int64 __fastcall load_adf_hook(__int64 *a1, __int64 raw_data, unsigned __int64
         dump_as_hex((uint8_t *) raw_data, raw_data_size);
         if (g_all_files_count + 1 >= g_all_files_capacity) {
             g_all_files_capacity *= 2;
-            g_all_files = realloc(g_all_files, g_all_files_capacity * sizeof(uint64_t));
+            g_all_files = static_cast<uint64_t *>(realloc(g_all_files, g_all_files_capacity * sizeof(uint64_t)));
             if (g_all_files == NULL) {
                 fprintf(stderr, "Failed to realloc g_all_files\n");
                 exit(1);
@@ -107,12 +107,12 @@ bool hook_function(const char *pattern, const char *name, void *orig_slot, void 
     }
     printf("Found %s at: 0x%p\n", name, fn_addr);
 
-    if (MH_CreateHook(fn_addr, hook, orig_slot) != MH_OK) {
+    if (MH_CreateHook((void*)fn_addr, hook, (void**)orig_slot) != MH_OK) {
         fprintf(stderr, "Failed to create hook for %s\n", name);
         return false;
     }
 
-    if (MH_EnableHook(fn_addr) != MH_OK) {
+    if (MH_EnableHook((void*)fn_addr) != MH_OK) {
         fprintf(stderr, "Failed to enable hook for %s\n", name);
         return false;
     }
@@ -179,7 +179,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID *reserved) {
         g_dump_file = fopen(adf_output_file, "w");
         g_hashes_file = fopen(hashes_output, "w");
 
-        g_all_files = calloc(100, sizeof(uint64_t));
+        g_all_files = static_cast<uint64_t *>(calloc(100, sizeof(uint64_t)));
         if (g_dump_file == NULL) {
             fprintf(stderr, "Failed to open dump file\n");
             exit(1);

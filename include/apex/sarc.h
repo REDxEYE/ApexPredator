@@ -2,40 +2,57 @@
 
 #ifndef APEXPREDATOR_SARC_H
 #define APEXPREDATOR_SARC_H
+#include <ranges>
+
 #include "int_def.h"
 #include "platform/archive.h"
-#include "utils/buffer/buffer.h"
-#include "utils/dynamic_map.h"
+#include "utils/file/file.h"
+#include "utils/hash_helper.h"
 
-typedef struct {
+struct SArcHeader {
     uint32 version;
     char ident[4];
     uint32 version2;
     uint32 dir_block_len;
-}SArcHeader;
+};
 
-typedef struct {
-    const char* name;
+struct SArcEntry {
+    std::string_view name;
     uint32 offset;
     uint32 size;
     uint32 hash;
     uint32 ext_hash;
-}SArcEntry;
-
-DYNAMIC_ARRAY_STRUCT(SArcEntry, SArcEntry);
-DYNAMIC_INT_MAP_STRUCT(SArcEntry, SArcEntryMap);
-
-struct SArchive:ArchiveInterface {
-    SArcHeader header;
-    uint32 hash;
-    char* strings;
-    DynamicIntMap_SArcEntryMap entries;
-    Buffer* buffer;
 };
 
-SArchive* SArchive_new(Buffer* buffer, uint32 self_hash);
-void SArchive_init(SArchive* archive, Buffer* buffer, uint32 self_hash);
-// void SArchive_from_buffer(SArchive* archive, Buffer* buffer);
-// void SArchive_free(SArchive* archive);
+
+class SArchive : public Archive {
+public:
+    SArchive(uint32 m_hash, std::unique_ptr<IO::File> buffer);
+
+    [[nodiscard]] bool has_file(std::string_view path) const override;
+
+    [[nodiscard]] bool has_file(uint32 hash) const override;
+
+    std::unique_ptr<IO::File> get_file(std::string_view path) override;
+
+    std::unique_ptr<IO::File> get_file(uint32 hash) override;
+
+    void all_entries(std::vector<ArchiveEntry> &entries) const override;
+
+    [[nodiscard]] std::string get_name() const override;
+
+    uint32 hash() override;
+
+    [[nodiscard]] auto entries() const {
+        return m_entries|std::views::values;
+    }
+
+private:
+    SArcHeader m_header{};
+    uint32 m_hash;
+    std::vector<char> m_strings;
+    std::unordered_map<uint32, SArcEntry> m_entries;
+    std::unique_ptr<IO::File> m_buffer;
+};
 
 #endif //APEXPREDATOR_SARC_H

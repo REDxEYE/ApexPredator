@@ -2,1008 +2,647 @@
 
 #include "havok/havok_codegen.h"
 
-#include <assert.h>
+#include <ranges>
 
 #include "platform/logger.h"
-#include "utils/common.h"
 #include "utils/hash_helper.h"
 
-void generate_members(const Havok_TypeLibrary *lib, const HavokType *record_type, FILE *header_output,
-                      uint32 *prev_member_offset, uint32 *prev_member_size) {
-    if (record_type->parent_hash != 0) {
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, record_type->parent_hash);
-        generate_members(lib, parent_type, header_output, prev_member_offset, prev_member_size);
+using namespace Havok::CodeGen;
+
+struct Context {
+    const TypeLibrary &lib;
+    std::ofstream &fwd_header_stream;
+    std::ofstream &header_stream;
+    std::ofstream &impl_stream;
+    std::ofstream &formatting_impl_stream;
+
+    bool fwd_mode;
+};
+
+bool is_trivial_type(const SharedType &type) {
+    if (!type->template_args.empty() && type->type!=MetaType::ENUM) {
+        return false;
+    }
+    bool is_trivial = true;
+    if (type->parent() != nullptr) {
+        is_trivial &= is_trivial_type(type->parent());
     }
 
-    fprintf(header_output, "    // %s members\n", String_cstr(&record_type->name));
-    DA_FORI(record_type->members, i) {
-        const HavokRecordMember *member = &record_type->members.items[i];
-        const HavokType *member_type = (const HavokType *)DM_get(&lib->types, member->type_hash);
-        if (member_type == NULL) {
-            GLog_Error("No member type data for member %s of type %s",
-                       String_cstr(&member->name), String_cstr(&record_type->name));
-            abort();
-        }
-
-        if (member->offset != 0) {
-            // Compute inter padding
-            const uint32 expected_offset = *prev_member_offset + *prev_member_size;
-            if (member->offset > expected_offset) {
-                const uint32 padding_size = member->offset - expected_offset;
-                fprintf(header_output, "    uint8 _padding_%s[%d]; // inter-member padding\n",
-                        String_cstr(&member->name), padding_size);
-            }
-        }
-
-        if (member_type->type == HK_ARRAY) {
-            fprintf(header_output, "    %s %s; // offset: %d, flags: %d, size: %d\n",
-                    String_cstr(&member_type->name),
-                    String_cstr(&member->name), member->offset, member->flags,
-                    member_type->size);
-        }
-        else if (member_type->type == HK_FIXED_ARRAY) {
-            const HavokType *inner_type = (const HavokType *)DM_get(&lib->types, member_type->inner_type_hash);
-            fprintf(header_output, "    %s %s[%i]; // offset: %d, flags: %d, size: %d, hash: 0x%08X\n",
-                    String_cstr(&inner_type->name),
-                    String_cstr(&member->name), member_type->array_size,
-                    member->offset, member->flags,
-                    member_type->size, member_type->hash);
-        }
-        else {
-            if (String_cequals(&member->name, "bool")) {
-                fprintf(header_output, "    %s _bool; // offset: %d, flags: %d, size: %d\n",
-                        String_cstr(&member_type->name), member->offset, member->flags,
-                        member_type->size);
-            }
-            else {
-                fprintf(header_output, "    %s %s; // offset: %d, flags: %d, size: %d\n",
-                        String_cstr(&member_type->name),
-                        String_cstr(&member->name), member->offset, member->flags,
-                        member_type->size);
-            }
-        }
-
-        *prev_member_offset = member->offset;
-        *prev_member_size = member_type->size;
+    if (type->type == MetaType::BASIC ||
+        type->type == MetaType::PRIMITIVE ||
+        type->type == MetaType::ENUM ||
+        type->type == MetaType::STRING
+    ) {
+        return is_trivial;
     }
-}
-
-void generate_ti_info(const HavokType *type, FILE *output,
-                      const bool has_init,
-                      const bool has_free,
-                      const bool has_read,
-                      const bool has_print,
-                      const bool is_record,
-                      const bool is_array
-) {
-    fprintf(output, "HavokTypeInfo %s_TI = {\n", String_cstr(&type->name));
-    if (has_init)
-        fprintf(output, "    .init = (initHavokObject)%s_init,\n", String_cstr(&type->name));
-    else
-        fprintf(output, "    .init = NULL,\n");
-    if (has_free)
-        fprintf(output, "    .free = (freeHavokObject)%s_free,\n", String_cstr(&type->name));
-    else
-        fprintf(output, "    .free = NULL,\n");
-    if (has_read)
-        fprintf(output, "    .read = (readHavokObject)%s_read,\n", String_cstr(&type->name));
-    else
-        fprintf(output, "    .read = NULL,\n");
-    if (has_print)
-        fprintf(output, "    .print = (printHavokObject)%s_print,\n", String_cstr(&type->name));
-    else
-        fprintf(output, "    .print = NULL,\n");
-    if (String_cequals(&type->name, "void"))
-        fprintf(output, "    .size = 0,\n");
-    else
-        fprintf(output, "    .size = sizeof(%s),\n", String_cstr(&type->name));
-    fprintf(output, "    .disk_size = %u,\n", type->size);
-    fprintf(output, "    .is_record = %u,\n", is_record ? 1 : 0);
-    fprintf(output, "    .is_array = %u,\n", is_array ? 1 : 0);
-    fprintf(output, "    .hash = 0x%08X,\n", type->hash);
-    fprintf(output, "    .name = \"%s\",\n", String_cstr(&type->name));
-
-    fprintf(output, "};\n\n");
-}
-
-bool is_complex_type(const Havok_TypeLibrary *lib, const HavokType *type) {
-    if (type->type == HK_ARRAY || type->type == HK_PTR || type->type == HK_STRING) {
+    if (type->type == MetaType::POINTER) {
         return true;
     }
-    if (type->type == HK_RECORD) {
-        bool has_complex_members = false;
-        if (type->parent_hash != 0) {
-            const HavokType *parent = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-            has_complex_members |= is_complex_type(lib, parent);
+
+    if (type->type == MetaType::RECORD) {
+        if (std::holds_alternative<std::vector<Member> >(type->data)) {
+            const auto &members = std::get<std::vector<Member> >(type->data);
+            for (const auto &member: members) {
+                is_trivial &= is_trivial_type(member.type());
+            }
         }
-        DA_FORI(type->members, i) {
-            const HavokRecordMember *member = &type->members.items[i];
-            const HavokType *member_type = (const HavokType *)DM_get(&lib->types, member->type_hash);
-            has_complex_members |= is_complex_type(lib, member_type);
-        }
-        return has_complex_members;
+        return is_trivial;
     }
-    if (type->type == HK_PRIMITIVE && type->parent_hash != 0) {
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-        return is_complex_type(lib, parent_type);
-    }
-    return false;
+
+    return is_trivial;
 }
 
-void generate_type_def(const Havok_TypeLibrary *lib, const HavokType *type, FILE *header_output, FILE *impl_output) {
-    if (DA_contains(&lib->exported_hashes, &type->hash, compare_hashes64)) {
+bool is_basic_type(const SharedType &type) {
+    return type->type == MetaType::BASIC ||
+           (type->type == MetaType::PRIMITIVE && type->parent() != nullptr && is_basic_type(type->parent()));
+}
+
+static std::set<SharedType> g_processed_hashes{};
+// static std::set<SharedType> g_handled_by_fwd{};
+
+void emit_type(Context &ctx, const SharedType &type, std::ofstream &header_stream);
+
+// void emit_type_forward_declaration(Context &ctx, const SharedType &type, std::ofstream &header_stream) {
+//     if (g_processed_hashes.contains(type)) {
+//         return;
+//     }
+//
+//     if (is_trivial_type(type)) {
+//         // Emit full declaration if it's simple type
+//         emit_type(lib, type, header_stream);
+//         g_handled_by_fwd.emplace(type);
+//         return;
+//     }
+//
+//     g_processed_hashes.emplace(type);
+//
+//     if (type->type == MetaType::RECORD) {
+//         if (type->template_args.size() == 0) {
+//             header_stream << std::format("    struct {}; // size: {}\n\n", type->name(), type->size);
+//         }
+//     }
+//     else if (type->type == MetaType::PRIMITIVE) {
+//         if (type->parent() != nullptr) {
+//             emit_type_forward_declaration(lib, type->parent(), header_stream);
+//             if (type->parent()->template_args.empty()) {
+//                 header_stream << std::format("    typedef {} {}; // size: {}\n\n", type->parent()->name(),
+//                                              type->name(),
+//                                              type->size);
+//             }
+//             else {
+//                 header_stream << std::format("    typedef {}<", type->parent()->name());
+//                 for (size_t i = 0; i < type->parent()->template_args.size(); i++) {
+//                     const auto &arg = type->parent()->template_args[i];
+//                     if (std::holds_alternative<int64>(arg.value)) {
+//                         header_stream << std::get<int64>(arg.value);
+//                     }
+//                     else if (std::holds_alternative<WeakType>(arg.value)) {
+//                         const auto &inner_type = unwrap_weak(std::get<WeakType>(arg.value));
+//                         emit_type_forward_declaration(lib, inner_type, header_stream);
+//                         header_stream << inner_type->name();
+//                     }
+//                     if (i != type->parent()->template_args.size() - 1) {
+//                         header_stream << ", ";
+//                     }
+//                 }
+//                 header_stream << std::format("> {}; // size: {}\n\n", type->name(),
+//                                              type->size);
+//             }
+//         }
+//     }
+//     else if (type->type == MetaType::ENUM) {
+//         if (type->template_args.size() == 2) {
+//             const auto enum_templ = type->template_args[0];
+//             const auto underlying_templ = type->template_args[1];
+//             if (std::holds_alternative<WeakType>(enum_templ.value) && std::holds_alternative<WeakType>(
+//                     underlying_templ.value)) {
+//                 const auto &enum_type = unwrap_weak(std::get<WeakType>(enum_templ.value));
+//                 const auto &underlying_type = unwrap_weak(std::get<WeakType>(underlying_templ.value));
+//                 emit_type_forward_declaration(lib, underlying_type, header_stream);
+//                 header_stream << std::format("    enum class {} : {}{{}};\n\n", enum_type->name(),
+//                                              underlying_type->name());
+//             }
+//         }
+//     }
+// }
+
+void emit_fwd_type_decl(Context &ctx, const SharedType &type, std::ofstream &stream) {
+    switch (type->type) {
+        case MetaType::RECORD: {
+            if (type->template_args.size() == 0) {
+                stream << std::format("struct {}; // size: {}\n\n", type->name(), type->size);
+            }
+            else {
+                stream << std::format("/*\nstruct {}; // size: {}\n*/\n\n", type->name(), type->size);
+            }
+            break;
+        }
+        case MetaType::PRIMITIVE:
+        case MetaType::OPAQUE:
+        case MetaType::STRING:
+        case MetaType::BASIC:
+        case MetaType::POINTER:
+        case MetaType::FIXED_ARRAY:
+        case MetaType::ARRAY:
+        case MetaType::ENUM:
+        case MetaType::SPECIAL:
+        case MetaType::TYPE_COUNT: {
+            throw std::runtime_error(std::format("emit_fwd_type_decl is not implemented for type {} of meta type {}",
+                                                 type->name(), type->type));
+            break;
+        }
+    }
+}
+
+bool should_skip_type_info(const MetaType type) {
+    return type == MetaType::BASIC || type == MetaType::OPAQUE;
+}
+
+
+std::set<std::string> g_generated_templates;
+
+void emit_struct(Context &ctx, const SharedType &type, std::ofstream &header_stream) {
+    if (std::holds_alternative<std::vector<Member> >(type->data)) {
+        const auto &members = std::get<std::vector<Member> >(type->data);
+
+        for (const auto &member: members) {
+            emit_type(ctx, member.type(), header_stream);
+        }
+
+        if (type->parent() != nullptr) {
+            emit_type(ctx, type->parent(), header_stream);
+        }
+
+        if (!type->template_args.empty()) {
+            if (g_generated_templates.contains(type->name())) {
+                return;
+            }
+            g_generated_templates.insert(type->name());
+            header_stream << "/*\ntemplate<";
+            for (size_t i = 0; i < type->template_args.size(); i++) {
+                const auto &arg = type->template_args[i];
+                if (std::holds_alternative<WeakType>(arg.value)) {
+                    header_stream << "typename " << arg.name;
+                }
+                else if (std::holds_alternative<int64>(arg.value)) {
+                    header_stream << "int64 " << arg.name;
+                }
+
+                if (i != type->template_args.size() - 1) {
+                    header_stream << ", ";
+                }
+            }
+            header_stream << ">\n";
+        }
+
+        if (type->parent() == nullptr) {
+            header_stream << std::format("struct {}: Havok::BaseType {{\n", type->type_name());
+        }
+        else {
+            header_stream << std::format("struct {}: {} {{\n", type->name(), type->parent()->type_name());
+        }
+        for (const auto &member: members) {
+            header_stream << std::format("    {} {}; // offset: {}, size: {}\n",
+                                         member.type()->type_name(), member.name, member.offset,
+                                         member.type()->size);
+        }
+        header_stream << "\n";
+        header_stream << "    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;\n";
+        header_stream << "    void print(std::ostream &os) const override;\n";
+        header_stream << "    void to_json(std::ostream &os) const override;\n";
+
+        header_stream << "};\n\n";
+        if (type->template_args.size() != 0) {
+            header_stream << "*/\n";
+        }
+    }
+    else {
+        if (type->template_args.size() == 0) {
+            header_stream << std::format("struct {} {{}};\n\n", type->name());
+        }
+        else {
+            header_stream << std::format("/*\nstruct {} {{}};\n*/\n\n", type->name());
+        }
+    }
+}
+
+void emit_array(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
+    if (std::holds_alternative<std::vector<Member> >(type->data)) {
+        const auto &members = std::get<std::vector<Member> >(type->data);
+        for (const auto &member: members) {
+            emit_type(ctx, member.type(), ofstream);
+        }
+    }
+}
+
+void emit_primitive(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
+    if (type->parent() != nullptr) {
+        emit_type(ctx, type->parent(), ofstream);
+    }
+
+    if (type->parent() != nullptr) {
+        emit_type(ctx, type->parent(), ofstream);
+        if (type->parent()->template_args.empty()) {
+            ofstream << std::format("typedef {} {}; // size: {}\n\n", type->parent()->name(),
+                                    type->name(),
+                                    type->size);
+        }
+        else {
+            ofstream << std::format("typedef {}<", type->parent()->name());
+            for (size_t i = 0; i < type->parent()->template_args.size(); i++) {
+                const auto &arg = type->parent()->template_args[i];
+                if (std::holds_alternative<int64>(arg.value)) {
+                    ofstream << std::get<int64>(arg.value);
+                }
+                else if (std::holds_alternative<WeakType>(arg.value)) {
+                    const auto &inner_type = unwrap_weak(std::get<WeakType>(arg.value));
+                    emit_type(ctx, inner_type, ofstream);
+                    ofstream << inner_type->name();
+                }
+                if (i != type->parent()->template_args.size() - 1) {
+                    ofstream << ", ";
+                }
+            }
+            ofstream << std::format("> {}; // size: {}\n\n", type->name(),
+                                    type->size);
+        }
+    }
+}
+
+void emit_pointer(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
+    if (!type->template_args.empty()) {
+        const auto &inner_arg = type->template_args[0];
+        if (!std::holds_alternative<WeakType>(inner_arg.value)) {
+            throw std::runtime_error(std::format("Pointer type {} has non-type template argument", type->name()));
+        }
+        const auto &inner_type = unwrap_weak(std::get<WeakType>(inner_arg.value));
+        if (is_trivial_type(inner_type) && ctx.fwd_mode) {
+            emit_type(ctx, inner_type, ctx.fwd_header_stream);
+        }
+        else if (is_trivial_type(inner_type) && !ctx.fwd_mode) {
+            emit_type(ctx, inner_type, ctx.header_stream);
+        }
+        else if (!is_trivial_type(inner_type) && ctx.fwd_mode) {
+            ctx.fwd_mode = false;
+            emit_fwd_type_decl(ctx, inner_type, ctx.fwd_header_stream);
+            emit_type(ctx, inner_type, ctx.header_stream);
+            ctx.fwd_mode = true;
+        }
+        else {
+            emit_type(ctx, inner_type, ctx.header_stream);
+        }
+    }
+}
+
+void emit_basic(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
+    if (!type->template_args.empty()) {
+        for (const auto & template_arg : type->template_args) {
+            if (std::holds_alternative<WeakType>(template_arg.value)) {
+                const auto &inner_type = unwrap_weak(std::get<WeakType>(template_arg.value));
+                emit_type(ctx, inner_type, ofstream);
+            }
+        }
+    }
+    ofstream << std::format("// Basic type {}, size: {}\n\n", type->type_name(), type->size);
+}
+
+void emit_fixed_array(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
+    if (type->template_args.empty()) {
+        throw std::runtime_error(std::format("Fixed array type {} has no template arguments", type->name()));
+    }
+    const auto &inner_arg = type->template_args[0];
+    if (!std::holds_alternative<WeakType>(inner_arg.value)) {
+        throw std::runtime_error(std::format("Fixed array type {} has non-type inner template argument", type->name()));
+    }
+    const auto &inner_type = unwrap_weak(std::get<WeakType>(inner_arg.value));
+    emit_type(ctx, inner_type, ofstream);
+}
+
+void emit_enum(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
+    if (type->template_args.size() == 2) {
+        const auto enum_templ = type->template_args[0];
+        const auto underlying_templ = type->template_args[1];
+        if (std::holds_alternative<WeakType>(enum_templ.value) &&
+            std::holds_alternative<WeakType>(underlying_templ.value)
+        ) {
+            const auto &enum_type = unwrap_weak(std::get<WeakType>(enum_templ.value));
+            g_processed_hashes.emplace(enum_type);
+            const auto &underlying_type = unwrap_weak(std::get<WeakType>(underlying_templ.value));
+            emit_type(ctx, underlying_type, ofstream);
+            ofstream << std::format("enum class {} : {}{{}};\n\n", enum_type->name(),
+                                    underlying_type->name());
+        }
+    }
+}
+
+void emit_type(Context &ctx, const SharedType &type, std::ofstream &header_stream) {
+    if (g_processed_hashes.contains(type)) {
         return;
     }
-    DA_append(&lib->exported_hashes, &type->hash);
+    g_processed_hashes.emplace(type);
 
-    if (type->parent_hash != 0) {
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-        generate_type_def(lib, parent_type, header_output, impl_output);
-    }
-    if (type->type == HK_RECORD) {
-        if (type->members.count == 0 && type->parent_hash == 0) {
-            return;
+    auto& stream = is_trivial_type(type)? ctx.fwd_header_stream : ctx.header_stream;
+
+    switch (type->type) {
+        case MetaType::RECORD: {
+            emit_struct(ctx, type, stream);
+            break;
         }
-        DA_FORI(type->members, i) {
-            const HavokRecordMember *member = &type->members.items[i];
-            const HavokType *member_type = (const HavokType *)DM_get(&lib->types, member->type_hash);
-            if (member_type == NULL) {
-                GLog_Error("No member type data for member %s of type %s",
-                           String_cstr(&member->name), String_cstr(&type->name));
-                abort();
-            }
-            generate_type_def(lib, member_type, header_output, impl_output);
+        case MetaType::ARRAY: {
+            emit_array(ctx, type, stream);
+            break;
         }
-
-        bool has_complex_members = is_complex_type(lib, type);
-
-        fprintf(header_output, "#define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
-        fprintf(header_output, "typedef /*alignas(%i)*/ struct %s { // Record\n", type->align,
-                String_cstr(&type->name));
-
-        fprintf(header_output, "    HavokTypeInfo* type_info_;\n");
-
-        uint32 prev_offset, prev_size;
-        generate_members(lib, type, header_output, &prev_offset, &prev_size);
-        // Final padding
-        const uint32 expected_size = prev_offset + prev_size;
-        if (expected_size < type->size) {
-            const uint32 padding_size = type->size - expected_size;
-            fprintf(header_output, "    uint8 _padding_end[%d]; // final padding\n", padding_size);
+        case MetaType::PRIMITIVE: {
+            emit_primitive(ctx, type, stream);
+            break;
         }
-        fprintf(header_output, "} %s;\n", String_cstr(&type->name));
-
-        fprintf(header_output, "extern HavokTypeInfo %s_TI;\n\n", String_cstr(&type->name));
-
-        generate_ti_info(type, impl_output,true, has_complex_members, true, true, true, false);
-
-        // fprintf(header_output, "static_assert(sizeof(%s)==(%i+8)), \"Invalid size for %s\");\n\n",
-        // String_data(&type->name), type->size, String_data(&type->name));
-    }
-    else if (type->type == HK_PTR) {
-        const HavokType *inner_type = (const HavokType *)DM_get(&lib->types, type->inner_type_hash);
-        generate_type_def(lib, inner_type, header_output, impl_output);
-    }
-    else if (type->type == HK_PRIMITIVE) {
-        if (type->parent_hash != 0) {
-            const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-            generate_type_def(lib, parent_type, header_output, impl_output);
-
-            fprintf(header_output, "#define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
-            fprintf(header_output, "typedef /*alignas(%i)*/ %s %s;\n\n",
-                    type->align, String_cstr(&parent_type->name), String_cstr(&type->name));
-            const bool complex_type = is_complex_type(lib, parent_type);
-            generate_ti_info(type, impl_output, complex_type, complex_type, true, true, parent_type->type==HK_RECORD,parent_type->type==HK_ARRAY);
+        case MetaType::POINTER: {
+            emit_pointer(ctx, type, stream);
+            break;
         }
-        else {
-            GLog_Error("Primitive without parent type is invalid!");
-            abort();
+        case MetaType::OPAQUE:
+        case MetaType::SPECIAL:
+        case MetaType::BASIC: {
+            emit_basic(ctx, type, stream);
+            break;
         }
-    }
-    else if (type->type == HK_BASIC) {
-        assert(type->parent_hash==0);
-        assert(type->members.count==0);
-        assert(type->inner_type_hash==0);
-        fprintf(header_output, "// #define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
-        fprintf(header_output, "// Basic type %s must be implemented by host\n", String_cstr(&type->name));
-        fprintf(header_output, "// Type info: size: %u, alignment: %u\n\n", type->size, type->align);
-
-        generate_ti_info(type, impl_output, false, false, true, true, false,false);
-    }
-    else if (type->type == HK_ENUM) {
-        if (type->parent_hash != 0) {
-            const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-            generate_type_def(lib, parent_type, header_output, impl_output);
-
-            fprintf(header_output, "#define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
-            fprintf(header_output, "typedef /*alignas(%i)*/ %s %s; // Enum\n\n",
-                    type->align, String_cstr(&parent_type->name), String_cstr(&type->name));
-
-            generate_ti_info(type, impl_output, false, false, true, true, false,false);
+        case MetaType::FIXED_ARRAY: {
+            emit_fixed_array(ctx, type, stream);
+            break;
         }
-        else {
-            switch (type->size) {
-                case 1: {
-                    fprintf(header_output, "#define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
-                    fprintf(header_output, "typedef /*alignas(%i)*/ uint8 %s; // Enum\n\n",
-                            type->align, String_cstr(&type->name));
-                    generate_ti_info(type, impl_output, false, false, true, true, false,false);
-
-                    break;
-                }
-                case 2: {
-                    fprintf(header_output, "#define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
-                    fprintf(header_output, "typedef /*alignas(%i)*/ uint16 %s; // Enum\n\n",
-                            type->align, String_cstr(&type->name));
-                    generate_ti_info(type, impl_output, false, false, true, true, false,false);
-                    break;
-                }
-                case 4: {
-                    fprintf(header_output, "#define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
-                    fprintf(header_output, "typedef /*alignas(%i)*/ uint32 %s; // Enum\n\n",
-                            type->align, String_cstr(&type->name));
-                    generate_ti_info(type, impl_output, false, false, true, true, false,false);
-                    break;
-                }
-                default: {
-                    GLog_Error("Unsupported enum size %d for type %s", type->size, String_cstr(&type->name));
-                    abort();
-                }
-            }
+        case MetaType::STRING: {
+            break;
         }
-    }
-    else if (type->type == HK_FIXED_ARRAY) {
-        const HavokType *inner_type = (const HavokType *)DM_get(&lib->types, type->inner_type_hash);
-        generate_type_def(lib, inner_type, header_output, impl_output);
-
-        fprintf(impl_output, "HavokTypeInfo %s_TI = {\n", String_cstr(&type->name));
-        fprintf(impl_output, "    .init = NULL,\n");
-        fprintf(impl_output, "    .free = NULL,\n");
-        fprintf(impl_output, "    .read = (readHavokObject)%s_read,\n", String_cstr(&type->name));
-        fprintf(impl_output, "    .print = (printHavokObject)%s_print,\n", String_cstr(&type->name));
-        fprintf(impl_output, "    .size = sizeof(%s)*%u,\n", String_cstr(&inner_type->name), type->array_size);
-        fprintf(impl_output, "    .disk_size = %u*%u,\n", inner_type->size, type->array_size);
-        fprintf(impl_output, "    .is_record = 0,\n");
-        fprintf(impl_output, "    .is_array = 0,\n");
-        fprintf(impl_output, "    .hash = 0x%08X,\n", type->hash);
-        fprintf(impl_output, "    .name = \"%s\",\n", String_cstr(&type->name));
-        fprintf(impl_output, "};\n\n");
-    }
-    else if (type->type == HK_ARRAY) {
-        const HavokType *inner_type = (const HavokType *)DM_get(&lib->types, type->inner_type_hash);
-        generate_type_def(lib, inner_type, header_output, impl_output);
-        fprintf(header_output, "#define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
-        fprintf(header_output, "typedef /*alignas(%i)*/ struct %s { // Array\n",
-                type->align, String_cstr(&type->name));
-        fprintf(header_output, "    HavokTypeInfo* inner_type_info;\n");
-        fprintf(header_output, "    %s* m_data;\n", String_cstr(&inner_type->name));
-        fprintf(header_output, "    uint32 m_size;\n");
-        fprintf(header_output, "    uint32 m_capacityAndFlags;\n");
-        fprintf(header_output, "} %s;\n", String_cstr(&type->name));
-
-        generate_ti_info(type, impl_output, true, true, true, true, false, true);
-    }
-    else if (type->type == HK_STRING) {
-        fprintf(header_output, "#define %s_HASH 0x%08X\n", String_cstr(&type->name), type->hash);
-        // fprintf(header_output, "typedef /*alignas(%i)*/ struct %s { // String\n",
-        //         type->align, String_data(&type->name));
-        // fprintf(header_output, "    char* m_data;\n");
-        // fprintf(header_output, "} %s;\n\n", String_data(&type->name));
-
-        generate_ti_info(type, impl_output, false, true, true, true, false,false);
-    }
-    else {
-        GLog_Error("Unhandled type kind %i for type %s", type->type, String_cstr(&type->name));
-        abort();
+        case MetaType::ENUM: {
+            emit_enum(ctx, type, stream);
+            break;
+        }
+        case MetaType::TYPE_COUNT: {
+            GLog_Warning("Unhandled {}", type->name());
+            break;
+        }
     }
 }
 
-void generate_function_forward_defs(Havok_TypeLibrary *lib, const HavokType *type, FILE *header_output) {
-    const String *full_name = &type->name;
-    if (type->type == HK_RECORD) {
-        if (type->members.count == 0 && type->parent_hash == 0) {
-            return;
-        }
+void emit_types(Context &ctx) {
+    ctx.fwd_header_stream << "namespace HavokTypes {\n\n";
+    ctx.header_stream << "namespace HavokTypes {\n\n";
 
-        bool is_complex = is_complex_type(lib, type);
-
-        fprintf(header_output,
-                "void %s_init(%s *obj);\n",
-                String_cstr(full_name),
-                String_cstr(full_name)
-        );
-        fprintf(header_output,
-                "void %s_read(%s *obj, const TagFile *tf, const uint8* src);\n",
-                String_cstr(full_name),
-                String_cstr(full_name));
-        fprintf(header_output,
-                "void %s_print(const %s *obj, JsonContext *ctx);\n",
-                String_cstr(full_name), String_cstr(full_name));
-        if (is_complex) {
-            fprintf(header_output,
-                    "void %s_free(%s *obj);\n\n",
-                    String_cstr(full_name),
-                    String_cstr(full_name));
+    g_processed_hashes.clear();
+    for (const auto &type: ctx.lib.types() | std::views::values) {
+        if (is_trivial_type(type)) {
+            ctx.fwd_mode = true;
+            emit_type(ctx, type, ctx.fwd_header_stream);
+        }
+        else {
+            ctx.fwd_mode = false;
+            emit_type(ctx, type, ctx.header_stream);
         }
     }
-    else if (type->type == HK_PRIMITIVE) {
-        if (type->parent_hash == 0) {
-            GLog_Error("Primitive type %s has no parent type!", String_cstr(full_name));
-            return;
-        }
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-        const bool complex_type = is_complex_type(lib, parent_type);
-        if (complex_type) {
-            fprintf(header_output,
-                    "void %s_init(%s *obj);\n",
-                    String_cstr(full_name),
-                    String_cstr(full_name)
-            );
-        }
-        fprintf(header_output,
-                "void %s_read(%s *obj, const TagFile *tf, const uint8* src);\n",
-                String_cstr(full_name),
-                String_cstr(full_name));
-        fprintf(header_output,
-                "void %s_print(const %s *obj, JsonContext *ctx);\n",
-                String_cstr(full_name), String_cstr(full_name));
-        if (complex_type) {
-            fprintf(header_output,
-                    "void %s_free(%s *obj);\n\n",
-                    String_cstr(full_name),
-                    String_cstr(full_name));
-        }
-    }
-    else if (type->type == HK_ENUM) {
-        fprintf(header_output,
-                "void %s_read( %s *obj, const TagFile *tf, const uint8* src);\n",
-                String_cstr(full_name),
-                String_cstr(full_name));
-        fprintf(header_output, "void %s_print(const %s *obj, JsonContext *ctx);\n\n",
-                String_cstr(full_name), String_cstr(full_name));
-    }
-    else if (type->type == HK_ARRAY) {
-        fprintf(header_output,
-                "void %s_init(%s *obj);\n",
-                String_cstr(full_name),
-                String_cstr(full_name)
-        );
-        fprintf(header_output,
-                "void %s_read(%s *obj, const TagFile *tf, const uint8* src);\n",
-                String_cstr(full_name),
-                String_cstr(full_name));
-        fprintf(header_output, "void %s_print(const %s *obj, JsonContext *ctx);\n",
-                String_cstr(full_name), String_cstr(full_name));
-        fprintf(header_output,
-                "void %s_free(%s *obj);\n\n",
-                String_cstr(full_name),
-                String_cstr(full_name));
-    }
-    else if (type->type == HK_FIXED_ARRAY) {
-        const HavokType *inner_type = (const HavokType *)DM_get(&lib->types, type->inner_type_hash);
-        fprintf(header_output,
-                "void %s_read(%s *obj, const TagFile *tf, const uint8* src);\n",
-                String_cstr(full_name),
-                String_cstr(&inner_type->name));
-        fprintf(header_output, "void %s_print(const %s *obj, JsonContext *ctx);\n\n",
-                String_cstr(full_name),
-                String_cstr(&inner_type->name));
-    }
+    ctx.fwd_header_stream << "};\n";
+    ctx.header_stream << "};\n";
 }
 
-void generate_read_function_body(Havok_TypeLibrary *lib, const HavokType *type, FILE *impl_out) {
-    const String *type_name = &type->name;
-    if (type->type == HK_RECORD) {
-        if (type->members.count == 0 && type->parent_hash == 0) {
-            return;
+void emit_struct_to_json_function(const SharedType &type, std::ofstream &impl_stream) {
+    impl_stream << std::format("void {}::to_json(std::ostream &out) const {{\n", type->name());
+    impl_stream << "    throw std::runtime_error(\"Not implemented\");\n";
+    impl_stream << "}\n\n";
+}
+
+void emit_struct_read_function_members(const SharedType &type,
+                                       std::ofstream &impl_stream, int64 &offset) {
+    const auto &type_members = std::get<std::vector<Member> >(type->data);
+    if (type->parent()!=nullptr) {
+        if (std::holds_alternative<std::vector<Member> >(type->parent()->data)) {
+            const auto &parent_members = std::get<std::vector<Member> >(type->parent()->data);
+            if (!parent_members.empty()) {
+                emit_struct_read_function_members(type->parent(), impl_stream, offset);
+            }
+        }else {
+            throw std::runtime_error(std::format("Parent type {} of struct {} has non-member data",
+                                             type->parent()->name(), type->name()));
         }
-        fprintf(impl_out,
-                "void %s_read(%s *obj, const TagFile *tf,const uint8* src) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
-        if (type->parent_hash != 0) {
-            const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-            if (parent_type->members.count != 0 || parent_type->parent_hash != 0) {
-                fprintf(impl_out, "    %s_read((%s*)obj, tf, src);\n",
-                        String_cstr(&parent_type->name),
-                        String_cstr(&parent_type->name));
+    }
+    if (type_members.empty() && type->parent()==nullptr) {
+        impl_stream << std::format("    buffer.skip({});\n", type->size);
+        offset+=type->size;
+        return;
+    }
+    for (const auto &member: type_members) {
+        if (member.offset != offset) {
+            if (member.offset < offset) {
+                throw std::runtime_error(std::format(
+                    "Member {} of struct {} has offset {}, which is less than current offset {}",
+                    member.name, type->name(), member.offset, offset));
             }
+            uint32 pad_size = member.offset - offset;
+            impl_stream << std::format("    buffer.skip({});\n", pad_size);
+            offset += pad_size;
         }
-        DA_FORI(type->members, i) {
-            const HavokRecordMember *member = &type->members.items[i];
-            const HavokType *member_type = (const HavokType *)DM_get(&lib->types, member->type_hash);
-            if (member_type == NULL) {
-                GLog_Error("No member type data for member %s of type %s",
-                           String_cstr(&member->name), String_cstr(&type->name));
-                abort();
-            }
-            if (member_type->type == HK_PTR) {
-                fprintf(impl_out, "    ptr_read((void**)&obj->%s, tf, src + %i, NULL);\n",
-                        String_cstr(&member->name), member->offset);
-            }
-            else if (member_type->type == HK_FIXED_ARRAY) {
-                fprintf(impl_out, "    %s_read(obj->%s, tf, src + %i);\n",
-                        String_cstr(&member_type->name),
-                        String_cstr(&member->name),
-                        member->offset);
-            }
-            else if (member_type->type == HK_RECORD) {
-                if (member_type->members.count == 0 && member_type->parent_hash == 0) {
-                    continue;
-                }
-                fprintf(impl_out, "    %s_read(&obj->%s, tf, src + %i);\n",
-                        String_cstr(&member_type->name),
-                        String_cstr(&member->name), member->offset);
-            }
-            else if (member_type->type == HK_ARRAY) {
-                fprintf(impl_out, "    hkArray_read(&obj->%s, tf, src + %i);\n",
-                        String_cstr(&member->name), member->offset);
+
+        if (is_basic_type(member.type())) {
+            impl_stream << std::format("    {} = buffer.read_pod<{}>();\n", member.name, member.type()->name());
+        }
+        else if (member.type()->type == MetaType::FIXED_ARRAY) {
+            auto inner_type = unwrap_weak(std::get<WeakType>(member.type()->template_args[0].value));
+            auto count = std::get<int64>(member.type()->template_args[1].value);
+            impl_stream << std::format("    for (size_t i = 0; i < {}; ++i) {{\n", count);
+            if (is_basic_type(inner_type)) {
+                impl_stream << std::format("        {}[i] = buffer.read_pod<{}>();\n", member.name, inner_type->name());
             }
             else {
-                fprintf(impl_out, "    %s_read(&obj->%s, tf, src + %i);\n",
-                        String_cstr(&member_type->name),
-                        String_cstr(&member->name), member->offset);
+                impl_stream << std::format("        {}[i].read(buffer, tag_file);\n", member.name);
             }
-        }
-        fprintf(impl_out, "}\n\n");
-    }
-    // else if (type->type == HK_STRING) {
-    //     fprintf(impl_out,
-    //             "void %s_read(%s *obj, const TagFile *tf, const uint8* src) {\n",
-    //             String_data(type_name),
-    //             String_data(type_name));
-    //     fprintf(impl_out, "    ptr_read((void**)&obj->m_data, tf, src, NULL);\n");
-    //     fprintf(impl_out, "}\n\n");
-    // }
-    else if (type->type == HK_PRIMITIVE) {
-        if (type->parent_hash == 0) {
-            GLog_Error("Primitive type %s has no parent type!", String_cstr(type_name));
-            return;
-        }
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-        fprintf(impl_out,
-                "void %s_read(%s *obj, const TagFile *tf, const uint8* src) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
-        fprintf(impl_out, "    %s_read((%s*)obj, tf, src);\n",
-                String_cstr(&parent_type->name),
-                String_cstr(&parent_type->name));
-        fprintf(impl_out, "}\n\n");
-    }
-    else if (type->type == HK_ENUM) {
-        if (type->parent_hash != 0) {
-            const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-            fprintf(impl_out,
-                    "void %s_read(%s *obj, const TagFile *tf, const uint8* src) {\n",
-                    String_cstr(type_name),
-                    String_cstr(type_name));
-            fprintf(impl_out, "    %s_read((%s*)obj, tf , src);\n",
-                    String_cstr(&parent_type->name),
-                    String_cstr(&parent_type->name));
-            fprintf(impl_out, "}\n\n");
+            impl_stream << "    }\n";
         }
         else {
-            switch (type->size) {
-                case 1: {
-                    fprintf(impl_out,
-                            "void %s_read(%s *obj, const TagFile *tf, const uint8* src) {\n",
-                            String_cstr(type_name),
-                            String_cstr(type_name));
-                    fprintf(impl_out, "    *obj = *((uint8*)src);\n");
-                    fprintf(impl_out, "}\n\n");
-                    break;
-                }
-                case 2: {
-                    fprintf(impl_out,
-                            "void %s_read(%s *obj, const TagFile *tf, const uint8* src) {\n",
-                            String_cstr(type_name),
-                            String_cstr(type_name));
-                    fprintf(impl_out, "    *obj = *((uint16*)src);\n");
-                    fprintf(impl_out, "}\n\n");
-                    break;
-                }
-                case 4: {
-                    fprintf(impl_out,
-                            "void %s_read(%s *obj, const TagFile *tf, const uint8* src) {\n",
-                            String_cstr(type_name),
-                            String_cstr(type_name));
-                    fprintf(impl_out, "    *obj = *((uint32*)src);\n");
-                    fprintf(impl_out, "}\n\n");
-                    break;
-                }
-                default: {
-                    GLog_Error("Unsupported enum size %d for type %s", type->size, String_cstr(type_name));
-                    abort();
-                }
-            }
+            impl_stream << std::format("    {}.read(buffer, tag_file);\n", member.name);
         }
-    }
-    else if (type->type == HK_FIXED_ARRAY) {
-        const HavokType *inner_type = (const HavokType *)DM_get(&lib->types, type->inner_type_hash);
-        fprintf(impl_out,
-                "void %s_read(%s *obj, const TagFile *tf, const uint8* src) {\n",
-                String_cstr(type_name),
-                String_cstr(&inner_type->name));
-        fprintf(impl_out, "    for (uint32 i = 0; i < %i; ++i) {\n", type->array_size);
-        fprintf(impl_out, "        %s_read(&obj[i], tf, src + i * %i);\n",
-                String_cstr(&inner_type->name), inner_type->size);
-        fprintf(impl_out, "    }\n");
-        fprintf(impl_out, "}\n\n");
-    }
-    else if (type->type == HK_ARRAY) {
-        fprintf(impl_out,
-                "void %s_read(%s *obj, const TagFile *tf, const uint8* src) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
-        fprintf(impl_out, "    hkArray_read(obj, tf, src);\n");
-        fprintf(impl_out, "}\n\n");
+        offset += member.type()->size_without_padding();
     }
 }
 
-bool ancestral_is_record(Havok_TypeLibrary *lib, const HavokType *type) {
-    if (type->type == HK_RECORD) {
-        return true;
+void emit_struct_read_function(Context &ctx, const SharedType &type,
+                               const std::vector<Member> &members,
+                               std::ofstream &impl_stream) {
+    impl_stream << std::format("void {}::read(IO::File& buffer, Tag::TagFile& tag_file) {{\n",
+                               type->name());
+
+    int64 offset = 0;
+    emit_struct_read_function_members(type, impl_stream, offset);
+    if (offset != type->size) {
+        if (offset > type->size) {
+            throw std::runtime_error(std::format(
+                "Struct {} is larger than expected, expected size {}, actual size {}",
+                type->name(), type->size, offset));
+        }
+        uint32 pad_size = type->size - offset;
+        impl_stream << std::format("    buffer.skip({});\n", pad_size);
     }
-    if (type->parent_hash != 0) {
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-        return ancestral_is_record(lib, parent_type);
-    }
-    return false;
+    impl_stream << "}\n\n";
 }
 
-bool ancestral_is_array(Havok_TypeLibrary *lib, const HavokType *type) {
-    if (type->type == HK_ARRAY) {
-        return true;
+void emit_struct_print_function(Context &ctx, const SharedType &type,
+                                const std::vector<Member> &members,
+                                std::ofstream &impl_stream) {
+    impl_stream << std::format("void {}::print(std::ostream &os) const {{\n", type->name());
+    if (type->parent() != nullptr) {
+        impl_stream << std::format("    {}::print(os);\n", type->parent()->name());
     }
-    if (type->parent_hash != 0) {
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-        return ancestral_is_array(lib, parent_type);
-    }
-    return false;
+    impl_stream << "    throw std::runtime_error(\"Not implemented\");\n";
+    impl_stream << "}\n\n";
 }
 
-void generate_print_function_body(Havok_TypeLibrary *lib, const HavokType *type, FILE *impl_out) {
-    const String *type_name = &type->name;
-    if (type->type == HK_RECORD) {
-        if (type->members.count == 0 && type->parent_hash == 0) {
-            return;
-        }
-        fprintf(impl_out,
-                "void %s_print(const %s *obj, JsonContext *ctx) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
-        if (type->parent_hash != 0) {
-            const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-            if (parent_type->members.count != 0 || parent_type->parent_hash != 0) {
-                fprintf(impl_out, "    %s_print((%s*)obj, ctx);\n",
-                        String_cstr(&parent_type->name),
-                        String_cstr(&parent_type->name));
-            }
-        }
-        DA_FORI(type->members, i) {
-            const HavokRecordMember *member = &type->members.items[i];
-            const HavokType *member_type = (const HavokType *)DM_get(&lib->types, member->type_hash);
-            if (member_type == NULL) {
-                GLog_Error("No member type data for member %s of type %s",
-                           String_cstr(&member->name), String_cstr(&type->name));
-                abort();
-            }
-            fprintf(impl_out, "    jsonName(ctx, \"%s\");\n", String_cstr(&member->name));
-            if (member_type->type == HK_PTR) {
-                const HavokType *inner_type = (const HavokType *)DM_get(&lib->types, member_type->inner_type_hash);
-                fprintf(impl_out, "    if(obj->%s != NULL) {\n", String_cstr(&member->name));
-                if (ancestral_is_record(lib, inner_type)) {
-                    fprintf(impl_out, "        jsonBeginObject(ctx);\n");
-                    fprintf(impl_out, "        obj->%s->type_info_->print(obj->%s, ctx);\n", String_cstr(&member->name),
-                            String_cstr(&member->name));
-                    fprintf(impl_out, "        jsonEndObject(ctx);\n");
-                }
-                else {
-                    fprintf(impl_out, "        obj->%s->type_info_->print(obj->%s, ctx);\n", String_cstr(&member->name),
-                            String_cstr(&member->name));
-                }
-                fprintf(impl_out, "    } else {\n");
-                fprintf(impl_out, "        jsonValueNull(ctx);\n");
-                fprintf(impl_out, "    }\n");
-            }
-            else if (member_type->type == HK_FIXED_ARRAY) {
-                fprintf(impl_out, "    %s_print(obj->%s, ctx);\n",
-                        String_cstr(&member_type->name),
-                        String_cstr(&member->name)
-                );
-            }
-            else if (ancestral_is_record(lib, member_type)) {
-                if (member_type->members.count == 0 && member_type->parent_hash == 0) {
-                    continue;
-                }
-                if (String_cequals(&member_type->name,"hkBool")) {
-                    fprintf(impl_out, "    jsonValueBool(ctx,obj->%s._bool>0);\n",
-                            String_cstr(&member->name));
-                }else {
-                    fprintf(impl_out, "    jsonBeginObject(ctx);\n");
-                    fprintf(impl_out, "    %s_print(&obj->%s, ctx);\n",
-                            String_cstr(&member_type->name),
-                            String_cstr(&member->name));
-                    fprintf(impl_out, "    jsonEndObject(ctx);\n");
-                }
-            }
-            else if (ancestral_is_array(lib, member_type)) {
-                fprintf(impl_out, "    hkArray_print(&obj->%s, ctx);\n", String_cstr(&member->name));
-            }
-            else {
-                fprintf(impl_out, "    %s_print(&obj->%s, ctx);\n",
-                        String_cstr(&member_type->name),
-                        String_cstr(&member->name));
-            }
-        }
-        fprintf(impl_out, "}\n\n");
+void emit_enum_formatter(const SharedType &type, std::ofstream &fwd_decl_stream, std::ofstream &impl_stream) {
+    const auto &enum_type = type->template_args[0];
+    if (!std::holds_alternative<WeakType>(enum_type.value)) {
+        return;
     }
-    else if (type->type == HK_PRIMITIVE) {
-        if (type->parent_hash == 0) {
-            GLog_Error("Primitive type %s has no parent type!", String_cstr(type_name));
-            return;
+    const auto &enum_shared_type = unwrap_weak(std::get<WeakType>(enum_type.value));
+    // Havok enums don't have members, so just get underlying int type and print it
+    fwd_decl_stream << std::format("std::ostream& operator<<(std::ostream &os, const HavokTypes::{} &value);\n",
+                                   enum_shared_type->name());
+
+    impl_stream << std::format("std::ostream& operator<<(std::ostream &os, const HavokTypes::{} &value) {{\n",
+                               enum_shared_type->name());
+    impl_stream << std::format("    return os << std::to_underlying(value);\n");
+    impl_stream << "}\n\n";
+}
+
+// void emit_new_instance_function(const SharedType &type, std::ofstream &impl_stream) {
+//     std::string full_type_name = type->full_name();
+//     if (type->type == MetaType::POINTER) {
+//         full_type_name += "_Ptr";
+//         impl_stream << std::format("static std::unique_ptr<{}> {}_new_instance() {{\n", type->type_name(),
+//                                    full_type_name);
+//         impl_stream << std::format("    return std::make_unique<{}>();\n", type->type_name());
+//         impl_stream << "}\n\n";
+//     }
+//     else {
+//         impl_stream << std::format("static std::unique_ptr<{}> {}_new_instance() {{\n", type->type_name(),
+//                                    full_type_name);
+//         impl_stream << std::format("    return std::make_unique<{}>();\n", type->type_name());
+//         impl_stream << "}\n\n";
+//     }
+// }
+
+void emit_functions(Context &ctx) {
+    for (const auto &type: ctx.lib.types() | std::views::values) {
+        if (type->type == MetaType::RECORD && type->template_args.size() == 0) {
+            if (std::holds_alternative<std::vector<Member> >(type->data)) {
+                const auto &members = std::get<std::vector<Member> >(type->data);
+
+                // Generate read, print, and to_json functions
+                emit_struct_read_function(ctx, type, members, ctx.impl_stream);
+                emit_struct_print_function(ctx, type, members, ctx.impl_stream);
+                emit_struct_to_json_function(type, ctx.impl_stream);
+            }
         }
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-        fprintf(impl_out,
-                "void %s_print(const %s *obj, JsonContext *ctx) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
-        fprintf(impl_out, "    %s_print((%s*)obj, ctx);\n",
-                String_cstr(&parent_type->name),
-                String_cstr(&parent_type->name));
-        fprintf(impl_out, "}\n\n");
+        else if (type->type == MetaType::ENUM) {
+            emit_enum_formatter(type, ctx.fwd_header_stream, ctx.formatting_impl_stream);
+        }
+        // if (type->hash != 0) {
+        //     emit_new_instance_function(type, ctx.impl_stream);
+        // }
     }
-    else if (type->type == HK_ENUM) {
-        if (type->parent_hash != 0) {
-            const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-            fprintf(impl_out,
-                    "void %s_print(const %s *obj, JsonContext *ctx) {\n",
-                    String_cstr(type_name),
-                    String_cstr(type_name));
-            fprintf(impl_out, "    %s_print((%s*)obj, ctx);\n",
-                    String_cstr(&parent_type->name),
-                    String_cstr(&parent_type->name));
-            fprintf(impl_out, "}\n\n");
+}
+
+
+void emit_type_infos(const Context &ctx) {
+    for (const auto &type: ctx.lib.types() | std::views::values) {
+        if (type->hash == 0) {
+            continue;
+        }
+        auto full_name = type->full_name();
+        if (type->type == MetaType::POINTER) {
+            full_name += "_Ptr";
+        }
+        auto &stream = ctx.impl_stream;
+        stream << std::format("TypeInfo TI_{:08X} = {{\n", type->hash);
+        if (type->type == MetaType::RECORD || type->type == MetaType::ARRAY) {
+            stream << std::format("    .new_instance = new_instance<{}>,\n", type->type_name());
         }
         else {
-            switch (type->size) {
-                case 1:
-                case 2:
-                case 4: {
-                    fprintf(impl_out,
-                            "void %s_print(const %s *obj, JsonContext *ctx) {\n",
-                            String_cstr(type_name),
-                            String_cstr(type_name));
-                    fprintf(impl_out, "    jsonValueUInt(ctx, *obj);\n");
-                    fprintf(impl_out, "}\n\n");
-                    break;
-                }
-                default: {
-                    GLog_Error("Unsupported enum size %d for type %s", type->size, String_cstr(type_name));
-                    abort();
-                }
-            }
+            stream << "    .new_instance = nullptr,\n";
         }
-    }
-    else if (type->type == HK_STRING) {
-        // fprintf(impl_out,
-        //         "void %s_print(const %s *obj, JsonContext *ctx) {\n",
-        //         String_cstr(type_name),
-        //         String_cstr(type_name));
-        // fprintf(impl_out, "    if (obj->m_data != NULL) {\n");
-        // fprintf(impl_out, "        jsonValueStr(ctx, obj->m_data);\n");
-        // fprintf(impl_out, "    } else {\n");
-        // fprintf(impl_out, "        jsonValueNull(ctx);\n");
-        // fprintf(impl_out, "    }\n");
-        // fprintf(impl_out, "}\n\n");
-    }
-    else if (type->type == HK_ARRAY) {
-        fprintf(impl_out,
-                "void %s_print(const %s *obj, JsonContext *ctx) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
-        fprintf(impl_out, "    hkArray_print(obj, ctx);\n");
-        fprintf(impl_out, "}\n\n");
-    }
-    else if (type->type == HK_PTR) {
-        // Do nothing, it should be handled by record
-    }
-    else if (type->type == HK_BASIC) {
-        // Do nothing, basic types are implemented by host
-    }
-    else if (type->type == HK_FIXED_ARRAY) {
-        const HavokType *inner_type = (const HavokType *)DM_get(&lib->types, type->inner_type_hash);
-        fprintf(impl_out,
-                "void %s_print(const %s *obj, JsonContext *ctx) {\n",
-                String_cstr(type_name),
-                String_cstr(&inner_type->name));
-        fprintf(impl_out, "    jsonBeginArray(ctx);\n");
-        fprintf(impl_out, "    for (uint32 i = 0; i < %i; ++i) {\n", type->array_size);
-        fprintf(impl_out, "        %s_print(&obj[i], ctx);\n",
-                String_cstr(&inner_type->name));
-        fprintf(impl_out, "    }\n");
-        fprintf(impl_out, "    jsonEndArray(ctx);\n");
-        fprintf(impl_out, "}\n\n");
-    }
-    else {
-        GLog_Error("Unhandled type kind %i for type %s", type->type, String_cstr(&type->name));
-        abort();
+        stream << std::format("    .hash = 0x{:08X},\n", type->hash);
+        stream << std::format("    .type = CodeGen::MetaType({}),\n", std::to_underlying(type->type));
+        stream << std::format("    .name = \"{}\",\n", type->type_name());
+        stream << "};\n\n";
     }
 }
 
-void generate_free_function_body(Havok_TypeLibrary *lib, const HavokType *type, FILE *impl_file) {
-    const String *type_name = &type->name;
-    if (type->type == HK_RECORD) {
-        if (type->members.count == 0 && type->parent_hash == 0 || !is_complex_type(lib, type)) {
-            return;
-        }
-        fprintf(impl_file,
-                "void %s_free(%s *obj) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
+void emit_type_info_table(Context &ctx) {
+    ctx.header_stream << "extern Havok::TypeInfoMap havok_type_info;\n\n";
+    ctx.header_stream << "void init_havok_type_info();\n\n";
 
-        DA_FORI(type->members, i) {
-            const HavokRecordMember *member = &type->members.items[i];
-            const HavokType *member_type = (const HavokType *)DM_get(&lib->types, member->type_hash);
-            if (member_type == NULL) {
-                GLog_Error("No member type data for member %s of type %s",
-                           String_cstr(&member->name), String_cstr(&type->name));
-                abort();
-            }
-            const bool is_complex = is_complex_type(lib, member_type);
-            if (!is_complex) {
-                continue;
-            }
+    ctx.impl_stream << "TypeInfoMap havok_type_info;\n\n";
+    ctx.impl_stream << "void init_havok_type_info() {\n";
+    ctx.impl_stream << std::format("    havok_type_info.reserve({});\n", ctx.lib.types().size());
 
-            if (member_type->type == HK_PTR) {
-                fprintf(impl_file, "    ptr_free(obj->%s);\n",
-                        String_cstr(&member->name)
-                );
-            }
-            else if (member_type->type == HK_STRING) {
-                fprintf(impl_file, "    if(obj->%s.m_data!=NULL) mp_free(obj->%s.m_data);\n",
-                        String_cstr(&member->name),
-                        String_cstr(&member->name));
-            }
-            else if (member_type->type == HK_ARRAY) {
-                fprintf(impl_file, "    hkArray_free(&obj->%s);\n",
-                        String_cstr(&member->name)
-                );
-            }
-            else if (member_type->type == HK_RECORD) {
-                if (member_type->members.count == 0 && member_type->parent_hash == 0) {
-                    continue;
-                }
-                fprintf(impl_file, "    %s_free(&obj->%s);\n",
-                        String_cstr(&member_type->name),
-                        String_cstr(&member->name));
-            }
-        }
-        if (type->parent_hash != 0) {
-            const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-            if ((parent_type->members.count != 0 || parent_type->parent_hash != 0) &&
-                is_complex_type(lib, parent_type)) {
-                fprintf(impl_file, "    %s_free((%s*)obj);\n",
-                        String_cstr(&parent_type->name),
-                        String_cstr(&parent_type->name));
-            }
-        }
-        fprintf(impl_file, "}\n\n");
-    }
-    else if (type->type == HK_PRIMITIVE) {
-        if (type->parent_hash == 0) {
-            GLog_Warning("Primitive type %s has no parent type!", String_cstr(type_name));
-            return;
-        }
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-        const bool complex_type = is_complex_type(lib, parent_type);
-        if (complex_type) {
-            fprintf(impl_file,
-                    "void %s_free(%s *obj) {\n",
-                    String_cstr(type_name),
-                    String_cstr(type_name));
-            fprintf(impl_file, "    %s_free((%s*)obj);\n",
-                    String_cstr(&parent_type->name),
-                    String_cstr(&parent_type->name));
-            fprintf(impl_file, "}\n\n");
+    for (const auto &type: ctx.lib.types() | std::views::values) {
+        if (type->hash != 0) {
+            ctx.impl_stream << std::format("    havok_type_info.emplace(0x{:08X}, &TI_{:08X});\n", type->hash,
+                                           type->hash);
         }
     }
-    // else if (type->type == HK_STRING) {
-    //     fprintf(impl_file,
-    //             "void %s_free(%s *obj) {\n",
-    //             String_data(type_name),
-    //             String_data(type_name));
-    //     fprintf(impl_file, "    if (obj->m_data != NULL) {\n");
-    //     fprintf(impl_file, "        mp_free((void*)obj->m_data);\n");
-    //     fprintf(impl_file, "        obj->m_data = NULL;\n");
-    //     fprintf(impl_file, "    }\n");
-    //     fprintf(impl_file, "}\n\n");
-    // }
-    else if (type->type == HK_ARRAY) {
-        fprintf(impl_file,
-                "void %s_free(%s *obj) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
-        fprintf(impl_file, "    hkArray_free(obj);\n");
-        fprintf(impl_file, "}\n\n");
-    }
+
+    ctx.impl_stream << "}\n";
 }
 
-void generate_init_function_body(Havok_TypeLibrary *lib, const HavokType *type, FILE *impl_output) {
-    const String *type_name = &type->name;
-    const HavokType *inner_type = (const HavokType *)DM_get(&lib->types, type->inner_type_hash);
-    if (type->type == HK_RECORD) {
-        if (type->members.count == 0 && type->parent_hash == 0) {
-            return;
-        }
-        fprintf(impl_output,
-                "void %s_init(%s *obj) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
-        fprintf(impl_output, "    memset(obj, 0, sizeof(%s));\n",
-                String_cstr(type_name));
-        if (type->parent_hash != 0) {
-            const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-            if (parent_type->members.count != 0 || parent_type->parent_hash != 0) {
-                fprintf(impl_output, "    %s_init((%s*)obj);\n",
-                        String_cstr(&parent_type->name),
-                        String_cstr(&parent_type->name));
-            }
-        }
-        DA_FORI(type->members, i) {
-            const HavokRecordMember *member = &type->members.items[i];
-            const HavokType *member_type = (const HavokType *)DM_get(&lib->types, member->type_hash);
-            if (member_type == NULL) {
-                GLog_Error("No member type data for member %s of type %s",
-                           String_cstr(&member->name), String_cstr(&type->name));
-                abort();
-            }
-            if (member_type->type == HK_RECORD) {
-                if (member_type->members.count == 0 && member_type->parent_hash == 0) {
-                    continue;
-                }
-                fprintf(impl_output, "    %s_init(&obj->%s);\n",
-                        String_cstr(&member_type->name),
-                        String_cstr(&member->name));
-            }
-            else if (member_type->type == HK_PRIMITIVE) {
-                if (member_type->parent_hash == 0) {
-                    continue;
-                }
-                const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, member_type->parent_hash);
-                const bool complex_type = is_complex_type(lib, parent_type);
-                if (complex_type) {
-                    fprintf(impl_output, "    %s_init(&obj->%s);\n",
-                            String_cstr(&member_type->name),
-                            String_cstr(&member->name));
-                }
-            }
-            else if (member_type->type == HK_ARRAY) {
-                fprintf(impl_output, "    %s_init(&obj->%s);\n",
-                        String_cstr(&member_type->name),
-                        String_cstr(&member->name));
-            }
-        }
-        fprintf(impl_output, "    obj->type_info_ = &%s_TI;\n", String_cstr(type_name));
-        fprintf(impl_output, "}\n\n");
-    }
-    else if (type->type == HK_ARRAY) {
-        fprintf(impl_output,
-                "void %s_init(%s *obj) {\n",
-                String_cstr(type_name),
-                String_cstr(type_name));
-        fprintf(impl_output, "    memset(obj, 0, sizeof(%s));\n",
-                String_cstr(type_name));
-        fprintf(impl_output, "    obj->inner_type_info = &%s_TI;\n", String_cstr(&inner_type->name));
-        fprintf(impl_output, "}\n\n");
-    }
-    else if (type->type == HK_PRIMITIVE) {
-        if (type->parent_hash == 0) {
-            GLog_Error("Primitive type %s has no parent type!", String_cstr(type_name));
-            return;
-        }
-        const HavokType *parent_type = (const HavokType *)DM_get(&lib->types, type->parent_hash);
-        const bool complex_type = is_complex_type(lib, parent_type);
-        if (complex_type) {
-            fprintf(impl_output,
-                    "void %s_init(%s *obj) {\n",
-                    String_cstr(type_name),
-                    String_cstr(type_name));
-            fprintf(impl_output, "    %s_init((%s*)obj);\n",
-                    String_cstr(&parent_type->name),
-                    String_cstr(&parent_type->name));
-            fprintf(impl_output, "}\n\n");
-        }
-    }
-}
 
-void generate_function_table(const Havok_TypeLibrary *lib, FILE *header_output, FILE *impl_output,
-                             const String *namespace_) {
+void Havok::CodeGen::generate_code(const TypeLibrary &lib,
+                                   const std::filesystem::path &sources_path,
+                                   const std::filesystem::path &headers_path) {
+    std::filesystem::create_directories(sources_path);
+    std::filesystem::create_directories(headers_path);
 
-    fprintf(header_output, "void %s_register_functions();\n", String_cstr(namespace_));
+    auto header_output = headers_path / "havok_types.h";
+    auto fwd_decl_output = headers_path / "havok_types_fwd.h";
+    auto impl_output = sources_path / "havok_types.cpp";
+    auto formatters_output = sources_path / "havok_types_formatters.cpp";
 
-    fprintf(impl_output, "TypeInfoMap %s_type_info = {};\n\n", String_cstr(namespace_));
+    std::ofstream header_stream(header_output);
+    std::ofstream fwd_decl_stream(fwd_decl_output);
+    std::ofstream impl_stream(impl_output);
+    std::ofstream formatter_stream(formatters_output);
 
-    fprintf(impl_output, "void register_type_info(TypeInfoMap *map, uint32 hash, const HavokTypeInfo *type_info){\n");
-    fprintf(impl_output, "    const HavokTypeInfo **slot = (const HavokTypeInfo **)DM_insert(map, hash);\n");
-     fprintf(impl_output, "    *slot = type_info;\n");
-    fprintf(impl_output, "}\n");
+    header_stream << "// This file is autogenerated\n";
+    header_stream << "#pragma once\n";
+    header_stream << "#include <array>\n";
+    header_stream << "#include \"havok/havok_support_types.h\"\n";
+    header_stream << "#include \"havok/extra_support_types.h\"\n\n";
+    header_stream << "#include \"havok/generated/havok_types_fwd.h\"\n\n";
+    header_stream << "#include \"havok/havok_base_type.h\"\n";
 
+    impl_stream << "// This file is autogenerated\n";
+    impl_stream << "#include \"havok/generated/havok_types.h\"\n\n";
+    impl_stream << "#include <stdexcept>\n\n";
+    impl_stream << "#include \"havok/havok_support_types.h\"\n";
+    impl_stream << "#include \"havok/tag_file/havok_tag_file.h\"\n";
+    impl_stream << "#include \"utils/buffer/buffer.h\"\n\n";
+    impl_stream << "using namespace Havok;\n";
+    impl_stream << "using namespace HavokTypes;\n\n";
 
-    fprintf(impl_output, "void %s_register_functions() {\n", String_cstr(namespace_));
-    fprintf(impl_output, "    DM_init(&%s_type_info, HavokTypeInfo*, %u);\n", String_cstr(namespace_),
-            lib->types.keys.count);
-    DA_FORI(lib->types.values, i) {
-        const HavokType *type = &lib->types.values.items[i];
-        if (type->type == HK_RECORD && type->members.count == 0 && type->parent_hash == 0) {
-            continue;
-        }
-        if (type->type == HK_PTR) {
-            continue;
-        }
-        const String *full_name = &type->name;
-        fprintf(impl_output,
-                "    register_type_info(&%s_type_info, 0x%08X, &%s_TI);\n",
-                String_cstr(namespace_),
-                type->hash,
-                String_cstr(full_name));
-    }
-    fprintf(impl_output, "}\n\n");
-}
+    formatter_stream << "// This file is autogenerated\n";
+    formatter_stream << "#include <iostream>\n";
+    formatter_stream << "#include <format>\n";
+    formatter_stream << "#include <string>\n";
+    formatter_stream << "#include <string_view>\n\n";
+    formatter_stream << "#include \"havok/generated/havok_types.h\"\n\n";
 
-void Havok_TypeLibrary_generate_code(Havok_TypeLibrary *lib, const String *namespace_, FILE *header_output,
-                                     const String *header_relative_path, FILE *impl_output) {
-    const HavokType *ull = Havok_TypeLibrary_find_by_name(lib, "unsigned_long_long");
-    HavokType *khbase_object = Havok_TypeLibrary_find_by_name(lib, "hkBaseObject");
-    khbase_object->hash = hash_string(&khbase_object->name);
-    khbase_object->type = HK_RECORD;
-    HavokRecordMember *fake_member = (HavokRecordMember *)DA_append_get(&khbase_object->members);
-    String_from_cstr(&fake_member->name, "unk_member");
-    fake_member->offset = 0;
-    fake_member->flags = 0;
-    fake_member->type_hash = ull->hash;
+    fwd_decl_stream << "// This file is autogenerated\n";
+    fwd_decl_stream << "#pragma once\n";
+    fwd_decl_stream << "#include \"havok/havok_base_type.h\"\n";
+    fwd_decl_stream << "#include \"havok/havok_support_types.h\"\n\n";
+    fwd_decl_stream << "#include <iostream>\n";
+    fwd_decl_stream << "#include <format>\n";
+    fwd_decl_stream << "#include <string_view>\n\n";
 
-    fprintf(header_output, "// This file is autogenerated\n");
-    fprintf(header_output, "#ifndef %s_GUARD\n", String_cstr(namespace_));
-    fprintf(header_output, "#define %s_GUARD\n\n", String_cstr(namespace_));
-    fprintf(header_output, "#define ALLOC_DEBUG\n");
-    fprintf(header_output, "#ifndef TRACY_MEMORY\n#define TRACY_MEMORY\n#endif\n");
-    fprintf(header_output, "#include \"havok/havok_helpers.h\"\n\n");
-    fprintf(header_output, "#include \"havok/havok_support_types.h\"\n\n");
+    Context ctx(lib, fwd_decl_stream, header_stream, impl_stream, formatter_stream, false);
 
-    fprintf(impl_output, "// This file is autogenerated\n");
-    fprintf(impl_output, "#include \"%s\"\n\n", String_cstr(header_relative_path));
-    fprintf(impl_output, "#include \"havok/havok_support_types_functions.h\"\n\n");
-
-    DA_init(&lib->exported_hashes, uint64, lib->types.values.count);
-
-    DA_FORI(lib->types.values, i) {
-        const HavokType *type = &lib->types.values.items[i];
-        if (type->type == HK_RECORD) {
-            fprintf(header_output, "typedef struct %s %s;\n", String_cstr(&type->name), String_cstr(&type->name));
-        }
-    }
-
-    DA_FORI(lib->types.values, i) {
-        generate_function_forward_defs(lib, &lib->types.values.items[i], impl_output);
-    }
-    DA_FORI(lib->types.values, i) {
-        generate_type_def(lib, &lib->types.values.items[i], header_output, impl_output);
-    }
-    printf("Got %d types\n", lib->types.values.count);
-
-    DA_init(&lib->exported_hashes, uint64, lib->types.values.count);
-    DA_FORI(lib->types.values, i) {
-        const HavokType *type = &lib->types.values.items[i];
-        generate_init_function_body(lib, type, impl_output);
-        generate_read_function_body(lib, type, impl_output);
-        generate_print_function_body(lib, type, impl_output);
-        generate_free_function_body(lib, type, impl_output);
-    }
-
-    fprintf(header_output, "extern TypeInfoMap %s_type_info;\n\n", String_cstr(namespace_));
-    generate_function_table(lib, header_output, impl_output, namespace_);
-    fprintf(header_output, "#endif //%s_GUARD\n", String_cstr(namespace_));
-
-    DA_free(&lib->exported_hashes);
+    emit_types(ctx);
+    emit_functions(ctx);
+    emit_type_infos(ctx);
+    emit_type_info_table(ctx);
 }

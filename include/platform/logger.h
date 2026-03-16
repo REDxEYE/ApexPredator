@@ -3,44 +3,108 @@
 #ifndef APEXPREDATOR_LOGGER_H
 #define APEXPREDATOR_LOGGER_H
 
-#include <stdarg.h>
-#include <stdio.h>
+#include <format>
+#include <string_view>
+#include <iostream>
 #include "int_def.h"
 
-typedef struct Logger Logger;
+enum class LogLevel {
+    Info,
+    Warning,
+    Error
+};
 
-void Log_init(Logger* log, FILE* output);
+class Logger {
+public:
+    explicit Logger(std::ostream& output = std::cout);
+    ~Logger() = default;
 
-void Log_info(const Logger* log, const char* fmt, ...);
-void Log_warning(const Logger* log, const char* fmt, ...);
-void Log_error(const Logger* log, const char* fmt, ...);
+    Logger(const Logger&) = delete;
+    Logger& operator=(const Logger&) = delete;
+    Logger(Logger&&) = default;
+    Logger& operator=(Logger&&) = default;
 
-void Log_info_s(const Logger* log, const char* source, uint32 source_line, const char* fmt, ...);
-void Log_warning_s(const Logger* log, const char* source, uint32 source_line, const char* fmt, ...);
-void Log_error_s(const Logger* log, const char* source, uint32 source_line, const char* fmt, ...);
+    template<typename... Args>
+    void info(std::format_string<Args...> fmt, Args&&... args) const {
+        log(LogLevel::Info, std::format(fmt, std::forward<Args>(args)...));
+    }
 
-void Log_info_va(const Logger* log, const char* fmt, va_list va);
-void Log_warning_va(const Logger* log, const char* fmt, va_list va);
-void Log_error_va(const Logger* log, const char* fmt, va_list va);
+    template<typename... Args>
+    void warning(std::format_string<Args...> fmt, Args&&... args) const {
+        log(LogLevel::Warning, std::format(fmt, std::forward<Args>(args)...));
+    }
 
-void Log_info_s_va(const Logger* log, const char* source, uint32 source_line, const char* fmt, va_list va);
-void Log_warning_s_va(const Logger* log, const char* source, uint32 source_line, const char* fmt, va_list va);
-void Log_error_s_va(const Logger* log, const char* source, uint32 source_line, const char* fmt, va_list va);
+    template<typename... Args>
+    void error(std::format_string<Args...> fmt, Args&&... args) const {
+        log(LogLevel::Error, std::format(fmt, std::forward<Args>(args)...));
+    }
 
-void GLog_init(FILE* output);
+    template<typename... Args>
+    void info_s(std::string_view source, uint32 source_line, std::format_string<Args...> fmt, Args&&... args) const {
+        log_s(LogLevel::Info, source, source_line, std::format(fmt, std::forward<Args>(args)...));
+    }
 
-void GLog_info(const char* fmt, ...);
-void GLog_warning(const char* fmt, ...);
-void GLog_error(const char* fmt, ...);
+    template<typename... Args>
+    void warning_s(std::string_view source, uint32 source_line, std::format_string<Args...> fmt, Args&&... args) const {
+        log_s(LogLevel::Warning, source, source_line, std::format(fmt, std::forward<Args>(args)...));
+    }
 
-void GLog_info_s(const char* source, uint32 source_line, const char* fmt, ...);
-void GLog_warning_s(const char* source, uint32 source_line, const char* fmt, ...);
-void GLog_error_s(const char* source, uint32 source_line, const char* fmt, ...);
+    template<typename... Args>
+    void error_s(std::string_view source, uint32 source_line, std::format_string<Args...> fmt, Args&&... args) const {
+        log_s(LogLevel::Error, source, source_line, std::format(fmt, std::forward<Args>(args)...));
+        output_->flush();
+    }
 
-const char* GLog_file_name(const char* name);
+    void set_output(std::ostream& output);
 
-#define GLog_Info(...) GLog_info_s(GLog_file_name(__FILE__), __LINE__, __VA_ARGS__)
-#define GLog_Warning(...) GLog_warning_s(GLog_file_name(__FILE__), __LINE__, __VA_ARGS__)
-#define GLog_Error(...) GLog_error_s(GLog_file_name(__FILE__), __LINE__, __VA_ARGS__)
+private:
+    void log(LogLevel level, std::string_view message) const;
+    void log_s(LogLevel level, std::string_view source, uint32 source_line, std::string_view message) const;
+
+    std::ostream* output_;
+};
+
+// Global logger interface
+namespace GLog {
+    void init(std::ostream& output = std::cout);
+    Logger& get();
+
+    template<typename... Args>
+    void info(std::format_string<Args...> fmt, Args&&... args) {
+        get().info(fmt, std::forward<Args>(args)...);
+    }
+
+    template<typename... Args>
+    void warning(std::format_string<Args...> fmt, Args&&... args) {
+        get().warning(fmt, std::forward<Args>(args)...);
+    }
+
+    template<typename... Args>
+    void error(std::format_string<Args...> fmt, Args&&... args) {
+        get().error(fmt, std::forward<Args>(args)...);
+    }
+
+    template<typename... Args>
+    void info_s(std::string_view source, uint32 source_line, std::format_string<Args...> fmt, Args&&... args) {
+        get().info_s(source, source_line, fmt, std::forward<Args>(args)...);
+    }
+
+    template<typename... Args>
+    void warning_s(std::string_view source, uint32 source_line, std::format_string<Args...> fmt, Args&&... args) {
+        get().warning_s(source, source_line, fmt, std::forward<Args>(args)...);
+    }
+
+    template<typename... Args>
+    void error_s(std::string_view source, uint32 source_line, std::format_string<Args...> fmt, Args&&... args) {
+        get().error_s(source, source_line, fmt, std::forward<Args>(args)...);
+    }
+
+    std::string_view file_name(std::string_view name);
+}
+
+// Convenience macros
+#define GLog_Info(...) GLog::info_s(GLog::file_name(__FILE__), __LINE__, __VA_ARGS__)
+#define GLog_Warning(...) GLog::warning_s(GLog::file_name(__FILE__), __LINE__, __VA_ARGS__)
+#define GLog_Error(...) GLog::error_s(GLog::file_name(__FILE__), __LINE__, __VA_ARGS__)
 
 #endif //APEXPREDATOR_LOGGER_H

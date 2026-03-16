@@ -1,162 +1,116 @@
-#include "utils/memory_tracker.h"
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "Windows.h"
-#else
-#include <unistd.h>
-#endif
-
-#include <stdio.h>
+#include <ranges>
 
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
-#include "utils/string.h"
-#include "utils/path.h"
 #include "apex/adf/adf.h"
 #include "apex/package/tab_archive.h"
 #include "apex/adf/builtin_adf.h"
 #include "apex/adf/sti.h"
+#include "platform/app_state.h"
 #include "platform/logger.h"
+#include "tracy/Tracy.hpp"
 
-void import_adf(const ADF *adf, STI_TypeLibrary *lib) {
-    for (uint32 i = 0; i < DA_size(&adf->types); ++i) {
-        const ADFType *adf_type = static_cast<const ADFType *>(DA_at(&adf->types, i));
-        STI_TypeLibrary_register_adf_type(lib, adf, adf_type);
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
+
+void collect_types(AppState &app_state, STI::TypeLibrary &lib) {
+    for (uint32 i = 0; i < std::size(builtin_adfs); ++i) {
+        const auto &[data, size] = builtin_adfs[i];
+        auto adf = ADF::ADFFile::from_buffer(data, size);
+        STI::register_types_from_adf(lib, adf);
     }
-}
 
-void import_builtin_adf(const uint8 *data, const int64 size, STI_TypeLibrary *lib) {
-    ADF *b_adf = ADF_load_builtin_adf(data, size);
-    import_adf(b_adf, lib);
-    ADF_free(b_adf);
-    mp_free(b_adf);
-}
+    std::vector<ArchiveEntry> all_entries;
+    auto &manager = app_state.manager();
+    manager.all_entries(all_entries);
+    for (auto [id, entry]: all_entries | std::views::enumerate) {
+        // if (id!=0 && id%10000==0) {
+        //     break;
+        // }
+        auto file = manager.get_file(entry.path_hash);
 
-
-void collect_types(ArchiveManager *archive_manager, STI_TypeLibrary *lib) {
-    STI_start_type_dump(lib);
-    // @formatter:off
-    uint32_t builtin_count = sizeof(builtin_adfs) / sizeof(BuiltinAdf);
-    for (uint32_t i = 0; i < builtin_count; ++i) {
-        import_builtin_adf((const uint8 *)builtin_adfs[i].data, builtin_adfs[i].size, lib);
-    }
-    // @formatter:on
-
-    ADF adf = {};
-    DynamicArray_ArchiveEntry all_entries = {};
-    ArchiveManager_get_all_entries(archive_manager, &all_entries);
-    for (int i = 0; i < all_entries.count; ++i) {
-        ArchiveEntry *entry = static_cast<ArchiveEntry *>(DA_at(&all_entries, i));
-        MemoryBuffer mb = {};
-        if (!ArchiveManager_get_file_by_hash(archive_manager, entry->path_hash, &mb)) {
-            printf("File not found\n");
-            return;
+        if (!file) {
+            GLog_Warning("Failed to read file {}", find_name32_sv(entry.path_hash).value_or("Unknown"));
+            continue;
         }
 
-        if (mb.data[0] == ' ' && mb.data[1] == 'F' && mb.data[2] == 'D' && mb.data[3] == 'A') {
-            ADF_from_buffer(&adf, (Buffer *) &mb);
-            import_adf(&adf, lib);
-            ADF_free(&adf);
+        std::vector<uint8> first_buffer(8);
+        file->read_exact<uint8>(first_buffer);
+        file->set_position(0);
+
+        if (std::memcmp(first_buffer.data(), ADF_MAGIC, 4) == 0) {
+            auto adf_file = ADF::ADFFile::from_buffer(std::move(file));
+            STI::register_types_from_adf(lib, adf_file);
         }
-        else if (mb.data[0] == 'A' && mb.data[1] == 'A' && mb.data[2] == 'F' && mb.data[3] == '\0') {
-            static AAFArchive aaf_archive = {};
-            AAFArchive_from_buffer(&aaf_archive, (Buffer *) &mb);
-            MemoryBuffer *section_buffer = MemoryBuffer_new();
-            if (!AAFArchive_get_data(&aaf_archive, section_buffer)) {
-                GLog_Error("Failed to get AAF section %i", i);
-                return;
-            }
-            if (section_buffer->data[4] == 'S' && section_buffer->data[5] == 'A' &&
-                section_buffer->data[6] == 'R' && section_buffer->data[7] == 'C') {
-                static SArchive sarc = {};
-                SArchive_init(&sarc, (Buffer *) section_buffer, entry->path_hash); // sarc is now owner of buffer
-                DynamicArray_ArchiveEntry sarc_entries = {};
-                DA_init(&sarc_entries, ArchiveEntry, 16);
-                Archive_get_all_entries((Archive *) &sarc, &sarc_entries);
-                for (int j = 0; j < sarc_entries.count; ++j) {
-                    ArchiveEntry *aaf_entry = static_cast<ArchiveEntry *>(DA_at(&sarc_entries, j));
-                    MemoryBuffer *tmp = MemoryBuffer_new();
-                    if (Archive_get_file((Archive *) &sarc, &aaf_entry->path, tmp)) {
-                        if (tmp->data[0] == ' ' && tmp->data[1] == 'F' && tmp->data[2] == 'D' && tmp->data[3] == 'A') {
-                            ADF_from_buffer(&adf, (Buffer *) tmp);
-                            import_adf(&adf, lib);
-                            ADF_free(&adf);
-                        }
+        else if (std::memcmp(first_buffer.data(), AAF_MAGIC, 4) == 0) {
+            AAFArchive aaf_archive(std::move(file));
+
+            auto aaf_buffer = aaf_archive.get_data();
+
+            aaf_buffer->read_exact<uint8>(first_buffer);
+            aaf_buffer->set_position(0);
+
+            if (std::memcmp(first_buffer.data() + 4, "SARC", 4) == 0) {
+                SArchive sarc(entry.path_hash, std::move(aaf_buffer));
+                std::vector<ArchiveEntry> sarc_entries;
+                sarc.all_entries(sarc_entries);
+
+                for (auto &sarc_entry: sarc_entries) {
+                    auto sarc_buffer = sarc.get_file(sarc_entry.path_hash);
+
+                    if (!sarc_buffer) {
+                        GLog_Warning("Failed to read file {} from SARC {}",
+                                     find_name32_sv(sarc_entry.path_hash).value_or("Unknown"),
+                                     find_name32_sv(entry.path_hash).value_or("Unknown"));
+                        continue;
                     }
-                    Buffer_close((Buffer *) tmp);
+
+                    sarc_buffer->read_exact<uint8>(first_buffer);
+                    sarc_buffer->set_position(0);
+
+                    if (std::memcmp(first_buffer.data(), ADF_MAGIC, 4) == 0) {
+                        auto adf_file = ADF::ADFFile::from_buffer(std::move(sarc_buffer));
+                        STI::register_types_from_adf(lib, adf_file);
+                    }
                 }
-                DA_free(&sarc_entries);
-                Archive_free((Archive *) &sarc);
             }
-            AAFArchive_free(&aaf_archive);
         }
-        Buffer_close((Buffer *) &mb);
     }
-
-    DA_free_with_inner(&all_entries, {
-                       ArchiveEntry* entry = (ArchiveEntry*)it;
-                       String_free(&entry->path);
-                       });
-
-    String namespace_ = {};
-    String_from_cstr(&namespace_, "ADF_TYPES");
-
-    String header_path = {};
-
-    String_from_cstr(&header_path, "D:/projects/cpp/ApexPredator/include/apex/adf/adf_types.h");
-    Path_convert_to_wsl(&header_path);
-    FILE *header_file = fopen(String_cstr(&header_path), "w");
-    String_free(&header_path);
-
-    String_from_cstr(&header_path, "D:/projects/cpp/ApexPredator/src/apex/adf/adf_types.cpp");
-    Path_convert_to_wsl(&header_path);
-    FILE *impl_file = fopen(String_cstr(&header_path), "w");
-    String_free(&header_path);
-
-    String_free(&header_path);
-
-    String header_rel_path = {};
-    String_append_cstr(&header_rel_path, "apex/adf/adf_types.h");
-
-    STI_TypeLibrary_generate_types(lib, &namespace_, header_file, &header_rel_path, impl_file);
-
-    String_free(&header_rel_path);
-    String_free(&namespace_);
-    fclose(header_file);
-    fclose(impl_file);
 }
 
 int main(int argc, const char *argv[]) {
-    mp_init();
-    if (argc < 2) {
-        printf("USAGE: %s <path_to_game_root>\n", argv[0]);
+    if (argc < 3) {
+        printf("USAGE: %s <path_to_game_root> <path_to_hashes.db>\n", argv[0]);
         return 0;
     }
 
-    //     while (!TracyCIsConnected) {
-    // #ifdef _WIN32
-    //         Sleep(100); /* Windows */
-    // #else
-    //         usleep(10000);
-    // #endif
-    //         printf("\rWaiting for tracy;");
-    //     }
-    //     printf("\n");
+    while (!TracyIsConnected) {
+#ifdef _WIN32
+        Sleep(100); /* Windows */
+#else
+        usleep(10000);
+#endif
+        printf("\rWaiting for tracy;");
+    }
+    printf("\n");
 
-    STI_TypeLibrary lib = {};
-    String game_root = {};
-    STI_TypeLibrary_init(&lib);
+    set_db_path(argv[2]);
 
-    ArchiveManager manager = {};
-    ArchiveManager_init(&manager);
+    AppState app_state(argv[1]);
 
-    String_from_cstr(&game_root, argv[1]);
-    Path_convert_to_wsl(&game_root);
-    TabArchives_init(&manager, &game_root);
-    collect_types(&manager, &lib);
+    STI::TypeLibrary type_library;
 
-    ArchiveManager_free(&manager);
-    STI_TypeLibrary_free(&lib);
-    String_free(&game_root);
+    collect_types(app_state, type_library);
+
+    STI::generate_code(type_library,
+                       "D:/projects/cpp/ApexPredator/src/apex/adf/generated",
+                       "D:/projects/cpp/ApexPredator/include/apex/adf/generated");
+    close_assets_db();
+
     return 0;
 }

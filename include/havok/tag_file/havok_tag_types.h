@@ -2,104 +2,118 @@
 
 #ifndef APEXPREDATOR_HAVOK_TAG_TYPES_H
 #define APEXPREDATOR_HAVOK_TAG_TYPES_H
+#include <array>
+#include <memory>
+#include <string>
+#include <vector>
+#include <variant>
 
 #include "int_def.h"
-#include "utils/string.h"
-#include "utils/dynamic_array.h"
+#include "utils/file/file.h"
+
+namespace Havok::Tag {
+    enum class TypeFlags {
+        Format = 0x01,
+        SubType = 0x02,
+        Version = 0x04,
+        SizeAlign = 0x08,
+        Flags = 0x10,
+        Fields = 0x20,
+        Interfaces = 0x40,
+        Attribute = 0x80
+    };
+
+    bool operator&(TypeFlags lhs, TypeFlags rhs);
+
+    struct Type;
+
+    using SharedType = std::shared_ptr<Type>;
+    using WeakType = std::weak_ptr<Type>;
 
 
-typedef enum {
-    Format = 0x01,
-    SubType = 0x02,
-    Version = 0x04,
-    SizeAlign = 0x08,
-    Flags = 0x10,
-    Fields = 0x20,
-    Interfaces = 0x40,
-    Attribute = 0x80
-} HKTagFlags;
+    struct TypeMember {
+        std::string name;
+        uint64 flags;
+        uint64 offset;
 
-typedef struct HKTagType HKTagType;
+        SharedType type() const;
+        void type(const SharedType &type);
 
-typedef struct {
-    String name;
-    uint32 flags;
-    uint32 offset;
-    HKTagType *type;
-} HKTagTypeMember;
+        TypeMember(const std::string &name_, const uint64 flags, const uint64 offset,
+                   const WeakType &type) : flags(flags), offset(offset), type_(type) {
+            if (name_[0] >= '0' && name_[0] <= '9')
+                name = "_" + name_;
+            else
+                name = name_;
+        }
 
-DYNAMIC_ARRAY_STRUCT(HKTagTypeMember, HKMember);
+    private:
+        WeakType type_;
+    };
 
-void HKTagTypeMember_init(HKTagTypeMember *member, const String *name);
+    using ValueOrType = std::variant<
+        int64,
+        WeakType
+    >;
 
-void HKTagTypeMember_free(HKTagTypeMember *member);
+    struct TemplateArgument {
+        std::string name;
+        ValueOrType value;
+    };
 
+    struct Interface {
+        uint64 type_id;
+        uint64 offset;
+    };
 
-typedef struct {
-    String name;
-    HKTagType *type;
-    uint32 number: 30;
-    uint32 is_number:1;
-    uint32 is_class: 1;
-} HKTagTemplateArgument;
+    enum class DataType:uint32 {
+        PRIMITIVE = 0,
+        OPAQUE = 1,
+        BOOL = 2,
+        STRING = 3,
+        BASIC = 4,
+        FLOAT = 5,
+        POINTER = 6,
+        RECORD = 7,
+        ARRAY = 8,
+    };
 
-typedef struct {
-    HKTagType *type;
-    uint32 offset;
-} HKTagInterface;
-
-DYNAMIC_ARRAY_STRUCT(HKTagTemplateArgument, HKTagTemplateArgument);
-
-DYNAMIC_ARRAY_STRUCT(HKTagInterface, HKInterface);
-
-void HKTagTemplateArgument_init(HKTagTemplateArgument *arg, const String *name);
-
-void HKTagTemplateArgument_free(HKTagTemplateArgument *arg);
-
-typedef enum {
-    HKTYPE_PRIMITIVE = 0,
-    HKTYPE_OPAQUE = 1,
-    HKTYPE_UNK2 = 2,
-    HKTYPE_STRING = 3,
-    HKTYPE_BASIC = 4,
-    HKTYPE_FLOAT = 5,
-    HKTYPE_POINTER = 6,
-    HKTYPE_RECORD = 7,
-    HKTYPE_ARRAY = 8,
-} HKTagDataType;
-
-static const char *HKTAGTYPE_NAMES[] = {
-    "PRIMITIVE", "OPAQUE", "UNK2", "STRING", "BASIC", "FLOAT", "POINTER", "RECORD", "ARRAY"
-};
+    static std::array<std::string_view, 9> DataType_Names = {
+        "PRIMITIVE", "OPAQUE", "BOOL", "STRING", "BASIC", "FLOAT", "POINTER", "RECORD", "ARRAY"
+    };
 
 
-typedef struct HKTagType {
-    String name;
-    String stable_name;
-    DynamicArray_HKTagTemplateArgument template_args;
-    DynamicArray_HKMember members;
-    HKTagType *parent;
-    DynamicArray_HKInterface interfaces;
-    uint32 format;
-    uint32 sub_type;
-    uint32 version;
-    uint32 size;
-    uint32 align;
-    uint32 flags;
-    uint32 hash;
-    HKTagDataType data_type;
-} HKTagType;
+    struct Type {
+        std::string name;
+        std::vector<TemplateArgument> template_args{};
+        std::vector<TypeMember> members{};
+        std::vector<Interface> interfaces{};
+        uint32 format{};
+        uint32 sub_type{};
+        uint32 version{};
+        SharedType parent{};
 
-const String *HKTagType_stable_name(HKTagType *tf_type);
+        uint32 flags{};
+        uint32 hash{};
+        DataType data_type{};
 
-uint32 HKTagType_hash(HKTagType *type);
+        Type(std::unique_ptr<IO::File> &buffer, const std::vector<std::string> &names);
 
-void HKTagType_print(const HKTagType *type, FILE *out, uint32 indent);
+        Type();
 
-DYNAMIC_ARRAY_STRUCT(HKTagType, HKTagType);
+        [[nodiscard]] std::string unique_id() const;
 
-void HKTagType_init(HKTagType *type, const String *name);
+        [[nodiscard]] uint32 size() const;
 
-void HKTagType_free(HKTagType *type);
+        [[nodiscard]] uint32 align() const;
 
+        void size(uint32 s);
+
+        void align(uint32 a);
+
+    private:
+        uint32 size_{};
+        uint32 align_{};
+    };
+}
 #endif //APEXPREDATOR_HAVOK_TAG_TYPES_H

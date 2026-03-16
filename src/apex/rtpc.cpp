@@ -1,12 +1,13 @@
 // Created by RED on 03.10.2025.
-#include <cassert>
-
 #include "apex/rtpc.h"
 
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/glm.hpp"
 #include "apex/hashes.h"
 #include "platform/logger.h"
-#include "utils/memory_profiling.h"
-#include "utils/string_view.h"
+
+using json = nlohmann::json;
+
 
 #pragma pack(push, 1)
 typedef struct {
@@ -14,14 +15,14 @@ typedef struct {
     uint32 version;
 } RTPCHeader;
 
-typedef struct {
+struct RuntimeNodeHeader {
     uint32 name_hash;
     uint32 data_offset;
     uint16 prop_count;
     uint16 child_count;
-} RuntimeNodeHeader;
+};
 
-typedef struct {
+struct RuntimePropHeader {
     uint32 name_hash;
 
     union {
@@ -30,871 +31,227 @@ typedef struct {
     } data_raw;
 
     PropType prop_type;
-} RuntimePropHeader;
+};
 #pragma pack(pop)
 
-void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer);
-
-void RuntimeProp__move_to(RuntimeProp *src, RuntimeProp *dest) {
-    dest->name_hash = src->name_hash;
-    dest->type = src->type;
-    dest->value = src->value;
-
-    memset(src, 0, sizeof(RuntimeProp));
-}
-
-void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer);
-
-RuntimeNode *RuntimeContainer_from_buffer(Buffer *buffer) {
-    TracyCZoneN(ctx, "RuntimeContainer_from_buffer", 1);
-    RTPCHeader header;
-    if (buffer->read(buffer, &header, sizeof(RTPCHeader), NULL) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to read RTPC header");
-        TracyCZoneEnd(ctx);
-        abort();
-    }
-    if (header.version < 1 || header.version > 3) {
-        GLog_Error("Unsupported RTPC version: %u", header.version);
-        TracyCZoneEnd(ctx);
-        return NULL;
-    }
-
-    RuntimeNode *root_node = RuntimeNode_new();
-    RuntimeNode__from_buffer(root_node, buffer);
-    TracyCZoneEnd(ctx);
-    return root_node;
-}
-
-RuntimeNode *RuntimeNode_new() {
-    RuntimeNode *node = (RuntimeNode *) mp_calloc(1, sizeof(RuntimeNode));
-    if (node == NULL) {
-        GLog_Error("Failed to allocate memory");
-        abort();
-    }
-    node->heap_allocated = 1;
-    return node;
-}
-
-void RuntimeNode_init(RuntimeNode *node, const uint32 prop_count, const uint32 children_count) {
-    DA_init(&node->props, RuntimeProp, prop_count);
-    DA_init(&node->children, RuntimeNode, children_count);
-}
-
-RuntimeProp *RuntimeNode_get_prop(const RuntimeNode *node, const char *name) {
-    const uint32 hash = hash_cstring(name);
-    return RuntimeNode_get_prop_by_hash(node, hash);
-}
-
-RuntimeProp *RuntimeNode_get_prop_by_hash(const RuntimeNode *node, const uint32 hash) {
-    for (uint32 i = 0; i < node->props.count; ++i) {
-        RuntimeProp *prop = (RuntimeProp *) DA_at(&node->props, i);
-        if (prop->name_hash == hash) {
-            return prop;
-        }
-    }
-    return NULL;
-}
-
-uint32 RuntimeNode_get_prop_by_hash_u32(const RuntimeNode *node, const uint32 hash) {
-    const RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type != PropType::PROP_TYPE_U32) {
-        return 0;
-    }
-    return prop->value.uint32_value;
-}
-
-float32 RuntimeNode_get_prop_by_hash_f32(const RuntimeNode *node, const uint32 hash) {
-    const RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_F32) {
-        return 0.0f;
-    }
-    return prop->value.float32_value;
-}
-
-StringView RuntimeNode_get_prop_by_hash_str(const RuntimeNode *node, const uint32 hash) {
-    const RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_STR) {
-        return StringView_empty();
-    }
-    return as_sv(&prop->value.string_value);
-}
-
-float32 *RuntimeNode_get_prop_by_hash_vec2(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_VEC2) {
-        return NULL;
-    }
-    return prop->value.vec2_value;
-}
-
-float32 *RuntimeNode_get_prop_by_hash_vec3(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_VEC3) {
-        return NULL;
-    }
-    return prop->value.vec3_value;
-}
-
-float32 *RuntimeNode_get_prop_by_hash_vec4(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_VEC4) {
-        return NULL;
-    }
-    return prop->value.vec4_value;
-}
-
-float32 *RuntimeNode_get_prop_by_hash_mat3x3(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_MAT3X3) {
-        return NULL;
-    }
-    return prop->value.matrix33_value;
-}
-
-float32 *RuntimeNode_get_prop_by_hash_mat4x4(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_MAT4X4) {
-        return NULL;
-    }
-    return prop->value.matrix44_value;
-}
-
-DynamicArray_uint32 *RuntimeNode_get_prop_by_hash_array_u32(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_ARRAY_U32) {
-        return NULL;
-    }
-    return &prop->value.uint32_array_value;
-}
-
-DynamicArray_float32 *RuntimeNode_get_prop_by_hash_array_f32(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_ARRAY_F32) {
-        return NULL;
-    }
-    return &prop->value.float32_array_value;
-}
-
-DynamicArray_uint8 *RuntimeNode_get_prop_by_hash_array_u8(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_ARRAY_U8) {
-        return NULL;
-    }
-    return &prop->value.uint8_array_value;
-}
-
-uint64 RuntimeNode_get_prop_by_hash_objid(const RuntimeNode *node, const uint32 hash) {
-    const RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_OBJID) {
-        return 0;
-    }
-    return prop->value.objid_value;
-}
-
-DynamicArray_RuntimeEvent *RuntimeNode_get_prop_by_hash_event(const RuntimeNode *node, const uint32 hash) {
-    RuntimeProp *prop = RuntimeNode_get_prop_by_hash(node, hash);
-    if (prop == NULL || prop->type !=  PropType::PROP_TYPE_EVENT) {
-        return NULL;
-    }
-    return &prop->value.event_value;
-}
-
-uint32 RuntimeNode_get_prop_u32(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_u32(node, hash_cstring(name));
-}
-
-float32 RuntimeNode_get_prop_f32(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_f32(node, hash_cstring(name));
-}
-
-StringView RuntimeNode_get_prop_str(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_str(node, hash_cstring(name));
-}
-
-float32 *RuntimeNode_get_prop_vec2(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_vec2(node, hash_cstring(name));
-}
-
-float32 *RuntimeNode_get_prop_vec3(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_vec3(node, hash_cstring(name));
-}
-
-float32 *RuntimeNode_get_prop_vec4(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_vec4(node, hash_cstring(name));
-}
-
-float32 *RuntimeNode_get_prop_mat3x3(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_mat3x3(node, hash_cstring(name));
-}
-
-float32 *RuntimeNode_get_prop_mat4x4(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_mat4x4(node, hash_cstring(name));
-}
-
-DynamicArray_uint32 *RuntimeNode_get_prop_array_u32(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_array_u32(node, hash_cstring(name));
-}
-
-DynamicArray_float32 *RuntimeNode_get_prop_array_f32(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_array_f32(node, hash_cstring(name));
-}
-
-DynamicArray_uint8 *RuntimeNode_get_prop_array_u8(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_array_u8(node, hash_cstring(name));
-}
-
-uint64 RuntimeNode_get_prop_objid(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_objid(node, hash_cstring(name));
-}
-
-DynamicArray_RuntimeEvent *RuntimeNode_get_prop_event(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop_by_hash_event(node, hash_cstring(name));
-}
-
-bool RuntimeNode_has_prop(const RuntimeNode *node, const char *name) {
-    return RuntimeNode_get_prop(node, name) != NULL;
-}
-
-void RuntimeNode_print(const RuntimeNode *node, FILE *output, const uint32 indent) {
-    for (uint32 i = 0; i < indent; ++i) {
-        fputc(' ', output);
-    }
-    const StringView name = find_name32_sv(node->name_hash);
-
-    fprintf(output, "Node: \"" SV_FMT "\" (0x%08X)\n", SV_ARGS(name), node->name_hash);
-    for (uint32 i = 0; i < node->props.count; ++i) {
-        const RuntimeProp *prop = (RuntimeProp *) DA_at(&node->props, i);
-        if (prop->type ==  PropType::PROP_TYPE_NONE)continue;
-        RuntimeProp_print(prop, output, indent + 2);
-    }
-    for (uint32 i = 0; i < node->children.count; ++i) {
-        const RuntimeNode *child = (RuntimeNode *) DA_at(&node->children, i);
-        RuntimeNode_print(child, output, indent + 2);
-    }
-}
-
-void RuntimeNode__from_buffer(RuntimeNode *node, Buffer *buffer) {
-    RuntimeNodeHeader header;
-    if (buffer->read(buffer, &header, sizeof(RuntimeNodeHeader), NULL) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to read RTPC root node header");
-        abort();
-    }
-
-    RuntimeNode_init(node, header.prop_count, header.child_count);
-
-    node->name_hash = header.name_hash;
-    int64 orig_pos;
-    if (buffer->get_position(buffer, &orig_pos) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to get current buffer position");
-        abort();
-    }
-    if (buffer->set_position(buffer, header.data_offset, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to seek to node data offset: %u", header.data_offset);
-        abort();
-    }
-    // RuntimeProp tmp = {};
-    for (int i = 0; i < header.prop_count; ++i) {
-        RuntimeProp *prop = (RuntimeProp*)DA_append_get(&node->props);
-        RuntimeProp__from_buffer(prop, buffer);
-        // if (tmp.type !=  PropType::PROP_TYPE_NONE) {
-        // *prop = tmp;
-        // memset(&tmp, 0, sizeof(RuntimeProp));
-        // }
-        // else {
-        // RuntimeProp_free(&tmp);
-        // }
-    }
-    // Align buffer position to 4
-    int64 pos;
-    if (buffer->get_position(buffer, &pos) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to get current buffer position");
-        abort();
-    }
-    if (buffer->set_position(buffer, (pos + 3) & ~3, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to align buffer position after reading RTPC properties");
-        abort();
-    }
-    for (int i = 0; i < header.child_count; ++i) {
-        RuntimeNode *child_node = (RuntimeNode*)DA_append_get(&node->children);
-        RuntimeNode__from_buffer(child_node, buffer);
-    }
-
-    if (buffer->set_position(buffer, orig_pos, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to return back");
-        abort();
-    }
-}
-
-#define READ_FROM_OFFSET(offset, body)\
-    do{\
-        int64 orig_offset;\
-        if(buffer->get_position(buffer, &orig_offset)!=BUFFER_SUCCESS){\
-            GLog_Error("Failed to get current buffer position");\
-            abort();\
-        }\
-        if (buffer->set_position(buffer, offset, BUFFER_ORIGIN_START) != BUFFER_SUCCESS) {\
-            GLog_Error("Failed to seek to RTPC property data at offset: %u", offset);\
-            abort();\
-        }\
-        {body}\
-        if(buffer->set_position(buffer, orig_offset, BUFFER_ORIGIN_START)!=BUFFER_SUCCESS) {\
-            GLog_Error("Failed to restore buffer position after reading RTPC property value");\
-            abort();\
-        }\
-    }while(0)
-
-void RuntimeNode_free(RuntimeNode *node) {
-    assert(node!=NULL);
-
-    DA_free_with_inner(&node->props, {
-                       RuntimeProp_free((RuntimeProp*)it);
-                       });
-
-    DA_free_with_inner(&node->children, {
-                       RuntimeNode_free((RuntimeNode*)it);
-                       });
-    node->name_hash = 0;
-    if (node->heap_allocated)
-        mp_free(node);
-}
-
-void RuntimeProp__from_buffer(RuntimeProp *prop, Buffer *buffer) {
-    RuntimePropHeader header;
-    if (buffer->read(buffer, &header, sizeof(RuntimePropHeader), NULL) != BUFFER_SUCCESS) {
-        GLog_Error("Failed to read RTPC property header");
-        abort();
-    }
-    RuntimeProp_init(prop, header.prop_type);
-    prop->name_hash = header.name_hash;
-    // String *found_name = find_name32(header.name_hash);
-
-    switch (prop->type) {
-        case  PropType::PROP_TYPE_NONE: {
+RuntimeProp::RuntimeProp(IO::File &buffer) {
+    const auto header = buffer.read_pod<RuntimePropHeader>();
+    m_name_hash = header.name_hash;
+    auto orig_offset = buffer.get_position();
+    switch (header.prop_type) {
+        case PropType::NONE: {
             // Nothing to read
             break;
         }
-        case  PropType::PROP_TYPE_U32: {
-            prop->value.uint32_value = header.data_raw.uint_value;
+        case PropType::U32: {
+            m_value = header.data_raw.uint_value;
             break;
         }
-        case  PropType::PROP_TYPE_F32: {
-            prop->value.float32_value = header.data_raw.float_value;
+        case PropType::F32: {
+            m_value = header.data_raw.float_value;
             break;
         }
-        case  PropType::PROP_TYPE_STR: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             if (buffer->read_cstring(buffer, &prop->value.string_value)!=BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC string property value");
-                             abort();
-                             }});
+        case PropType::STR: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto &v = m_value.emplace<std::string>();
+            buffer.read_cstring(v);
             break;
         }
-        case  PropType::PROP_TYPE_VEC2: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             if (buffer->read(buffer, prop->value.vec2_value, 4*2, NULL)!=BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC vec2 property value");
-                             abort();
-                             }});
+        case PropType::VEC2: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto &v = m_value.emplace<glm::vec2>();
+            v = buffer.read_pod<glm::vec2>();
             break;
         }
-        case  PropType::PROP_TYPE_VEC3: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             if (buffer->read(buffer, prop->value.vec3_value, 4*3, NULL)!=BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC vec3 property value");
-                             abort();
-                             }});
+        case PropType::VEC3: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto &v = m_value.emplace<glm::vec3>();
+            v = buffer.read_pod<glm::vec3>();
             break;
         }
-        case  PropType::PROP_TYPE_VEC4: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             if (buffer->read(buffer, prop->value.vec4_value, 4*4, NULL)!=BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC vec4 property value");
-                             abort();
-                             }});
+        case PropType::VEC4: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto &v = m_value.emplace<glm::vec4>();
+            v = buffer.read_pod<glm::vec4>();
             break;
         }
-        case  PropType::PROP_TYPE_MAT3X3: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             if (buffer->read(buffer, prop->value.vec4_value, 4*9, NULL)!=BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC MAT3X3 property value");
-                             abort();
-                             }});
+        case PropType::MAT3X3: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto &v = m_value.emplace<glm::mat3>();
+            v = buffer.read_pod<glm::mat3>();
             break;
         }
-        case  PropType::PROP_TYPE_MAT4X4: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             if (buffer->read(buffer, prop->value.vec4_value, 4*16, NULL)!=BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC MAT4X4 property value");
-                             abort();
-                             }});
+        case PropType::MAT4X4: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto &v = m_value.emplace<glm::mat4>();
+            v = buffer.read_pod<glm::mat4>();
             break;
         }
-        case  PropType::PROP_TYPE_ARRAY_U32: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             uint32 array_size;
-                             if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC u32 array size");
-                             abort();
-                             }
-                             DA_reserve(&prop->value.uint32_array_value, array_size);
-                             prop->value.uint32_array_value.count = array_size;
-                             if (array_size>0)
-                             if (buffer->read(buffer, prop->value.uint32_array_value.items, 4*array_size, NULL)!=
-                                 BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC ARRAY_U32 property value");
-                             abort();
-                             }});
+        case PropType::ARRAY_U32: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto array_size = buffer.read_pod<uint32>();
+            auto &v = m_value.emplace<std::vector<uint32> >();
+            v.reserve(array_size);
+            if (array_size > 0) {
+                buffer.read_exact(v);
+            }
             break;
         }
-        case  PropType::PROP_TYPE_ARRAY_F32: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             uint32 array_size;
-                             if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC u32 array size");
-                             abort();
-                             }
-                             DA_reserve(&prop->value.float32_array_value, array_size);
-                             prop->value.float32_array_value.count = array_size;
-                             if (array_size>0)
-                             if (buffer->read(buffer, prop->value.float32_array_value.items, 4*array_size, NULL)!=
-                                 BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC ARRAY_F32 property value");
-                             abort();
-                             }});
+        case PropType::ARRAY_F32: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto array_size = buffer.read_pod<uint32>();
+            auto &v = m_value.emplace<std::vector<float32> >();
+            v.reserve(array_size);
+            if (array_size > 0) {
+                buffer.read_exact(v);
+            }
             break;
         }
-        case  PropType::PROP_TYPE_ARRAY_U8: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             uint32 array_size;
-                             if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC u32 array size");
-                             abort();
-                             }
-                             DA_reserve(&prop->value.uint8_array_value, array_size);
-                             prop->value.uint8_array_value.count = array_size;
-                             if (array_size>0)
-                             if (buffer->read(buffer, prop->value.uint8_array_value.items, array_size, NULL)!=
-                                 BUFFER_SUCCESS){
-                             GLog_Error("Failed to read RTPC ARRAY_U8 property value");
-                             abort();
-                             }});
+        case PropType::ARRAY_U8: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto array_size = buffer.read_pod<uint32>();
+            auto &v = m_value.emplace<std::vector<uint8> >();
+            if (array_size > 0) {
+                buffer.read_exact(v);
+            }
             break;
         }
-        case  PropType::PROP_TYPE_OBJID: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             if (buffer->read_uint64(buffer, &prop->value.objid_value)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC OBJID property value\n");
-                             abort();
-                             }});
+        case PropType::OBJID: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto &v = m_value.emplace<uint64>();
+            v = buffer.read_pod<uint64>();
             break;
         }
-        case  PropType::PROP_TYPE_EVENT: {
-            READ_FROM_OFFSET(header.data_raw.uint_value, {
-                             uint32 array_size;
-                             if (buffer->read_uint32(buffer, &array_size)!=BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC u32 array size\n");
-                             abort();
-                             }
-                             DA_reserve(&prop->value.event_value, array_size);
-                             prop->value.event_value.count = array_size;
-                             if (array_size>0)
-                             if (buffer->read(buffer, prop->value.event_value.items, 8*array_size, NULL)!=
-                                 BUFFER_SUCCESS){
-                             printf("[ERROR]: Failed to read RTPC EVENT property value\n");
-                             abort();
-                             }});
+        case PropType::EVENT: {
+            buffer.set_position(header.data_raw.uint_value, std::ios::beg);
+            auto array_size = buffer.read_pod<uint32>();
+            auto &v = m_value.emplace<std::vector<RuntimeEvent> >();
+            v.reserve(array_size);
+            for (uint32 i = 0; i < array_size; ++i) {
+                auto a = buffer.read_pod<uint32>();
+                auto b = buffer.read_pod<uint32>();
+                v.emplace_back(a, b);
+            }
             break;
         }
         default: {
-            printf("[ERROR]: Unknown RTPC property type: %d\n", prop->type);
+            printf("[ERROR]: Unknown RTPC property type in RuntimeProp constructor: %d\n", header.prop_type);
             abort();
         }
     }
+    buffer.set_position(orig_offset, std::ios::beg);
 }
 
-void RuntimeProp_init(RuntimeProp *prop, const PropType type) {
-    prop->type = type;
-    switch (type) {
-        case  PropType::PROP_TYPE_NONE:
-        case  PropType::PROP_TYPE_U32:
-        case  PropType::PROP_TYPE_F32:
-        case  PropType::PROP_TYPE_VEC2:
-        case  PropType::PROP_TYPE_VEC3:
-        case  PropType::PROP_TYPE_VEC4:
-        case  PropType::PROP_TYPE_MAT3X3:
-        case  PropType::PROP_TYPE_MAT4X4:
-        case  PropType::PROP_TYPE_OBJID: {
-            // Nothing to init
-            break;
-        }
-        case  PropType::PROP_TYPE_STR: {
-            String_init(&prop->value.string_value, 16);
-            break;
-        }
+RuntimeNode::RuntimeNode(IO::File &buffer) {
+    const auto [name_hash, data_offset, prop_count, child_count] = buffer.read_pod<RuntimeNodeHeader>();
 
-        case  PropType::PROP_TYPE_ARRAY_U32: {
-            DA_init(&prop->value.uint32_array_value, uint32, 0);
-            break;
-        }
-        case  PropType::PROP_TYPE_ARRAY_F32: {
-            DA_init(&prop->value.float32_array_value, float32, 0);
-            break;
-        }
-        case  PropType::PROP_TYPE_ARRAY_U8: {
-            DA_init(&prop->value.uint8_array_value, uint8, 0);
-            break;
-        }
-        case  PropType::PROP_TYPE_EVENT: {
-            DA_init(&prop->value.event_value, uint64, 0);
-            break;
-        }
-        case  PropType::PROP_TYPE_DEPRECIATED_12:
-        case  PropType::PROP_TYPE_UNK_15:
-        case  PropType::PROP_TYPE_UNK_16:
-        default: {
-            printf("[ERROR]: Unknown prop type: %d\n", type);
-            abort();
-        }
+    m_name_hash = name_hash;
+    m_children.reserve(child_count);
+    m_props.reserve(prop_count);
+
+    auto orig_pos = buffer.get_position();
+    buffer.set_position(data_offset, std::ios::beg);
+
+    for (int i = 0; i < prop_count; ++i) {
+        RuntimeProp prop(buffer);
+        uint32 hash = prop.hash();
+        m_props.emplace(hash, prop);
     }
+    // Align buffer position to 4
+    buffer.align(4);
+
+    for (int i = 0; i < child_count; ++i) {
+        m_children.emplace_back(buffer);
+    }
+    buffer.set_position(orig_pos, std::ios::beg);
 }
 
-void RuntimeProp_print(const RuntimeProp *prop, FILE *output, const uint32 indent) {
-    for (uint32 i = 0; i < indent; ++i) {
-        fputc(' ', output);
-    }
-    const StringView prop_name = find_name32_sv(prop->name_hash);
-    if (sv_is_null(prop_name)) {
-        fprintf(output, "Prop: 0x%08X Type: %d Value: ", prop->name_hash, prop->type);
-    }
-    else {
-        fprintf(output, "Prop: \"" SV_FMT "\" (0x%08X) Type: %d Value: ", SV_ARGS(prop_name), prop->name_hash,
-                prop->type);
-    }
-
-    switch (prop->type) {
-        case  PropType::PROP_TYPE_NONE: {
-            fprintf(output, "<NONE>\n");
-            break;
-        }
-        case  PropType::PROP_TYPE_U32: {
-            const StringView name_value = find_name32_sv(prop->value.uint32_value);
-            if (sv_is_null(name_value)) {
-                fprintf(output, "%u\n", prop->value.uint32_value);
-            }
-            else {
-                fprintf(output, "\"" SV_FMT "\" (0x%08X)\n", SV_ARGS(name_value), prop->value.uint32_value);
-            }
-
-            break;
-        }
-        case  PropType::PROP_TYPE_F32: {
-            fprintf(output, "%f\n", prop->value.float32_value);
-            break;
-        }
-        case  PropType::PROP_TYPE_STR: {
-            fprintf(output, "\"%s\"\n", String_cstr(&prop->value.string_value));
-            break;
-        }
-        case  PropType::PROP_TYPE_VEC2: {
-            fprintf(output, "[%f, %f]\n", prop->value.vec2_value[0], prop->value.vec2_value[1]);
-            break;
-        }
-        case  PropType::PROP_TYPE_VEC3: {
-            fprintf(output, "[%f, %f, %f]\n", prop->value.vec3_value[0], prop->value.vec3_value[1],
-                    prop->value.vec3_value[2]);
-            break;
-        }
-        case  PropType::PROP_TYPE_VEC4: {
-            fprintf(output, "[%f, %f, %f, %f]\n", prop->value.vec4_value[0], prop->value.vec4_value[1],
-                    prop->value.vec4_value[2], prop->value.vec4_value[3]);
-            break;
-        }
-        case  PropType::PROP_TYPE_MAT3X3: {
-            fprintf(output, "[");
-            for (int i = 0; i < 9; ++i) {
-                if (i > 0) fprintf(output, ", ");
-                fprintf(output, "%f", prop->value.matrix33_value[i]);
-            }
-            fprintf(output, "]\n");
-            break;
-        }
-        case  PropType::PROP_TYPE_MAT4X4: {
-            fprintf(output, "[");
-            for (int i = 0; i < 16; ++i) {
-                if (i > 0) fprintf(output, ", ");
-                fprintf(output, "%f", prop->value.matrix44_value[i]);
-            }
-            fprintf(output, "]\n");
-            break;
-        }
-        case  PropType::PROP_TYPE_ARRAY_U32: {
-            fprintf(output, "[");
-            uint32 count = prop->value.uint32_array_value.count;
-            if (count > 32) count = 32;
-            for (int i = 0; i < count; ++i) {
-                if (i > 0) fprintf(output, ", ");
-                fprintf(output, "%u", prop->value.uint32_array_value.items[i]);
-            }
-            if (prop->value.uint8_array_value.count > 32) {
-                fprintf(output, ", ... (%u total)", prop->value.uint32_array_value.count);
-            }
-            fprintf(output, "]\n");
-            break;
-        }
-        case  PropType::PROP_TYPE_ARRAY_F32: {
-            fprintf(output, "[");
-            uint32 count = prop->value.float32_array_value.count;
-            if (count > 32) count = 32;
-            for (int i = 0; i < count; ++i) {
-                if (i > 0) fprintf(output, ", ");
-                fprintf(output, "%f", prop->value.float32_array_value.items[i]);
-            }
-            if (prop->value.uint8_array_value.count > 32) {
-                fprintf(output, ", ... (%u total)", prop->value.float32_array_value.count);
-            }
-            fprintf(output, "]\n");
-            break;
-        }
-        case  PropType::PROP_TYPE_ARRAY_U8: {
-            fprintf(output, "[");
-            uint32 count = prop->value.uint8_array_value.count;
-            if (count > 32) count = 32;
-            for (int i = 0; i < count; ++i) {
-                if (i > 0) fprintf(output, ", ");
-                fprintf(output, "%u", prop->value.uint8_array_value.items[i]);
-            }
-            if (prop->value.uint8_array_value.count > 32) {
-                fprintf(output, ", ... (%u total)", prop->value.uint8_array_value.count);
-            }
-            fprintf(output, "]\n");
-            break;
-        }
-        case  PropType::PROP_TYPE_OBJID: {
-            fprintf(output, "0x%016llX\n", prop->value.objid_value);
-            break;
-        }
-        case  PropType::PROP_TYPE_EVENT: {
-            fprintf(output, "[");
-            uint32 count = prop->value.event_value.count;
-            if (count > 32) count = 32;
-            for (int i = 0; i < count; ++i) {
-                if (i > 0) fprintf(output, ", ");
-                fprintf(output, "0x%08X, 0x%08X", prop->value.event_value.items[i].a,
-                        prop->value.event_value.items[i].b);
-            }
-            if (prop->value.event_value.count > 32) {
-                fprintf(output, ", ... (%u total)", prop->value.event_value.count);
-            }
-            fprintf(output, "]\n");
-            break;
-        }
-        default: {
-            printf("[ERROR]: Unknown prop type: %d\n", prop->type);
-            abort();
-        }
-    }
+bool RuntimeNode::has(const std::string_view name) const {
+    return has(hash_string(name));
 }
 
-void RuntimeProp_free(RuntimeProp *prop) {
-    prop->name_hash = 0;
-    switch (prop->type) {
-        case  PropType::PROP_TYPE_NONE:
-        case  PropType::PROP_TYPE_U32:
-        case  PropType::PROP_TYPE_F32:
-        case  PropType::PROP_TYPE_VEC2:
-        case  PropType::PROP_TYPE_VEC3:
-        case  PropType::PROP_TYPE_VEC4:
-        case  PropType::PROP_TYPE_MAT3X3:
-        case  PropType::PROP_TYPE_MAT4X4:
-        case  PropType::PROP_TYPE_OBJID: {
-            // Nothing to free
-            break;
-        }
-        case  PropType::PROP_TYPE_STR: {
-            String_free(&prop->value.string_value);
-            break;
-        }
 
-        case  PropType::PROP_TYPE_ARRAY_U32: {
-            DA_free(&prop->value.uint32_array_value);
-            break;
-        }
-        case  PropType::PROP_TYPE_ARRAY_F32: {
-            DA_free(&prop->value.float32_array_value);
-            break;
-        }
-        case  PropType::PROP_TYPE_ARRAY_U8: {
-            DA_free(&prop->value.uint8_array_value);
-            break;
-        }
-        case  PropType::PROP_TYPE_EVENT: {
-            DA_free(&prop->value.event_value);
-            break;
-        }
-        case  PropType::PROP_TYPE_DEPRECIATED_12:
-        case  PropType::PROP_TYPE_UNK_15:
-        case  PropType::PROP_TYPE_UNK_16:
-        default: {
-            printf("[ERROR]: Unknown prop type: %d\n", prop->type);
-            abort();
-        }
+RuntimeNode RuntimeNode::RootNode(const std::unique_ptr<IO::File> &file) {
+    const auto header = file->read_pod<RTPCHeader>();
+    if (std::memcmp(header.ident, "RTPC", 4) != 0) {
+        throw std::runtime_error("Invalid RTPC header");
     }
-    prop->type = PropType::PROP_TYPE_NONE;
-    // memset(&prop->value, 0, sizeof(prop->value));
+    return RuntimeNode(*file);
 }
 
-static void print_indent(String *out, const uint32 indent) {
-    String_reserve(out, String_size(out) + indent);
-    String_fill(out, String_size(out), indent, ' ');
+json RuntimeNode::to_json() const {
+    json props;
+    for (const auto &[hash, prop]: m_props) {
+        const auto name = find_name32(hash).value_or(std::to_string(hash));
+        json value;
+        auto &prop_value = prop.value();
+        if (const auto str = std::get_if<std::string>(&prop_value)) {
+            value = *str;
+        }
+        else if (const auto flt = std::get_if<float32>(&prop_value)) {
+            value = *flt;
+        }
+        else if (const auto int_ = std::get_if<uint32>(&prop_value)) {
+            value = *int_;
+        }
+        else if (const auto int_ = std::get_if<uint64>(&prop_value)) {
+            value = *int_;
+        }
+        else if (const auto vec = std::get_if<glm::vec2>(&prop_value)) {
+            value = {vec->x, vec->y};
+        }
+        else if (const auto vec = std::get_if<glm::vec3>(&prop_value)) {
+            value = {vec->x, vec->y, vec->z};
+        }
+        else if (const auto vec = std::get_if<glm::vec4>(&prop_value)) {
+            value = {vec->x, vec->y, vec->z, vec->w};
+        }
+        else if (const auto mat = std::get_if<glm::mat3>(&prop_value)) {
+            const auto value_ptr = glm::value_ptr(*mat);
+            value = {
+                value_ptr[0], value_ptr[1], value_ptr[2],
+                value_ptr[3], value_ptr[4], value_ptr[5],
+                value_ptr[6], value_ptr[7], value_ptr[8]
+            };
+        }
+        else if (const auto mat = std::get_if<glm::mat4>(&prop_value)) {
+            const auto value_ptr = glm::value_ptr(*mat);
+            value = {
+                value_ptr[0], value_ptr[1], value_ptr[2], value_ptr[3],
+                value_ptr[4], value_ptr[5], value_ptr[6], value_ptr[7],
+                value_ptr[8], value_ptr[9], value_ptr[10], value_ptr[11],
+                value_ptr[12], value_ptr[13], value_ptr[14], value_ptr[15]
+            };
+        }
+        else if (const auto array = std::get_if<std::vector<uint32> >(&prop_value)) {
+            value = *array;
+        }
+        else if (const auto array = std::get_if<std::vector<float32> >(&prop_value)) {
+            value = *array;
+        }
+        else if (const auto array = std::get_if<std::vector<uint8> >(&prop_value)) {
+            value = *array;
+        }
+        else if (const auto array = std::get_if<std::vector<RuntimeEvent> >(&prop_value)) {
+            std::vector<json> events;
+            events.reserve(array->size());
+            for (const auto &event: *array) {
+                events.emplace_back(json{event.a, event.b});
+            }
+            value = events;
+        }
+        else if (const auto array = std::get_if<uint64>(&prop_value)) {
+            value = *array;
+        }
+        else {
+            throw std::runtime_error("Unknown prop type");
+        }
+
+        props[name] = value;
+    }
+    return props;
 }
 
-void RuntimeProp_emit_json(const RuntimeProp *prop, String *out, const uint32 indent) {
-    print_indent(out, indent);
-    StringView prop_name = find_name32_sv(prop->name_hash);
-    if (sv_is_null(prop_name)) {
-        String_append_format(out, "\"0x%08X\": ", prop->name_hash);
-    }
-    else {
-        String_append_format(out, "\"" SV_FMT "\": ", SV_ARGS(prop_name));
-    }
-    switch (prop->type) {
-        case  PropType::PROP_TYPE_NONE:
-            String_append_cstr(out, "null");
-            break;
-        case  PropType::PROP_TYPE_U32:
-            String_append_format(out, "%u", prop->value.uint32_value);
-            break;
-        case  PropType::PROP_TYPE_F32:
-            String_append_format(out, "%f", prop->value.float32_value);
-            break;
-        case  PropType::PROP_TYPE_STR:
-            String_append_format(out, "\"%s\"", String_cstr(&prop->value.string_value));
-            break;
-        case  PropType::PROP_TYPE_VEC2:
-            String_append_format(out, "[%f, %f]", prop->value.vec2_value[0], prop->value.vec2_value[1]);
-            break;
-        case  PropType::PROP_TYPE_VEC3:
-            String_append_format(out, "[%f, %f, %f]", prop->value.vec3_value[0], prop->value.vec3_value[1],
-                                 prop->value.vec3_value[2]);
-            break;
-        case  PropType::PROP_TYPE_VEC4:
-            String_append_format(out, "[%f, %f, %f, %f]", prop->value.vec4_value[0], prop->value.vec4_value[1],
-                                 prop->value.vec4_value[2], prop->value.vec4_value[3]);
-            break;
-        case  PropType::PROP_TYPE_MAT3X3:
-            String_append_cstr(out, "[");
-            for (int i = 0; i < 9; ++i) {
-                if (i > 0) String_append_cstr(out, ", ");
-                String_append_format(out, "%f", prop->value.matrix33_value[i]);
-            }
-            String_append_cstr(out, "]");
-            break;
-        case  PropType::PROP_TYPE_MAT4X4:
-            String_append_cstr(out, "[");
-            for (int i = 0; i < 16; ++i) {
-                if (i > 0) String_append_cstr(out, ", ");
-                String_append_format(out, "%f", prop->value.matrix44_value[i]);
-            }
-            String_append_cstr(out, "]");
-            break;
-        case  PropType::PROP_TYPE_ARRAY_U32: {
-            String_append_cstr(out, "[");
-            uint32 count = prop->value.uint32_array_value.count;
-            if (count > 32) count = 32;
-            for (uint32 i = 0; i < count; ++i) {
-                if (i > 0) String_append_cstr(out, ", ");
-                String_append_format(out, "%u", prop->value.uint32_array_value.items[i]);
-            }
-            if (prop->value.uint32_array_value.count > 32)
-                String_append_cstr(out, ", null");
-            String_append_cstr(out, "]");
-            break;
-        }
-        case  PropType::PROP_TYPE_ARRAY_F32: {
-            String_append_cstr(out, "[");
-            uint32 count = prop->value.float32_array_value.count;
-            if (count > 32) count = 32;
-            for (uint32 i = 0; i < count; ++i) {
-                if (i > 0) String_append_cstr(out, ", ");
-                String_append_format(out, "%f", prop->value.float32_array_value.items[i]);
-            }
-            if (prop->value.float32_array_value.count > 32)
-                String_append_cstr(out, ", null");
-            String_append_cstr(out, "]");
-            break;
-        }
-        case  PropType::PROP_TYPE_ARRAY_U8: {
-            String_append_cstr(out, "[");
-            uint32 count = prop->value.uint8_array_value.count;
-            if (count > 32) count = 32;
-            for (uint32 i = 0; i < count; ++i) {
-                if (i > 0) String_append_cstr(out, ", ");
-                String_append_format(out, "%u", prop->value.uint8_array_value.items[i]);
-            }
-            if (prop->value.uint8_array_value.count > 32)
-                String_append_cstr(out, ", null");
-            String_append_cstr(out, "]");
-            break;
-        }
-        case  PropType::PROP_TYPE_OBJID:
-            String_append_format(out, "%llu", prop->value.objid_value);
-            break;
-        case  PropType::PROP_TYPE_EVENT: {
-            String_append_cstr(out, "[");
-            uint32 count = prop->value.event_value.count;
-            if (count > 32) count = 32;
-            for (uint32 i = 0; i < count; ++i) {
-                if (i > 0) String_append_cstr(out, ", ");
-                String_append_format(out, "%llu", prop->value.event_value.items[i]);
-            }
-            if (prop->value.event_value.count > 32)
-                String_append_cstr(out, ", null");
-            String_append_cstr(out, "]");
-            break;
-        }
-        default:
-            String_append_cstr(out, "null");
-    }
-}
-
-void RuntimeNode_emit_json(const RuntimeNode *node, String *out, const uint32 indent) {
-    print_indent(out, indent);
-    String_append_cstr(out, "{\n");
-    print_indent(out, indent + 2);
-    const StringView name = find_name32_sv(node->name_hash);
-    String_append_format(out, "\"name\": \"" SV_FMT "\",\n", SV_ARGS(name));
-    print_indent(out, indent + 2);
-    String_append_format(out, "\"name_hash\": %u,\n", node->name_hash);
-
-    // Properties
-    if (node->props.count) {
-        print_indent(out, indent + 2);
-        String_append_cstr(out, "\"props\": {\n");
-        for (uint32 i = 0; i < node->props.count; ++i) {
-            const RuntimeProp *prop = (const RuntimeProp *)DA_at(&node->props, i);
-            if (prop->type ==  PropType::PROP_TYPE_NONE) continue;
-            RuntimeProp_emit_json(prop, out, indent + 4);
-            if (i + 1 < node->props.count) String_append_cstr(out, ",");
-            String_append_cstr(out, "\n");
-        }
-        print_indent(out, indent + 2);
-        String_append_cstr(out, "},\n");
-    }
-
-    // Children
-    if (node->children.count) {
-        print_indent(out, indent + 2);
-        String_append_cstr(out, "\"children\": [\n");
-        for (uint32 i = 0; i < node->children.count; ++i) {
-            const RuntimeNode *child = (const RuntimeNode *)DA_at(&node->children, i);
-            RuntimeNode_emit_json(child, out, indent + 4);
-            if (i + 1 < node->children.count) String_append_cstr(out, ",");
-            String_append_cstr(out, "\n");
-        }
-        print_indent(out, indent + 2);
-        String_append_cstr(out, "]\n");
-    }
-
-    print_indent(out, indent);
-    String_append_cstr(out, "}");
+bool RuntimeNode::has(const uint32 hash) const {
+    return m_props.contains(hash);
 }

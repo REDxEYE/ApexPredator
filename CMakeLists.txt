@@ -9,7 +9,7 @@ FetchContent_MakeAvailable(sqlite3)
 FetchContent_Declare(
         tracy
         GIT_REPOSITORY https://github.com/wolfpld/tracy.git
-        GIT_TAG master
+        GIT_TAG v0.13.1
         GIT_SHALLOW TRUE
         GIT_PROGRESS TRUE
 )
@@ -44,13 +44,6 @@ SET(ZSTD_BUILD_CONTRIB OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(zstd)
 
 FetchContent_Declare(
-        cglm
-        GIT_REPOSITORY "https://github.com/recp/cglm"
-        GIT_TAG v0.9.6
-)
-FetchContent_MakeAvailable(cglm)
-
-FetchContent_Declare(
         ogg
         GIT_REPOSITORY "https://github.com/xiph/ogg"
         GIT_TAG v1.3.6
@@ -68,26 +61,53 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(vorbis)
 
+set(TINYGLTF_HEADER_ONLY ON CACHE INTERNAL "" FORCE)
+set(TINYGLTF_INSTALL OFF CACHE INTERNAL "" FORCE)
+FetchContent_Declare(
+        tinygltf
+        GIT_REPOSITORY "https://github.com/syoyo/tinygltf"
+        GIT_TAG v2.9.7
+)
+FetchContent_MakeAvailable(tinygltf)
+
+FetchContent_Declare(
+        glm
+        GIT_REPOSITORY "https://github.com/g-truc/glm"
+        GIT_TAG 1.0.3
+)
+FetchContent_MakeAvailable(glm)
+
+FetchContent_Declare(
+        cli11_proj
+        QUIET
+        GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
+        GIT_TAG v2.6.2
+)
+FetchContent_MakeAvailable(cli11_proj)
+
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
+FetchContent_MakeAvailable(json)
 
 SET(ZLIB_ALIASES OFF CACHE BOOL "" FORCE)
 SET(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/tinycpng)
 
 add_library(AdfLib STATIC
-        src/utils/memory_profiler.cpp
-        src/utils/memory_tracker.cpp
-        src/apex/adf/adf_support_types.cpp
-        src/apex/adf/adf_types.cpp
+        src/apex/adf/generated/adf_types.cpp
+        src/apex/adf/generated/adf_types_formatters.cpp
+        src/apex/adf/adf_read_instance.cpp
 )
 
 add_library(HavokLib STATIC
-        src/havok/animations/animation.cpp
+        src/havok/generated/havok_types.cpp
+        src/havok/generated/havok_types_formatters.cpp
+        src/havok/havok_codegen.cpp
+        src/havok/havok_types.cpp
+        src/havok/tag_file/havok_tag_file.cpp
+        src/havok/tag_file/havok_tag_types.cpp
+        src/havok/tag_file/havok_tag_file_get_item.cpp
         src/havok/animations/spline.cpp
-        src/havok/animations/track.cpp
-        src/havok/generated/havok_generated.cpp
-        src/havok/havok_helpers.cpp
-        src/utils/memory_profiler.cpp
-        src/utils/memory_tracker.cpp
+        #        src/havok/havok_helpers.cpp
 )
 
 SET(CommonFiles
@@ -106,28 +126,21 @@ SET(CommonFiles
         src/platform/app_state.cpp
         src/platform/archive.cpp
         src/platform/archive_manager.cpp
-        src/platform/cli_parser.cpp
         src/platform/logger.cpp
         src/platform/texture.cpp
         src/platform/texture_ops.cpp
-        src/utils/buffer/buffer.cpp
-        src/utils/buffer/file_buffer.cpp
-        src/utils/buffer/memory_buffer.cpp
+        src/utils/file/file.cpp
+        src/utils/file/native_file.cpp
+        src/utils/file/memory_file.cpp
         src/utils/common.cpp
-        src/utils/dynamic_array.cpp
-        src/utils/dynamic_map.cpp
-        src/utils/gltf/cgltf_helper.cpp
+        src/utils/gltf/gltf_helper.cpp
         src/utils/hash_helper.cpp
         src/utils/json.cpp
         src/utils/lookup3.cpp
-        src/utils/memory_profiler.cpp
-        src/utils/memory_tracker.cpp
-        src/utils/path.cpp
+        src/utils/memory_debugger.cpp
         src/utils/simple_fileio.cpp
         src/utils/sqlite_wrapper.cpp
         src/utils/stb.cpp
-        src/utils/string.cpp
-        src/utils/string_view.cpp
         src/utils/zlib_wrapper.cpp
 )
 
@@ -141,18 +154,20 @@ add_executable(ApexPredator
         src/exporter/havok_export.cpp
         src/exporter/fmod_export.cpp
 
+        src/havok/animations/spline.cpp
+
         ${CommonFiles}
         src/tools/apex_predator/commands/extract.cpp
         src/tools/apex_predator/commands/extract_anim.cpp
         src/tools/apex_predator/commands/search.cpp
-        src/tools/apex_predator/commands/convert.cpp
+#        src/tools/apex_predator/commands/convert.cpp
 
 )
 
 add_executable(AdfTypeGenerator
         src/tools/adf_type_gen.cpp
         src/apex/adf/sti_codegen.cpp
-        src/utils/memory_tracker.cpp
+        src/apex/adf/adf_read_instance_stub.cpp
         ${CommonFiles}
 )
 
@@ -171,7 +186,6 @@ add_executable(StringHasher
         src/tools/string_hasher.cpp
         src/utils/lookup3.cpp
 )
-
 
 if (UNIX)
     target_compile_options(AdfLib PRIVATE -fms-extensions)
@@ -195,9 +209,11 @@ endif ()
 SET(CommonLibs
         libzstd_static
         zlib-ng-static
-        cglm
+        glm
         tinycpng-static
         SQLite::SQLite3
+        tinygltf
+        nlohmann_json::nlohmann_json
 )
 
 SET(CommonIncludes
@@ -214,11 +230,10 @@ target_include_directories(HashCollector PUBLIC include ${CommonIncludes})
 target_include_directories(StringHasher PUBLIC include)
 
 target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib Ogg::ogg vorbis vorbisenc ${CommonLibs})
-target_link_libraries(HashCollector PUBLIC AdfLib ${CommonLibs})
+target_link_libraries(HashCollector PUBLIC HavokLib AdfLib ${CommonLibs})
 target_link_libraries(AdfTypeGenerator PUBLIC ${CommonLibs})
 target_link_libraries(HavokTypeGenerator PUBLIC ${CommonLibs})
-target_link_libraries(HavokLib PUBLIC cglm)
-target_link_libraries(AdfLib PUBLIC cglm)
+target_link_libraries(HavokLib PUBLIC glm)
 
 target_link_libraries(AdfLib PUBLIC Tracy::TracyClient)
 target_link_libraries(HavokLib PUBLIC Tracy::TracyClient)
@@ -228,8 +243,10 @@ target_link_libraries(AdfTypeGenerator PUBLIC Tracy::TracyClient)
 target_link_libraries(HavokTypeGenerator PUBLIC Tracy::TracyClient)
 target_link_libraries(StringHasher PUBLIC Tracy::TracyClient)
 
+add_compile_definitions(GLM_ENABLE_EXPERIMENTAL TRACY_CALLSTACK=32)
 
-target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
+target_link_libraries(ApexPredator PRIVATE CLI11::CLI11)
+target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY)
 # target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
 
 if (WIN32)

@@ -2,20 +2,19 @@
 
 #ifndef APEXPREDATOR_HAVOK_EXPORT_H
 #define APEXPREDATOR_HAVOK_EXPORT_H
-#include "cglm/cglm.h"
-#include "havok/generated/havok_generated.h"
+#include "glm/glm.hpp"
+#include "havok/generated/havok_types.h"
 #include "platform/app_state.h"
-#include "utils/gltf/cgltf_helper.h"
 
 #define HAVOK_MAGIC  "TAG0"
 
-extern mat4 IDENTITY_MAT;
+// extern mat4 IDENTITY_MAT;
 
-GL_ID export_havok_file(AppState* app_state, Buffer *buffer, StringView path);
+GltfHelper::Handle<tinygltf::Node> export_havok_file(AppState& app_state, std::unique_ptr<IO::File> && buffer, std::string_view path);
 
-void build_matrix(mat4 out, const hkQsTransform* transform);
+glm::mat4 build_matrix(const HavokTypes::hkQsTransform& transform);
 
-GL_ID export_skeleton(AppState* app_state, const hkaSkeleton *skeleton);
+GltfHelper::Handle<tinygltf::Node> export_skeleton(AppState& app_state, const HavokTypes::hkaSkeleton *skeleton);
 
-void export_animation(AppState* app_state, const hkaAnimationBinding *binding, const hkaSkeleton* skeleton, StringView animation_name);
+void export_animation(AppState& app_state, const HavokTypes::hkaAnimationBinding *binding, const HavokTypes::hkaSkeleton* skeleton, std::string_view animation_name);
 #endif //APEXPREDATOR_HAVOK_EXPORT_H

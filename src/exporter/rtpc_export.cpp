@@ -2,440 +2,460 @@
 
 #include "exporter/rtpc_export.h"
 
+#include "../../cmake-build-debug-wsl/_deps/tinygltf-src/tiny_gltf.h"
+#include "glm/glm.hpp"
+#include "glm/gtx/quaternion.hpp"
+
 #include "apex/hashes.h"
 #include "exporter/havok_export.h"
 #include "exporter/adf_export.h"
 #include "exporter/common_export.h"
 #include "platform/logger.h"
-#include "utils/path.h"
+#include "tracy/Tracy.hpp"
 
-void add_extras(const GLTFContext *context, const RuntimeNode *node, const GL_ID output_node) {
-    String extra_data = {};
-    String_reserve(&extra_data, 1024);
-    String_append_cstr(&extra_data, "{");
-    DA_FORI(node->props, i) {
-        RuntimeProp_emit_json(&node->props.items[i], &extra_data, 1);
-        if (i + 1 < node->props.count)
-            String_append_cstr(&extra_data, ", ");
+using namespace tinygltf;
+
+Value convert_to_value(const nlohmann::json& j) {
+    if (j.is_null()) {
+        return Value();
     }
-    String_append_cstr(&extra_data, "}");
-    GLTFContext_node_set_extra(context, output_node, String_detach(&extra_data), false);
+    if (j.is_boolean()) {
+        return  Value(j.get<bool>());
+    }
+    if (j.is_number_float()) {
+        return  Value(j.get<float>());
+    }
+    if (j.is_number_integer()) {
+        return  Value(j.get<int>());
+    }
+    if (j.is_string()) {
+        return  Value(j.get<std::string>());
+    }
+    if (j.is_array()) {
+        Value::Array array;
+        for (const auto &item : j) {
+            array.push_back(convert_to_value(item));
+        }
+        return  Value(array);
+    }
+    if (j.is_object()) {
+        Value::Object object;
+        for (const auto &[key, key_value] : j.items()) {
+            object.emplace(key, convert_to_value(key_value));
+        }
+        return  Value(object);
+    }
+
+    throw std::runtime_error("Unsupported type");
 }
 
-void get_node_matrix(const cgltf_node *target_node, mat4 out) {
-    if (target_node->has_matrix) {
-        memcpy(out, target_node->matrix, sizeof(float) * 16);
+void add_extras(const RuntimeNode &node, const GltfHelper::Handle<Node> &output_node) {
+    const nlohmann::json extra = node.to_json();
+
+    output_node->extras = convert_to_value(extra);
+
+    // String_append_cstr(&extra_data, "{");
+    // DA_FORI(node->props, i) {
+    //     RuntimeProp_emit_json(&node->props.items[i], &extra_data, 1);
+    //     if (i + 1 < node->props.count)
+    //         String_append_cstr(&extra_data, ", ");
+    // }
+    // String_append_cstr(&extra_data, "}");
+    // GLTFContext_node_set_extra(context, output_node, String_detach(&extra_data), false);
+}
+
+glm::mat4 get_node_matrix(const GltfHelper::Handle<tinygltf::Node> &target_node) {
+    glm::mat4 out = glm::identity<glm::mat4>();
+    if (!target_node->matrix.empty()) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                out[j][i] = static_cast<float32>(target_node->matrix.at(i * 4 + j));
+            }
+        }
     }
     else {
-        glm_mat4_identity(out);
-        if (target_node->has_translation) {
-            vec3 tmp = {};
-            tmp[0] = target_node->translation[0];
-            tmp[1] = target_node->translation[1];
-            tmp[2] = target_node->translation[2];
-            glm_translate(out, tmp);
+        if (!target_node->translation.empty()) {
+            const glm::vec3 tmp = {
+                target_node->translation.at(0),
+                target_node->translation.at(1),
+                target_node->translation.at(2)
+            };
+            out = glm::translate(out, tmp);
         }
-        if (target_node->has_rotation) {
-            versor tmp = {};
-            tmp[0] = target_node->rotation[0];
-            tmp[1] = target_node->rotation[1];
-            tmp[2] = target_node->rotation[2];
-            tmp[3] = target_node->rotation[3];
-            glm_quat_rotate(out, tmp, out);
+        if (!target_node->rotation.empty()) {
+            const glm::quat tmp = {
+                static_cast<float32>(target_node->rotation.at(3)),
+                static_cast<float32>(target_node->rotation.at(0)),
+                static_cast<float32>(target_node->rotation.at(1)),
+                static_cast<float32>(target_node->rotation.at(2))
+            };
+            out *= glm::mat4_cast(tmp);
         }
-        if (target_node->has_scale) {
-            vec3 tmp = {};
-            tmp[0] = target_node->scale[0];
-            tmp[1] = target_node->scale[1];
-            tmp[2] = target_node->scale[2];
-            glm_scale(out, tmp);
+        if (!target_node->scale.empty()) {
+            const glm::vec3 tmp = {
+                target_node->scale.at(0),
+                target_node->scale.at(1),
+                target_node->scale.at(2)
+            };
+            out = glm::scale(out, tmp);
         }
+    }
+    return out;
+}
+
+glm::mat4 calculate_global_node_matrix(GltfHelper &helper, const GltfHelper::Handle<tinygltf::Node> target) {
+    if (!target.is_valid()) {
+        return glm::identity<glm::mat4>();
+    }
+    const auto parent_node = helper.get_parent(target);
+
+    if (parent_node.is_valid()) {
+        const glm::mat4 parent_matrix = calculate_global_node_matrix(helper, parent_node);
+        const glm::mat4 local_matrix = get_node_matrix(target);
+        return parent_matrix * local_matrix;
+    }
+    return get_node_matrix(target);
+}
+
+void process_children(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+                      const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+    for (const auto &child: node.children()) {
+        process_rtpc_node(app_state, child, path_hash, parent_gltf_node);
     }
 }
 
-void calculate_global_node_matrix(const GLTFContext *context, const GL_ID target_id, mat4 out) {
-    if (!IS_VALID_GL_ID(target_id)) {
-        glm_mat4_identity(out);
+void set_world_matrix(const GltfHelper::Handle<tinygltf::Node> &gltf_node, const RuntimeNode &node) {
+    if (!node.has("world"))
         return;
-    }
-    const cgltf_node *target_node = &context->nodes.items[target_id.v];
-    if (target_node->parent != NULL) {
-        mat4 parent_matrix = {};
-        glm_mat4_identity(parent_matrix);
-        const GL_ID parent_id = gltf_untag_index(target_node->parent);
-        calculate_global_node_matrix(context, parent_id, parent_matrix);
-        mat4 local_matrix = {};
-        glm_mat4_identity(local_matrix);
-        get_node_matrix(target_node, local_matrix);
-        glm_mat4_mul(parent_matrix, local_matrix, out);
-    }
-    else {
-        get_node_matrix(target_node, out);
-    }
+    const auto &matrix = node.get<glm::mat4>("world");
+    if (matrix != glm::identity<glm::mat4>())
+        GltfHelper::set_node_matrix(*gltf_node, matrix);
 }
 
-void process_children(AppState *app_state,
-                      RuntimeNode *node, const uint32 path_hash,
-                      const GL_ID parent_gltf_node) {
-    DA_FORI(node->children, i) {
-        process_rtpc_node(app_state, static_cast<RuntimeNode *>(DA_at(&node->children, i)), path_hash, parent_gltf_node);
-    }
-}
+void handle_CCharacter(AppState &app_state,
+                       const RuntimeNode &node, const uint32 path_hash,
+                       const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+    GltfHelper &helper = app_state.helper();
 
-bool static is_identity_mat(mat4 mat) {
-    vec4 row0 = {1.0f, 0.0f, 0.0f, 0.0f};
-    vec4 row1 = {0.0f, 1.0f, 0.0f, 0.0f};
-    vec4 row2 = {0.0f, 0.0f, 1.0f, 0.0f};
-    vec4 row3 = {0.0f, 0.0f, 0.0f, 1.0f};
-    return glm_vec4_eqv_eps(mat[0], row0) &&
-           glm_vec4_eqv_eps(mat[1], row1) &&
-           glm_vec4_eqv_eps(mat[2], row2) &&
-           glm_vec4_eqv_eps(mat[3], row3);
-}
 
-void set_world_matrix(const GLTFContext *context, const GL_ID gltf_node, const RuntimeNode *node) {
-    if (!RuntimeNode_has_prop(node, "world"))
-        return;
-    const float32 *matrix = RuntimeNode_get_prop_mat4x4(node, "world");
-    if (matrix != NULL && !is_identity_mat((vec4 *) matrix))
-        GLTFContext_node_set_matrix(context, gltf_node, matrix);
-}
-
-void handle_CCharacter(AppState *app_state,
-                       RuntimeNode *node, const uint32 path_hash,
-                       const GL_ID parent_gltf_node) {
-    GLTFContext *context = &app_state->gltf_context;
-
-    const StringView model_filename = RuntimeNode_get_prop_by_hash_str(node, 0xE8129FE6);
-    const StringView skeleton_filename = RuntimeNode_get_prop_by_hash_str(node, 0x26FA86FE);
-    if (sv_is_null(model_filename)) {
+    if (!node.has(0xE8129FE6)) {
         GLog_Error("Failed to get model property for CCharacter");
         return;
     }
-
-    String skeleton_bsk_name = {};
-    Path_replace_extension_sv(skeleton_filename, "bsk", &skeleton_bsk_name);
-
-    const GL_ID skin_id = export_file(app_state, hash_string(&skeleton_bsk_name));
-    if (!IS_VALID_GL_ID(skin_id)) {
-        GLog_Error("Failed to export skeleton for CCharacter: %s", String_cstr(&skeleton_bsk_name));
-        abort();
-    }
-    String_free(&skeleton_bsk_name);
-    const cgltf_skin *skin = &context->skins.items[skin_id.v];
-    const GL_ID root_bone = skin->joints[0] != NULL ? gltf_untag_index(skin->joints[0]) : INVALID_GL_ID;
-    if (IS_VALID_GL_ID(root_bone)) {
-        GLTFContext_node_set_parent(context, parent_gltf_node, root_bone);
+    if (!node.has(0x26FA86FE)) {
+        GLog_Error("Failed to get skeleton property for CCharacter");
+        return;
     }
 
-    GLTFContext_push_skin(context, skin_id);
-    const GL_ID output_node = export_adf_file(app_state, hash_vstring(model_filename));
+    const auto &model_filename = node.get<std::string>(0xE8129FE6);
+    const auto &skeleton_filename = node.get<std::string>(0x26FA86FE);
 
-    add_extras(context, node, output_node);
-    set_world_matrix(context, output_node, node);
-    if (IS_VALID_GL_ID(parent_gltf_node))
-        GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
+    std::filesystem::path skeleton_bsk_name = skeleton_filename;
+    skeleton_bsk_name.replace_extension(".bsk");
+
+    const auto skeleton_node = export_file(app_state, hash_string(skeleton_bsk_name));
+
+    if (!skeleton_node.is_valid()) {
+        GLog_Error("Failed to export skeleton for CCharacter: {}", skeleton_bsk_name.string());
+        throw std::runtime_error("Failed to export skeleton for CCharacter");
+    }
+    const auto skin = helper.current_skin();
+    if (!skin.is_valid()) {
+        GLog_Error("Failed to get current skin for CCharacter");
+        throw std::runtime_error("Failed to get current skin for CCharacter");
+    }
+
+    const auto root_bone = helper.get<tinygltf::Node>(skin->joints[0]);
+    if (!root_bone.is_valid()) {
+        GLog_Error("Failed to get root bone for CCharacter");
+        throw std::runtime_error("Failed to get root bone for CCharacter");
+    }
+    // helper.set_parent(parent_gltf_node, root_bone);
+
+    const auto output_node = export_adf_file(app_state, hash_string(model_filename));
+
+    add_extras(node, output_node);
+    set_world_matrix(output_node, node);
+    if (parent_gltf_node.is_valid())
+        helper.set_parent(parent_gltf_node, output_node);
     else {
-        GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
+        GLog_Warning("Invalid parent setup: 0x{:08X}", node.name_hash());
     }
 
     process_children(app_state, node, path_hash, output_node);
-    GLTFContext_pop_skin(context);
+    if (skin.is_valid()) {
+        helper.pop_skin();
+    }
 }
 
-void handle_CSecondaryMotionAttachment(AppState *app_state,
-                                       RuntimeNode *node, const uint32 path_hash,
-                                       const GL_ID parent_gltf_node) {
-    GLTFContext *context = &app_state->gltf_context;
-    const StringView model_filename = RuntimeNode_get_prop_str(node, "model");
-    const StringView skeleton_filename = RuntimeNode_get_prop_by_hash_str(node, 0x26FA86FE);
-    if (sv_is_null(model_filename)) {
+void handle_CSecondaryMotionAttachment(AppState &app_state,
+                                       const RuntimeNode &node, const uint32 path_hash,
+                                       const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+    auto &helper = app_state.helper();
+    if (!node.has("model")) {
         GLog_Error("Failed to get model property for CSecondaryMotionAttachment");
         return;
     }
-    String skeleton_bsk_name = {};
-    Path_replace_extension_sv(skeleton_filename, "bsk", &skeleton_bsk_name);
-    const GL_ID skin_id = export_file(app_state, hash_string(&skeleton_bsk_name));
-    String_free(&skeleton_bsk_name);
+    if (!node.has(0x26FA86FE)) {
+        GLog_Error("Failed to get skeleton property for CSecondaryMotionAttachment");
+        return;
+    }
+    const auto &model_filename = node.get<std::string>("model");
+    const auto &skeleton_filename = node.get<std::string>(0x26FA86FE);
+    std::filesystem::path skeleton_bsk_name = skeleton_filename;
+    skeleton_bsk_name.replace_extension(".bsk");
+    const auto skeleton_node = export_file(app_state, hash_string(skeleton_bsk_name));
+    if (!skeleton_node.is_valid()) {
+        GLog_Error("Failed to export skeleton for CSecondaryMotionAttachment: {}", skeleton_bsk_name.string());
+        throw std::runtime_error("Failed to export skeleton for CSecondaryMotionAttachment");
+    }
+    const auto skin = helper.current_skin();
+    if (!skin.is_valid()) {
+        GLog_Error("Failed to get current skin for CSecondaryMotionAttachment");
+    }
 
-    GLTFContext_push_skin(context, skin_id);
-    const GL_ID output_node = export_adf_file(app_state, hash_vstring(model_filename));
-    set_world_matrix(context, output_node, node);
-    add_extras(context, node, output_node);
-    if (IS_VALID_GL_ID(parent_gltf_node))
-        GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
+    const auto output_node = export_adf_file(app_state, hash_string(model_filename));
+    set_world_matrix(output_node, node);
+    add_extras(node, output_node);
+    if (parent_gltf_node.is_valid())
+        helper.set_parent(parent_gltf_node, output_node);
     else {
-        GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
+        GLog_Warning("Invalid parent setup: 0x{:08X}", node.name_hash());
     }
     process_children(app_state, node, path_hash, output_node);
-    GLTFContext_pop_skin(context);
+    if (skin.is_valid()) {
+        helper.pop_skin();
+    }
 }
 
-void handle_CDamageableCharacterPart(AppState *app_state,
-                                     RuntimeNode *node, const uint32 path_hash,
-                                     const GL_ID parent_gltf_node) {
-    GLTFContext *context = &app_state->gltf_context;
-    String node_name = {};
-    const StringView node_name_sv = RuntimeNode_get_prop_str(node, "name");
-    const StringView node_name_hash = find_name32_sv(node->name_hash);
+void handle_CDamageableCharacterPart(AppState &app_state,
+                                     const RuntimeNode &node, const uint32 path_hash,
+                                     const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+    auto &helper = app_state.helper();
+    std::string node_name = {};
+    if (node.has("name"))
+        node_name = node.get<std::string>("name");
+    else
+        node_name = find_name32(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
 
-    if (sv_is_not_null(node_name_sv)) {
-        String_copy_from_view(&node_name, node_name_sv);
+    const auto output_node = helper.make<tinygltf::Node>();
+    output_node->name = node_name;
+
+    set_world_matrix(output_node, node);
+    add_extras(node, output_node);
+
+    const auto current_skin = helper.current_skin();
+    if (current_skin.is_valid() && node.has(0x4d67eec5)) {
+        const auto &parent_bone_name = node.get<std::string>(0x4d67eec5);
+        const auto parent_bone = helper.find_node_in_skin(current_skin, parent_bone_name);
+        if (parent_bone.is_valid()) {
+            glm::mat4 node_global_matrix = calculate_global_node_matrix(helper, parent_bone);
+            node_global_matrix = glm::inverse(node_global_matrix);
+            GltfHelper::set_node_matrix(*output_node, node_global_matrix);
+            helper.set_parent(parent_bone, output_node);
+        }
+        else {
+            GLog_Warning("Parent bone not found: {}", parent_bone_name);
+        }
     }
-    else if (sv_is_not_null(node_name_hash)) {
-        String_copy_from_view(&node_name, node_name_hash);
+    else if (parent_gltf_node.is_valid()) {
+        helper.set_parent(parent_gltf_node, output_node);
     }
     else {
-        String_format(&node_name, "node_%08X", node->name_hash);
-    }
-
-    const GL_ID output_node = GLTFContext_node_add(context, String_detach(&node_name), false);
-
-    set_world_matrix(context, output_node, node);
-    add_extras(context, node, output_node);
-
-    const GL_ID current_skin = GLTFContext_current_skin(context);
-    if (context->skins.count > 0 && IS_VALID_GL_ID(current_skin)) {
-        const StringView parent_bone_name = RuntimeNode_get_prop_by_hash_str(node, 0x4d67eec5);
-        mat4 node_global_matrix = {};
-        const GL_ID parent_bone_id = GLTFContext_skin_find_bone_by_name(context, current_skin,
-                                                                        StringView_cstr(parent_bone_name));
-
-        calculate_global_node_matrix(context, parent_bone_id, node_global_matrix);
-        glm_mat4_inv(node_global_matrix, node_global_matrix);
-        GLTFContext_node_set_matrix(context, output_node, (float *) node_global_matrix);
-        GLTFContext_node_set_parent(context, output_node, parent_bone_id);
-    }
-    else if (IS_VALID_GL_ID(parent_gltf_node))
-        GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
-    else {
-        GLog_Warning("Invalid parent setup: %s", StringView_cstr(node_name_hash));
+        GLog_Warning("Invalid parent setup: {}", node.name_hash());
     }
 
     process_children(app_state, node, path_hash, output_node);
 }
 
-void handle_CRigidObject(AppState *app_state, RuntimeNode *node, const uint32 path_hash, const GL_ID parent_gltf_node) {
-    GLTFContext *context = &app_state->gltf_context;
+void handle_CRigidObject(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+                         const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+    auto &helper = app_state.helper();
 
-    const uint32 model_filename_hash = RuntimeNode_get_prop_u32(node, "filename");
+    const auto model_filename_hash = node.get<uint32>("filename");
     if (model_filename_hash == 0) {
         GLog_Error("Failed to get model property for CRigidObject");
         return;
     }
-    GL_ID output_node = export_adf_file(app_state, model_filename_hash);
-    if (IS_VALID_GL_ID(output_node)) {
-        set_world_matrix(context, output_node, node);
+    auto output_node = export_adf_file(app_state, model_filename_hash);
+    if (output_node.is_valid()) {
+        set_world_matrix(output_node, node);
 
-        if (IS_VALID_GL_ID(parent_gltf_node))
-            GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
+        if (parent_gltf_node.is_valid())
+            helper.set_parent(parent_gltf_node, output_node);
         else {
-            GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
+            GLog_Warning("Invalid parent setup: 0x{:08X}", node.name_hash());
         }
     }
     else {
-        const String *model_filename = find_name32(model_filename_hash);
-        if (model_filename == NULL) {
-            const StringView node_name = find_name32_sv(node->name_hash);
-            if (sv_is_null(node_name)) {
-                char generated_name[64];
-                snprintf(generated_name, sizeof(generated_name), "node_%08X", node->name_hash);
-                output_node = GLTFContext_node_add(context, generated_name, true);
-            }
-            else {
-                output_node = GLTFContext_node_add(context, StringView_cstr(node_name), true);
-            }
-        }
-        else {
-            output_node = GLTFContext_node_add(context, String_cstr(model_filename), true);
-        }
+        const auto model_filename = find_name32(model_filename_hash).or_else([&] {
+            return find_name32(node.name_hash());
+        }).value_or(std::format("model_{:08X}", model_filename_hash));
 
-        set_world_matrix(context, output_node, node);
-        add_extras(context, node, output_node);
+        output_node = helper.make<tinygltf::Node>();
+        output_node->name = model_filename;
+        set_world_matrix(output_node, node);
+        add_extras(node, output_node);
     }
     process_children(app_state, node, path_hash, output_node);
 }
 
-void handle_CSkeletalAnimatedObject(AppState *app_state,
-                                    RuntimeNode *node, const uint32 path_hash,
-                                    const GL_ID parent_gltf_node) {
-    GLTFContext *context = &app_state->gltf_context;
+void handle_CSkeletalAnimatedObject(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+                                    const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+    auto &helper = app_state.helper();
 
-    const StringView model_filename = RuntimeNode_get_prop_by_hash_str(node, 0x0f94740b);
-    const StringView skeleton_filename = RuntimeNode_get_prop_by_hash_str(node, 0x26fa86fe);
-
-    if (sv_is_null(model_filename)) {
+    if (!node.has(0x0f94740b)) {
         GLog_Error("Failed to get model property for CSkeletalAnimatedObject");
         return;
     }
-
-    if (sv_is_null(skeleton_filename)) {
+    if (!node.has(0x26fa86fe)) {
         GLog_Error("Failed to get skeleton property for CSkeletalAnimatedObject");
         return;
     }
 
-    String skeleton_bsk_name = {};
-    Path_replace_extension_sv(skeleton_filename, "bsk", &skeleton_bsk_name);
+    const auto &model_filename = node.get<std::string>(0x0f94740b);
+    const auto &skeleton_filename = node.get<std::string>(0x26fa86fe);
 
-    const GL_ID skin_id = export_file(app_state, hash_string(&skeleton_bsk_name));
-    const cgltf_skin *skin = &context->skins.items[skin_id.v];
-    const GL_ID root_bone = skin->joints[0] != NULL ? gltf_untag_index(skin->joints[0]) : INVALID_GL_ID;
-    if (IS_VALID_GL_ID(root_bone)) {
-        GLTFContext_node_set_parent(context, parent_gltf_node, root_bone);
-    }
+    std::filesystem::path skeleton_bsk_name = skeleton_filename;
+    skeleton_bsk_name.replace_extension(".bsk");
 
-    GLTFContext_push_skin(context, skin_id);
-    const GL_ID output_node = export_adf_file(app_state, hash_vstring(model_filename));
+    const auto skeleton_node = export_file(app_state, hash_string(skeleton_bsk_name));
+    const auto skin = helper.current_skin();
 
-    add_extras(context, node, output_node);
-    set_world_matrix(context, output_node, node);
-    if (IS_VALID_GL_ID(parent_gltf_node))
-        GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
-    else {
-        GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
-    }
-
-    process_children(app_state, node, path_hash, output_node);
-    GLTFContext_pop_skin(context);
-}
-
-void handle_CBoneAttachment(AppState *app_state,
-                            RuntimeNode *node, const uint32 path_hash,
-                            const GL_ID parent_gltf_node) {
-    GLTFContext *context = &app_state->gltf_context;
-
-    const StringView node_name = RuntimeNode_get_prop_str(node, "name");
-    const StringView node_hash_name = find_name32_sv(node->name_hash);
-
-    GL_ID output_node;
-    if (sv_is_not_null(node_name)) {
-        output_node = GLTFContext_node_add(context, StringView_cstr(node_name), true);
-    }
-    else if (sv_is_not_null(node_hash_name)) {
-        output_node = GLTFContext_node_add(context, StringView_cstr(node_hash_name), true);
-    }
-    else {
-        char generated_name[64];
-        snprintf(generated_name, sizeof(generated_name), "node_%08X", node->name_hash);
-        output_node = GLTFContext_node_add(context, generated_name, true);
-    }
-
-    set_world_matrix(context, output_node, node);
-    add_extras(context, node, output_node);
-
-    const GL_ID current_skin = GLTFContext_current_skin(context);
-    if (context->skins.count > 0 && IS_VALID_GL_ID(current_skin)) {
-        const StringView parent_bone_name = RuntimeNode_get_prop_by_hash_str(node, 0x87becf63);
-        // mat4 node_global_matrix = {};
-        const GL_ID parent_bone_id = GLTFContext_skin_find_bone_by_name(context, current_skin,
-                                                                        StringView_cstr(parent_bone_name));
-        if (IS_VALID_GL_ID(parent_bone_id)) {
-            // calculate_global_node_matrix(context, parent_bone_id, node_global_matrix);
-            // glm_mat4_inv(node_global_matrix, node_global_matrix);
-            // GLTFContext_node_set_matrix(context, output_node, (float *) node_global_matrix);
-            GLTFContext_node_set_parent(context, output_node, parent_bone_id);
-        }
-        else {
-            GLog_Warning("Parent bone not found: %s", StringView_cstr(parent_bone_name));
-            GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
-        }
-    }
-    else if (IS_VALID_GL_ID(parent_gltf_node))
-        GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
-    else {
-        GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
-    }
-
-    process_children(app_state, node, path_hash, output_node);
-}
-
-void handle_default(AppState *app_state, RuntimeNode *node, const uint32 path_hash, const GL_ID parent_gltf_node) {
-    GLTFContext *context = &app_state->gltf_context;
-
-    const StringView node_name = RuntimeNode_get_prop_str(node, "name");
-
-
-    GL_ID output_node;
-    if (sv_is_null(node_name)) {
-        const StringView node_name_hash = find_name32_sv(node->name_hash);
-        if (sv_is_null(node_name_hash)) {
-            char generated_name[64];
-            snprintf(generated_name, sizeof(generated_name), "node_%08X", node->name_hash);
-            output_node = GLTFContext_node_add(context, generated_name, true);
-        }
-        else {
-            output_node = GLTFContext_node_add(context, StringView_cstr(node_name_hash), true);
-        }
-    }
-    else {
-        output_node = GLTFContext_node_add(context, StringView_cstr(node_name), true);
-    }
-
-    add_extras(context, node, output_node);
-    set_world_matrix(context, output_node, node);
-
-    if (IS_VALID_GL_ID(parent_gltf_node))
-        GLTFContext_node_set_parent(context, output_node, parent_gltf_node);
-    else {
-        GLog_Warning("Invalid parent setup: 0x%08X", node->name_hash);
-    }
-
-    DA_FORI(node->children, i) {
-        process_rtpc_node(app_state, static_cast<RuntimeNode *>(DA_at(&node->children, i)), path_hash, output_node);
-    }
-}
-
-void process_rtpc_node(AppState *app_state,
-                      RuntimeNode *node, const uint32 path_hash,
-                      const GL_ID parent_gltf_node) {
-    TracyCZoneN(ctx, "process_epe_node", 1);
-    CHECK_APP_STATE(app_state);
-    CHECK_GLTF_STATE(&app_state->gltf_context);
-
-    if (!RuntimeNode_has_prop(node, "_class")) {
+    if (!skin.is_valid()) {
+        GLog_Error("Failed to get current skin for CSkeletalAnimatedObject");
         return;
     }
-    const StringView class_name = RuntimeNode_get_prop_str(node, "_class");
-    if (sv_is_null(class_name)) {
-        GLog_Error("Failed to get _class property");
-        abort();
-    }
-    TracyCZoneName(ctx, StringView_cstr(class_name), StringView_size(class_name));
+    const auto root_bone = helper.get<tinygltf::Node>(skin->joints[0]);
+    // if (root_bone.is_valid()) {
+    //     helper.set_parent(parent_gltf_node, root_bone);
+    // }
 
-    if (StringView_cequals(class_name, "CCharacter")) {
+    const auto output_node = export_adf_file(app_state, hash_string(model_filename));
+
+    add_extras(node, output_node);
+    set_world_matrix(output_node, node);
+    if (parent_gltf_node.is_valid()) {
+        helper.set_parent(parent_gltf_node, output_node);
+    }
+    else {
+        GLog_Warning("Invalid parent setup: 0x%08X", node.name_hash());
+    }
+
+    process_children(app_state, node, path_hash, output_node);
+    if (skeleton_node.is_valid()) {
+        helper.pop_skin();
+    }
+}
+
+void handle_CBoneAttachment(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+                            const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+    auto &helper = app_state.helper();
+
+    std::string node_name;
+    if (node.has("name")) {
+        node_name = node.get<std::string>("name");
+    }
+    else {
+        node_name = find_name32(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
+    }
+
+    auto output_node = helper.make<tinygltf::Node>();
+    output_node->name = node_name;
+
+    set_world_matrix(output_node, node);
+    add_extras(node, output_node);
+
+    const auto current_skin = helper.current_skin();
+    if (current_skin.is_valid() && node.has(0x87becf63)) {
+        const auto &parent_bone_name = node.get<std::string>(0x87becf63);
+        const auto parent_bone = helper.find_node_in_skin(current_skin, parent_bone_name);
+        if (parent_bone.is_valid()) {
+            helper.set_parent(parent_bone, output_node);
+        }
+        else {
+            GLog_Warning("Parent bone not found: {}", parent_bone_name);
+        }
+    }
+    else if (parent_gltf_node.is_valid()) {
+        helper.set_parent(parent_gltf_node, output_node);
+    }
+    else {
+        GLog_Warning("Invalid parent setup: 0x%08X", node.name_hash());
+    }
+
+    process_children(app_state, node, path_hash, output_node);
+}
+
+void handle_default(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+                    const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+    auto &helper = app_state.helper();
+    std::string node_name;
+    if (node.has("name")) {
+        if (node.is<std::string>("name")) {
+            node_name = node.get<std::string>("name");
+        }else {
+            auto node_name_hash = node.get<uint32>("name");
+            node_name = find_name32(node_name_hash).value_or(std::format("node_{:08X}", node_name_hash));
+        }
+    }
+    else {
+        node_name = find_name32(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
+    }
+
+    auto output_node = helper.make<tinygltf::Node>();
+    output_node->name = node_name;
+
+    add_extras(node, output_node);
+    set_world_matrix(output_node, node);
+
+    if (parent_gltf_node.is_valid()) {
+        helper.set_parent(parent_gltf_node, output_node);
+    }
+    else {
+        GLog_Warning("Invalid parent setup: 0x%08X", node.name_hash());
+    }
+
+    process_children(app_state, node, path_hash, output_node);
+}
+
+void process_rtpc_node(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+                       const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+    ZoneScoped
+    if (!node.has("_class")) {
+        return;
+    }
+    const auto &class_name = node.get<std::string>("_class");
+
+    if (class_name == "CCharacter") {
         handle_CCharacter(app_state, node, path_hash, parent_gltf_node);
     }
-    else if (StringView_cequals(class_name, "CSecondaryMotionAttachment")) {
+    else if (class_name == "CSecondaryMotionAttachment") {
         handle_CSecondaryMotionAttachment(app_state, node, path_hash, parent_gltf_node);
     }
-    else if (StringView_cequals(class_name, "CRigidObject")) {
+    else if (class_name == "CRigidObject") {
         handle_CRigidObject(app_state, node, path_hash, parent_gltf_node);
     }
-    else if (StringView_cequals(class_name, "CDamageableCharacterPart")) {
+    else if (class_name == "CDamageableCharacterPart") {
         handle_CDamageableCharacterPart(app_state, node, path_hash, parent_gltf_node);
     }
-    else if (StringView_cequals(class_name, "CSkeletalAnimatedObject")) {
+    else if (class_name == "CSkeletalAnimatedObject") {
         handle_CSkeletalAnimatedObject(app_state, node, path_hash, parent_gltf_node);
     }
-    else if (StringView_cequals(class_name, "CBoneAttachment")) {
+    else if (class_name == "CBoneAttachment") {
         handle_CBoneAttachment(app_state, node, path_hash, parent_gltf_node);
     }
     else {
         handle_default(app_state, node, path_hash, parent_gltf_node);
     }
-    TracyCZoneEnd(ctx);
 }
 
-GL_ID export_rtpc(AppState *app_state, Buffer *buffer, const uint32 path_hash) {
-    TracyCZoneN(ctx, "export_epe", 1);
-    CHECK_APP_STATE(app_state);
-    CHECK_GLTF_STATE(&app_state->gltf_context);
-    GLTFContext *context = &app_state->gltf_context;
+GltfHelper::Handle<tinygltf::Node> export_rtpc(AppState &app_state, const std::unique_ptr<IO::File> &&buffer,
+                                               const uint32 path_hash) {
+    ZoneScoped
+    auto &helper = app_state.helper();
 
-    RuntimeNode *root_node = RuntimeContainer_from_buffer(buffer);
-    if (root_node == NULL) {
-        return INVALID_GL_ID;
-    }
+    const RuntimeNode root_node = RuntimeNode::RootNode(buffer);
 
     // RuntimeNode_print(root_node, stdout, 0);
     // String epe_json = {};
@@ -443,31 +463,13 @@ GL_ID export_rtpc(AppState *app_state, Buffer *buffer, const uint32 path_hash) {
     // RuntimeNode_emit_json(root_node, &epe_json, 0);
     // printf("%s\n", String_data(&epe_json));
 
-    const StringView path = find_name32_sv(path_hash);
+    const auto path = find_name32(path_hash).value_or(std::format("path_{:08X}", path_hash));
 
-    if (sv_is_null(path)) {
-        String generated_save_path = {};
-        String_copy_from(&generated_save_path, &app_state->export_path);
-        String_append_format(&generated_save_path, "export_%08X.gltf", path_hash);
-        Path_ensure_parent_dirs(&generated_save_path);
-        GLTFContext_set_save_path(context, &generated_save_path);
-    }
-    else {
-        String epe_export_path = {};
-        Path_join(&epe_export_path, &app_state->export_path);
-        Path_join_sv(&epe_export_path, path);
-        String_append_cstr(&epe_export_path, ".gltf");
-        Path_ensure_parent_dirs(&epe_export_path);
-        GLTFContext_set_save_path(context, &epe_export_path);
-        String_free(&epe_export_path);
-    }
 
-    const GL_ID epe_root_node_id = GLTFContext_node_add(context, "epe_root", true);
+    const auto epe_root_node = helper.make<tinygltf::Node>();
+    epe_root_node->name = "epe_root";
 
-    DA_FORI(root_node->children, i) {
-        process_rtpc_node(app_state, static_cast<RuntimeNode *>(DA_at(&root_node->children, i)), path_hash, epe_root_node_id);
-    }
-    RuntimeNode_free(root_node);
-    TracyCZoneEnd(ctx);
-    return epe_root_node_id;
+    process_children(app_state, root_node, path_hash, epe_root_node);
+
+    return epe_root_node;
 }

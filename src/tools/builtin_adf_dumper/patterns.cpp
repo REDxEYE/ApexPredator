@@ -121,22 +121,22 @@ const uint8_t *pattern_find_first(const void *data, const size_t size, const Pat
 
 Region get_module() {
     const uintptr_t module_base = (uintptr_t) GetModuleHandleA(NULL);
-    const IMAGE_DOS_HEADER *dos_header = (void *) module_base;
-    const IMAGE_NT_HEADERS64 *nt_headers64 = (void *) (module_base + dos_header->e_lfanew);
+    const IMAGE_DOS_HEADER *dos_header = (IMAGE_DOS_HEADER *) module_base;
+    const IMAGE_NT_HEADERS64 *nt_headers64 = (IMAGE_NT_HEADERS64 *) (module_base + dos_header->e_lfanew);
     const uintptr_t module_end = module_base + nt_headers64->OptionalHeader.SizeOfImage;
-    return (Region){module_base, module_end};
+    return {module_base, module_end};
 }
 
 Region get_pe_section(const Region module, const char *section) {
-    const IMAGE_DOS_HEADER *dos_header = (void *) module.base;
-    const IMAGE_NT_HEADERS64 *nt_headers64 = (void *) (module.base + dos_header->e_lfanew);
-    const IMAGE_SECTION_HEADER *sections = (void *) (module.base + dos_header->e_lfanew + sizeof(IMAGE_NT_HEADERS64));
+    const IMAGE_DOS_HEADER *dos_header = (IMAGE_DOS_HEADER *) module.base;
+    const IMAGE_NT_HEADERS64 *nt_headers64 = (IMAGE_NT_HEADERS64 *) (module.base + dos_header->e_lfanew);
+    const IMAGE_SECTION_HEADER *sections = (IMAGE_SECTION_HEADER *) (module.base + dos_header->e_lfanew + sizeof(IMAGE_NT_HEADERS64));
 
     for (size_t i = 0; i < nt_headers64->FileHeader.NumberOfSections; i++) {
         const IMAGE_SECTION_HEADER *sh = &sections[i];
         if (memcmp(sh->Name, section, 8) == 0) {
-            return (Region){module.base + sh->VirtualAddress, module.base + sh->VirtualAddress + sh->Misc.VirtualSize};
+            return {module.base + sh->VirtualAddress, module.base + sh->VirtualAddress + sh->Misc.VirtualSize};
         }
     }
-    return (Region){0, 0};
+    return {0, 0};
 }
