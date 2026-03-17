@@ -1,30 +1,29 @@
 // Created by RED on 12.01.2026.
 
-#include "exporter/adf_export.h"
-
-#include "glm/glm.hpp"
-
 #include "apex/adf/adf.h"
 #include "apex/adf/generated/adf_types.h"
+#include "apex/adf/sti_shared.h"
 #include "apex/hashes.h"
+#include "exporter/adf_export.h"
 #include "exporter/amf_export.h"
 #include "platform/logger.h"
+#include "platform/texture.h"
 #include "utils/hash_helper.h"
-
-#include "tiny_gltf.h"
-#include "apex/adf/sti_shared.h"
-
-#include "zstd.h"
-#include "glm/ext/matrix_transform.hpp"
-#include "tracy/Tracy.hpp"
 #include "utils/simple_fileio.h"
 
+#include "zstd.h"
+#include "tiny_gltf.h"
+#include "tracy/Tracy.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/glm.hpp"
 
 #pragma pack(push, 1)
+
 struct VertexID_UV {
     uint32 vertex_id;
     int16 UV[2];
 };
+
 
 static_assert(sizeof(VertexID_UV) == 8, "VertexID_UV size mismatch");
 

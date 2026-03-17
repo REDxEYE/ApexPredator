@@ -2,6 +2,8 @@
 
 #include "apex/hashes.h"
 
+#include <cstring>
+
 #include "platform/logger.h"
 #include "utils/sqlite_wrapper.h"
 

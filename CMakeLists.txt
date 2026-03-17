@@ -217,7 +217,6 @@ SET(CommonLibs
 )
 
 SET(CommonIncludes
-        external/cgltf
         external/tinycpng/include
 )
 

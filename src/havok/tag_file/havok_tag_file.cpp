@@ -3,9 +3,9 @@
 #include "havok/tag_file/havok_tag_file.h"
 
 #include <cassert>
+#include <cstring>
 #include <unordered_map>
 
-#include "havok/havok_base_type.h"
 #include "platform/logger.h"
 #include "utils/file/memory_buffer.h"
 #include "utils/endian.h"
