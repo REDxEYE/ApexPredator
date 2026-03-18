@@ -57,7 +57,7 @@ public:
         return data_[index];
     }
 
-    std::span<const T> as_span() const {
+    [[nodiscard]] std::span<const T> as_span() const {
         return {data_, size_};
     }
 
@@ -129,8 +129,7 @@ private:
             throw std::out_of_range("BufferView typed view offset is out of range");
         }
 
-        const std::uintptr_t raw_address = reinterpret_cast<std::uintptr_t>(
-            reinterpret_cast<const u8 *>(data_) + byte_offset);
+        const auto raw_address = reinterpret_cast<std::uintptr_t>(reinterpret_cast<const u8 *>(data_) + byte_offset);
         if ((raw_address % alignment) != 0) {
             throw std::invalid_argument("BufferView typed view is not properly aligned");
         }
@@ -193,6 +192,7 @@ public:
     static Buffer wrap(const u8 *data, size_type size) {
         return Buffer(std::make_unique<ExternalConstBackend>(data, size));
     }
+
     static Buffer wrap(const std::span<const u8> data) {
         return Buffer(std::make_unique<ExternalConstBackend>(data.data(), data.size()));
     }
@@ -237,7 +237,7 @@ public:
         return (*this)[index];
     }
 
-    std::span<const u8> as_span() const {
+    [[nodiscard]] std::span<const u8> as_span() const {
         return {data(), size()};
     }
 
@@ -245,15 +245,15 @@ public:
         return {data(), size()};
     }
 
-    void clear() { backend_->clear(); }
+    void clear() const { backend_->clear(); }
 
-    void resize(const size_type new_size) { backend_->resize(new_size); }
+    void resize(const size_type new_size) const { backend_->resize(new_size); }
 
-    void reserve(const size_type new_capacity) { backend_->reserve(new_capacity); }
+    void reserve(const size_type new_capacity) const { backend_->reserve(new_capacity); }
 
-    void push_back(const u8 value) { backend_->push_back(value); }
+    void push_back(const u8 value) const { backend_->push_back(value); }
 
-    void append(const u8 *bytes, const size_type count) {
+    void append(const u8 *bytes, const size_type count) const {
         if (count == 0) {
             return;
         }
@@ -263,9 +263,9 @@ public:
         backend_->append(bytes, count);
     }
 
-    void append(const ConstByteBufferView bytes) { append(bytes.data(), bytes.size()); }
+    void append(const ConstByteBufferView bytes) const { append(bytes.data(), bytes.size()); }
 
-    void append(const std::initializer_list<u8> values) {
+    void append(const std::initializer_list<u8> values) const {
         append(values.begin(), values.size());
     }
 

@@ -2,7 +2,7 @@
 
 #include "exporter/rtpc_export.h"
 
-#include "../../cmake-build-debug-wsl/_deps/tinygltf-src/tiny_gltf.h"
+#include "tiny_gltf.h"
 #include "glm/glm.hpp"
 #include "glm/gtx/quaternion.hpp"
 
