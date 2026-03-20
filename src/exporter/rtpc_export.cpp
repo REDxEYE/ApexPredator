@@ -17,7 +17,7 @@ using namespace tinygltf;
 
 Value convert_to_value(const nlohmann::json& j) {
     if (j.is_null()) {
-        return Value();
+        return {};
     }
     if (j.is_boolean()) {
         return  Value(j.get<bool>());
@@ -53,19 +53,10 @@ void add_extras(const RuntimeNode &node, const GltfHelper::Handle<Node> &output_
     const nlohmann::json extra = node.to_json();
 
     output_node->extras = convert_to_value(extra);
-
-    // String_append_cstr(&extra_data, "{");
-    // DA_FORI(node->props, i) {
-    //     RuntimeProp_emit_json(&node->props.items[i], &extra_data, 1);
-    //     if (i + 1 < node->props.count)
-    //         String_append_cstr(&extra_data, ", ");
-    // }
-    // String_append_cstr(&extra_data, "}");
-    // GLTFContext_node_set_extra(context, output_node, String_detach(&extra_data), false);
 }
 
-glm::mat4 get_node_matrix(const GltfHelper::Handle<tinygltf::Node> &target_node) {
-    glm::mat4 out = glm::identity<glm::mat4>();
+glm::mat4 get_node_matrix(const GltfHelper::Handle<Node> &target_node) {
+    auto out = glm::identity<glm::mat4>();
     if (!target_node->matrix.empty()) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -103,7 +94,7 @@ glm::mat4 get_node_matrix(const GltfHelper::Handle<tinygltf::Node> &target_node)
     return out;
 }
 
-glm::mat4 calculate_global_node_matrix(GltfHelper &helper, const GltfHelper::Handle<tinygltf::Node> target) {
+glm::mat4 calculate_global_node_matrix(GltfHelper &helper, const GltfHelper::Handle<Node> target) {
     if (!target.is_valid()) {
         return glm::identity<glm::mat4>();
     }
@@ -118,13 +109,13 @@ glm::mat4 calculate_global_node_matrix(GltfHelper &helper, const GltfHelper::Han
 }
 
 void process_children(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
-                      const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+                      const GltfHelper::Handle<Node> &parent_gltf_node) {
     for (const auto &child: node.children()) {
         process_rtpc_node(app_state, child, path_hash, parent_gltf_node);
     }
 }
 
-void set_world_matrix(const GltfHelper::Handle<tinygltf::Node> &gltf_node, const RuntimeNode &node) {
+void set_world_matrix(const GltfHelper::Handle<Node> &gltf_node, const RuntimeNode &node) {
     if (!node.has("world"))
         return;
     const auto &matrix = node.get<glm::mat4>("world");
@@ -134,9 +125,8 @@ void set_world_matrix(const GltfHelper::Handle<tinygltf::Node> &gltf_node, const
 
 void handle_CCharacter(AppState &app_state,
                        const RuntimeNode &node, const uint32 path_hash,
-                       const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+                       const GltfHelper::Handle<Node> &parent_gltf_node) {
     GltfHelper &helper = app_state.helper();
-
 
     if (!node.has(0xE8129FE6)) {
         GLog_Error("Failed to get model property for CCharacter");
@@ -165,12 +155,12 @@ void handle_CCharacter(AppState &app_state,
         throw std::runtime_error("Failed to get current skin for CCharacter");
     }
 
-    const auto root_bone = helper.get<tinygltf::Node>(skin->joints[0]);
+    const auto root_bone = helper.get<Node>(skin->joints[0]);
     if (!root_bone.is_valid()) {
         GLog_Error("Failed to get root bone for CCharacter");
         throw std::runtime_error("Failed to get root bone for CCharacter");
     }
-    // helper.set_parent(parent_gltf_node, root_bone);
+    helper.set_parent(root_bone, parent_gltf_node);
 
     const auto output_node = export_adf_file(app_state, hash_string(model_filename));
 
@@ -190,7 +180,7 @@ void handle_CCharacter(AppState &app_state,
 
 void handle_CSecondaryMotionAttachment(AppState &app_state,
                                        const RuntimeNode &node, const uint32 path_hash,
-                                       const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+                                       const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
     if (!node.has("model")) {
         GLog_Error("Failed to get model property for CSecondaryMotionAttachment");
@@ -230,7 +220,7 @@ void handle_CSecondaryMotionAttachment(AppState &app_state,
 
 void handle_CDamageableCharacterPart(AppState &app_state,
                                      const RuntimeNode &node, const uint32 path_hash,
-                                     const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+                                     const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
     std::string node_name = {};
     if (node.has("name"))
@@ -238,7 +228,7 @@ void handle_CDamageableCharacterPart(AppState &app_state,
     else
         node_name = find_name32(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
 
-    const auto output_node = helper.make<tinygltf::Node>();
+    const auto output_node = helper.make<Node>();
     output_node->name = node_name;
 
     set_world_matrix(output_node, node);
@@ -269,7 +259,7 @@ void handle_CDamageableCharacterPart(AppState &app_state,
 }
 
 void handle_CRigidObject(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
-                         const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+                         const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
 
     const auto model_filename_hash = node.get<uint32>("filename");
@@ -292,7 +282,7 @@ void handle_CRigidObject(AppState &app_state, const RuntimeNode &node, const uin
             return find_name32(node.name_hash());
         }).value_or(std::format("model_{:08X}", model_filename_hash));
 
-        output_node = helper.make<tinygltf::Node>();
+        output_node = helper.make<Node>();
         output_node->name = model_filename;
         set_world_matrix(output_node, node);
         add_extras(node, output_node);
@@ -301,7 +291,7 @@ void handle_CRigidObject(AppState &app_state, const RuntimeNode &node, const uin
 }
 
 void handle_CSkeletalAnimatedObject(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
-                                    const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+                                    const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
 
     if (!node.has(0x0f94740b)) {
@@ -326,7 +316,7 @@ void handle_CSkeletalAnimatedObject(AppState &app_state, const RuntimeNode &node
         GLog_Error("Failed to get current skin for CSkeletalAnimatedObject");
         return;
     }
-    const auto root_bone = helper.get<tinygltf::Node>(skin->joints[0]);
+    const auto root_bone = helper.get<Node>(skin->joints[0]);
     // if (root_bone.is_valid()) {
     //     helper.set_parent(parent_gltf_node, root_bone);
     // }
@@ -349,7 +339,7 @@ void handle_CSkeletalAnimatedObject(AppState &app_state, const RuntimeNode &node
 }
 
 void handle_CBoneAttachment(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
-                            const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+                            const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
 
     std::string node_name;
@@ -360,7 +350,7 @@ void handle_CBoneAttachment(AppState &app_state, const RuntimeNode &node, const 
         node_name = find_name32(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
     }
 
-    auto output_node = helper.make<tinygltf::Node>();
+    auto output_node = helper.make<Node>();
     output_node->name = node_name;
 
     set_world_matrix(output_node, node);
@@ -388,7 +378,7 @@ void handle_CBoneAttachment(AppState &app_state, const RuntimeNode &node, const 
 }
 
 void handle_default(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
-                    const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+                    const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
     std::string node_name;
     if (node.has("name")) {
@@ -403,7 +393,7 @@ void handle_default(AppState &app_state, const RuntimeNode &node, const uint32 p
         node_name = find_name32(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
     }
 
-    auto output_node = helper.make<tinygltf::Node>();
+    auto output_node = helper.make<Node>();
     output_node->name = node_name;
 
     add_extras(node, output_node);
@@ -420,7 +410,7 @@ void handle_default(AppState &app_state, const RuntimeNode &node, const uint32 p
 }
 
 void process_rtpc_node(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
-                       const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node) {
+                       const GltfHelper::Handle<Node> &parent_gltf_node) {
     ZoneScoped
     if (!node.has("_class")) {
         return;
@@ -450,7 +440,7 @@ void process_rtpc_node(AppState &app_state, const RuntimeNode &node, const uint3
     }
 }
 
-GltfHelper::Handle<tinygltf::Node> export_rtpc(AppState &app_state, const std::unique_ptr<IO::File> &&buffer,
+GltfHelper::Handle<Node> export_rtpc(AppState &app_state, const std::unique_ptr<IO::File> &&buffer,
                                                const uint32 path_hash) {
     ZoneScoped
     auto &helper = app_state.helper();
@@ -466,7 +456,7 @@ GltfHelper::Handle<tinygltf::Node> export_rtpc(AppState &app_state, const std::u
     const auto path = find_name32(path_hash).value_or(std::format("path_{:08X}", path_hash));
 
 
-    const auto epe_root_node = helper.make<tinygltf::Node>();
+    const auto epe_root_node = helper.make<Node>();
     epe_root_node->name = "epe_root";
 
     process_children(app_state, root_node, path_hash, epe_root_node);
