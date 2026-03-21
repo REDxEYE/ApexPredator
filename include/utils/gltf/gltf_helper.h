@@ -191,6 +191,8 @@ public:
 
     void pop_skin();
 
+    void reset();
+
     static void set_node_matrix(tinygltf::Node &node, const glm::mat4 &mat);
 
     static void set_node_transform(tinygltf::Node &node,

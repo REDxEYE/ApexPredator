@@ -28,7 +28,7 @@ void ExtractAnimationCommand::handle() {
         else {
             file_hash = hash_string(std::filesystem::path(asset));
         }
-
+        app_state.helper().reset();
         export_anim(app_state, hash_string(m_skeleton_path), file_hash);
     }
 }
@@ -67,11 +67,15 @@ void export_anim(AppState &app_state, uint32 skeleton_hash, uint32 anim_hash) {
 
     std::filesystem::path save_path = app_state.export_path() / anim_name;
     save_path.replace_extension("gltf");
+    std::filesystem::create_directories(save_path.parent_path());
     const auto& helper = app_state.helper();
     if (!helper.model().scenes.empty() && !helper.model().nodes.empty()) {
         tinygltf::TinyGLTF gltf_exporter;
-        gltf_exporter.WriteGltfSceneToFile(&helper.model(), save_path.string(), false, true, true, false);
-        GLog_Info("Written GLTF file: {}", save_path.string());
+        if (gltf_exporter.WriteGltfSceneToFile(&helper.model(), save_path.string(), false, true, true, false)) {
+            GLog_Info("Written GLTF file: {}", save_path.string());
+        }else {
+            GLog_Error("Failed to write GLTF file: {}", save_path.string());
+        }
     }
 }
 

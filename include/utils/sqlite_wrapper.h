@@ -3,8 +3,6 @@
 #ifndef APEXPREDATOR_SQLITE_WRAPPER_H
 #define APEXPREDATOR_SQLITE_WRAPPER_H
 #include <filesystem>
-#include <stddef.h>
-#include <stdint.h>
 #include <string>
 #include <vector>
 

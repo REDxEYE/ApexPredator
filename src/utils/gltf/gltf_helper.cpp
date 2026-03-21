@@ -328,6 +328,10 @@ void GltfHelper::pop_skin() {
     m_skin_stack.pop_back();
 }
 
+void GltfHelper::reset() {
+    m_model = tinygltf::Model();
+}
+
 bool is_all_zero(const glm::vec3 &v) {
     return glm::length(v) <= glm::epsilon<float>();
 }
@@ -338,7 +342,7 @@ bool is_all_one(const glm::vec3 &v) {
 
 bool is_identity_quat(const glm::quat &q) {
     constexpr auto eps = glm::epsilon<float>();
-    constexpr glm::quat id = glm::identity<glm::quat>();
+    constexpr auto id = glm::identity<glm::quat>();
     return glm::length(q - id) <= eps || glm::length(q + id) <= eps;
 }
 
