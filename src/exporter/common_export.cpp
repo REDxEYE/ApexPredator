@@ -28,7 +28,7 @@
 GltfHelper::Handle<tinygltf::Node> export_file(AppState &app_state, const uint32 hash) {
     ZoneScoped
     auto& manager = app_state.manager();
-    auto path = find_name32(hash).value_or(std::format("unknown({:08X})", hash));
+    auto path = find_name(hash).value_or(std::format("unknown({:08X})", hash));
     GLog_Info("Exporting file: {}", path);
     auto buffer = manager.get_file(hash);
     if (!buffer) {

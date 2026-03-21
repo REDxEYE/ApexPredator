@@ -1,6 +1,6 @@
 // Created by RED on 18.09.2025.
 
-#include "utils/file/memory_buffer.h"
+#include "platform/file/memory_buffer.h"
 #include <cstdlib>
 #include <cstring>
 

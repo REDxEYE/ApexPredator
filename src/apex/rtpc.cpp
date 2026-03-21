@@ -182,7 +182,7 @@ RuntimeNode RuntimeNode::RootNode(const std::unique_ptr<IO::File> &file) {
 json RuntimeNode::to_json() const {
     json props;
     for (const auto &[hash, prop]: m_props) {
-        const auto name = find_name32(hash).value_or(std::to_string(hash));
+        const auto name = find_name(hash).value_or(std::to_string(hash));
         json value;
         auto &prop_value = prop.value();
         if (const auto str = std::get_if<std::string>(&prop_value)) {

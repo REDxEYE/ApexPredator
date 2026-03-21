@@ -9,10 +9,11 @@
 #include "utils/common.h"
 #include "utils/hash_helper.h"
 #include "utils/simple_fileio.h"
+#include "../../../../include/apex/asset_db.h"
 
 void raw_export(AppState &app_state, const uint32 asset_hash) {
     ZoneScoped
-    const auto asset_path = find_name32(asset_hash)
+    const auto asset_path = find_name(asset_hash)
             .or_else([&] { return std::optional{std::format("{:08X}.bin", asset_hash)}; })
             .value();
 
@@ -32,7 +33,7 @@ void raw_export(AppState &app_state, const uint32 asset_hash) {
 
 void normal_export(AppState &app_state, const uint32 asset_hash) {
     ZoneScoped
-    const auto asset_path = find_name32(asset_hash)
+    const auto asset_path = find_name(asset_hash)
             .or_else([&] { return std::optional{std::format("{:08X}.bin", asset_hash)}; })
             .value();
 
@@ -56,7 +57,10 @@ void ExtractCommand::handle() {
     convert_to_wsl(m_game_root);
     convert_to_wsl(m_export_path);
 
-    set_db_path(m_db_path.string().c_str());
+
+    AssetDB db(m_db_path);
+    AssetDB::set_instance(&db);
+
     AppState app_state(m_game_root);
     app_state.skip_textures = m_skip_textures;
     app_state.export_path(m_export_path);
@@ -80,4 +84,6 @@ void ExtractCommand::handle() {
             normal_export(app_state, file_hash);
         }
     }
+
+    AssetDB::set_instance(nullptr);
 }

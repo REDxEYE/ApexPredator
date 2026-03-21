@@ -11,7 +11,7 @@
 #include "apex/package/tab_archive.h"
 #include "platform/archive_manager.h"
 #include "utils/common.h"
-#include "utils/gltf/gltf_helper.h"
+#include "gltf_helper.h"
 
 std::pair<bool, uint32 > inline mount_archive(ArchiveManager &manager, const uint32 hash) {
     if (manager.is_mounted(hash)) {
@@ -19,7 +19,7 @@ std::pair<bool, uint32 > inline mount_archive(ArchiveManager &manager, const uin
     }
     auto buffer = manager.get_file(hash);
     if (!buffer) {
-        const auto name = find_name32_sv(hash);
+        const auto name = find_name(hash);
         if (name)
             GLog_Error("Failed to load archive \"%s\"", name->data());
         else
@@ -33,7 +33,7 @@ std::pair<bool, uint32 > inline mount_archive(ArchiveManager &manager, const uin
 
 
     if (memcmp(first_bytes.data(), AAF_MAGIC, 4) == 0) {
-        const auto name = find_name32_sv(hash);
+        const auto name = find_name(hash);
         if (name) {
             GLog_Info("Mounting AAF archive \"{}\"", name->data());
         }

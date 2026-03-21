@@ -1,6 +1,6 @@
 // Created by RED on 17.09.2025.
 
-#include "utils/file/file_buffer.h"
+#include "platform/file/file_buffer.h"
 
 const std::fstream & IO::NativeFile::stream() const {
     return m_stream;

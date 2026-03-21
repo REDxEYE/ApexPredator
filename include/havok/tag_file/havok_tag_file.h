@@ -4,8 +4,8 @@
 
 #include "havok/havok_base_type.h"
 #include "havok/tag_file/havok_tag_types.h"
-#include "utils/file/file.h"
-#include "utils/file/memory_buffer.h"
+#include "platform/file/file.h"
+#include "platform/file/memory_buffer.h"
 #include "int_def.h"
 
 namespace Havok {

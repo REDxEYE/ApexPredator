@@ -226,7 +226,7 @@ void handle_CDamageableCharacterPart(AppState &app_state,
     if (node.has("name"))
         node_name = node.get<std::string>("name");
     else
-        node_name = find_name32(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
+        node_name = find_name(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
 
     const auto output_node = helper.make<Node>();
     output_node->name = node_name;
@@ -278,8 +278,8 @@ void handle_CRigidObject(AppState &app_state, const RuntimeNode &node, const uin
         }
     }
     else {
-        const auto model_filename = find_name32(model_filename_hash).or_else([&] {
-            return find_name32(node.name_hash());
+        const auto model_filename = find_name(model_filename_hash).or_else([&] {
+            return find_name(node.name_hash());
         }).value_or(std::format("model_{:08X}", model_filename_hash));
 
         output_node = helper.make<Node>();
@@ -347,7 +347,7 @@ void handle_CBoneAttachment(AppState &app_state, const RuntimeNode &node, const 
         node_name = node.get<std::string>("name");
     }
     else {
-        node_name = find_name32(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
+        node_name = find_name(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
     }
 
     auto output_node = helper.make<Node>();
@@ -386,11 +386,11 @@ void handle_default(AppState &app_state, const RuntimeNode &node, const uint32 p
             node_name = node.get<std::string>("name");
         }else {
             auto node_name_hash = node.get<uint32>("name");
-            node_name = find_name32(node_name_hash).value_or(std::format("node_{:08X}", node_name_hash));
+            node_name = find_name(node_name_hash).value_or(std::format("node_{:08X}", node_name_hash));
         }
     }
     else {
-        node_name = find_name32(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
+        node_name = find_name(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
     }
 
     auto output_node = helper.make<Node>();
@@ -453,7 +453,7 @@ GltfHelper::Handle<Node> export_rtpc(AppState &app_state, const std::unique_ptr<
     // RuntimeNode_emit_json(root_node, &epe_json, 0);
     // printf("%s\n", String_data(&epe_json));
 
-    const auto path = find_name32(path_hash).value_or(std::format("path_{:08X}", path_hash));
+    const auto path = find_name(path_hash).value_or(std::format("path_{:08X}", path_hash));
 
 
     const auto epe_root_node = helper.make<Node>();

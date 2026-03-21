@@ -2,7 +2,7 @@
 
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
-#include "utils/file/file.h"
+#include "platform/file/file.h"
 
 #include "apex/package/tab_archive.h"
 #include "havok/havok_codegen.h"
@@ -53,8 +53,8 @@ void collect_types(AppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
 
                     if (!sarc_buffer) {
                         GLog_Warning("Failed to read file {} from SARC {}",
-                                     find_name32_sv(sarc_entry.path_hash).value_or("Unknown"),
-                                     find_name32_sv(entry.path_hash).value_or("Unknown"));
+                                     find_name(sarc_entry.path_hash).value_or("Unknown"),
+                                     find_name(entry.path_hash).value_or("Unknown"));
                         continue;
                     }
 

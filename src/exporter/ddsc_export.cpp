@@ -27,7 +27,7 @@ void export_ddsc(AppState &app_state, const uint32 hash, std::unique_ptr<IO::Fil
         GLog_Error("Failed to convert AVTX texture with hash {:08X}", hash);
         return;
     }
-    const auto export_path = app_state.export_path() / find_name32(hash).value_or(std::format("texture_{:08X}", hash));
+    const auto export_path = app_state.export_path() / find_name(hash).value_or(std::format("texture_{:08X}", hash));
     std::filesystem::create_directories(export_path.parent_path());
     tex->save(export_path);
 }

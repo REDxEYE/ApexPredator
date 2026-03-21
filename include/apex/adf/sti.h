@@ -10,7 +10,7 @@
 
 #include "adf.h"
 #include "int_def.h"
-#include "utils/file/file.h"
+#include "platform/file/file.h"
 
 namespace STI {
     enum class DataType {

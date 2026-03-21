@@ -6,13 +6,15 @@
 #include "platform/logger.h"
 #include "utils/common.h"
 #include "utils/hash_helper.h"
+#include "../../../../include/apex/asset_db.h"
 
 void export_anim(AppState &app_state, uint32 skeleton_hash, uint32 anim_hash);
 
 void ExtractAnimationCommand::handle() {
     convert_to_wsl(m_game_root);
     convert_to_wsl(m_export_path);
-    set_db_path(m_db_path.string().c_str());
+    AssetDB db(m_db_path);
+    AssetDB::set_instance(&db);
     AppState app_state(m_game_root);
     app_state.skip_textures = true;
     app_state.export_path(m_export_path);
@@ -31,6 +33,8 @@ void ExtractAnimationCommand::handle() {
         app_state.helper().reset();
         export_anim(app_state, hash_string(m_skeleton_path), file_hash);
     }
+
+    AssetDB::set_instance(nullptr);
 }
 
 void export_anim(AppState &app_state, uint32 skeleton_hash, uint32 anim_hash) {
@@ -61,7 +65,7 @@ void export_anim(AppState &app_state, uint32 skeleton_hash, uint32 anim_hash) {
     const auto anim_animation_container = Havok::as<HavokTypes::hkaAnimationContainer>(anim_variant);
     const auto &binding = anim_animation_container->bindings.front();
 
-    auto anim_name = find_name32(anim_hash).value_or(std::format("anim_{:08X}", anim_hash));
+    auto anim_name = find_name(anim_hash).value_or(std::format("anim_{:08X}", anim_hash));
 
     export_animation(app_state, binding.get(), skeleton.get(), path_utils::stem(anim_name));
 
@@ -197,7 +201,7 @@ void export_anim(AppState &app_state, uint32 skeleton_hash, uint32 anim_hash) {
 //
 //         const hkaAnimationBinding *binding = anim_animation_container->bindings.m_data[0].ptr;
 //         String anim_file_name = {};
-//         StringView animation_path_tmp = find_name32_sv(animation_path_hash);
+//         StringView animation_path_tmp = find_name(animation_path_hash);
 //         if (sv_is_null(animation_path_tmp)) {
 //             String_format(&anim_file_name, "anim_%08X", animation_path_hash);
 //         }

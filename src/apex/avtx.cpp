@@ -52,7 +52,7 @@ std::unique_ptr<Texture> AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, c
             goto BUILTIN_MIPS;
         }
 
-        const auto path = find_name32_sv(hash);
+        const auto path = find_name(hash);
         if (path->empty()) {
             return nullptr;
         }

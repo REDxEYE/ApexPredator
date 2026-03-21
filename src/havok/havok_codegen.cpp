@@ -620,7 +620,7 @@ void Havok::CodeGen::generate_code(const TypeLibrary &lib,
     impl_stream << "#include <stdexcept>\n\n";
     impl_stream << "#include \"havok/havok_support_types.h\"\n";
     impl_stream << "#include \"havok/tag_file/havok_tag_file.h\"\n";
-    impl_stream << "#include \"utils/buffer/buffer.h\"\n\n";
+    impl_stream << "#include \"platform/buffer/buffer.h\"\n\n";
     impl_stream << "using namespace Havok;\n";
     impl_stream << "using namespace HavokTypes;\n\n";
 

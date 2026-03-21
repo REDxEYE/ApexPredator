@@ -4,6 +4,7 @@
 
 #include <string>
 
+#include "platform/file/memory_buffer.h"
 #include "tracy/Tracy.hpp"
 #include "utils/zlib_wrapper.h"
 

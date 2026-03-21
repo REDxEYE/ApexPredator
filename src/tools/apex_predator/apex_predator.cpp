@@ -8,15 +8,15 @@
 
 
 int main(int argc, const char *argv[]) {
-//     while (!TracyIsConnected) {
-// #ifdef _WIN32
-//         Sleep(100); /* Windows */
-// #else
-//         usleep(10000);
-// #endif
-//         printf("\rWaiting for tracy;");
-//     }
-//     printf("\n");
+    //     while (!TracyIsConnected) {
+    // #ifdef _WIN32
+    //         Sleep(100); /* Windows */
+    // #else
+    //         usleep(10000);
+    // #endif
+    //         printf("\rWaiting for tracy;");
+    //     }
+    //     printf("\n");
 
 
     mp_init();
@@ -50,9 +50,12 @@ int main(int argc, const char *argv[]) {
         app.parse(argc, argv);
     } catch (const CLI::ParseError &e) {
         return app.exit(e);
+    } catch (const std::exception &e) {
+        std::cerr << "ApexPredator crashed!" << std::endl;
+        std::cerr << "Cause: " << e.what() << std::endl;
+        return 1;
     }
 
-    close_assets_db();
     mp_shutdown();
     return 0;
 }

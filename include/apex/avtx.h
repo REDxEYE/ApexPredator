@@ -5,7 +5,7 @@
 #include "int_def.h"
 #include "platform/archive_manager.h"
 #include "platform/texture.h"
-#include "utils/file/file.h"
+#include "platform/file/file.h"
 
 #define AVTX_MAGIC "AVTX"
 

@@ -55,16 +55,16 @@ void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
 
         auto &used_index_buffer = all_index_buffer[index_buffer_index];
 
-        // auto mesh_type_name = find_name32_sv(mesh.MeshTypeId);
+        // auto mesh_type_name = find_name(mesh.MeshTypeId);
 
-        auto gl_mesh_name = find_name32(mesh.MeshTypeId).value_or(std::format("mesh_{:08X}", mesh.MeshTypeId.storage));
+        auto gl_mesh_name = find_name(mesh.MeshTypeId).value_or(std::format("mesh_{:08X}", mesh.MeshTypeId.storage));
         auto gl_mesh = helper.make<tinygltf::Mesh>();
         gl_mesh->name = gl_mesh_name;
         gl_mesh->primitives.resize(mesh.SubMeshes.size());
         node->mesh = gl_mesh.index();
 
         for (const auto &[sub_mesh_id, sub_mesh]: mesh.SubMeshes | std::views::enumerate) {
-            const auto material_name = find_name32(sub_mesh.SubMeshId).value_or(
+            const auto material_name = find_name(sub_mesh.SubMeshId).value_or(
                 std::format("material_{:08X}", sub_mesh.SubMeshId.storage));
 
             auto material = helper.find<tinygltf::Material>(material_name);
@@ -372,7 +372,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_mesh(AppState &app_state, uint32 p
     ZoneScoped
     auto &helper = app_state.helper();
 
-    std::string mesh_name = find_name32(path_hash).value_or(std::format("mesh_{:08X}", path_hash));
+    std::string mesh_name = find_name(path_hash).value_or(std::format("mesh_{:08X}", path_hash));
     auto mesh_root_node = helper.make<tinygltf::Node>();
     mesh_root_node->name = mesh_name;
 
@@ -392,7 +392,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_mesh(AppState &app_state, uint32 p
 
 
     // hires fix
-    if (const auto hi_res_path_full_tmp = find_name32_sv(header->HighLodPath)) {
+    if (const auto hi_res_path_full_tmp = find_name(header->HighLodPath)) {
         const auto hi_res_path_full = hi_res_path_full_tmp.value();
         if (hi_res_path_full.contains("intermediate/")) {
             auto hi_res_path = hi_res_path_full.substr(strlen("intermediate/"));
@@ -429,11 +429,11 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const A
     ZoneScoped
     auto &helper = app_state.helper();
     auto model_root_node = helper.make<tinygltf::Node>();
-    const std::filesystem::path model_path = find_name32(path_hash).value_or(std::format("model_{:08X}", path_hash));
+    const std::filesystem::path model_path = find_name(path_hash).value_or(std::format("model_{:08X}", path_hash));
     model_root_node->name = model_path.filename().string();
 
     for (const auto &amf_material: amf_model->Materials) {
-        std::string material_name = find_name32(amf_material.Name).value_or(
+        std::string material_name = find_name(amf_material.Name).value_or(
             std::format("material_{:08X}", amf_material.Name.storage));
 
         auto material = helper.find<tinygltf::Material>(material_name);
@@ -442,12 +442,12 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const A
             auto new_material = helper.make<tinygltf::Material>();
             new_material->name = material_name;
 
-            std::string render_block_id = find_name32(amf_material.RenderBlockId).value_or(
+            std::string render_block_id = find_name(amf_material.RenderBlockId).value_or(
                 std::format("renderblock_{:08X}", amf_material.RenderBlockId.storage));
 
             GLog_Info("Material {} -> {}", material_name, render_block_id);
             for (const auto [tex_id, texture]: amf_material.Textures | std::views::enumerate) {
-                auto tex_path = find_name64_sv(texture.storage);
+                auto tex_path = find_name(texture.storage);
                 if (!tex_path) {
                     continue;
                 }
@@ -472,7 +472,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const A
                     if (amf_material.Textures.size() >= 3) {
                         std::unique_ptr<Texture> diffuse_texture = nullptr;
 
-                        if (const auto diffuse_path = find_name32(amf_material.Textures[0])) {
+                        if (const auto diffuse_path = find_name(amf_material.Textures[0])) {
                             diffuse_texture = convert_ddsc(app_state, amf_material.Textures[0]);
                             auto image = helper.create_texture_png_data(
                                 diffuse_texture->save_to_memory(MemoryFormat::PNG),
@@ -480,7 +480,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const A
                                             hash_string(diffuse_path.value())));
                             new_material->pbrMetallicRoughness.baseColorTexture.index = image.index();
                         }
-                        if (auto normal_path = find_name32(amf_material.Textures[1])) {
+                        if (auto normal_path = find_name(amf_material.Textures[1])) {
                             auto normal_texture = convert_ddsc(app_state, amf_material.Textures[1]);
                             auto image = helper.create_texture_png_data(
                                 normal_texture->save_to_memory(MemoryFormat::PNG),
@@ -490,7 +490,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const A
                             new_material->normalTexture.scale = 1.0f;
                         }
 
-                        if (auto orm_path = find_name32(amf_material.Textures[2])) {
+                        if (auto orm_path = find_name(amf_material.Textures[2])) {
                             auto orm_texture = convert_ddsc(app_state, amf_material.Textures[2]);
                             auto image = helper.create_texture_png_data(
                                 orm_texture->save_to_memory(MemoryFormat::PNG),
@@ -499,7 +499,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const A
                             new_material->pbrMetallicRoughness.metallicRoughnessTexture.index = image.index();
                         }
                         if (constants->UseEmissive) {
-                            if (auto emission_path = find_name32(amf_material.Textures[4])) {
+                            if (auto emission_path = find_name(amf_material.Textures[4])) {
                                 const uint32 hash = hash_string(emission_path.value());
                                 auto texture_name = std::format("{}_{:08X}",
                                                                 path_utils::filename(emission_path.value()), hash);
@@ -527,7 +527,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const A
                         }
 
                         // if (constants->UseAlbedoDetail) {
-                        //     StringView albedo_detail_path = find_name32_sv(amf_material.Textures.items[5]);
+                        //     StringView albedo_detail_path = find_name(amf_material.Textures.items[5]);
                         //     Texture *albedo_detail = convert_ddsc(app_state, amf_material.Textures.items[5]);
                         //     String *texture_save_path = GLTFContext_data_path(context);
                         //     const uint32 hash = hash_vstring(albedo_detail_path);
@@ -540,7 +540,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const A
                         //     String_free(texture_save_path);
                         // }
                         // if (constants->UseNormalDetail) {
-                        //     StringView normal_detail_path = find_name32_sv(amf_material.Textures.items[6]);
+                        //     StringView normal_detail_path = find_name(amf_material.Textures.items[6]);
                         //     Texture *normal_detail = convert_ddsc(app_state, amf_material.Textures.items[6]);
                         //     String *texture_save_path = GLTFContext_data_path(context);
                         //     const uint32 hash = hash_vstring(normal_detail_path);

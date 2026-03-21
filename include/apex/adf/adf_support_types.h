@@ -4,13 +4,10 @@
 #define APEXPREDATOR_ADF_SUPPORT_TYPES_H
 #include <format>
 #include <string>
-#include <optional>
-#include <functional>
-#include <unordered_map>
 
-#include "adf_base_type.h"
 #include "apex/hashes.h"
-#include "utils/file/file.h"
+#include "adf_base_type.h"
+#include "platform/file/file.h"
 
 using String = std::string;
 
@@ -41,7 +38,7 @@ struct StringHash : ADF::BaseType {
     };
 
     void print(std::ostream &out) const override {
-        if (const auto str = find_name64_sv(storage)) {
+        if (const auto str = find_name(storage)) {
             out << *str;
         }
         else {
@@ -50,7 +47,7 @@ struct StringHash : ADF::BaseType {
     };
 
     void to_json(std::ostream &out) const override {
-        if (const auto str = find_name64_sv(storage)) {
+        if (const auto str = find_name(storage)) {
             out << std::format("\"{}\"", *str);
         }
         else {

@@ -1,6 +1,6 @@
 // Created by RED on 08.03.2026.
 
-#include "utils/gltf/gltf_helper.h"
+#include "../../include/platform/gltf_helper.h"
 
 #include <algorithm>
 #include <ranges>

@@ -11,7 +11,7 @@
 
 #include "int_def.h"
 #include "utils/hash_helper.h"
-#include "utils/file/file.h"
+#include "platform/file/file.h"
 
 #define RTPC_MAGIC "RTPC"
 

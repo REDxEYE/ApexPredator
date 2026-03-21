@@ -35,7 +35,7 @@ void collect_types(AppState &app_state, STI::TypeLibrary &lib) {
         auto file = manager.get_file(entry.path_hash);
 
         if (!file) {
-            GLog_Warning("Failed to read file {}", find_name32_sv(entry.path_hash).value_or("Unknown"));
+            GLog_Warning("Failed to read file {}", find_name(entry.path_hash).value_or("Unknown"));
             continue;
         }
 
@@ -65,8 +65,8 @@ void collect_types(AppState &app_state, STI::TypeLibrary &lib) {
 
                     if (!sarc_buffer) {
                         GLog_Warning("Failed to read file {} from SARC {}",
-                                     find_name32_sv(sarc_entry.path_hash).value_or("Unknown"),
-                                     find_name32_sv(entry.path_hash).value_or("Unknown"));
+                                     find_name(sarc_entry.path_hash).value_or("Unknown"),
+                                     find_name(entry.path_hash).value_or("Unknown"));
                         continue;
                     }
 

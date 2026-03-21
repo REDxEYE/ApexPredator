@@ -1,7 +1,7 @@
 // Created by RED on 18.09.2025.
 
 #include "apex/package/tab_archive.h"
-#include "utils/file/file_buffer.h"
+#include "platform/file/file_buffer.h"
 
 #include "platform/logger.h"
 #include "tracy/Tracy.hpp"

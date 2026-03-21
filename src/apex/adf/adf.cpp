@@ -4,7 +4,7 @@
 
 #include "apex/hashes.h"
 #include "platform/logger.h"
-#include "utils/file/memory_buffer.h"
+#include "platform/file/memory_buffer.h"
 
 
 ADF::Type ADF::Type::from_buffer(IO::File &buffer) {
@@ -65,6 +65,7 @@ Buffer ADF::ADFFile::get_instance_data(const uint32 instance_id) const {
     return Buffer(std::move(data));
 }
 
+
 ADF::ADFFile ADF::ADFFile::from_buffer(std::unique_ptr<IO::File> buffer) {
     const auto header = buffer->read_pod<Header>();
     const std::string comment = buffer->read_cstring();
@@ -73,10 +74,10 @@ ADF::ADFFile ADF::ADFFile::from_buffer(std::unique_ptr<IO::File> buffer) {
     for (int i = 0; i < header.stringhash_count; ++i) {
         std::string hash_str = buffer->read_cstring();
         const auto string_hash = buffer->read_pod<uint64>();
-        if (check_hash64_presence(string_hash)) {
+        if (check_hash_presence(string_hash)) {
             continue;
         }
-        store_hash64_name(string_hash, hash_str);
+        store_hash_name(string_hash, hash_str);
     }
 
     std::vector<std::string> strings;

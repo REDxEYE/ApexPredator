@@ -92,7 +92,7 @@ void SArchive::all_entries(std::vector<ArchiveEntry> &entries) const {
 }
 
 std::string SArchive::get_name() const {
-    if (const auto name = find_name32_sv(m_hash)) {
+    if (const auto name = find_name(m_hash)) {
         return std::string(*name);
     }
     return std::format("SARC 0x%08X", m_hash);

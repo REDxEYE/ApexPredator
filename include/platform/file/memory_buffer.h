@@ -4,8 +4,8 @@
 #define APEXPREDATOR_MEMORY_BUFFER_H
 #include <span>
 
-#include "utils/buffer/buffer.h"
-#include "utils/file/file.h"
+#include "platform/buffer/buffer.h"
+#include "platform/file/file.h"
 
 namespace IO {
     class MemoryViewFile;

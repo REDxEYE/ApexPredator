@@ -10,7 +10,7 @@
 #include "apex/package/tab.h"
 #include "platform/archive.h"
 #include "platform/archive_manager.h"
-#include "utils/file/file_buffer.h"
+#include "platform/file/file_buffer.h"
 
 std::filesystem::path inline get_arc_path(const std::filesystem::path &tab_path) {
     std::filesystem::path arc_path = tab_path;

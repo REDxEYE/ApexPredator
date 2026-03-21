@@ -1,6 +1,4 @@
 // Created by RED on 23.09.2025.
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "utils/stb_image_write.h"
 
 #define BCDEC_IMPLEMENTATION
 #include "bcdec.h"
@@ -9,9 +7,10 @@
 
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 // #define TINYGLTF_NO_STB_IMAGE_WRITE
 // #define TINYGLTF_NO_STB_IMAGE
-#define TINYGLTF_NO_INCLUDE_STB_IMAGE_WRITE
+// #define TINYGLTF_NO_INCLUDE_STB_IMAGE_WRITE
 #define TINYGLTF_NO_INCLUDE_JSON
 // #define TINYGLTF_NO_INCLUDE_STB_IMAGE
 #include "tiny_gltf.h"

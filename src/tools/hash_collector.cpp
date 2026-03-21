@@ -12,7 +12,7 @@
 #include "platform/logger.h"
 #include "utils/hash_helper.h"
 #include "utils/memory_tracker.h"
-#include "utils/sqlite_wrapper.h"
+#include "../../include/apex/asset_db.h"
 
 typedef struct Context {
     assetdb_t *db;
@@ -119,7 +119,7 @@ int main(int argc, const char *argv[]) {
 
 
     app_state.manager().foreach_file([&](const ArchiveEntry &entry)-> bool {
-        const auto name = find_name32(entry.path_hash).value_or(std::format("<{:08X}>", entry.path_hash));
+        const auto name = find_name(entry.path_hash).value_or(std::format("<{:08X}>", entry.path_hash));
 
         // assetdb_files_put(ctx->db, entry->path_hash, StringView_cstr(asset_path), size, 0);
 

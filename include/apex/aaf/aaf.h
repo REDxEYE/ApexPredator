@@ -3,8 +3,10 @@
 #ifndef APEXPREDATOR_AAF_H
 #define APEXPREDATOR_AAF_H
 #include <memory>
+#include <vector>
+
 #include "int_def.h"
-#include "utils/file/memory_buffer.h"
+#include "platform/file/file.h"
 
 #define AAF_MAGIC "AAF\0"
 

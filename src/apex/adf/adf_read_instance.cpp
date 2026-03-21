@@ -5,6 +5,8 @@
 #include <memory>
 
 #include "apex/adf/adf_support_types.h"
+#include "platform/file/memory_buffer.h"
+
 extern ADF::TypeInfoMap adf_type_info;
 
 std::unique_ptr<ADF::BaseType> ADF::ADFFile::read_instance(const uint32 index) {

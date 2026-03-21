@@ -2,9 +2,11 @@
 #include "apex/hashes.h"
 #include "../commands.h"
 #include "platform/app_state.h"
+#include "../../../../include/apex/asset_db.h"
 
 void SearchCommand::handle() {
-    set_db_path(m_db_path.string().c_str());
+    AssetDB db(m_db_path);
+    AssetDB::set_instance(&db);
     std::vector<std::string> result;
     search_file_table(m_search_query,result);
     if (result.empty()) {
@@ -15,6 +17,6 @@ void SearchCommand::handle() {
             printf("  %s\n", entry.c_str());
         }
     }
-
+    AssetDB::set_instance(nullptr);
 }
 

@@ -3,8 +3,6 @@ project(ApexPredator CXX)
 include(FetchContent)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
-FetchContent_Declare(sqlite3 GIT_REPOSITORY https://github.com/sjinks/sqlite3-cmake GIT_TAG v3.49.1)
-FetchContent_MakeAvailable(sqlite3)
 
 FetchContent_Declare(
         tracy
@@ -85,6 +83,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(cli11_proj)
 
+FetchContent_Declare(
+        SQLiteCpp
+        QUIET
+        GIT_REPOSITORY https://github.com/SRombauts/SQLiteCpp.git
+        GIT_TAG 3.3.3
+)
+FetchContent_MakeAvailable(SQLiteCpp)
+
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
@@ -129,17 +135,17 @@ SET(CommonFiles
         src/platform/logger.cpp
         src/platform/texture.cpp
         src/platform/texture_ops.cpp
-        src/utils/file/file.cpp
-        src/utils/file/native_file.cpp
-        src/utils/file/memory_file.cpp
+        src/platform/file/file.cpp
+        src/platform/file/native_file.cpp
+        src/platform/file/memory_file.cpp
         src/utils/common.cpp
-        src/utils/gltf/gltf_helper.cpp
+        src/platform/gltf_helper.cpp
         src/utils/hash_helper.cpp
         src/utils/json.cpp
         src/utils/lookup3.cpp
         src/utils/memory_debugger.cpp
         src/utils/simple_fileio.cpp
-        src/utils/sqlite_wrapper.cpp
+        src/apex/asset_db.cpp
         src/utils/stb.cpp
         src/utils/zlib_wrapper.cpp
 )
@@ -188,13 +194,6 @@ add_executable(StringHasher
 )
 
 if (UNIX)
-    target_compile_options(AdfLib PRIVATE -fms-extensions)
-    target_compile_options(HavokLib PRIVATE -fms-extensions)
-    target_compile_options(ApexPredator PRIVATE -fms-extensions)
-    target_compile_options(AdfTypeGenerator PRIVATE -fms-extensions)
-    target_compile_options(HavokTypeGenerator PRIVATE -fms-extensions)
-    target_compile_options(HashCollector PRIVATE -fms-extensions)
-
     target_link_libraries(ApexPredator PUBLIC m)
     target_link_libraries(AdfTypeGenerator PUBLIC m)
     target_link_libraries(HavokTypeGenerator PUBLIC m)
@@ -214,6 +213,7 @@ SET(CommonLibs
         SQLite::SQLite3
         tinygltf
         nlohmann_json::nlohmann_json
+        SQLiteCpp
 )
 
 SET(CommonIncludes
@@ -232,6 +232,7 @@ target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib Ogg::ogg vorbis vorbis
 target_link_libraries(HashCollector PUBLIC HavokLib AdfLib ${CommonLibs})
 target_link_libraries(AdfTypeGenerator PUBLIC ${CommonLibs})
 target_link_libraries(HavokTypeGenerator PUBLIC ${CommonLibs})
+target_link_libraries(AdfLib PUBLIC SQLiteCpp)
 target_link_libraries(HavokLib PUBLIC glm)
 
 target_link_libraries(AdfLib PUBLIC Tracy::TracyClient)
@@ -247,6 +248,8 @@ add_compile_definitions(GLM_ENABLE_EXPERIMENTAL TRACY_CALLSTACK=32)
 target_link_libraries(ApexPredator PRIVATE CLI11::CLI11)
 target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY)
 # target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
+
+target_compile_options(ApexPredator PRIVATE $<$<CONFIG:Debug>:-glldb -fno-standalone-debug -gsplit-dwarf>)
 
 if (WIN32)
 

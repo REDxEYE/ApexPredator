@@ -314,7 +314,7 @@ void export_terrain_instances(AppState &app_state,
     const uint32 patch_size = 1 << header.PatchLod;
 
     for (const auto &instance_layer: instance_data_patch.InstanceDataLayers) {
-        const auto layer_name = find_name32(instance_layer.Name).value_or(
+        const auto layer_name = find_name(instance_layer.Name).value_or(
             std::format("layer_0x{:08X}", instance_layer.Name.storage));
         for (int j = 0; j < instance_layer.Instances.size(); ++j) {
             const VegetationSystemInstance &veg_instance = instance_layer.Instances[j];
@@ -415,7 +415,7 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(AppState &app_sta
         }
         else {
             // const auto instance_obj = adf.read_instance(instanceId);
-            auto path = find_name32(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
+            auto path = find_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
             path += std::format("_{:08X}", instance.type_hash);
             std::filesystem::path unk_file_export_path = app_state.export_path() / path;
             std::filesystem::create_directories(unk_file_export_path.parent_path());
