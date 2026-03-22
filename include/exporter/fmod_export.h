@@ -6,6 +6,6 @@
 
 #define RIFF_MAGIC "RIFF"
 
-void export_fmod_bank(const AppState &app_state, uint32 path_hash, const std::unique_ptr<IO::File> &&buffer);
+void export_fmod_bank(const ApexAppState &app_state, uint32 path_hash, const std::unique_ptr<IO::File> &&buffer);
 
 #endif //APEXPREDATOR_EXPORT_FMOD_H

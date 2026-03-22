@@ -21,7 +21,7 @@
 #define MVK_MAGIC "\x1A\x45\xDF\xA3"
 
 
-GltfHelper::Handle<tinygltf::Node> export_file(AppState &app_state, const uint32 hash) {
+GltfHelper::Handle<tinygltf::Node> export_file(ApexAppState &app_state, const uint32 hash) {
     ZoneScoped
     auto& manager = app_state.manager();
     auto path = find_name(hash).value_or(std::format("unknown({:08X})", hash));

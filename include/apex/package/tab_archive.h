@@ -8,8 +8,8 @@
 
 
 #include "apex/package/tab.h"
-#include "platform/archive.h"
 #include "platform/archive_manager.h"
+#include "redscore/platform/archive.h"
 #include "redscore/platform/file/file_buffer.h"
 
 std::filesystem::path inline get_arc_path(const std::filesystem::path &tab_path) {
@@ -25,9 +25,9 @@ public:
         initialize();
     }
 
-    bool has_file(std::string_view path) const override;
+    bool has_file(std::string_view path) override;
 
-    bool has_file(uint32 hash) const override;
+    bool has_file(uint32 hash) override;
 
     std::unique_ptr<IO::File> get_file(std::string_view path) override;
 

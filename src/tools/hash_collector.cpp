@@ -110,7 +110,7 @@ int main(int argc, const char *argv[]) {
     ingest_strings_file(db, "./../gz_strings/cross_game.txt");
     ingest_strings_file(db, "./../gz_strings/game_dump_clean.txt");
 
-    AppState app_state(argv[1]);
+    ApexAppState app_state(argv[1]);
 
 
     Context context = {

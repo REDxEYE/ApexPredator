@@ -37,7 +37,6 @@ SET(CommonFiles
         src/havok/tag_file/havok_tag_file.cpp
         src/havok/tag_file/havok_tag_types.cpp
         src/platform/app_state.cpp
-        src/platform/archive.cpp
         src/platform/archive_manager.cpp
         src/utils/hash_helper.cpp
         src/utils/json.cpp

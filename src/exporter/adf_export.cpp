@@ -119,7 +119,7 @@ std::unique_ptr<Texture> export_terrain_texture(const TerrainTexture &terrain_te
         Texture::from_dxgi(fmt, decompressed_data->as_span(), terrain_texture.Width, terrain_texture.Height, 1)));
 }
 
-GltfHelper::Handle<tinygltf::Node> export_adf_file(AppState &app_state, const uint32 path_hash) {
+GltfHelper::Handle<tinygltf::Node> export_adf_file(ApexAppState &app_state, const uint32 path_hash) {
     ZoneScoped
     auto result = app_state.manager().get_file(path_hash);
 
@@ -131,7 +131,7 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file(AppState &app_state, const ui
     return export_adf_file_from_buffer(app_state, path_hash, std::move(result));
 }
 
-GltfHelper::Handle<tinygltf::Node> export_terrain_patch(AppState &app_state, const StreamPatchBlockHeader *header,
+GltfHelper::Handle<tinygltf::Node> export_terrain_patch(ApexAppState &app_state, const StreamPatchBlockHeader *header,
                            const TerrainPatch *terrain_patch) {
     ZoneScoped
     const uint32 patch_x_pos = header->PatchPositionX;
@@ -304,7 +304,7 @@ GltfHelper::Handle<tinygltf::Node> export_terrain_patch(AppState &app_state, con
     return patch_mesh_node;
 }
 
-void export_terrain_instances(AppState &app_state,
+void export_terrain_instances(ApexAppState &app_state,
                               const StreamPatchBlockHeader &header,
                               const InstanceDataPatch &instance_data_patch
 ) {
@@ -329,7 +329,7 @@ void export_terrain_instances(AppState &app_state,
     }
 }
 
-GltfHelper::Handle<tinygltf::Node> export_stream_patch_file(AppState &app_state, ADF::ADFFile &adf) {
+GltfHelper::Handle<tinygltf::Node> export_stream_patch_file(ApexAppState &app_state, ADF::ADFFile &adf) {
     ZoneScoped
     const auto patch_file_header = convert<StreamPatchFileHeader>(adf.read_instance(0));
     for (int i = 1; i < adf.instances().size(); ++i) {
@@ -356,7 +356,7 @@ GltfHelper::Handle<tinygltf::Node> export_stream_patch_file(AppState &app_state,
     return {};
 }
 
-GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(AppState &app_state, const uint32 path_hash, std::unique_ptr<IO::File> mb) {
+GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app_state, const uint32 path_hash, std::unique_ptr<IO::File> mb) {
     ZoneScoped
     ADF::ADFFile adf = ADF::ADFFile::from_buffer(std::move(mb));
 

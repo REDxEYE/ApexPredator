@@ -108,7 +108,7 @@ glm::mat4 calculate_global_node_matrix(GltfHelper &helper, const GltfHelper::Han
     return get_node_matrix(target);
 }
 
-void process_children(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+void process_children(ApexAppState &app_state, const RuntimeNode &node, const uint32 path_hash,
                       const GltfHelper::Handle<Node> &parent_gltf_node) {
     for (const auto &child: node.children()) {
         process_rtpc_node(app_state, child, path_hash, parent_gltf_node);
@@ -123,7 +123,7 @@ void set_world_matrix(const GltfHelper::Handle<Node> &gltf_node, const RuntimeNo
         GltfHelper::set_node_matrix(*gltf_node, matrix);
 }
 
-void handle_CCharacter(AppState &app_state,
+void handle_CCharacter(ApexAppState &app_state,
                        const RuntimeNode &node, const uint32 path_hash,
                        const GltfHelper::Handle<Node> &parent_gltf_node) {
     GltfHelper &helper = app_state.helper();
@@ -178,7 +178,7 @@ void handle_CCharacter(AppState &app_state,
     }
 }
 
-void handle_CSecondaryMotionAttachment(AppState &app_state,
+void handle_CSecondaryMotionAttachment(ApexAppState &app_state,
                                        const RuntimeNode &node, const uint32 path_hash,
                                        const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
@@ -218,7 +218,7 @@ void handle_CSecondaryMotionAttachment(AppState &app_state,
     }
 }
 
-void handle_CDamageableCharacterPart(AppState &app_state,
+void handle_CDamageableCharacterPart(ApexAppState &app_state,
                                      const RuntimeNode &node, const uint32 path_hash,
                                      const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
@@ -258,7 +258,7 @@ void handle_CDamageableCharacterPart(AppState &app_state,
     process_children(app_state, node, path_hash, output_node);
 }
 
-void handle_CRigidObject(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+void handle_CRigidObject(ApexAppState &app_state, const RuntimeNode &node, const uint32 path_hash,
                          const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
 
@@ -290,7 +290,7 @@ void handle_CRigidObject(AppState &app_state, const RuntimeNode &node, const uin
     process_children(app_state, node, path_hash, output_node);
 }
 
-void handle_CSkeletalAnimatedObject(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+void handle_CSkeletalAnimatedObject(ApexAppState &app_state, const RuntimeNode &node, const uint32 path_hash,
                                     const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
 
@@ -338,7 +338,7 @@ void handle_CSkeletalAnimatedObject(AppState &app_state, const RuntimeNode &node
     }
 }
 
-void handle_CBoneAttachment(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+void handle_CBoneAttachment(ApexAppState &app_state, const RuntimeNode &node, const uint32 path_hash,
                             const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
 
@@ -377,7 +377,7 @@ void handle_CBoneAttachment(AppState &app_state, const RuntimeNode &node, const 
     process_children(app_state, node, path_hash, output_node);
 }
 
-void handle_default(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+void handle_default(ApexAppState &app_state, const RuntimeNode &node, const uint32 path_hash,
                     const GltfHelper::Handle<Node> &parent_gltf_node) {
     auto &helper = app_state.helper();
     std::string node_name;
@@ -409,7 +409,7 @@ void handle_default(AppState &app_state, const RuntimeNode &node, const uint32 p
     process_children(app_state, node, path_hash, output_node);
 }
 
-void process_rtpc_node(AppState &app_state, const RuntimeNode &node, const uint32 path_hash,
+void process_rtpc_node(ApexAppState &app_state, const RuntimeNode &node, const uint32 path_hash,
                        const GltfHelper::Handle<Node> &parent_gltf_node) {
     ZoneScoped
     if (!node.has("_class")) {
@@ -440,7 +440,7 @@ void process_rtpc_node(AppState &app_state, const RuntimeNode &node, const uint3
     }
 }
 
-GltfHelper::Handle<Node> export_rtpc(AppState &app_state, const std::unique_ptr<IO::File> &&buffer,
+GltfHelper::Handle<Node> export_rtpc(ApexAppState &app_state, const std::unique_ptr<IO::File> &&buffer,
                                                const uint32 path_hash) {
     ZoneScoped
     auto &helper = app_state.helper();

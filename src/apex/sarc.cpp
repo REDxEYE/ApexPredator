@@ -47,12 +47,12 @@ SArchive::SArchive(const uint32 m_hash, std::unique_ptr<IO::File> buffer): m_has
     }
 }
 
-bool SArchive::has_file(const std::string_view path) const {
+bool SArchive::has_file(const std::string_view path) {
     const uint32 hash = hash_string(path);
     return m_entries.contains(hash);
 }
 
-bool SArchive::has_file(const uint32 hash) const{
+bool SArchive::has_file(const uint32 hash){
     return m_entries.contains(hash);
 }
 

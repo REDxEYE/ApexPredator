@@ -14,7 +14,7 @@ void process_havok_file(Havok::CodeGen::TypeLibrary &lib, std::unique_ptr<IO::Fi
     lib.register_types(tag_file);
 }
 
-void collect_types(AppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
+void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
     std::vector<ArchiveEntry> all_entries;
     auto& manager = app_state.manager();
     manager.all_entries(all_entries);
@@ -98,7 +98,7 @@ int main(int argc, const char *argv[]) {
         printf("USAGE: %s <path_to_game_root>\n", argv[0]);
         return 0;
     }
-    AppState app_state(argv[1]);
+    ApexAppState app_state(argv[1]);
     Havok::CodeGen::TypeLibrary type_library;
 
     collect_types(app_state, type_library);

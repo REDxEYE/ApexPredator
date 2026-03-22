@@ -50,11 +50,12 @@ int main(int argc, const char *argv[]) {
         app.parse(argc, argv);
     } catch (const CLI::ParseError &e) {
         return app.exit(e);
-    } catch (const std::exception &e) {
-        std::cerr << "ApexPredator crashed!" << std::endl;
-        std::cerr << "Cause: " << e.what() << std::endl;
-        return 1;
     }
+    // } catch (const std::exception &e) {
+    //     std::cerr << "ApexPredator crashed!" << std::endl;
+    //     std::cerr << "Cause: " << e.what() << std::endl;
+    //     return 1;
+    // }
 
     mp_shutdown();
     return 0;

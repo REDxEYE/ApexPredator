@@ -18,7 +18,7 @@
 #endif
 
 
-void collect_types(AppState &app_state, STI::TypeLibrary &lib) {
+void collect_types(ApexAppState &app_state, STI::TypeLibrary &lib) {
     for (uint32 i = 0; i < std::size(builtin_adfs); ++i) {
         const auto &[data, size] = builtin_adfs[i];
         auto adf = ADF::ADFFile::from_buffer(data, size);
@@ -101,7 +101,7 @@ int main(int argc, const char *argv[]) {
 
     set_db_path(argv[2]);
 
-    AppState app_state(argv[1]);
+    ApexAppState app_state(argv[1]);
 
     STI::TypeLibrary type_library;
 

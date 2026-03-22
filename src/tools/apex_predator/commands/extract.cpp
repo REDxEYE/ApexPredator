@@ -12,7 +12,7 @@
 #include "tracy/Tracy.hpp"
 #include "utils/hash_helper.h"
 
-void raw_export(AppState &app_state, const uint32 asset_hash) {
+void raw_export(ApexAppState &app_state, const uint32 asset_hash) {
     ZoneScoped
     const auto asset_path = find_name(asset_hash)
             .or_else([&] { return std::optional{std::format("{:08X}.bin", asset_hash)}; })
@@ -32,7 +32,7 @@ void raw_export(AppState &app_state, const uint32 asset_hash) {
     GLog_Info("File \"{}\" extracted to \"{}\"", asset_hash, save_path.string());
 }
 
-void normal_export(AppState &app_state, const uint32 asset_hash) {
+void normal_export(ApexAppState &app_state, const uint32 asset_hash) {
     ZoneScoped
     const auto asset_path = find_name(asset_hash)
             .or_else([&] { return std::optional{std::format("{:08X}.bin", asset_hash)}; })
@@ -66,7 +66,7 @@ void ExtractCommand::handle() {
     AssetDB db(m_db_path);
     AssetDB::set_instance(&db);
 
-    AppState app_state(m_game_root);
+    ApexAppState app_state(m_game_root);
     app_state.skip_textures = m_skip_textures;
     app_state.export_path(m_export_path);
 

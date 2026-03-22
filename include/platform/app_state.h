@@ -13,6 +13,8 @@
 #include "redscore/platform/gltf_helper.h"
 #include "redscore/platform/logger.h"
 
+#include "redscore/platform/app_state.h"
+
 std::pair<bool, uint32 > inline mount_archive(ArchiveManager &manager, const uint32 hash) {
     if (manager.is_mounted(hash)) {
         return {false, 0};
@@ -50,38 +52,24 @@ std::pair<bool, uint32 > inline mount_archive(ArchiveManager &manager, const uin
     return {false, 0};
 }
 
-class AppState {
+class ApexAppState: public AppState {
 public:
-    AppState(const std::filesystem::path &game_root) : AppState() {
-        m_game_root = game_root;
-        convert_to_wsl(m_game_root);
-
+    explicit ApexAppState(const std::filesystem::path &game_root) : AppState(game_root), m_archive_manager(mount_archive)  {
         TabArchive::mount_folder(m_archive_manager, m_game_root / "initial");
         TabArchive::mount_folder(m_archive_manager, m_game_root / "optional");
         TabArchive::mount_folder(m_archive_manager, m_game_root / "supplemental");
     }
 
-    AppState() : m_archive_manager(mount_archive) {
-    }
-
-    ArchiveManager &manager();
+    ApexArchiveManager &manager();
 
     [[nodiscard]] const std::filesystem::path &export_path() const;
 
     void export_path(const std::filesystem::path &path);
 
-    GltfHelper &helper() {
-        return m_gltf_helper;
-    }
-
     bool skip_textures{false};
 
 private:
-    GltfHelper m_gltf_helper{};
-    ArchiveManager m_archive_manager;
-    std::filesystem::path m_game_root;
-    std::filesystem::path m_export_path;
-
+    ApexArchiveManager m_archive_manager;
 };
 
 #endif //APEXPREDATOR_APP_STATE_H

@@ -7,12 +7,12 @@
 #include "tracy/Tracy.hpp"
 #include "utils/hash_helper.h"
 
-bool TabArchive::has_file(std::string_view path) const {
+bool TabArchive::has_file(std::string_view path) {
     const uint32 hash = hash_string(path);
     return m_entries.contains(hash);
 }
 
-bool TabArchive::has_file(const uint32 hash) const {
+bool TabArchive::has_file(const uint32 hash) {
     return m_entries.contains(hash);
 }
 

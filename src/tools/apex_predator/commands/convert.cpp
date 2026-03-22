@@ -3,7 +3,7 @@
 #include "platform/cli_parser.h"
 // Created by RED on 22.02.2026.
 
-void convert_handler(const AppState *app_state, const CliResult *cli_res) {
+void convert_handler(const ApexAppState *app_state, const CliResult *cli_res) {
     std::string output_dir = {};
     cli_get_string(cli_res, "out_dir", &output_dir);
     String input_path = {};

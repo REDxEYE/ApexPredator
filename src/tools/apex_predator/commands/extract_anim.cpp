@@ -8,14 +8,14 @@
 #include "utils/hash_helper.h"
 #include "apex/asset_db.h"
 
-void export_anim(AppState &app_state, uint32 skeleton_hash, uint32 anim_hash);
+void export_anim(ApexAppState &app_state, uint32 skeleton_hash, uint32 anim_hash);
 
 void ExtractAnimationCommand::handle() {
     convert_to_wsl(m_game_root);
     convert_to_wsl(m_export_path);
     AssetDB db(m_db_path);
     AssetDB::set_instance(&db);
-    AppState app_state(m_game_root);
+    ApexAppState app_state(m_game_root);
     app_state.skip_textures = true;
     app_state.export_path(m_export_path);
 
@@ -37,7 +37,7 @@ void ExtractAnimationCommand::handle() {
     AssetDB::set_instance(nullptr);
 }
 
-void export_anim(AppState &app_state, uint32 skeleton_hash, uint32 anim_hash) {
+void export_anim(ApexAppState &app_state, uint32 skeleton_hash, uint32 anim_hash) {
 
     auto skeleton_file = app_state.manager().get_file(skeleton_hash);
     if (!skeleton_file) {
@@ -84,7 +84,7 @@ void export_anim(AppState &app_state, uint32 skeleton_hash, uint32 anim_hash) {
 }
 
 
-// void extract_anims_handler(AppState *app_state, const CliResult *cli_res) {
+// void extract_anims_handler(ApexAppState *app_state, const CliResult *cli_res) {
 //     const char *skeleton_path_cstr = NULL;
 //
 //     cli_get_cstring(cli_res, "skeleton-path", &skeleton_path_cstr);

@@ -462,7 +462,7 @@ void process_fsb(RIFFContext &ctx, const std::unique_ptr<IO::File> &file) {
     }
 }
 
-void export_fmod_bank(const AppState &app_state, uint32 path_hash, const std::unique_ptr<IO::File> &&buffer) {
+void export_fmod_bank(const ApexAppState &app_state, uint32 path_hash, const std::unique_ptr<IO::File> &&buffer) {
     std::filesystem::path bank_path = find_name(path_hash).value_or(std::format("bank_{:08X}", path_hash));
     bank_path.replace_extension("");
 

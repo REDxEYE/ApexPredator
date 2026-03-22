@@ -21,7 +21,7 @@ using namespace std::string_view_literals;
 auto IDENTITY_MAT = glm::identity<glm::mat4>();
 
 
-void export_spline_compressed_animation(AppState &app_state,
+void export_spline_compressed_animation(ApexAppState &app_state,
                                         const HavokTypes::hkaSplineCompressedAnimation *spline_animation,
                                         const HavokTypes::hkaAnimationBinding *binding,
                                         const HavokTypes::hkaSkeleton *skeleton,
@@ -147,7 +147,7 @@ void export_spline_compressed_animation(AppState &app_state,
     }
 }
 
-void export_animation(AppState &app_state, const HavokTypes::hkaAnimationBinding *binding,
+void export_animation(ApexAppState &app_state, const HavokTypes::hkaAnimationBinding *binding,
                       const HavokTypes::hkaSkeleton *skeleton,
                       const std::string_view animation_name) {
     export_skeleton(app_state, skeleton);
@@ -159,7 +159,7 @@ void export_animation(AppState &app_state, const HavokTypes::hkaAnimationBinding
     }
 }
 
-GltfHelper::Handle<tinygltf::Node> export_animation_container(AppState &app_state,
+GltfHelper::Handle<tinygltf::Node> export_animation_container(ApexAppState &app_state,
                                                               const HavokTypes::hkaAnimationContainer *
                                                               animation_container) {
     GltfHelper::Handle<tinygltf::Skin> skeleton_id = {};
@@ -174,7 +174,7 @@ GltfHelper::Handle<tinygltf::Node> export_animation_container(AppState &app_stat
     return {};
 }
 
-GltfHelper::Handle<tinygltf::Node> export_havok_file(AppState &app_state,
+GltfHelper::Handle<tinygltf::Node> export_havok_file(ApexAppState &app_state,
                                                      std::unique_ptr<IO::File> &&buffer,
                                                      const std::string_view path) {
     Havok::Tag::TagFile tag_file(std::move(buffer));
@@ -209,7 +209,7 @@ glm::mat4 build_matrix(const HavokTypes::hkQsTransform &transform) {
     return out;
 }
 
-GltfHelper::Handle<tinygltf::Node> export_skeleton(AppState &app_state,
+GltfHelper::Handle<tinygltf::Node> export_skeleton(ApexAppState &app_state,
                                                    const HavokTypes::hkaSkeleton *skeleton) {
     GltfHelper &helper = app_state.helper();
 

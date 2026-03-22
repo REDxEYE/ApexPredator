@@ -5,7 +5,7 @@
 #include <ranges>
 
 #include "int_def.h"
-#include "platform/archive.h"
+#include "redscore/platform/archive.h"
 #include "redscore/platform/file/file.h"
 #include "utils/hash_helper.h"
 
@@ -29,9 +29,9 @@ class SArchive : public Archive {
 public:
     SArchive(uint32 m_hash, std::unique_ptr<IO::File> buffer);
 
-    [[nodiscard]] bool has_file(std::string_view path) const override;
+    [[nodiscard]] bool has_file(std::string_view path) override;
 
-    [[nodiscard]] bool has_file(uint32 hash) const override;
+    [[nodiscard]] bool has_file(uint32 hash) override;
 
     std::unique_ptr<IO::File> get_file(std::string_view path) override;
 

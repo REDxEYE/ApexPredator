@@ -7,10 +7,10 @@
 #include "platform/app_state.h"
 
 
-void process_rtpc_node(AppState &app_state, const RuntimeNode &node, uint32 path_hash,
+void process_rtpc_node(ApexAppState &app_state, const RuntimeNode &node, uint32 path_hash,
                        const GltfHelper::Handle<tinygltf::Node> &parent_gltf_node);
 
-GltfHelper::Handle<tinygltf::Node> export_rtpc(AppState& app_state, const std::unique_ptr<IO::File> &&buffer, uint32 path_hash);
+GltfHelper::Handle<tinygltf::Node> export_rtpc(ApexAppState& app_state, const std::unique_ptr<IO::File> &&buffer, uint32 path_hash);
 
 
 #endif //APEXPREDATOR_EPE_EXPORT_H

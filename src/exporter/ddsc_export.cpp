@@ -9,7 +9,7 @@
 
 #include "tracy/Tracy.hpp"
 
-std::unique_ptr<Texture> convert_ddsc(AppState &app_state, const uint32 hash) {
+std::unique_ptr<Texture> convert_ddsc(ApexAppState &app_state, const uint32 hash) {
     ZoneScoped
     auto mb = app_state.manager().get_file(hash);
     if (!mb) {
@@ -19,7 +19,7 @@ std::unique_ptr<Texture> convert_ddsc(AppState &app_state, const uint32 hash) {
     return AVTX::from_buffer(std::move(mb), hash, app_state.manager());
 }
 
-void export_ddsc(AppState &app_state, const uint32 hash, std::unique_ptr<IO::File> &&mb) {
+void export_ddsc(ApexAppState &app_state, const uint32 hash, std::unique_ptr<IO::File> &&mb) {
     ZoneScoped
     const auto tex = AVTX::from_buffer(std::move(mb), hash, app_state.manager());
     if (!tex) {

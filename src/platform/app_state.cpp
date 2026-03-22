@@ -2,14 +2,14 @@
 
 #include "platform/app_state.h"
 
-ArchiveManager &AppState::manager() {
+ApexArchiveManager &ApexAppState::manager() {
     return m_archive_manager;
 }
 
-const std::filesystem::path & AppState::export_path() const {
+const std::filesystem::path & ApexAppState::export_path() const {
     return m_export_path;
 }
 
-void AppState::export_path(const std::filesystem::path &path) {
+void ApexAppState::export_path(const std::filesystem::path &path) {
     m_export_path = path;
 }

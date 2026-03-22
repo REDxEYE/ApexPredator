@@ -364,7 +364,7 @@ void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
     }
 }
 
-GltfHelper::Handle<tinygltf::Node> export_amf_mesh(AppState &app_state, uint32 path_hash,
+GltfHelper::Handle<tinygltf::Node> export_amf_mesh(ApexAppState &app_state, uint32 path_hash,
                                                    const ADFTypes::AmfMeshHeader *header,
                                                    const ADFTypes::AmfMeshBuffers *mesh_buffers) {
     ZoneScoped
@@ -422,7 +422,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_mesh(AppState &app_state, uint32 p
     return mesh_root_node;
 }
 
-GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const ADFTypes::AmfModel *amf_model,
+GltfHelper::Handle<tinygltf::Node> export_amf_model(ApexAppState &app_state, const ADFTypes::AmfModel *amf_model,
                                                     const uint32 path_hash) {
     ZoneScoped
     auto &helper = app_state.helper();
