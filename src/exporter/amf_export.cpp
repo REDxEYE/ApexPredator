@@ -2,21 +2,19 @@
 
 #include "exporter/amf_export.h"
 
-#include "apex/adf/generated/adf_types_fwd.h"
-
-#include "apex/hashes.h"
-#include "apex/adf/adf.h"
-#include "exporter/adf_export.h"
-#include "exporter/ddsc_export.h"
-#include "platform/logger.h"
-#include "platform/texture_ops.h"
-#include "utils/hash_helper.h"
-
 #include <algorithm>
 #include <ranges>
 
+#include "apex/hashes.h"
+#include "apex/adf/adf.h"
+#include "apex/adf/generated/adf_types_fwd.h"
+#include "exporter/adf_export.h"
+#include "exporter/ddsc_export.h"
+#include "redscore/platform/logger.h"
+#include "redscore/platform/texture_ops.h"
+#include "redscore/utils/common.h"
 #include "tracy/Tracy.hpp"
-#include "utils/common.h"
+#include "utils/hash_helper.h"
 
 
 void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
@@ -522,7 +520,6 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(AppState &app_state, const A
                                 new_material->emissiveFactor[0] = 1.0f;
                                 new_material->emissiveFactor[1] = 1.0f;
                                 new_material->emissiveFactor[2] = 1.0f;
-                                new_material->emissiveFactor[3] = 1.0f;
                             }
                         }
 

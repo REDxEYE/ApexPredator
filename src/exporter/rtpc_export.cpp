@@ -10,7 +10,7 @@
 #include "exporter/havok_export.h"
 #include "exporter/adf_export.h"
 #include "exporter/common_export.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "tracy/Tracy.hpp"
 
 using namespace tinygltf;

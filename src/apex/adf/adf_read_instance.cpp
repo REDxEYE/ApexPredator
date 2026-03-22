@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "apex/adf/adf_support_types.h"
-#include "platform/file/memory_buffer.h"
+#include "redscore/platform/file/memory_buffer.h"
 
 extern ADF::TypeInfoMap adf_type_info;
 

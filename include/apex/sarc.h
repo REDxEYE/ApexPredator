@@ -6,7 +6,7 @@
 
 #include "int_def.h"
 #include "platform/archive.h"
-#include "platform/file/file.h"
+#include "redscore/platform/file/file.h"
 #include "utils/hash_helper.h"
 
 struct SArcHeader {

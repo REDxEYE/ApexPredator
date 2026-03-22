@@ -1,102 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
 project(ApexPredator CXX)
-include(FetchContent)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
-FetchContent_Declare(
-        tracy
-        GIT_REPOSITORY https://github.com/wolfpld/tracy.git
-        GIT_TAG v0.13.1
-        GIT_SHALLOW TRUE
-        GIT_PROGRESS TRUE
-)
-
-set(TRACY_ONLY_LOCALHOST ON CACHE BOOL "" FORCE)
-set(TRACY_NO_FRAME_IMAGE ON CACHE BOOL "" FORCE)
-set(TRACY_NO_VSYNC_CAPTURE ON CACHE BOOL "" FORCE)
-set(TRACY_IGNORE_MEMORY_FAULTS ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(tracy)
-
-FetchContent_Declare(zlib-ng GIT_REPOSITORY https://github.com/zlib-ng/zlib-ng GIT_TAG 2.3.2)
-set(WITH_GTEST OFF CACHE BOOL "Disable building tests for zlib-ng")
-set(WITH_FUZZERS OFF CACHE BOOL "Disable building examples for zlib-ng")
-set(WITH_BENCHMARKS OFF CACHE BOOL "Disable building benchmarks for zlib-ng")
-set(WITH_BENCHMARK_APPS OFF CACHE BOOL "Disable building benchmarks-apps for zlib-ng")
-set(ZLIB_COMPAT OFF CACHE BOOL "Disable zlib-ng zlib compatibility layer")
-set(ZLIBNG_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
-set(ZLIBNG_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
-set(ZLIBNG_ENABLE_PACKAGE_CONFIG OFF CACHE BOOL "" FORCE)
-set(ZLIB_ENABLE_OPTIMIZATIONS ON CACHE BOOL "Enable zlib-ng optimizations")
-FetchContent_MakeAvailable(zlib-ng)
-
-FetchContent_Declare(
-        zstd
-        GIT_REPOSITORY "https://github.com/facebook/zstd"
-        GIT_TAG v1.5.7
-        SOURCE_SUBDIR build/cmake
-)
-
-SET(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
-SET(ZSTD_BUILD_CONTRIB OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(zstd)
-
-FetchContent_Declare(
-        ogg
-        GIT_REPOSITORY "https://github.com/xiph/ogg"
-        GIT_TAG v1.3.6
-)
-FetchContent_MakeAvailable(ogg)
-
-set(OGG_FOUND TRUE CACHE BOOL "" FORCE)
-set(OGG_INCLUDE_DIR "${ogg_SOURCE_DIR}/include" CACHE PATH "" FORCE)
-set(OGG_LIBRARY ogg CACHE STRING "" FORCE) # note: target name is OK here
-
-FetchContent_Declare(
-        vorbis
-        GIT_REPOSITORY "https://github.com/xiph/vorbis"
-        GIT_TAG v1.3.7
-)
-FetchContent_MakeAvailable(vorbis)
-
-set(TINYGLTF_HEADER_ONLY ON CACHE INTERNAL "" FORCE)
-set(TINYGLTF_INSTALL OFF CACHE INTERNAL "" FORCE)
-FetchContent_Declare(
-        tinygltf
-        GIT_REPOSITORY "https://github.com/syoyo/tinygltf"
-        GIT_TAG v2.9.7
-)
-FetchContent_MakeAvailable(tinygltf)
-
-FetchContent_Declare(
-        glm
-        GIT_REPOSITORY "https://github.com/g-truc/glm"
-        GIT_TAG 1.0.3
-)
-FetchContent_MakeAvailable(glm)
-
-FetchContent_Declare(
-        cli11_proj
-        QUIET
-        GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
-        GIT_TAG v2.6.2
-)
-FetchContent_MakeAvailable(cli11_proj)
-
-FetchContent_Declare(
-        SQLiteCpp
-        QUIET
-        GIT_REPOSITORY https://github.com/SRombauts/SQLiteCpp.git
-        GIT_TAG 3.3.3
-)
-FetchContent_MakeAvailable(SQLiteCpp)
-
-FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
-FetchContent_MakeAvailable(json)
-
-SET(ZLIB_ALIASES OFF CACHE BOOL "" FORCE)
-SET(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
-add_subdirectory(external/tinycpng)
+include(cmake/dependencies.cmake)
 
 add_library(AdfLib STATIC
         src/apex/adf/generated/adf_types.cpp
@@ -132,19 +39,9 @@ SET(CommonFiles
         src/platform/app_state.cpp
         src/platform/archive.cpp
         src/platform/archive_manager.cpp
-        src/platform/logger.cpp
-        src/platform/texture.cpp
-        src/platform/texture_ops.cpp
-        src/platform/file/file.cpp
-        src/platform/file/native_file.cpp
-        src/platform/file/memory_file.cpp
-        src/utils/common.cpp
-        src/platform/gltf_helper.cpp
         src/utils/hash_helper.cpp
         src/utils/json.cpp
         src/utils/lookup3.cpp
-        src/utils/memory_debugger.cpp
-        src/utils/simple_fileio.cpp
         src/apex/asset_db.cpp
         src/utils/stb.cpp
         src/utils/zlib_wrapper.cpp
@@ -206,13 +103,7 @@ else ()
 endif ()
 
 SET(CommonLibs
-        libzstd_static
-        zlib-ng-static
-        glm
-        tinycpng-static
-        SQLite::SQLite3
-        tinygltf
-        nlohmann_json::nlohmann_json
+        RedsCore
         SQLiteCpp
 )
 
@@ -232,24 +123,16 @@ target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib Ogg::ogg vorbis vorbis
 target_link_libraries(HashCollector PUBLIC HavokLib AdfLib ${CommonLibs})
 target_link_libraries(AdfTypeGenerator PUBLIC ${CommonLibs})
 target_link_libraries(HavokTypeGenerator PUBLIC ${CommonLibs})
-target_link_libraries(AdfLib PUBLIC SQLiteCpp)
-target_link_libraries(HavokLib PUBLIC glm)
+target_link_libraries(AdfLib PUBLIC ${CommonLibs})
+target_link_libraries(HavokLib PUBLIC ${CommonLibs})
 
-target_link_libraries(AdfLib PUBLIC Tracy::TracyClient)
-target_link_libraries(HavokLib PUBLIC Tracy::TracyClient)
-target_link_libraries(ApexPredator PUBLIC Tracy::TracyClient)
-target_link_libraries(HashCollector PUBLIC Tracy::TracyClient)
-target_link_libraries(AdfTypeGenerator PUBLIC Tracy::TracyClient)
-target_link_libraries(HavokTypeGenerator PUBLIC Tracy::TracyClient)
-target_link_libraries(StringHasher PUBLIC Tracy::TracyClient)
+link_libraries(Tracy::TracyClient)
 
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL TRACY_CALLSTACK=32)
 
 target_link_libraries(ApexPredator PRIVATE CLI11::CLI11)
 target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY)
 # target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
-
-target_compile_options(ApexPredator PRIVATE $<$<CONFIG:Debug>:-glldb -fno-standalone-debug -gsplit-dwarf>)
 
 if (WIN32)
 

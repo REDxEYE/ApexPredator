@@ -3,8 +3,8 @@
 #include "apex/adf/adf.h"
 
 #include "apex/hashes.h"
-#include "platform/logger.h"
-#include "platform/file/memory_buffer.h"
+#include "redscore/platform/logger.h"
+#include "redscore/platform/file/memory_buffer.h"
 
 
 ADF::Type ADF::Type::from_buffer(IO::File &buffer) {
@@ -15,7 +15,7 @@ ADF::Type ADF::Type::from_buffer(IO::File &buffer) {
             return {def, {}};
         }
         case MetaType::Structure: {
-            const uint32 member_count = buffer.read_pod<uint32>();
+            const auto member_count = buffer.read_pod<uint32>();
             auto data = std::vector<StructMemberInfo>(member_count);
 
             for (int i = 0; i < member_count; ++i) {
@@ -46,7 +46,7 @@ ADF::Type ADF::Type::from_buffer(IO::File &buffer) {
 
         case MetaType::Array:
         case MetaType::InlineArray: {
-            uint32 array_count = buffer.read_pod<uint32>();
+            auto array_count = buffer.read_pod<uint32>();
             return {def, array_count};
         }
 
@@ -100,7 +100,7 @@ ADF::ADFFile ADF::ADFFile::from_buffer(std::unique_ptr<IO::File> buffer) {
     for (int i = 0; i < header.instance_count; ++i) {
         instances.push_back(buffer->read_pod<Instance>());
     }
-    return ADFFile(header, comment, strings, instances, types, std::move(buffer));
+    return {header, comment, strings, instances, types, std::move(buffer)};
 }
 
 ADF::ADFFile ADF::ADFFile::from_buffer(const uint8 *data, const uint32 size) {

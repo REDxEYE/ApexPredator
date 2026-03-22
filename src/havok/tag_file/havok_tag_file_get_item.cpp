@@ -4,7 +4,7 @@
 
 #include "havok/havok_support_types.h"
 #include "havok/tag_file/havok_tag_file.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 
 
 namespace HavokTypes {

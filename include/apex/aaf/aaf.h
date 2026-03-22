@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "int_def.h"
-#include "platform/file/file.h"
+#include "redscore/platform/file/file.h"
 
 #define AAF_MAGIC "AAF\0"
 

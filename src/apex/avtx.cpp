@@ -8,9 +8,9 @@
 #include "tinycpng/public/error_utils.h"
 #include "tinycpng/public/file_utils.h"
 
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
+#include "redscore/utils/common.h"
 #include "tracy/Tracy.hpp"
-#include "utils/common.h"
 #include "utils/hash_helper.h"
 
 #include <filesystem>

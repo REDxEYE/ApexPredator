@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "platform/file/file.h"
+#include "redscore/platform/file/file.h"
 
 
 namespace Havok {

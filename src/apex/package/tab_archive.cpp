@@ -1,9 +1,9 @@
 // Created by RED on 18.09.2025.
 
 #include "apex/package/tab_archive.h"
-#include "platform/file/file_buffer.h"
+#include "redscore/platform/file/file_buffer.h"
+#include "redscore/platform/logger.h"
 
-#include "platform/logger.h"
 #include "tracy/Tracy.hpp"
 #include "utils/hash_helper.h"
 

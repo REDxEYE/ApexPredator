@@ -8,8 +8,6 @@
 #include "glm/glm.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/quaternion.hpp"
-#include "platform/logger.h"
-
 
 #include "havok/animations/spline.h"
 

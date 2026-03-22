@@ -3,10 +3,10 @@
 
 #include "exporter/havok_export.h"
 #include "platform/app_state.h"
-#include "platform/logger.h"
-#include "utils/common.h"
+#include "redscore/platform/logger.h"
+#include "redscore/utils/common.h"
 #include "utils/hash_helper.h"
-#include "../../../../include/apex/asset_db.h"
+#include "apex/asset_db.h"
 
 void export_anim(AppState &app_state, uint32 skeleton_hash, uint32 anim_hash);
 

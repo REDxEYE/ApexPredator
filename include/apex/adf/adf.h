@@ -7,8 +7,8 @@
 #include <variant>
 
 #include "apex/adf/adf_base_type.h"
-#include "platform/buffer/buffer.h"
-#include "platform/file/file.h"
+#include "redscore/platform/buffer/buffer.h"
+#include "redscore/platform/file/file.h"
 
 #define ADF_MAGIC " FDA"
 

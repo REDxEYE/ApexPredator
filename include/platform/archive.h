@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "int_def.h"
-#include "platform/file/memory_buffer.h"
+#include "redscore/platform/file/memory_buffer.h"
 
 struct ArchiveEntry {
     uint32 path_hash;

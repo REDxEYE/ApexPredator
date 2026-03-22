@@ -6,8 +6,8 @@
 #include <cstring>
 #include <unordered_map>
 
-#include "platform/logger.h"
-#include "platform/file/memory_buffer.h"
+#include "redscore/platform/logger.h"
+#include "redscore/platform/file/memory_buffer.h"
 #include "utils/endian.h"
 #include "utils/hash_helper.h"
 

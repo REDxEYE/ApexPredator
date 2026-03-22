@@ -9,7 +9,7 @@
 #include <variant>
 
 #include "int_def.h"
-#include "platform/file/file.h"
+#include "redscore/platform/file/file.h"
 
 namespace Havok::Tag {
     enum class TypeFlags {

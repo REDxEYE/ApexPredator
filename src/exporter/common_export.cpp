@@ -5,15 +5,11 @@
 #include "apex/avtx.h"
 #include "apex/hashes.h"
 #include "apex/rtpc.h"
-#include "apex/aaf/aaf.h"
 #include "apex/adf/adf.h"
 #include "exporter/adf_export.h"
-// #include "exporter/ddsc_export.h"
-// #include "exporter/rtpc_export.h"
-// #include "exporter/fmod_export.h"
-// #include "exporter/havok_export.h"
-#include "platform/logger.h"
-#include "utils/simple_fileio.h"
+
+#include "redscore/platform/logger.h"
+#include "redscore/utils/simple_fileio.h"
 
 #include "tiny_gltf.h"
 #include "exporter/ddsc_export.h"

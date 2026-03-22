@@ -4,7 +4,7 @@
 #define APEXPREDATOR_DDSC_EXPORT_H
 #include "apex/adf/sti.h"
 #include "platform/app_state.h"
-#include "platform/texture.h"
+#include "redscore/platform/texture.h"
 
 std::unique_ptr<Texture> convert_ddsc(AppState& app_state, uint32 hash);
 

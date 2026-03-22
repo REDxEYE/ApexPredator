@@ -2,7 +2,7 @@
 
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
-#include "platform/file/file.h"
+#include "redscore/platform/file/file.h"
 
 #include "apex/package/tab_archive.h"
 #include "havok/havok_codegen.h"

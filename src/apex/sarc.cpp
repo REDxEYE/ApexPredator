@@ -8,7 +8,7 @@
 
 #include "tracy/Tracy.hpp"
 #include "apex/hashes.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "utils/hash_helper.h"
 
 

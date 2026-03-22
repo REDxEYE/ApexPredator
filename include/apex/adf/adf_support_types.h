@@ -7,7 +7,7 @@
 
 #include "apex/hashes.h"
 #include "adf_base_type.h"
-#include "platform/file/file.h"
+#include "redscore/platform/file/file.h"
 
 using String = std::string;
 

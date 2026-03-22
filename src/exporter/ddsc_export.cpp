@@ -4,11 +4,10 @@
 
 #include "apex/avtx.h"
 #include "apex/hashes.h"
-#include "platform/logger.h"
-#include "platform/texture.h"
+#include "redscore/platform/logger.h"
+#include "redscore/platform/texture.h"
 
 #include "tracy/Tracy.hpp"
-#include "utils/common.h"
 
 std::unique_ptr<Texture> convert_ddsc(AppState &app_state, const uint32 hash) {
     ZoneScoped

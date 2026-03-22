@@ -6,10 +6,10 @@
 #include "apex/hashes.h"
 #include "exporter/adf_export.h"
 #include "exporter/amf_export.h"
-#include "platform/logger.h"
-#include "platform/texture.h"
+#include "redscore/platform/logger.h"
+#include "redscore/platform/texture.h"
+#include "redscore/utils/simple_fileio.h"
 #include "utils/hash_helper.h"
-#include "utils/simple_fileio.h"
 
 #include "zstd.h"
 #include "tiny_gltf.h"

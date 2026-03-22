@@ -3,11 +3,11 @@
 #include "exporter/fmod_export.h"
 #include "apex/hashes.h"
 
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "vorbis_headers.h"
 
 #include "ogg/ogg.h"
-#include "utils/simple_fileio.h"
+#include "redscore/utils/simple_fileio.h"
 #include "vorbis/codec.h"
 
 #include <vector>

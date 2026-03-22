@@ -4,7 +4,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/glm.hpp"
 #include "apex/hashes.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 
 using json = nlohmann::json;
 

@@ -3,7 +3,6 @@
 
 #include "havok/tag_file/havok_tag_types.h"
 
-#include "platform/logger.h"
 #include "utils/hash_helper.h"
 
 int64 read_compressed_int(const std::unique_ptr<IO::File> &buffer);

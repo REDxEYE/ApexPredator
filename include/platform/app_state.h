@@ -3,15 +3,15 @@
 #ifndef APEXPREDATOR_APP_STATE_H
 #define APEXPREDATOR_APP_STATE_H
 #include <format>
-#include "logger.h"
 #include "tiny_gltf.h"
 #include "apex/hashes.h"
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
 #include "apex/package/tab_archive.h"
 #include "platform/archive_manager.h"
-#include "utils/common.h"
-#include "gltf_helper.h"
+#include "redscore/utils/common.h"
+#include "redscore/platform/gltf_helper.h"
+#include "redscore/platform/logger.h"
 
 std::pair<bool, uint32 > inline mount_archive(ArchiveManager &manager, const uint32 hash) {
     if (manager.is_mounted(hash)) {

@@ -2,7 +2,7 @@
 #include "apex/hashes.h"
 #include "../commands.h"
 #include "platform/app_state.h"
-#include "../../../../include/apex/asset_db.h"
+#include "apex/asset_db.h"
 
 void SearchCommand::handle() {
     AssetDB db(m_db_path);

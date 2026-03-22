@@ -3,7 +3,6 @@
 #include "havok/havok_types.h"
 
 #include "havok/tag_file/havok_tag_file.h"
-#include "platform/logger.h"
 #include "utils/hash_helper.h"
 
 #include <ranges>
@@ -358,9 +357,6 @@ namespace Havok::CodeGen {
                 new_type->type = MetaType::ENUM;
             }
         }
-
-        // Replace noisy stdout with your logger if you want.
-        // GLog_Info("Registered {}: {}", new_type->type, new_type->type_name());
 
         return new_type;
     }

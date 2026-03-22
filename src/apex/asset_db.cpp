@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <vector>
 
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "SQLiteCpp/Database.h"
 #include "SQLiteCpp/Statement.h"
 
@@ -204,7 +204,8 @@ void AssetDB::files_search(const std::string_view pattern, std::vector<std::stri
 
     out.clear();
 
-    const std::string escaped = escape_like(pattern);
+    // const std::string escaped = escape_like(pattern);
+    const std::string escaped = std::string(pattern);
 
     m_files_search.reset();
     m_files_search.clearBindings();

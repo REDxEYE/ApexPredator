@@ -5,7 +5,7 @@
 
 #include "havok/havok_support_types.h"
 #include "havok/tag_file/havok_tag_file.h"
-#include "platform/file/file.h"
+#include "redscore/platform/file/file.h"
 
 using namespace Havok;
 using namespace HavokTypes;

@@ -3,7 +3,7 @@
 #include "platform/archive_manager.h"
 
 #include "apex/hashes.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "tracy/Tracy.hpp"
 #include "utils/hash_helper.h"
 

@@ -4,7 +4,7 @@
 
 #include <ranges>
 
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "utils/hash_helper.h"
 
 using namespace Havok::CodeGen;

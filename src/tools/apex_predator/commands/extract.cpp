@@ -1,15 +1,16 @@
 // Created by RED on 16.02.2026.
 
 #include "../commands.h"
+
 #include "tiny_gltf.h"
+#include "apex/asset_db.h"
 #include "exporter/common_export.h"
 #include "platform/app_state.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
+#include "redscore/utils/common.h"
+#include "redscore/utils/simple_fileio.h"
 #include "tracy/Tracy.hpp"
-#include "utils/common.h"
 #include "utils/hash_helper.h"
-#include "utils/simple_fileio.h"
-#include "../../../../include/apex/asset_db.h"
 
 void raw_export(AppState &app_state, const uint32 asset_hash) {
     ZoneScoped
@@ -45,11 +46,15 @@ void normal_export(AppState &app_state, const uint32 asset_hash) {
     if (node.is_valid()) {
         gltf_helper.add_to_scene(node);
     }
-
     if (!gltf_helper.model().scenes.empty() && !gltf_helper.model().nodes.empty()) {
+        std::filesystem::create_directories(save_path.parent_path());
         tinygltf::TinyGLTF gltf_exporter;
-        gltf_exporter.WriteGltfSceneToFile(&gltf_helper.model(), save_path.string(), false, true, true, false);
-        GLog_Info("Written GLTF file: {}", save_path.string());
+        if (gltf_exporter.WriteGltfSceneToFile(&gltf_helper.model(), save_path.string(), false, true, true, false)) {
+            GLog_Info("Written GLTF file: {}", save_path.string());
+        }else {
+            GLog_Error("Failed to write GLTF file: {}", save_path.string());
+        }
+
     }
 }
 
