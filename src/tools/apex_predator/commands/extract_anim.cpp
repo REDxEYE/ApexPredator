@@ -8,7 +8,11 @@
 #include "utils/hash_helper.h"
 #include "apex/asset_db.h"
 
-void export_anim(ApexAppState &app_state, uint32 skeleton_hash, uint32 anim_hash);
+#include <json.hpp>
+
+using namespace nlohmann;
+
+void export_anim(ApexAppState &app_state, uint32 skeleton_hash, uint32 anim_hash, bool apply_root_motion);
 
 void ExtractAnimationCommand::handle() {
     convert_to_wsl(m_game_root);
@@ -18,9 +22,20 @@ void ExtractAnimationCommand::handle() {
     ApexAppState app_state(m_game_root);
     app_state.skip_textures = true;
     app_state.export_path(m_export_path);
+    uint32 skeleton_hash{0};
+
+    if (is_hex(m_skeleton_path.c_str())) {
+        skeleton_hash = parse_hex_u32(m_skeleton_path.c_str());
+    }
+    else if (is_digits(m_skeleton_path.c_str())) {
+        skeleton_hash = parse_digits_u32(m_skeleton_path.c_str());
+    }
+    else {
+        skeleton_hash = hash_string(std::filesystem::path(m_skeleton_path));
+    }
 
     for (const auto &asset: m_animations) {
-        uint32 file_hash;
+        uint32 file_hash{0};
         if (is_hex(asset.c_str())) {
             file_hash = parse_hex_u32(asset.c_str());
         }
@@ -31,14 +46,32 @@ void ExtractAnimationCommand::handle() {
             file_hash = hash_string(std::filesystem::path(asset));
         }
         app_state.helper().reset();
-        export_anim(app_state, hash_string(m_skeleton_path), file_hash);
+        export_anim(app_state, skeleton_hash, file_hash, m_apply_root_motion);
     }
 
     AssetDB::set_instance(nullptr);
 }
 
-void export_anim(ApexAppState &app_state, uint32 skeleton_hash, uint32 anim_hash) {
+json extract_root_motion_info(HavokTypes::hkaAnimatedReferenceFrame *extracted_motion_base) {
+    auto *extracted_motion = Havok::as<HavokTypes::hkaDefaultAnimatedReferenceFrame>(extracted_motion_base);
 
+    auto root = json::object();
+    root["frame_type"] = extracted_motion->frameType.value;
+    root["duration"] = extracted_motion->duration;
+    const auto &forward = extracted_motion->forward.value;
+    const auto &up = extracted_motion->up.value;
+    root["forward"] = {forward.x, forward.y, forward.z};
+    root["up"] = {up.x, up.y, up.z};
+    const auto &ref_frames = extracted_motion->referenceFrameSamples;
+    auto &reference_frame_array = root["reference_frames"] = json::array();
+    for (const auto &ref_frame: ref_frames) {
+        const auto &pos = ref_frame.value;
+        reference_frame_array.push_back({pos.x, pos.y, pos.z});
+    }
+    return root;
+}
+
+void export_anim(ApexAppState &app_state, uint32 skeleton_hash, uint32 anim_hash, bool apply_root_motion) {
     auto skeleton_file = app_state.manager().get_file(skeleton_hash);
     if (!skeleton_file) {
         GLog_Error("Skeleton file not found: %08X", skeleton_hash);
@@ -54,30 +87,39 @@ void export_anim(ApexAppState &app_state, uint32 skeleton_hash, uint32 anim_hash
 
     auto skeleton_item = Havok::Tag::get_item(skeleton_tag_file, 1);
     const auto skeleton_container = Havok::convert<HavokTypes::hkRootLevelContainer>(std::move(skeleton_item));
-    const auto& variant = skeleton_container->namedVariants.front().variant;
+    const auto &variant = skeleton_container->namedVariants.front().variant;
     const auto animation_container = Havok::as<HavokTypes::hkaAnimationContainer>(variant);
     const auto &skeleton = animation_container->skeletons.front();
 
     auto anim_tag_file = Havok::Tag::TagFile(std::move(anim_file));
     auto anim_item = Havok::Tag::get_item(anim_tag_file, 1);
     const auto anim_container = Havok::convert<HavokTypes::hkRootLevelContainer>(std::move(anim_item));
-    const auto& anim_variant = anim_container->namedVariants.front().variant;
+    const auto &anim_variant = anim_container->namedVariants.front().variant;
     const auto anim_animation_container = Havok::as<HavokTypes::hkaAnimationContainer>(anim_variant);
     const auto &binding = anim_animation_container->bindings.front();
 
     auto anim_name = find_name(anim_hash).value_or(std::format("anim_{:08X}", anim_hash));
 
-    export_animation(app_state, binding.get(), skeleton.get(), path_utils::stem(anim_name));
+    export_animation(app_state, binding.get(), skeleton.get(), path_utils::stem(anim_name), apply_root_motion);
+
+    const auto extracted_motion = extract_root_motion_info(binding->animation->extractedMotion.get());
 
     std::filesystem::path save_path = app_state.export_path() / anim_name;
-    save_path.replace_extension("gltf");
+    save_path.replace_extension("json");
     std::filesystem::create_directories(save_path.parent_path());
-    const auto& helper = app_state.helper();
+    std::ofstream out(save_path);
+    auto json_dump = extracted_motion.dump(1);
+    out.write(json_dump.c_str(), json_dump.size());
+    out.close();
+
+    save_path.replace_extension("gltf");
+    const auto &helper = app_state.helper();
     if (!helper.model().scenes.empty() && !helper.model().nodes.empty()) {
         tinygltf::TinyGLTF gltf_exporter;
         if (gltf_exporter.WriteGltfSceneToFile(&helper.model(), save_path.string(), false, true, true, false)) {
             GLog_Info("Written GLTF file: {}", save_path.string());
-        }else {
+        }
+        else {
             GLog_Error("Failed to write GLTF file: {}", save_path.string());
         }
     }

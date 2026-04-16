@@ -1,28 +1,28 @@
 // Created by RED on 18.09.2025.
 
 #include "apex/package/tab_archive.h"
-#include "redscore/platform/file/file_buffer.h"
+#include "redscore/platform/file/native_file.h"
 #include "redscore/platform/logger.h"
 
 #include "tracy/Tracy.hpp"
 #include "utils/hash_helper.h"
 
 bool TabArchive::has_file(std::string_view path) {
-    const uint32 hash = hash_string(path);
+    const uint64 hash = hash_string(path);
     return m_entries.contains(hash);
 }
 
-bool TabArchive::has_file(const uint32 hash) {
+bool TabArchive::has_file(const uint64 hash) {
     return m_entries.contains(hash);
 }
 
 std::unique_ptr<IO::File> TabArchive::get_file(const std::string_view path) {
     ZoneScoped
-    const uint32 hash = hash_string(path);
+    const uint64 hash = hash_string(path);
     return get_file(hash);
 }
 
-std::unique_ptr<IO::File> TabArchive::get_file(const uint32 hash) {
+std::unique_ptr<IO::File> TabArchive::get_file(const uint64 hash) {
     ZoneScoped
     const auto it = m_entries.find(hash);
     if (it == m_entries.end()) {
@@ -48,7 +48,7 @@ std::string TabArchive::get_name() const {
     return relative_path.string();
 }
 
-uint32 TabArchive::hash() {
+uint64 TabArchive::hash() {
     return hash_string(get_name());
 }
 
@@ -83,7 +83,7 @@ void TabArchive::initialize() {
     const uint32 entry_count = tab_buffer.remaining() / sizeof(TabEntry);
     m_entries.reserve(entry_count);
     for (uint32 i = 0; i < entry_count; ++i) {
-        const TabEntry entry = tab_buffer.read_pod<TabEntry>();
+        const auto entry = tab_buffer.read_pod<TabEntry>();
         m_entries[entry.hash] = entry;
     }
 

@@ -418,7 +418,7 @@ void TransformSplineBlock::Assign(IO::File &buffer, size_t numTracks,
 void hkaSplineDecompressor::Assign(
     const HavokTypes::hkaSplineCompressedAnimation *input) {
     const auto blockOffsets = input->blockOffsets;
-    const auto data_buffer = Buffer::wrap(input->data);
+    const auto data_buffer = IO::Buffer::wrap(input->data);
     blocks.resize(blockOffsets.size());
     int cBlock = 0;
 

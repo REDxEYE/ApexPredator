@@ -169,7 +169,7 @@ namespace ADF {
             m_comment.clear();
         }
 
-        Buffer get_instance_data(uint32 instance_id) const;
+        IO::Buffer get_instance_data(uint32 instance_id) const;
 
         static ADFFile from_buffer(std::unique_ptr<IO::File> buffer);
 

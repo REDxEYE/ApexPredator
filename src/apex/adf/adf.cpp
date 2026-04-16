@@ -4,7 +4,7 @@
 
 #include "apex/hashes.h"
 #include "redscore/platform/logger.h"
-#include "redscore/platform/file/memory_buffer.h"
+#include "redscore/platform/file/memory_file.h"
 
 
 ADF::Type ADF::Type::from_buffer(IO::File &buffer) {
@@ -57,12 +57,12 @@ ADF::Type ADF::Type::from_buffer(IO::File &buffer) {
     throw std::runtime_error("Unknown MetaType in Type::from_buffer");
 }
 
-Buffer ADF::ADFFile::get_instance_data(const uint32 instance_id) const {
+IO::Buffer ADF::ADFFile::get_instance_data(const uint32 instance_id) const {
     auto &instance = m_instances[instance_id];
     m_buffer->set_position(instance.offset);
     std::vector<uint8> data(instance.size);
     m_buffer->read_exact(data);
-    return Buffer(std::move(data));
+    return IO::Buffer(std::move(data));
 }
 
 

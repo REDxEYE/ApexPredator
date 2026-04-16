@@ -62,7 +62,8 @@ add_executable(ApexPredator
         src/tools/apex_predator/commands/extract.cpp
         src/tools/apex_predator/commands/extract_anim.cpp
         src/tools/apex_predator/commands/search.cpp
-#        src/tools/apex_predator/commands/convert.cpp
+        src/tools/apex_predator/commands/export_everything.cpp
+        #        src/tools/apex_predator/commands/convert.cpp
 
 )
 
@@ -106,16 +107,12 @@ SET(CommonLibs
         SQLiteCpp
 )
 
-SET(CommonIncludes
-        external/tinycpng/include
-)
-
 target_include_directories(AdfLib PUBLIC include)
 target_include_directories(HavokLib PUBLIC include)
-target_include_directories(ApexPredator PUBLIC include ${CommonIncludes})
-target_include_directories(AdfTypeGenerator PUBLIC include ${CommonIncludes})
-target_include_directories(HavokTypeGenerator PUBLIC include ${CommonIncludes})
-target_include_directories(HashCollector PUBLIC include ${CommonIncludes})
+target_include_directories(ApexPredator PUBLIC include)
+target_include_directories(AdfTypeGenerator PUBLIC include)
+target_include_directories(HavokTypeGenerator PUBLIC include)
+target_include_directories(HashCollector PUBLIC include)
 target_include_directories(StringHasher PUBLIC include)
 
 target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib Ogg::ogg vorbis vorbisenc ${CommonLibs})

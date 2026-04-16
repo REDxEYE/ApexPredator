@@ -4,7 +4,7 @@
 
 #include <string>
 
-#include "redscore/platform/file/memory_buffer.h"
+#include "redscore/platform/file/memory_file.h"
 #include "tracy/Tracy.hpp"
 #include "utils/zlib_wrapper.h"
 

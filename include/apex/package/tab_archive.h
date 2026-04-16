@@ -10,7 +10,7 @@
 #include "apex/package/tab.h"
 #include "platform/archive_manager.h"
 #include "redscore/platform/archive.h"
-#include "redscore/platform/file/file_buffer.h"
+#include "redscore/platform/file/native_file.h"
 
 std::filesystem::path inline get_arc_path(const std::filesystem::path &tab_path) {
     std::filesystem::path arc_path = tab_path;
@@ -27,17 +27,17 @@ public:
 
     bool has_file(std::string_view path) override;
 
-    bool has_file(uint32 hash) override;
+    bool has_file(uint64 hash) override;
 
     std::unique_ptr<IO::File> get_file(std::string_view path) override;
 
-    std::unique_ptr<IO::File> get_file(uint32 hash) override;
+    std::unique_ptr<IO::File> get_file(uint64 hash) override;
 
     void all_entries(std::vector<ArchiveEntry> &entries) const override;
 
     [[nodiscard]] std::string get_name() const override;
 
-    uint32 hash() override;
+    uint64 hash() override;
 
     static void mount_folder(ArchiveManager& manager, const std::filesystem::path& path);
 
@@ -47,7 +47,7 @@ private:
 
     std::filesystem::path m_tab_path;
     IO::NativeFile arc_buffer;
-    std::unordered_map<uint32, TabEntry> m_entries{};
+    std::unordered_map<uint64, TabEntry> m_entries{};
 };
 
 

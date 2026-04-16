@@ -5,7 +5,7 @@
 #include "havok/havok_base_type.h"
 #include "havok/tag_file/havok_tag_types.h"
 #include "redscore/platform/file/file.h"
-#include "redscore/platform/file/memory_buffer.h"
+#include "redscore/platform/file/memory_file.h"
 #include "int_def.h"
 
 namespace Havok {

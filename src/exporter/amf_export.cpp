@@ -73,12 +73,12 @@ void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
             }
             primitive.mode = TINYGLTF_MODE_TRIANGLES;
             auto *index_data = used_index_buffer.Data.data() + index_buffer_offset + sub_mesh.IndexStreamOffset;
-            helper.set_primitive_indices_from_u8(gl_mesh.index(), sub_mesh_id, index_data,
-                                                 sub_mesh.IndexCount * index_buffer_stride,
-                                                 index_buffer_stride == 2
-                                                     ? TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT
-                                                     : TINYGLTF_COMPONENT_TYPE_INT,
-                                                 sub_mesh.IndexCount, 0, 0, "Indices"
+            helper.set_primitive_indices(primitive, index_data,
+                                         sub_mesh.IndexCount * index_buffer_stride,
+                                         index_buffer_stride == 2
+                                             ? TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT
+                                             : TINYGLTF_COMPONENT_TYPE_INT,
+                                         sub_mesh.IndexCount, 0, 0, "Indices"
             );
 
             uint32 uv_count = 0;
@@ -91,8 +91,8 @@ void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
                 int32 comp_type;
                 bool normalized;
                 String attr_name = "_INVALID_ATTRIBUTE";
-                Buffer attribute_data = Buffer();
-                auto vertex_buffer = Buffer(all_vertex_buffer[stream_index].Data);
+                IO::Buffer attribute_data = IO::Buffer();
+                auto vertex_buffer = IO::Buffer(all_vertex_buffer[stream_index].Data);
                 auto raw_vertex_buffer_data = vertex_buffer.view(
                     vertex_buffer_offsets[amf_attribute.StreamIndex] + stream_offset, stream_stride * vertex_count);
                 float32 bbox_min[3] = {0, 0, 0};
@@ -126,8 +126,7 @@ void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
                                         bbox_max[0] = x;
                                         bbox_max[1] = y;
                                         bbox_max[2] = z;
-                                    }
-                                    else {
+                                    } else {
                                         if (x < bbox_min[0]) bbox_min[0] = x;
                                         if (y < bbox_min[1]) bbox_min[1] = y;
                                         if (z < bbox_min[2]) bbox_min[2] = z;
@@ -341,10 +340,10 @@ void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
                     }
                 }
 
-                auto attribute_accessor = helper.set_primitive_attribute_from_u8(
-                    gl_mesh.index(), sub_mesh_id, attr_name,
+                auto attribute_accessor = helper.set_primitive_attribute(
+                    primitive, attr_name,
                     attribute_data.data(), attribute_data.size(), comp_type, data_type, vertex_count, normalized,
-                    stride, 0, std::format("{}_{}", mesh_name,attr_name));
+                    stride, 0, std::format("{}_{}", mesh_name, attr_name));
 
                 auto &attribute = helper.model().accessors[attribute_accessor.index()];
                 if (use_bbox) {
@@ -551,8 +550,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(ApexAppState &app_state, con
                         // }
                     }
                 }
-            }
-            else {
+            } else {
                 GLog_Warning("Unsupported material render block: 0x{:08X}", amf_material.RenderBlockId.storage);
                 continue;
             }

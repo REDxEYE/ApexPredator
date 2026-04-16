@@ -12,7 +12,7 @@
 #include "utils/hash_helper.h"
 
 
-SArchive::SArchive(const uint32 m_hash, std::unique_ptr<IO::File> buffer): m_hash(m_hash),
+SArchive::SArchive(const uint64 m_hash, std::unique_ptr<IO::File> buffer): m_hash(m_hash),
                                                                 m_buffer(std::move(buffer)) {
     ZoneScoped
     m_header = m_buffer->read_pod<SArcHeader>();
@@ -48,11 +48,11 @@ SArchive::SArchive(const uint32 m_hash, std::unique_ptr<IO::File> buffer): m_has
 }
 
 bool SArchive::has_file(const std::string_view path) {
-    const uint32 hash = hash_string(path);
+    const uint64 hash = hash_string(path);
     return m_entries.contains(hash);
 }
 
-bool SArchive::has_file(const uint32 hash){
+bool SArchive::has_file(const uint64 hash){
     return m_entries.contains(hash);
 }
 
@@ -60,7 +60,7 @@ std::unique_ptr<IO::File> SArchive::get_file(const std::string_view path) {
     return get_file(hash_string(path));
 }
 
-std::unique_ptr<IO::File> SArchive::get_file(const uint32 hash) {
+std::unique_ptr<IO::File> SArchive::get_file(const uint64 hash) {
     ZoneScoped
     const auto it = m_entries.find(hash);
     if (it == m_entries.end()) {
@@ -93,11 +93,11 @@ void SArchive::all_entries(std::vector<ArchiveEntry> &entries) const {
 
 std::string SArchive::get_name() const {
     if (const auto name = find_name(m_hash)) {
-        return std::string(*name);
+        return name.value();
     }
     return std::format("SARC 0x%08X", m_hash);
 }
 
-uint32 SArchive::hash() {
+uint64 SArchive::hash() {
     return m_hash;
 }

@@ -25,7 +25,8 @@ void export_spline_compressed_animation(ApexAppState &app_state,
                                         const HavokTypes::hkaSplineCompressedAnimation *spline_animation,
                                         const HavokTypes::hkaAnimationBinding *binding,
                                         const HavokTypes::hkaSkeleton *skeleton,
-                                        const std::string_view animation_name) {
+                                        const std::string_view animation_name,
+                                        const bool apply_root_motion) {
     GltfHelper &gltf_helper = app_state.helper();
 
     hkaSplineDecompressor decompressor{};
@@ -37,6 +38,10 @@ void export_spline_compressed_animation(ApexAppState &app_state,
 
     std::vector<float32> timestamps = {};
 
+    const auto& extracted_motion = spline_animation->extractedMotion;
+    const auto& ref_frame = Havok::as<HavokTypes::hkaDefaultAnimatedReferenceFrame>(extracted_motion);
+    const auto& root_motion_frames = ref_frame->referenceFrameSamples;
+
 
     timestamps.reserve(spline_animation->numFrames);
 
@@ -44,7 +49,7 @@ void export_spline_compressed_animation(ApexAppState &app_state,
         timestamps.push_back(frame_id * frame_duration);
     }
 
-    const auto timestamps_accessor = gltf_helper.create_accessor_chain_from_u8(
+    const auto timestamps_accessor = gltf_helper.create_accessor_chain(
         reinterpret_cast<const uint8 *>(timestamps.data()), timestamps.size() * sizeof(float32), 0,
         TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_SCALAR, timestamps.size(), false, 0, 0,
         "spline_animation_timestamps");
@@ -90,25 +95,33 @@ void export_spline_compressed_animation(ApexAppState &app_state,
             const TransformSplineBlock *block = &decompressor.blocks[block_id];
             auto [translation, rotation, scale] = block->GetValue(track_id, local_frame);
 
+            if (bone_id==0 && apply_root_motion) {
+                const auto& root_frame = root_motion_frames[frame_id];
+                translation+=root_frame;
+                // translation.y +=root_frame.value.z;
+                // translation.y +=root_frame.value.w;
+                // translation.z +=root_frame.value.y;
+            }
+
             positions.emplace_back(translation);
             rotations.emplace_back(rotation);
             scales.emplace_back(scale);
         }
 
 
-        const auto position_accessor = gltf_helper.create_accessor_chain_from_u8(
+        const auto position_accessor = gltf_helper.create_accessor_chain(
             reinterpret_cast<uint8 *>(positions.data()), positions.size() * 3 * sizeof(float32), 0,
             TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, positions.size(), false,
             0, 0, "spline_animation_positions"
         );
 
-        const auto rotation_accessor = gltf_helper.create_accessor_chain_from_u8(
+        const auto rotation_accessor = gltf_helper.create_accessor_chain(
             reinterpret_cast<uint8 *>(rotations.data()), rotations.size() * 4 * sizeof(float32), 0,
             TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC4, rotations.size(), false,
             0, 0, "spline_animation_rotations"
         );
 
-        const auto scale_accessor = gltf_helper.create_accessor_chain_from_u8(
+        const auto scale_accessor = gltf_helper.create_accessor_chain(
             reinterpret_cast<uint8 *>(scales.data()), scales.size() * 3 * sizeof(float32), 0,
             TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, scales.size(), false,
             0, 0, "spline_animation_scales"
@@ -149,13 +162,14 @@ void export_spline_compressed_animation(ApexAppState &app_state,
 
 void export_animation(ApexAppState &app_state, const HavokTypes::hkaAnimationBinding *binding,
                       const HavokTypes::hkaSkeleton *skeleton,
-                      const std::string_view animation_name) {
+                      const std::string_view animation_name,
+                      const bool apply_root_motion) {
     export_skeleton(app_state, skeleton);
 
     if (const auto spline_compressed_animation = Havok::as<
         HavokTypes::hkaSplineCompressedAnimation>(binding->animation)) {
         export_spline_compressed_animation(app_state, spline_compressed_animation, binding, skeleton,
-                                           animation_name);
+                                           animation_name, apply_root_motion);
     }
 }
 
@@ -250,7 +264,7 @@ GltfHelper::Handle<tinygltf::Node> export_skeleton(ApexAppState &app_state,
         }
 
         if (bone_matrix != glm::identity<glm::mat4>()) {
-            GltfHelper::set_node_transform(*bone_node, transform.translation, transform.scale,
+            GltfHelper::set_node_transform(bone_node, transform.translation, transform.scale,
                                            glm::quat(transform.rotation.vec));
         }
     }
@@ -258,7 +272,7 @@ GltfHelper::Handle<tinygltf::Node> export_skeleton(ApexAppState &app_state,
         glm::mat4 inverse_matrix = glm::inverse(global_matrices[i]);
         inverse_matrices.push_back(inverse_matrix);
     }
-    auto accessor = helper.create_accessor_chain_from_u8(reinterpret_cast<uint8 *>(inverse_matrices.data()),
+    const auto accessor = helper.create_accessor_chain(reinterpret_cast<uint8 *>(inverse_matrices.data()),
                                                          inverse_matrices.size() * 16 * sizeof(float32), 0,
                                                          TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_MAT4,
                                                          inverse_matrices.size(), false, 0, 0,

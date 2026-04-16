@@ -10,7 +10,7 @@
 #include <ranges>
 #include <algorithm>
 
-bool ApexArchiveManager::has_file(const uint32 hash) {
+bool ApexArchiveManager::has_file(const uint64 hash) {
     ZoneScoped;
     ensure_parent_loaded(hash);
     for (const auto &archive: m_archives | std::views::values) {
@@ -23,7 +23,7 @@ bool ApexArchiveManager::has_file(const std::string_view name) {
     return has_file(hash_string(name));
 }
 
-std::unique_ptr<IO::File> ApexArchiveManager::get_file(const uint32 hash) {
+std::unique_ptr<IO::File> ApexArchiveManager::get_file(const uint64 hash) {
     ZoneScoped
     ensure_parent_loaded(hash);
 
@@ -40,7 +40,7 @@ std::unique_ptr<IO::File> ApexArchiveManager::get_file(const std::string_view na
     return get_file(hash_string(name));
 }
 
-std::pair<bool, uint32> ApexArchiveManager::ensure_parent_loaded(const uint32 hash){
+std::pair<bool, uint64> ApexArchiveManager::ensure_parent_loaded(const uint64 hash){
     auto parent_opt = get_file_parent(hash);
     if (!parent_opt || *parent_opt == 0) return {false, 0};
 

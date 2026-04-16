@@ -95,7 +95,7 @@ struct SampleMetadataChunkHeader {
 
 struct SampleMetadataChunk {
     SampleMetadataChunkHeader header{};
-    Buffer data;
+    IO::Buffer data;
 };
 
 struct SampleMetadata {
@@ -395,7 +395,7 @@ void process_fsb(RIFFContext &ctx, const std::unique_ptr<IO::File> &file) {
 
     const uint32 header_size = header.version == 0 ? 0x40 : 0x3C;
     file->set_position(header_size);
-    Buffer dir_buffer(header.dir_size);
+    IO::Buffer dir_buffer(header.dir_size);
     file->read_exact(dir_buffer.as_span());
     const auto dir_file = std::make_unique<IO::MemoryViewFile>(dir_buffer);
     ctx.samples.reserve(header.sample_count);
@@ -432,7 +432,7 @@ void process_fsb(RIFFContext &ctx, const std::unique_ptr<IO::File> &file) {
     std::vector<char> names(header.name_size - header.sample_count * sizeof(uint32));
     file->read_exact(names);
 
-    Buffer samples_data(header.data_size);
+    IO::Buffer samples_data(header.data_size);
     file->read_exact(samples_data.as_span());
     for (int i = 0; i < header.sample_count; ++i) {
         Sample &sample = ctx.samples[i];
@@ -488,7 +488,7 @@ void export_fmod_bank(const ApexAppState &app_state, uint32 path_hash, const std
             const auto data_offset = buffer->get_position();
             const auto aligned_offset = (data_offset + 31) & ~31;
             const auto fsb_size = chunk.size - (aligned_offset - data_offset);
-            Buffer fsb_subbuffer(fsb_size);
+            IO::Buffer fsb_subbuffer(fsb_size);
             buffer->set_position(aligned_offset);
             buffer->read_exact(fsb_subbuffer.as_span());
             process_fsb(ctx, std::make_unique<IO::MemoryViewFile>(fsb_subbuffer));

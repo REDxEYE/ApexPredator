@@ -7,7 +7,7 @@
 #include <unordered_map>
 
 #include "redscore/platform/logger.h"
-#include "redscore/platform/file/memory_buffer.h"
+#include "redscore/platform/file/memory_file.h"
 #include "utils/endian.h"
 #include "utils/hash_helper.h"
 

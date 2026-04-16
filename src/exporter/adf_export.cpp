@@ -38,9 +38,9 @@ static_assert(sizeof(VertexPosNorm) == 12, "VertexPosNorm size mismatch");
 
 using namespace ADFTypes;
 
-std::optional<Buffer> decompress_data(const CompressedData &data) {
+std::optional<IO::Buffer> decompress_data(const CompressedData &data) {
     ZoneScoped
-    Buffer decompressed_data(data.UncompressedSize);
+    IO::Buffer decompressed_data(data.UncompressedSize);
 
     const auto compressed_header = reinterpret_cast<const CompressedHeader *>(data.Data.data());
     const uint8 *compressed_data = data.Data.data() + sizeof(CompressedHeader);
@@ -213,7 +213,7 @@ GltfHelper::Handle<tinygltf::Node> export_terrain_patch(ApexAppState &app_state,
 
     auto &primitive = mesh->primitives.emplace_back();
 
-    gltf_helper.set_primitive_attribute_from_u8(mesh.index(), 0, "POSITIONS",
+    gltf_helper.set_primitive_attribute(primitive, "POSITIONS",
                                                 reinterpret_cast<const uint8 *>(positions.data()),
                                                 positions.size() * sizeof(glm::vec3),
                                                 TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, vertex_count, false,
@@ -221,19 +221,19 @@ GltfHelper::Handle<tinygltf::Node> export_terrain_patch(ApexAppState &app_state,
     );
 
 
-    gltf_helper.set_primitive_attribute_from_u8(mesh.index(), 0, "NORMAL",
+    gltf_helper.set_primitive_attribute(primitive, "NORMAL",
                                                 reinterpret_cast<const uint8 *>(normals.data()),
                                                 normals.size() * sizeof(glm::vec3),
                                                 TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, vertex_count, false,
                                                 sizeof(glm::vec3), 0, "NORMALS");
 
-    gltf_helper.set_primitive_attribute_from_u8(mesh.index(), 0, "TEXCOORD_0",
+    gltf_helper.set_primitive_attribute(primitive, "TEXCOORD_0",
                                                 reinterpret_cast<const uint8 *>(uv.data()),
                                                 uv.size() * sizeof(glm::vec2),
                                                 TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC2, vertex_count, false,
                                                 sizeof(glm::vec2), 24, "TEXCOORD_0");
 
-    gltf_helper.set_primitive_indices_from_u8(mesh.index(), 0, reinterpret_cast<const uint8 *>(indices.data()),
+    gltf_helper.set_primitive_indices(primitive, reinterpret_cast<const uint8 *>(indices.data()),
                                               indices.size() * sizeof(uint32), TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT,
                                               indices.size(), sizeof(uint32), 0, "INDICES");
 

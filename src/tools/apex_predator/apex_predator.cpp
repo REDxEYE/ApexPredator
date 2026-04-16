@@ -46,16 +46,21 @@ int main(int argc, const char *argv[]) {
     ConvertCommand convert_command("convert", "Convert png->ddsc");
     convert_command.register_(app);
 
+    /* ---------------- extract-all ---------------- */
+
+    ExtractEverythingCommand extract_all_command("extract-all", "Extract all assets from a game.");
+    extract_all_command.register_(app);
+
     try {
         app.parse(argc, argv);
     } catch (const CLI::ParseError &e) {
         return app.exit(e);
-    }
-    // } catch (const std::exception &e) {
-    //     std::cerr << "ApexPredator crashed!" << std::endl;
-    //     std::cerr << "Cause: " << e.what() << std::endl;
-    //     return 1;
     // }
+    } catch (const std::exception &e) {
+        std::cerr << "ApexPredator crashed!" << std::endl;
+        std::cerr << "Cause: " << e.what() << std::endl;
+        return 1;
+    }
 
     mp_shutdown();
     return 0;

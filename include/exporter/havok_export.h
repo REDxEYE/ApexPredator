@@ -16,5 +16,5 @@ glm::mat4 build_matrix(const HavokTypes::hkQsTransform& transform);
 
 GltfHelper::Handle<tinygltf::Node> export_skeleton(ApexAppState& app_state, const HavokTypes::hkaSkeleton *skeleton);
 
-void export_animation(ApexAppState& app_state, const HavokTypes::hkaAnimationBinding *binding, const HavokTypes::hkaSkeleton* skeleton, std::string_view animation_name);
+void export_animation(ApexAppState& app_state, const HavokTypes::hkaAnimationBinding *binding, const HavokTypes::hkaSkeleton* skeleton, std::string_view animation_name, bool apply_root_motion);
 #endif //APEXPREDATOR_HAVOK_EXPORT_H

@@ -120,7 +120,7 @@ void set_world_matrix(const GltfHelper::Handle<Node> &gltf_node, const RuntimeNo
         return;
     const auto &matrix = node.get<glm::mat4>("world");
     if (matrix != glm::identity<glm::mat4>())
-        GltfHelper::set_node_matrix(*gltf_node, matrix);
+        GltfHelper::set_node_matrix(gltf_node, matrix);
 }
 
 void handle_CCharacter(ApexAppState &app_state,
@@ -241,7 +241,7 @@ void handle_CDamageableCharacterPart(ApexAppState &app_state,
         if (parent_bone.is_valid()) {
             glm::mat4 node_global_matrix = calculate_global_node_matrix(helper, parent_bone);
             node_global_matrix = glm::inverse(node_global_matrix);
-            GltfHelper::set_node_matrix(*output_node, node_global_matrix);
+            GltfHelper::set_node_matrix(output_node, node_global_matrix);
             helper.set_parent(parent_bone, output_node);
         }
         else {

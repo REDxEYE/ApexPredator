@@ -100,6 +100,8 @@ public:
 protected:
     void customize(CLI::App &app) override {
         GameCommand::customize(app);
+        app.add_flag("-r,--root-motion", m_apply_root_motion,
+                       "Apply root motion.")->default_val(false);
         app.add_option("skeleton-path", m_skeleton_path,
                        "Path or hash to the Havok container containing the skeleton.")
                 ->required();
@@ -112,6 +114,7 @@ protected:
 
 private:
     std::string m_skeleton_path;
+    bool m_apply_root_motion;
     std::vector<std::string> m_animations;
 };
 
@@ -130,6 +133,7 @@ protected:
     }
 
     void handle() override;
+
 private:
     std::string m_search_query;
 };
@@ -152,10 +156,29 @@ protected:
     }
 
     void handle() override {
-
     }
 
 private:
     std::string input_file;
     std::string v_output;
+};
+
+class ExtractEverythingCommand : public GameCommand {
+public:
+    ExtractEverythingCommand(const std::string_view &name, const std::string_view &description)
+        : GameCommand(name, description) {
+    }
+
+    ~ExtractEverythingCommand() override = default;
+
+protected:
+    void customize(CLI::App &app) override {
+        GameCommand::customize(app);
+        app.add_flag("-n,--no_textures", m_skip_textures, "Don't export textures.");
+    }
+
+    void handle() override;
+
+private:
+    bool m_skip_textures{};
 };
