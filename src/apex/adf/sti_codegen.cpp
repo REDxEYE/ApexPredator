@@ -5,9 +5,8 @@
 #include <ranges>
 #include <set>
 
-#include "utils/lookup3.h"
 #include "apex/adf/sti.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 
 using namespace STI;
 
@@ -45,7 +44,7 @@ static bool is_simple_type(DataType type) {
 void emit_type_forward_declaration(const Type &type, std::ofstream &header_stream) {
     if (type.type == DataType::Structure) {
         header_stream << std::format("struct {}; // size: {}\n", type.type_name(), type.size);
-    }else if (type.type==DataType::Enumeration) {
+    } else if (type.type == DataType::Enumeration) {
         header_stream << std::format("enum class {}: uint{};\n", type.type_name(), type.size * 8);
     }
 }
@@ -60,7 +59,7 @@ void emit_struct(const TypeLibrary &lib, const Type &type, std::ofstream &header
     }
 
     header_stream << "extern ADF::TypeInfo " << type.type_name() << "_TI;\n";
-    header_stream << std::format("struct {}: ADF::BaseType {{\n", type.type_name());
+    header_stream << std::format("struct {}: ADF::BaseType {{ // size: {}, alignment: {}\n", type.type_name(),type.size, type.alignment);
 
     // Emit member declarations
     for (const auto &member: members) {
@@ -72,10 +71,13 @@ void emit_struct(const TypeLibrary &lib, const Type &type, std::ofstream &header
             case DataType::StringType:
             case DataType::StringHash:
             case DataType::Enumeration:
-            case DataType::Pointer:
             case DataType::Structure:
                 header_stream << std::format("    {} {}; // offset: {}, size: {}\n",
                                              member_type.type_name(), member.name, member.offset, member.size);
+                break;
+
+            case DataType::Pointer:
+                header_stream << std::format("    u64 {}; // offset: {}, size: {}\n", member.name, member.offset, member.size);
                 break;
 
             case DataType::Array: {
@@ -89,7 +91,7 @@ void emit_struct(const TypeLibrary &lib, const Type &type, std::ofstream &header
             case DataType::InlineArray: {
                 const auto &type_info = std::get<TypeAndSize>(member_type.data);
                 const Type &inner_type = get_type_or_throw(lib, type_info.type_hash);
-                header_stream << std::format("    std::array<{}, {}> {}; // offset: {}, size: {}\n",
+                header_stream << std::format("    Array<{}, {}> {}; // offset: {}, size: {}\n",
                                              inner_type.type_name(), type_info.count, member.name, member.offset,
                                              member.size);
                 break;
@@ -108,7 +110,7 @@ void emit_struct(const TypeLibrary &lib, const Type &type, std::ofstream &header
 
     header_stream << "    void read(IO::File& buffer) override;\n";
     header_stream << "    void print(std::ostream &out) const override;\n";
-    header_stream << "    void to_json(std::ostream &out) const override;\n";
+    header_stream << "    nlohmann::json to_json() const override;\n";
 
     header_stream << "}; // size: " << type.size << "\n\n";
 }
@@ -217,8 +219,7 @@ void emit_type_infos(const std::unordered_map<uint32, Type> &types, std::ostream
         stream << std::format("ADF::TypeInfo ADFTypes::{}_TI = {{\n", type.name());
         if (type.type == DataType::Structure || type.type == DataType::Array) {
             stream << std::format("    .new_instance = {}_new_instance,\n", type.name());
-        }
-        else {
+        } else {
             stream << "    .new_instance = nullptr,\n";
         }
         stream << std::format("    .hash = 0x{:08X},\n", type.hash);
@@ -250,33 +251,9 @@ void emit_type_info_table(const std::unordered_map<uint32, Type> &types,
 // Function generation helpers
 void emit_array_print_helper(const TypeLibrary &lib, const Type &member_type,
                              const std::string &member_name, std::ofstream &impl_stream) {
-    impl_stream << std::format("    out << \"{}: [\" << \"\\n\";\n", member_name);
-    impl_stream << std::format("    for (const auto& item: {}) {{\n", member_name);
-
-    const Type &inner_type = get_type_or_throw(lib, std::get<TypeAndSize>(member_type.data).type_hash);
-
-    if (inner_type.type == DataType::Primitive) {
-        impl_stream << "        out << std::to_string(item) << \"\\n\";\n";
-    }
-    else if (inner_type.type == DataType::StringType) {
-        impl_stream << "        out << item << \"\\n\";\n";
-    }
-    else if (inner_type.type == DataType::Structure ||
-             inner_type.type == DataType::Array ||
-             inner_type.type == DataType::StringHash) {
-        impl_stream << "        item.print(out);\n";
-    }
-    else if (inner_type.type == DataType::DeferredType) {
-        impl_stream << "        if (item) {\n";
-        impl_stream << "            item->print(out);\n";
-        impl_stream << "        }\n";
-    }
-    else {
-        throw std::runtime_error("Unsupported array inner type for printing");
-    }
-
-    impl_stream << "    }\n";
-    impl_stream << "    out << \"]\" << \"\\n\";\n";
+    impl_stream << std::format("    out << \"{}: \\n\";\n", member_name);
+    impl_stream << std::format("    {}.print(out);\n", member_name);
+    impl_stream << "    out << \"\\n\";\n";
 }
 
 void emit_struct_print_function(const TypeLibrary &lib, const Type &type,
@@ -292,8 +269,7 @@ void emit_struct_print_function(const TypeLibrary &lib, const Type &type,
             case DataType::Primitive:
             case DataType::Bitfield:
             case DataType::StringType:
-                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n",
-                                           member.name, member.name);
+                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n", member.name, member.name);
                 break;
 
             case DataType::Structure:
@@ -301,7 +277,8 @@ void emit_struct_print_function(const TypeLibrary &lib, const Type &type,
                 break;
 
             case DataType::Pointer:
-                impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
+                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n", member.name, member.name);
+                // impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
                 break;
 
             case DataType::Array:
@@ -310,8 +287,7 @@ void emit_struct_print_function(const TypeLibrary &lib, const Type &type,
                 break;
 
             case DataType::Enumeration:
-                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n",
-                                           member.name, member.name);
+                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n", member.name, member.name);
                 break;
 
             case DataType::StringHash:
@@ -335,17 +311,61 @@ void emit_struct_print_function(const TypeLibrary &lib, const Type &type,
     impl_stream << "}\n\n";
 }
 
-void emit_struct_to_json_function(const std::string &type_name, std::ofstream &impl_stream) {
-    impl_stream << std::format("void {}::to_json(std::ostream &out) const {{\n", type_name);
-    impl_stream << "    throw std::runtime_error(\"Not implemented\");\n";
+void emit_struct_to_json_function(const TypeLibrary &lib, const Type &type,
+                                  const std::vector<StructMember> &members,
+                                  const std::string &type_name,
+                                  std::ofstream &impl_stream) {
+    impl_stream << std::format("nlohmann::json {}::to_json() const {{\n", type_name);
+    impl_stream << "    nlohmann::json _res;\n";
+    for (const auto &member: members) {
+        const Type &member_type = get_type_or_throw(lib, member.type_hash);
+        switch (member_type.type) {
+            case DataType::Primitive:
+            case DataType::Bitfield:
+            case DataType::StringType:
+                impl_stream << std::format("    _res[\"{}\"] = {};\n", member.name, member.name);
+                break;
+
+            case DataType::Structure:
+            case DataType::Array:
+            case DataType::StringHash:
+            case DataType::InlineArray:
+                impl_stream << std::format("    _res[\"{}\"] = {}.to_json();\n", member.name, member.name);
+                break;
+
+            case DataType::Pointer:
+                impl_stream << std::format("    _res[\"{}\"] = {};\n", member.name, member.name);
+                // impl_stream << std::format("    _res[\"{}\"] = {}.to_json();\n", member.name, member.name);
+                // impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
+                break;
+
+            case DataType::Enumeration:
+                impl_stream << std::format("    _res[\"{}\"] = {};\n", member.name, member.name);
+                // impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n",
+                //                            member.name, member.name);
+                break;
+
+            case DataType::DeferredType:
+                impl_stream << std::format("    if ({}) {{\n", member.name);
+                impl_stream << std::format("        _res[\"{}\"] = {}->to_json();\n", member.name, member.name);
+                impl_stream << "    }\n";
+                break;
+
+            case DataType::Recursive:
+                throw std::runtime_error("Recursive types are not supported yet");
+        }
+    }
+    // impl_stream << "    throw std::runtime_error(\"Not implemented\");\n";
+    impl_stream << "    return _res;\n";
     impl_stream << "}\n\n";
 }
 
-void emit_enum_formatter(const Type &type, const std::string &type_name, std::ofstream &fwd_decl_stream, std::ofstream &impl_stream) {
+void emit_enum_formatter(const Type &type, const std::string &type_name, std::ofstream &fwd_decl_stream,
+                         std::ofstream &impl_stream) {
     const auto &members = std::get<std::vector<EnumMember> >(type.data);
 
-    fwd_decl_stream << std::format("constexpr std::string_view to_string({} v) noexcept;\n",type_name);
-    fwd_decl_stream << std::format("std::ostream& operator<<(std::ostream &os, {} value);\n",type_name);
+    fwd_decl_stream << std::format("constexpr std::string_view to_string({} v) noexcept;\n", type_name);
+    fwd_decl_stream << std::format("std::ostream& operator<<(std::ostream &os, {} value);\n", type_name);
 
     impl_stream << std::format("constexpr std::string_view to_string({} v) noexcept{{\n", type_name);
     impl_stream << "    using namespace std::literals;\n";
@@ -357,7 +377,7 @@ void emit_enum_formatter(const Type &type, const std::string &type_name, std::of
     impl_stream << "    }\n";
     impl_stream << "}\n\n";
 
-    impl_stream << std::format("std::ostream& operator<<(std::ostream &os, const {} value) {{\n",type_name);
+    impl_stream << std::format("std::ostream& operator<<(std::ostream &os, const {} value) {{\n", type_name);
     impl_stream << "    return os << to_string(value);\n";
     impl_stream << "}\n\n";
 
@@ -370,7 +390,6 @@ void emit_enum_formatter(const Type &type, const std::string &type_name, std::of
     // fwd_decl_stream << "        return std::formatter<std::string_view>::format(str_value, ctx);\n";
     // fwd_decl_stream << "    }\n";
     // fwd_decl_stream << "};\n\n";
-
 }
 
 void emit_new_instance_function(const std::string &type_name, const std::string &name, std::ofstream &impl_stream) {
@@ -423,7 +442,8 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
                 break;
 
             case DataType::Pointer:
-                impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
+                impl_stream << std::format("    {} = buffer.read_pod<u64>();\n",member.name);
+                // impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
                 break;
 
             case DataType::InlineArray: {
@@ -432,15 +452,12 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
                                            std::get<TypeAndSize>(member_type.data).count);
                 if (inner_type.type == DataType::Structure || inner_type.type == DataType::Array) {
                     impl_stream << std::format("        {}[i].read(buffer);\n", member.name);
-                }
-                else if (inner_type.type == DataType::Primitive) {
+                } else if (inner_type.type == DataType::Primitive) {
                     impl_stream << std::format("        {}[i] = buffer.read_pod<{}>();\n",
                                                member.name, inner_type.type_name());
-                }
-                else if (inner_type.type == DataType::StringType) {
+                } else if (inner_type.type == DataType::StringType) {
                     impl_stream << std::format("        {}[i] = buffer.read_cstring();\n", member.name);
-                }
-                else {
+                } else {
                     impl_stream << "        throw std::runtime_error(\"Unsupported inline array inner type\");\n";
                 }
                 impl_stream << "    }\n";
@@ -527,7 +544,8 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
     impl_stream << "}\n\n";
 }
 
-void emit_functions(const TypeLibrary &lib, std::ofstream &fwd_decl_stream, std::ofstream &impl_stream, std::ofstream &formatter_out) {
+void emit_functions(const TypeLibrary &lib, std::ofstream &fwd_decl_stream, std::ofstream &impl_stream,
+                    std::ofstream &formatter_out) {
     for (const auto &type: lib.types() | std::views::values) {
         // Skip types that don't need function generation
         if (type.type == DataType::Bitfield ||
@@ -546,7 +564,7 @@ void emit_functions(const TypeLibrary &lib, std::ofstream &fwd_decl_stream, std:
                 // Generate read, print, and to_json functions
                 emit_struct_read_function(lib, type, members, type_name, impl_stream);
                 emit_struct_print_function(lib, type, members, type_name, impl_stream);
-                emit_struct_to_json_function(type_name, impl_stream);
+                emit_struct_to_json_function(lib, type, members, type_name, impl_stream);
                 break;
             }
 
@@ -604,6 +622,7 @@ void STI::generate_code(const TypeLibrary &lib,
     header_stream << "#include <array>\n";
     header_stream << "#include \"apex/adf/adf_base_type.h\"\n";
     header_stream << "#include \"apex/adf/adf_support_types.h\"\n\n";
+    header_stream << "#include \"json.hpp\"\n";
     header_stream << "#include \"apex/adf/generated/adf_types_fwd.h\"\n\n";
 
     impl_stream << "// This file is autogenerated\n";

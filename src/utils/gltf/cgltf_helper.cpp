@@ -7,7 +7,7 @@
 
 #include <cassert>
 #include "cglm/affine.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "platform/texture.h"
 #include "utils/hash_helper.h"
 #include "utils/path.h"

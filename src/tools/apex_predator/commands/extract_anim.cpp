@@ -54,7 +54,9 @@ void ExtractAnimationCommand::handle() {
 
 json extract_root_motion_info(HavokTypes::hkaAnimatedReferenceFrame *extracted_motion_base) {
     auto *extracted_motion = Havok::as<HavokTypes::hkaDefaultAnimatedReferenceFrame>(extracted_motion_base);
-
+    if (extracted_motion==nullptr) {
+        return json::object();
+    }
     auto root = json::object();
     root["frame_type"] = extracted_motion->frameType.value;
     root["duration"] = extracted_motion->duration;

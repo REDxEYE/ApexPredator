@@ -127,8 +127,8 @@ link_libraries(Tracy::TracyClient)
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL TRACY_CALLSTACK=32)
 
 target_link_libraries(ApexPredator PRIVATE CLI11::CLI11)
-target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY)
-# target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_CALLSTACK=62)
+target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_ON_DEMAND)
+ target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_ON_DEMAND)
 
 if (WIN32)
 

@@ -30,7 +30,9 @@ std::unique_ptr<ADF::BaseType> ADF::ADFFile::read_instance(const uint32 index) {
 
 std::unique_ptr<ADF::BaseType> Deferred::read(IO::File &buffer) {
     auto info = buffer.read_pod<Deferred>();
-
+    if (info.size==0) {
+        return {};
+    }
     const auto inner_type = adf_type_info.find(info.type_hash);
     if (inner_type == adf_type_info.end()) {
         throw std::runtime_error(std::format("Failed to find type with hash 0x{:08X}", info.type_hash));

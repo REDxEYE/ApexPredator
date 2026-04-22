@@ -5,475 +5,126 @@
 
 #include "havok/havok_support_types.h"
 #include "havok/tag_file/havok_tag_file.h"
-#include "redscore/platform/file/file.h"
 
 using namespace Havok;
 using namespace HavokTypes;
 
-void hkPropertyId::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    desc.read(buffer, tag_file);
+void hkcdStaticMeshTreeBase_Connectivity_SectionHeader::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    baseLocal = buffer.read_pod<hkUint32>();
+    baseGlobal = buffer.read_pod<hkUint32>();
 }
 
-void hkPropertyId::print(std::ostream &os) const {
+void hkcdStaticMeshTreeBase_Connectivity_SectionHeader::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkPropertyId::to_json(std::ostream &out) const {
+nlohmann::json hkcdStaticMeshTreeBase_Connectivity_SectionHeader::to_json() const {
+    nlohmann::json obj_;
+    obj_["baseLocal"] = baseLocal;
+    obj_["baseGlobal"] = baseGlobal;
+    return obj_;
+}
+
+void hknpCompressedMeshShapeTreeDataRunData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    data = buffer.read_pod<hkUint16>();
+}
+
+void hknpCompressedMeshShapeTreeDataRunData::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkStringPtr::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    stringAndFlag.read(buffer, tag_file);
+nlohmann::json hknpCompressedMeshShapeTreeDataRunData::to_json() const {
+    nlohmann::json obj_;
+    obj_["data"] = data;
+    return obj_;
 }
 
-void hkStringPtr::print(std::ostream &os) const {
+void hkcdStaticMeshTreeBase_Section::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    nodes.read(buffer, tag_file);
+    domain.read(buffer, tag_file);
+    codecParms.read(buffer, tag_file);
+    firstPackedVertex = buffer.read_pod<hkUint32>();
+    sharedVertices.read(buffer, tag_file);
+    primitives.read(buffer, tag_file);
+    dataRuns.read(buffer, tag_file);
+    numPackedVertices = buffer.read_pod<hkUint8>();
+    numSharedIndices = buffer.read_pod<hkUint8>();
+    leafIndex = buffer.read_pod<hkUint16>();
+    page = buffer.read_pod<hkUint8>();
+    flags = buffer.read_pod<hkUint8>();
+    layerData = buffer.read_pod<hkUint8>();
+    unusedData = buffer.read_pod<hkUint8>();
+}
+
+void hkcdStaticMeshTreeBase_Section::print(std::ostream &os) const {
+    hkcdStaticTree_Tree::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkStringPtr::to_json(std::ostream &out) const {
+nlohmann::json hkcdStaticMeshTreeBase_Section::to_json() const {
+    nlohmann::json obj_;
+    obj_["nodes"] = nodes.to_json();
+    obj_["domain"] = domain.to_json();
+    obj_["codecParms"] = codecParms.to_json();
+    obj_["firstPackedVertex"] = firstPackedVertex;
+    obj_["sharedVertices"] = sharedVertices.to_json();
+    obj_["primitives"] = primitives.to_json();
+    obj_["dataRuns"] = dataRuns.to_json();
+    obj_["numPackedVertices"] = numPackedVertices;
+    obj_["numSharedIndices"] = numSharedIndices;
+    obj_["leafIndex"] = leafIndex;
+    obj_["page"] = page;
+    obj_["flags"] = flags;
+    obj_["layerData"] = layerData;
+    obj_["unusedData"] = unusedData;
+    return obj_;
+}
+
+void hkcdStaticTree_Codec3Axis5::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    xyz.read(buffer, tag_file);
+    hiData = buffer.read_pod<hkUint8>();
+    loData = buffer.read_pod<hkUint8>();
+}
+
+void hkcdStaticTree_Codec3Axis5::print(std::ostream &os) const {
+    hkcdStaticTree_Codec3Axis::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkRootLevelContainer::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    namedVariants.read(buffer, tag_file);
-}
-
-void hkRootLevelContainer::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkRootLevelContainer::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMesh::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    faces.read(buffer, tag_file);
-    edges.read(buffer, tag_file);
-    vertices.read(buffer, tag_file);
-    streamingSets.read(buffer, tag_file);
-    faceData.read(buffer, tag_file);
-    edgeData.read(buffer, tag_file);
-    faceDataStriding = buffer.read_pod<int>();
-    edgeDataStriding = buffer.read_pod<int>();
-    flags = buffer.read_pod<unsigned char>();
-    buffer.skip(15);
-    aabb.read(buffer, tag_file);
-    erosionRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    userData = buffer.read_pod<hkUlong>();
-    clearanceCacheSeedingDataSet.read(buffer, tag_file);
-    buffer.skip(8);
-}
-
-void hkaiNavMesh::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMesh::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxIndexBuffer::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    indexType.read(buffer, tag_file);
-    buffer.skip(7);
-    indices16.read(buffer, tag_file);
-    indices32.read(buffer, tag_file);
-    vertexBaseOffset = buffer.read_pod<hkUint32>();
-    length = buffer.read_pod<hkUint32>();
-}
-
-void hkxIndexBuffer::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxIndexBuffer::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMesh::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    sections.read(buffer, tag_file);
-    userChannelInfos.read(buffer, tag_file);
-}
-
-void hkxMesh::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMesh::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaMeshBinding::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    mesh.read(buffer, tag_file);
-    originalSkeletonName.read(buffer, tag_file);
-    name.read(buffer, tag_file);
-    skeleton.read(buffer, tag_file);
-    mappings.read(buffer, tag_file);
-    boneFromSkinMeshTransforms.read(buffer, tag_file);
-}
-
-void hkaMeshBinding::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaMeshBinding::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkReflect_Any::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    type.read(buffer, tag_file);
-    status = buffer.read_pod<unsigned char>();
-    buffer.skip(7);
-    for (size_t i = 0; i < 4; ++i) {
-        buf[i] = buffer.read_pod<hkUintReal>();
-    }
-}
-
-void hkReflect_Any::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkReflect_Any::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkMeshBoneIndexMapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    mapping.read(buffer, tag_file);
-}
-
-void hkMeshBoneIndexMapping::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkMeshBoneIndexMapping::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeleton_LocalFrameOnBone::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    localFrame.read(buffer, tag_file);
-    boneIndex = buffer.read_pod<hkInt16>();
-    buffer.skip(6);
-}
-
-void hkaSkeleton_LocalFrameOnBone::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeleton_LocalFrameOnBone::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMeshClearanceCache_McpDataInteger::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    interpolant = buffer.read_pod<hkUint8>();
-    clearance = buffer.read_pod<hkUint8>();
-}
-
-void hkaiNavMeshClearanceCache_McpDataInteger::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMeshClearanceCache_McpDataInteger::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkRootLevelContainer_NamedVariant::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    name.read(buffer, tag_file);
-    className.read(buffer, tag_file);
-    variant.read(buffer, tag_file);
-}
-
-void hkRootLevelContainer_NamedVariant::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkRootLevelContainer_NamedVariant::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpBodyId::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    serialAndIndex = buffer.read_pod<hkUint32>();
-}
-
-void hknpBodyId::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpBodyId::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdFourAabb::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    lx.read(buffer, tag_file);
-    hx.read(buffer, tag_file);
-    ly.read(buffer, tag_file);
-    hy.read(buffer, tag_file);
-    lz.read(buffer, tag_file);
-    hz.read(buffer, tag_file);
-}
-
-void hkcdFourAabb::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdFourAabb::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkContainerHeapAllocator::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(1);
-}
-
-void hkContainerHeapAllocator::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkContainerHeapAllocator::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkReferencedObject::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-}
-
-void hkReferencedObject::print(std::ostream &os) const {
-    hkBaseObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkReferencedObject::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkPropertyBag::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    bag.read(buffer, tag_file);
-}
-
-void hkPropertyBag::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkPropertyBag::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkDefaultPropertyBag::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    propertyMap.read(buffer, tag_file);
-    transientPropertyMap.read(buffer, tag_file);
-}
-
-void hkDefaultPropertyBag::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkDefaultPropertyBag::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMesh_Face::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    startEdgeIndex.read(buffer, tag_file);
-    startUserEdgeIndex.read(buffer, tag_file);
-    numEdges = buffer.read_pod<hkInt16>();
-    numUserEdges = buffer.read_pod<hkInt16>();
-    clusterIndex = buffer.read_pod<hkInt16>();
-    padding = buffer.read_pod<hkUint16>();
-}
-
-void hkaiNavMesh_Face::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMesh_Face::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpBodyCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    shape.read(buffer, tag_file);
-    flags = buffer.read_pod<int>();
-    collisionCntrl = buffer.read_pod<short>();
-    buffer.skip(2);
-    collisionFilterInfo = buffer.read_pod<hkUint32>();
-    materialId = buffer.read_pod<unsigned short>();
-    qualityId = buffer.read_pod<unsigned char>();
-    buffer.skip(1);
-    name.read(buffer, tag_file);
-    userData = buffer.read_pod<hkUint64>();
-    motionType = buffer.read_pod<unsigned char>();
-    buffer.skip(7);
-    position.read(buffer, tag_file);
-    orientation.read(buffer, tag_file);
-    linearVelocity.read(buffer, tag_file);
-    angularVelocity.read(buffer, tag_file);
-    mass = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    massDistribution.read(buffer, tag_file);
-    motionPropertiesId = buffer.read_pod<unsigned short>();
-    buffer.skip(2);
-    reservedBodyId.read(buffer, tag_file);
-    reservedMotionId = buffer.read_pod<unsigned int>();
-    collisionLookAheadDistance = buffer.read_pod<hkReal>();
-    localFrame.read(buffer, tag_file);
-    buffer.skip(8);
-}
-
-void hknpBodyCinfo::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpBodyCinfo::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpRagdollData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    materials.read(buffer, tag_file);
-    motionProperties.read(buffer, tag_file);
-    bodyCinfos.read(buffer, tag_file);
-    constraintCinfos.read(buffer, tag_file);
-    referencedObjects.read(buffer, tag_file);
-    name.read(buffer, tag_file);
-    skeleton.read(buffer, tag_file);
-    boneToBodyMap.read(buffer, tag_file);
-}
-
-void hknpRagdollData::print(std::ostream &os) const {
-    hknpPhysicsSystemData::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpRagdollData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiAnnotatedStreamingSet::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    side.read(buffer, tag_file);
-    buffer.skip(7);
-    streamingSet.read(buffer, tag_file);
-}
-
-void hkaiAnnotatedStreamingSet::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiAnnotatedStreamingSet::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpShapeTagCodec::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    hints.read(buffer, tag_file);
-    type.read(buffer, tag_file);
-    buffer.skip(3);
-}
-
-void hknpShapeTagCodec::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpShapeTagCodec::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkPropertyDesc::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    type.read(buffer, tag_file);
-    name.read(buffer, tag_file);
-    flags.read(buffer, tag_file);
-    buffer.skip(4);
-}
-
-void hkPropertyDesc::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkPropertyDesc::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpRefWorldCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+nlohmann::json hkcdStaticTree_Codec3Axis5::to_json() const {
+    nlohmann::json obj_;
+    obj_["xyz"] = xyz.to_json();
+    obj_["hiData"] = hiData;
+    obj_["loData"] = loData;
+    return obj_;
+}
+
+void hknpCompressedMeshShapeData::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
     buffer.skip(12);
-    info.read(buffer, tag_file);
-    buffer.skip(6);
+    meshTree.read(buffer, tag_file);
+    simdTree.read(buffer, tag_file);
+    connectivity.read(buffer, tag_file);
+    buffer.skip(8);
 }
 
-void hknpRefWorldCinfo::print(std::ostream &os) const {
+void hknpCompressedMeshShapeData::print(std::ostream &os) const {
     hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpRefWorldCinfo::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkHashMapDetail_Index::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    entries.read(buffer, tag_file);
-    hashMod = buffer.read_pod<int>();
-    buffer.skip(4);
-}
-
-void hkHashMapDetail_Index::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkHashMapDetail_Index::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMesh_Edge::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    a.read(buffer, tag_file);
-    b.read(buffer, tag_file);
-    oppositeEdge.read(buffer, tag_file);
-    oppositeFace.read(buffer, tag_file);
-    flags.read(buffer, tag_file);
-    paddingByte = buffer.read_pod<hkUint8>();
-    userEdgeCost.read(buffer, tag_file);
-}
-
-void hkaiNavMesh_Edge::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMesh_Edge::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hknpCompressedMeshShapeData::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["meshTree"] = meshTree.to_json();
+    obj_["simdTree"] = simdTree.to_json();
+    obj_["connectivity"] = connectivity.to_json();
+    return obj_;
 }
 
 void hkpLimitedForceConstraintMotor::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -493,119 +144,15 @@ void hkpLimitedForceConstraintMotor::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkpLimitedForceConstraintMotor::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaBone::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    name.read(buffer, tag_file);
-    lockTranslation = buffer.read_pod<hkBool>();
-    buffer.skip(7);
-}
-
-void hkaBone::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaBone::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkHalf16::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    value = buffer.read_pod<hkInt16>();
-}
-
-void hkHalf16::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkHalf16::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkp2dAngConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    type.read(buffer, tag_file);
-    freeRotationAxis = buffer.read_pod<hkUint8>();
-    buffer.skip(13);
-}
-
-void hkp2dAngConstraintAtom::print(std::ostream &os) const {
-    hkpConstraintAtom::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkp2dAngConstraintAtom::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeleton_Partition::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    name.read(buffer, tag_file);
-    startBoneIndex = buffer.read_pod<hkInt16>();
-    numBones = buffer.read_pod<hkInt16>();
-    buffer.skip(4);
-}
-
-void hkaSkeleton_Partition::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeleton_Partition::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpConstraintData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    userData = buffer.read_pod<hkUlong>();
-}
-
-void hkpConstraintData::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpConstraintData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiStreamingSet::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    aSectionUid = buffer.read_pod<hkUint32>();
-    bSectionUid = buffer.read_pod<hkUint32>();
-    meshConnections.read(buffer, tag_file);
-    graphConnections.read(buffer, tag_file);
-    volumeConnections.read(buffer, tag_file);
-    aConnectionAabbs.read(buffer, tag_file);
-    bConnectionAabbs.read(buffer, tag_file);
-}
-
-void hkaiStreamingSet::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiStreamingSet::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiStreamingSet_NavMeshConnection::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    aFaceEdgeIndex.read(buffer, tag_file);
-    bFaceEdgeIndex.read(buffer, tag_file);
-}
-
-void hkaiStreamingSet_NavMeshConnection::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiStreamingSet_NavMeshConnection::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkpLimitedForceConstraintMotor::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["type"] = type.to_json();
+    obj_["minForce"] = minForce;
+    obj_["maxForce"] = maxForce;
+    return obj_;
 }
 
 void hkpTwistLimitConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -626,111 +173,96 @@ void hkpTwistLimitConstraintAtom::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkpTwistLimitConstraintAtom::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkpTwistLimitConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["isEnabled"] = isEnabled;
+    obj_["twistAxis"] = twistAxis;
+    obj_["refAxis"] = refAxis;
+    obj_["minAngle"] = minAngle;
+    obj_["maxAngle"] = maxAngle;
+    obj_["angularLimitsTauFactor"] = angularLimitsTauFactor;
+    obj_["angularLimitsDampFactor"] = angularLimitsDampFactor;
+    return obj_;
 }
 
-void hkaiFaceEdgeIndexPair::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    faceIndex.read(buffer, tag_file);
-    edgeIndex.read(buffer, tag_file);
-}
-
-void hkaiFaceEdgeIndexPair::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiFaceEdgeIndexPair::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiStreamingSet_GraphConnection::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    aNodeIndex = buffer.read_pod<int>();
-    bNodeIndex = buffer.read_pod<int>();
-    aEdgeData = buffer.read_pod<hkUint32>();
-    bEdgeData = buffer.read_pod<hkUint32>();
-    aEdgeCost.read(buffer, tag_file);
-    bEdgeCost.read(buffer, tag_file);
-}
-
-void hkaiStreamingSet_GraphConnection::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiStreamingSet_GraphConnection::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+void hkpRagdollConstraintData_Atoms::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    transforms.read(buffer, tag_file);
+    setupStabilization.read(buffer, tag_file);
+    ragdollMotors.read(buffer, tag_file);
     buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    flags.read(buffer, tag_file);
-    type.read(buffer, tag_file);
-    numShapeKeyBits = buffer.read_pod<hkUint8>();
-    dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
-    convexRadius = buffer.read_pod<hkReal>();
+    angFriction.read(buffer, tag_file);
     buffer.skip(4);
-    userData = buffer.read_pod<hkUint64>();
-    properties.read(buffer, tag_file);
+    twistLimit.read(buffer, tag_file);
+    buffer.skip(8);
+    coneLimit.read(buffer, tag_file);
+    buffer.skip(8);
+    planesLimit.read(buffer, tag_file);
+    buffer.skip(8);
+    ballSocket.read(buffer, tag_file);
 }
 
-void hknpShape::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
+void hkpRagdollConstraintData_Atoms::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpShape::to_json(std::ostream &out) const {
+nlohmann::json hkpRagdollConstraintData_Atoms::to_json() const {
+    nlohmann::json obj_;
+    obj_["transforms"] = transforms.to_json();
+    obj_["setupStabilization"] = setupStabilization.to_json();
+    obj_["ragdollMotors"] = ragdollMotors.to_json();
+    obj_["angFriction"] = angFriction.to_json();
+    obj_["twistLimit"] = twistLimit.to_json();
+    obj_["coneLimit"] = coneLimit.to_json();
+    obj_["planesLimit"] = planesLimit.to_json();
+    obj_["ballSocket"] = ballSocket.to_json();
+    return obj_;
+}
+
+void hkaSkeletonMapperData_SimpleMapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    boneA = buffer.read_pod<hkInt16>();
+    boneB = buffer.read_pod<hkInt16>();
+    buffer.skip(12);
+    aFromBTransform.read(buffer, tag_file);
+}
+
+void hkaSkeletonMapperData_SimpleMapping::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkaiStreamingSet_VolumeConnection::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    aCellIndex.read(buffer, tag_file);
-    bCellIndex.read(buffer, tag_file);
+nlohmann::json hkaSkeletonMapperData_SimpleMapping::to_json() const {
+    nlohmann::json obj_;
+    obj_["boneA"] = boneA;
+    obj_["boneB"] = boneB;
+    obj_["aFromBTransform"] = aFromBTransform.to_json();
+    return obj_;
 }
 
-void hkaiStreamingSet_VolumeConnection::print(std::ostream &os) const {
+void hkcdSimdTree_Node::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    lx.read(buffer, tag_file);
+    hx.read(buffer, tag_file);
+    ly.read(buffer, tag_file);
+    hy.read(buffer, tag_file);
+    lz.read(buffer, tag_file);
+    hz.read(buffer, tag_file);
+    data.read(buffer, tag_file);
+}
+
+void hkcdSimdTree_Node::print(std::ostream &os) const {
+    hkcdFourAabb::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkaiStreamingSet_VolumeConnection::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkAabb::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    min.read(buffer, tag_file);
-    max.read(buffer, tag_file);
-}
-
-void hkAabb::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkAabb::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpAngMotorConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    type.read(buffer, tag_file);
-    isEnabled = buffer.read_pod<hkBool>();
-    motorAxis = buffer.read_pod<hkUint8>();
-    initializedOffset = buffer.read_pod<hkInt16>();
-    previousTargetAngleOffset = buffer.read_pod<hkInt16>();
-    motor.read(buffer, tag_file);
-    targetAngle = buffer.read_pod<hkReal>();
-    correspondingAngLimitSolverResultOffset = buffer.read_pod<hkInt16>();
-    buffer.skip(10);
-}
-
-void hkpAngMotorConstraintAtom::print(std::ostream &os) const {
-    hkpConstraintAtom::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpAngMotorConstraintAtom::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkcdSimdTree_Node::to_json() const {
+    nlohmann::json obj_;
+    obj_["lx"] = lx.to_json();
+    obj_["hx"] = hx.to_json();
+    obj_["ly"] = ly.to_json();
+    obj_["hy"] = hy.to_json();
+    obj_["lz"] = lz.to_json();
+    obj_["hz"] = hz.to_json();
+    obj_["data"] = data.to_json();
+    return obj_;
 }
 
 void hkaSkeletonMapperData_ChainMapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -747,40 +279,271 @@ void hkaSkeletonMapperData_ChainMapping::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkaSkeletonMapperData_ChainMapping::to_json(std::ostream &out) const {
+nlohmann::json hkaSkeletonMapperData_ChainMapping::to_json() const {
+    nlohmann::json obj_;
+    obj_["startBoneA"] = startBoneA;
+    obj_["endBoneA"] = endBoneA;
+    obj_["startBoneB"] = startBoneB;
+    obj_["endBoneB"] = endBoneB;
+    obj_["startAFromBTransform"] = startAFromBTransform.to_json();
+    obj_["endAFromBTransform"] = endAFromBTransform.to_json();
+    return obj_;
+}
+
+void hknpExternMeshShapeData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    aabbTree.read(buffer, tag_file);
+    simdTree.read(buffer, tag_file);
+    buildContext.read(buffer, tag_file);
+    hasBuildContext = buffer.read_pod<hkBool>();
+    buffer.skip(15);
+}
+
+void hknpExternMeshShapeData::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkaiNavMeshClearanceCacheSeeding_CacheDataSet::read(IO::File& buffer, Tag::TagFile& tag_file) {
+nlohmann::json hknpExternMeshShapeData::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["aabbTree"] = aabbTree.to_json();
+    obj_["simdTree"] = simdTree.to_json();
+    obj_["buildContext"] = buildContext.to_json();
+    obj_["hasBuildContext"] = hasBuildContext;
+    return obj_;
+}
+
+void hkcdStaticMeshTreeBase_Primitive::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    indices.read(buffer, tag_file);
+}
+
+void hkcdStaticMeshTreeBase_Primitive::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkcdStaticMeshTreeBase_Primitive::to_json() const {
+    nlohmann::json obj_;
+    obj_["indices"] = indices.to_json();
+    return obj_;
+}
+
+void CPfxPartIndexProperty::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
     buffer.skip(4);
-    cacheDatas.read(buffer, tag_file);
+    partIndex = buffer.read_pod<int>();
+    buffer.skip(4);
 }
 
-void hkaiNavMeshClearanceCacheSeeding_CacheDataSet::print(std::ostream &os) const {
+void CPfxPartIndexProperty::print(std::ostream &os) const {
     hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkaiNavMeshClearanceCacheSeeding_CacheDataSet::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json CPfxPartIndexProperty::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["partIndex"] = partIndex;
+    return obj_;
 }
 
-void hkcdSimdTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
+void hkpAngLimitConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    type.read(buffer, tag_file);
+    isEnabled = buffer.read_pod<hkUint8>();
+    limitAxis = buffer.read_pod<hkUint8>();
+    cosineAxis = buffer.read_pod<hkUint8>();
+    buffer.skip(3);
+    minAngle = buffer.read_pod<hkReal>();
+    maxAngle = buffer.read_pod<hkReal>();
+    angularLimitsTauFactor = buffer.read_pod<hkReal>();
+    angularLimitsDampFactor = buffer.read_pod<hkReal>();
     buffer.skip(8);
-    nodes.read(buffer, tag_file);
 }
 
-void hkcdSimdTree::print(std::ostream &os) const {
-    hkBaseObject::print(os);
+void hkpAngLimitConstraintAtom::print(std::ostream &os) const {
+    hkpConstraintAtom::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdSimdTree::to_json(std::ostream &out) const {
+nlohmann::json hkpAngLimitConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["isEnabled"] = isEnabled;
+    obj_["limitAxis"] = limitAxis;
+    obj_["cosineAxis"] = cosineAxis;
+    obj_["minAngle"] = minAngle;
+    obj_["maxAngle"] = maxAngle;
+    obj_["angularLimitsTauFactor"] = angularLimitsTauFactor;
+    obj_["angularLimitsDampFactor"] = angularLimitsDampFactor;
+    return obj_;
+}
+
+void hkpConstraintMotor::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    type.read(buffer, tag_file);
+    buffer.skip(7);
+}
+
+void hkpConstraintMotor::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkpConstraintMotor::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["type"] = type.to_json();
+    return obj_;
+}
+
+void hkpLimitedHingeConstraintData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUlong>();
+    atoms.read(buffer, tag_file);
+}
+
+void hkpLimitedHingeConstraintData::print(std::ostream &os) const {
+    hkpConstraintData::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkpLimitedHingeConstraintData::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["userData"] = userData;
+    obj_["atoms"] = atoms.to_json();
+    return obj_;
+}
+
+void hkpRagdollConstraintData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUlong>();
+    atoms.read(buffer, tag_file);
+}
+
+void hkpRagdollConstraintData::print(std::ostream &os) const {
+    hkpConstraintData::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkpRagdollConstraintData::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["userData"] = userData;
+    obj_["atoms"] = atoms.to_json();
+    return obj_;
+}
+
+void hknpExternMeshShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    flags.read(buffer, tag_file);
+    type.read(buffer, tag_file);
+    numShapeKeyBits = buffer.read_pod<hkUint8>();
+    dispatchType.read(buffer, tag_file);
+    buffer.skip(3);
+    convexRadius = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUint64>();
+    properties.read(buffer, tag_file);
+    edgeWeldingMap.read(buffer, tag_file);
+    shapeTagCodecInfo = buffer.read_pod<hkUint32>();
+    buffer.skip(4);
+    materialTable.read(buffer, tag_file);
+    buffer.skip(8);
+    geometry.read(buffer, tag_file);
+    boundingVolumeData.read(buffer, tag_file);
+}
+
+void hknpExternMeshShape::print(std::ostream &os) const {
+    hknpCompositeShape::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpExternMeshShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["edgeWeldingMap"] = edgeWeldingMap.to_json();
+    obj_["shapeTagCodecInfo"] = shapeTagCodecInfo;
+    obj_["materialTable"] = materialTable.to_json();
+    obj_["geometry"] = geometry.to_json();
+    obj_["boundingVolumeData"] = boundingVolumeData.to_json();
+    return obj_;
+}
+
+void hkaiDirectedGraphExplicitCost_Edge::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    cost.read(buffer, tag_file);
+    flags.read(buffer, tag_file);
+    target.read(buffer, tag_file);
+}
+
+void hkaiDirectedGraphExplicitCost_Edge::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaiDirectedGraphExplicitCost_Edge::to_json() const {
+    nlohmann::json obj_;
+    obj_["cost"] = cost.to_json();
+    obj_["flags"] = flags.to_json();
+    obj_["target"] = target.to_json();
+    return obj_;
+}
+
+void hkaiDirectedGraphExplicitCost_Node::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    startEdgeIndex = buffer.read_pod<int>();
+    numEdges = buffer.read_pod<int>();
+}
+
+void hkaiDirectedGraphExplicitCost_Node::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaiDirectedGraphExplicitCost_Node::to_json() const {
+    nlohmann::json obj_;
+    obj_["startEdgeIndex"] = startEdgeIndex;
+    obj_["numEdges"] = numEdges;
+    return obj_;
 }
 
 void hkcdStaticAabbTree_Impl::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -793,46 +556,46 @@ void hkcdStaticAabbTree_Impl::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdStaticAabbTree_Impl::to_json(std::ostream &out) const {
+nlohmann::json hkcdStaticAabbTree_Impl::to_json() const {
+    nlohmann::json obj_;
+    obj_["nodes"] = nodes.to_json();
+    obj_["domain"] = domain.to_json();
+    return obj_;
+}
+
+void hkcdStaticTree_Codec3Axis6::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    xyz.read(buffer, tag_file);
+    hiData = buffer.read_pod<hkUint8>();
+    loData = buffer.read_pod<hkUint16>();
+}
+
+void hkcdStaticTree_Codec3Axis6::print(std::ostream &os) const {
+    hkcdStaticTree_Codec3Axis::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkaBoneAttachment::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    originalSkeletonName.read(buffer, tag_file);
-    boneFromAttachment.read(buffer, tag_file);
-    attachment.read(buffer, tag_file);
-    name.read(buffer, tag_file);
-    boneIndex = buffer.read_pod<hkInt16>();
-    buffer.skip(14);
+nlohmann::json hkcdStaticTree_Codec3Axis6::to_json() const {
+    nlohmann::json obj_;
+    obj_["xyz"] = xyz.to_json();
+    obj_["hiData"] = hiData;
+    obj_["loData"] = loData;
+    return obj_;
 }
 
-void hkaBoneAttachment::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
+void hkaiNavMeshClearanceCache_McpDataInteger::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    interpolant = buffer.read_pod<hkUint8>();
+    clearance = buffer.read_pod<hkUint8>();
+}
+
+void hkaiNavMeshClearanceCache_McpDataInteger::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkaBoneAttachment::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMeshClearanceCacheSeeding_CacheData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    id = buffer.read_pod<hkUlong>();
-    info = buffer.read_pod<hkUint32>();
-    infoMask = buffer.read_pod<hkUint32>();
-    initialCache.read(buffer, tag_file);
-}
-
-void hkaiNavMeshClearanceCacheSeeding_CacheData::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiNavMeshClearanceCacheSeeding_CacheData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkaiNavMeshClearanceCache_McpDataInteger::to_json() const {
+    nlohmann::json obj_;
+    obj_["interpolant"] = interpolant;
+    obj_["clearance"] = clearance;
+    return obj_;
 }
 
 void hkaiNavMeshClearanceCache::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -860,45 +623,325 @@ void hkaiNavMeshClearanceCache::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkaiNavMeshClearanceCache::to_json(std::ostream &out) const {
+nlohmann::json hkaiNavMeshClearanceCache::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["clearanceCeiling"] = clearanceCeiling;
+    obj_["clearanceIntToRealMultiplier"] = clearanceIntToRealMultiplier;
+    obj_["clearanceRealToIntMultiplier"] = clearanceRealToIntMultiplier;
+    obj_["faceOffsets"] = faceOffsets.to_json();
+    obj_["edgePairClearances"] = edgePairClearances.to_json();
+    obj_["unusedEdgePairElements"] = unusedEdgePairElements;
+    obj_["mcpData"] = mcpData.to_json();
+    obj_["vertexClearances"] = vertexClearances.to_json();
+    obj_["uncalculatedFacesLowerBound"] = uncalculatedFacesLowerBound;
+    return obj_;
+}
+
+void hkcdStaticTree_Codec3Axis::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    xyz.read(buffer, tag_file);
+}
+
+void hkcdStaticTree_Codec3Axis::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdStaticAabbTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
+nlohmann::json hkcdStaticTree_Codec3Axis::to_json() const {
+    nlohmann::json obj_;
+    obj_["xyz"] = xyz.to_json();
+    return obj_;
+}
+
+void hkaiNavMeshClearanceCacheSeeding_CacheData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    id = buffer.read_pod<hkUlong>();
+    info = buffer.read_pod<hkUint32>();
+    infoMask = buffer.read_pod<hkUint32>();
+    initialCache.read(buffer, tag_file);
+}
+
+void hkaiNavMeshClearanceCacheSeeding_CacheData::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaiNavMeshClearanceCacheSeeding_CacheData::to_json() const {
+    nlohmann::json obj_;
+    obj_["id"] = id;
+    obj_["info"] = info;
+    obj_["infoMask"] = infoMask;
+    obj_["initialCache"] = initialCache.to_json();
+    return obj_;
+}
+
+void hkaiNavMeshClearanceCacheSeeding_CacheDataSet::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
     buffer.skip(4);
-    shouldDeleteTree = buffer.read_pod<hkBool>();
-    buffer.skip(7);
-    treePtr.read(buffer, tag_file);
+    cacheDatas.read(buffer, tag_file);
 }
 
-void hkcdStaticAabbTree::print(std::ostream &os) const {
+void hkaiNavMeshClearanceCacheSeeding_CacheDataSet::print(std::ostream &os) const {
     hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdStaticAabbTree::to_json(std::ostream &out) const {
+nlohmann::json hkaiNavMeshClearanceCacheSeeding_CacheDataSet::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["cacheDatas"] = cacheDatas.to_json();
+    return obj_;
+}
+
+void hkaiStreamingSet_GraphConnection::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    aNodeIndex = buffer.read_pod<int>();
+    bNodeIndex = buffer.read_pod<int>();
+    aEdgeData = buffer.read_pod<hkUint32>();
+    bEdgeData = buffer.read_pod<hkUint32>();
+    aEdgeCost.read(buffer, tag_file);
+    bEdgeCost.read(buffer, tag_file);
+}
+
+void hkaiStreamingSet_GraphConnection::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdStaticTree_Codec3Axis5::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    for (size_t i = 0; i < 3; ++i) {
-        xyz[i] = buffer.read_pod<hkUint8>();
-    }
-    hiData = buffer.read_pod<hkUint8>();
-    loData = buffer.read_pod<hkUint8>();
+nlohmann::json hkaiStreamingSet_GraphConnection::to_json() const {
+    nlohmann::json obj_;
+    obj_["aNodeIndex"] = aNodeIndex;
+    obj_["bNodeIndex"] = bNodeIndex;
+    obj_["aEdgeData"] = aEdgeData;
+    obj_["bEdgeData"] = bEdgeData;
+    obj_["aEdgeCost"] = aEdgeCost.to_json();
+    obj_["bEdgeCost"] = bEdgeCost.to_json();
+    return obj_;
 }
 
-void hkcdStaticTree_Codec3Axis5::print(std::ostream &os) const {
-    hkcdStaticTree_Codec3Axis::print(os);
+void hkaiStreamingSet_NavMeshConnection::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    aFaceEdgeIndex.read(buffer, tag_file);
+    bFaceEdgeIndex.read(buffer, tag_file);
+}
+
+void hkaiStreamingSet_NavMeshConnection::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdStaticTree_Codec3Axis5::to_json(std::ostream &out) const {
+nlohmann::json hkaiStreamingSet_NavMeshConnection::to_json() const {
+    nlohmann::json obj_;
+    obj_["aFaceEdgeIndex"] = aFaceEdgeIndex.to_json();
+    obj_["bFaceEdgeIndex"] = bFaceEdgeIndex.to_json();
+    return obj_;
+}
+
+void hkcdStaticMeshTreeBase::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    nodes.read(buffer, tag_file);
+    domain.read(buffer, tag_file);
+    numPrimitiveKeys = buffer.read_pod<int>();
+    bitsPerKey = buffer.read_pod<int>();
+    maxKeyValue = buffer.read_pod<hkUint32>();
+    primitiveStoresIsFlatConvex = buffer.read_pod<hkUint8>();
+    buffer.skip(3);
+    sections.read(buffer, tag_file);
+    primitives.read(buffer, tag_file);
+    sharedVerticesIndex.read(buffer, tag_file);
+}
+
+void hkcdStaticMeshTreeBase::print(std::ostream &os) const {
+    hkcdStaticTree_Tree::print(os);
     throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkcdStaticMeshTreeBase::to_json() const {
+    nlohmann::json obj_;
+    obj_["nodes"] = nodes.to_json();
+    obj_["domain"] = domain.to_json();
+    obj_["numPrimitiveKeys"] = numPrimitiveKeys;
+    obj_["bitsPerKey"] = bitsPerKey;
+    obj_["maxKeyValue"] = maxKeyValue;
+    obj_["primitiveStoresIsFlatConvex"] = primitiveStoresIsFlatConvex;
+    obj_["sections"] = sections.to_json();
+    obj_["primitives"] = primitives.to_json();
+    obj_["sharedVerticesIndex"] = sharedVerticesIndex.to_json();
+    return obj_;
+}
+
+void hkaiStreamingSet::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    aSectionUid = buffer.read_pod<hkUint32>();
+    bSectionUid = buffer.read_pod<hkUint32>();
+    meshConnections.read(buffer, tag_file);
+    graphConnections.read(buffer, tag_file);
+    volumeConnections.read(buffer, tag_file);
+    aConnectionAabbs.read(buffer, tag_file);
+    bConnectionAabbs.read(buffer, tag_file);
+}
+
+void hkaiStreamingSet::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaiStreamingSet::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["aSectionUid"] = aSectionUid;
+    obj_["bSectionUid"] = bSectionUid;
+    obj_["meshConnections"] = meshConnections.to_json();
+    obj_["graphConnections"] = graphConnections.to_json();
+    obj_["volumeConnections"] = volumeConnections.to_json();
+    obj_["aConnectionAabbs"] = aConnectionAabbs.to_json();
+    obj_["bConnectionAabbs"] = bConnectionAabbs.to_json();
+    return obj_;
+}
+
+void hkaiAnnotatedStreamingSet::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    side.read(buffer, tag_file);
+    buffer.skip(7);
+    streamingSet.read(buffer, tag_file);
+}
+
+void hkaiAnnotatedStreamingSet::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaiAnnotatedStreamingSet::to_json() const {
+    nlohmann::json obj_;
+    obj_["side"] = side.to_json();
+    obj_["streamingSet"] = streamingSet.to_json();
+    return obj_;
+}
+
+void hkpAngMotorConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    type.read(buffer, tag_file);
+    isEnabled = buffer.read_pod<hkBool>();
+    motorAxis = buffer.read_pod<hkUint8>();
+    initializedOffset = buffer.read_pod<hkInt16>();
+    previousTargetAngleOffset = buffer.read_pod<hkInt16>();
+    motor.read(buffer, tag_file);
+    targetAngle = buffer.read_pod<hkReal>();
+    correspondingAngLimitSolverResultOffset = buffer.read_pod<hkInt16>();
+    buffer.skip(10);
+}
+
+void hkpAngMotorConstraintAtom::print(std::ostream &os) const {
+    hkpConstraintAtom::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkpAngMotorConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["isEnabled"] = isEnabled;
+    obj_["motorAxis"] = motorAxis;
+    obj_["initializedOffset"] = initializedOffset;
+    obj_["previousTargetAngleOffset"] = previousTargetAngleOffset;
+    obj_["motor"] = motor.to_json();
+    obj_["targetAngle"] = targetAngle;
+    obj_["correspondingAngLimitSolverResultOffset"] = correspondingAngLimitSolverResultOffset;
+    return obj_;
+}
+
+void hkpAngFrictionConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    type.read(buffer, tag_file);
+    isEnabled = buffer.read_pod<hkUint8>();
+    firstFrictionAxis = buffer.read_pod<hkUint8>();
+    numFrictionAxes = buffer.read_pod<hkUint8>();
+    buffer.skip(3);
+    maxFrictionTorque = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+}
+
+void hkpAngFrictionConstraintAtom::print(std::ostream &os) const {
+    hkpConstraintAtom::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkpAngFrictionConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["isEnabled"] = isEnabled;
+    obj_["firstFrictionAxis"] = firstFrictionAxis;
+    obj_["numFrictionAxes"] = numFrictionAxes;
+    obj_["maxFrictionTorque"] = maxFrictionTorque;
+    return obj_;
+}
+
+void hkp2dAngConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    type.read(buffer, tag_file);
+    freeRotationAxis = buffer.read_pod<hkUint8>();
+    buffer.skip(13);
+}
+
+void hkp2dAngConstraintAtom::print(std::ostream &os) const {
+    hkpConstraintAtom::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkp2dAngConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["freeRotationAxis"] = freeRotationAxis;
+    return obj_;
+}
+
+void hkaSkeletonMapperData_PartitionMappingRange::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    startMappingIndex = buffer.read_pod<int>();
+    numMappings = buffer.read_pod<int>();
+}
+
+void hkaSkeletonMapperData_PartitionMappingRange::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaSkeletonMapperData_PartitionMappingRange::to_json() const {
+    nlohmann::json obj_;
+    obj_["startMappingIndex"] = startMappingIndex;
+    obj_["numMappings"] = numMappings;
+    return obj_;
+}
+
+void hkaDefaultAnimatedReferenceFrame::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    frameType.read(buffer, tag_file);
+    buffer.skip(7);
+    up.read(buffer, tag_file);
+    forward.read(buffer, tag_file);
+    duration = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    referenceFrameSamples.read(buffer, tag_file);
+    buffer.skip(8);
+}
+
+void hkaDefaultAnimatedReferenceFrame::print(std::ostream &os) const {
+    hkaAnimatedReferenceFrame::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaDefaultAnimatedReferenceFrame::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["frameType"] = frameType.to_json();
+    obj_["up"] = up.to_json();
+    obj_["forward"] = forward.to_json();
+    obj_["duration"] = duration;
+    obj_["referenceFrameSamples"] = referenceFrameSamples.to_json();
+    return obj_;
 }
 
 void hknpBoxShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -932,720 +975,28 @@ void hknpBoxShape::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpBoxShape::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticTree_Codec3Axis::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    for (size_t i = 0; i < 3; ++i) {
-        xyz[i] = buffer.read_pod<hkUint8>();
-    }
-}
-
-void hkcdStaticTree_Codec3Axis::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticTree_Codec3Axis::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticTree_Codec3Axis6::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    for (size_t i = 0; i < 3; ++i) {
-        xyz[i] = buffer.read_pod<hkUint8>();
-    }
-    hiData = buffer.read_pod<hkUint8>();
-    loData = buffer.read_pod<hkUint16>();
-}
-
-void hkcdStaticTree_Codec3Axis6::print(std::ostream &os) const {
-    hkcdStaticTree_Codec3Axis::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticTree_Codec3Axis6::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMesh_UserChannelInfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    attributeGroups.read(buffer, tag_file);
-    name.read(buffer, tag_file);
-    className.read(buffer, tag_file);
-}
-
-void hkxMesh_UserChannelInfo::print(std::ostream &os) const {
-    hkxAttributeHolder::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMesh_UserChannelInfo::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpMassDistribution::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    centerOfMassAndVolume.read(buffer, tag_file);
-    majorAxisSpace.read(buffer, tag_file);
-    inertiaTensor.read(buffer, tag_file);
-}
-
-void hknpMassDistribution::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpMassDistribution::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnnotationTrack_Annotation::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    time = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    text.read(buffer, tag_file);
-}
-
-void hkaAnnotationTrack_Annotation::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnnotationTrack_Annotation::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiDirectedGraphExplicitCost::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    positions.read(buffer, tag_file);
-    nodes.read(buffer, tag_file);
-    edges.read(buffer, tag_file);
-    nodeData.read(buffer, tag_file);
-    edgeData.read(buffer, tag_file);
-    nodeDataStriding = buffer.read_pod<int>();
-    edgeDataStriding = buffer.read_pod<int>();
-    streamingSets.read(buffer, tag_file);
-}
-
-void hkaiDirectedGraphExplicitCost::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiDirectedGraphExplicitCost::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiDirectedGraphExplicitCost_Node::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    startEdgeIndex = buffer.read_pod<int>();
-    numEdges = buffer.read_pod<int>();
-}
-
-void hkaiDirectedGraphExplicitCost_Node::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiDirectedGraphExplicitCost_Node::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiDirectedGraphExplicitCost_Edge::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    cost.read(buffer, tag_file);
-    flags.read(buffer, tag_file);
-    target.read(buffer, tag_file);
-}
-
-void hkaiDirectedGraphExplicitCost_Edge::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaiDirectedGraphExplicitCost_Edge::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpPhysicsSceneData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    systemDatas.read(buffer, tag_file);
-    worldCinfo.read(buffer, tag_file);
-}
-
-void hknpPhysicsSceneData::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpPhysicsSceneData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Section::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    nodes.read(buffer, tag_file);
-    domain.read(buffer, tag_file);
-    for (size_t i = 0; i < 6; ++i) {
-        codecParms[i] = buffer.read_pod<hkReal>();
-    }
-    firstPackedVertex = buffer.read_pod<hkUint32>();
-    sharedVertices.read(buffer, tag_file);
-    primitives.read(buffer, tag_file);
-    dataRuns.read(buffer, tag_file);
-    numPackedVertices = buffer.read_pod<hkUint8>();
-    numSharedIndices = buffer.read_pod<hkUint8>();
-    leafIndex = buffer.read_pod<hkUint16>();
-    page = buffer.read_pod<hkUint8>();
-    flags = buffer.read_pod<hkUint8>();
-    layerData = buffer.read_pod<hkUint8>();
-    unusedData = buffer.read_pod<hkUint8>();
-}
-
-void hkcdStaticMeshTreeBase_Section::print(std::ostream &os) const {
-    hkcdStaticTree_Tree::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Section::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpMotionProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    isExclusive = buffer.read_pod<hkUint32>();
-    flags = buffer.read_pod<unsigned int>();
-    gravityFactor = buffer.read_pod<hkReal>();
-    timeFactor = buffer.read_pod<hkReal>();
-    maxLinearSpeed = buffer.read_pod<hkReal>();
-    maxAngularSpeed = buffer.read_pod<hkReal>();
-    linearDamping = buffer.read_pod<hkReal>();
-    angularDamping = buffer.read_pod<hkReal>();
-    solverStabilizationSpeedThreshold = buffer.read_pod<hkReal>();
-    solverStabilizationSpeedReduction = buffer.read_pod<hkReal>();
-    maxDistSqrd = buffer.read_pod<hkReal>();
-    maxRotSqrd = buffer.read_pod<hkReal>();
-    invBlockSize = buffer.read_pod<hkReal>();
-    pathingUpperThreshold = buffer.read_pod<hkInt16>();
-    pathingLowerThreshold = buffer.read_pod<hkInt16>();
-    numDeactivationFrequencyPasses = buffer.read_pod<hkUint8>();
-    deactivationVelocityScaleSquare = buffer.read_pod<hkUint8>();
-    minimumPathingVelocityScaleSquare = buffer.read_pod<hkUint8>();
-    spikingVelocityScaleThresholdSquared = buffer.read_pod<hkUint8>();
-    minimumSpikingVelocityScaleSquared = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
-}
-
-void hknpMotionProperties::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpMotionProperties::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnimationContainer::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    skeletons.read(buffer, tag_file);
-    animations.read(buffer, tag_file);
-    bindings.read(buffer, tag_file);
-    attachments.read(buffer, tag_file);
-    skins.read(buffer, tag_file);
-}
-
-void hkaAnimationContainer::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnimationContainer::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Section_Primitives::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    data = buffer.read_pod<hkUint32>();
-}
-
-void hkcdStaticMeshTreeBase_Section_Primitives::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Section_Primitives::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeleton::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    name.read(buffer, tag_file);
-    parentIndices.read(buffer, tag_file);
-    bones.read(buffer, tag_file);
-    referencePose.read(buffer, tag_file);
-    referenceFloats.read(buffer, tag_file);
-    floatSlots.read(buffer, tag_file);
-    localFrames.read(buffer, tag_file);
-    partitions.read(buffer, tag_file);
-}
-
-void hkaSkeleton::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeleton::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexBuffer::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    data.read(buffer, tag_file);
-    desc.read(buffer, tag_file);
-}
-
-void hkxVertexBuffer::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexBuffer::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMaterial_Property::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    key = buffer.read_pod<hkUint32>();
-    value = buffer.read_pod<hkUint32>();
-}
-
-void hkxMaterial_Property::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMaterial_Property::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkQsTransformf::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    translation.read(buffer, tag_file);
-    rotation.read(buffer, tag_file);
-    scale.read(buffer, tag_file);
-}
-
-void hkQsTransformf::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkQsTransformf::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkQuaternionf::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    vec.read(buffer, tag_file);
-}
-
-void hkQuaternionf::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkQuaternionf::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkLocalFrame::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-}
-
-void hkLocalFrame::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkLocalFrame::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpMaterial::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    name.read(buffer, tag_file);
-    isExclusive = buffer.read_pod<hkUint32>();
-    flags = buffer.read_pod<int>();
-    triggerType.read(buffer, tag_file);
-    triggerManifoldTolerance.read(buffer, tag_file);
-    dynamicFriction.read(buffer, tag_file);
-    staticFriction.read(buffer, tag_file);
-    restitution.read(buffer, tag_file);
-    frictionCombinePolicy.read(buffer, tag_file);
-    restitutionCombinePolicy.read(buffer, tag_file);
-    weldingTolerance.read(buffer, tag_file);
-    maxContactImpulse = buffer.read_pod<hkReal>();
-    fractionOfClippedImpulseToApply = buffer.read_pod<hkReal>();
-    massChangerCategory.read(buffer, tag_file);
-    buffer.skip(1);
-    massChangerHeavyObjectFactor.read(buffer, tag_file);
-    softContactForceFactor.read(buffer, tag_file);
-    softContactDampFactor.read(buffer, tag_file);
-    softContactSeparationVelocity.read(buffer, tag_file);
-    buffer.skip(3);
-    surfaceVelocity.read(buffer, tag_file);
-    disablingCollisionsBetweenCvxCvxDynamicObjectsDistance.read(buffer, tag_file);
-    buffer.skip(6);
-    userData = buffer.read_pod<hkUint64>();
-    isShared = buffer.read_pod<hkBool>();
-    buffer.skip(7);
-}
-
-void hknpMaterial::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpMaterial::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpConstraintMotor::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    type.read(buffer, tag_file);
-    buffer.skip(7);
-}
-
-void hkpConstraintMotor::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpConstraintMotor::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnimation::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    type.read(buffer, tag_file);
-    duration = buffer.read_pod<hkReal>();
-    numberOfTransformTracks = buffer.read_pod<int>();
-    numberOfFloatTracks = buffer.read_pod<int>();
-    extractedMotion.read(buffer, tag_file);
-    annotationTracks.read(buffer, tag_file);
-}
-
-void hkaAnimation::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnimation::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpCompressedMeshShapeTreeDataRun::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    value.read(buffer, tag_file);
-    index = buffer.read_pod<hkUint8>();
-    count = buffer.read_pod<hkUint8>();
-}
-
-void hknpCompressedMeshShapeTreeDataRun::print(std::ostream &os) const {
-    hkcdStaticMeshTreeBase_PrimitiveDataRunBase::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpCompressedMeshShapeTreeDataRun::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaDefaultAnimatedReferenceFrame::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    frameType.read(buffer, tag_file);
-    buffer.skip(7);
-    up.read(buffer, tag_file);
-    forward.read(buffer, tag_file);
-    duration = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    referenceFrameSamples.read(buffer, tag_file);
-    buffer.skip(8);
-}
-
-void hkaDefaultAnimatedReferenceFrame::print(std::ostream &os) const {
-    hkaAnimatedReferenceFrame::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaDefaultAnimatedReferenceFrame::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnimatedReferenceFrame::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    frameType.read(buffer, tag_file);
-    buffer.skip(7);
-}
-
-void hkaAnimatedReferenceFrame::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnimatedReferenceFrame::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnnotationTrack::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    trackName.read(buffer, tag_file);
-    annotations.read(buffer, tag_file);
-}
-
-void hkaAnnotationTrack::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnnotationTrack::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticTree_Codec3Axis4::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    for (size_t i = 0; i < 3; ++i) {
-        xyz[i] = buffer.read_pod<hkUint8>();
-    }
-    data = buffer.read_pod<hkUint8>();
-}
-
-void hkcdStaticTree_Codec3Axis4::print(std::ostream &os) const {
-    hkcdStaticTree_Codec3Axis::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticTree_Codec3Axis4::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnimationBinding::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    originalSkeletonName.read(buffer, tag_file);
-    animation.read(buffer, tag_file);
-    transformTrackToBoneIndices.read(buffer, tag_file);
-    floatTrackToFloatSlotIndices.read(buffer, tag_file);
-    partitionIndices.read(buffer, tag_file);
-    blendHint.read(buffer, tag_file);
-    buffer.skip(7);
-}
-
-void hkaAnimationBinding::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaAnimationBinding::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkGeometry::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    vertices.read(buffer, tag_file);
-    triangles.read(buffer, tag_file);
-}
-
-void hkGeometry::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkGeometry::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Connectivity::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    headers.read(buffer, tag_file);
-    localLinks.read(buffer, tag_file);
-    globalLinks.read(buffer, tag_file);
-}
-
-void hkcdStaticMeshTreeBase_Connectivity::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Connectivity::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkMatrix4f::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    col0.read(buffer, tag_file);
-    col1.read(buffer, tag_file);
-    col2.read(buffer, tag_file);
-    col3.read(buffer, tag_file);
-}
-
-void hkMatrix4f::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkMatrix4f::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaMeshBinding_Mapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    mapping.read(buffer, tag_file);
-}
-
-void hkaMeshBinding_Mapping::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaMeshBinding_Mapping::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkRefCountedProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    entries.read(buffer, tag_file);
-}
-
-void hkRefCountedProperties::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkRefCountedProperties::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMeshSection::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    vertexBuffer.read(buffer, tag_file);
-    indexBuffers.read(buffer, tag_file);
-    material.read(buffer, tag_file);
-    userChannels.read(buffer, tag_file);
-    vertexAnimations.read(buffer, tag_file);
-    linearKeyFrameHints.read(buffer, tag_file);
-    boneMatrixMap.read(buffer, tag_file);
-}
-
-void hkxMeshSection::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMeshSection::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexBuffer_VertexData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    vectorData.read(buffer, tag_file);
-    floatData.read(buffer, tag_file);
-    uint32Data.read(buffer, tag_file);
-    uint16Data.read(buffer, tag_file);
-    uint8Data.read(buffer, tag_file);
-    numVerts = buffer.read_pod<hkUint32>();
-    vectorStride = buffer.read_pod<hkUint32>();
-    floatStride = buffer.read_pod<hkUint32>();
-    uint32Stride = buffer.read_pod<hkUint32>();
-    uint16Stride = buffer.read_pod<hkUint32>();
-    uint8Stride = buffer.read_pod<hkUint32>();
-}
-
-void hkxVertexBuffer_VertexData::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexBuffer_VertexData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexDescription::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    decls.read(buffer, tag_file);
-}
-
-void hkxVertexDescription::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexDescription::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexDescription_ElementDecl::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    byteOffset = buffer.read_pod<hkUint32>();
-    type.read(buffer, tag_file);
-    usage.read(buffer, tag_file);
-    byteStride = buffer.read_pod<hkUint32>();
-    numElements = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
-    channelID.read(buffer, tag_file);
-}
-
-void hkxVertexDescription_ElementDecl::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexDescription_ElementDecl::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Primitive::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    for (size_t i = 0; i < 4; ++i) {
-        indices[i] = buffer.read_pod<hkUint8>();
-    }
-}
-
-void hkcdStaticMeshTreeBase_Primitive::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Primitive::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpConvexShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+nlohmann::json hknpBoxShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["vertices"] = vertices.to_json();
+    obj_["planes"] = planes.to_json();
+    obj_["faces"] = faces.to_json();
+    obj_["indices"] = indices.to_json();
+    obj_["connectivity"] = connectivity.to_json();
+    obj_["obb"] = obb.to_json();
+    return obj_;
+}
+
+void hknpSphereShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
@@ -1664,309 +1015,25 @@ void hknpConvexShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(12);
 }
 
-void hknpConvexShape::print(std::ostream &os) const {
-    hknpShape::print(os);
+void hknpSphereShape::print(std::ostream &os) const {
+    hknpConvexShape::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpConvexShape::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxAttributeHolder::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    attributeGroups.read(buffer, tag_file);
-}
-
-void hkxAttributeHolder::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxAttributeHolder::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxAttributeGroup::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    name.read(buffer, tag_file);
-    attributes.read(buffer, tag_file);
-}
-
-void hkxAttributeGroup::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxAttributeGroup::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxAttribute::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    name.read(buffer, tag_file);
-    value.read(buffer, tag_file);
-}
-
-void hkxAttribute::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxAttribute::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMaterial::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    attributeGroups.read(buffer, tag_file);
-    name.read(buffer, tag_file);
-    stages.read(buffer, tag_file);
-    diffuseColor.read(buffer, tag_file);
-    ambientColor.read(buffer, tag_file);
-    specularColor.read(buffer, tag_file);
-    emissiveColor.read(buffer, tag_file);
-    subMaterials.read(buffer, tag_file);
-    extraData.read(buffer, tag_file);
-    for (size_t i = 0; i < 2; ++i) {
-        uvMapScale[i] = buffer.read_pod<hkReal>();
-    }
-    for (size_t i = 0; i < 2; ++i) {
-        uvMapOffset[i] = buffer.read_pod<hkReal>();
-    }
-    uvMapRotation = buffer.read_pod<hkReal>();
-    uvMapAlgorithm.read(buffer, tag_file);
-    specularMultiplier = buffer.read_pod<hkReal>();
-    specularExponent = buffer.read_pod<hkReal>();
-    transparency.read(buffer, tag_file);
-    buffer.skip(7);
-    userData = buffer.read_pod<hkUlong>();
-    properties.read(buffer, tag_file);
-    buffer.skip(8);
-}
-
-void hkxMaterial::print(std::ostream &os) const {
-    hkxAttributeHolder::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMaterial::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMaterial_TextureStage::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    texture.read(buffer, tag_file);
-    usageHint.read(buffer, tag_file);
-    tcoordChannel = buffer.read_pod<hkInt32>();
-}
-
-void hkxMaterial_TextureStage::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxMaterial_TextureStage::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpExternMeshShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    flags.read(buffer, tag_file);
-    type.read(buffer, tag_file);
-    numShapeKeyBits = buffer.read_pod<hkUint8>();
-    dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
-    convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    userData = buffer.read_pod<hkUint64>();
-    properties.read(buffer, tag_file);
-    edgeWeldingMap.read(buffer, tag_file);
-    shapeTagCodecInfo = buffer.read_pod<hkUint32>();
-    buffer.skip(4);
-    materialTable.read(buffer, tag_file);
-    buffer.skip(8);
-    geometry.read(buffer, tag_file);
-    boundingVolumeData.read(buffer, tag_file);
-}
-
-void hknpExternMeshShape::print(std::ostream &os) const {
-    hknpCompositeShape::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpExternMeshShape::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpCapsuleShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    flags.read(buffer, tag_file);
-    type.read(buffer, tag_file);
-    numShapeKeyBits = buffer.read_pod<hkUint8>();
-    dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
-    convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    userData = buffer.read_pod<hkUint64>();
-    properties.read(buffer, tag_file);
-    vertices.read(buffer, tag_file);
-    buffer.skip(12);
-    planes.read(buffer, tag_file);
-    faces.read(buffer, tag_file);
-    indices.read(buffer, tag_file);
-    buffer.skip(4);
-    connectivity.read(buffer, tag_file);
-    buffer.skip(8);
-    a.read(buffer, tag_file);
-    b.read(buffer, tag_file);
-}
-
-void hknpCapsuleShape::print(std::ostream &os) const {
-    hknpConvexPolytopeShape::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpCapsuleShape::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexAnimation::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    time = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    vertData.read(buffer, tag_file);
-    vertexIndexMap.read(buffer, tag_file);
-    componentMap.read(buffer, tag_file);
-}
-
-void hkxVertexAnimation::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexAnimation::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexAnimation_UsageMap::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    use.read(buffer, tag_file);
-    useIndexOrig = buffer.read_pod<hkUint8>();
-    useIndexLocal = buffer.read_pod<hkUint8>();
-}
-
-void hkxVertexAnimation_UsageMap::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkxVertexAnimation_UsageMap::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpConvexPolytopeShape_Connectivity_Edge::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    faceIndex = buffer.read_pod<hkUint16>();
-    edgeIndex = buffer.read_pod<hkUint8>();
-    for (size_t i = 0; i < 1; ++i) {
-        padding[i] = buffer.read_pod<hkUint8>();
-    }
-}
-
-void hknpConvexPolytopeShape_Connectivity_Edge::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpConvexPolytopeShape_Connectivity_Edge::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpPositionConstraintMotor::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    type.read(buffer, tag_file);
-    buffer.skip(7);
-    minForce = buffer.read_pod<hkReal>();
-    maxForce = buffer.read_pod<hkReal>();
-    tau = buffer.read_pod<hkReal>();
-    damping = buffer.read_pod<hkReal>();
-    proportionalRecoveryVelocity = buffer.read_pod<hkReal>();
-    constantRecoveryVelocity = buffer.read_pod<hkReal>();
-}
-
-void hkpPositionConstraintMotor::print(std::ostream &os) const {
-    hkpLimitedForceConstraintMotor::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpPositionConstraintMotor::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpConvexPolytopeShape_Connectivity::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    vertexEdges.read(buffer, tag_file);
-    faceLinks.read(buffer, tag_file);
-}
-
-void hknpConvexPolytopeShape_Connectivity::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpConvexPolytopeShape_Connectivity::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkTransformf::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    rotation.read(buffer, tag_file);
-    translation.read(buffer, tag_file);
-}
-
-void hkTransformf::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkTransformf::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpAngFrictionConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    type.read(buffer, tag_file);
-    isEnabled = buffer.read_pod<hkUint8>();
-    firstFrictionAxis = buffer.read_pod<hkUint8>();
-    numFrictionAxes = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
-    maxFrictionTorque = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-}
-
-void hkpAngFrictionConstraintAtom::print(std::ostream &os) const {
-    hkpConstraintAtom::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpAngFrictionConstraintAtom::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hknpSphereShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["vertices"] = vertices.to_json();
+    return obj_;
 }
 
 void hkaSplineCompressedAnimation::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2003,81 +1070,402 @@ void hkaSplineCompressedAnimation::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkaSplineCompressedAnimation::to_json(std::ostream &out) const {
+nlohmann::json hkaSplineCompressedAnimation::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["type"] = type.to_json();
+    obj_["duration"] = duration;
+    obj_["numberOfTransformTracks"] = numberOfTransformTracks;
+    obj_["numberOfFloatTracks"] = numberOfFloatTracks;
+    obj_["extractedMotion"] = extractedMotion.to_json();
+    obj_["annotationTracks"] = annotationTracks.to_json();
+    obj_["numFrames"] = numFrames;
+    obj_["numBlocks"] = numBlocks;
+    obj_["maxFramesPerBlock"] = maxFramesPerBlock;
+    obj_["maskAndQuantizationSize"] = maskAndQuantizationSize;
+    obj_["blockDuration"] = blockDuration;
+    obj_["blockInverseDuration"] = blockInverseDuration;
+    obj_["frameDuration"] = frameDuration;
+    obj_["blockOffsets"] = blockOffsets.to_json();
+    obj_["floatBlockOffsets"] = floatBlockOffsets.to_json();
+    obj_["transformOffsets"] = transformOffsets.to_json();
+    obj_["floatOffsets"] = floatOffsets.to_json();
+    obj_["data"] = data.to_json();
+    obj_["endian"] = endian;
+    return obj_;
+}
+
+void hkMeshBoneIndexMapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    mapping.read(buffer, tag_file);
+}
+
+void hkMeshBoneIndexMapping::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpDynamicCompoundShapeTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(24);
-    numLeaves = buffer.read_pod<hkUint32>();
-    path = buffer.read_pod<hkUint32>();
-    root = buffer.read_pod<unsigned short>();
-    buffer.skip(6);
+nlohmann::json hkMeshBoneIndexMapping::to_json() const {
+    nlohmann::json obj_;
+    obj_["mapping"] = mapping.to_json();
+    return obj_;
 }
 
-void hknpDynamicCompoundShapeTree::print(std::ostream &os) const {
-    hkcdDynamicTree_Tree::print(os);
+void hkxVertexAnimation_UsageMap::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    use.read(buffer, tag_file);
+    useIndexOrig = buffer.read_pod<hkUint8>();
+    useIndexLocal = buffer.read_pod<hkUint8>();
+}
+
+void hkxVertexAnimation_UsageMap::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpDynamicCompoundShapeTree::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkxVertexAnimation_UsageMap::to_json() const {
+    nlohmann::json obj_;
+    obj_["use"] = use.to_json();
+    obj_["useIndexOrig"] = useIndexOrig;
+    obj_["useIndexLocal"] = useIndexLocal;
+    return obj_;
 }
 
-void hknpPhysicsSystemData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+void hkxVertexAnimation::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
     buffer.skip(4);
-    materials.read(buffer, tag_file);
-    motionProperties.read(buffer, tag_file);
-    bodyCinfos.read(buffer, tag_file);
-    constraintCinfos.read(buffer, tag_file);
-    referencedObjects.read(buffer, tag_file);
+    time = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    vertData.read(buffer, tag_file);
+    vertexIndexMap.read(buffer, tag_file);
+    componentMap.read(buffer, tag_file);
+}
+
+void hkxVertexAnimation::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxVertexAnimation::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["time"] = time;
+    obj_["vertData"] = vertData.to_json();
+    obj_["vertexIndexMap"] = vertexIndexMap.to_json();
+    obj_["componentMap"] = componentMap.to_json();
+    return obj_;
+}
+
+void hkcdStaticMeshTreeBase_Connectivity::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    headers.read(buffer, tag_file);
+    localLinks.read(buffer, tag_file);
+    globalLinks.read(buffer, tag_file);
+}
+
+void hkcdStaticMeshTreeBase_Connectivity::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkcdStaticMeshTreeBase_Connectivity::to_json() const {
+    nlohmann::json obj_;
+    obj_["headers"] = headers.to_json();
+    obj_["localLinks"] = localLinks.to_json();
+    obj_["globalLinks"] = globalLinks.to_json();
+    return obj_;
+}
+
+void hkBitField::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    storage.read(buffer, tag_file);
+    buffer.skip(4);
+}
+
+void hkBitField::print(std::ostream &os) const {
+    hkBitFieldBase::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkBitField::to_json() const {
+    nlohmann::json obj_;
+    obj_["storage"] = storage.to_json();
+    return obj_;
+}
+
+void hkxMaterial_TextureStage::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    texture.read(buffer, tag_file);
+    usageHint.read(buffer, tag_file);
+    tcoordChannel = buffer.read_pod<hkInt32>();
+}
+
+void hkxMaterial_TextureStage::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxMaterial_TextureStage::to_json() const {
+    nlohmann::json obj_;
+    obj_["texture"] = texture.to_json();
+    obj_["usageHint"] = usageHint.to_json();
+    obj_["tcoordChannel"] = tcoordChannel;
+    return obj_;
+}
+
+void hkxMaterial::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    attributeGroups.read(buffer, tag_file);
     name.read(buffer, tag_file);
+    stages.read(buffer, tag_file);
+    diffuseColor.read(buffer, tag_file);
+    ambientColor.read(buffer, tag_file);
+    specularColor.read(buffer, tag_file);
+    emissiveColor.read(buffer, tag_file);
+    subMaterials.read(buffer, tag_file);
+    extraData.read(buffer, tag_file);
+    uvMapScale.read(buffer, tag_file);
+    uvMapOffset.read(buffer, tag_file);
+    uvMapRotation = buffer.read_pod<hkReal>();
+    uvMapAlgorithm.read(buffer, tag_file);
+    specularMultiplier = buffer.read_pod<hkReal>();
+    specularExponent = buffer.read_pod<hkReal>();
+    transparency.read(buffer, tag_file);
+    buffer.skip(7);
+    userData = buffer.read_pod<hkUlong>();
+    properties.read(buffer, tag_file);
+    buffer.skip(8);
 }
 
-void hknpPhysicsSystemData::print(std::ostream &os) const {
+void hkxMaterial::print(std::ostream &os) const {
+    hkxAttributeHolder::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxMaterial::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["attributeGroups"] = attributeGroups.to_json();
+    obj_["name"] = name.to_json();
+    obj_["stages"] = stages.to_json();
+    obj_["diffuseColor"] = diffuseColor.to_json();
+    obj_["ambientColor"] = ambientColor.to_json();
+    obj_["specularColor"] = specularColor.to_json();
+    obj_["emissiveColor"] = emissiveColor.to_json();
+    obj_["subMaterials"] = subMaterials.to_json();
+    obj_["extraData"] = extraData.to_json();
+    obj_["uvMapScale"] = uvMapScale.to_json();
+    obj_["uvMapOffset"] = uvMapOffset.to_json();
+    obj_["uvMapRotation"] = uvMapRotation;
+    obj_["uvMapAlgorithm"] = uvMapAlgorithm.to_json();
+    obj_["specularMultiplier"] = specularMultiplier;
+    obj_["specularExponent"] = specularExponent;
+    obj_["transparency"] = transparency.to_json();
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    return obj_;
+}
+
+void hkxAttribute::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    name.read(buffer, tag_file);
+    value.read(buffer, tag_file);
+}
+
+void hkxAttribute::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxAttribute::to_json() const {
+    nlohmann::json obj_;
+    obj_["name"] = name.to_json();
+    obj_["value"] = value.to_json();
+    return obj_;
+}
+
+void hkxAttributeGroup::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    name.read(buffer, tag_file);
+    attributes.read(buffer, tag_file);
+}
+
+void hkxAttributeGroup::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxAttributeGroup::to_json() const {
+    nlohmann::json obj_;
+    obj_["name"] = name.to_json();
+    obj_["attributes"] = attributes.to_json();
+    return obj_;
+}
+
+void hkxAttributeHolder::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    attributeGroups.read(buffer, tag_file);
+}
+
+void hkxAttributeHolder::print(std::ostream &os) const {
     hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpPhysicsSystemData::to_json(std::ostream &out) const {
+nlohmann::json hkxAttributeHolder::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["attributeGroups"] = attributeGroups.to_json();
+    return obj_;
+}
+
+void hkaSkeletonMapper::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    mapping.read(buffer, tag_file);
+    buffer.skip(8);
+}
+
+void hkaSkeletonMapper::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkUFloat8::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    value = buffer.read_pod<hkUint8>();
+nlohmann::json hkaSkeletonMapper::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["mapping"] = mapping.to_json();
+    return obj_;
 }
 
-void hkUFloat8::print(std::ostream &os) const {
+void hkxIndexBuffer::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    indexType.read(buffer, tag_file);
+    buffer.skip(7);
+    indices16.read(buffer, tag_file);
+    indices32.read(buffer, tag_file);
+    vertexBaseOffset = buffer.read_pod<hkUint32>();
+    length = buffer.read_pod<hkUint32>();
+}
+
+void hkxIndexBuffer::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkUFloat8::to_json(std::ostream &out) const {
+nlohmann::json hkxIndexBuffer::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["indexType"] = indexType.to_json();
+    obj_["indices16"] = indices16.to_json();
+    obj_["indices32"] = indices32.to_json();
+    obj_["vertexBaseOffset"] = vertexBaseOffset;
+    obj_["length"] = length;
+    return obj_;
+}
+
+void hkpRagdollMotorConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    type.read(buffer, tag_file);
+    isEnabled = buffer.read_pod<hkBool>();
+    buffer.skip(1);
+    initializedOffset = buffer.read_pod<hkInt16>();
+    previousTargetAnglesOffset = buffer.read_pod<hkInt16>();
+    buffer.skip(8);
+    target_bRca.read(buffer, tag_file);
+    motors.read(buffer, tag_file);
+    buffer.skip(8);
+}
+
+void hkpRagdollMotorConstraintAtom::print(std::ostream &os) const {
+    hkpConstraintAtom::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkCompressedMassProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    centerOfMass.read(buffer, tag_file);
-    inertia.read(buffer, tag_file);
-    for (size_t i = 0; i < 4; ++i) {
-        majorAxisSpace[i] = buffer.read_pod<short>();
-    }
-    mass = buffer.read_pod<hkReal>();
-    volume = buffer.read_pod<hkReal>();
+nlohmann::json hkpRagdollMotorConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["isEnabled"] = isEnabled;
+    obj_["initializedOffset"] = initializedOffset;
+    obj_["previousTargetAnglesOffset"] = previousTargetAnglesOffset;
+    obj_["target_bRca"] = target_bRca.to_json();
+    obj_["motors"] = motors.to_json();
+    return obj_;
 }
 
-void hkCompressedMassProperties::print(std::ostream &os) const {
+void hkxVertexDescription_ElementDecl::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    byteOffset = buffer.read_pod<hkUint32>();
+    type.read(buffer, tag_file);
+    usage.read(buffer, tag_file);
+    byteStride = buffer.read_pod<hkUint32>();
+    numElements = buffer.read_pod<hkUint8>();
+    buffer.skip(3);
+    channelID.read(buffer, tag_file);
+}
+
+void hkxVertexDescription_ElementDecl::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkCompressedMassProperties::to_json(std::ostream &out) const {
+nlohmann::json hkxVertexDescription_ElementDecl::to_json() const {
+    nlohmann::json obj_;
+    obj_["byteOffset"] = byteOffset;
+    obj_["type"] = type.to_json();
+    obj_["usage"] = usage.to_json();
+    obj_["byteStride"] = byteStride;
+    obj_["numElements"] = numElements;
+    obj_["channelID"] = channelID.to_json();
+    return obj_;
+}
+
+void hkcdStaticTree_Codec3Axis4::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    xyz.read(buffer, tag_file);
+    data = buffer.read_pod<hkUint8>();
+}
+
+void hkcdStaticTree_Codec3Axis4::print(std::ostream &os) const {
+    hkcdStaticTree_Codec3Axis::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpSurfaceVelocity::read(IO::File& buffer, Tag::TagFile& tag_file) {
+nlohmann::json hkcdStaticTree_Codec3Axis4::to_json() const {
+    nlohmann::json obj_;
+    obj_["xyz"] = xyz.to_json();
+    obj_["data"] = data;
+    return obj_;
+}
+
+void hkxVertexDescription::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    decls.read(buffer, tag_file);
+}
+
+void hkxVertexDescription::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxVertexDescription::to_json() const {
+    nlohmann::json obj_;
+    obj_["decls"] = decls.to_json();
+    return obj_;
+}
+
+void hknpExternMeshShapeGeometry::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
@@ -2085,13 +1473,220 @@ void hknpSurfaceVelocity::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(4);
 }
 
-void hknpSurfaceVelocity::print(std::ostream &os) const {
+void hknpExternMeshShapeGeometry::print(std::ostream &os) const {
     hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpSurfaceVelocity::to_json(std::ostream &out) const {
+nlohmann::json hknpExternMeshShapeGeometry::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    return obj_;
+}
+
+void hkxVertexBuffer_VertexData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    vectorData.read(buffer, tag_file);
+    floatData.read(buffer, tag_file);
+    uint32Data.read(buffer, tag_file);
+    uint16Data.read(buffer, tag_file);
+    uint8Data.read(buffer, tag_file);
+    numVerts = buffer.read_pod<hkUint32>();
+    vectorStride = buffer.read_pod<hkUint32>();
+    floatStride = buffer.read_pod<hkUint32>();
+    uint32Stride = buffer.read_pod<hkUint32>();
+    uint16Stride = buffer.read_pod<hkUint32>();
+    uint8Stride = buffer.read_pod<hkUint32>();
+}
+
+void hkxVertexBuffer_VertexData::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxVertexBuffer_VertexData::to_json() const {
+    nlohmann::json obj_;
+    obj_["vectorData"] = vectorData.to_json();
+    obj_["floatData"] = floatData.to_json();
+    obj_["uint32Data"] = uint32Data.to_json();
+    obj_["uint16Data"] = uint16Data.to_json();
+    obj_["uint8Data"] = uint8Data.to_json();
+    obj_["numVerts"] = numVerts;
+    obj_["vectorStride"] = vectorStride;
+    obj_["floatStride"] = floatStride;
+    obj_["uint32Stride"] = uint32Stride;
+    obj_["uint16Stride"] = uint16Stride;
+    obj_["uint8Stride"] = uint8Stride;
+    return obj_;
+}
+
+void hkxVertexBuffer::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    data.read(buffer, tag_file);
+    desc.read(buffer, tag_file);
+}
+
+void hkxVertexBuffer::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxVertexBuffer::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["data"] = data.to_json();
+    obj_["desc"] = desc.to_json();
+    return obj_;
+}
+
+void CPfxFloatShapeProperty::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    Value = buffer.read_pod<float>();
+    buffer.skip(4);
+}
+
+void CPfxFloatShapeProperty::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json CPfxFloatShapeProperty::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["Value"] = Value;
+    return obj_;
+}
+
+void hkaMeshBinding::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    mesh.read(buffer, tag_file);
+    originalSkeletonName.read(buffer, tag_file);
+    name.read(buffer, tag_file);
+    skeleton.read(buffer, tag_file);
+    mappings.read(buffer, tag_file);
+    boneFromSkinMeshTransforms.read(buffer, tag_file);
+}
+
+void hkaMeshBinding::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaMeshBinding::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["mesh"] = mesh.to_json();
+    obj_["originalSkeletonName"] = originalSkeletonName.to_json();
+    obj_["name"] = name.to_json();
+    obj_["skeleton"] = skeleton.to_json();
+    obj_["mappings"] = mappings.to_json();
+    obj_["boneFromSkinMeshTransforms"] = boneFromSkinMeshTransforms.to_json();
+    return obj_;
+}
+
+void hkMatrix4f::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    col0.read(buffer, tag_file);
+    col1.read(buffer, tag_file);
+    col2.read(buffer, tag_file);
+    col3.read(buffer, tag_file);
+}
+
+void hkMatrix4f::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkMatrix4f::to_json() const {
+    nlohmann::json obj_;
+    obj_["col0"] = col0.to_json();
+    obj_["col1"] = col1.to_json();
+    obj_["col2"] = col2.to_json();
+    obj_["col3"] = col3.to_json();
+    return obj_;
+}
+
+void hkaAnimationBinding::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    originalSkeletonName.read(buffer, tag_file);
+    animation.read(buffer, tag_file);
+    transformTrackToBoneIndices.read(buffer, tag_file);
+    floatTrackToFloatSlotIndices.read(buffer, tag_file);
+    partitionIndices.read(buffer, tag_file);
+    blendHint.read(buffer, tag_file);
+    buffer.skip(7);
+}
+
+void hkaAnimationBinding::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaAnimationBinding::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["originalSkeletonName"] = originalSkeletonName.to_json();
+    obj_["animation"] = animation.to_json();
+    obj_["transformTrackToBoneIndices"] = transformTrackToBoneIndices.to_json();
+    obj_["floatTrackToFloatSlotIndices"] = floatTrackToFloatSlotIndices.to_json();
+    obj_["partitionIndices"] = partitionIndices.to_json();
+    obj_["blendHint"] = blendHint.to_json();
+    return obj_;
+}
+
+void CPfxBreakableShapeCollection::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    rayCastShape.read(buffer, tag_file);
+    worldCollisionShape.read(buffer, tag_file);
+    simplifiedShape.read(buffer, tag_file);
+    partRayCastShapeInfo.read(buffer, tag_file);
+    partWorldCollisionShapeInfo.read(buffer, tag_file);
+    partSimplifiedShapeInfo.read(buffer, tag_file);
+}
+
+void CPfxBreakableShapeCollection::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json CPfxBreakableShapeCollection::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["rayCastShape"] = rayCastShape.to_json();
+    obj_["worldCollisionShape"] = worldCollisionShape.to_json();
+    obj_["simplifiedShape"] = simplifiedShape.to_json();
+    obj_["partRayCastShapeInfo"] = partRayCastShapeInfo.to_json();
+    obj_["partWorldCollisionShapeInfo"] = partWorldCollisionShapeInfo.to_json();
+    obj_["partSimplifiedShapeInfo"] = partSimplifiedShapeInfo.to_json();
+    return obj_;
 }
 
 void hknpMaterialLibrary::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2112,8 +1707,204 @@ void hknpMaterialLibrary::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpMaterialLibrary::to_json(std::ostream &out) const {
+nlohmann::json hknpMaterialLibrary::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["materialAddedSignal"] = materialAddedSignal.to_json();
+    obj_["materialModifiedSignal"] = materialModifiedSignal.to_json();
+    obj_["materialRemovedSignal"] = materialRemovedSignal.to_json();
+    obj_["entries"] = entries.to_json();
+    return obj_;
+}
+
+void hkaAnimationContainer::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    skeletons.read(buffer, tag_file);
+    animations.read(buffer, tag_file);
+    bindings.read(buffer, tag_file);
+    attachments.read(buffer, tag_file);
+    skins.read(buffer, tag_file);
+}
+
+void hkaAnimationContainer::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaAnimationContainer::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["skeletons"] = skeletons.to_json();
+    obj_["animations"] = animations.to_json();
+    obj_["bindings"] = bindings.to_json();
+    obj_["attachments"] = attachments.to_json();
+    obj_["skins"] = skins.to_json();
+    return obj_;
+}
+
+void hkpConstraintData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUlong>();
+}
+
+void hkpConstraintData::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkpConstraintData::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["userData"] = userData;
+    return obj_;
+}
+
+void hkaSkeletonMapperData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    skeletonA.read(buffer, tag_file);
+    skeletonB.read(buffer, tag_file);
+    partitionMap.read(buffer, tag_file);
+    simpleMappingPartitionRanges.read(buffer, tag_file);
+    chainMappingPartitionRanges.read(buffer, tag_file);
+    simpleMappings.read(buffer, tag_file);
+    chainMappings.read(buffer, tag_file);
+    unmappedBones.read(buffer, tag_file);
+    extractedMotionMapping.read(buffer, tag_file);
+    keepUnmappedLocal = buffer.read_pod<hkBool>();
+    buffer.skip(3);
+    mappingType.read(buffer, tag_file);
+    buffer.skip(8);
+}
+
+void hkaSkeletonMapperData::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaSkeletonMapperData::to_json() const {
+    nlohmann::json obj_;
+    obj_["skeletonA"] = skeletonA.to_json();
+    obj_["skeletonB"] = skeletonB.to_json();
+    obj_["partitionMap"] = partitionMap.to_json();
+    obj_["simpleMappingPartitionRanges"] = simpleMappingPartitionRanges.to_json();
+    obj_["chainMappingPartitionRanges"] = chainMappingPartitionRanges.to_json();
+    obj_["simpleMappings"] = simpleMappings.to_json();
+    obj_["chainMappings"] = chainMappings.to_json();
+    obj_["unmappedBones"] = unmappedBones.to_json();
+    obj_["extractedMotionMapping"] = extractedMotionMapping.to_json();
+    obj_["keepUnmappedLocal"] = keepUnmappedLocal;
+    obj_["mappingType"] = mappingType.to_json();
+    return obj_;
+}
+
+void hkcdStaticMeshTreeBase_Section_Primitives::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    data = buffer.read_pod<hkUint32>();
+}
+
+void hkcdStaticMeshTreeBase_Section_Primitives::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkcdStaticMeshTreeBase_Section_Primitives::to_json() const {
+    nlohmann::json obj_;
+    obj_["data"] = data;
+    return obj_;
+}
+
+void hkLocalFrame::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+}
+
+void hkLocalFrame::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkLocalFrame::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    return obj_;
+}
+
+void hkaiNavMesh_Face::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    startEdgeIndex.read(buffer, tag_file);
+    startUserEdgeIndex.read(buffer, tag_file);
+    numEdges = buffer.read_pod<hkInt16>();
+    numUserEdges = buffer.read_pod<hkInt16>();
+    clusterIndex = buffer.read_pod<hkInt16>();
+    padding = buffer.read_pod<hkUint16>();
+}
+
+void hkaiNavMesh_Face::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaiNavMesh_Face::to_json() const {
+    nlohmann::json obj_;
+    obj_["startEdgeIndex"] = startEdgeIndex.to_json();
+    obj_["startUserEdgeIndex"] = startUserEdgeIndex.to_json();
+    obj_["numEdges"] = numEdges;
+    obj_["numUserEdges"] = numUserEdges;
+    obj_["clusterIndex"] = clusterIndex;
+    obj_["padding"] = padding;
+    return obj_;
+}
+
+void hknpSurfaceVelocity::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+}
+
+void hknpSurfaceVelocity::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpSurfaceVelocity::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    return obj_;
+}
+
+void hknpMassDistribution::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    centerOfMassAndVolume.read(buffer, tag_file);
+    majorAxisSpace.read(buffer, tag_file);
+    inertiaTensor.read(buffer, tag_file);
+}
+
+void hknpMassDistribution::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpMassDistribution::to_json() const {
+    nlohmann::json obj_;
+    obj_["centerOfMassAndVolume"] = centerOfMassAndVolume.to_json();
+    obj_["majorAxisSpace"] = majorAxisSpace.to_json();
+    obj_["inertiaTensor"] = inertiaTensor.to_json();
+    return obj_;
 }
 
 void hkRefCountedProperties_Entry::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2127,69 +1918,70 @@ void hkRefCountedProperties_Entry::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkRefCountedProperties_Entry::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkRefCountedProperties_Entry::to_json() const {
+    nlohmann::json obj_;
+    obj_["object"] = object.to_json();
+    obj_["key"] = key;
+    obj_["flags"] = flags;
+    return obj_;
 }
 
-void hknpCompoundShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    flags.read(buffer, tag_file);
-    type.read(buffer, tag_file);
-    numShapeKeyBits = buffer.read_pod<hkUint8>();
-    dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
-    convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+void hknpBodyCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    shape.read(buffer, tag_file);
+    flags = buffer.read_pod<int>();
+    collisionCntrl = buffer.read_pod<short>();
+    buffer.skip(2);
+    collisionFilterInfo = buffer.read_pod<hkUint32>();
+    materialId = buffer.read_pod<unsigned short>();
+    qualityId = buffer.read_pod<unsigned char>();
+    buffer.skip(1);
+    name.read(buffer, tag_file);
     userData = buffer.read_pod<hkUint64>();
-    properties.read(buffer, tag_file);
-    edgeWeldingMap.read(buffer, tag_file);
-    shapeTagCodecInfo = buffer.read_pod<hkUint32>();
+    motionType = buffer.read_pod<unsigned char>();
+    buffer.skip(7);
+    position.read(buffer, tag_file);
+    orientation.read(buffer, tag_file);
+    linearVelocity.read(buffer, tag_file);
+    angularVelocity.read(buffer, tag_file);
+    mass = buffer.read_pod<hkReal>();
     buffer.skip(4);
-    materialTable.read(buffer, tag_file);
-    buffer.skip(8);
-    instances.read(buffer, tag_file);
-    buffer.skip(4);
-    instanceVelocities.read(buffer, tag_file);
-    buffer.skip(8);
-    aabb.read(buffer, tag_file);
-    isMutable = buffer.read_pod<hkBool>();
-    buffer.skip(3);
-    estimatedNumShapeKeys = buffer.read_pod<int>();
-    mutationSignals.read(buffer, tag_file);
-    buffer.skip(8);
-    boundingVolumeData.read(buffer, tag_file);
-    buffer.skip(8);
-}
-
-void hknpCompoundShape::print(std::ostream &os) const {
-    hknpCompoundShapeBase::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpCompoundShape::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpRefMassDistribution::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
     massDistribution.read(buffer, tag_file);
+    motionPropertiesId = buffer.read_pod<unsigned short>();
+    buffer.skip(2);
+    reservedBodyId.read(buffer, tag_file);
+    reservedMotionId = buffer.read_pod<unsigned int>();
+    collisionLookAheadDistance = buffer.read_pod<hkReal>();
+    localFrame.read(buffer, tag_file);
+    buffer.skip(8);
 }
 
-void hknpRefMassDistribution::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
+void hknpBodyCinfo::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpRefMassDistribution::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hknpBodyCinfo::to_json() const {
+    nlohmann::json obj_;
+    obj_["shape"] = shape.to_json();
+    obj_["flags"] = flags;
+    obj_["collisionCntrl"] = collisionCntrl;
+    obj_["collisionFilterInfo"] = collisionFilterInfo;
+    obj_["materialId"] = materialId;
+    obj_["qualityId"] = qualityId;
+    obj_["name"] = name.to_json();
+    obj_["userData"] = userData;
+    obj_["motionType"] = motionType;
+    obj_["position"] = position.to_json();
+    obj_["orientation"] = orientation.to_json();
+    obj_["linearVelocity"] = linearVelocity.to_json();
+    obj_["angularVelocity"] = angularVelocity.to_json();
+    obj_["mass"] = mass;
+    obj_["massDistribution"] = massDistribution.to_json();
+    obj_["motionPropertiesId"] = motionPropertiesId;
+    obj_["reservedBodyId"] = reservedBodyId.to_json();
+    obj_["reservedMotionId"] = reservedMotionId;
+    obj_["collisionLookAheadDistance"] = collisionLookAheadDistance;
+    obj_["localFrame"] = localFrame.to_json();
+    return obj_;
 }
 
 void hkpSetupStabilizationAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2206,8 +1998,191 @@ void hkpSetupStabilizationAtom::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkpSetupStabilizationAtom::to_json(std::ostream &out) const {
+nlohmann::json hkpSetupStabilizationAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["enabled"] = enabled;
+    obj_["maxLinImpulse"] = maxLinImpulse;
+    obj_["maxAngImpulse"] = maxAngImpulse;
+    obj_["maxAngle"] = maxAngle;
+    return obj_;
+}
+
+void hkaAnnotationTrack::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    trackName.read(buffer, tag_file);
+    annotations.read(buffer, tag_file);
+}
+
+void hkaAnnotationTrack::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaAnnotationTrack::to_json() const {
+    nlohmann::json obj_;
+    obj_["trackName"] = trackName.to_json();
+    obj_["annotations"] = annotations.to_json();
+    return obj_;
+}
+
+void hkRefCountedProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    entries.read(buffer, tag_file);
+}
+
+void hkRefCountedProperties::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkRefCountedProperties::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["entries"] = entries.to_json();
+    return obj_;
+}
+
+void hkTransformf::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    rotation.read(buffer, tag_file);
+    translation.read(buffer, tag_file);
+}
+
+void hkTransformf::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkTransformf::to_json() const {
+    nlohmann::json obj_;
+    obj_["rotation"] = rotation.to_json();
+    obj_["translation"] = translation.to_json();
+    return obj_;
+}
+
+void hkpPositionConstraintMotor::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    type.read(buffer, tag_file);
+    buffer.skip(7);
+    minForce = buffer.read_pod<hkReal>();
+    maxForce = buffer.read_pod<hkReal>();
+    tau = buffer.read_pod<hkReal>();
+    damping = buffer.read_pod<hkReal>();
+    proportionalRecoveryVelocity = buffer.read_pod<hkReal>();
+    constantRecoveryVelocity = buffer.read_pod<hkReal>();
+}
+
+void hkpPositionConstraintMotor::print(std::ostream &os) const {
+    hkpLimitedForceConstraintMotor::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkpPositionConstraintMotor::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["type"] = type.to_json();
+    obj_["minForce"] = minForce;
+    obj_["maxForce"] = maxForce;
+    obj_["tau"] = tau;
+    obj_["damping"] = damping;
+    obj_["proportionalRecoveryVelocity"] = proportionalRecoveryVelocity;
+    obj_["constantRecoveryVelocity"] = constantRecoveryVelocity;
+    return obj_;
+}
+
+void hknpMotionPropertiesLibrary::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    entryAddedSignal.read(buffer, tag_file);
+    entryModifiedSignal.read(buffer, tag_file);
+    entryRemovedSignal.read(buffer, tag_file);
+    entries.read(buffer, tag_file);
+    buffer.skip(4);
+}
+
+void hknpMotionPropertiesLibrary::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpMotionPropertiesLibrary::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["entryAddedSignal"] = entryAddedSignal.to_json();
+    obj_["entryModifiedSignal"] = entryModifiedSignal.to_json();
+    obj_["entryRemovedSignal"] = entryRemovedSignal.to_json();
+    obj_["entries"] = entries.to_json();
+    return obj_;
+}
+
+void hknpConvexShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    flags.read(buffer, tag_file);
+    type.read(buffer, tag_file);
+    numShapeKeyBits = buffer.read_pod<hkUint8>();
+    dispatchType.read(buffer, tag_file);
+    buffer.skip(3);
+    convexRadius = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUint64>();
+    properties.read(buffer, tag_file);
+    vertices.read(buffer, tag_file);
+    buffer.skip(12);
+}
+
+void hknpConvexShape::print(std::ostream &os) const {
+    hknpShape::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpConvexShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["vertices"] = vertices.to_json();
+    return obj_;
+}
+
+void hkcdSimdTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    nodes.read(buffer, tag_file);
+}
+
+void hkcdSimdTree::print(std::ostream &os) const {
+    hkBaseObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkcdSimdTree::to_json() const {
+    nlohmann::json obj_;
+    obj_["nodes"] = nodes.to_json();
+    return obj_;
 }
 
 void hknpPhysicsSystemData_bodyCinfoWithAttachment::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2246,67 +2221,724 @@ void hknpPhysicsSystemData_bodyCinfoWithAttachment::print(std::ostream &os) cons
     throw std::runtime_error("Not implemented");
 }
 
-void hknpPhysicsSystemData_bodyCinfoWithAttachment::to_json(std::ostream &out) const {
+nlohmann::json hknpPhysicsSystemData_bodyCinfoWithAttachment::to_json() const {
+    nlohmann::json obj_;
+    obj_["shape"] = shape.to_json();
+    obj_["flags"] = flags;
+    obj_["collisionCntrl"] = collisionCntrl;
+    obj_["collisionFilterInfo"] = collisionFilterInfo;
+    obj_["materialId"] = materialId;
+    obj_["qualityId"] = qualityId;
+    obj_["name"] = name.to_json();
+    obj_["userData"] = userData;
+    obj_["motionType"] = motionType;
+    obj_["position"] = position.to_json();
+    obj_["orientation"] = orientation.to_json();
+    obj_["linearVelocity"] = linearVelocity.to_json();
+    obj_["angularVelocity"] = angularVelocity.to_json();
+    obj_["mass"] = mass;
+    obj_["massDistribution"] = massDistribution.to_json();
+    obj_["motionPropertiesId"] = motionPropertiesId;
+    obj_["reservedBodyId"] = reservedBodyId.to_json();
+    obj_["reservedMotionId"] = reservedMotionId;
+    obj_["collisionLookAheadDistance"] = collisionLookAheadDistance;
+    obj_["localFrame"] = localFrame.to_json();
+    obj_["attachedBody"] = attachedBody;
+    return obj_;
+}
+
+void hknpLodManagerCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    registerDefaultConfig = buffer.read_pod<hkBool>();
+    autoBuildLodOnDynamicBodyAdded = buffer.read_pod<hkBool>();
+    autoBuildLodOnMeshBodyAdded = buffer.read_pod<hkBool>();
+    buffer.skip(1);
+    lodAccuray = buffer.read_pod<hkReal>();
+    slowToFastThreshold = buffer.read_pod<hkReal>();
+    fastToSlowThreshold = buffer.read_pod<hkReal>();
+    bodyIsBigThreshold = buffer.read_pod<hkReal>();
+    avgVelocityGain = buffer.read_pod<hkReal>();
+}
+
+void hknpLodManagerCinfo::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCollisionFilter::read(IO::File& buffer, Tag::TagFile& tag_file) {
+nlohmann::json hknpLodManagerCinfo::to_json() const {
+    nlohmann::json obj_;
+    obj_["registerDefaultConfig"] = registerDefaultConfig;
+    obj_["autoBuildLodOnDynamicBodyAdded"] = autoBuildLodOnDynamicBodyAdded;
+    obj_["autoBuildLodOnMeshBodyAdded"] = autoBuildLodOnMeshBodyAdded;
+    obj_["lodAccuray"] = lodAccuray;
+    obj_["slowToFastThreshold"] = slowToFastThreshold;
+    obj_["fastToSlowThreshold"] = fastToSlowThreshold;
+    obj_["bodyIsBigThreshold"] = bodyIsBigThreshold;
+    obj_["avgVelocityGain"] = avgVelocityGain;
+    return obj_;
+}
+
+void hkGeometry::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
     buffer.skip(4);
-    type.read(buffer, tag_file);
-    buffer.skip(7);
+    vertices.read(buffer, tag_file);
+    triangles.read(buffer, tag_file);
 }
 
-void hknpCollisionFilter::print(std::ostream &os) const {
+void hkGeometry::print(std::ostream &os) const {
     hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCollisionFilter::to_json(std::ostream &out) const {
+nlohmann::json hkGeometry::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["vertices"] = vertices.to_json();
+    obj_["triangles"] = triangles.to_json();
+    return obj_;
+}
+
+void hkaiDirectedGraphExplicitCost::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    positions.read(buffer, tag_file);
+    nodes.read(buffer, tag_file);
+    edges.read(buffer, tag_file);
+    nodeData.read(buffer, tag_file);
+    edgeData.read(buffer, tag_file);
+    nodeDataStriding = buffer.read_pod<int>();
+    edgeDataStriding = buffer.read_pod<int>();
+    streamingSets.read(buffer, tag_file);
+}
+
+void hkaiDirectedGraphExplicitCost::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpConstraintCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    constraintData.read(buffer, tag_file);
-    bodyA.read(buffer, tag_file);
-    bodyB.read(buffer, tag_file);
+nlohmann::json hkaiDirectedGraphExplicitCost::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["positions"] = positions.to_json();
+    obj_["nodes"] = nodes.to_json();
+    obj_["edges"] = edges.to_json();
+    obj_["nodeData"] = nodeData.to_json();
+    obj_["edgeData"] = edgeData.to_json();
+    obj_["nodeDataStriding"] = nodeDataStriding;
+    obj_["edgeDataStriding"] = edgeDataStriding;
+    obj_["streamingSets"] = streamingSets.to_json();
+    return obj_;
+}
+
+void hknpDynamicCompoundShapeData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    aabbTree.read(buffer, tag_file);
+}
+
+void hknpDynamicCompoundShapeData::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpDynamicCompoundShapeData::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["aabbTree"] = aabbTree.to_json();
+    return obj_;
+}
+
+void hknpPhysicsSceneData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    systemDatas.read(buffer, tag_file);
+    worldCinfo.read(buffer, tag_file);
+}
+
+void hknpPhysicsSceneData::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpPhysicsSceneData::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["systemDatas"] = systemDatas.to_json();
+    obj_["worldCinfo"] = worldCinfo.to_json();
+    return obj_;
+}
+
+void hknpCompressedMeshShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
     flags.read(buffer, tag_file);
-    buffer.skip(6);
+    type.read(buffer, tag_file);
+    numShapeKeyBits = buffer.read_pod<hkUint8>();
+    dispatchType.read(buffer, tag_file);
+    buffer.skip(3);
+    convexRadius = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUint64>();
+    properties.read(buffer, tag_file);
+    edgeWeldingMap.read(buffer, tag_file);
+    shapeTagCodecInfo = buffer.read_pod<hkUint32>();
+    buffer.skip(4);
+    materialTable.read(buffer, tag_file);
+    buffer.skip(8);
+    data.read(buffer, tag_file);
+    triangleIsInterior.read(buffer, tag_file);
+    numTriangles = buffer.read_pod<int>();
+    numConvexShapes = buffer.read_pod<int>();
+    buffer.skip(8);
+}
+
+void hknpCompressedMeshShape::print(std::ostream &os) const {
+    hknpCompositeShape::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpCompressedMeshShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["edgeWeldingMap"] = edgeWeldingMap.to_json();
+    obj_["shapeTagCodecInfo"] = shapeTagCodecInfo;
+    obj_["materialTable"] = materialTable.to_json();
+    obj_["data"] = data.to_json();
+    obj_["triangleIsInterior"] = triangleIsInterior.to_json();
+    obj_["numTriangles"] = numTriangles;
+    obj_["numConvexShapes"] = numConvexShapes;
+    return obj_;
+}
+
+void hkpBallSocketConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    type.read(buffer, tag_file);
+    solvingMethod.read(buffer, tag_file);
+    bodiesToNotify = buffer.read_pod<hkUint8>();
+    velocityStabilizationFactor.read(buffer, tag_file);
+    enableLinearImpulseLimit = buffer.read_pod<hkBool>();
+    buffer.skip(2);
+    breachImpulse = buffer.read_pod<hkReal>();
+    inertiaStabilizationFactor = buffer.read_pod<hkReal>();
+}
+
+void hkpBallSocketConstraintAtom::print(std::ostream &os) const {
+    hkpConstraintAtom::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkpBallSocketConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["solvingMethod"] = solvingMethod.to_json();
+    obj_["bodiesToNotify"] = bodiesToNotify;
+    obj_["velocityStabilizationFactor"] = velocityStabilizationFactor.to_json();
+    obj_["enableLinearImpulseLimit"] = enableLinearImpulseLimit;
+    obj_["breachImpulse"] = breachImpulse;
+    obj_["inertiaStabilizationFactor"] = inertiaStabilizationFactor;
+    return obj_;
+}
+
+void hkPropertyDesc::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    type.read(buffer, tag_file);
     name.read(buffer, tag_file);
-    desiredConstraintId.read(buffer, tag_file);
-    constraintGroupId.read(buffer, tag_file);
+    flags.read(buffer, tag_file);
+    buffer.skip(4);
 }
 
-void hknpConstraintCinfo::print(std::ostream &os) const {
+void hkPropertyDesc::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpConstraintCinfo::to_json(std::ostream &out) const {
+nlohmann::json hkPropertyDesc::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["name"] = name.to_json();
+    obj_["flags"] = flags.to_json();
+    return obj_;
+}
+
+void hknpShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    flags.read(buffer, tag_file);
+    type.read(buffer, tag_file);
+    numShapeKeyBits = buffer.read_pod<hkUint8>();
+    dispatchType.read(buffer, tag_file);
+    buffer.skip(3);
+    convexRadius = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUint64>();
+    properties.read(buffer, tag_file);
+}
+
+void hknpShape::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdSimdTree_Node::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    lx.read(buffer, tag_file);
-    hx.read(buffer, tag_file);
-    ly.read(buffer, tag_file);
-    hy.read(buffer, tag_file);
-    lz.read(buffer, tag_file);
-    hz.read(buffer, tag_file);
-    for (size_t i = 0; i < 4; ++i) {
-        data[i] = buffer.read_pod<hkUint32>();
-    }
+nlohmann::json hknpShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    return obj_;
 }
 
-void hkcdSimdTree_Node::print(std::ostream &os) const {
-    hkcdFourAabb::print(os);
+void hkxMesh_UserChannelInfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    attributeGroups.read(buffer, tag_file);
+    name.read(buffer, tag_file);
+    className.read(buffer, tag_file);
+}
+
+void hkxMesh_UserChannelInfo::print(std::ostream &os) const {
+    hkxAttributeHolder::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdSimdTree_Node::to_json(std::ostream &out) const {
+nlohmann::json hkxMesh_UserChannelInfo::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["attributeGroups"] = attributeGroups.to_json();
+    obj_["name"] = name.to_json();
+    obj_["className"] = className.to_json();
+    return obj_;
+}
+
+void hknpRefWorldCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    info.read(buffer, tag_file);
+    buffer.skip(6);
+}
+
+void hknpRefWorldCinfo::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpRefWorldCinfo::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["info"] = info.to_json();
+    return obj_;
+}
+
+void hkaiStreamingSet_VolumeConnection::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    aCellIndex.read(buffer, tag_file);
+    bCellIndex.read(buffer, tag_file);
+}
+
+void hkaiStreamingSet_VolumeConnection::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaiStreamingSet_VolumeConnection::to_json() const {
+    nlohmann::json obj_;
+    obj_["aCellIndex"] = aCellIndex.to_json();
+    obj_["bCellIndex"] = bCellIndex.to_json();
+    return obj_;
+}
+
+void hkContainerHeapAllocator::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(1);
+}
+
+void hkContainerHeapAllocator::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkContainerHeapAllocator::to_json() const {
+    nlohmann::json obj_;
+    return obj_;
+}
+
+void hkPropertyId::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    desc.read(buffer, tag_file);
+}
+
+void hkPropertyId::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkPropertyId::to_json() const {
+    nlohmann::json obj_;
+    obj_["desc"] = desc.to_json();
+    return obj_;
+}
+
+void hkQuaternionf::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    vec.read(buffer, tag_file);
+}
+
+void hkQuaternionf::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkQuaternionf::to_json() const {
+    nlohmann::json obj_;
+    obj_["vec"] = vec.to_json();
+    return obj_;
+}
+
+void hkRootLevelContainer::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    namedVariants.read(buffer, tag_file);
+}
+
+void hkRootLevelContainer::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkRootLevelContainer::to_json() const {
+    nlohmann::json obj_;
+    obj_["namedVariants"] = namedVariants.to_json();
+    return obj_;
+}
+
+void hkGeometry_Triangle::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    a = buffer.read_pod<int>();
+    b = buffer.read_pod<int>();
+    c = buffer.read_pod<int>();
+    material = buffer.read_pod<int>();
+}
+
+void hkGeometry_Triangle::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkGeometry_Triangle::to_json() const {
+    nlohmann::json obj_;
+    obj_["a"] = a;
+    obj_["b"] = b;
+    obj_["c"] = c;
+    obj_["material"] = material;
+    return obj_;
+}
+
+void hkReferencedObject::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+}
+
+void hkReferencedObject::print(std::ostream &os) const {
+    hkBaseObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkReferencedObject::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    return obj_;
+}
+
+void hkaAnnotationTrack_Annotation::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    time = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    text.read(buffer, tag_file);
+}
+
+void hkaAnnotationTrack_Annotation::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaAnnotationTrack_Annotation::to_json() const {
+    nlohmann::json obj_;
+    obj_["time"] = time;
+    obj_["text"] = text.to_json();
+    return obj_;
+}
+
+void hknpBodyId::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    serialAndIndex = buffer.read_pod<hkUint32>();
+}
+
+void hknpBodyId::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpBodyId::to_json() const {
+    nlohmann::json obj_;
+    obj_["serialAndIndex"] = serialAndIndex;
+    return obj_;
+}
+
+void hkAabb::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    min.read(buffer, tag_file);
+    max.read(buffer, tag_file);
+}
+
+void hkAabb::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkAabb::to_json() const {
+    nlohmann::json obj_;
+    obj_["min"] = min.to_json();
+    obj_["max"] = max.to_json();
+    return obj_;
+}
+
+void hkDefaultPropertyBag::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    propertyMap.read(buffer, tag_file);
+    transientPropertyMap.read(buffer, tag_file);
+}
+
+void hkDefaultPropertyBag::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkDefaultPropertyBag::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyMap"] = propertyMap.to_json();
+    obj_["transientPropertyMap"] = transientPropertyMap.to_json();
+    return obj_;
+}
+
+void hknpCompressedMeshShapeTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    nodes.read(buffer, tag_file);
+    domain.read(buffer, tag_file);
+    numPrimitiveKeys = buffer.read_pod<int>();
+    bitsPerKey = buffer.read_pod<int>();
+    maxKeyValue = buffer.read_pod<hkUint32>();
+    primitiveStoresIsFlatConvex = buffer.read_pod<hkUint8>();
+    buffer.skip(3);
+    sections.read(buffer, tag_file);
+    primitives.read(buffer, tag_file);
+    sharedVerticesIndex.read(buffer, tag_file);
+    packedVertices.read(buffer, tag_file);
+    sharedVertices.read(buffer, tag_file);
+    primitiveDataRuns.read(buffer, tag_file);
+}
+
+void hknpCompressedMeshShapeTree::print(std::ostream &os) const {
+    hkcdStaticMeshTree::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpCompressedMeshShapeTree::to_json() const {
+    nlohmann::json obj_;
+    obj_["nodes"] = nodes.to_json();
+    obj_["domain"] = domain.to_json();
+    obj_["numPrimitiveKeys"] = numPrimitiveKeys;
+    obj_["bitsPerKey"] = bitsPerKey;
+    obj_["maxKeyValue"] = maxKeyValue;
+    obj_["primitiveStoresIsFlatConvex"] = primitiveStoresIsFlatConvex;
+    obj_["sections"] = sections.to_json();
+    obj_["primitives"] = primitives.to_json();
+    obj_["sharedVerticesIndex"] = sharedVerticesIndex.to_json();
+    obj_["packedVertices"] = packedVertices.to_json();
+    obj_["sharedVertices"] = sharedVertices.to_json();
+    obj_["primitiveDataRuns"] = primitiveDataRuns.to_json();
+    return obj_;
+}
+
+void hkaiFaceEdgeIndexPair::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    faceIndex.read(buffer, tag_file);
+    edgeIndex.read(buffer, tag_file);
+}
+
+void hkaiFaceEdgeIndexPair::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaiFaceEdgeIndexPair::to_json() const {
+    nlohmann::json obj_;
+    obj_["faceIndex"] = faceIndex.to_json();
+    obj_["edgeIndex"] = edgeIndex.to_json();
+    return obj_;
+}
+
+void hkaBoneAttachment::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    originalSkeletonName.read(buffer, tag_file);
+    boneFromAttachment.read(buffer, tag_file);
+    attachment.read(buffer, tag_file);
+    name.read(buffer, tag_file);
+    boneIndex = buffer.read_pod<hkInt16>();
+    buffer.skip(14);
+}
+
+void hkaBoneAttachment::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaBoneAttachment::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["originalSkeletonName"] = originalSkeletonName.to_json();
+    obj_["boneFromAttachment"] = boneFromAttachment.to_json();
+    obj_["attachment"] = attachment.to_json();
+    obj_["name"] = name.to_json();
+    obj_["boneIndex"] = boneIndex;
+    return obj_;
+}
+
+void hknpBodyQualityLibrary::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    qualityModifiedSignal.read(buffer, tag_file);
+    qualities.read(buffer, tag_file);
+}
+
+void hknpBodyQualityLibrary::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpBodyQualityLibrary::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["qualityModifiedSignal"] = qualityModifiedSignal.to_json();
+    obj_["qualities"] = qualities.to_json();
+    return obj_;
+}
+
+void hknpBodyQuality::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    priority = buffer.read_pod<int>();
+    supportedFlags.read(buffer, tag_file);
+    requestedFlags.read(buffer, tag_file);
+    contactCachingRelativeMovementThreshold = buffer.read_pod<hkReal>();
+}
+
+void hknpBodyQuality::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpBodyQuality::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["priority"] = priority;
+    obj_["supportedFlags"] = supportedFlags.to_json();
+    obj_["requestedFlags"] = requestedFlags.to_json();
+    obj_["contactCachingRelativeMovementThreshold"] = contactCachingRelativeMovementThreshold;
+    return obj_;
+}
+
+void hkStringPtr::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    stringAndFlag.read(buffer, tag_file);
+}
+
+void hkStringPtr::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkStringPtr::to_json() const {
+    nlohmann::json obj_;
+    obj_["stringAndFlag"] = stringAndFlag.to_json();
+    return obj_;
+}
+
+void hkcdStaticMeshTreeBase_Section_DataRuns::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    data = buffer.read_pod<hkUint32>();
+}
+
+void hkcdStaticMeshTreeBase_Section_DataRuns::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkcdStaticMeshTreeBase_Section_DataRuns::to_json() const {
+    nlohmann::json obj_;
+    obj_["data"] = data;
+    return obj_;
+}
+
+void hknpRefMassDistribution::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    massDistribution.read(buffer, tag_file);
+}
+
+void hknpRefMassDistribution::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpRefMassDistribution::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["massDistribution"] = massDistribution.to_json();
+    return obj_;
 }
 
 void hkpConeLimitConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2328,59 +2960,186 @@ void hkpConeLimitConstraintAtom::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkpConeLimitConstraintAtom::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkpConeLimitConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["isEnabled"] = isEnabled;
+    obj_["twistAxisInA"] = twistAxisInA;
+    obj_["refAxisInB"] = refAxisInB;
+    obj_["angleMeasurementMode"] = angleMeasurementMode.to_json();
+    obj_["memOffsetToAngleOffset"] = memOffsetToAngleOffset;
+    obj_["minAngle"] = minAngle;
+    obj_["maxAngle"] = maxAngle;
+    obj_["angularLimitsTauFactor"] = angularLimitsTauFactor;
+    obj_["angularLimitsDampFactor"] = angularLimitsDampFactor;
+    return obj_;
 }
 
-void hknpLodManagerCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    registerDefaultConfig = buffer.read_pod<hkBool>();
-    autoBuildLodOnDynamicBodyAdded = buffer.read_pod<hkBool>();
-    autoBuildLodOnMeshBodyAdded = buffer.read_pod<hkBool>();
-    buffer.skip(1);
-    lodAccuray = buffer.read_pod<hkReal>();
-    slowToFastThreshold = buffer.read_pod<hkReal>();
-    fastToSlowThreshold = buffer.read_pod<hkReal>();
-    bodyIsBigThreshold = buffer.read_pod<hkReal>();
-    avgVelocityGain = buffer.read_pod<hkReal>();
-}
-
-void hknpLodManagerCinfo::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpLodManagerCinfo::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpCompositeShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+void hknpRagdollData::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    flags.read(buffer, tag_file);
+    buffer.skip(4);
+    materials.read(buffer, tag_file);
+    motionProperties.read(buffer, tag_file);
+    bodyCinfos.read(buffer, tag_file);
+    constraintCinfos.read(buffer, tag_file);
+    referencedObjects.read(buffer, tag_file);
+    name.read(buffer, tag_file);
+    skeleton.read(buffer, tag_file);
+    boneToBodyMap.read(buffer, tag_file);
+}
+
+void hknpRagdollData::print(std::ostream &os) const {
+    hknpPhysicsSystemData::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpRagdollData::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["materials"] = materials.to_json();
+    obj_["motionProperties"] = motionProperties.to_json();
+    obj_["bodyCinfos"] = bodyCinfos.to_json();
+    obj_["constraintCinfos"] = constraintCinfos.to_json();
+    obj_["referencedObjects"] = referencedObjects.to_json();
+    obj_["name"] = name.to_json();
+    obj_["skeleton"] = skeleton.to_json();
+    obj_["boneToBodyMap"] = boneToBodyMap.to_json();
+    return obj_;
+}
+
+void hkpConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
     type.read(buffer, tag_file);
-    numShapeKeyBits = buffer.read_pod<hkUint8>();
-    dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
-    convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    userData = buffer.read_pod<hkUint64>();
-    properties.read(buffer, tag_file);
-    edgeWeldingMap.read(buffer, tag_file);
-    shapeTagCodecInfo = buffer.read_pod<hkUint32>();
-    buffer.skip(4);
-    materialTable.read(buffer, tag_file);
+    buffer.skip(14);
+}
+
+void hkpConstraintAtom::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkpConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    return obj_;
+}
+
+void hkxMeshSection::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    vertexBuffer.read(buffer, tag_file);
+    indexBuffers.read(buffer, tag_file);
+    material.read(buffer, tag_file);
+    userChannels.read(buffer, tag_file);
+    vertexAnimations.read(buffer, tag_file);
+    linearKeyFrameHints.read(buffer, tag_file);
+    boneMatrixMap.read(buffer, tag_file);
 }
 
-void hknpCompositeShape::print(std::ostream &os) const {
-    hknpShape::print(os);
+void hkxMeshSection::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompositeShape::to_json(std::ostream &out) const {
+nlohmann::json hkxMeshSection::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["vertexBuffer"] = vertexBuffer.to_json();
+    obj_["indexBuffers"] = indexBuffers.to_json();
+    obj_["material"] = material.to_json();
+    obj_["userChannels"] = userChannels.to_json();
+    obj_["vertexAnimations"] = vertexAnimations.to_json();
+    obj_["linearKeyFrameHints"] = linearKeyFrameHints.to_json();
+    obj_["boneMatrixMap"] = boneMatrixMap.to_json();
+    return obj_;
+}
+
+void hkxMesh::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    sections.read(buffer, tag_file);
+    userChannelInfos.read(buffer, tag_file);
+}
+
+void hkxMesh::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxMesh::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["sections"] = sections.to_json();
+    obj_["userChannelInfos"] = userChannelInfos.to_json();
+    return obj_;
+}
+
+void hkHashMapDetail_Index::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    entries.read(buffer, tag_file);
+    hashMod = buffer.read_pod<int>();
+    buffer.skip(4);
+}
+
+void hkHashMapDetail_Index::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkHashMapDetail_Index::to_json() const {
+    nlohmann::json obj_;
+    obj_["entries"] = entries.to_json();
+    obj_["hashMod"] = hashMod;
+    return obj_;
+}
+
+void hkCompressedMassProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    centerOfMass.read(buffer, tag_file);
+    inertia.read(buffer, tag_file);
+    majorAxisSpace.read(buffer, tag_file);
+    mass = buffer.read_pod<hkReal>();
+    volume = buffer.read_pod<hkReal>();
+}
+
+void hkCompressedMassProperties::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkCompressedMassProperties::to_json() const {
+    nlohmann::json obj_;
+    obj_["centerOfMass"] = centerOfMass.to_json();
+    obj_["inertia"] = inertia.to_json();
+    obj_["majorAxisSpace"] = majorAxisSpace.to_json();
+    obj_["mass"] = mass;
+    obj_["volume"] = volume;
+    return obj_;
+}
+
+void hkxMaterial_Property::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    key = buffer.read_pod<hkUint32>();
+    value = buffer.read_pod<hkUint32>();
+}
+
+void hkxMaterial_Property::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkxMaterial_Property::to_json() const {
+    nlohmann::json obj_;
+    obj_["key"] = key;
+    obj_["value"] = value;
+    return obj_;
 }
 
 void hknpWorldCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2437,72 +3196,98 @@ void hknpWorldCinfo::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpWorldCinfo::to_json(std::ostream &out) const {
+nlohmann::json hknpWorldCinfo::to_json() const {
+    nlohmann::json obj_;
+    obj_["bodyBufferCapacity"] = bodyBufferCapacity;
+    obj_["userBodyBuffer"] = userBodyBuffer.to_json();
+    obj_["motionBufferCapacity"] = motionBufferCapacity;
+    obj_["userMotionBuffer"] = userMotionBuffer.to_json();
+    obj_["constraintBufferCapacity"] = constraintBufferCapacity;
+    obj_["userConstraintBuffer"] = userConstraintBuffer.to_json();
+    obj_["constraintGroupBufferCapacity"] = constraintGroupBufferCapacity;
+    obj_["userConstraintGroupBuffer"] = userConstraintGroupBuffer.to_json();
+    obj_["persistentStreamAllocator"] = persistentStreamAllocator.to_json();
+    obj_["materialLibrary"] = materialLibrary.to_json();
+    obj_["motionPropertiesLibrary"] = motionPropertiesLibrary.to_json();
+    obj_["qualityLibrary"] = qualityLibrary.to_json();
+    obj_["simulationType"] = simulationType;
+    obj_["numSplitterCells"] = numSplitterCells;
+    obj_["gravity"] = gravity.to_json();
+    obj_["enableContactCaching"] = enableContactCaching;
+    obj_["mergeEventsBeforeDispatch"] = mergeEventsBeforeDispatch;
+    obj_["broadPhaseType"] = broadPhaseType;
+    obj_["broadPhaseAabb"] = broadPhaseAabb.to_json();
+    obj_["broadPhaseConfig"] = broadPhaseConfig.to_json();
+    obj_["collisionFilter"] = collisionFilter.to_json();
+    obj_["shapeTagCodec"] = shapeTagCodec.to_json();
+    obj_["collisionTolerance"] = collisionTolerance;
+    obj_["relativeCollisionAccuracy"] = relativeCollisionAccuracy;
+    obj_["aabbMargin"] = aabbMargin;
+    obj_["enableWeldingForDefaultObjects"] = enableWeldingForDefaultObjects;
+    obj_["enableWeldingForCriticalObjects"] = enableWeldingForCriticalObjects;
+    obj_["lodManagerCinfo"] = lodManagerCinfo.to_json();
+    obj_["enableSdfEdgeCollisions"] = enableSdfEdgeCollisions;
+    obj_["enableCollideWorkStealing"] = enableCollideWorkStealing;
+    obj_["solverTau"] = solverTau;
+    obj_["solverDamp"] = solverDamp;
+    obj_["solverIterations"] = solverIterations;
+    obj_["solverMicrosteps"] = solverMicrosteps;
+    obj_["maxApproachSpeedForHighQualitySolver"] = maxApproachSpeedForHighQualitySolver;
+    obj_["enableDeactivation"] = enableDeactivation;
+    obj_["enablePenetrationRecovery"] = enablePenetrationRecovery;
+    return obj_;
+}
+
+void hkReflect_Any::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    type.read(buffer, tag_file);
+    status = buffer.read_pod<unsigned char>();
+    buffer.skip(7);
+    buf.read(buffer, tag_file);
+}
+
+void hkReflect_Any::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpMotionPropertiesLibrary::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
+nlohmann::json hkReflect_Any::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["status"] = status;
+    obj_["buf"] = buf.to_json();
+    return obj_;
+}
+
+void hkaSkeleton_Partition::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    name.read(buffer, tag_file);
+    startBoneIndex = buffer.read_pod<hkInt16>();
+    numBones = buffer.read_pod<hkInt16>();
     buffer.skip(4);
-    entryAddedSignal.read(buffer, tag_file);
-    entryModifiedSignal.read(buffer, tag_file);
-    entryRemovedSignal.read(buffer, tag_file);
-    entries.read(buffer, tag_file);
-    buffer.skip(4);
 }
 
-void hknpMotionPropertiesLibrary::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
+void hkaSkeleton_Partition::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpMotionPropertiesLibrary::to_json(std::ostream &out) const {
+nlohmann::json hkaSkeleton_Partition::to_json() const {
+    nlohmann::json obj_;
+    obj_["name"] = name.to_json();
+    obj_["startBoneIndex"] = startBoneIndex;
+    obj_["numBones"] = numBones;
+    return obj_;
+}
+
+void hkHalf16::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    value = buffer.read_pod<hkInt16>();
+}
+
+void hkHalf16::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpBodyQualityLibrary::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    qualityModifiedSignal.read(buffer, tag_file);
-    for (size_t i = 0; i < 32; ++i) {
-        qualities[i].read(buffer, tag_file);
-    }
-}
-
-void hknpBodyQualityLibrary::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpBodyQualityLibrary::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpBodyQuality::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    priority = buffer.read_pod<int>();
-    supportedFlags.read(buffer, tag_file);
-    requestedFlags.read(buffer, tag_file);
-    contactCachingRelativeMovementThreshold = buffer.read_pod<hkReal>();
-}
-
-void hknpBodyQuality::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpBodyQuality::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkHalf16::to_json() const {
+    nlohmann::json obj_;
+    obj_["value"] = value;
+    return obj_;
 }
 
 void hkpSetLocalTransformsConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2517,137 +3302,198 @@ void hkpSetLocalTransformsConstraintAtom::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkpSetLocalTransformsConstraintAtom::to_json(std::ostream &out) const {
+nlohmann::json hkpSetLocalTransformsConstraintAtom::to_json() const {
+    nlohmann::json obj_;
+    obj_["type"] = type.to_json();
+    obj_["transformA"] = transformA.to_json();
+    obj_["transformB"] = transformB.to_json();
+    return obj_;
+}
+
+void hkPropertyBag::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    bag.read(buffer, tag_file);
+}
+
+void hkPropertyBag::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompoundShapeBase_VelocityInfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    linearVelocity.read(buffer, tag_file);
-    angularVelocity.read(buffer, tag_file);
+nlohmann::json hkPropertyBag::to_json() const {
+    nlohmann::json obj_;
+    obj_["bag"] = bag.to_json();
+    return obj_;
 }
 
-void hknpCompoundShapeBase_VelocityInfo::print(std::ostream &os) const {
+void hkaBone::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    name.read(buffer, tag_file);
+    lockTranslation = buffer.read_pod<hkBool>();
+    buffer.skip(7);
+}
+
+void hkaBone::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompoundShapeBase_VelocityInfo::to_json(std::ostream &out) const {
+nlohmann::json hkaBone::to_json() const {
+    nlohmann::json obj_;
+    obj_["name"] = name.to_json();
+    obj_["lockTranslation"] = lockTranslation;
+    return obj_;
+}
+
+void hknpMorphExternMesh::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(24);
+    pristineGeom.read(buffer, tag_file);
+    deformedGeom.read(buffer, tag_file);
+    morphedVertices.read(buffer, tag_file);
+    morphAmount.read(buffer, tag_file);
+}
+
+void hknpMorphExternMesh::print(std::ostream &os) const {
+    hknpExternMeshShapeGeometry::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpBroadPhaseConfig::read(IO::File& buffer, Tag::TagFile& tag_file) {
+nlohmann::json hknpMorphExternMesh::to_json() const {
+    nlohmann::json obj_;
+    obj_["pristineGeom"] = pristineGeom.to_json();
+    obj_["deformedGeom"] = deformedGeom.to_json();
+    obj_["morphedVertices"] = morphedVertices.to_json();
+    obj_["morphAmount"] = morphAmount.to_json();
+    return obj_;
+}
+
+void hkaAnimatedReferenceFrame::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
     buffer.skip(4);
+    frameType.read(buffer, tag_file);
+    buffer.skip(7);
 }
 
-void hknpBroadPhaseConfig::print(std::ostream &os) const {
+void hkaAnimatedReferenceFrame::print(std::ostream &os) const {
     hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpBroadPhaseConfig::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkaAnimatedReferenceFrame::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["frameType"] = frameType.to_json();
+    return obj_;
 }
 
-void hkpRagdollConstraintData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+void hknpPhysicsSystemData::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
     buffer.skip(4);
-    userData = buffer.read_pod<hkUlong>();
-    atoms.read(buffer, tag_file);
+    materials.read(buffer, tag_file);
+    motionProperties.read(buffer, tag_file);
+    bodyCinfos.read(buffer, tag_file);
+    constraintCinfos.read(buffer, tag_file);
+    referencedObjects.read(buffer, tag_file);
+    name.read(buffer, tag_file);
 }
 
-void hkpRagdollConstraintData::print(std::ostream &os) const {
-    hkpConstraintData::print(os);
+void hknpPhysicsSystemData::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkpRagdollConstraintData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hknpPhysicsSystemData::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["materials"] = materials.to_json();
+    obj_["motionProperties"] = motionProperties.to_json();
+    obj_["bodyCinfos"] = bodyCinfos.to_json();
+    obj_["constraintCinfos"] = constraintCinfos.to_json();
+    obj_["referencedObjects"] = referencedObjects.to_json();
+    obj_["name"] = name.to_json();
+    return obj_;
 }
 
-void hknpConvexPolytopeShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+void hknpShapeTagCodec::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    flags.read(buffer, tag_file);
+    buffer.skip(4);
+    hints.read(buffer, tag_file);
     type.read(buffer, tag_file);
-    numShapeKeyBits = buffer.read_pod<hkUint8>();
-    dispatchType.read(buffer, tag_file);
     buffer.skip(3);
-    convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    userData = buffer.read_pod<hkUint64>();
-    properties.read(buffer, tag_file);
-    vertices.read(buffer, tag_file);
-    buffer.skip(12);
-    planes.read(buffer, tag_file);
-    faces.read(buffer, tag_file);
-    indices.read(buffer, tag_file);
-    buffer.skip(4);
-    connectivity.read(buffer, tag_file);
-    buffer.skip(8);
 }
 
-void hknpConvexPolytopeShape::print(std::ostream &os) const {
-    hknpConvexShape::print(os);
+void hknpShapeTagCodec::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpConvexPolytopeShape::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hknpShapeTagCodec::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["hints"] = hints.to_json();
+    obj_["type"] = type.to_json();
+    return obj_;
 }
 
-void hknpConvexPolytopeShape_Face::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    firstIndex = buffer.read_pod<hkUint16>();
-    numIndices = buffer.read_pod<hkUint8>();
-    minHalfAngle = buffer.read_pod<hkUint8>();
-}
-
-void hknpConvexPolytopeShape_Face::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpConvexPolytopeShape_Face::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpShapeMassProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
+void hknpCollisionFilter::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
     buffer.skip(4);
-    compressedMassProperties.read(buffer, tag_file);
+    type.read(buffer, tag_file);
+    buffer.skip(7);
 }
 
-void hknpShapeMassProperties::print(std::ostream &os) const {
+void hknpCollisionFilter::print(std::ostream &os) const {
     hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpShapeMassProperties::to_json(std::ostream &out) const {
+nlohmann::json hknpCollisionFilter::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["type"] = type.to_json();
+    return obj_;
+}
+
+void hkaiNavMesh_Edge::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    a.read(buffer, tag_file);
+    b.read(buffer, tag_file);
+    oppositeEdge.read(buffer, tag_file);
+    oppositeFace.read(buffer, tag_file);
+    flags.read(buffer, tag_file);
+    paddingByte = buffer.read_pod<hkUint8>();
+    userEdgeCost.read(buffer, tag_file);
+}
+
+void hkaiNavMesh_Edge::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkPackedVector3::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    for (size_t i = 0; i < 4; ++i) {
-        values[i] = buffer.read_pod<hkInt16>();
-    }
-}
-
-void hkPackedVector3::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkPackedVector3::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkaiNavMesh_Edge::to_json() const {
+    nlohmann::json obj_;
+    obj_["a"] = a.to_json();
+    obj_["b"] = b.to_json();
+    obj_["oppositeEdge"] = oppositeEdge.to_json();
+    obj_["oppositeFace"] = oppositeFace.to_json();
+    obj_["flags"] = flags.to_json();
+    obj_["paddingByte"] = paddingByte;
+    obj_["userEdgeCost"] = userEdgeCost.to_json();
+    return obj_;
 }
 
 void hknpCompoundShapeBase::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2687,8 +3533,334 @@ void hknpCompoundShapeBase::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompoundShapeBase::to_json(std::ostream &out) const {
+nlohmann::json hknpCompoundShapeBase::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["edgeWeldingMap"] = edgeWeldingMap.to_json();
+    obj_["shapeTagCodecInfo"] = shapeTagCodecInfo;
+    obj_["materialTable"] = materialTable.to_json();
+    obj_["instances"] = instances.to_json();
+    obj_["instanceVelocities"] = instanceVelocities.to_json();
+    obj_["aabb"] = aabb.to_json();
+    obj_["isMutable"] = isMutable;
+    obj_["estimatedNumShapeKeys"] = estimatedNumShapeKeys;
+    obj_["mutationSignals"] = mutationSignals.to_json();
+    return obj_;
+}
+
+void hknpConvexPolytopeShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    flags.read(buffer, tag_file);
+    type.read(buffer, tag_file);
+    numShapeKeyBits = buffer.read_pod<hkUint8>();
+    dispatchType.read(buffer, tag_file);
+    buffer.skip(3);
+    convexRadius = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUint64>();
+    properties.read(buffer, tag_file);
+    vertices.read(buffer, tag_file);
+    buffer.skip(12);
+    planes.read(buffer, tag_file);
+    faces.read(buffer, tag_file);
+    indices.read(buffer, tag_file);
+    buffer.skip(4);
+    connectivity.read(buffer, tag_file);
+    buffer.skip(8);
+}
+
+void hknpConvexPolytopeShape::print(std::ostream &os) const {
+    hknpConvexShape::print(os);
     throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpConvexPolytopeShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["vertices"] = vertices.to_json();
+    obj_["planes"] = planes.to_json();
+    obj_["faces"] = faces.to_json();
+    obj_["indices"] = indices.to_json();
+    obj_["connectivity"] = connectivity.to_json();
+    return obj_;
+}
+
+void hkRootLevelContainer_NamedVariant::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    name.read(buffer, tag_file);
+    className.read(buffer, tag_file);
+    variant.read(buffer, tag_file);
+}
+
+void hkRootLevelContainer_NamedVariant::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkRootLevelContainer_NamedVariant::to_json() const {
+    nlohmann::json obj_;
+    obj_["name"] = name.to_json();
+    obj_["className"] = className.to_json();
+    obj_["variant"] = variant.to_json();
+    return obj_;
+}
+
+void hknpCompressedMeshShapeTreeDataRun::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    value.read(buffer, tag_file);
+    index = buffer.read_pod<hkUint8>();
+    count = buffer.read_pod<hkUint8>();
+}
+
+void hknpCompressedMeshShapeTreeDataRun::print(std::ostream &os) const {
+    hkcdStaticMeshTreeBase_PrimitiveDataRunBase::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpCompressedMeshShapeTreeDataRun::to_json() const {
+    nlohmann::json obj_;
+    obj_["value"] = value.to_json();
+    obj_["index"] = index;
+    obj_["count"] = count;
+    return obj_;
+}
+
+void hknpMotionProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    isExclusive = buffer.read_pod<hkUint32>();
+    flags = buffer.read_pod<unsigned int>();
+    gravityFactor = buffer.read_pod<hkReal>();
+    timeFactor = buffer.read_pod<hkReal>();
+    maxLinearSpeed = buffer.read_pod<hkReal>();
+    maxAngularSpeed = buffer.read_pod<hkReal>();
+    linearDamping = buffer.read_pod<hkReal>();
+    angularDamping = buffer.read_pod<hkReal>();
+    solverStabilizationSpeedThreshold = buffer.read_pod<hkReal>();
+    solverStabilizationSpeedReduction = buffer.read_pod<hkReal>();
+    maxDistSqrd = buffer.read_pod<hkReal>();
+    maxRotSqrd = buffer.read_pod<hkReal>();
+    invBlockSize = buffer.read_pod<hkReal>();
+    pathingUpperThreshold = buffer.read_pod<hkInt16>();
+    pathingLowerThreshold = buffer.read_pod<hkInt16>();
+    numDeactivationFrequencyPasses = buffer.read_pod<hkUint8>();
+    deactivationVelocityScaleSquare = buffer.read_pod<hkUint8>();
+    minimumPathingVelocityScaleSquare = buffer.read_pod<hkUint8>();
+    spikingVelocityScaleThresholdSquared = buffer.read_pod<hkUint8>();
+    minimumSpikingVelocityScaleSquared = buffer.read_pod<hkUint8>();
+    buffer.skip(3);
+}
+
+void hknpMotionProperties::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpMotionProperties::to_json() const {
+    nlohmann::json obj_;
+    obj_["isExclusive"] = isExclusive;
+    obj_["flags"] = flags;
+    obj_["gravityFactor"] = gravityFactor;
+    obj_["timeFactor"] = timeFactor;
+    obj_["maxLinearSpeed"] = maxLinearSpeed;
+    obj_["maxAngularSpeed"] = maxAngularSpeed;
+    obj_["linearDamping"] = linearDamping;
+    obj_["angularDamping"] = angularDamping;
+    obj_["solverStabilizationSpeedThreshold"] = solverStabilizationSpeedThreshold;
+    obj_["solverStabilizationSpeedReduction"] = solverStabilizationSpeedReduction;
+    obj_["maxDistSqrd"] = maxDistSqrd;
+    obj_["maxRotSqrd"] = maxRotSqrd;
+    obj_["invBlockSize"] = invBlockSize;
+    obj_["pathingUpperThreshold"] = pathingUpperThreshold;
+    obj_["pathingLowerThreshold"] = pathingLowerThreshold;
+    obj_["numDeactivationFrequencyPasses"] = numDeactivationFrequencyPasses;
+    obj_["deactivationVelocityScaleSquare"] = deactivationVelocityScaleSquare;
+    obj_["minimumPathingVelocityScaleSquare"] = minimumPathingVelocityScaleSquare;
+    obj_["spikingVelocityScaleThresholdSquared"] = spikingVelocityScaleThresholdSquared;
+    obj_["minimumSpikingVelocityScaleSquared"] = minimumSpikingVelocityScaleSquared;
+    return obj_;
+}
+
+void hknpConvexPolytopeShape_Connectivity::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    vertexEdges.read(buffer, tag_file);
+    faceLinks.read(buffer, tag_file);
+}
+
+void hknpConvexPolytopeShape_Connectivity::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpConvexPolytopeShape_Connectivity::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["vertexEdges"] = vertexEdges.to_json();
+    obj_["faceLinks"] = faceLinks.to_json();
+    return obj_;
+}
+
+void hkaMeshBinding_Mapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    mapping.read(buffer, tag_file);
+}
+
+void hkaMeshBinding_Mapping::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkaMeshBinding_Mapping::to_json() const {
+    nlohmann::json obj_;
+    obj_["mapping"] = mapping.to_json();
+    return obj_;
+}
+
+void hknpConstraintCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    constraintData.read(buffer, tag_file);
+    bodyA.read(buffer, tag_file);
+    bodyB.read(buffer, tag_file);
+    flags.read(buffer, tag_file);
+    buffer.skip(6);
+    name.read(buffer, tag_file);
+    desiredConstraintId.read(buffer, tag_file);
+    constraintGroupId.read(buffer, tag_file);
+}
+
+void hknpConstraintCinfo::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpConstraintCinfo::to_json() const {
+    nlohmann::json obj_;
+    obj_["constraintData"] = constraintData.to_json();
+    obj_["bodyA"] = bodyA.to_json();
+    obj_["bodyB"] = bodyB.to_json();
+    obj_["flags"] = flags.to_json();
+    obj_["name"] = name.to_json();
+    obj_["desiredConstraintId"] = desiredConstraintId.to_json();
+    obj_["constraintGroupId"] = constraintGroupId.to_json();
+    return obj_;
+}
+
+void hknpConvexPolytopeShape_Connectivity_Edge::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    faceIndex = buffer.read_pod<hkUint16>();
+    edgeIndex = buffer.read_pod<hkUint8>();
+    padding.read(buffer, tag_file);
+}
+
+void hknpConvexPolytopeShape_Connectivity_Edge::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpConvexPolytopeShape_Connectivity_Edge::to_json() const {
+    nlohmann::json obj_;
+    obj_["faceIndex"] = faceIndex;
+    obj_["edgeIndex"] = edgeIndex;
+    obj_["padding"] = padding.to_json();
+    return obj_;
+}
+
+void hknpShapeMassProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    compressedMassProperties.read(buffer, tag_file);
+}
+
+void hknpShapeMassProperties::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpShapeMassProperties::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["compressedMassProperties"] = compressedMassProperties.to_json();
+    return obj_;
+}
+
+void hkPackedVector3::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    values.read(buffer, tag_file);
+}
+
+void hkPackedVector3::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkPackedVector3::to_json() const {
+    nlohmann::json obj_;
+    obj_["values"] = values.to_json();
+    return obj_;
+}
+
+void hknpCompositeShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    flags.read(buffer, tag_file);
+    type.read(buffer, tag_file);
+    numShapeKeyBits = buffer.read_pod<hkUint8>();
+    dispatchType.read(buffer, tag_file);
+    buffer.skip(3);
+    convexRadius = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUint64>();
+    properties.read(buffer, tag_file);
+    edgeWeldingMap.read(buffer, tag_file);
+    shapeTagCodecInfo = buffer.read_pod<hkUint32>();
+    buffer.skip(4);
+    materialTable.read(buffer, tag_file);
+    buffer.skip(8);
+}
+
+void hknpCompositeShape::print(std::ostream &os) const {
+    hknpShape::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpCompositeShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["edgeWeldingMap"] = edgeWeldingMap.to_json();
+    obj_["shapeTagCodecInfo"] = shapeTagCodecInfo;
+    obj_["materialTable"] = materialTable.to_json();
+    return obj_;
 }
 
 void hknpShapeInstance::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2697,9 +3869,7 @@ void hknpShapeInstance::read(IO::File& buffer, Tag::TagFile& tag_file) {
     shape.read(buffer, tag_file);
     shapeTag = buffer.read_pod<hkUint16>();
     destructionTag = buffer.read_pod<hkUint16>();
-    for (size_t i = 0; i < 30; ++i) {
-        padding[i] = buffer.read_pod<hkUint8>();
-    }
+    padding.read(buffer, tag_file);
     buffer.skip(6);
 }
 
@@ -2707,151 +3877,15 @@ void hknpShapeInstance::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpShapeInstance::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkBitField::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    storage.read(buffer, tag_file);
-    buffer.skip(4);
-}
-
-void hkBitField::print(std::ostream &os) const {
-    hkBitFieldBase::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkBitField::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpShapeSignals::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    shapeMutated.read(buffer, tag_file);
-    shapeDestroyed.read(buffer, tag_file);
-}
-
-void hknpShapeSignals::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpShapeSignals::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpDynamicCompoundShapeData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    aabbTree.read(buffer, tag_file);
-}
-
-void hknpDynamicCompoundShapeData::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpDynamicCompoundShapeData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdDynamicTree_AnisotropicMetric::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(1);
-}
-
-void hkcdDynamicTree_AnisotropicMetric::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdDynamicTree_AnisotropicMetric::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdDynamicTree_Codec32::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    aabb.read(buffer, tag_file);
-}
-
-void hkcdDynamicTree_Codec32::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdDynamicTree_Codec32::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void CPfxBreakableShapeCollection::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    rayCastShape.read(buffer, tag_file);
-    worldCollisionShape.read(buffer, tag_file);
-    simplifiedShape.read(buffer, tag_file);
-    partRayCastShapeInfo.read(buffer, tag_file);
-    partWorldCollisionShapeInfo.read(buffer, tag_file);
-    partSimplifiedShapeInfo.read(buffer, tag_file);
-}
-
-void CPfxBreakableShapeCollection::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void CPfxBreakableShapeCollection::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void SPartShapeInfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    partIndex = buffer.read_pod<int>();
-    parentPartIndex = buffer.read_pod<int>();
-    shapeKey = buffer.read_pod<hkUint32>();
-    size = buffer.read_pod<int>();
-}
-
-void SPartShapeInfo::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void SPartShapeInfo::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpExternMeshShapeGeometry::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-}
-
-void hknpExternMeshShapeGeometry::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpExternMeshShapeGeometry::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpLimitedHingeConstraintData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    userData = buffer.read_pod<hkUlong>();
-    atoms.read(buffer, tag_file);
-}
-
-void hkpLimitedHingeConstraintData::print(std::ostream &os) const {
-    hkpConstraintData::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpLimitedHingeConstraintData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hknpShapeInstance::to_json() const {
+    nlohmann::json obj_;
+    obj_["transform"] = transform.to_json();
+    obj_["scale"] = scale.to_json();
+    obj_["shape"] = shape.to_json();
+    obj_["shapeTag"] = shapeTag;
+    obj_["destructionTag"] = destructionTag;
+    obj_["padding"] = padding.to_json();
+    return obj_;
 }
 
 void hkpLimitedHingeConstraintData_Atoms::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -2872,304 +3906,128 @@ void hkpLimitedHingeConstraintData_Atoms::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkpLimitedHingeConstraintData_Atoms::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkpLimitedHingeConstraintData_Atoms::to_json() const {
+    nlohmann::json obj_;
+    obj_["transforms"] = transforms.to_json();
+    obj_["setupStabilization"] = setupStabilization.to_json();
+    obj_["angMotor"] = angMotor.to_json();
+    obj_["angFriction"] = angFriction.to_json();
+    obj_["angLimit"] = angLimit.to_json();
+    obj_["_2dAng"] = _2dAng.to_json();
+    obj_["ballSocket"] = ballSocket.to_json();
+    return obj_;
 }
 
-void hkpConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    type.read(buffer, tag_file);
-    buffer.skip(14);
-}
-
-void hkpConstraintAtom::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpConstraintAtom::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpAngLimitConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    type.read(buffer, tag_file);
-    isEnabled = buffer.read_pod<hkUint8>();
-    limitAxis = buffer.read_pod<hkUint8>();
-    cosineAxis = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
-    minAngle = buffer.read_pod<hkReal>();
-    maxAngle = buffer.read_pod<hkReal>();
-    angularLimitsTauFactor = buffer.read_pod<hkReal>();
-    angularLimitsDampFactor = buffer.read_pod<hkReal>();
-    buffer.skip(8);
-}
-
-void hkpAngLimitConstraintAtom::print(std::ostream &os) const {
-    hkpConstraintAtom::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpAngLimitConstraintAtom::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpBallSocketConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    type.read(buffer, tag_file);
-    solvingMethod.read(buffer, tag_file);
-    bodiesToNotify = buffer.read_pod<hkUint8>();
-    velocityStabilizationFactor.read(buffer, tag_file);
-    enableLinearImpulseLimit = buffer.read_pod<hkBool>();
-    buffer.skip(2);
-    breachImpulse = buffer.read_pod<hkReal>();
-    inertiaStabilizationFactor = buffer.read_pod<hkReal>();
-}
-
-void hkpBallSocketConstraintAtom::print(std::ostream &os) const {
-    hkpConstraintAtom::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpBallSocketConstraintAtom::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkGeometry_Triangle::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    a = buffer.read_pod<int>();
-    b = buffer.read_pod<int>();
-    c = buffer.read_pod<int>();
-    material = buffer.read_pod<int>();
-}
-
-void hkGeometry_Triangle::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkGeometry_Triangle::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void CPfxPartIndexProperty::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    partIndex = buffer.read_pod<int>();
-    buffer.skip(4);
-}
-
-void CPfxPartIndexProperty::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void CPfxPartIndexProperty::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpMorphExternMesh::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(24);
-    pristineGeom.read(buffer, tag_file);
-    deformedGeom.read(buffer, tag_file);
-    morphedVertices.read(buffer, tag_file);
-    morphAmount.read(buffer, tag_file);
-}
-
-void hknpMorphExternMesh::print(std::ostream &os) const {
-    hknpExternMeshShapeGeometry::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpMorphExternMesh::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpExternMeshShapeData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    aabbTree.read(buffer, tag_file);
-    simdTree.read(buffer, tag_file);
-    buildContext.read(buffer, tag_file);
-    hasBuildContext = buffer.read_pod<hkBool>();
-    buffer.skip(15);
-}
-
-void hknpExternMeshShapeData::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpExternMeshShapeData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void CPfxFloatShapeProperty::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
-    Value = buffer.read_pod<float>();
-    buffer.skip(4);
-}
-
-void CPfxFloatShapeProperty::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void CPfxFloatShapeProperty::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeletonMapper::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    mapping.read(buffer, tag_file);
-    buffer.skip(8);
-}
-
-void hkaSkeletonMapper::print(std::ostream &os) const {
-    hkReferencedObject::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeletonMapper::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeletonMapperData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    skeletonA.read(buffer, tag_file);
-    skeletonB.read(buffer, tag_file);
-    partitionMap.read(buffer, tag_file);
-    simpleMappingPartitionRanges.read(buffer, tag_file);
-    chainMappingPartitionRanges.read(buffer, tag_file);
-    simpleMappings.read(buffer, tag_file);
-    chainMappings.read(buffer, tag_file);
-    unmappedBones.read(buffer, tag_file);
-    extractedMotionMapping.read(buffer, tag_file);
-    keepUnmappedLocal = buffer.read_pod<hkBool>();
-    buffer.skip(3);
-    mappingType.read(buffer, tag_file);
-    buffer.skip(8);
-}
-
-void hkaSkeletonMapperData::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeletonMapperData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeletonMapperData_PartitionMappingRange::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    startMappingIndex = buffer.read_pod<int>();
-    numMappings = buffer.read_pod<int>();
-}
-
-void hkaSkeletonMapperData_PartitionMappingRange::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeletonMapperData_PartitionMappingRange::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeletonMapperData_SimpleMapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    boneA = buffer.read_pod<hkInt16>();
-    boneB = buffer.read_pod<hkInt16>();
-    buffer.skip(12);
-    aFromBTransform.read(buffer, tag_file);
-}
-
-void hkaSkeletonMapperData_SimpleMapping::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkaSkeletonMapperData_SimpleMapping::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpSphereShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
-    propertyBag.read(buffer, tag_file);
-    memSizeAndFlags = buffer.read_pod<hkUint16>();
-    refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
-    flags.read(buffer, tag_file);
-    type.read(buffer, tag_file);
-    numShapeKeyBits = buffer.read_pod<hkUint8>();
-    dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
-    convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
-    userData = buffer.read_pod<hkUint64>();
-    properties.read(buffer, tag_file);
-    vertices.read(buffer, tag_file);
-    buffer.skip(12);
-}
-
-void hknpSphereShape::print(std::ostream &os) const {
-    hknpConvexShape::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpSphereShape::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpRagdollConstraintData_Atoms::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    transforms.read(buffer, tag_file);
-    setupStabilization.read(buffer, tag_file);
-    ragdollMotors.read(buffer, tag_file);
-    buffer.skip(8);
-    angFriction.read(buffer, tag_file);
-    buffer.skip(4);
-    twistLimit.read(buffer, tag_file);
-    buffer.skip(8);
-    coneLimit.read(buffer, tag_file);
-    buffer.skip(8);
-    planesLimit.read(buffer, tag_file);
-    buffer.skip(8);
-    ballSocket.read(buffer, tag_file);
-}
-
-void hkpRagdollConstraintData_Atoms::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpRagdollConstraintData_Atoms::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkpRagdollMotorConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    type.read(buffer, tag_file);
-    isEnabled = buffer.read_pod<hkBool>();
+void hkcdDynamicTree_AnisotropicMetric::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(1);
-    initializedOffset = buffer.read_pod<hkInt16>();
-    previousTargetAnglesOffset = buffer.read_pod<hkInt16>();
-    buffer.skip(8);
-    target_bRca.read(buffer, tag_file);
-    for (size_t i = 0; i < 3; ++i) {
-        motors[i].read(buffer, tag_file);
-    }
-    buffer.skip(8);
 }
 
-void hkpRagdollMotorConstraintAtom::print(std::ostream &os) const {
-    hkpConstraintAtom::print(os);
+void hkcdDynamicTree_AnisotropicMetric::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkpRagdollMotorConstraintAtom::to_json(std::ostream &out) const {
+nlohmann::json hkcdDynamicTree_AnisotropicMetric::to_json() const {
+    nlohmann::json obj_;
+    return obj_;
+}
+
+void hkaiNavMesh::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    faces.read(buffer, tag_file);
+    edges.read(buffer, tag_file);
+    vertices.read(buffer, tag_file);
+    streamingSets.read(buffer, tag_file);
+    faceData.read(buffer, tag_file);
+    edgeData.read(buffer, tag_file);
+    faceDataStriding = buffer.read_pod<int>();
+    edgeDataStriding = buffer.read_pod<int>();
+    flags = buffer.read_pod<unsigned char>();
+    buffer.skip(15);
+    aabb.read(buffer, tag_file);
+    erosionRadius = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUlong>();
+    clearanceCacheSeedingDataSet.read(buffer, tag_file);
+    buffer.skip(8);
+}
+
+void hkaiNavMesh::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompressedMeshShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
+nlohmann::json hkaiNavMesh::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["faces"] = faces.to_json();
+    obj_["edges"] = edges.to_json();
+    obj_["vertices"] = vertices.to_json();
+    obj_["streamingSets"] = streamingSets.to_json();
+    obj_["faceData"] = faceData.to_json();
+    obj_["edgeData"] = edgeData.to_json();
+    obj_["faceDataStriding"] = faceDataStriding;
+    obj_["edgeDataStriding"] = edgeDataStriding;
+    obj_["flags"] = flags;
+    obj_["aabb"] = aabb.to_json();
+    obj_["erosionRadius"] = erosionRadius;
+    obj_["userData"] = userData;
+    obj_["clearanceCacheSeedingDataSet"] = clearanceCacheSeedingDataSet.to_json();
+    return obj_;
+}
+
+void hknpCompoundShapeBase_VelocityInfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    linearVelocity.read(buffer, tag_file);
+    angularVelocity.read(buffer, tag_file);
+}
+
+void hknpCompoundShapeBase_VelocityInfo::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpCompoundShapeBase_VelocityInfo::to_json() const {
+    nlohmann::json obj_;
+    obj_["linearVelocity"] = linearVelocity.to_json();
+    obj_["angularVelocity"] = angularVelocity.to_json();
+    return obj_;
+}
+
+void hknpShapeSignals::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    shapeMutated.read(buffer, tag_file);
+    shapeDestroyed.read(buffer, tag_file);
+}
+
+void hknpShapeSignals::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpShapeSignals::to_json() const {
+    nlohmann::json obj_;
+    obj_["shapeMutated"] = shapeMutated.to_json();
+    obj_["shapeDestroyed"] = shapeDestroyed.to_json();
+    return obj_;
+}
+
+void hkUFloat8::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    value = buffer.read_pod<hkUint8>();
+}
+
+void hkUFloat8::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkUFloat8::to_json() const {
+    nlohmann::json obj_;
+    obj_["value"] = value;
+    return obj_;
+}
+
+void hknpCompoundShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
@@ -3189,63 +4047,306 @@ void hknpCompressedMeshShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(4);
     materialTable.read(buffer, tag_file);
     buffer.skip(8);
-    data.read(buffer, tag_file);
-    triangleIsInterior.read(buffer, tag_file);
-    numTriangles = buffer.read_pod<int>();
-    numConvexShapes = buffer.read_pod<int>();
+    instances.read(buffer, tag_file);
+    buffer.skip(4);
+    instanceVelocities.read(buffer, tag_file);
+    buffer.skip(8);
+    aabb.read(buffer, tag_file);
+    isMutable = buffer.read_pod<hkBool>();
+    buffer.skip(3);
+    estimatedNumShapeKeys = buffer.read_pod<int>();
+    mutationSignals.read(buffer, tag_file);
+    buffer.skip(8);
+    boundingVolumeData.read(buffer, tag_file);
     buffer.skip(8);
 }
 
-void hknpCompressedMeshShape::print(std::ostream &os) const {
-    hknpCompositeShape::print(os);
+void hknpCompoundShape::print(std::ostream &os) const {
+    hknpCompoundShapeBase::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompressedMeshShape::to_json(std::ostream &out) const {
+nlohmann::json hknpCompoundShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["edgeWeldingMap"] = edgeWeldingMap.to_json();
+    obj_["shapeTagCodecInfo"] = shapeTagCodecInfo;
+    obj_["materialTable"] = materialTable.to_json();
+    obj_["instances"] = instances.to_json();
+    obj_["instanceVelocities"] = instanceVelocities.to_json();
+    obj_["aabb"] = aabb.to_json();
+    obj_["isMutable"] = isMutable;
+    obj_["estimatedNumShapeKeys"] = estimatedNumShapeKeys;
+    obj_["mutationSignals"] = mutationSignals.to_json();
+    obj_["boundingVolumeData"] = boundingVolumeData.to_json();
+    return obj_;
+}
+
+void hkcdFourAabb::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    lx.read(buffer, tag_file);
+    hx.read(buffer, tag_file);
+    ly.read(buffer, tag_file);
+    hy.read(buffer, tag_file);
+    lz.read(buffer, tag_file);
+    hz.read(buffer, tag_file);
+}
+
+void hkcdFourAabb::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompressedMeshShapeData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+nlohmann::json hkcdFourAabb::to_json() const {
+    nlohmann::json obj_;
+    obj_["lx"] = lx.to_json();
+    obj_["hx"] = hx.to_json();
+    obj_["ly"] = ly.to_json();
+    obj_["hy"] = hy.to_json();
+    obj_["lz"] = lz.to_json();
+    obj_["hz"] = hz.to_json();
+    return obj_;
+}
+
+void hkcdDynamicTree_Codec32::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    aabb.read(buffer, tag_file);
+}
+
+void hkcdDynamicTree_Codec32::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkcdDynamicTree_Codec32::to_json() const {
+    nlohmann::json obj_;
+    obj_["aabb"] = aabb.to_json();
+    return obj_;
+}
+
+void hknpDynamicCompoundShapeTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(24);
+    numLeaves = buffer.read_pod<hkUint32>();
+    path = buffer.read_pod<hkUint32>();
+    root = buffer.read_pod<unsigned short>();
+    buffer.skip(6);
+}
+
+void hknpDynamicCompoundShapeTree::print(std::ostream &os) const {
+    hkcdDynamicTree_Tree::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpDynamicCompoundShapeTree::to_json() const {
+    nlohmann::json obj_;
+    obj_["numLeaves"] = numLeaves;
+    obj_["path"] = path;
+    obj_["root"] = root;
+    return obj_;
+}
+
+void hknpCapsuleShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
     buffer.skip(8);
     propertyBag.read(buffer, tag_file);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
     refCount = buffer.read_pod<hkUint16>();
     buffer.skip(12);
-    meshTree.read(buffer, tag_file);
-    simdTree.read(buffer, tag_file);
+    flags.read(buffer, tag_file);
+    type.read(buffer, tag_file);
+    numShapeKeyBits = buffer.read_pod<hkUint8>();
+    dispatchType.read(buffer, tag_file);
+    buffer.skip(3);
+    convexRadius = buffer.read_pod<hkReal>();
+    buffer.skip(4);
+    userData = buffer.read_pod<hkUint64>();
+    properties.read(buffer, tag_file);
+    vertices.read(buffer, tag_file);
+    buffer.skip(12);
+    planes.read(buffer, tag_file);
+    faces.read(buffer, tag_file);
+    indices.read(buffer, tag_file);
+    buffer.skip(4);
     connectivity.read(buffer, tag_file);
     buffer.skip(8);
+    a.read(buffer, tag_file);
+    b.read(buffer, tag_file);
 }
 
-void hknpCompressedMeshShapeData::print(std::ostream &os) const {
+void hknpCapsuleShape::print(std::ostream &os) const {
+    hknpConvexPolytopeShape::print(os);
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpCapsuleShape::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["flags"] = flags.to_json();
+    obj_["type"] = type.to_json();
+    obj_["numShapeKeyBits"] = numShapeKeyBits;
+    obj_["dispatchType"] = dispatchType.to_json();
+    obj_["convexRadius"] = convexRadius;
+    obj_["userData"] = userData;
+    obj_["properties"] = properties.to_json();
+    obj_["vertices"] = vertices.to_json();
+    obj_["planes"] = planes.to_json();
+    obj_["faces"] = faces.to_json();
+    obj_["indices"] = indices.to_json();
+    obj_["connectivity"] = connectivity.to_json();
+    obj_["a"] = a.to_json();
+    obj_["b"] = b.to_json();
+    return obj_;
+}
+
+void hkaSkeleton::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    name.read(buffer, tag_file);
+    parentIndices.read(buffer, tag_file);
+    bones.read(buffer, tag_file);
+    referencePose.read(buffer, tag_file);
+    referenceFloats.read(buffer, tag_file);
+    floatSlots.read(buffer, tag_file);
+    localFrames.read(buffer, tag_file);
+    partitions.read(buffer, tag_file);
+}
+
+void hkaSkeleton::print(std::ostream &os) const {
     hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompressedMeshShapeData::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
+nlohmann::json hkaSkeleton::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["name"] = name.to_json();
+    obj_["parentIndices"] = parentIndices.to_json();
+    obj_["bones"] = bones.to_json();
+    obj_["referencePose"] = referencePose.to_json();
+    obj_["referenceFloats"] = referenceFloats.to_json();
+    obj_["floatSlots"] = floatSlots.to_json();
+    obj_["localFrames"] = localFrames.to_json();
+    obj_["partitions"] = partitions.to_json();
+    return obj_;
 }
 
-void hkcdStaticMeshTreeBase::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    nodes.read(buffer, tag_file);
-    domain.read(buffer, tag_file);
-    numPrimitiveKeys = buffer.read_pod<int>();
-    bitsPerKey = buffer.read_pod<int>();
-    maxKeyValue = buffer.read_pod<hkUint32>();
-    primitiveStoresIsFlatConvex = buffer.read_pod<hkUint8>();
+void hknpMaterial::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(12);
+    name.read(buffer, tag_file);
+    isExclusive = buffer.read_pod<hkUint32>();
+    flags = buffer.read_pod<int>();
+    triggerType.read(buffer, tag_file);
+    triggerManifoldTolerance.read(buffer, tag_file);
+    dynamicFriction.read(buffer, tag_file);
+    staticFriction.read(buffer, tag_file);
+    restitution.read(buffer, tag_file);
+    frictionCombinePolicy.read(buffer, tag_file);
+    restitutionCombinePolicy.read(buffer, tag_file);
+    weldingTolerance.read(buffer, tag_file);
+    maxContactImpulse = buffer.read_pod<hkReal>();
+    fractionOfClippedImpulseToApply = buffer.read_pod<hkReal>();
+    massChangerCategory.read(buffer, tag_file);
+    buffer.skip(1);
+    massChangerHeavyObjectFactor.read(buffer, tag_file);
+    softContactForceFactor.read(buffer, tag_file);
+    softContactDampFactor.read(buffer, tag_file);
+    softContactSeparationVelocity.read(buffer, tag_file);
     buffer.skip(3);
-    sections.read(buffer, tag_file);
-    primitives.read(buffer, tag_file);
-    sharedVerticesIndex.read(buffer, tag_file);
+    surfaceVelocity.read(buffer, tag_file);
+    disablingCollisionsBetweenCvxCvxDynamicObjectsDistance.read(buffer, tag_file);
+    buffer.skip(6);
+    userData = buffer.read_pod<hkUint64>();
+    isShared = buffer.read_pod<hkBool>();
+    buffer.skip(7);
 }
 
-void hkcdStaticMeshTreeBase::print(std::ostream &os) const {
-    hkcdStaticTree_Tree::print(os);
+void hknpMaterial::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdStaticMeshTreeBase::to_json(std::ostream &out) const {
+nlohmann::json hknpMaterial::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["name"] = name.to_json();
+    obj_["isExclusive"] = isExclusive;
+    obj_["flags"] = flags;
+    obj_["triggerType"] = triggerType.to_json();
+    obj_["triggerManifoldTolerance"] = triggerManifoldTolerance.to_json();
+    obj_["dynamicFriction"] = dynamicFriction.to_json();
+    obj_["staticFriction"] = staticFriction.to_json();
+    obj_["restitution"] = restitution.to_json();
+    obj_["frictionCombinePolicy"] = frictionCombinePolicy.to_json();
+    obj_["restitutionCombinePolicy"] = restitutionCombinePolicy.to_json();
+    obj_["weldingTolerance"] = weldingTolerance.to_json();
+    obj_["maxContactImpulse"] = maxContactImpulse;
+    obj_["fractionOfClippedImpulseToApply"] = fractionOfClippedImpulseToApply;
+    obj_["massChangerCategory"] = massChangerCategory.to_json();
+    obj_["massChangerHeavyObjectFactor"] = massChangerHeavyObjectFactor.to_json();
+    obj_["softContactForceFactor"] = softContactForceFactor.to_json();
+    obj_["softContactDampFactor"] = softContactDampFactor.to_json();
+    obj_["softContactSeparationVelocity"] = softContactSeparationVelocity.to_json();
+    obj_["surfaceVelocity"] = surfaceVelocity.to_json();
+    obj_["disablingCollisionsBetweenCvxCvxDynamicObjectsDistance"] = disablingCollisionsBetweenCvxCvxDynamicObjectsDistance.to_json();
+    obj_["userData"] = userData;
+    obj_["isShared"] = isShared;
+    return obj_;
+}
+
+void hknpBroadPhaseConfig::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+}
+
+void hknpBroadPhaseConfig::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hknpBroadPhaseConfig::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    return obj_;
+}
+
+void hkQsTransformf::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    translation.read(buffer, tag_file);
+    rotation.read(buffer, tag_file);
+    scale.read(buffer, tag_file);
+}
+
+void hkQsTransformf::print(std::ostream &os) const {
+    throw std::runtime_error("Not implemented");
+}
+
+nlohmann::json hkQsTransformf::to_json() const {
+    nlohmann::json obj_;
+    obj_["translation"] = translation.to_json();
+    obj_["rotation"] = rotation.to_json();
+    obj_["scale"] = scale.to_json();
+    return obj_;
 }
 
 void hkcdStaticMeshTreeBase_Section_SharedVertices::read(IO::File& buffer, Tag::TagFile& tag_file) {
@@ -3256,574 +4357,131 @@ void hkcdStaticMeshTreeBase_Section_SharedVertices::print(std::ostream &os) cons
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdStaticMeshTreeBase_Section_SharedVertices::to_json(std::ostream &out) const {
+nlohmann::json hkcdStaticMeshTreeBase_Section_SharedVertices::to_json() const {
+    nlohmann::json obj_;
+    obj_["data"] = data;
+    return obj_;
+}
+
+void hkaSkeleton_LocalFrameOnBone::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    localFrame.read(buffer, tag_file);
+    boneIndex = buffer.read_pod<hkInt16>();
+    buffer.skip(6);
+}
+
+void hkaSkeleton_LocalFrameOnBone::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdStaticMeshTreeBase_Section_DataRuns::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    data = buffer.read_pod<hkUint32>();
+nlohmann::json hkaSkeleton_LocalFrameOnBone::to_json() const {
+    nlohmann::json obj_;
+    obj_["localFrame"] = localFrame.to_json();
+    obj_["boneIndex"] = boneIndex;
+    return obj_;
 }
 
-void hkcdStaticMeshTreeBase_Section_DataRuns::print(std::ostream &os) const {
+void hknpConvexPolytopeShape_Face::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    firstIndex = buffer.read_pod<hkUint16>();
+    numIndices = buffer.read_pod<hkUint8>();
+    minHalfAngle = buffer.read_pod<hkUint8>();
+}
+
+void hknpConvexPolytopeShape_Face::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hkcdStaticMeshTreeBase_Section_DataRuns::to_json(std::ostream &out) const {
+nlohmann::json hknpConvexPolytopeShape_Face::to_json() const {
+    nlohmann::json obj_;
+    obj_["firstIndex"] = firstIndex;
+    obj_["numIndices"] = numIndices;
+    obj_["minHalfAngle"] = minHalfAngle;
+    return obj_;
+}
+
+void hkcdStaticAabbTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    shouldDeleteTree = buffer.read_pod<hkBool>();
+    buffer.skip(7);
+    treePtr.read(buffer, tag_file);
+}
+
+void hkcdStaticAabbTree::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompressedMeshShapeTreeDataRunData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    data = buffer.read_pod<hkUint16>();
+nlohmann::json hkcdStaticAabbTree::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["shouldDeleteTree"] = shouldDeleteTree;
+    obj_["treePtr"] = treePtr.to_json();
+    return obj_;
 }
 
-void hknpCompressedMeshShapeTreeDataRunData::print(std::ostream &os) const {
+void hkaAnimation::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    buffer.skip(8);
+    propertyBag.read(buffer, tag_file);
+    memSizeAndFlags = buffer.read_pod<hkUint16>();
+    refCount = buffer.read_pod<hkUint16>();
+    buffer.skip(4);
+    type.read(buffer, tag_file);
+    duration = buffer.read_pod<hkReal>();
+    numberOfTransformTracks = buffer.read_pod<int>();
+    numberOfFloatTracks = buffer.read_pod<int>();
+    extractedMotion.read(buffer, tag_file);
+    annotationTracks.read(buffer, tag_file);
+}
+
+void hkaAnimation::print(std::ostream &os) const {
+    hkReferencedObject::print(os);
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompressedMeshShapeTreeDataRunData::to_json(std::ostream &out) const {
+nlohmann::json hkaAnimation::to_json() const {
+    nlohmann::json obj_;
+    obj_["propertyBag"] = propertyBag.to_json();
+    obj_["memSizeAndFlags"] = memSizeAndFlags;
+    obj_["refCount"] = refCount;
+    obj_["type"] = type.to_json();
+    obj_["duration"] = duration;
+    obj_["numberOfTransformTracks"] = numberOfTransformTracks;
+    obj_["numberOfFloatTracks"] = numberOfFloatTracks;
+    obj_["extractedMotion"] = extractedMotion.to_json();
+    obj_["annotationTracks"] = annotationTracks.to_json();
+    return obj_;
+}
+
+void SPartShapeInfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    partIndex = buffer.read_pod<int>();
+    parentPartIndex = buffer.read_pod<int>();
+    shapeKey = buffer.read_pod<hkUint32>();
+    size = buffer.read_pod<int>();
+}
+
+void SPartShapeInfo::print(std::ostream &os) const {
     throw std::runtime_error("Not implemented");
 }
 
-void hknpCompressedMeshShapeTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    nodes.read(buffer, tag_file);
-    domain.read(buffer, tag_file);
-    numPrimitiveKeys = buffer.read_pod<int>();
-    bitsPerKey = buffer.read_pod<int>();
-    maxKeyValue = buffer.read_pod<hkUint32>();
-    primitiveStoresIsFlatConvex = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
-    sections.read(buffer, tag_file);
-    primitives.read(buffer, tag_file);
-    sharedVerticesIndex.read(buffer, tag_file);
-    packedVertices.read(buffer, tag_file);
-    sharedVertices.read(buffer, tag_file);
-    primitiveDataRuns.read(buffer, tag_file);
+nlohmann::json SPartShapeInfo::to_json() const {
+    nlohmann::json obj_;
+    obj_["partIndex"] = partIndex;
+    obj_["parentPartIndex"] = parentPartIndex;
+    obj_["shapeKey"] = shapeKey;
+    obj_["size"] = size;
+    return obj_;
 }
 
-void hknpCompressedMeshShapeTree::print(std::ostream &os) const {
-    hkcdStaticMeshTree::print(os);
-    throw std::runtime_error("Not implemented");
-}
-
-void hknpCompressedMeshShapeTree::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Connectivity_SectionHeader::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    baseLocal = buffer.read_pod<hkUint32>();
-    baseGlobal = buffer.read_pod<hkUint32>();
-}
-
-void hkcdStaticMeshTreeBase_Connectivity_SectionHeader::print(std::ostream &os) const {
-    throw std::runtime_error("Not implemented");
-}
-
-void hkcdStaticMeshTreeBase_Connectivity_SectionHeader::to_json(std::ostream &out) const {
-    throw std::runtime_error("Not implemented");
-}
-
-TypeInfo TI_A9193084 = {
-    .new_instance = new_instance<hkStringPtr>,
-    .hash = 0xA9193084,
-    .type = CodeGen::MetaType(5),
-    .name = "hkStringPtr",
-};
-
-TypeInfo TI_96071661 = {
-    .new_instance = new_instance<hkRootLevelContainer>,
-    .hash = 0x96071661,
-    .type = CodeGen::MetaType(5),
-    .name = "hkRootLevelContainer",
-};
-
-TypeInfo TI_B8931D5D = {
-    .new_instance = new_instance<hkaiNavMesh>,
-    .hash = 0xB8931D5D,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiNavMesh",
-};
-
-TypeInfo TI_0B3A0741 = {
-    .new_instance = new_instance<hkArray<hkRootLevelContainer_NamedVariant, hkContainerHeapAllocator>>,
-    .hash = 0x0B3A0741,
+TypeInfo TI_906CFF48 = {
+    .new_instance = new_instance<hkArray<hkcdStaticMeshTreeBase_Primitive, hkContainerHeapAllocator>>,
+    .hash = 0x906CFF48,
     .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkRootLevelContainer_NamedVariant, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_3FC8635A = {
-    .new_instance = nullptr,
-    .hash = 0x3FC8635A,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkReferencedObject>",
-};
-
-TypeInfo TI_DDD4337B = {
-    .new_instance = nullptr,
-    .hash = 0xDDD4337B,
-    .type = CodeGen::MetaType(0),
-    .name = "hkUint8",
-};
-
-TypeInfo TI_84052A59 = {
-    .new_instance = new_instance<hkArray<hkaiNavMesh_Edge, hkContainerHeapAllocator>>,
-    .hash = 0x84052A59,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaiNavMesh_Edge, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_78170165 = {
-    .new_instance = new_instance<hkaiNavMeshClearanceCache_McpDataInteger>,
-    .hash = 0x78170165,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiNavMeshClearanceCache_McpDataInteger",
-};
-
-TypeInfo TI_E1ABB200 = {
-    .new_instance = new_instance<hkRootLevelContainer_NamedVariant>,
-    .hash = 0xE1ABB200,
-    .type = CodeGen::MetaType(5),
-    .name = "hkRootLevelContainer_NamedVariant",
-};
-
-TypeInfo TI_5CC5D8EA = {
-    .new_instance = nullptr,
-    .hash = 0x5CC5D8EA,
-    .type = CodeGen::MetaType(0),
-    .name = "hkInt16",
-};
-
-TypeInfo TI_AB3C5525 = {
-    .new_instance = nullptr,
-    .hash = 0xAB3C5525,
-    .type = CodeGen::MetaType(9),
-    .name = "hkRefVariant",
-};
-
-TypeInfo TI_7D89734D = {
-    .new_instance = new_instance<hkArray<int, hkContainerHeapAllocator>>,
-    .hash = 0x7D89734D,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<int, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_F2226812 = {
-    .new_instance = nullptr,
-    .hash = 0xF2226812,
-    .type = CodeGen::MetaType(3),
-    .name = "int",
-};
-
-TypeInfo TI_186D2A5F = {
-    .new_instance = new_instance<hkArray<hkaAnnotationTrack, hkContainerHeapAllocator>>,
-    .hash = 0x186D2A5F,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaAnnotationTrack, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_28F2B833 = {
-    .new_instance = nullptr,
-    .hash = 0x28F2B833,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkaAnimatedReferenceFrame>",
-};
-
-TypeInfo TI_CF5AFEDF = {
-    .new_instance = nullptr,
-    .hash = 0xCF5AFEDF,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hknpConvexPolytopeShape_Connectivity>",
-};
-
-TypeInfo TI_97AED99F = {
-    .new_instance = new_instance<hkaiNavMesh_Face>,
-    .hash = 0x97AED99F,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiNavMesh_Face",
-};
-
-TypeInfo TI_DC59EAD4 = {
-    .new_instance = new_instance<hkArray<hkaiStreamingSet_GraphConnection, hkContainerHeapAllocator>>,
-    .hash = 0xDC59EAD4,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaiStreamingSet_GraphConnection, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_E53DD2E6 = {
-    .new_instance = new_instance<hkArray<hknpConvexPolytopeShape_Connectivity_Edge, hkContainerHeapAllocator>>,
-    .hash = 0xE53DD2E6,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hknpConvexPolytopeShape_Connectivity_Edge, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_B54AA116 = {
-    .new_instance = new_instance<hkVector4f>,
-    .hash = 0xB54AA116,
-    .type = CodeGen::MetaType(7),
-    .name = "hkVector4f",
-};
-
-TypeInfo TI_0F6842F4 = {
-    .new_instance = new_instance<hkRelArray<hkVector4>>,
-    .hash = 0x0F6842F4,
-    .type = CodeGen::MetaType(5),
-    .name = "hkRelArray<hkVector4>",
-};
-
-TypeInfo TI_07B5C0B6 = {
-    .new_instance = new_instance<hknpRagdollData>,
-    .hash = 0x07B5C0B6,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpRagdollData",
-};
-
-TypeInfo TI_3C57698F = {
-    .new_instance = new_instance<hkaiAnnotatedStreamingSet>,
-    .hash = 0x3C57698F,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiAnnotatedStreamingSet",
-};
-
-TypeInfo TI_CB3511AB = {
-    .new_instance = nullptr,
-    .hash = 0xCB3511AB,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hknpShape>",
-};
-
-TypeInfo TI_F96FEE69 = {
-    .new_instance = nullptr,
-    .hash = 0xF96FEE69,
-    .type = CodeGen::MetaType(3),
-    .name = "char",
-};
-
-TypeInfo TI_664BE534 = {
-    .new_instance = nullptr,
-    .hash = 0x664BE534,
-    .type = CodeGen::MetaType(0),
-    .name = "hkUint32",
-};
-
-TypeInfo TI_837D1C66 = {
-    .new_instance = new_instance<hkArray<hkaiNavMeshClearanceCache_McpDataInteger, hkContainerHeapAllocator>>,
-    .hash = 0x837D1C66,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaiNavMeshClearanceCache_McpDataInteger, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_548E02B8 = {
-    .new_instance = new_instance<hkaiNavMesh_Edge>,
-    .hash = 0x548E02B8,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiNavMesh_Edge",
-};
-
-TypeInfo TI_F5740913 = {
-    .new_instance = new_instance<hkArray<hkaiNavMesh_Face, hkContainerHeapAllocator>>,
-    .hash = 0xF5740913,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaiNavMesh_Face, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_25D0CEC9 = {
-    .new_instance = nullptr,
-    .hash = 0x25D0CEC9,
-    .type = CodeGen::MetaType(0),
-    .name = "hkInt32",
-};
-
-TypeInfo TI_9B1DF1D9 = {
-    .new_instance = new_instance<hkArray<hkRefCountedProperties_Entry, hkContainerHeapAllocator>>,
-    .hash = 0x9B1DF1D9,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkRefCountedProperties_Entry, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_E5CDD47F = {
-    .new_instance = new_instance<hkaBone>,
-    .hash = 0xE5CDD47F,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaBone",
-};
-
-TypeInfo TI_853407AB = {
-    .new_instance = new_instance<hkArray<hkVector4, hkContainerHeapAllocator>>,
-    .hash = 0x853407AB,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkVector4, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_C2B7E409 = {
-    .new_instance = nullptr,
-    .hash = 0xC2B7E409,
-    .type = CodeGen::MetaType(0),
-    .name = "hkVector4",
-};
-
-TypeInfo TI_351B2E04 = {
-    .new_instance = new_instance<hkArray<hkaiAnnotatedStreamingSet, hkContainerHeapAllocator>>,
-    .hash = 0x351B2E04,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaiAnnotatedStreamingSet, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_AD93639D = {
-    .new_instance = new_instance<hkArray<hknpCompressedMeshShapeTreeDataRun, hkContainerHeapAllocator>>,
-    .hash = 0xAD93639D,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hknpCompressedMeshShapeTreeDataRun, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_5A7C87B4 = {
-    .new_instance = nullptr,
-    .hash = 0x5A7C87B4,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkaiStreamingSet>",
-};
-
-TypeInfo TI_539FAB50 = {
-    .new_instance = new_instance<hkaiStreamingSet>,
-    .hash = 0x539FAB50,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiStreamingSet",
-};
-
-TypeInfo TI_DC925F4C = {
-    .new_instance = new_instance<hkArray<hkaiStreamingSet_NavMeshConnection, hkContainerHeapAllocator>>,
-    .hash = 0xDC925F4C,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaiStreamingSet_NavMeshConnection, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_1BB71023 = {
-    .new_instance = new_instance<hkaiStreamingSet_NavMeshConnection>,
-    .hash = 0x1BB71023,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiStreamingSet_NavMeshConnection",
-};
-
-TypeInfo TI_5A544D18 = {
-    .new_instance = new_instance<hkaiStreamingSet_GraphConnection>,
-    .hash = 0x5A544D18,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiStreamingSet_GraphConnection",
-};
-
-TypeInfo TI_D295C3D8 = {
-    .new_instance = new_instance<hkArray<hknpConstraintCinfo, hkContainerHeapAllocator>>,
-    .hash = 0xD295C3D8,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hknpConstraintCinfo, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_E6D117E0 = {
-    .new_instance = new_instance<hkArray<hkAabb, hkContainerHeapAllocator>>,
-    .hash = 0xE6D117E0,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkAabb, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_BC376DF9 = {
-    .new_instance = new_instance<hkAabb>,
-    .hash = 0xBC376DF9,
-    .type = CodeGen::MetaType(5),
-    .name = "hkAabb",
-};
-
-TypeInfo TI_A24D5E15 = {
-    .new_instance = new_instance<hkArray<hkInt32, hkContainerHeapAllocator>>,
-    .hash = 0xA24D5E15,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkInt32, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_BBFF8FBC = {
-    .new_instance = nullptr,
-    .hash = 0xBBFF8FBC,
-    .type = CodeGen::MetaType(3),
-    .name = "float",
-};
-
-TypeInfo TI_E5CD30F2 = {
-    .new_instance = nullptr,
-    .hash = 0xE5CD30F2,
-    .type = CodeGen::MetaType(0),
-    .name = "hkReal",
-};
-
-TypeInfo TI_4151832F = {
-    .new_instance = new_instance<hkaSkeletonMapperData_ChainMapping>,
-    .hash = 0x4151832F,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaSkeletonMapperData_ChainMapping",
-};
-
-TypeInfo TI_F3825823 = {
-    .new_instance = nullptr,
-    .hash = 0xF3825823,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkaiNavMeshClearanceCacheSeeding_CacheDataSet>",
-};
-
-TypeInfo TI_0C055103 = {
-    .new_instance = new_instance<hkaiNavMeshClearanceCacheSeeding_CacheDataSet>,
-    .hash = 0x0C055103,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiNavMeshClearanceCacheSeeding_CacheDataSet",
-};
-
-TypeInfo TI_2A5CF5A1 = {
-    .new_instance = new_instance<hkcdStaticAabbTree_Impl>,
-    .hash = 0x2A5CF5A1,
-    .type = CodeGen::MetaType(5),
-    .name = "hkcdStaticAabbTree_Impl",
-};
-
-TypeInfo TI_CFDFE11A = {
-    .new_instance = new_instance<hkArray<hkaiNavMeshClearanceCacheSeeding_CacheData, hkContainerHeapAllocator>>,
-    .hash = 0xCFDFE11A,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaiNavMeshClearanceCacheSeeding_CacheData, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_C7C588C8 = {
-    .new_instance = new_instance<hkaiNavMeshClearanceCacheSeeding_CacheData>,
-    .hash = 0xC7C588C8,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiNavMeshClearanceCacheSeeding_CacheData",
-};
-
-TypeInfo TI_13786D87 = {
-    .new_instance = nullptr,
-    .hash = 0x13786D87,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkaiNavMeshClearanceCache>",
-};
-
-TypeInfo TI_AA8D81D0 = {
-    .new_instance = new_instance<hkaiNavMeshClearanceCache>,
-    .hash = 0xAA8D81D0,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiNavMeshClearanceCache",
-};
-
-TypeInfo TI_FDA96ACC = {
-    .new_instance = new_instance<hkArray<hkUint32, hkContainerHeapAllocator>>,
-    .hash = 0xFDA96ACC,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkUint32, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_AB7DD7BE = {
-    .new_instance = new_instance<hkArray<hkUint8, hkContainerHeapAllocator>>,
-    .hash = 0xAB7DD7BE,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkUint8, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_AF3916BB = {
-    .new_instance = new_instance<hkcdStaticAabbTree>,
-    .hash = 0xAF3916BB,
-    .type = CodeGen::MetaType(5),
-    .name = "hkcdStaticAabbTree",
-};
-
-TypeInfo TI_48171456 = {
-    .new_instance = new_instance<hkcdStaticTree_Codec3Axis5>,
-    .hash = 0x48171456,
-    .type = CodeGen::MetaType(5),
-    .name = "hkcdStaticTree_Codec3Axis5",
-};
-
-TypeInfo TI_787B8F4A = {
-    .new_instance = nullptr,
-    .hash = 0x787B8F4A,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkcdStaticAabbTree_Impl>",
-};
-
-TypeInfo TI_7C88F204 = {
-    .new_instance = new_instance<hknpBoxShape>,
-    .hash = 0x7C88F204,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpBoxShape",
-};
-
-TypeInfo TI_9DB0C1F2 = {
-    .new_instance = new_instance<hkArray<hkcdStaticTree_Codec3Axis6, hkContainerHeapAllocator>>,
-    .hash = 0x9DB0C1F2,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkcdStaticTree_Codec3Axis6, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_FF787F85 = {
-    .new_instance = new_instance<hkArray<hkGeometry_Triangle, hkContainerHeapAllocator>>,
-    .hash = 0xFF787F85,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkGeometry_Triangle, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_4966EB95 = {
-    .new_instance = new_instance<hkcdStaticTree_Codec3Axis6>,
-    .hash = 0x4966EB95,
-    .type = CodeGen::MetaType(5),
-    .name = "hkcdStaticTree_Codec3Axis6",
-};
-
-TypeInfo TI_9E048D18 = {
-    .new_instance = new_instance<hkArray<hkPtr<hkaAnimationBinding>, hkContainerHeapAllocator>>,
-    .hash = 0x9E048D18,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkPtr<hkaAnimationBinding>, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_7E655999 = {
-    .new_instance = new_instance<hkaiDirectedGraphExplicitCost>,
-    .hash = 0x7E655999,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiDirectedGraphExplicitCost",
-};
-
-TypeInfo TI_81084BF9 = {
-    .new_instance = new_instance<hkArray<hkaiDirectedGraphExplicitCost_Node, hkContainerHeapAllocator>>,
-    .hash = 0x81084BF9,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaiDirectedGraphExplicitCost_Node, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_31A55970 = {
-    .new_instance = new_instance<hkArray<hkcdSimdTree_Node, hkContainerHeapAllocator>>,
-    .hash = 0x31A55970,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkcdSimdTree_Node, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_777A00A6 = {
-    .new_instance = new_instance<hkaiDirectedGraphExplicitCost_Node>,
-    .hash = 0x777A00A6,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiDirectedGraphExplicitCost_Node",
-};
-
-TypeInfo TI_2228A88C = {
-    .new_instance = new_instance<hkArray<hkaiDirectedGraphExplicitCost_Edge, hkContainerHeapAllocator>>,
-    .hash = 0x2228A88C,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaiDirectedGraphExplicitCost_Edge, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_5264308D = {
-    .new_instance = new_instance<hkaiDirectedGraphExplicitCost_Edge>,
-    .hash = 0x5264308D,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaiDirectedGraphExplicitCost_Edge",
-};
-
-TypeInfo TI_BEF25485 = {
-    .new_instance = new_instance<hknpPhysicsSceneData>,
-    .hash = 0xBEF25485,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpPhysicsSceneData",
+    .name = "hkArray<hkcdStaticMeshTreeBase_Primitive, hkContainerHeapAllocator>",
 };
 
 TypeInfo TI_82CE8FF6 = {
@@ -3833,11 +4491,396 @@ TypeInfo TI_82CE8FF6 = {
     .name = "hkcdStaticMeshTreeBase_Section",
 };
 
-TypeInfo TI_F28B68F4 = {
-    .new_instance = new_instance<hknpMotionProperties>,
-    .hash = 0xF28B68F4,
+TypeInfo TI_48171456 = {
+    .new_instance = new_instance<hkcdStaticTree_Codec3Axis5>,
+    .hash = 0x48171456,
     .type = CodeGen::MetaType(5),
-    .name = "hknpMotionProperties",
+    .name = "hkcdStaticTree_Codec3Axis5",
+};
+
+TypeInfo TI_3FBC3E5E = {
+    .new_instance = new_instance<hknpCompressedMeshShapeData>,
+    .hash = 0x3FBC3E5E,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpCompressedMeshShapeData",
+};
+
+TypeInfo TI_266055DC = {
+    .new_instance = new_instance<hkArray<hkaSkeletonMapperData_ChainMapping, hkContainerHeapAllocator>>,
+    .hash = 0x266055DC,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaSkeletonMapperData_ChainMapping, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_1CD6F437 = {
+    .new_instance = new_instance<hkaSkeletonMapperData_SimpleMapping>,
+    .hash = 0x1CD6F437,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaSkeletonMapperData_SimpleMapping",
+};
+
+TypeInfo TI_F1AF3848 = {
+    .new_instance = new_instance<hkcdSimdTree_Node>,
+    .hash = 0xF1AF3848,
+    .type = CodeGen::MetaType(5),
+    .name = "hkcdSimdTree_Node",
+};
+
+TypeInfo TI_4151832F = {
+    .new_instance = new_instance<hkaSkeletonMapperData_ChainMapping>,
+    .hash = 0x4151832F,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaSkeletonMapperData_ChainMapping",
+};
+
+TypeInfo TI_D114E4AD = {
+    .new_instance = new_instance<hknpExternMeshShapeData>,
+    .hash = 0xD114E4AD,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpExternMeshShapeData",
+};
+
+TypeInfo TI_A421524A = {
+    .new_instance = new_instance<hkcdStaticMeshTreeBase_Primitive>,
+    .hash = 0xA421524A,
+    .type = CodeGen::MetaType(5),
+    .name = "hkcdStaticMeshTreeBase_Primitive",
+};
+
+TypeInfo TI_D1389983 = {
+    .new_instance = new_instance<CPfxPartIndexProperty>,
+    .hash = 0xD1389983,
+    .type = CodeGen::MetaType(5),
+    .name = "CPfxPartIndexProperty",
+};
+
+TypeInfo TI_3DF4746C = {
+    .new_instance = nullptr,
+    .hash = 0x3DF4746C,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkpConstraintMotor>",
+};
+
+TypeInfo TI_BC7C0DE5 = {
+    .new_instance = new_instance<hkpLimitedHingeConstraintData>,
+    .hash = 0xBC7C0DE5,
+    .type = CodeGen::MetaType(5),
+    .name = "hkpLimitedHingeConstraintData",
+};
+
+TypeInfo TI_487A0361 = {
+    .new_instance = new_instance<hkpRagdollConstraintData>,
+    .hash = 0x487A0361,
+    .type = CodeGen::MetaType(5),
+    .name = "hkpRagdollConstraintData",
+};
+
+TypeInfo TI_56362A20 = {
+    .new_instance = new_instance<hknpExternMeshShape>,
+    .hash = 0x56362A20,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpExternMeshShape",
+};
+
+TypeInfo TI_73813A14 = {
+    .new_instance = new_instance<hkArray<SPartShapeInfo, hkContainerHeapAllocator>>,
+    .hash = 0x73813A14,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<SPartShapeInfo, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_5264308D = {
+    .new_instance = new_instance<hkaiDirectedGraphExplicitCost_Edge>,
+    .hash = 0x5264308D,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiDirectedGraphExplicitCost_Edge",
+};
+
+TypeInfo TI_777A00A6 = {
+    .new_instance = new_instance<hkaiDirectedGraphExplicitCost_Node>,
+    .hash = 0x777A00A6,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiDirectedGraphExplicitCost_Node",
+};
+
+TypeInfo TI_81084BF9 = {
+    .new_instance = new_instance<hkArray<hkaiDirectedGraphExplicitCost_Node, hkContainerHeapAllocator>>,
+    .hash = 0x81084BF9,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaiDirectedGraphExplicitCost_Node, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_2A5CF5A1 = {
+    .new_instance = new_instance<hkcdStaticAabbTree_Impl>,
+    .hash = 0x2A5CF5A1,
+    .type = CodeGen::MetaType(5),
+    .name = "hkcdStaticAabbTree_Impl",
+};
+
+TypeInfo TI_4966EB95 = {
+    .new_instance = new_instance<hkcdStaticTree_Codec3Axis6>,
+    .hash = 0x4966EB95,
+    .type = CodeGen::MetaType(5),
+    .name = "hkcdStaticTree_Codec3Axis6",
+};
+
+TypeInfo TI_78170165 = {
+    .new_instance = new_instance<hkaiNavMeshClearanceCache_McpDataInteger>,
+    .hash = 0x78170165,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiNavMeshClearanceCache_McpDataInteger",
+};
+
+TypeInfo TI_AA8D81D0 = {
+    .new_instance = new_instance<hkaiNavMeshClearanceCache>,
+    .hash = 0xAA8D81D0,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiNavMeshClearanceCache",
+};
+
+TypeInfo TI_13786D87 = {
+    .new_instance = nullptr,
+    .hash = 0x13786D87,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkaiNavMeshClearanceCache>",
+};
+
+TypeInfo TI_C7C588C8 = {
+    .new_instance = new_instance<hkaiNavMeshClearanceCacheSeeding_CacheData>,
+    .hash = 0xC7C588C8,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiNavMeshClearanceCacheSeeding_CacheData",
+};
+
+TypeInfo TI_9DB0C1F2 = {
+    .new_instance = new_instance<hkArray<hkcdStaticTree_Codec3Axis6, hkContainerHeapAllocator>>,
+    .hash = 0x9DB0C1F2,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkcdStaticTree_Codec3Axis6, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_0C055103 = {
+    .new_instance = new_instance<hkaiNavMeshClearanceCacheSeeding_CacheDataSet>,
+    .hash = 0x0C055103,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiNavMeshClearanceCacheSeeding_CacheDataSet",
+};
+
+TypeInfo TI_E6D117E0 = {
+    .new_instance = new_instance<hkArray<hkAabb, hkContainerHeapAllocator>>,
+    .hash = 0xE6D117E0,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkAabb, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_5A544D18 = {
+    .new_instance = new_instance<hkaiStreamingSet_GraphConnection>,
+    .hash = 0x5A544D18,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiStreamingSet_GraphConnection",
+};
+
+TypeInfo TI_1BB71023 = {
+    .new_instance = new_instance<hkaiStreamingSet_NavMeshConnection>,
+    .hash = 0x1BB71023,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiStreamingSet_NavMeshConnection",
+};
+
+TypeInfo TI_539FAB50 = {
+    .new_instance = new_instance<hkaiStreamingSet>,
+    .hash = 0x539FAB50,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiStreamingSet",
+};
+
+TypeInfo TI_5A7C87B4 = {
+    .new_instance = nullptr,
+    .hash = 0x5A7C87B4,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkaiStreamingSet>",
+};
+
+TypeInfo TI_3C57698F = {
+    .new_instance = new_instance<hkaiAnnotatedStreamingSet>,
+    .hash = 0x3C57698F,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiAnnotatedStreamingSet",
+};
+
+TypeInfo TI_84052A59 = {
+    .new_instance = new_instance<hkArray<hkaiNavMesh_Edge, hkContainerHeapAllocator>>,
+    .hash = 0x84052A59,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaiNavMesh_Edge, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_853407AB = {
+    .new_instance = new_instance<hkArray<hkVector4, hkContainerHeapAllocator>>,
+    .hash = 0x853407AB,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkVector4, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_3119B4F0 = {
+    .new_instance = new_instance<hkaDefaultAnimatedReferenceFrame>,
+    .hash = 0x3119B4F0,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaDefaultAnimatedReferenceFrame",
+};
+
+TypeInfo TI_D69360E7 = {
+    .new_instance = new_instance<hkArray<hkaSkeletonMapperData_SimpleMapping, hkContainerHeapAllocator>>,
+    .hash = 0xD69360E7,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaSkeletonMapperData_SimpleMapping, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_7C88F204 = {
+    .new_instance = new_instance<hknpBoxShape>,
+    .hash = 0x7C88F204,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpBoxShape",
+};
+
+TypeInfo TI_840F8273 = {
+    .new_instance = new_instance<hknpSphereShape>,
+    .hash = 0x840F8273,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpSphereShape",
+};
+
+TypeInfo TI_A8DDFCF6 = {
+    .new_instance = new_instance<hkaSplineCompressedAnimation>,
+    .hash = 0xA8DDFCF6,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaSplineCompressedAnimation",
+};
+
+TypeInfo TI_DDA9CB84 = {
+    .new_instance = new_instance<hkArray<hkcdStaticTree_Codec3Axis5, hkContainerHeapAllocator>>,
+    .hash = 0xDDA9CB84,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkcdStaticTree_Codec3Axis5, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_A24D5E15 = {
+    .new_instance = new_instance<hkArray<hkInt32, hkContainerHeapAllocator>>,
+    .hash = 0xA24D5E15,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkInt32, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_CFDFE11A = {
+    .new_instance = new_instance<hkArray<hkaiNavMeshClearanceCacheSeeding_CacheData, hkContainerHeapAllocator>>,
+    .hash = 0xCFDFE11A,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaiNavMeshClearanceCacheSeeding_CacheData, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_548E3069 = {
+    .new_instance = new_instance<hkArray<hkcdStaticTree_Codec3Axis4, hkContainerHeapAllocator>>,
+    .hash = 0x548E3069,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkcdStaticTree_Codec3Axis4, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_F5740913 = {
+    .new_instance = new_instance<hkArray<hkaiNavMesh_Face, hkContainerHeapAllocator>>,
+    .hash = 0xF5740913,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaiNavMesh_Face, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_531C44AF = {
+    .new_instance = new_instance<hkaSkeletonMapper>,
+    .hash = 0x531C44AF,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaSkeletonMapper",
+};
+
+TypeInfo TI_F3715A88 = {
+    .new_instance = new_instance<hkcdStaticTree_Codec3Axis4>,
+    .hash = 0xF3715A88,
+    .type = CodeGen::MetaType(5),
+    .name = "hkcdStaticTree_Codec3Axis4",
+};
+
+TypeInfo TI_AB7DD7BE = {
+    .new_instance = new_instance<hkArray<hkUint8, hkContainerHeapAllocator>>,
+    .hash = 0xAB7DD7BE,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkUint8, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_FDA96ACC = {
+    .new_instance = new_instance<hkArray<hkUint32, hkContainerHeapAllocator>>,
+    .hash = 0xFDA96ACC,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkUint32, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_36D0EFBC = {
+    .new_instance = nullptr,
+    .hash = 0x36D0EFBC,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkGeometry>",
+};
+
+TypeInfo TI_DC59EAD4 = {
+    .new_instance = new_instance<hkArray<hkaiStreamingSet_GraphConnection, hkContainerHeapAllocator>>,
+    .hash = 0xDC59EAD4,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaiStreamingSet_GraphConnection, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_21306E13 = {
+    .new_instance = new_instance<CPfxFloatShapeProperty>,
+    .hash = 0x21306E13,
+    .type = CodeGen::MetaType(5),
+    .name = "CPfxFloatShapeProperty",
+};
+
+TypeInfo TI_837D1C66 = {
+    .new_instance = new_instance<hkArray<hkaiNavMeshClearanceCache_McpDataInteger, hkContainerHeapAllocator>>,
+    .hash = 0x837D1C66,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaiNavMeshClearanceCache_McpDataInteger, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_63588856 = {
+    .new_instance = new_instance<hkaAnimationBinding>,
+    .hash = 0x63588856,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaAnimationBinding",
+};
+
+TypeInfo TI_7D89734D = {
+    .new_instance = new_instance<hkArray<int, hkContainerHeapAllocator>>,
+    .hash = 0x7D89734D,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<int, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_BC7D3072 = {
+    .new_instance = new_instance<CPfxBreakableShapeCollection>,
+    .hash = 0xBC7D3072,
+    .type = CodeGen::MetaType(5),
+    .name = "CPfxBreakableShapeCollection",
+};
+
+TypeInfo TI_607B8A2D = {
+    .new_instance = new_instance<hkArray<hkQsTransform, hkContainerHeapAllocator>>,
+    .hash = 0x607B8A2D,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkQsTransform, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_048D6702 = {
+    .new_instance = new_instance<hkArray<hkPtr<hkReferencedObject>, hkContainerHeapAllocator>>,
+    .hash = 0x048D6702,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkPtr<hkReferencedObject>, hkContainerHeapAllocator>",
 };
 
 TypeInfo TI_965B57C3 = {
@@ -3847,6 +4890,34 @@ TypeInfo TI_965B57C3 = {
     .name = "hkaAnimationContainer",
 };
 
+TypeInfo TI_58EE1490 = {
+    .new_instance = nullptr,
+    .hash = 0x58EE1490,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkpConstraintData>",
+};
+
+TypeInfo TI_97AED99F = {
+    .new_instance = new_instance<hkaiNavMesh_Face>,
+    .hash = 0x97AED99F,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiNavMesh_Face",
+};
+
+TypeInfo TI_AB3C5525 = {
+    .new_instance = nullptr,
+    .hash = 0xAB3C5525,
+    .type = CodeGen::MetaType(9),
+    .name = "hkRefVariant",
+};
+
+TypeInfo TI_541B515F = {
+    .new_instance = new_instance<hkRefCountedProperties_Entry>,
+    .hash = 0x541B515F,
+    .type = CodeGen::MetaType(5),
+    .name = "hkRefCountedProperties_Entry",
+};
+
 TypeInfo TI_E62256FA = {
     .new_instance = new_instance<hkArray<hkFreeListArrayElement<hknpShapeInstance>, hkContainerHeapAllocator>>,
     .hash = 0xE62256FA,
@@ -3854,11 +4925,564 @@ TypeInfo TI_E62256FA = {
     .name = "hkArray<hkFreeListArrayElement<hknpShapeInstance>, hkContainerHeapAllocator>",
 };
 
+TypeInfo TI_31494FE3 = {
+    .new_instance = new_instance<hkaAnnotationTrack>,
+    .hash = 0x31494FE3,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaAnnotationTrack",
+};
+
+TypeInfo TI_0526387C = {
+    .new_instance = new_instance<hkRefCountedProperties>,
+    .hash = 0x0526387C,
+    .type = CodeGen::MetaType(5),
+    .name = "hkRefCountedProperties",
+};
+
+TypeInfo TI_CB3511AB = {
+    .new_instance = nullptr,
+    .hash = 0xCB3511AB,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hknpShape>",
+};
+
+TypeInfo TI_8171564E = {
+    .new_instance = nullptr,
+    .hash = 0x8171564E,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkRefCountedProperties>",
+};
+
+TypeInfo TI_7CA2764B = {
+    .new_instance = new_instance<hkpPositionConstraintMotor>,
+    .hash = 0x7CA2764B,
+    .type = CodeGen::MetaType(5),
+    .name = "hkpPositionConstraintMotor",
+};
+
+TypeInfo TI_2228A88C = {
+    .new_instance = new_instance<hkArray<hkaiDirectedGraphExplicitCost_Edge, hkContainerHeapAllocator>>,
+    .hash = 0x2228A88C,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaiDirectedGraphExplicitCost_Edge, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_C4CA4875 = {
+    .new_instance = new_instance<hknpConvexShape>,
+    .hash = 0xC4CA4875,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpConvexShape",
+};
+
+TypeInfo TI_F3825823 = {
+    .new_instance = nullptr,
+    .hash = 0xF3825823,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkaiNavMeshClearanceCacheSeeding_CacheDataSet>",
+};
+
+TypeInfo TI_106BBC75 = {
+    .new_instance = new_instance<hkArray<float, hkContainerHeapAllocator>>,
+    .hash = 0x106BBC75,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<float, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_C6A0C331 = {
+    .new_instance = new_instance<hknpPhysicsSystemData_bodyCinfoWithAttachment>,
+    .hash = 0xC6A0C331,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpPhysicsSystemData_bodyCinfoWithAttachment",
+};
+
+TypeInfo TI_30FA579B = {
+    .new_instance = new_instance<hkGeometry>,
+    .hash = 0x30FA579B,
+    .type = CodeGen::MetaType(5),
+    .name = "hkGeometry",
+};
+
+TypeInfo TI_4F01CBB6 = {
+    .new_instance = nullptr,
+    .hash = 0x4F01CBB6,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hknpShape>",
+};
+
+TypeInfo TI_2129CE34 = {
+    .new_instance = new_instance<hkArray<hkPtr<hknpPhysicsSystemData>, hkContainerHeapAllocator>>,
+    .hash = 0x2129CE34,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkPtr<hknpPhysicsSystemData>, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_7E655999 = {
+    .new_instance = new_instance<hkaiDirectedGraphExplicitCost>,
+    .hash = 0x7E655999,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiDirectedGraphExplicitCost",
+};
+
+TypeInfo TI_7C19D91C = {
+    .new_instance = new_instance<hknpDynamicCompoundShapeData>,
+    .hash = 0x7C19D91C,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpDynamicCompoundShapeData",
+};
+
+TypeInfo TI_FD379362 = {
+    .new_instance = new_instance<hkArray<hknpMotionProperties, hkContainerHeapAllocator>>,
+    .hash = 0xFD379362,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hknpMotionProperties, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_BEF25485 = {
+    .new_instance = new_instance<hknpPhysicsSceneData>,
+    .hash = 0xBEF25485,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpPhysicsSceneData",
+};
+
+TypeInfo TI_7D575382 = {
+    .new_instance = new_instance<hknpCompressedMeshShape>,
+    .hash = 0x7D575382,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpCompressedMeshShape",
+};
+
+TypeInfo TI_3F8A2460 = {
+    .new_instance = new_instance<hkArray<hknpPhysicsSystemData_bodyCinfoWithAttachment, hkContainerHeapAllocator>>,
+    .hash = 0x3F8A2460,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hknpPhysicsSystemData_bodyCinfoWithAttachment, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_5CC5D8EA = {
+    .new_instance = nullptr,
+    .hash = 0x5CC5D8EA,
+    .type = CodeGen::MetaType(0),
+    .name = "hkInt16",
+};
+
+TypeInfo TI_E5E88A3C = {
+    .new_instance = nullptr,
+    .hash = 0xE5E88A3C,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkReferencedObject>",
+};
+
+TypeInfo TI_186D2A5F = {
+    .new_instance = new_instance<hkArray<hkaAnnotationTrack, hkContainerHeapAllocator>>,
+    .hash = 0x186D2A5F,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaAnnotationTrack, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_B54AA116 = {
+    .new_instance = new_instance<hkVector4f>,
+    .hash = 0xB54AA116,
+    .type = CodeGen::MetaType(7),
+    .name = "hkVector4f",
+};
+
+TypeInfo TI_915F1AF8 = {
+    .new_instance = nullptr,
+    .hash = 0x915F1AF8,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hknpExternMeshShapeGeometry>",
+};
+
+TypeInfo TI_AD93639D = {
+    .new_instance = new_instance<hkArray<hknpCompressedMeshShapeTreeDataRun, hkContainerHeapAllocator>>,
+    .hash = 0xAD93639D,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hknpCompressedMeshShapeTreeDataRun, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_96071661 = {
+    .new_instance = new_instance<hkRootLevelContainer>,
+    .hash = 0x96071661,
+    .type = CodeGen::MetaType(5),
+    .name = "hkRootLevelContainer",
+};
+
+TypeInfo TI_A225D0DD = {
+    .new_instance = new_instance<hkGeometry_Triangle>,
+    .hash = 0xA225D0DD,
+    .type = CodeGen::MetaType(5),
+    .name = "hkGeometry_Triangle",
+};
+
+TypeInfo TI_044F32FA = {
+    .new_instance = new_instance<hkArray<hkReal, hkContainerHeapAllocator>>,
+    .hash = 0x044F32FA,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkReal, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_96A536C4 = {
+    .new_instance = new_instance<hkArray<hkStringPtr, hkContainerHeapAllocator>>,
+    .hash = 0x96A536C4,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkStringPtr, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_BC376DF9 = {
+    .new_instance = new_instance<hkAabb>,
+    .hash = 0xBC376DF9,
+    .type = CodeGen::MetaType(5),
+    .name = "hkAabb",
+};
+
+TypeInfo TI_664BE534 = {
+    .new_instance = nullptr,
+    .hash = 0x664BE534,
+    .type = CodeGen::MetaType(0),
+    .name = "hkUint32",
+};
+
+TypeInfo TI_0B3A0741 = {
+    .new_instance = new_instance<hkArray<hkRootLevelContainer_NamedVariant, hkContainerHeapAllocator>>,
+    .hash = 0x0B3A0741,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkRootLevelContainer_NamedVariant, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_31A55970 = {
+    .new_instance = new_instance<hkArray<hkcdSimdTree_Node, hkContainerHeapAllocator>>,
+    .hash = 0x31A55970,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkcdSimdTree_Node, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_A9193084 = {
+    .new_instance = new_instance<hkStringPtr>,
+    .hash = 0xA9193084,
+    .type = CodeGen::MetaType(5),
+    .name = "hkStringPtr",
+};
+
+TypeInfo TI_351B2E04 = {
+    .new_instance = new_instance<hkArray<hkaiAnnotatedStreamingSet, hkContainerHeapAllocator>>,
+    .hash = 0x351B2E04,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaiAnnotatedStreamingSet, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_F96FEE69 = {
+    .new_instance = nullptr,
+    .hash = 0xF96FEE69,
+    .type = CodeGen::MetaType(3),
+    .name = "char",
+};
+
+TypeInfo TI_07B5C0B6 = {
+    .new_instance = new_instance<hknpRagdollData>,
+    .hash = 0x07B5C0B6,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpRagdollData",
+};
+
 TypeInfo TI_147221F5 = {
     .new_instance = new_instance<hkArray<hkPtr<hkaSkeleton>, hkContainerHeapAllocator>>,
     .hash = 0x147221F5,
     .type = CodeGen::MetaType(7),
     .name = "hkArray<hkPtr<hkaSkeleton>, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_3FC8635A = {
+    .new_instance = nullptr,
+    .hash = 0x3FC8635A,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkReferencedObject>",
+};
+
+TypeInfo TI_BBFF8FBC = {
+    .new_instance = nullptr,
+    .hash = 0xBBFF8FBC,
+    .type = CodeGen::MetaType(3),
+    .name = "float",
+};
+
+TypeInfo TI_77C59735 = {
+    .new_instance = nullptr,
+    .hash = 0x77C59735,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkaAnimationBinding>",
+};
+
+TypeInfo TI_25D0CEC9 = {
+    .new_instance = nullptr,
+    .hash = 0x25D0CEC9,
+    .type = CodeGen::MetaType(0),
+    .name = "hkInt32",
+};
+
+TypeInfo TI_10943B3E = {
+    .new_instance = nullptr,
+    .hash = 0x10943B3E,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hknpPhysicsSystemData>",
+};
+
+TypeInfo TI_31CE208E = {
+    .new_instance = nullptr,
+    .hash = 0x31CE208E,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkaAnimation>",
+};
+
+TypeInfo TI_E5CDD47F = {
+    .new_instance = new_instance<hkaBone>,
+    .hash = 0xE5CDD47F,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaBone",
+};
+
+TypeInfo TI_3A9A8ABF = {
+    .new_instance = new_instance<hknpMorphExternMesh>,
+    .hash = 0x3A9A8ABF,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpMorphExternMesh",
+};
+
+TypeInfo TI_56657F16 = {
+    .new_instance = new_instance<hknpPhysicsSystemData>,
+    .hash = 0x56657F16,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpPhysicsSystemData",
+};
+
+TypeInfo TI_E5CD30F2 = {
+    .new_instance = nullptr,
+    .hash = 0xE5CD30F2,
+    .type = CodeGen::MetaType(0),
+    .name = "hkReal",
+};
+
+TypeInfo TI_B28A7871 = {
+    .new_instance = new_instance<hkArray<hkPtr<hkaAnimation>, hkContainerHeapAllocator>>,
+    .hash = 0xB28A7871,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkPtr<hkaAnimation>, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_9734CE0A = {
+    .new_instance = nullptr,
+    .hash = 0x9734CE0A,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hknpShape>",
+};
+
+TypeInfo TI_F2226812 = {
+    .new_instance = nullptr,
+    .hash = 0xF2226812,
+    .type = CodeGen::MetaType(3),
+    .name = "int",
+};
+
+TypeInfo TI_787B8F4A = {
+    .new_instance = nullptr,
+    .hash = 0x787B8F4A,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkcdStaticAabbTree_Impl>",
+};
+
+TypeInfo TI_548E02B8 = {
+    .new_instance = new_instance<hkaiNavMesh_Edge>,
+    .hash = 0x548E02B8,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiNavMesh_Edge",
+};
+
+TypeInfo TI_2B264726 = {
+    .new_instance = new_instance<hkRelArray<hkVector4f>>,
+    .hash = 0x2B264726,
+    .type = CodeGen::MetaType(5),
+    .name = "hkRelArray<hkVector4f>",
+};
+
+TypeInfo TI_67612D0F = {
+    .new_instance = new_instance<hknpConvexPolytopeShape>,
+    .hash = 0x67612D0F,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpConvexPolytopeShape",
+};
+
+TypeInfo TI_E1ABB200 = {
+    .new_instance = new_instance<hkRootLevelContainer_NamedVariant>,
+    .hash = 0xE1ABB200,
+    .type = CodeGen::MetaType(5),
+    .name = "hkRootLevelContainer_NamedVariant",
+};
+
+TypeInfo TI_0F6842F4 = {
+    .new_instance = new_instance<hkRelArray<hkVector4>>,
+    .hash = 0x0F6842F4,
+    .type = CodeGen::MetaType(5),
+    .name = "hkRelArray<hkVector4>",
+};
+
+TypeInfo TI_15959511 = {
+    .new_instance = new_instance<hknpCompressedMeshShapeTreeDataRun>,
+    .hash = 0x15959511,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpCompressedMeshShapeTreeDataRun",
+};
+
+TypeInfo TI_025FB763 = {
+    .new_instance = new_instance<hkRelArray<hknpConvexPolytopeShape_Face>>,
+    .hash = 0x025FB763,
+    .type = CodeGen::MetaType(5),
+    .name = "hkRelArray<hknpConvexPolytopeShape_Face>",
+};
+
+TypeInfo TI_C2B7E409 = {
+    .new_instance = nullptr,
+    .hash = 0xC2B7E409,
+    .type = CodeGen::MetaType(0),
+    .name = "hkVector4",
+};
+
+TypeInfo TI_452B9F92 = {
+    .new_instance = new_instance<hkRelArray<hkUint8>>,
+    .hash = 0x452B9F92,
+    .type = CodeGen::MetaType(5),
+    .name = "hkRelArray<hkUint8>",
+};
+
+TypeInfo TI_CF5AFEDF = {
+    .new_instance = nullptr,
+    .hash = 0xCF5AFEDF,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hknpConvexPolytopeShape_Connectivity>",
+};
+
+TypeInfo TI_F28B68F4 = {
+    .new_instance = new_instance<hknpMotionProperties>,
+    .hash = 0xF28B68F4,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpMotionProperties",
+};
+
+TypeInfo TI_55A69A1F = {
+    .new_instance = new_instance<hknpConvexPolytopeShape_Connectivity>,
+    .hash = 0x55A69A1F,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpConvexPolytopeShape_Connectivity",
+};
+
+TypeInfo TI_AFA1BAF0 = {
+    .new_instance = new_instance<hknpConstraintCinfo>,
+    .hash = 0xAFA1BAF0,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpConstraintCinfo",
+};
+
+TypeInfo TI_E53DD2E6 = {
+    .new_instance = new_instance<hkArray<hknpConvexPolytopeShape_Connectivity_Edge, hkContainerHeapAllocator>>,
+    .hash = 0xE53DD2E6,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hknpConvexPolytopeShape_Connectivity_Edge, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_A816B6F7 = {
+    .new_instance = new_instance<hknpConvexPolytopeShape_Connectivity_Edge>,
+    .hash = 0xA816B6F7,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpConvexPolytopeShape_Connectivity_Edge",
+};
+
+TypeInfo TI_574FC03C = {
+    .new_instance = new_instance<hknpShapeMassProperties>,
+    .hash = 0x574FC03C,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpShapeMassProperties",
+};
+
+TypeInfo TI_9B1DF1D9 = {
+    .new_instance = new_instance<hkArray<hkRefCountedProperties_Entry, hkContainerHeapAllocator>>,
+    .hash = 0x9B1DF1D9,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkRefCountedProperties_Entry, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_D295C3D8 = {
+    .new_instance = new_instance<hkArray<hknpConstraintCinfo, hkContainerHeapAllocator>>,
+    .hash = 0xD295C3D8,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hknpConstraintCinfo, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_9E048D18 = {
+    .new_instance = new_instance<hkArray<hkPtr<hkaAnimationBinding>, hkContainerHeapAllocator>>,
+    .hash = 0x9E048D18,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkPtr<hkaAnimationBinding>, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_66C54037 = {
+    .new_instance = new_instance<hkArray<hknpMaterial, hkContainerHeapAllocator>>,
+    .hash = 0x66C54037,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hknpMaterial, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_DC925F4C = {
+    .new_instance = new_instance<hkArray<hkaiStreamingSet_NavMeshConnection, hkContainerHeapAllocator>>,
+    .hash = 0xDC925F4C,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkaiStreamingSet_NavMeshConnection, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_B8931D5D = {
+    .new_instance = new_instance<hkaiNavMesh>,
+    .hash = 0xB8931D5D,
+    .type = CodeGen::MetaType(5),
+    .name = "hkaiNavMesh",
+};
+
+TypeInfo TI_06BBD3F4 = {
+    .new_instance = nullptr,
+    .hash = 0x06BBD3F4,
+    .type = CodeGen::MetaType(3),
+    .name = "hkFreeListArrayElement<hknpShapeInstance>",
+};
+
+TypeInfo TI_3736B0E5 = {
+    .new_instance = new_instance<hknpCompoundShape>,
+    .hash = 0x3736B0E5,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpCompoundShape",
+};
+
+TypeInfo TI_2E4036E7 = {
+    .new_instance = new_instance<hkArray<hkcdDynamicTree_Codec32, hkContainerHeapAllocator>>,
+    .hash = 0x2E4036E7,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkcdDynamicTree_Codec32, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_9C4C255E = {
+    .new_instance = new_instance<hkcdDynamicTree_Codec32>,
+    .hash = 0x9C4C255E,
+    .type = CodeGen::MetaType(5),
+    .name = "hkcdDynamicTree_Codec32",
+};
+
+TypeInfo TI_300CB708 = {
+    .new_instance = new_instance<hkArray<hkcdStaticMeshTreeBase_Section, hkContainerHeapAllocator>>,
+    .hash = 0x300CB708,
+    .type = CodeGen::MetaType(7),
+    .name = "hkArray<hkcdStaticMeshTreeBase_Section, hkContainerHeapAllocator>",
+};
+
+TypeInfo TI_B58FAFC5 = {
+    .new_instance = new_instance<hknpCapsuleShape>,
+    .hash = 0xB58FAFC5,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpCapsuleShape",
 };
 
 TypeInfo TI_4488031B = {
@@ -3882,18 +5506,18 @@ TypeInfo TI_8C55CF5F = {
     .name = "hkArray<hkInt16, hkContainerHeapAllocator>",
 };
 
+TypeInfo TI_C99B2161 = {
+    .new_instance = new_instance<hknpMaterial>,
+    .hash = 0xC99B2161,
+    .type = CodeGen::MetaType(5),
+    .name = "hknpMaterial",
+};
+
 TypeInfo TI_6F1D52CF = {
     .new_instance = new_instance<hkArray<hkaBone, hkContainerHeapAllocator>>,
     .hash = 0x6F1D52CF,
     .type = CodeGen::MetaType(7),
     .name = "hkArray<hkaBone, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_607B8A2D = {
-    .new_instance = new_instance<hkArray<hkQsTransform, hkContainerHeapAllocator>>,
-    .hash = 0x607B8A2D,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkQsTransform, hkContainerHeapAllocator>",
 };
 
 TypeInfo TI_E086948F = {
@@ -3903,335 +5527,6 @@ TypeInfo TI_E086948F = {
     .name = "hkQsTransform",
 };
 
-TypeInfo TI_044F32FA = {
-    .new_instance = new_instance<hkArray<hkReal, hkContainerHeapAllocator>>,
-    .hash = 0x044F32FA,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkReal, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_96A536C4 = {
-    .new_instance = new_instance<hkArray<hkStringPtr, hkContainerHeapAllocator>>,
-    .hash = 0x96A536C4,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkStringPtr, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_C99B2161 = {
-    .new_instance = new_instance<hknpMaterial>,
-    .hash = 0xC99B2161,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpMaterial",
-};
-
-TypeInfo TI_B28A7871 = {
-    .new_instance = new_instance<hkArray<hkPtr<hkaAnimation>, hkContainerHeapAllocator>>,
-    .hash = 0xB28A7871,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkPtr<hkaAnimation>, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_31CE208E = {
-    .new_instance = nullptr,
-    .hash = 0x31CE208E,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkaAnimation>",
-};
-
-TypeInfo TI_15959511 = {
-    .new_instance = new_instance<hknpCompressedMeshShapeTreeDataRun>,
-    .hash = 0x15959511,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpCompressedMeshShapeTreeDataRun",
-};
-
-TypeInfo TI_3119B4F0 = {
-    .new_instance = new_instance<hkaDefaultAnimatedReferenceFrame>,
-    .hash = 0x3119B4F0,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaDefaultAnimatedReferenceFrame",
-};
-
-TypeInfo TI_31494FE3 = {
-    .new_instance = new_instance<hkaAnnotationTrack>,
-    .hash = 0x31494FE3,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaAnnotationTrack",
-};
-
-TypeInfo TI_77C59735 = {
-    .new_instance = nullptr,
-    .hash = 0x77C59735,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkaAnimationBinding>",
-};
-
-TypeInfo TI_F3715A88 = {
-    .new_instance = new_instance<hkcdStaticTree_Codec3Axis4>,
-    .hash = 0xF3715A88,
-    .type = CodeGen::MetaType(5),
-    .name = "hkcdStaticTree_Codec3Axis4",
-};
-
-TypeInfo TI_63588856 = {
-    .new_instance = new_instance<hkaAnimationBinding>,
-    .hash = 0x63588856,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaAnimationBinding",
-};
-
-TypeInfo TI_452B9F92 = {
-    .new_instance = new_instance<hkRelArray<hkUint8>>,
-    .hash = 0x452B9F92,
-    .type = CodeGen::MetaType(5),
-    .name = "hkRelArray<hkUint8>",
-};
-
-TypeInfo TI_30FA579B = {
-    .new_instance = new_instance<hkGeometry>,
-    .hash = 0x30FA579B,
-    .type = CodeGen::MetaType(5),
-    .name = "hkGeometry",
-};
-
-TypeInfo TI_0526387C = {
-    .new_instance = new_instance<hkRefCountedProperties>,
-    .hash = 0x0526387C,
-    .type = CodeGen::MetaType(5),
-    .name = "hkRefCountedProperties",
-};
-
-TypeInfo TI_A421524A = {
-    .new_instance = new_instance<hkcdStaticMeshTreeBase_Primitive>,
-    .hash = 0xA421524A,
-    .type = CodeGen::MetaType(5),
-    .name = "hkcdStaticMeshTreeBase_Primitive",
-};
-
-TypeInfo TI_C4CA4875 = {
-    .new_instance = new_instance<hknpConvexShape>,
-    .hash = 0xC4CA4875,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpConvexShape",
-};
-
-TypeInfo TI_56362A20 = {
-    .new_instance = new_instance<hknpExternMeshShape>,
-    .hash = 0x56362A20,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpExternMeshShape",
-};
-
-TypeInfo TI_B58FAFC5 = {
-    .new_instance = new_instance<hknpCapsuleShape>,
-    .hash = 0xB58FAFC5,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpCapsuleShape",
-};
-
-TypeInfo TI_025FB763 = {
-    .new_instance = new_instance<hkRelArray<hknpConvexPolytopeShape_Face>>,
-    .hash = 0x025FB763,
-    .type = CodeGen::MetaType(5),
-    .name = "hkRelArray<hknpConvexPolytopeShape_Face>",
-};
-
-TypeInfo TI_106BBC75 = {
-    .new_instance = new_instance<hkArray<float, hkContainerHeapAllocator>>,
-    .hash = 0x106BBC75,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<float, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_A816B6F7 = {
-    .new_instance = new_instance<hknpConvexPolytopeShape_Connectivity_Edge>,
-    .hash = 0xA816B6F7,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpConvexPolytopeShape_Connectivity_Edge",
-};
-
-TypeInfo TI_7CA2764B = {
-    .new_instance = new_instance<hkpPositionConstraintMotor>,
-    .hash = 0x7CA2764B,
-    .type = CodeGen::MetaType(5),
-    .name = "hkpPositionConstraintMotor",
-};
-
-TypeInfo TI_55A69A1F = {
-    .new_instance = new_instance<hknpConvexPolytopeShape_Connectivity>,
-    .hash = 0x55A69A1F,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpConvexPolytopeShape_Connectivity",
-};
-
-TypeInfo TI_A8DDFCF6 = {
-    .new_instance = new_instance<hkaSplineCompressedAnimation>,
-    .hash = 0xA8DDFCF6,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaSplineCompressedAnimation",
-};
-
-TypeInfo TI_2129CE34 = {
-    .new_instance = new_instance<hkArray<hkPtr<hknpPhysicsSystemData>, hkContainerHeapAllocator>>,
-    .hash = 0x2129CE34,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkPtr<hknpPhysicsSystemData>, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_10943B3E = {
-    .new_instance = nullptr,
-    .hash = 0x10943B3E,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hknpPhysicsSystemData>",
-};
-
-TypeInfo TI_56657F16 = {
-    .new_instance = new_instance<hknpPhysicsSystemData>,
-    .hash = 0x56657F16,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpPhysicsSystemData",
-};
-
-TypeInfo TI_66C54037 = {
-    .new_instance = new_instance<hkArray<hknpMaterial, hkContainerHeapAllocator>>,
-    .hash = 0x66C54037,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hknpMaterial, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_FD379362 = {
-    .new_instance = new_instance<hkArray<hknpMotionProperties, hkContainerHeapAllocator>>,
-    .hash = 0xFD379362,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hknpMotionProperties, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_3F8A2460 = {
-    .new_instance = new_instance<hkArray<hknpPhysicsSystemData_bodyCinfoWithAttachment, hkContainerHeapAllocator>>,
-    .hash = 0x3F8A2460,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hknpPhysicsSystemData_bodyCinfoWithAttachment, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_4F01CBB6 = {
-    .new_instance = nullptr,
-    .hash = 0x4F01CBB6,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hknpShape>",
-};
-
-TypeInfo TI_8171564E = {
-    .new_instance = nullptr,
-    .hash = 0x8171564E,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkRefCountedProperties>",
-};
-
-TypeInfo TI_541B515F = {
-    .new_instance = new_instance<hkRefCountedProperties_Entry>,
-    .hash = 0x541B515F,
-    .type = CodeGen::MetaType(5),
-    .name = "hkRefCountedProperties_Entry",
-};
-
-TypeInfo TI_E5E88A3C = {
-    .new_instance = nullptr,
-    .hash = 0xE5E88A3C,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkReferencedObject>",
-};
-
-TypeInfo TI_3736B0E5 = {
-    .new_instance = new_instance<hknpCompoundShape>,
-    .hash = 0x3736B0E5,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpCompoundShape",
-};
-
-TypeInfo TI_C6A0C331 = {
-    .new_instance = new_instance<hknpPhysicsSystemData_bodyCinfoWithAttachment>,
-    .hash = 0xC6A0C331,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpPhysicsSystemData_bodyCinfoWithAttachment",
-};
-
-TypeInfo TI_906CFF48 = {
-    .new_instance = new_instance<hkArray<hkcdStaticMeshTreeBase_Primitive, hkContainerHeapAllocator>>,
-    .hash = 0x906CFF48,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkcdStaticMeshTreeBase_Primitive, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_AFA1BAF0 = {
-    .new_instance = new_instance<hknpConstraintCinfo>,
-    .hash = 0xAFA1BAF0,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpConstraintCinfo",
-};
-
-TypeInfo TI_F1AF3848 = {
-    .new_instance = new_instance<hkcdSimdTree_Node>,
-    .hash = 0xF1AF3848,
-    .type = CodeGen::MetaType(5),
-    .name = "hkcdSimdTree_Node",
-};
-
-TypeInfo TI_58EE1490 = {
-    .new_instance = nullptr,
-    .hash = 0x58EE1490,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkpConstraintData>",
-};
-
-TypeInfo TI_36D0EFBC = {
-    .new_instance = nullptr,
-    .hash = 0x36D0EFBC,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkGeometry>",
-};
-
-TypeInfo TI_048D6702 = {
-    .new_instance = new_instance<hkArray<hkPtr<hkReferencedObject>, hkContainerHeapAllocator>>,
-    .hash = 0x048D6702,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkPtr<hkReferencedObject>, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_266055DC = {
-    .new_instance = new_instance<hkArray<hkaSkeletonMapperData_ChainMapping, hkContainerHeapAllocator>>,
-    .hash = 0x266055DC,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaSkeletonMapperData_ChainMapping, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_487A0361 = {
-    .new_instance = new_instance<hkpRagdollConstraintData>,
-    .hash = 0x487A0361,
-    .type = CodeGen::MetaType(5),
-    .name = "hkpRagdollConstraintData",
-};
-
-TypeInfo TI_9734CE0A = {
-    .new_instance = nullptr,
-    .hash = 0x9734CE0A,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hknpShape>",
-};
-
-TypeInfo TI_2B264726 = {
-    .new_instance = new_instance<hkRelArray<hkVector4f>>,
-    .hash = 0x2B264726,
-    .type = CodeGen::MetaType(5),
-    .name = "hkRelArray<hkVector4f>",
-};
-
-TypeInfo TI_67612D0F = {
-    .new_instance = new_instance<hknpConvexPolytopeShape>,
-    .hash = 0x67612D0F,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpConvexPolytopeShape",
-};
-
 TypeInfo TI_EAAD8C84 = {
     .new_instance = new_instance<hknpConvexPolytopeShape_Face>,
     .hash = 0xEAAD8C84,
@@ -4239,60 +5534,25 @@ TypeInfo TI_EAAD8C84 = {
     .name = "hknpConvexPolytopeShape_Face",
 };
 
-TypeInfo TI_574FC03C = {
-    .new_instance = new_instance<hknpShapeMassProperties>,
-    .hash = 0x574FC03C,
+TypeInfo TI_AF3916BB = {
+    .new_instance = new_instance<hkcdStaticAabbTree>,
+    .hash = 0xAF3916BB,
     .type = CodeGen::MetaType(5),
-    .name = "hknpShapeMassProperties",
+    .name = "hkcdStaticAabbTree",
 };
 
-TypeInfo TI_D69360E7 = {
-    .new_instance = new_instance<hkArray<hkaSkeletonMapperData_SimpleMapping, hkContainerHeapAllocator>>,
-    .hash = 0xD69360E7,
+TypeInfo TI_FF787F85 = {
+    .new_instance = new_instance<hkArray<hkGeometry_Triangle, hkContainerHeapAllocator>>,
+    .hash = 0xFF787F85,
     .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkaSkeletonMapperData_SimpleMapping, hkContainerHeapAllocator>",
+    .name = "hkArray<hkGeometry_Triangle, hkContainerHeapAllocator>",
 };
 
-TypeInfo TI_06BBD3F4 = {
+TypeInfo TI_28F2B833 = {
     .new_instance = nullptr,
-    .hash = 0x06BBD3F4,
-    .type = CodeGen::MetaType(3),
-    .name = "hkFreeListArrayElement<hknpShapeInstance>",
-};
-
-TypeInfo TI_7C19D91C = {
-    .new_instance = new_instance<hknpDynamicCompoundShapeData>,
-    .hash = 0x7C19D91C,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpDynamicCompoundShapeData",
-};
-
-TypeInfo TI_2E4036E7 = {
-    .new_instance = new_instance<hkArray<hkcdDynamicTree_Codec32, hkContainerHeapAllocator>>,
-    .hash = 0x2E4036E7,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkcdDynamicTree_Codec32, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_9C4C255E = {
-    .new_instance = new_instance<hkcdDynamicTree_Codec32>,
-    .hash = 0x9C4C255E,
-    .type = CodeGen::MetaType(5),
-    .name = "hkcdDynamicTree_Codec32",
-};
-
-TypeInfo TI_BC7D3072 = {
-    .new_instance = new_instance<CPfxBreakableShapeCollection>,
-    .hash = 0xBC7D3072,
-    .type = CodeGen::MetaType(5),
-    .name = "CPfxBreakableShapeCollection",
-};
-
-TypeInfo TI_73813A14 = {
-    .new_instance = new_instance<hkArray<SPartShapeInfo, hkContainerHeapAllocator>>,
-    .hash = 0x73813A14,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<SPartShapeInfo, hkContainerHeapAllocator>",
+    .hash = 0x28F2B833,
+    .type = CodeGen::MetaType(4),
+    .name = "hkPtr<hkaAnimatedReferenceFrame>",
 };
 
 TypeInfo TI_CE47F49E = {
@@ -4302,276 +5562,171 @@ TypeInfo TI_CE47F49E = {
     .name = "SPartShapeInfo",
 };
 
-TypeInfo TI_915F1AF8 = {
+TypeInfo TI_DDD4337B = {
     .new_instance = nullptr,
-    .hash = 0x915F1AF8,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hknpExternMeshShapeGeometry>",
-};
-
-TypeInfo TI_BC7C0DE5 = {
-    .new_instance = new_instance<hkpLimitedHingeConstraintData>,
-    .hash = 0xBC7C0DE5,
-    .type = CodeGen::MetaType(5),
-    .name = "hkpLimitedHingeConstraintData",
-};
-
-TypeInfo TI_3DF4746C = {
-    .new_instance = nullptr,
-    .hash = 0x3DF4746C,
-    .type = CodeGen::MetaType(4),
-    .name = "hkPtr<hkpConstraintMotor>",
-};
-
-TypeInfo TI_A225D0DD = {
-    .new_instance = new_instance<hkGeometry_Triangle>,
-    .hash = 0xA225D0DD,
-    .type = CodeGen::MetaType(5),
-    .name = "hkGeometry_Triangle",
-};
-
-TypeInfo TI_D1389983 = {
-    .new_instance = new_instance<CPfxPartIndexProperty>,
-    .hash = 0xD1389983,
-    .type = CodeGen::MetaType(5),
-    .name = "CPfxPartIndexProperty",
-};
-
-TypeInfo TI_3A9A8ABF = {
-    .new_instance = new_instance<hknpMorphExternMesh>,
-    .hash = 0x3A9A8ABF,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpMorphExternMesh",
-};
-
-TypeInfo TI_D114E4AD = {
-    .new_instance = new_instance<hknpExternMeshShapeData>,
-    .hash = 0xD114E4AD,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpExternMeshShapeData",
-};
-
-TypeInfo TI_21306E13 = {
-    .new_instance = new_instance<CPfxFloatShapeProperty>,
-    .hash = 0x21306E13,
-    .type = CodeGen::MetaType(5),
-    .name = "CPfxFloatShapeProperty",
-};
-
-TypeInfo TI_531C44AF = {
-    .new_instance = new_instance<hkaSkeletonMapper>,
-    .hash = 0x531C44AF,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaSkeletonMapper",
-};
-
-TypeInfo TI_1CD6F437 = {
-    .new_instance = new_instance<hkaSkeletonMapperData_SimpleMapping>,
-    .hash = 0x1CD6F437,
-    .type = CodeGen::MetaType(5),
-    .name = "hkaSkeletonMapperData_SimpleMapping",
-};
-
-TypeInfo TI_840F8273 = {
-    .new_instance = new_instance<hknpSphereShape>,
-    .hash = 0x840F8273,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpSphereShape",
-};
-
-TypeInfo TI_7D575382 = {
-    .new_instance = new_instance<hknpCompressedMeshShape>,
-    .hash = 0x7D575382,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpCompressedMeshShape",
-};
-
-TypeInfo TI_3FBC3E5E = {
-    .new_instance = new_instance<hknpCompressedMeshShapeData>,
-    .hash = 0x3FBC3E5E,
-    .type = CodeGen::MetaType(5),
-    .name = "hknpCompressedMeshShapeData",
-};
-
-TypeInfo TI_DDA9CB84 = {
-    .new_instance = new_instance<hkArray<hkcdStaticTree_Codec3Axis5, hkContainerHeapAllocator>>,
-    .hash = 0xDDA9CB84,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkcdStaticTree_Codec3Axis5, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_300CB708 = {
-    .new_instance = new_instance<hkArray<hkcdStaticMeshTreeBase_Section, hkContainerHeapAllocator>>,
-    .hash = 0x300CB708,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkcdStaticMeshTreeBase_Section, hkContainerHeapAllocator>",
-};
-
-TypeInfo TI_548E3069 = {
-    .new_instance = new_instance<hkArray<hkcdStaticTree_Codec3Axis4, hkContainerHeapAllocator>>,
-    .hash = 0x548E3069,
-    .type = CodeGen::MetaType(7),
-    .name = "hkArray<hkcdStaticTree_Codec3Axis4, hkContainerHeapAllocator>",
+    .hash = 0xDDD4337B,
+    .type = CodeGen::MetaType(0),
+    .name = "hkUint8",
 };
 
 TypeInfoMap havok_type_info;
 
 void init_havok_type_info() {
     havok_type_info.reserve(541);
-    havok_type_info.emplace(0xA9193084, &TI_A9193084);
-    havok_type_info.emplace(0x96071661, &TI_96071661);
-    havok_type_info.emplace(0xB8931D5D, &TI_B8931D5D);
-    havok_type_info.emplace(0x0B3A0741, &TI_0B3A0741);
-    havok_type_info.emplace(0x3FC8635A, &TI_3FC8635A);
-    havok_type_info.emplace(0xDDD4337B, &TI_DDD4337B);
-    havok_type_info.emplace(0x84052A59, &TI_84052A59);
-    havok_type_info.emplace(0x78170165, &TI_78170165);
-    havok_type_info.emplace(0xE1ABB200, &TI_E1ABB200);
-    havok_type_info.emplace(0x5CC5D8EA, &TI_5CC5D8EA);
-    havok_type_info.emplace(0xAB3C5525, &TI_AB3C5525);
-    havok_type_info.emplace(0x7D89734D, &TI_7D89734D);
-    havok_type_info.emplace(0xF2226812, &TI_F2226812);
-    havok_type_info.emplace(0x186D2A5F, &TI_186D2A5F);
-    havok_type_info.emplace(0x28F2B833, &TI_28F2B833);
-    havok_type_info.emplace(0xCF5AFEDF, &TI_CF5AFEDF);
-    havok_type_info.emplace(0x97AED99F, &TI_97AED99F);
-    havok_type_info.emplace(0xDC59EAD4, &TI_DC59EAD4);
-    havok_type_info.emplace(0xE53DD2E6, &TI_E53DD2E6);
-    havok_type_info.emplace(0xB54AA116, &TI_B54AA116);
-    havok_type_info.emplace(0x0F6842F4, &TI_0F6842F4);
-    havok_type_info.emplace(0x07B5C0B6, &TI_07B5C0B6);
-    havok_type_info.emplace(0x3C57698F, &TI_3C57698F);
-    havok_type_info.emplace(0xCB3511AB, &TI_CB3511AB);
-    havok_type_info.emplace(0xF96FEE69, &TI_F96FEE69);
-    havok_type_info.emplace(0x664BE534, &TI_664BE534);
-    havok_type_info.emplace(0x837D1C66, &TI_837D1C66);
-    havok_type_info.emplace(0x548E02B8, &TI_548E02B8);
-    havok_type_info.emplace(0xF5740913, &TI_F5740913);
-    havok_type_info.emplace(0x25D0CEC9, &TI_25D0CEC9);
-    havok_type_info.emplace(0x9B1DF1D9, &TI_9B1DF1D9);
-    havok_type_info.emplace(0xE5CDD47F, &TI_E5CDD47F);
-    havok_type_info.emplace(0x853407AB, &TI_853407AB);
-    havok_type_info.emplace(0xC2B7E409, &TI_C2B7E409);
-    havok_type_info.emplace(0x351B2E04, &TI_351B2E04);
-    havok_type_info.emplace(0xAD93639D, &TI_AD93639D);
-    havok_type_info.emplace(0x5A7C87B4, &TI_5A7C87B4);
-    havok_type_info.emplace(0x539FAB50, &TI_539FAB50);
-    havok_type_info.emplace(0xDC925F4C, &TI_DC925F4C);
-    havok_type_info.emplace(0x1BB71023, &TI_1BB71023);
-    havok_type_info.emplace(0x5A544D18, &TI_5A544D18);
-    havok_type_info.emplace(0xD295C3D8, &TI_D295C3D8);
-    havok_type_info.emplace(0xE6D117E0, &TI_E6D117E0);
-    havok_type_info.emplace(0xBC376DF9, &TI_BC376DF9);
-    havok_type_info.emplace(0xA24D5E15, &TI_A24D5E15);
-    havok_type_info.emplace(0xBBFF8FBC, &TI_BBFF8FBC);
-    havok_type_info.emplace(0xE5CD30F2, &TI_E5CD30F2);
-    havok_type_info.emplace(0x4151832F, &TI_4151832F);
-    havok_type_info.emplace(0xF3825823, &TI_F3825823);
-    havok_type_info.emplace(0x0C055103, &TI_0C055103);
-    havok_type_info.emplace(0x2A5CF5A1, &TI_2A5CF5A1);
-    havok_type_info.emplace(0xCFDFE11A, &TI_CFDFE11A);
-    havok_type_info.emplace(0xC7C588C8, &TI_C7C588C8);
-    havok_type_info.emplace(0x13786D87, &TI_13786D87);
-    havok_type_info.emplace(0xAA8D81D0, &TI_AA8D81D0);
-    havok_type_info.emplace(0xFDA96ACC, &TI_FDA96ACC);
-    havok_type_info.emplace(0xAB7DD7BE, &TI_AB7DD7BE);
-    havok_type_info.emplace(0xAF3916BB, &TI_AF3916BB);
-    havok_type_info.emplace(0x48171456, &TI_48171456);
-    havok_type_info.emplace(0x787B8F4A, &TI_787B8F4A);
-    havok_type_info.emplace(0x7C88F204, &TI_7C88F204);
-    havok_type_info.emplace(0x9DB0C1F2, &TI_9DB0C1F2);
-    havok_type_info.emplace(0xFF787F85, &TI_FF787F85);
-    havok_type_info.emplace(0x4966EB95, &TI_4966EB95);
-    havok_type_info.emplace(0x9E048D18, &TI_9E048D18);
-    havok_type_info.emplace(0x7E655999, &TI_7E655999);
-    havok_type_info.emplace(0x81084BF9, &TI_81084BF9);
-    havok_type_info.emplace(0x31A55970, &TI_31A55970);
-    havok_type_info.emplace(0x777A00A6, &TI_777A00A6);
-    havok_type_info.emplace(0x2228A88C, &TI_2228A88C);
-    havok_type_info.emplace(0x5264308D, &TI_5264308D);
-    havok_type_info.emplace(0xBEF25485, &TI_BEF25485);
+    havok_type_info.emplace(0x906CFF48, &TI_906CFF48);
     havok_type_info.emplace(0x82CE8FF6, &TI_82CE8FF6);
-    havok_type_info.emplace(0xF28B68F4, &TI_F28B68F4);
+    havok_type_info.emplace(0x48171456, &TI_48171456);
+    havok_type_info.emplace(0x3FBC3E5E, &TI_3FBC3E5E);
+    havok_type_info.emplace(0x266055DC, &TI_266055DC);
+    havok_type_info.emplace(0x1CD6F437, &TI_1CD6F437);
+    havok_type_info.emplace(0xF1AF3848, &TI_F1AF3848);
+    havok_type_info.emplace(0x4151832F, &TI_4151832F);
+    havok_type_info.emplace(0xD114E4AD, &TI_D114E4AD);
+    havok_type_info.emplace(0xA421524A, &TI_A421524A);
+    havok_type_info.emplace(0xD1389983, &TI_D1389983);
+    havok_type_info.emplace(0x3DF4746C, &TI_3DF4746C);
+    havok_type_info.emplace(0xBC7C0DE5, &TI_BC7C0DE5);
+    havok_type_info.emplace(0x487A0361, &TI_487A0361);
+    havok_type_info.emplace(0x56362A20, &TI_56362A20);
+    havok_type_info.emplace(0x73813A14, &TI_73813A14);
+    havok_type_info.emplace(0x5264308D, &TI_5264308D);
+    havok_type_info.emplace(0x777A00A6, &TI_777A00A6);
+    havok_type_info.emplace(0x81084BF9, &TI_81084BF9);
+    havok_type_info.emplace(0x2A5CF5A1, &TI_2A5CF5A1);
+    havok_type_info.emplace(0x4966EB95, &TI_4966EB95);
+    havok_type_info.emplace(0x78170165, &TI_78170165);
+    havok_type_info.emplace(0xAA8D81D0, &TI_AA8D81D0);
+    havok_type_info.emplace(0x13786D87, &TI_13786D87);
+    havok_type_info.emplace(0xC7C588C8, &TI_C7C588C8);
+    havok_type_info.emplace(0x9DB0C1F2, &TI_9DB0C1F2);
+    havok_type_info.emplace(0x0C055103, &TI_0C055103);
+    havok_type_info.emplace(0xE6D117E0, &TI_E6D117E0);
+    havok_type_info.emplace(0x5A544D18, &TI_5A544D18);
+    havok_type_info.emplace(0x1BB71023, &TI_1BB71023);
+    havok_type_info.emplace(0x539FAB50, &TI_539FAB50);
+    havok_type_info.emplace(0x5A7C87B4, &TI_5A7C87B4);
+    havok_type_info.emplace(0x3C57698F, &TI_3C57698F);
+    havok_type_info.emplace(0x84052A59, &TI_84052A59);
+    havok_type_info.emplace(0x853407AB, &TI_853407AB);
+    havok_type_info.emplace(0x3119B4F0, &TI_3119B4F0);
+    havok_type_info.emplace(0xD69360E7, &TI_D69360E7);
+    havok_type_info.emplace(0x7C88F204, &TI_7C88F204);
+    havok_type_info.emplace(0x840F8273, &TI_840F8273);
+    havok_type_info.emplace(0xA8DDFCF6, &TI_A8DDFCF6);
+    havok_type_info.emplace(0xDDA9CB84, &TI_DDA9CB84);
+    havok_type_info.emplace(0xA24D5E15, &TI_A24D5E15);
+    havok_type_info.emplace(0xCFDFE11A, &TI_CFDFE11A);
+    havok_type_info.emplace(0x548E3069, &TI_548E3069);
+    havok_type_info.emplace(0xF5740913, &TI_F5740913);
+    havok_type_info.emplace(0x531C44AF, &TI_531C44AF);
+    havok_type_info.emplace(0xF3715A88, &TI_F3715A88);
+    havok_type_info.emplace(0xAB7DD7BE, &TI_AB7DD7BE);
+    havok_type_info.emplace(0xFDA96ACC, &TI_FDA96ACC);
+    havok_type_info.emplace(0x36D0EFBC, &TI_36D0EFBC);
+    havok_type_info.emplace(0xDC59EAD4, &TI_DC59EAD4);
+    havok_type_info.emplace(0x21306E13, &TI_21306E13);
+    havok_type_info.emplace(0x837D1C66, &TI_837D1C66);
+    havok_type_info.emplace(0x63588856, &TI_63588856);
+    havok_type_info.emplace(0x7D89734D, &TI_7D89734D);
+    havok_type_info.emplace(0xBC7D3072, &TI_BC7D3072);
+    havok_type_info.emplace(0x607B8A2D, &TI_607B8A2D);
+    havok_type_info.emplace(0x048D6702, &TI_048D6702);
     havok_type_info.emplace(0x965B57C3, &TI_965B57C3);
+    havok_type_info.emplace(0x58EE1490, &TI_58EE1490);
+    havok_type_info.emplace(0x97AED99F, &TI_97AED99F);
+    havok_type_info.emplace(0xAB3C5525, &TI_AB3C5525);
+    havok_type_info.emplace(0x541B515F, &TI_541B515F);
     havok_type_info.emplace(0xE62256FA, &TI_E62256FA);
+    havok_type_info.emplace(0x31494FE3, &TI_31494FE3);
+    havok_type_info.emplace(0x0526387C, &TI_0526387C);
+    havok_type_info.emplace(0xCB3511AB, &TI_CB3511AB);
+    havok_type_info.emplace(0x8171564E, &TI_8171564E);
+    havok_type_info.emplace(0x7CA2764B, &TI_7CA2764B);
+    havok_type_info.emplace(0x2228A88C, &TI_2228A88C);
+    havok_type_info.emplace(0xC4CA4875, &TI_C4CA4875);
+    havok_type_info.emplace(0xF3825823, &TI_F3825823);
+    havok_type_info.emplace(0x106BBC75, &TI_106BBC75);
+    havok_type_info.emplace(0xC6A0C331, &TI_C6A0C331);
+    havok_type_info.emplace(0x30FA579B, &TI_30FA579B);
+    havok_type_info.emplace(0x4F01CBB6, &TI_4F01CBB6);
+    havok_type_info.emplace(0x2129CE34, &TI_2129CE34);
+    havok_type_info.emplace(0x7E655999, &TI_7E655999);
+    havok_type_info.emplace(0x7C19D91C, &TI_7C19D91C);
+    havok_type_info.emplace(0xFD379362, &TI_FD379362);
+    havok_type_info.emplace(0xBEF25485, &TI_BEF25485);
+    havok_type_info.emplace(0x7D575382, &TI_7D575382);
+    havok_type_info.emplace(0x3F8A2460, &TI_3F8A2460);
+    havok_type_info.emplace(0x5CC5D8EA, &TI_5CC5D8EA);
+    havok_type_info.emplace(0xE5E88A3C, &TI_E5E88A3C);
+    havok_type_info.emplace(0x186D2A5F, &TI_186D2A5F);
+    havok_type_info.emplace(0xB54AA116, &TI_B54AA116);
+    havok_type_info.emplace(0x915F1AF8, &TI_915F1AF8);
+    havok_type_info.emplace(0xAD93639D, &TI_AD93639D);
+    havok_type_info.emplace(0x96071661, &TI_96071661);
+    havok_type_info.emplace(0xA225D0DD, &TI_A225D0DD);
+    havok_type_info.emplace(0x044F32FA, &TI_044F32FA);
+    havok_type_info.emplace(0x96A536C4, &TI_96A536C4);
+    havok_type_info.emplace(0xBC376DF9, &TI_BC376DF9);
+    havok_type_info.emplace(0x664BE534, &TI_664BE534);
+    havok_type_info.emplace(0x0B3A0741, &TI_0B3A0741);
+    havok_type_info.emplace(0x31A55970, &TI_31A55970);
+    havok_type_info.emplace(0xA9193084, &TI_A9193084);
+    havok_type_info.emplace(0x351B2E04, &TI_351B2E04);
+    havok_type_info.emplace(0xF96FEE69, &TI_F96FEE69);
+    havok_type_info.emplace(0x07B5C0B6, &TI_07B5C0B6);
     havok_type_info.emplace(0x147221F5, &TI_147221F5);
+    havok_type_info.emplace(0x3FC8635A, &TI_3FC8635A);
+    havok_type_info.emplace(0xBBFF8FBC, &TI_BBFF8FBC);
+    havok_type_info.emplace(0x77C59735, &TI_77C59735);
+    havok_type_info.emplace(0x25D0CEC9, &TI_25D0CEC9);
+    havok_type_info.emplace(0x10943B3E, &TI_10943B3E);
+    havok_type_info.emplace(0x31CE208E, &TI_31CE208E);
+    havok_type_info.emplace(0xE5CDD47F, &TI_E5CDD47F);
+    havok_type_info.emplace(0x3A9A8ABF, &TI_3A9A8ABF);
+    havok_type_info.emplace(0x56657F16, &TI_56657F16);
+    havok_type_info.emplace(0xE5CD30F2, &TI_E5CD30F2);
+    havok_type_info.emplace(0xB28A7871, &TI_B28A7871);
+    havok_type_info.emplace(0x9734CE0A, &TI_9734CE0A);
+    havok_type_info.emplace(0xF2226812, &TI_F2226812);
+    havok_type_info.emplace(0x787B8F4A, &TI_787B8F4A);
+    havok_type_info.emplace(0x548E02B8, &TI_548E02B8);
+    havok_type_info.emplace(0x2B264726, &TI_2B264726);
+    havok_type_info.emplace(0x67612D0F, &TI_67612D0F);
+    havok_type_info.emplace(0xE1ABB200, &TI_E1ABB200);
+    havok_type_info.emplace(0x0F6842F4, &TI_0F6842F4);
+    havok_type_info.emplace(0x15959511, &TI_15959511);
+    havok_type_info.emplace(0x025FB763, &TI_025FB763);
+    havok_type_info.emplace(0xC2B7E409, &TI_C2B7E409);
+    havok_type_info.emplace(0x452B9F92, &TI_452B9F92);
+    havok_type_info.emplace(0xCF5AFEDF, &TI_CF5AFEDF);
+    havok_type_info.emplace(0xF28B68F4, &TI_F28B68F4);
+    havok_type_info.emplace(0x55A69A1F, &TI_55A69A1F);
+    havok_type_info.emplace(0xAFA1BAF0, &TI_AFA1BAF0);
+    havok_type_info.emplace(0xE53DD2E6, &TI_E53DD2E6);
+    havok_type_info.emplace(0xA816B6F7, &TI_A816B6F7);
+    havok_type_info.emplace(0x574FC03C, &TI_574FC03C);
+    havok_type_info.emplace(0x9B1DF1D9, &TI_9B1DF1D9);
+    havok_type_info.emplace(0xD295C3D8, &TI_D295C3D8);
+    havok_type_info.emplace(0x9E048D18, &TI_9E048D18);
+    havok_type_info.emplace(0x66C54037, &TI_66C54037);
+    havok_type_info.emplace(0xDC925F4C, &TI_DC925F4C);
+    havok_type_info.emplace(0xB8931D5D, &TI_B8931D5D);
+    havok_type_info.emplace(0x06BBD3F4, &TI_06BBD3F4);
+    havok_type_info.emplace(0x3736B0E5, &TI_3736B0E5);
+    havok_type_info.emplace(0x2E4036E7, &TI_2E4036E7);
+    havok_type_info.emplace(0x9C4C255E, &TI_9C4C255E);
+    havok_type_info.emplace(0x300CB708, &TI_300CB708);
+    havok_type_info.emplace(0xB58FAFC5, &TI_B58FAFC5);
     havok_type_info.emplace(0x4488031B, &TI_4488031B);
     havok_type_info.emplace(0x96674903, &TI_96674903);
     havok_type_info.emplace(0x8C55CF5F, &TI_8C55CF5F);
-    havok_type_info.emplace(0x6F1D52CF, &TI_6F1D52CF);
-    havok_type_info.emplace(0x607B8A2D, &TI_607B8A2D);
-    havok_type_info.emplace(0xE086948F, &TI_E086948F);
-    havok_type_info.emplace(0x044F32FA, &TI_044F32FA);
-    havok_type_info.emplace(0x96A536C4, &TI_96A536C4);
     havok_type_info.emplace(0xC99B2161, &TI_C99B2161);
-    havok_type_info.emplace(0xB28A7871, &TI_B28A7871);
-    havok_type_info.emplace(0x31CE208E, &TI_31CE208E);
-    havok_type_info.emplace(0x15959511, &TI_15959511);
-    havok_type_info.emplace(0x3119B4F0, &TI_3119B4F0);
-    havok_type_info.emplace(0x31494FE3, &TI_31494FE3);
-    havok_type_info.emplace(0x77C59735, &TI_77C59735);
-    havok_type_info.emplace(0xF3715A88, &TI_F3715A88);
-    havok_type_info.emplace(0x63588856, &TI_63588856);
-    havok_type_info.emplace(0x452B9F92, &TI_452B9F92);
-    havok_type_info.emplace(0x30FA579B, &TI_30FA579B);
-    havok_type_info.emplace(0x0526387C, &TI_0526387C);
-    havok_type_info.emplace(0xA421524A, &TI_A421524A);
-    havok_type_info.emplace(0xC4CA4875, &TI_C4CA4875);
-    havok_type_info.emplace(0x56362A20, &TI_56362A20);
-    havok_type_info.emplace(0xB58FAFC5, &TI_B58FAFC5);
-    havok_type_info.emplace(0x025FB763, &TI_025FB763);
-    havok_type_info.emplace(0x106BBC75, &TI_106BBC75);
-    havok_type_info.emplace(0xA816B6F7, &TI_A816B6F7);
-    havok_type_info.emplace(0x7CA2764B, &TI_7CA2764B);
-    havok_type_info.emplace(0x55A69A1F, &TI_55A69A1F);
-    havok_type_info.emplace(0xA8DDFCF6, &TI_A8DDFCF6);
-    havok_type_info.emplace(0x2129CE34, &TI_2129CE34);
-    havok_type_info.emplace(0x10943B3E, &TI_10943B3E);
-    havok_type_info.emplace(0x56657F16, &TI_56657F16);
-    havok_type_info.emplace(0x66C54037, &TI_66C54037);
-    havok_type_info.emplace(0xFD379362, &TI_FD379362);
-    havok_type_info.emplace(0x3F8A2460, &TI_3F8A2460);
-    havok_type_info.emplace(0x4F01CBB6, &TI_4F01CBB6);
-    havok_type_info.emplace(0x8171564E, &TI_8171564E);
-    havok_type_info.emplace(0x541B515F, &TI_541B515F);
-    havok_type_info.emplace(0xE5E88A3C, &TI_E5E88A3C);
-    havok_type_info.emplace(0x3736B0E5, &TI_3736B0E5);
-    havok_type_info.emplace(0xC6A0C331, &TI_C6A0C331);
-    havok_type_info.emplace(0x906CFF48, &TI_906CFF48);
-    havok_type_info.emplace(0xAFA1BAF0, &TI_AFA1BAF0);
-    havok_type_info.emplace(0xF1AF3848, &TI_F1AF3848);
-    havok_type_info.emplace(0x58EE1490, &TI_58EE1490);
-    havok_type_info.emplace(0x36D0EFBC, &TI_36D0EFBC);
-    havok_type_info.emplace(0x048D6702, &TI_048D6702);
-    havok_type_info.emplace(0x266055DC, &TI_266055DC);
-    havok_type_info.emplace(0x487A0361, &TI_487A0361);
-    havok_type_info.emplace(0x9734CE0A, &TI_9734CE0A);
-    havok_type_info.emplace(0x2B264726, &TI_2B264726);
-    havok_type_info.emplace(0x67612D0F, &TI_67612D0F);
+    havok_type_info.emplace(0x6F1D52CF, &TI_6F1D52CF);
+    havok_type_info.emplace(0xE086948F, &TI_E086948F);
     havok_type_info.emplace(0xEAAD8C84, &TI_EAAD8C84);
-    havok_type_info.emplace(0x574FC03C, &TI_574FC03C);
-    havok_type_info.emplace(0xD69360E7, &TI_D69360E7);
-    havok_type_info.emplace(0x06BBD3F4, &TI_06BBD3F4);
-    havok_type_info.emplace(0x7C19D91C, &TI_7C19D91C);
-    havok_type_info.emplace(0x2E4036E7, &TI_2E4036E7);
-    havok_type_info.emplace(0x9C4C255E, &TI_9C4C255E);
-    havok_type_info.emplace(0xBC7D3072, &TI_BC7D3072);
-    havok_type_info.emplace(0x73813A14, &TI_73813A14);
+    havok_type_info.emplace(0xAF3916BB, &TI_AF3916BB);
+    havok_type_info.emplace(0xFF787F85, &TI_FF787F85);
+    havok_type_info.emplace(0x28F2B833, &TI_28F2B833);
     havok_type_info.emplace(0xCE47F49E, &TI_CE47F49E);
-    havok_type_info.emplace(0x915F1AF8, &TI_915F1AF8);
-    havok_type_info.emplace(0xBC7C0DE5, &TI_BC7C0DE5);
-    havok_type_info.emplace(0x3DF4746C, &TI_3DF4746C);
-    havok_type_info.emplace(0xA225D0DD, &TI_A225D0DD);
-    havok_type_info.emplace(0xD1389983, &TI_D1389983);
-    havok_type_info.emplace(0x3A9A8ABF, &TI_3A9A8ABF);
-    havok_type_info.emplace(0xD114E4AD, &TI_D114E4AD);
-    havok_type_info.emplace(0x21306E13, &TI_21306E13);
-    havok_type_info.emplace(0x531C44AF, &TI_531C44AF);
-    havok_type_info.emplace(0x1CD6F437, &TI_1CD6F437);
-    havok_type_info.emplace(0x840F8273, &TI_840F8273);
-    havok_type_info.emplace(0x7D575382, &TI_7D575382);
-    havok_type_info.emplace(0x3FBC3E5E, &TI_3FBC3E5E);
-    havok_type_info.emplace(0xDDA9CB84, &TI_DDA9CB84);
-    havok_type_info.emplace(0x300CB708, &TI_300CB708);
-    havok_type_info.emplace(0x548E3069, &TI_548E3069);
+    havok_type_info.emplace(0xDDD4337B, &TI_DDD4337B);
 }

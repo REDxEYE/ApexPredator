@@ -6,63 +6,51 @@
 
 #include "apex/adf/generated/adf_types.h"
 
-constexpr std::string_view to_string(ADFTypes::ControllerType v) noexcept{
+constexpr std::string_view to_string(ADFTypes::EquipmentGender v) noexcept{
     using namespace std::literals;
     switch (v) {
-        case ADFTypes::ControllerType::DISABLE: return "DISABLE"sv;
-        case ADFTypes::ControllerType::RIGID_BODY: return "RIGID_BODY"sv;
-        case ADFTypes::ControllerType::POWERED_CHAIN: return "POWERED_CHAIN"sv;
-        case ADFTypes::ControllerType::POWERED_CONSTRAINT: return "POWERED_CONSTRAINT"sv;
+        case ADFTypes::EquipmentGender::MALE: return "MALE"sv;
+        case ADFTypes::EquipmentGender::FEMALE: return "FEMALE"sv;
+        case ADFTypes::EquipmentGender::BOTH: return "BOTH"sv;
         default: return "Unknown";
     }
 }
 
-std::ostream& operator<<(std::ostream &os, const ADFTypes::ControllerType value) {
+std::ostream& operator<<(std::ostream &os, const ADFTypes::EquipmentGender value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::EnvironmentOps v) noexcept{
+constexpr std::string_view to_string(ADFTypes::CraftingOptionChance v) noexcept{
     using namespace std::literals;
     switch (v) {
-        case ADFTypes::EnvironmentOps::EP_OP_VALUE: return "EP_OP_VALUE"sv;
-        case ADFTypes::EnvironmentOps::EP_OP_ONEOVERVALUE: return "EP_OP_ONEOVERVALUE"sv;
-        case ADFTypes::EnvironmentOps::EP_OP_EXPVALUE: return "EP_OP_EXPVALUE"sv;
-        case ADFTypes::EnvironmentOps::EP_OP_ONEOVEREXPVALUE: return "EP_OP_ONEOVEREXPVALUE"sv;
-        case ADFTypes::EnvironmentOps::EP_OP_SINVALUE: return "EP_OP_SINVALUE"sv;
-        case ADFTypes::EnvironmentOps::EP_OP_ONEOVERSINVALUE: return "EP_OP_ONEOVERSINVALUE"sv;
+        case ADFTypes::CraftingOptionChance::ECRAFT_CHANCE_ODDS: return "ECRAFT_CHANCE_ODDS"sv;
         default: return "Unknown";
     }
 }
 
-std::ostream& operator<<(std::ostream &os, const ADFTypes::EnvironmentOps value) {
+std::ostream& operator<<(std::ostream &os, const ADFTypes::CraftingOptionChance value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::MemAllocator v) noexcept{
+constexpr std::string_view to_string(ADFTypes::AmfUsage v) noexcept{
     using namespace std::literals;
     switch (v) {
-        case ADFTypes::MemAllocator::E_MEMALLOCATOR_CPU: return "E_MEMALLOCATOR_CPU"sv;
-        case ADFTypes::MemAllocator::E_MEMALLOCATOR_SHARED: return "E_MEMALLOCATOR_SHARED"sv;
-        case ADFTypes::MemAllocator::E_MEMALLOCATOR_GPU: return "E_MEMALLOCATOR_GPU"sv;
+        case ADFTypes::AmfUsage::AmfUsage_Unspecified: return "AmfUsage_Unspecified"sv;
+        case ADFTypes::AmfUsage::AmfUsage_Position: return "AmfUsage_Position"sv;
+        case ADFTypes::AmfUsage::AmfUsage_TextureCoordinate: return "AmfUsage_TextureCoordinate"sv;
+        case ADFTypes::AmfUsage::AmfUsage_Normal: return "AmfUsage_Normal"sv;
+        case ADFTypes::AmfUsage::AmfUsage_Tangent: return "AmfUsage_Tangent"sv;
+        case ADFTypes::AmfUsage::AmfUsage_BiTangent: return "AmfUsage_BiTangent"sv;
+        case ADFTypes::AmfUsage::AmfUsage_TangentSpace: return "AmfUsage_TangentSpace"sv;
+        case ADFTypes::AmfUsage::AmfUsage_BoneIndex: return "AmfUsage_BoneIndex"sv;
+        case ADFTypes::AmfUsage::AmfUsage_BoneWeight: return "AmfUsage_BoneWeight"sv;
+        case ADFTypes::AmfUsage::AmfUsage_Color: return "AmfUsage_Color"sv;
+        case ADFTypes::AmfUsage::AmfUsage_WireRadius: return "AmfUsage_WireRadius"sv;
         default: return "Unknown";
     }
 }
 
-std::ostream& operator<<(std::ostream &os, const ADFTypes::MemAllocator value) {
-    return os << to_string(value);
-}
-
-constexpr std::string_view to_string(ADFTypes::UseMethod v) noexcept{
-    using namespace std::literals;
-    switch (v) {
-        case ADFTypes::UseMethod::EUSE_METHOD_NONE: return "EUSE_METHOD_NONE"sv;
-        case ADFTypes::UseMethod::EUSE_METHOD_CONSUME: return "EUSE_METHOD_CONSUME"sv;
-        case ADFTypes::UseMethod::EUSE_METHOD_DEPLOY: return "EUSE_METHOD_DEPLOY"sv;
-        default: return "Unknown";
-    }
-}
-
-std::ostream& operator<<(std::ostream &os, const ADFTypes::UseMethod value) {
+std::ostream& operator<<(std::ostream &os, const ADFTypes::AmfUsage value) {
     return os << to_string(value);
 }
 
@@ -80,43 +68,65 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::BoneLengthAdjustmentT
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::EnvironmentCurveTypes v) noexcept{
+constexpr std::string_view to_string(ADFTypes::ControllerType v) noexcept{
     using namespace std::literals;
     switch (v) {
-        case ADFTypes::EnvironmentCurveTypes::EP_CURVE_LINEAR: return "EP_CURVE_LINEAR"sv;
-        case ADFTypes::EnvironmentCurveTypes::EP_CURVE_EASEIN: return "EP_CURVE_EASEIN"sv;
-        case ADFTypes::EnvironmentCurveTypes::EP_CURVE_EASEOUT: return "EP_CURVE_EASEOUT"sv;
-        case ADFTypes::EnvironmentCurveTypes::EP_CURVE_EASEINOUT: return "EP_CURVE_EASEINOUT"sv;
+        case ADFTypes::ControllerType::DISABLE: return "DISABLE"sv;
+        case ADFTypes::ControllerType::RIGID_BODY: return "RIGID_BODY"sv;
+        case ADFTypes::ControllerType::POWERED_CHAIN: return "POWERED_CHAIN"sv;
+        case ADFTypes::ControllerType::POWERED_CONSTRAINT: return "POWERED_CONSTRAINT"sv;
         default: return "Unknown";
     }
 }
 
-std::ostream& operator<<(std::ostream &os, const ADFTypes::EnvironmentCurveTypes value) {
+std::ostream& operator<<(std::ostream &os, const ADFTypes::ControllerType value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::CraftingOptionChance v) noexcept{
+constexpr std::string_view to_string(ADFTypes::UnlockCondition v) noexcept{
     using namespace std::literals;
     switch (v) {
-        case ADFTypes::CraftingOptionChance::ECRAFT_CHANCE_ODDS: return "ECRAFT_CHANCE_ODDS"sv;
+        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_NONE: return "EUNLOCK_CONDITION_NONE"sv;
+        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_WEAPON_SCORE_RIFLE: return "EUNLOCK_CONDITION_WEAPON_SCORE_RIFLE"sv;
+        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_WEAPON_SCORE_HANDGUN: return "EUNLOCK_CONDITION_WEAPON_SCORE_HANDGUN"sv;
+        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_WEAPON_SCORE_SHOTGUN: return "EUNLOCK_CONDITION_WEAPON_SCORE_SHOTGUN"sv;
+        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_WEAPON_SCORE_BOW: return "EUNLOCK_CONDITION_WEAPON_SCORE_BOW"sv;
+        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_CHARACTER_LEVEL: return "EUNLOCK_CONDITION_CHARACTER_LEVEL"sv;
         default: return "Unknown";
     }
 }
 
-std::ostream& operator<<(std::ostream &os, const ADFTypes::CraftingOptionChance value) {
+std::ostream& operator<<(std::ostream &os, const ADFTypes::UnlockCondition value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::VegetationPlacementFlags v) noexcept{
+constexpr std::string_view to_string(ADFTypes::StreamPatchMemoryType v) noexcept{
     using namespace std::literals;
     switch (v) {
-        case ADFTypes::VegetationPlacementFlags::E_VEGETATIONPLACEMENTFLAGS_NONE: return "E_VEGETATIONPLACEMENTFLAGS_NONE"sv;
-        case ADFTypes::VegetationPlacementFlags::E_VEGETATIONPLACEMENTFLAGS_FLOATS: return "E_VEGETATIONPLACEMENTFLAGS_FLOATS"sv;
+        case ADFTypes::StreamPatchMemoryType::STREAM_PATCH_STATIC_POOL: return "STREAM_PATCH_STATIC_POOL"sv;
+        case ADFTypes::StreamPatchMemoryType::STREAM_PATCH_DYNAMIC: return "STREAM_PATCH_DYNAMIC"sv;
+        case ADFTypes::StreamPatchMemoryType::STREAM_PATCH_USER: return "STREAM_PATCH_USER"sv;
         default: return "Unknown";
     }
 }
 
-std::ostream& operator<<(std::ostream &os, const ADFTypes::VegetationPlacementFlags value) {
+std::ostream& operator<<(std::ostream &os, const ADFTypes::StreamPatchMemoryType value) {
+    return os << to_string(value);
+}
+
+constexpr std::string_view to_string(ADFTypes::StrategicResourceType v) noexcept{
+    using namespace std::literals;
+    switch (v) {
+        case ADFTypes::StrategicResourceType::CONSTRUCTION_MATERIALS: return "CONSTRUCTION_MATERIALS"sv;
+        case ADFTypes::StrategicResourceType::ENERGY: return "ENERGY"sv;
+        case ADFTypes::StrategicResourceType::SYNTHETICS: return "SYNTHETICS"sv;
+        case ADFTypes::StrategicResourceType::CRAFTING_MATERIAL: return "CRAFTING_MATERIAL"sv;
+        case ADFTypes::StrategicResourceType::NUM_STRATEGIC_RESOURCES: return "NUM_STRATEGIC_RESOURCES"sv;
+        default: return "Unknown";
+    }
+}
+
+std::ostream& operator<<(std::ostream &os, const ADFTypes::StrategicResourceType value) {
     return os << to_string(value);
 }
 
@@ -135,6 +145,69 @@ constexpr std::string_view to_string(ADFTypes::EnvironmentBlendModes v) noexcept
 }
 
 std::ostream& operator<<(std::ostream &os, const ADFTypes::EnvironmentBlendModes value) {
+    return os << to_string(value);
+}
+
+constexpr std::string_view to_string(ADFTypes::UseMethod v) noexcept{
+    using namespace std::literals;
+    switch (v) {
+        case ADFTypes::UseMethod::EUSE_METHOD_NONE: return "EUSE_METHOD_NONE"sv;
+        case ADFTypes::UseMethod::EUSE_METHOD_CONSUME: return "EUSE_METHOD_CONSUME"sv;
+        case ADFTypes::UseMethod::EUSE_METHOD_DEPLOY: return "EUSE_METHOD_DEPLOY"sv;
+        default: return "Unknown";
+    }
+}
+
+std::ostream& operator<<(std::ostream &os, const ADFTypes::UseMethod value) {
+    return os << to_string(value);
+}
+
+constexpr std::string_view to_string(ADFTypes::LockMode v) noexcept{
+    using namespace std::literals;
+    switch (v) {
+        case ADFTypes::LockMode::LOCKED: return "LOCKED"sv;
+        case ADFTypes::LockMode::UNLOCKED: return "UNLOCKED"sv;
+        case ADFTypes::LockMode::LOCKED_DLC: return "LOCKED_DLC"sv;
+        case ADFTypes::LockMode::UNLOCKED_DLC: return "UNLOCKED_DLC"sv;
+        case ADFTypes::LockMode::UNLOCKED_STEAM_INVENTORY: return "UNLOCKED_STEAM_INVENTORY"sv;
+        case ADFTypes::LockMode::INVISIBLE: return "INVISIBLE"sv;
+        default: return "Unknown";
+    }
+}
+
+std::ostream& operator<<(std::ostream &os, const ADFTypes::LockMode value) {
+    return os << to_string(value);
+}
+
+constexpr std::string_view to_string(ADFTypes::EnvironmentCurveTypes v) noexcept{
+    using namespace std::literals;
+    switch (v) {
+        case ADFTypes::EnvironmentCurveTypes::EP_CURVE_LINEAR: return "EP_CURVE_LINEAR"sv;
+        case ADFTypes::EnvironmentCurveTypes::EP_CURVE_EASEIN: return "EP_CURVE_EASEIN"sv;
+        case ADFTypes::EnvironmentCurveTypes::EP_CURVE_EASEOUT: return "EP_CURVE_EASEOUT"sv;
+        case ADFTypes::EnvironmentCurveTypes::EP_CURVE_EASEINOUT: return "EP_CURVE_EASEINOUT"sv;
+        default: return "Unknown";
+    }
+}
+
+std::ostream& operator<<(std::ostream &os, const ADFTypes::EnvironmentCurveTypes value) {
+    return os << to_string(value);
+}
+
+constexpr std::string_view to_string(ADFTypes::EnvironmentOps v) noexcept{
+    using namespace std::literals;
+    switch (v) {
+        case ADFTypes::EnvironmentOps::EP_OP_VALUE: return "EP_OP_VALUE"sv;
+        case ADFTypes::EnvironmentOps::EP_OP_ONEOVERVALUE: return "EP_OP_ONEOVERVALUE"sv;
+        case ADFTypes::EnvironmentOps::EP_OP_EXPVALUE: return "EP_OP_EXPVALUE"sv;
+        case ADFTypes::EnvironmentOps::EP_OP_ONEOVEREXPVALUE: return "EP_OP_ONEOVEREXPVALUE"sv;
+        case ADFTypes::EnvironmentOps::EP_OP_SINVALUE: return "EP_OP_SINVALUE"sv;
+        case ADFTypes::EnvironmentOps::EP_OP_ONEOVERSINVALUE: return "EP_OP_ONEOVERSINVALUE"sv;
+        default: return "Unknown";
+    }
+}
+
+std::ostream& operator<<(std::ostream &os, const ADFTypes::EnvironmentOps value) {
     return os << to_string(value);
 }
 
@@ -200,39 +273,30 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::AmfFormat value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::AmfUsage v) noexcept{
+constexpr std::string_view to_string(ADFTypes::VegetationPlacementFlags v) noexcept{
     using namespace std::literals;
     switch (v) {
-        case ADFTypes::AmfUsage::AmfUsage_Unspecified: return "AmfUsage_Unspecified"sv;
-        case ADFTypes::AmfUsage::AmfUsage_Position: return "AmfUsage_Position"sv;
-        case ADFTypes::AmfUsage::AmfUsage_TextureCoordinate: return "AmfUsage_TextureCoordinate"sv;
-        case ADFTypes::AmfUsage::AmfUsage_Normal: return "AmfUsage_Normal"sv;
-        case ADFTypes::AmfUsage::AmfUsage_Tangent: return "AmfUsage_Tangent"sv;
-        case ADFTypes::AmfUsage::AmfUsage_BiTangent: return "AmfUsage_BiTangent"sv;
-        case ADFTypes::AmfUsage::AmfUsage_TangentSpace: return "AmfUsage_TangentSpace"sv;
-        case ADFTypes::AmfUsage::AmfUsage_BoneIndex: return "AmfUsage_BoneIndex"sv;
-        case ADFTypes::AmfUsage::AmfUsage_BoneWeight: return "AmfUsage_BoneWeight"sv;
-        case ADFTypes::AmfUsage::AmfUsage_Color: return "AmfUsage_Color"sv;
-        case ADFTypes::AmfUsage::AmfUsage_WireRadius: return "AmfUsage_WireRadius"sv;
+        case ADFTypes::VegetationPlacementFlags::E_VEGETATIONPLACEMENTFLAGS_NONE: return "E_VEGETATIONPLACEMENTFLAGS_NONE"sv;
+        case ADFTypes::VegetationPlacementFlags::E_VEGETATIONPLACEMENTFLAGS_FLOATS: return "E_VEGETATIONPLACEMENTFLAGS_FLOATS"sv;
         default: return "Unknown";
     }
 }
 
-std::ostream& operator<<(std::ostream &os, const ADFTypes::AmfUsage value) {
+std::ostream& operator<<(std::ostream &os, const ADFTypes::VegetationPlacementFlags value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::StreamPatchMemoryType v) noexcept{
+constexpr std::string_view to_string(ADFTypes::MemAllocator v) noexcept{
     using namespace std::literals;
     switch (v) {
-        case ADFTypes::StreamPatchMemoryType::STREAM_PATCH_STATIC_POOL: return "STREAM_PATCH_STATIC_POOL"sv;
-        case ADFTypes::StreamPatchMemoryType::STREAM_PATCH_DYNAMIC: return "STREAM_PATCH_DYNAMIC"sv;
-        case ADFTypes::StreamPatchMemoryType::STREAM_PATCH_USER: return "STREAM_PATCH_USER"sv;
+        case ADFTypes::MemAllocator::E_MEMALLOCATOR_CPU: return "E_MEMALLOCATOR_CPU"sv;
+        case ADFTypes::MemAllocator::E_MEMALLOCATOR_SHARED: return "E_MEMALLOCATOR_SHARED"sv;
+        case ADFTypes::MemAllocator::E_MEMALLOCATOR_GPU: return "E_MEMALLOCATOR_GPU"sv;
         default: return "Unknown";
     }
 }
 
-std::ostream& operator<<(std::ostream &os, const ADFTypes::StreamPatchMemoryType value) {
+std::ostream& operator<<(std::ostream &os, const ADFTypes::MemAllocator value) {
     return os << to_string(value);
 }
 
@@ -247,70 +311,6 @@ constexpr std::string_view to_string(ADFTypes::BlockCompressionType v) noexcept{
 }
 
 std::ostream& operator<<(std::ostream &os, const ADFTypes::BlockCompressionType value) {
-    return os << to_string(value);
-}
-
-constexpr std::string_view to_string(ADFTypes::EquipmentGender v) noexcept{
-    using namespace std::literals;
-    switch (v) {
-        case ADFTypes::EquipmentGender::MALE: return "MALE"sv;
-        case ADFTypes::EquipmentGender::FEMALE: return "FEMALE"sv;
-        case ADFTypes::EquipmentGender::BOTH: return "BOTH"sv;
-        default: return "Unknown";
-    }
-}
-
-std::ostream& operator<<(std::ostream &os, const ADFTypes::EquipmentGender value) {
-    return os << to_string(value);
-}
-
-constexpr std::string_view to_string(ADFTypes::LockMode v) noexcept{
-    using namespace std::literals;
-    switch (v) {
-        case ADFTypes::LockMode::LOCKED: return "LOCKED"sv;
-        case ADFTypes::LockMode::UNLOCKED: return "UNLOCKED"sv;
-        case ADFTypes::LockMode::LOCKED_DLC: return "LOCKED_DLC"sv;
-        case ADFTypes::LockMode::UNLOCKED_DLC: return "UNLOCKED_DLC"sv;
-        case ADFTypes::LockMode::UNLOCKED_STEAM_INVENTORY: return "UNLOCKED_STEAM_INVENTORY"sv;
-        case ADFTypes::LockMode::INVISIBLE: return "INVISIBLE"sv;
-        default: return "Unknown";
-    }
-}
-
-std::ostream& operator<<(std::ostream &os, const ADFTypes::LockMode value) {
-    return os << to_string(value);
-}
-
-constexpr std::string_view to_string(ADFTypes::UnlockCondition v) noexcept{
-    using namespace std::literals;
-    switch (v) {
-        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_NONE: return "EUNLOCK_CONDITION_NONE"sv;
-        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_WEAPON_SCORE_RIFLE: return "EUNLOCK_CONDITION_WEAPON_SCORE_RIFLE"sv;
-        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_WEAPON_SCORE_HANDGUN: return "EUNLOCK_CONDITION_WEAPON_SCORE_HANDGUN"sv;
-        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_WEAPON_SCORE_SHOTGUN: return "EUNLOCK_CONDITION_WEAPON_SCORE_SHOTGUN"sv;
-        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_WEAPON_SCORE_BOW: return "EUNLOCK_CONDITION_WEAPON_SCORE_BOW"sv;
-        case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_CHARACTER_LEVEL: return "EUNLOCK_CONDITION_CHARACTER_LEVEL"sv;
-        default: return "Unknown";
-    }
-}
-
-std::ostream& operator<<(std::ostream &os, const ADFTypes::UnlockCondition value) {
-    return os << to_string(value);
-}
-
-constexpr std::string_view to_string(ADFTypes::StrategicResourceType v) noexcept{
-    using namespace std::literals;
-    switch (v) {
-        case ADFTypes::StrategicResourceType::CONSTRUCTION_MATERIALS: return "CONSTRUCTION_MATERIALS"sv;
-        case ADFTypes::StrategicResourceType::ENERGY: return "ENERGY"sv;
-        case ADFTypes::StrategicResourceType::SYNTHETICS: return "SYNTHETICS"sv;
-        case ADFTypes::StrategicResourceType::CRAFTING_MATERIAL: return "CRAFTING_MATERIAL"sv;
-        case ADFTypes::StrategicResourceType::NUM_STRATEGIC_RESOURCES: return "NUM_STRATEGIC_RESOURCES"sv;
-        default: return "Unknown";
-    }
-}
-
-std::ostream& operator<<(std::ostream &os, const ADFTypes::StrategicResourceType value) {
     return os << to_string(value);
 }
 

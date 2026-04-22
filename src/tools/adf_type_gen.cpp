@@ -1,5 +1,6 @@
 #include <ranges>
 
+#include "apex/asset_db.h"
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
 #include "apex/adf/adf.h"
@@ -7,7 +8,7 @@
 #include "apex/adf/builtin_adf.h"
 #include "apex/adf/sti.h"
 #include "platform/app_state.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "tracy/Tracy.hpp"
 
 #ifdef _WIN32
@@ -19,19 +20,23 @@
 
 
 void collect_types(ApexAppState &app_state, STI::TypeLibrary &lib) {
-    for (uint32 i = 0; i < std::size(builtin_adfs); ++i) {
-        const auto &[data, size] = builtin_adfs[i];
+    for (auto [data, size] : builtin_adfs) {
         auto adf = ADF::ADFFile::from_buffer(data, size);
         STI::register_types_from_adf(lib, adf);
     }
-
+    // return;
     std::vector<ArchiveEntry> all_entries;
     auto &manager = app_state.manager();
     manager.all_entries(all_entries);
+    const u32 total_count = all_entries.size();
     for (auto [id, entry]: all_entries | std::views::enumerate) {
-        // if (id!=0 && id%10000==0) {
+        // if (id!=0 && id%5000==0) {
         //     break;
         // }
+        if (id%1000==0) {
+            GLog_Info("{}/{}",id, total_count);
+        }
+
         auto file = manager.get_file(entry.path_hash);
 
         if (!file) {
@@ -89,28 +94,28 @@ int main(int argc, const char *argv[]) {
         return 0;
     }
 
-    while (!TracyIsConnected) {
-#ifdef _WIN32
-        Sleep(100); /* Windows */
-#else
-        usleep(10000);
-#endif
-        printf("\rWaiting for tracy;");
-    }
-    printf("\n");
-
-    set_db_path(argv[2]);
+//     while (!TracyIsConnected) {
+// #ifdef _WIN32
+//         Sleep(100); /* Windows */
+// #else
+//         usleep(10000);
+// #endif
+//         printf("\rWaiting for tracy;");
+//     }
+//     printf("\n");
 
     ApexAppState app_state(argv[1]);
+
+    AssetDB db(argv[2]);
+    AssetDB::set_instance(&db);
 
     STI::TypeLibrary type_library;
 
     collect_types(app_state, type_library);
 
     STI::generate_code(type_library,
-                       "D:/projects/cpp/ApexPredator/src/apex/adf/generated",
-                       "D:/projects/cpp/ApexPredator/include/apex/adf/generated");
-    close_assets_db();
+                       "../src/apex/adf/generated",
+                       "../include/apex/adf/generated");
 
     return 0;
 }

@@ -4,7 +4,7 @@
 #define APEXPREDATOR_AVTX_H
 #include "int_def.h"
 #include "platform/archive_manager.h"
-#include "redscore/platform/texture.h"
+#include "redscore/platform/texture/texture.h"
 #include "redscore/platform/file/file.h"
 
 #define AVTX_MAGIC "AVTX"

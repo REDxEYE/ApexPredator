@@ -9,67 +9,334 @@
 
 namespace HavokTypes {
 
-// Basic type hkReflect_Type, size: 0
-
 // Basic type unsigned int, size: 4
 
 typedef unsigned int hkUint32; // size: 4
 
-enum class hkPropertyFlags_Enum : hkUint32{};
-
-struct hkStringPtr: Havok::BaseType {
-    hkString stringAndFlag; // offset: 0, size: 8
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-// Basic type hkRefVariant, size: 8
-
-struct hkRootLevelContainer_NamedVariant: Havok::BaseType {
-    hkStringPtr name; // offset: 0, size: 8
-    hkStringPtr className; // offset: 8, size: 8
-    hkRefVariant variant; // offset: 16, size: 8
+struct hkcdStaticMeshTreeBase_Connectivity_SectionHeader: Havok::BaseType { // size: 8, alignment: 4
+    hkUint32 baseLocal; // offset: 0, size: 4
+    hkUint32 baseGlobal; // offset: 4, size: 4
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
 // Basic type int, size: 4
-
-// Basic type hkaiDirectedGraphExplicitCost_EdgeBits, size: 4
-
-typedef int hkInt32; // size: 4
-
-// Basic type short, size: 2
-
-typedef short hkInt16; // size: 2
 
 // Basic type unsigned short, size: 2
 
 typedef unsigned short hkUint16; // size: 2
 
+struct hknpCompressedMeshShapeTreeDataRunData: Havok::BaseType { // size: 2, alignment: 2
+    hkUint16 data; // offset: 0, size: 2
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
 // Basic type unsigned char, size: 1
 
 typedef unsigned char hkUint8; // size: 1
 
-enum class hkaiNavMesh_EdgeFlagBits : hkUint8{};
+// Basic type unsigned long long, size: 8
 
-struct hkHalf16: Havok::BaseType {
-    hkInt16 value; // offset: 0, size: 2
+typedef unsigned long long hkUint64; // size: 8
+
+// Basic type float, size: 4
+
+typedef float hkReal; // size: 4
+
+struct hkcdStaticMeshTreeBase_Section_SharedVertices: Havok::BaseType { // size: 4, alignment: 4
+    hkUint32 data; // offset: 0, size: 4
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkcdStaticMeshTreeBase_Section_Primitives: Havok::BaseType { // size: 4, alignment: 4
+    hkUint32 data; // offset: 0, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkcdStaticMeshTreeBase_Section_DataRuns: Havok::BaseType { // size: 4, alignment: 4
+    hkUint32 data; // offset: 0, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
 typedef hkVector4f hkVector4; // size: 16
 
-enum class hkaiAnnotatedStreamingSet_Side : hkUint8{};
+struct hkAabb: Havok::BaseType { // size: 32, alignment: 16
+    hkVector4 min; // offset: 0, size: 16
+    hkVector4 max; // offset: 16, size: 16
 
-struct hkaiStreamingSet_GraphConnection: Havok::BaseType {
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkcdFourAabb: Havok::BaseType { // size: 96, alignment: 16
+    hkVector4 lx; // offset: 0, size: 16
+    hkVector4 hx; // offset: 16, size: 16
+    hkVector4 ly; // offset: 32, size: 16
+    hkVector4 hy; // offset: 48, size: 16
+    hkVector4 lz; // offset: 64, size: 16
+    hkVector4 hz; // offset: 80, size: 16
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+// Basic type hkBaseObject, size: 8
+
+// Basic type hkReflect_Type, size: 0
+
+enum class hkPropertyFlags_Enum : hkUint32{};
+
+typedef unsigned int hkUintReal; // size: 4
+
+// Basic type signed char, size: 1
+
+typedef signed char hkInt8; // size: 1
+
+enum class hkpConstraintMotor_MotorType : hkInt8{};
+
+// Basic type hkpConeLimitConstraintAtom_MeasurementMode, size: 4
+
+enum class hkpConstraintAtom_AtomType : hkUint16{};
+
+struct hkpConstraintAtom: Havok::BaseType { // size: 16, alignment: 16
+    hkEnum<hkpConstraintAtom_AtomType, hkUint16> type; // offset: 0, size: 2
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkpTwistLimitConstraintAtom: hkpConstraintAtom { // size: 32, alignment: 16
+    hkUint8 isEnabled; // offset: 2, size: 1
+    hkUint8 twistAxis; // offset: 3, size: 1
+    hkUint8 refAxis; // offset: 4, size: 1
+    hkReal minAngle; // offset: 8, size: 4
+    hkReal maxAngle; // offset: 12, size: 4
+    hkReal angularLimitsTauFactor; // offset: 16, size: 4
+    hkReal angularLimitsDampFactor; // offset: 20, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+// Basic type hkBool, size: 1
+
+struct hkpSetupStabilizationAtom: hkpConstraintAtom { // size: 16, alignment: 16
+    hkBool enabled; // offset: 2, size: 1
+    hkReal maxLinImpulse; // offset: 4, size: 4
+    hkReal maxAngImpulse; // offset: 8, size: 4
+    hkReal maxAngle; // offset: 12, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+// Basic type short, size: 2
+
+typedef short hkInt16; // size: 2
+
+struct hkpAngFrictionConstraintAtom: hkpConstraintAtom { // size: 16, alignment: 16
+    hkUint8 isEnabled; // offset: 2, size: 1
+    hkUint8 firstFrictionAxis; // offset: 3, size: 1
+    hkUint8 numFrictionAxes; // offset: 4, size: 1
+    hkReal maxFrictionTorque; // offset: 8, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+enum class hkpConeLimitConstraintAtom_MeasurementMode : hkUint8{};
+
+struct hkpConeLimitConstraintAtom: hkpConstraintAtom { // size: 32, alignment: 16
+    hkUint8 isEnabled; // offset: 2, size: 1
+    hkUint8 twistAxisInA; // offset: 3, size: 1
+    hkUint8 refAxisInB; // offset: 4, size: 1
+    hkEnum<hkpConeLimitConstraintAtom_MeasurementMode, hkUint8> angleMeasurementMode; // offset: 5, size: 1
+    hkUint16 memOffsetToAngleOffset; // offset: 6, size: 2
+    hkReal minAngle; // offset: 8, size: 4
+    hkReal maxAngle; // offset: 12, size: 4
+    hkReal angularLimitsTauFactor; // offset: 16, size: 4
+    hkReal angularLimitsDampFactor; // offset: 20, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+enum class hkpConstraintAtom_SolvingMethod : hkUint8{};
+
+struct hkUFloat8: Havok::BaseType { // size: 1, alignment: 1
+    hkUint8 value; // offset: 0, size: 1
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkpBallSocketConstraintAtom: hkpConstraintAtom { // size: 16, alignment: 16
+    hkEnum<hkpConstraintAtom_SolvingMethod, hkUint8> solvingMethod; // offset: 2, size: 1
+    hkUint8 bodiesToNotify; // offset: 3, size: 1
+    hkUFloat8 velocityStabilizationFactor; // offset: 4, size: 1
+    hkBool enableLinearImpulseLimit; // offset: 5, size: 1
+    hkReal breachImpulse; // offset: 8, size: 4
+    hkReal inertiaStabilizationFactor; // offset: 12, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+// Basic type hkaSkeletonMapperData_MappingType, size: 4
+
+typedef int hkInt32; // size: 4
+
+enum class hkaSkeletonMapperData_MappingType : hkInt32{};
+
+struct hkQuaternionf: Havok::BaseType { // size: 16, alignment: 16
+    hkVector4f vec; // offset: 0, size: 16
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkQsTransformf: Havok::BaseType { // size: 48, alignment: 16
+    hkVector4f translation; // offset: 0, size: 16
+    hkQuaternionf rotation; // offset: 16, size: 16
+    hkVector4f scale; // offset: 32, size: 16
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+typedef hkQsTransformf hkQsTransform; // size: 48
+
+struct hkaSkeletonMapperData_ChainMapping: Havok::BaseType { // size: 112, alignment: 16
+    hkInt16 startBoneA; // offset: 0, size: 2
+    hkInt16 endBoneA; // offset: 2, size: 2
+    hkInt16 startBoneB; // offset: 4, size: 2
+    hkInt16 endBoneB; // offset: 6, size: 2
+    hkQsTransform startAFromBTransform; // offset: 16, size: 48
+    hkQsTransform endAFromBTransform; // offset: 64, size: 48
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkaSkeletonMapperData_SimpleMapping: Havok::BaseType { // size: 64, alignment: 16
+    hkInt16 boneA; // offset: 0, size: 2
+    hkInt16 boneB; // offset: 2, size: 2
+    hkQsTransform aFromBTransform; // offset: 16, size: 48
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+// Basic type hkReflect_Detail_Opaque, size: 0
+
+struct hkGeometry_Triangle: Havok::BaseType { // size: 16, alignment: 4
+    int a; // offset: 0, size: 4
+    int b; // offset: 4, size: 4
+    int c; // offset: 8, size: 4
+    int material; // offset: 12, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkpAngLimitConstraintAtom: hkpConstraintAtom { // size: 32, alignment: 16
+    hkUint8 isEnabled; // offset: 2, size: 1
+    hkUint8 limitAxis; // offset: 3, size: 1
+    hkUint8 cosineAxis; // offset: 4, size: 1
+    hkReal minAngle; // offset: 8, size: 4
+    hkReal maxAngle; // offset: 12, size: 4
+    hkReal angularLimitsTauFactor; // offset: 16, size: 4
+    hkReal angularLimitsDampFactor; // offset: 20, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkp2dAngConstraintAtom: hkpConstraintAtom { // size: 16, alignment: 16
+    hkUint8 freeRotationAxis; // offset: 2, size: 1
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+typedef unsigned long long hkUlong; // size: 8
+
+enum class hknpShape_FlagsEnum : hkUint16{};
+
+enum class hknpShapeType_Enum : hkUint8{};
+
+enum class hknpCollisionDispatchType_Enum : hkUint8{};
+
+struct SPartShapeInfo: Havok::BaseType { // size: 16, alignment: 4
+    int partIndex; // offset: 0, size: 4
+    int parentPartIndex; // offset: 4, size: 4
+    hkUint32 shapeKey; // offset: 8, size: 4
+    int size; // offset: 12, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkHalf16: Havok::BaseType { // size: 2, alignment: 2
+    hkInt16 value; // offset: 0, size: 2
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+enum class hkaiDirectedGraphExplicitCost_EdgeBits : hkUint16{};
+
+struct hkaiDirectedGraphExplicitCost_Node: Havok::BaseType { // size: 8, alignment: 4
+    int startEdgeIndex; // offset: 0, size: 4
+    int numEdges; // offset: 4, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkaiNavMeshClearanceCache_McpDataInteger: Havok::BaseType { // size: 2, alignment: 1
+    hkUint8 interpolant; // offset: 0, size: 1
+    hkUint8 clearance; // offset: 1, size: 1
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkaiStreamingSet_GraphConnection: Havok::BaseType { // size: 20, alignment: 4
     int aNodeIndex; // offset: 0, size: 4
     int bNodeIndex; // offset: 4, size: 4
     hkUint32 aEdgeData; // offset: 8, size: 4
@@ -79,40 +346,157 @@ struct hkaiStreamingSet_GraphConnection: Havok::BaseType {
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-struct hkAabb: Havok::BaseType {
-    hkVector4 min; // offset: 0, size: 16
-    hkVector4 max; // offset: 16, size: 16
+// Basic type hkaiAnnotatedStreamingSet_Side, size: 4
+
+enum class hkaiAnnotatedStreamingSet_Side : hkUint8{};
+
+// Basic type hkaiNavMesh_EdgeFlagBits, size: 4
+
+enum class hkaiNavMesh_EdgeFlagBits : hkUint8{};
+
+struct hkaSkeletonMapperData_PartitionMappingRange: Havok::BaseType { // size: 8, alignment: 4
+    int startMappingIndex; // offset: 0, size: 4
+    int numMappings; // offset: 4, size: 4
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-typedef unsigned int hkUintReal; // size: 4
+enum class hkaAnimatedReferenceFrame_hkaReferenceFrameTypeEnum : hkInt8{};
 
-// Basic type hkBaseObject, size: 8
+enum class hkaAnimation_AnimationType : hkInt32{};
 
-// Basic type float, size: 4
-
-typedef float hkReal; // size: 4
-
-// Basic type unsigned long long, size: 8
-
-typedef unsigned long long hkUlong; // size: 8
-
-struct hkaiNavMeshClearanceCache_McpDataInteger: Havok::BaseType {
-    hkUint8 interpolant; // offset: 0, size: 1
-    hkUint8 clearance; // offset: 1, size: 1
+struct hkStringPtr: Havok::BaseType { // size: 8, alignment: 8
+    hkString stringAndFlag; // offset: 0, size: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-struct hknpMotionProperties: Havok::BaseType {
+struct hkaAnnotationTrack_Annotation: Havok::BaseType { // size: 16, alignment: 8
+    hkReal time; // offset: 0, size: 4
+    hkStringPtr text; // offset: 8, size: 8
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+// Basic type hkRefVariant, size: 8
+
+enum class hkxMaterial_TextureType : hkInt32{};
+
+struct hkxMaterial_TextureStage: Havok::BaseType { // size: 16, alignment: 8
+    hkRefVariant texture; // offset: 0, size: 8
+    hkEnum<hkxMaterial_TextureType, hkInt32> usageHint; // offset: 8, size: 4
+    hkInt32 tcoordChannel; // offset: 12, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+enum class hkxMaterial_UVMappingAlgorithm : hkUint32{};
+
+enum class hkxMaterial_Transparency : hkUint8{};
+
+struct hkxMaterial_Property: Havok::BaseType { // size: 8, alignment: 4
+    hkUint32 key; // offset: 0, size: 4
+    hkUint32 value; // offset: 4, size: 4
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkxAttribute: Havok::BaseType { // size: 16, alignment: 8
+    hkStringPtr name; // offset: 0, size: 8
+    hkRefVariant value; // offset: 8, size: 8
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+enum class hkxVertexDescription_DataType : hkUint16{};
+
+enum class hkxVertexDescription_DataUsage : hkUint16{};
+
+struct hkxVertexDescription_ElementDecl: Havok::BaseType { // size: 24, alignment: 8
+    hkUint32 byteOffset; // offset: 0, size: 4
+    hkEnum<hkxVertexDescription_DataType, hkUint16> type; // offset: 4, size: 2
+    hkEnum<hkxVertexDescription_DataUsage, hkUint16> usage; // offset: 6, size: 2
+    hkUint32 byteStride; // offset: 8, size: 4
+    hkUint8 numElements; // offset: 12, size: 1
+    hkStringPtr channelID; // offset: 16, size: 8
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+enum class hkxIndexBuffer_IndexType : hkInt8{};
+
+struct hkxVertexAnimation_UsageMap: Havok::BaseType { // size: 4, alignment: 2
+    hkEnum<hkxVertexDescription_DataUsage, hkUint16> use; // offset: 0, size: 2
+    hkUint8 useIndexOrig; // offset: 2, size: 1
+    hkUint8 useIndexLocal; // offset: 3, size: 1
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkaBone: Havok::BaseType { // size: 16, alignment: 8
+    hkStringPtr name; // offset: 0, size: 8
+    hkBool lockTranslation; // offset: 8, size: 1
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkaSkeleton_Partition: Havok::BaseType { // size: 16, alignment: 8
+    hkStringPtr name; // offset: 0, size: 8
+    hkInt16 startBoneIndex; // offset: 8, size: 2
+    hkInt16 numBones; // offset: 10, size: 2
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+struct hkMatrix4f: Havok::BaseType { // size: 64, alignment: 16
+    hkVector4f col0; // offset: 0, size: 16
+    hkVector4f col1; // offset: 16, size: 16
+    hkVector4f col2; // offset: 32, size: 16
+    hkVector4f col3; // offset: 48, size: 16
+
+    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
+    void print(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
+};
+
+typedef hkMatrix4f hkMatrix4; // size: 64
+
+enum class hkaAnimationBinding_BlendHint : hkInt8{};
+
+enum class hknpMaterial_TriggerType : hkUint8{};
+
+enum class hknpMaterial_CombinePolicy : hkUint8{};
+
+enum class hknpMaterial_MassChangerCategory : hkUint8{};
+
+// Basic type hknpBodyQuality_FlagsEnum, size: 4
+
+// Basic type hknpCollisionFilter_Type, size: 4
+
+struct hknpMotionProperties: Havok::BaseType { // size: 64, alignment: 16
     hkUint32 isExclusive; // offset: 0, size: 4
     unsigned int flags; // offset: 4, size: 4
     hkReal gravityFactor; // offset: 8, size: 4
@@ -136,218 +520,18 @@ struct hknpMotionProperties: Havok::BaseType {
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
-
-struct hkxAttribute: Havok::BaseType {
-    hkStringPtr name; // offset: 0, size: 8
-    hkRefVariant value; // offset: 8, size: 8
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-// Basic type signed char, size: 1
-
-typedef signed char hkInt8; // size: 1
-
-enum class hkxIndexBuffer_IndexType : hkInt8{};
-
-enum class hkxVertexDescription_DataType : hkUint16{};
-
-enum class hkxVertexDescription_DataUsage : hkUint16{};
-
-struct hkxVertexDescription_ElementDecl: Havok::BaseType {
-    hkUint32 byteOffset; // offset: 0, size: 4
-    hkEnum<hkxVertexDescription_DataType, hkUint16> type; // offset: 4, size: 2
-    hkEnum<hkxVertexDescription_DataUsage, hkUint16> usage; // offset: 6, size: 2
-    hkUint32 byteStride; // offset: 8, size: 4
-    hkUint8 numElements; // offset: 12, size: 1
-    hkStringPtr channelID; // offset: 16, size: 8
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-enum class hkxMaterial_TextureType : hkInt32{};
-
-struct hkxMaterial_TextureStage: Havok::BaseType {
-    hkRefVariant texture; // offset: 0, size: 8
-    hkEnum<hkxMaterial_TextureType, hkInt32> usageHint; // offset: 8, size: 4
-    hkInt32 tcoordChannel; // offset: 12, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-enum class hkxMaterial_UVMappingAlgorithm : hkUint32{};
-
-enum class hkxMaterial_Transparency : hkUint8{};
-
-struct hkxMaterial_Property: Havok::BaseType {
-    hkUint32 key; // offset: 0, size: 4
-    hkUint32 value; // offset: 4, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkxVertexAnimation_UsageMap: Havok::BaseType {
-    hkEnum<hkxVertexDescription_DataUsage, hkUint16> use; // offset: 0, size: 2
-    hkUint8 useIndexOrig; // offset: 2, size: 1
-    hkUint8 useIndexLocal; // offset: 3, size: 1
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-// Basic type hkBool, size: 1
-
-struct hkaBone: Havok::BaseType {
-    hkStringPtr name; // offset: 0, size: 8
-    hkBool lockTranslation; // offset: 8, size: 1
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkQuaternionf: Havok::BaseType {
-    hkVector4f vec; // offset: 0, size: 16
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkQsTransformf: Havok::BaseType {
-    hkVector4f translation; // offset: 0, size: 16
-    hkQuaternionf rotation; // offset: 16, size: 16
-    hkVector4f scale; // offset: 32, size: 16
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-typedef hkQsTransformf hkQsTransform; // size: 48
-
-struct hkaSkeleton_Partition: Havok::BaseType {
-    hkStringPtr name; // offset: 0, size: 8
-    hkInt16 startBoneIndex; // offset: 8, size: 2
-    hkInt16 numBones; // offset: 10, size: 2
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hknpBodyId: Havok::BaseType {
-    hkUint32 serialAndIndex; // offset: 0, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkcdFourAabb: Havok::BaseType {
-    hkVector4 lx; // offset: 0, size: 16
-    hkVector4 hx; // offset: 16, size: 16
-    hkVector4 ly; // offset: 32, size: 16
-    hkVector4 hy; // offset: 48, size: 16
-    hkVector4 lz; // offset: 64, size: 16
-    hkVector4 hz; // offset: 80, size: 16
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkContainerHeapAllocator: Havok::BaseType {
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkaAnnotationTrack_Annotation: Havok::BaseType {
-    hkReal time; // offset: 0, size: 4
-    hkStringPtr text; // offset: 8, size: 8
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-enum class hkaAnimatedReferenceFrame_hkaReferenceFrameTypeEnum : hkInt8{};
-
-// Basic type hkReflect_Detail_Opaque, size: 0
-
-enum class hknpMaterial_TriggerType : hkUint8{};
-
-struct hkUFloat8: Havok::BaseType {
-    hkUint8 value; // offset: 0, size: 1
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-enum class hknpMaterial_CombinePolicy : hkUint8{};
-
-enum class hknpMaterial_MassChangerCategory : hkUint8{};
-
-typedef unsigned long long hkUint64; // size: 8
-
-enum class hknpShape_FlagsEnum : hkUint16{};
-
-enum class hknpShapeType_Enum : hkUint8{};
-
-enum class hknpCollisionDispatchType_Enum : hkUint8{};
-
-typedef hkQuaternionf hkQuaternion; // size: 16
-
-struct hknpMassDistribution: Havok::BaseType {
-    hkVector4 centerOfMassAndVolume; // offset: 0, size: 16
-    hkQuaternion majorAxisSpace; // offset: 16, size: 16
-    hkVector4 inertiaTensor; // offset: 32, size: 16
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkcdDynamicTree_Codec32: Havok::BaseType {
-    hkAabb aabb; // offset: 0, size: 32
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkcdDynamicTree_AnisotropicMetric: Havok::BaseType {
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-enum class hknpConstraint_FlagsEnum : hkUint16{};
-
-enum class hknpShapeTagCodec_Hints : hkUint32{};
-
-enum class hknpShapeTagCodec_Type : hkUint8{};
 
 enum class hknpBodyQuality_FlagsEnum : hkUint32{};
 
 enum class hknpCollisionFilter_Type : hkUint8{};
 
-struct hknpLodManagerCinfo: Havok::BaseType {
+enum class hknpShapeTagCodec_Hints : hkUint32{};
+
+enum class hknpShapeTagCodec_Type : hkUint8{};
+
+struct hknpLodManagerCinfo: Havok::BaseType { // size: 24, alignment: 4
     hkBool registerDefaultConfig; // offset: 0, size: 1
     hkBool autoBuildLodOnDynamicBodyAdded; // offset: 1, size: 1
     hkBool autoBuildLodOnMeshBodyAdded; // offset: 2, size: 1
@@ -359,287 +543,111 @@ struct hknpLodManagerCinfo: Havok::BaseType {
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-// Basic type char, size: 1
+enum class hknpConstraint_FlagsEnum : hkUint16{};
 
-enum class hkpConstraintMotor_MotorType : hkInt8{};
+typedef hkQuaternionf hkQuaternion; // size: 16
 
-enum class hkpConstraintAtom_AtomType : hkUint16{};
-
-struct hkpConstraintAtom: Havok::BaseType {
-    hkEnum<hkpConstraintAtom_AtomType, hkUint16> type; // offset: 0, size: 2
+struct hknpMassDistribution: Havok::BaseType { // size: 48, alignment: 16
+    hkVector4 centerOfMassAndVolume; // offset: 0, size: 16
+    hkQuaternion majorAxisSpace; // offset: 16, size: 16
+    hkVector4 inertiaTensor; // offset: 32, size: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-struct hkp2dAngConstraintAtom: hkpConstraintAtom {
-    hkUint8 freeRotationAxis; // offset: 2, size: 1
+struct hknpBodyId: Havok::BaseType { // size: 4, alignment: 4
+    hkUint32 serialAndIndex; // offset: 0, size: 4
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-enum class hkaAnimation_AnimationType : hkInt32{};
-
-struct hknpCompressedMeshShapeTreeDataRunData: Havok::BaseType {
-    hkUint16 data; // offset: 0, size: 2
+struct hkcdDynamicTree_Codec32: Havok::BaseType { // size: 32, alignment: 16
+    hkAabb aabb; // offset: 0, size: 32
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-struct hkpTwistLimitConstraintAtom: hkpConstraintAtom {
-    hkUint8 isEnabled; // offset: 2, size: 1
-    hkUint8 twistAxis; // offset: 3, size: 1
-    hkUint8 refAxis; // offset: 4, size: 1
-    hkReal minAngle; // offset: 8, size: 4
-    hkReal maxAngle; // offset: 12, size: 4
-    hkReal angularLimitsTauFactor; // offset: 16, size: 4
-    hkReal angularLimitsDampFactor; // offset: 20, size: 4
+struct hkcdDynamicTree_AnisotropicMetric: Havok::BaseType { // size: 1, alignment: 1
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-struct hkaSkeletonMapperData_ChainMapping: Havok::BaseType {
-    hkInt16 startBoneA; // offset: 0, size: 2
-    hkInt16 endBoneA; // offset: 2, size: 2
-    hkInt16 startBoneB; // offset: 4, size: 2
-    hkInt16 endBoneB; // offset: 6, size: 2
-    hkQsTransform startAFromBTransform; // offset: 16, size: 48
-    hkQsTransform endAFromBTransform; // offset: 64, size: 48
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkMatrix4f: Havok::BaseType {
-    hkVector4f col0; // offset: 0, size: 16
-    hkVector4f col1; // offset: 16, size: 16
-    hkVector4f col2; // offset: 32, size: 16
-    hkVector4f col3; // offset: 48, size: 16
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-typedef hkMatrix4f hkMatrix4; // size: 64
-
-// Basic type hkpConeLimitConstraintAtom_MeasurementMode, size: 4
-
-struct hkcdStaticMeshTreeBase_Section_SharedVertices: Havok::BaseType {
-    hkUint32 data; // offset: 0, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkcdStaticMeshTreeBase_Section_Primitives: Havok::BaseType {
-    hkUint32 data; // offset: 0, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkcdStaticMeshTreeBase_Section_DataRuns: Havok::BaseType {
-    hkUint32 data; // offset: 0, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-enum class hkpConstraintAtom_SolvingMethod : hkUint8{};
-
-struct hkGeometry_Triangle: Havok::BaseType {
-    int a; // offset: 0, size: 4
-    int b; // offset: 4, size: 4
-    int c; // offset: 8, size: 4
-    int material; // offset: 12, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-enum class hkaAnimationBinding_BlendHint : hkInt8{};
-
-struct hkaiDirectedGraphExplicitCost_Node: Havok::BaseType {
-    int startEdgeIndex; // offset: 0, size: 4
-    int numEdges; // offset: 4, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-enum class hkaiDirectedGraphExplicitCost_EdgeBits : hkUint16{};
-
-struct hkcdStaticMeshTreeBase_Connectivity_SectionHeader: Havok::BaseType {
-    hkUint32 baseLocal; // offset: 0, size: 4
-    hkUint32 baseGlobal; // offset: 4, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-enum class hkaSkeletonMapperData_MappingType : hkInt32{};
-
-struct hkpAngFrictionConstraintAtom: hkpConstraintAtom {
-    hkUint8 isEnabled; // offset: 2, size: 1
-    hkUint8 firstFrictionAxis; // offset: 3, size: 1
-    hkUint8 numFrictionAxes; // offset: 4, size: 1
-    hkReal maxFrictionTorque; // offset: 8, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hknpCompoundShapeBase_VelocityInfo: Havok::BaseType {
+struct hknpCompoundShapeBase_VelocityInfo: Havok::BaseType { // size: 32, alignment: 16
     hkVector4 linearVelocity; // offset: 0, size: 16
     hkVector4 angularVelocity; // offset: 16, size: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-struct hkpSetupStabilizationAtom: hkpConstraintAtom {
-    hkBool enabled; // offset: 2, size: 1
-    hkReal maxLinImpulse; // offset: 4, size: 4
-    hkReal maxAngImpulse; // offset: 8, size: 4
-    hkReal maxAngle; // offset: 12, size: 4
+struct hkContainerHeapAllocator: Havok::BaseType { // size: 1, alignment: 1
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-enum class hkpConeLimitConstraintAtom_MeasurementMode : hkUint8{};
-
-struct hkpConeLimitConstraintAtom: hkpConstraintAtom {
-    hkUint8 isEnabled; // offset: 2, size: 1
-    hkUint8 twistAxisInA; // offset: 3, size: 1
-    hkUint8 refAxisInB; // offset: 4, size: 1
-    hkEnum<hkpConeLimitConstraintAtom_MeasurementMode, hkUint8> angleMeasurementMode; // offset: 5, size: 1
-    hkUint16 memOffsetToAngleOffset; // offset: 6, size: 2
-    hkReal minAngle; // offset: 8, size: 4
-    hkReal maxAngle; // offset: 12, size: 4
-    hkReal angularLimitsTauFactor; // offset: 16, size: 4
-    hkReal angularLimitsDampFactor; // offset: 20, size: 4
+struct hkRootLevelContainer_NamedVariant: Havok::BaseType { // size: 24, alignment: 8
+    hkStringPtr name; // offset: 0, size: 8
+    hkStringPtr className; // offset: 8, size: 8
+    hkRefVariant variant; // offset: 16, size: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
-struct hkaSkeletonMapperData_PartitionMappingRange: Havok::BaseType {
-    int startMappingIndex; // offset: 0, size: 4
-    int numMappings; // offset: 4, size: 4
+// Basic type char, size: 1
 
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkpBallSocketConstraintAtom: hkpConstraintAtom {
-    hkEnum<hkpConstraintAtom_SolvingMethod, hkUint8> solvingMethod; // offset: 2, size: 1
-    hkUint8 bodiesToNotify; // offset: 3, size: 1
-    hkUFloat8 velocityStabilizationFactor; // offset: 4, size: 1
-    hkBool enableLinearImpulseLimit; // offset: 5, size: 1
-    hkReal breachImpulse; // offset: 8, size: 4
-    hkReal inertiaStabilizationFactor; // offset: 12, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hknpConvexPolytopeShape_Face: Havok::BaseType {
+struct hknpConvexPolytopeShape_Face: Havok::BaseType { // size: 4, alignment: 2
     hkUint16 firstIndex; // offset: 0, size: 2
     hkUint8 numIndices; // offset: 2, size: 1
     hkUint8 minHalfAngle; // offset: 3, size: 1
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkaSkeletonMapperData_SimpleMapping: Havok::BaseType {
-    hkInt16 boneA; // offset: 0, size: 2
-    hkInt16 boneB; // offset: 2, size: 2
-    hkQsTransform aFromBTransform; // offset: 16, size: 48
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct SPartShapeInfo: Havok::BaseType {
-    int partIndex; // offset: 0, size: 4
-    int parentPartIndex; // offset: 4, size: 4
-    hkUint32 shapeKey; // offset: 8, size: 4
-    int size; // offset: 12, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
-};
-
-struct hkpAngLimitConstraintAtom: hkpConstraintAtom {
-    hkUint8 isEnabled; // offset: 2, size: 1
-    hkUint8 limitAxis; // offset: 3, size: 1
-    hkUint8 cosineAxis; // offset: 4, size: 1
-    hkReal minAngle; // offset: 8, size: 4
-    hkReal maxAngle; // offset: 12, size: 4
-    hkReal angularLimitsTauFactor; // offset: 16, size: 4
-    hkReal angularLimitsDampFactor; // offset: 20, size: 4
-
-    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
-    void print(std::ostream &os) const override;
-    void to_json(std::ostream &os) const override;
+    nlohmann::json to_json() const override;
 };
 
 };
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiAnnotatedStreamingSet_Side &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeType_Enum &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkPropertyFlags_Enum &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiNavMesh_EdgeFlagBits &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_TriggerType &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimation_AnimationType &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintAtom_AtomType &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_MassChangerCategory &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintAtom_SolvingMethod &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiDirectedGraphExplicitCost_EdgeBits &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_Transparency &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimationBinding_BlendHint &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimatedReferenceFrame_hkaReferenceFrameTypeEnum &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShape_FlagsEnum &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpConstraint_FlagsEnum &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxVertexDescription_DataType &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxVertexDescription_DataUsage &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeTagCodec_Type &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxIndexBuffer_IndexType &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_TextureType &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_UVMappingAlgorithm &value);
 std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaSkeletonMapperData_MappingType &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_CombinePolicy &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpCollisionDispatchType_Enum &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintAtom_SolvingMethod &value);
 std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintMotor_MotorType &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiNavMesh_EdgeFlagBits &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConeLimitConstraintAtom_MeasurementMode &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_UVMappingAlgorithm &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_TextureType &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxIndexBuffer_IndexType &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxVertexDescription_DataUsage &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxVertexDescription_DataType &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimationBinding_BlendHint &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiDirectedGraphExplicitCost_EdgeBits &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpConstraint_FlagsEnum &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkPropertyFlags_Enum &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimation_AnimationType &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShape_FlagsEnum &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_MassChangerCategory &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_TriggerType &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpCollisionDispatchType_Enum &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintAtom_AtomType &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_CombinePolicy &value);
 std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpBodyQuality_FlagsEnum &value);
 std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpCollisionFilter_Type &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeTagCodec_Type &value);
 std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeTagCodec_Hints &value);
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConeLimitConstraintAtom_MeasurementMode &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_Transparency &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeType_Enum &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiAnnotatedStreamingSet_Side &value);
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimatedReferenceFrame_hkaReferenceFrameTypeEnum &value);

@@ -11,7 +11,7 @@
 #include "exporter/adf_export.h"
 #include "exporter/ddsc_export.h"
 #include "redscore/platform/logger.h"
-#include "redscore/platform/texture_ops.h"
+#include "redscore/platform/texture/texture_ops.h"
 #include "redscore/utils/common.h"
 #include "tracy/Tracy.hpp"
 #include "utils/hash_helper.h"
@@ -118,6 +118,34 @@ void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
                                     float32 x = *packing_data * input_data[0] / 32767.0f;
                                     float32 y = *packing_data * input_data[1] / 32767.0f;
                                     float32 z = *packing_data * input_data[2] / 32767.0f;
+                                    // Update min/max
+                                    if (i == 0) {
+                                        bbox_min[0] = x;
+                                        bbox_min[1] = y;
+                                        bbox_min[2] = z;
+                                        bbox_max[0] = x;
+                                        bbox_max[1] = y;
+                                        bbox_max[2] = z;
+                                    } else {
+                                        if (x < bbox_min[0]) bbox_min[0] = x;
+                                        if (y < bbox_min[1]) bbox_min[1] = y;
+                                        if (z < bbox_min[2]) bbox_min[2] = z;
+                                        if (x > bbox_max[0]) bbox_max[0] = x;
+                                        if (y > bbox_max[1]) bbox_max[1] = y;
+                                        if (z > bbox_max[2]) bbox_max[2] = z;
+                                    }
+                                    output_data[i * 3 + 0] = x;
+                                    output_data[i * 3 + 1] = y;
+                                    output_data[i * 3 + 2] = z;
+                                }
+                                break;
+                            }
+                            case ADFTypes::AmfFormat::AmfFormat_R32G32B32_FLOAT: {
+                                for (int i = 0; i < vertex_count; ++i) {
+                                    auto input_data = reinterpret_cast<float *>(raw_vertex_buffer_data.data() + i * stream_stride);
+                                    float32 x = input_data[0];
+                                    float32 y = input_data[1];
+                                    float32 z = input_data[2];
                                     // Update min/max
                                     if (i == 0) {
                                         bbox_min[0] = x;
@@ -428,6 +456,8 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(ApexAppState &app_state, con
     auto model_root_node = helper.make<tinygltf::Node>();
     const std::filesystem::path model_path = find_name(path_hash).value_or(std::format("model_{:08X}", path_hash));
     model_root_node->name = model_path.filename().string();
+
+    GLog_Info("Exporting {} model", model_path.string());
 
     for (const auto &amf_material: amf_model->Materials) {
         std::string material_name = find_name(amf_material.Name).value_or(

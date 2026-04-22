@@ -1,5 +1,6 @@
 #include <cstdio>
 
+#include "apex/asset_db.h"
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
 #include "redscore/platform/file/file.h"
@@ -7,7 +8,7 @@
 #include "apex/package/tab_archive.h"
 #include "havok/havok_codegen.h"
 #include "platform/app_state.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 
 void process_havok_file(Havok::CodeGen::TypeLibrary &lib, std::unique_ptr<IO::File> &&buffer) {
     const Havok::Tag::TagFile tag_file(std::move(buffer));
@@ -71,8 +72,8 @@ void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
     printf("\n");
 
     Havok::CodeGen::generate_code(lib,
-                                  "D:/projects/cpp/ApexPredator/src/havok/generated",
-                                  "D:/projects/cpp/ApexPredator/include/havok/generated");
+                                  "../src/havok/generated",
+                                  "../include/havok/generated");
 }
 
 
@@ -95,10 +96,12 @@ void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
 
 int main(int argc, const char *argv[]) {
     if (argc < 2) {
-        printf("USAGE: %s <path_to_game_root>\n", argv[0]);
+        printf("USAGE: %s <path_to_game_root> <db_path>\n", argv[0]);
         return 0;
     }
     ApexAppState app_state(argv[1]);
+    AssetDB db(argv[2]);
+    AssetDB::set_instance(&db);
     Havok::CodeGen::TypeLibrary type_library;
 
     collect_types(app_state, type_library);

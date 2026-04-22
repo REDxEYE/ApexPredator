@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <memory>
 
+#include "../../cmake-build-relwithdebinfo/_deps/tinygltf-src/json.hpp"
 #include "redscore/platform/file/file.h"
 
 
@@ -29,7 +30,7 @@ namespace Havok {
             throw std::runtime_error(std::format("read is not implemented for type {}", typeid(*this).name()));
         }
 
-        virtual void to_json(std::ostream &out) const {
+        [[nodiscard]] virtual nlohmann::json to_json() const {
             throw std::runtime_error(std::format("read is not implemented for type {}", typeid(*this).name()));
         }
     };

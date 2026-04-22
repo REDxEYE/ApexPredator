@@ -10,6 +10,7 @@
 #include "glm/gtc/quaternion.hpp"
 
 #include "havok/animations/spline.h"
+#include "redscore/utils/simple_fileio.h"
 
 
 typedef uint8_t u8;
@@ -40,7 +41,12 @@ void export_spline_compressed_animation(ApexAppState &app_state,
 
     const auto& extracted_motion = spline_animation->extractedMotion;
     const auto& ref_frame = Havok::as<HavokTypes::hkaDefaultAnimatedReferenceFrame>(extracted_motion);
-    const auto& root_motion_frames = ref_frame->referenceFrameSamples;
+    const hkArray<hkVector4f, HavokTypes::hkContainerHeapAllocator>* root_motion_frames = nullptr;
+    if (ref_frame!=nullptr) {
+        root_motion_frames = &ref_frame->referenceFrameSamples;
+    }
+
+
 
 
     timestamps.reserve(spline_animation->numFrames);
@@ -95,9 +101,14 @@ void export_spline_compressed_animation(ApexAppState &app_state,
             const TransformSplineBlock *block = &decompressor.blocks[block_id];
             auto [translation, rotation, scale] = block->GetValue(track_id, local_frame);
 
-            if (bone_id==0 && apply_root_motion) {
-                const auto& root_frame = root_motion_frames[frame_id];
+            if (bone_id==0 && apply_root_motion && root_motion_frames) {
+                const auto& root_frame = root_motion_frames->at(frame_id);
                 translation+=root_frame;
+
+                if (root_frame.value.x!=0.0f) {
+                    rotation = glm::rotate(rotation,root_frame.value.w, glm::vec3(ref_frame->up.value));
+                }
+
                 // translation.y +=root_frame.value.z;
                 // translation.y +=root_frame.value.w;
                 // translation.z +=root_frame.value.y;
@@ -199,9 +210,9 @@ GltfHelper::Handle<tinygltf::Node> export_havok_file(ApexAppState &app_state,
         if (root_container->namedVariants.empty()) {
             throw std::runtime_error("No named variants in root container");
         }
-        if (root_container->namedVariants.size() > 1) {
-            throw std::runtime_error("Multiple named variants in root container");
-        }
+        // if (root_container->namedVariants.size() > 1) {
+        //     throw std::runtime_error("Multiple named variants in root container");
+        // }
         const auto &named_variant = root_container->namedVariants.front();
         if (named_variant.className == "hkaAnimationContainer") {
             if (const auto animation_container = Havok::as<HavokTypes::hkaAnimationContainer>(named_variant.variant)) {
@@ -210,6 +221,13 @@ GltfHelper::Handle<tinygltf::Node> export_havok_file(ApexAppState &app_state,
             const auto &ti = typeid(*named_variant.variant);
             throw std::runtime_error(std::format(
                 "Malformed hkaAnimationContainer, supposed to have hkaAnimationContainer, but had {}", ti.name()));
+        }else {
+            std::filesystem::path unk_file_export_path = app_state.export_path() / path;
+            unk_file_export_path.replace_extension("json");
+
+            std::ofstream json_out(unk_file_export_path);
+            json_out << root_container->to_json().dump(2);
+            json_out.close();
         }
     }
     return {};

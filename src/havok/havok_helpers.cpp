@@ -2,7 +2,7 @@
 #include "havok/havok_helpers.h"
 
 #include "havok/generated/havok_generated.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "utils/memory_profiling.h"
 #include "utils/hash_helper.h"
 

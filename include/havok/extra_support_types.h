@@ -16,7 +16,7 @@ struct hkcdStaticTree_Tree : STORAGE {
         throw std::runtime_error("hkcdStaticTree_Tree is not supported yet");
     }
 
-    void to_json(std::ostream &out) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
         throw std::runtime_error("hkcdStaticTree_Tree is not supported yet");
     }
 };
@@ -36,7 +36,7 @@ struct hkcdDynamicTree_Tree : Havok::BaseType {
         throw std::runtime_error("hkcdStaticTree_Tree is not supported yet");
     }
 
-    void to_json(std::ostream &out) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
         throw std::runtime_error("hkcdStaticTree_Tree is not supported yet");
     }
 };
@@ -53,7 +53,7 @@ struct hkcdStaticTree_DynamicStorage : Havok::BaseType {
         throw std::runtime_error("hkcdStaticTree_DynamicStorage is not supported yet");
     }
 
-    void to_json(std::ostream &os) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
         throw std::runtime_error("hkcdStaticTree_DynamicStorage is not supported yet");
     }
 };
@@ -70,7 +70,7 @@ struct hkcdDynamicTree_DefaultDynamicStorage : Havok::BaseType {
         throw std::runtime_error("hkcdStaticTree_DynamicStorage is not supported yet");
     }
 
-    void to_json(std::ostream &os) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
         throw std::runtime_error("hkcdStaticTree_DynamicStorage is not supported yet");
     }
 };
@@ -83,15 +83,25 @@ struct hknpSparseCompactMap : Havok::BaseType {
     hkArray<T, std::monostate> valueAndSecondaryKeys; // offset: 24, size: 16
 
     void read(IO::File &buffer, Havok::Tag::TagFile &tag_file) override {
-        throw std::runtime_error("hknpSparseCompactMap is not supported yet");
+        secondaryKeyMask = buffer.read_pod<u32>();
+        sencondaryKeyBits = buffer.read_pod<u32>();
+        primaryKeyToIndex.read(buffer,tag_file);
+        valueAndSecondaryKeys.read(buffer,tag_file);
+        // throw std::runtime_error("hknpSparseCompactMap is not supported yet");
     }
 
     void print(std::ostream &os) const override {
         throw std::runtime_error("hknpSparseCompactMap is not supported yet");
     }
 
-    void to_json(std::ostream &os) const override {
-        throw std::runtime_error("hknpSparseCompactMap is not supported yet");
+    [[nodiscard]] nlohmann::json to_json() const override {
+        nlohmann::json obj;
+        obj["secondaryKeyMask"] = secondaryKeyMask;
+        obj["sencondaryKeyBits"] = sencondaryKeyBits;
+        obj["primaryKeyToIndex"] = primaryKeyToIndex.to_json();
+        obj["valueAndSecondaryKeys"] = valueAndSecondaryKeys.to_json();
+
+        return obj;
     }
 };
 
@@ -110,7 +120,7 @@ struct hkcdStaticMeshTreeBase_PrimitiveDataRunBase : Havok::BaseType {
         throw std::runtime_error("hkcdStaticMeshTreeBase_PrimitiveDataRunBase is not supported yet");
     }
 
-    void to_json(std::ostream &os) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
         throw std::runtime_error("hkcdStaticMeshTreeBase_PrimitiveDataRunBase is not supported yet");
     }
 };
@@ -127,7 +137,7 @@ struct hkBitFieldBase : Havok::BaseType {
         throw std::runtime_error("hkBitFieldBase is not supported yet");
     }
 
-    void to_json(std::ostream &os) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
         throw std::runtime_error("hkBitFieldBase is not supported yet");
     }
 };
@@ -145,7 +155,7 @@ struct hkBitFieldStorage : Havok::BaseType {
         throw std::runtime_error("hkBitFieldStorage is not supported yet");
     }
 
-    void to_json(std::ostream &os) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
         throw std::runtime_error("hkBitFieldStorage is not supported yet");
     }
 };
@@ -161,7 +171,7 @@ struct hkcdStaticMeshTreeCommonConfig : Havok::BaseType {
         throw std::runtime_error("hkcdStaticMeshTreeCommonConfig is not supported yet");
     }
 
-    void to_json(std::ostream &os) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
         throw std::runtime_error("hkcdStaticMeshTreeCommonConfig is not supported yet");
     }
 };

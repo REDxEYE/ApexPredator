@@ -53,7 +53,7 @@ std::unique_ptr<Texture> AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, c
         }
 
         const auto path = find_name(hash);
-        if (path->empty()) {
+        if (!path.has_value() || path->empty()) {
             return nullptr;
         }
 

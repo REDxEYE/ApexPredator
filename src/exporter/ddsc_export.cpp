@@ -5,7 +5,7 @@
 #include "apex/avtx.h"
 #include "apex/hashes.h"
 #include "redscore/platform/logger.h"
-#include "redscore/platform/texture.h"
+#include "redscore/platform/texture/texture.h"
 
 #include "tracy/Tracy.hpp"
 

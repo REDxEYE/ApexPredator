@@ -8,12 +8,13 @@
 #include "apex/hashes.h"
 #include "adf_base_type.h"
 #include "redscore/platform/file/file.h"
+#include "json.hpp"
 
 using String = std::string;
 
 
 template<class E>
-requires std::is_enum_v<E>
+    requires std::is_enum_v<E>
 std::string to_string(E e) {
     return std::format("{}", e); // uses std::formatter<E>
 }
@@ -27,8 +28,7 @@ struct StringHash : ADF::BaseType {
         if constexpr (width == 4) {
             storage = buffer.read_pod<uint32>();
             return;
-        }
-        else if constexpr (width == 6 || width == 8) {
+        } else if constexpr (width == 6 || width == 8) {
             storage = buffer.read_pod<uint64>();
             return;
         }
@@ -40,19 +40,16 @@ struct StringHash : ADF::BaseType {
     void print(std::ostream &out) const override {
         if (const auto str = find_name(storage)) {
             out << *str;
-        }
-        else {
+        } else {
             out << std::format("0x{:0{}X}", storage, width * 2);
         }
     };
 
-    void to_json(std::ostream &out) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
         if (const auto str = find_name(storage)) {
-            out << std::format("\"{}\"", *str);
+            return std::format("{}", *str);
         }
-        else {
-            out << std::format("\"0x{:0{}X}\"", storage, width * 2);
-        }
+        return std::format("0x{:0{}X}", storage, width * 2);
     }
 
 
@@ -90,26 +87,23 @@ public:
         (void) unk1;
 
         const std::streamoff original_offset = buffer.get_position();
-        buffer.set_position(offset,std::ios::beg);
+        buffer.set_position(offset, std::ios::beg);
         this->resize(count);
         if constexpr (std::is_same_v<T, std::string>) {
             for (uint32 i = 0; i < count; ++i) {
                 std::string &str = this->operator[](i);
                 buffer.read_cstring(str);
             }
-        }
-        else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType>>) {
+        } else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType> >) {
             for (uint32 i = 0; i < count; ++i) {
                 std::unique_ptr<BaseType> &ptr = this->operator[](i);
                 ptr = Deferred::read(buffer);
             }
-        }
-        else if constexpr(is_dataset_v<T>) {
+        } else if constexpr (is_dataset_v<T>) {
             for (uint32 i = 0; i < count; ++i) {
                 this->operator[](i).read(buffer);
             }
-        }
-        else {
+        } else {
             buffer.read_exact<T>(*this);
         }
         buffer.set_position(original_offset, std::ios::beg);
@@ -118,22 +112,18 @@ public:
     void print(std::ostream &out) const override {
         out << "[";
         for (size_t i = 0; i < this->size(); ++i) {
-            const auto& ptr = this->operator[](i);
+            const auto &ptr = this->operator[](i);
             if constexpr (std::is_same_v<T, std::string>) {
                 out << std::quoted(ptr);
-            }
-            else if constexpr(is_dataset_v<T>) {
+            } else if constexpr (is_dataset_v<T>) {
                 ptr.print(out);
-            }
-            else if constexpr(std::is_same_v<T, std::unique_ptr<BaseType>>) {
+            } else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType> >) {
                 if (ptr) {
                     ptr->print(out);
-                }
-                else {
+                } else {
                     out << "null";
                 }
-            }
-            else {
+            } else {
                 out << std::to_string(ptr);
             }
             if (i < this->size() - 1) {
@@ -143,25 +133,66 @@ public:
         out << "]";
     }
 
-    void to_json(std::ostream &out) const override {
+    [[nodiscard]] nlohmann::json to_json() const override {
+        nlohmann::json arr;
+        for (size_t i = 0; i < this->size(); ++i) {
+            const auto &ptr = this->operator[](i);
+            if constexpr (std::is_same_v<T, std::string>) {
+                arr.emplace_back(ptr);
+            } else if constexpr (is_dataset_v<T>) {
+                arr.emplace_back(ptr.to_json());
+            } else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType> >) {
+                if (ptr) {
+                    arr.emplace_back(ptr->to_json());
+                } else {
+                    arr.emplace_back();
+                }
+            } else {
+                arr.emplace_back(std::to_string(ptr));
+            }
+        }
+        return arr;
+    }
+};
+
+template<typename T, u32 V>
+class Array: public std::array<T, V>, public ADF::BaseType {
+public:
+    void read(IO::File &buffer) override {
+        if constexpr (std::is_same_v<T, std::string>) {
+            for (uint32 i = 0; i < V; ++i) {
+                std::string &str = this->operator[](i);
+                buffer.read_cstring(str);
+            }
+        } else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType> >) {
+            for (uint32 i = 0; i < V; ++i) {
+                std::unique_ptr<BaseType> &ptr = this->operator[](i);
+                ptr = Deferred::read(buffer);
+            }
+        } else if constexpr (is_dataset_v<T>) {
+            for (uint32 i = 0; i < V; ++i) {
+                this->operator[](i).read(buffer);
+            }
+        } else {
+            buffer.read_exact<T>(*this);
+        }
+    }
+
+    void print(std::ostream &out) const override {
         out << "[";
         for (size_t i = 0; i < this->size(); ++i) {
-            const auto& ptr = this->operator[](i);
+            const auto &ptr = this->operator[](i);
             if constexpr (std::is_same_v<T, std::string>) {
                 out << std::quoted(ptr);
-            }
-            else if constexpr(is_dataset_v<T>) {
-                ptr.to_json(out);
-            }
-            else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType>>) {
+            } else if constexpr (is_dataset_v<T>) {
+                ptr.print(out);
+            } else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType> >) {
                 if (ptr) {
-                    ptr->to_json(out);
-                }
-                else {
+                    ptr->print(out);
+                } else {
                     out << "null";
                 }
-            }
-            else {
+            } else {
                 out << std::to_string(ptr);
             }
             if (i < this->size() - 1) {
@@ -169,6 +200,27 @@ public:
             }
         }
         out << "]";
+    }
+
+    [[nodiscard]] nlohmann::json to_json() const override {
+        nlohmann::json arr;
+        for (size_t i = 0; i < this->size(); ++i) {
+            const auto &ptr = this->operator[](i);
+            if constexpr (std::is_same_v<T, std::string>) {
+                arr.emplace_back(ptr);
+            } else if constexpr (is_dataset_v<T>) {
+                arr.emplace_back(ptr.to_json());
+            } else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType> >) {
+                if (ptr) {
+                    arr.emplace_back(ptr->to_json());
+                } else {
+                    arr.emplace_back();
+                }
+            } else {
+                arr.emplace_back(std::to_string(ptr));
+            }
+        }
+        return arr;
     }
 };
 

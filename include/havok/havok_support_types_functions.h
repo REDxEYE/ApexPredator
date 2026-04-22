@@ -7,7 +7,7 @@
 #include "havok/havok_helpers.h"
 
 #include "havok/generated/havok_generated.h"
-#include "platform/logger.h"
+#include "redscore/platform/logger.h"
 #include "utils/hash_helper.h"
 
 static void hkVector4f_read(hkVector4f *obj, const TagFile *tf, const uint8 *src) {

@@ -117,7 +117,7 @@ namespace Havok::CodeGen {
                 const auto &inner = lock_or_null(require_type_arg(m_name, template_args[0]));
                 const int64 len = require_i64_arg(m_name, template_args[1]);
                 const auto inner_name = inner ? inner->type_name() : std::string{"void"};
-                return std::format("std::array<{}, {}>", inner_name, len);
+                return std::format("hkFixedArray<{}, {}>", inner_name, len);
             }
         }
 

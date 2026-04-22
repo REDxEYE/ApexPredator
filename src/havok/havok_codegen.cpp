@@ -196,10 +196,10 @@ void emit_struct(Context &ctx, const SharedType &type, std::ofstream &header_str
         }
 
         if (type->parent() == nullptr) {
-            header_stream << std::format("struct {}: Havok::BaseType {{\n", type->type_name());
+            header_stream << std::format("struct {}: Havok::BaseType {{ // size: {}, alignment: {}\n", type->type_name(), type->size, type->align);
         }
         else {
-            header_stream << std::format("struct {}: {} {{\n", type->name(), type->parent()->type_name());
+            header_stream << std::format("struct {}: {} {{ // size: {}, alignment: {}\n", type->name(), type->parent()->type_name(), type->size, type->align);
         }
         for (const auto &member: members) {
             header_stream << std::format("    {} {}; // offset: {}, size: {}\n",
@@ -209,7 +209,7 @@ void emit_struct(Context &ctx, const SharedType &type, std::ofstream &header_str
         header_stream << "\n";
         header_stream << "    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;\n";
         header_stream << "    void print(std::ostream &os) const override;\n";
-        header_stream << "    void to_json(std::ostream &os) const override;\n";
+        header_stream << "    nlohmann::json to_json() const override;\n";
 
         header_stream << "};\n\n";
         if (type->template_args.size() != 0) {
@@ -403,9 +403,34 @@ void emit_types(Context &ctx) {
     ctx.header_stream << "};\n";
 }
 
+void emit_struct_to_json_function_members(const SharedType &type, std::ofstream &impl_stream) {
+    const auto &type_members = std::get<std::vector<Member> >(type->data);
+    if (type->parent()!=nullptr) {
+        if (std::holds_alternative<std::vector<Member> >(type->parent()->data)) {
+            const auto &parent_members = std::get<std::vector<Member> >(type->parent()->data);
+            if (!parent_members.empty()) {
+                emit_struct_to_json_function_members(type->parent(), impl_stream);
+            }
+        }else {
+            throw std::runtime_error(std::format("Parent type {} of struct {} has non-member data",
+                                             type->parent()->name(), type->name()));
+        }
+    }
+    for (const auto &member: type_members) {
+        if (is_basic_type(member.type())) {
+            impl_stream << std::format("    obj_[\"{}\"] = {};\n", member.name, member.name);
+        }
+        else{
+            impl_stream << std::format("    obj_[\"{}\"] = {}.to_json();\n", member.name, member.name);
+        }
+    }
+}
+
 void emit_struct_to_json_function(const SharedType &type, std::ofstream &impl_stream) {
-    impl_stream << std::format("void {}::to_json(std::ostream &out) const {{\n", type->name());
-    impl_stream << "    throw std::runtime_error(\"Not implemented\");\n";
+    impl_stream << std::format("nlohmann::json {}::to_json() const {{\n", type->name());
+    impl_stream << "    nlohmann::json obj_;\n";
+    emit_struct_to_json_function_members(type, impl_stream);
+    impl_stream << "    return obj_;\n";
     impl_stream << "}\n\n";
 }
 
@@ -444,16 +469,17 @@ void emit_struct_read_function_members(const SharedType &type,
             impl_stream << std::format("    {} = buffer.read_pod<{}>();\n", member.name, member.type()->name());
         }
         else if (member.type()->type == MetaType::FIXED_ARRAY) {
-            auto inner_type = unwrap_weak(std::get<WeakType>(member.type()->template_args[0].value));
-            auto count = std::get<int64>(member.type()->template_args[1].value);
-            impl_stream << std::format("    for (size_t i = 0; i < {}; ++i) {{\n", count);
-            if (is_basic_type(inner_type)) {
-                impl_stream << std::format("        {}[i] = buffer.read_pod<{}>();\n", member.name, inner_type->name());
-            }
-            else {
-                impl_stream << std::format("        {}[i].read(buffer, tag_file);\n", member.name);
-            }
-            impl_stream << "    }\n";
+            impl_stream << std::format("    {}.read(buffer, tag_file);\n", member.name);
+            // auto inner_type = unwrap_weak(std::get<WeakType>(member.type()->template_args[0].value));
+            // auto count = std::get<int64>(member.type()->template_args[1].value);
+            // impl_stream << std::format("    for (size_t i = 0; i < {}; ++i) {{\n", count);
+            // if (is_basic_type(inner_type)) {
+            //     impl_stream << std::format("        {}[i] = buffer.read_pod<{}>();\n", member.name, inner_type->name());
+            // }
+            // else {
+            //     impl_stream << std::format("        {}[i].read(buffer, tag_file);\n", member.name);
+            // }
+            // impl_stream << "    }\n";
         }
         else {
             impl_stream << std::format("    {}.read(buffer, tag_file);\n", member.name);
@@ -614,6 +640,7 @@ void Havok::CodeGen::generate_code(const TypeLibrary &lib,
     header_stream << "#include \"havok/extra_support_types.h\"\n\n";
     header_stream << "#include \"havok/generated/havok_types_fwd.h\"\n\n";
     header_stream << "#include \"havok/havok_base_type.h\"\n";
+    header_stream << "#include \"json.hpp\"\n";
 
     impl_stream << "// This file is autogenerated\n";
     impl_stream << "#include \"havok/generated/havok_types.h\"\n\n";

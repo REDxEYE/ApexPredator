@@ -7,7 +7,7 @@
 #include "exporter/adf_export.h"
 #include "exporter/amf_export.h"
 #include "redscore/platform/logger.h"
-#include "redscore/platform/texture.h"
+#include "redscore/platform/texture/texture.h"
 #include "redscore/utils/simple_fileio.h"
 #include "utils/hash_helper.h"
 
@@ -93,20 +93,15 @@ std::unique_ptr<Texture> export_terrain_texture(const TerrainTexture &terrain_te
         case BlockCompressionType::E_BLOCKCOMPRESSIONTYPE_NONE: {
             if (expected_channels == 1 && pixel_size == 1) {
                 fmt = DDSDXGIFormat::DXGI_FORMAT_R8_UNORM;
-            }
-            else if (expected_channels == 1 && pixel_size == 2) {
+            } else if (expected_channels == 1 && pixel_size == 2) {
                 fmt = DDSDXGIFormat::DXGI_FORMAT_R16_UNORM;
-            }
-            else if (expected_channels == 2 && pixel_size == 4) {
+            } else if (expected_channels == 2 && pixel_size == 4) {
                 fmt = DDSDXGIFormat::DXGI_FORMAT_R16G16_UNORM;
-            }
-            else if (expected_channels == 3 && pixel_size == 3) {
+            } else if (expected_channels == 3 && pixel_size == 3) {
                 fmt = DDSDXGIFormat::DXGI_FORMAT_CUSTOM_R8G8B8_UNORM;
-            }
-            else if (expected_channels == 4 && pixel_size == 4) {
+            } else if (expected_channels == 4 && pixel_size == 4) {
                 fmt = DDSDXGIFormat::DXGI_FORMAT_R8G8B8A8_UNORM;
-            }
-            else {
+            } else {
                 GLog_Error("Unsupported terrain texture format with %i channels and pixel size %f", expected_channels,
                            pixel_size);
                 return nullptr;
@@ -132,7 +127,7 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file(ApexAppState &app_state, cons
 }
 
 GltfHelper::Handle<tinygltf::Node> export_terrain_patch(ApexAppState &app_state, const StreamPatchBlockHeader *header,
-                           const TerrainPatch *terrain_patch) {
+                                                        const TerrainPatch *terrain_patch) {
     ZoneScoped
     const uint32 patch_x_pos = header->PatchPositionX;
     const uint32 patch_z_pos = header->PatchPositionZ;
@@ -207,35 +202,35 @@ GltfHelper::Handle<tinygltf::Node> export_terrain_patch(ApexAppState &app_state,
 
     std::copy_n(reinterpret_cast<const uint16 *>(indices_buffer->data()), indices_buffer->size() / 2, indices.data());
 
-    auto gltf_helper = app_state.helper();
+    auto &gltf_helper = app_state.helper();
     auto mesh = gltf_helper.make<tinygltf::Mesh>();
     mesh->name = patch_name;
 
     auto &primitive = mesh->primitives.emplace_back();
 
     gltf_helper.set_primitive_attribute(primitive, "POSITIONS",
-                                                reinterpret_cast<const uint8 *>(positions.data()),
-                                                positions.size() * sizeof(glm::vec3),
-                                                TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, vertex_count, false,
-                                                sizeof(glm::vec3), 0, "POSITIONS"
+                                        reinterpret_cast<const uint8 *>(positions.data()),
+                                        positions.size() * sizeof(glm::vec3),
+                                        TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, vertex_count, false,
+                                        sizeof(glm::vec3), 0, "POSITIONS"
     );
 
 
     gltf_helper.set_primitive_attribute(primitive, "NORMAL",
-                                                reinterpret_cast<const uint8 *>(normals.data()),
-                                                normals.size() * sizeof(glm::vec3),
-                                                TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, vertex_count, false,
-                                                sizeof(glm::vec3), 0, "NORMALS");
+                                        reinterpret_cast<const uint8 *>(normals.data()),
+                                        normals.size() * sizeof(glm::vec3),
+                                        TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, vertex_count, false,
+                                        sizeof(glm::vec3), 0, "NORMALS");
 
     gltf_helper.set_primitive_attribute(primitive, "TEXCOORD_0",
-                                                reinterpret_cast<const uint8 *>(uv.data()),
-                                                uv.size() * sizeof(glm::vec2),
-                                                TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC2, vertex_count, false,
-                                                sizeof(glm::vec2), 24, "TEXCOORD_0");
+                                        reinterpret_cast<const uint8 *>(uv.data()),
+                                        uv.size() * sizeof(glm::vec2),
+                                        TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC2, vertex_count, false,
+                                        sizeof(glm::vec2), 24, "TEXCOORD_0");
 
     gltf_helper.set_primitive_indices(primitive, reinterpret_cast<const uint8 *>(indices.data()),
-                                              indices.size() * sizeof(uint32), TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT,
-                                              indices.size(), sizeof(uint32), 0, "INDICES");
+                                      indices.size() * sizeof(uint32), TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT,
+                                      indices.size(), sizeof(uint32), 0, "INDICES");
 
     auto patch_mesh_node = gltf_helper.make<tinygltf::Node>();
     patch_mesh_node->name = patch_name;
@@ -254,13 +249,19 @@ GltfHelper::Handle<tinygltf::Node> export_terrain_patch(ApexAppState &app_state,
     if (auto displacement_texture = export_terrain_texture(terrain_patch->TerrainDisplacementTexture, 1)) {
         std::string patch_texture_name = std::format("{}_disp", patch_name);
 
-        gltf_helper.add_extra_save_data(patch_texture_name, displacement_texture->save_to_memory(MemoryFormat::PNG));
+        if (displacement_texture->bpc() == 1) {
+            gltf_helper.add_extra_save_data(patch_texture_name,
+                                            displacement_texture->save_to_memory(MemoryFormat::PNG));
+        } else {
+            gltf_helper.add_extra_save_data(patch_texture_name,
+                                            displacement_texture->save_to_memory(MemoryFormat::DDS));
+        }
     }
 
     if (auto color_texture = export_terrain_texture(terrain_patch->TerrainColorTexture, 4)) {
         std::string patch_texture_name = std::format("{}_color", patch_name);
         auto texture = gltf_helper.create_image_png_data(color_texture->save_to_memory(MemoryFormat::PNG),
-                                                            patch_texture_name);
+                                                         patch_texture_name);
         material->pbrMetallicRoughness.baseColorTexture.index = texture.index();
     }
 
@@ -345,10 +346,13 @@ GltfHelper::Handle<tinygltf::Node> export_stream_patch_file(ApexAppState &app_st
                 // } else if (block_data_instance->type_hash == STI_TYPE_HASH_InstanceDataPatch) {
                 //     const InstanceDataPatch *instance_data_patch = (InstanceDataPatch *) block_data;
                 //     export_terrain_instances(context, archive_manager, block_header, instance_data_patch, export_path);
-            }
-            else {
-                const auto &ti = typeid(*patch_instance);
-                throw std::runtime_error("Unsupported block type: " + std::string(ti.name()));
+            // } else if (const auto *instance_patch = as<InstanceDataPatch>(block_data)) {
+            // } else if (const auto *world_audio_patch = as<WorldAudioPatchData>(block_data)) {
+            // } else if (const auto *world_audio_normal_patch = as<WorldAudioPatchNormalData>(block_data)) {
+            } else {
+                const auto &ti = typeid(*block_data);
+                GLog_Warning("Unsupported block type: {}", ti.name());
+                // throw std::runtime_error("Unsupported block type: " + std::string(ti.name()));
             }
             i++;
         }
@@ -356,7 +360,8 @@ GltfHelper::Handle<tinygltf::Node> export_stream_patch_file(ApexAppState &app_st
     return {};
 }
 
-GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app_state, const uint32 path_hash, std::unique_ptr<IO::File> mb) {
+GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app_state, const uint32 path_hash,
+                                                               std::unique_ptr<IO::File> mb) {
     ZoneScoped
     ADF::ADFFile adf = ADF::ADFFile::from_buffer(std::move(mb));
 
@@ -381,8 +386,7 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
                 }
                 // break;
             }
-        }
-        else if (instance.type_hash == std::to_underlying(ADFHashes::StreamPatchFileHeader)) {
+        } else if (instance.type_hash == std::to_underlying(ADFHashes::StreamPatchFileHeader)) {
             return export_stream_patch_file(app_state, adf);
             // }
             // if (instance->type_hash == STI_TYPE_HASH_StreamPatchFileHeader) {
@@ -392,15 +396,13 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             //     lod = ph->PatchLod;
             // } else if (instance->type_hash == STI_TYPE_HASH_TerrainPatch) {
             //     export_terrain_patch(&mesh_export_path, instance_data, tile_x, tile_y, lod);
-        }
-        else if (instance.type_hash == std::to_underlying(ADFHashes::AmfModel)) {
+        } else if (instance.type_hash == std::to_underlying(ADFHashes::AmfModel)) {
             if (instances.size() != 1) {
                 throw std::runtime_error("ADF with AmfModel should have only one instance");
             }
             const auto model = adf.read_instance<AmfModel>(instanceId);
             return export_amf_model(app_state, model.get(), path_hash);
-        }
-        else if (instance.type_hash == std::to_underlying(ADFHashes::AmfMeshHeader)) {
+        } else if (instance.type_hash == std::to_underlying(ADFHashes::AmfMeshHeader)) {
             if (instances.size() != 2) {
                 throw std::runtime_error("ADF with AmfMeshHeader should have only two instances");
             }
@@ -408,12 +410,8 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             instanceId++;
             const auto mesh_buffers = adf.read_instance<AmfMeshBuffers>(instanceId);
 
-            // ADF_print_instance(lib, instance, instance_data, 0);
-            // ADF_print_instance(lib, mesh_buffers_instance, mesh_buffers, 0);
-
             return export_amf_mesh(app_state, path_hash, mesh_header.get(), mesh_buffers.get());
-        }
-        else {
+        } else {
             // const auto instance_obj = adf.read_instance(instanceId);
             auto path = find_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
             path += std::format("_{:08X}", instance.type_hash);
@@ -422,15 +420,12 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             auto data = adf.get_instance_data(instanceId);
             write_file(unk_file_export_path, data);
 
-            // String_append_format(&unk_file_export_path, ".json");
-            // JsonContext ctx;
-            // f = fopen(String_cstr(&unk_file_export_path), "wb");
-            // jsonInit(&ctx, f);
-            // ADF_print_instance(instance, instance_data, &ctx, &ADF_TYPES_type_info);
-            // fclose(f);
-            // printf("\n");
-            // ADF_free_instance(instance, instance_data, &ADF_TYPES_type_info);
-            // String_free(&unk_file_export_path);
+            unk_file_export_path.replace_extension("json");
+            std::ofstream json_out(unk_file_export_path);
+            const auto json_data = adf.read_instance<ADF::BaseType>(instanceId);
+            json_out << json_data->to_json().dump(2);
+            json_out.close();
+
         }
     }
 

@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "redscore/platform/file/file.h"
+#include "json.hpp"
 
 namespace ADF {
     struct BaseType {
@@ -15,7 +16,7 @@ namespace ADF {
 
         virtual void print(std::ostream &out) const = 0;
 
-        virtual void to_json(std::ostream &out) const = 0;
+        [[nodiscard]] virtual nlohmann::json to_json() const = 0;
     };
 
     using NewFn = std::function<std::unique_ptr<BaseType>()>;

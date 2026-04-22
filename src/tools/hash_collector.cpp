@@ -9,10 +9,8 @@
 #include "apex/adf/generated/adf_types.h"
 #include "apex/package/tab_archive.h"
 #include "exporter/havok_export.h"
-#include "platform/logger.h"
 #include "utils/hash_helper.h"
-#include "utils/memory_tracker.h"
-#include "../../include/apex/asset_db.h"
+#include "apex/asset_db.h"
 
 typedef struct Context {
     assetdb_t *db;

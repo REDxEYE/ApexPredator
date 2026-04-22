@@ -6,35 +6,7 @@
 
 #include "havok/generated/havok_types.h"
 
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiAnnotatedStreamingSet_Side &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeType_Enum &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkPropertyFlags_Enum &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiNavMesh_EdgeFlagBits &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_TriggerType &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimation_AnimationType &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintAtom_AtomType &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_MassChangerCategory &value) {
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaSkeletonMapperData_MappingType &value) {
     return os << std::to_underlying(value);
 }
 
@@ -42,47 +14,15 @@ std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintAtom_S
     return os << std::to_underlying(value);
 }
 
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiDirectedGraphExplicitCost_EdgeBits &value) {
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintMotor_MotorType &value) {
     return os << std::to_underlying(value);
 }
 
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_Transparency &value) {
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiNavMesh_EdgeFlagBits &value) {
     return os << std::to_underlying(value);
 }
 
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimationBinding_BlendHint &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimatedReferenceFrame_hkaReferenceFrameTypeEnum &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShape_FlagsEnum &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpConstraint_FlagsEnum &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxVertexDescription_DataType &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxVertexDescription_DataUsage &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeTagCodec_Type &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxIndexBuffer_IndexType &value) {
-    return os << std::to_underlying(value);
-}
-
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_TextureType &value) {
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConeLimitConstraintAtom_MeasurementMode &value) {
     return os << std::to_underlying(value);
 }
 
@@ -90,11 +30,51 @@ std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_UVMappi
     return os << std::to_underlying(value);
 }
 
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaSkeletonMapperData_MappingType &value) {
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_TextureType &value) {
     return os << std::to_underlying(value);
 }
 
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_CombinePolicy &value) {
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxIndexBuffer_IndexType &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxVertexDescription_DataUsage &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxVertexDescription_DataType &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimationBinding_BlendHint &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiDirectedGraphExplicitCost_EdgeBits &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpConstraint_FlagsEnum &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkPropertyFlags_Enum &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimation_AnimationType &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShape_FlagsEnum &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_MassChangerCategory &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_TriggerType &value) {
     return os << std::to_underlying(value);
 }
 
@@ -102,7 +82,11 @@ std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpCollisionDispat
     return os << std::to_underlying(value);
 }
 
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintMotor_MotorType &value) {
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConstraintAtom_AtomType &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpMaterial_CombinePolicy &value) {
     return os << std::to_underlying(value);
 }
 
@@ -114,11 +98,27 @@ std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpCollisionFilter
     return os << std::to_underlying(value);
 }
 
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeTagCodec_Type &value) {
+    return os << std::to_underlying(value);
+}
+
 std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeTagCodec_Hints &value) {
     return os << std::to_underlying(value);
 }
 
-std::ostream& operator<<(std::ostream &os, const HavokTypes::hkpConeLimitConstraintAtom_MeasurementMode &value) {
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkxMaterial_Transparency &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hknpShapeType_Enum &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaiAnnotatedStreamingSet_Side &value) {
+    return os << std::to_underlying(value);
+}
+
+std::ostream& operator<<(std::ostream &os, const HavokTypes::hkaAnimatedReferenceFrame_hkaReferenceFrameTypeEnum &value) {
     return os << std::to_underlying(value);
 }
 
