@@ -33,23 +33,29 @@ GltfHelper::Handle<tinygltf::Node> export_file(ApexAppState &app_state, const ui
     }
     const auto &mb = buffer->cbuffer();
     if (memcmp(mb.data(), ADF_MAGIC, 4) == 0) {
+        GLog_Info("Detected ADF file");
         return export_adf_file_from_buffer(app_state, hash, std::move(buffer));
     }
     if (memcmp(mb.data(), AVTX_MAGIC, 4) == 0) {
+        GLog_Info("Detected AVTX file");
         export_ddsc(app_state, hash, std::move(buffer));
         return {};
     }
     if (memcmp(mb.data(), RIFF_MAGIC, 4) == 0) {
+        GLog_Info("Detected FMOD bank/RIFF file");
         export_fmod_bank(app_state, hash, std::move(buffer));
         return {};
     }
     if (memcmp(mb.data(), RTPC_MAGIC, 4) == 0) {
+        GLog_Info("Detected RTPC file");
         return export_rtpc(app_state, std::move(buffer), hash);
     }
     if (memcmp(mb.data() + 4, HAVOK_MAGIC, 4) == 0) {
+        GLog_Info("Detected Havok file");
         return export_havok_file(app_state, std::move(buffer), path);
     }
     if (memcmp(mb.data(), MVK_MAGIC, 4) == 0) {
+        GLog_Info("Detected MKV file");
         const std::filesystem::path export_path = get_export_path(app_state.export_path(), hash, ".mkv");
 
         std::filesystem::create_directories(export_path.parent_path());
