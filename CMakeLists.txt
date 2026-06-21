@@ -3,6 +3,36 @@ project(ApexPredator CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
+find_program(SCCACHE_PROGRAM sccache)
+
+if(SCCACHE_PROGRAM)
+    message(STATUS "Found sccache: ${SCCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER "${SCCACHE_PROGRAM}")
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${SCCACHE_PROGRAM}")
+else()
+    message(STATUS "sccache not found; compiler cache disabled")
+endif()
+
+if(UNIX AND NOT APPLE)
+    find_program(MOLD_LINKER mold)
+    find_program(LLD_LINKER ld.lld)
+
+    if(MOLD_LINKER)
+        message(STATUS "Found mold linker: ${MOLD_LINKER}")
+        add_link_options(-fuse-ld=mold)
+    elseif(LLD_LINKER)
+        message(STATUS "Found lld linker: ${LLD_LINKER}")
+        add_link_options(-fuse-ld=lld)
+    else()
+        message(STATUS "Using default system linker")
+    endif()
+
+    add_compile_options(
+            "$<$<CONFIG:Debug>:-fdebug-types-section>"
+    )
+
+endif()
+
 include(cmake/dependencies.cmake)
 
 add_library(AdfLib STATIC
