@@ -411,6 +411,64 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             const auto mesh_buffers = adf.read_instance<AmfMeshBuffers>(instanceId);
 
             return export_amf_mesh(app_state, path_hash, mesh_header.get(), mesh_buffers.get());
+        } else if (instance.type_hash == std::to_underlying(ADFHashes::StringLookup)) {
+            if (instances.size() != 1) {
+                throw std::runtime_error("ADF with StringLookup should have only one instance");
+            }
+            const auto string_lookup = adf.read_instance<StringLookup>(instanceId);
+            const char *string_data = reinterpret_cast<const char *>(string_lookup->Text.data());
+
+            std::unordered_map<u32, std::string> string_map;
+
+            nlohmann::json root;
+            auto &sorted_pairs = root["SortedPairs"];
+            for (const auto &sorted_pair: string_lookup->SortedPairs) {
+                string_map[sorted_pair.Hash] = std::string_view(string_data + sorted_pair.TextOffset);
+
+                sorted_pairs.emplace_back(nlohmann::json{
+                    {"Hash", sorted_pair.Hash},
+                    {"Name", std::string_view(string_data + sorted_pair.NameOffset)},
+                    {"Text", std::string_view(string_data + sorted_pair.TextOffset)}
+                });
+            }
+            auto &sorted_dialogue_lines = root["SortedDialogueLines"];
+            for (const auto &sorted_dialogue_line: string_lookup->SortedDialogueLines) {
+                nlohmann::json subtitles;
+                for (const auto & subtitle : sorted_dialogue_line.Subtitles) {
+                    std::string subtitle_line = "<!!LINE NOT FOUND!!>";
+                    if (string_map.contains(subtitle.LineHash)) {
+                        subtitle_line = string_map.at(subtitle.LineHash);
+                    }
+                    subtitles.emplace_back(nlohmann::json{
+                        {"LineHash", subtitle.LineHash},
+                        {"Line", subtitle_line},
+                        {"Start", subtitle.Start},
+                        {"Duration", subtitle.Duration},
+                    });
+                }
+
+                sorted_dialogue_lines.emplace_back(nlohmann::json{
+                    {"Hash", sorted_dialogue_line.Hash},
+                    {"Name", std::string_view(string_data + sorted_dialogue_line.NameOffset)},
+                    {"Subtitles", subtitles},
+                    {"FMODEvent", sorted_dialogue_line.FMODEvent},
+                    {"IncomingCall", sorted_dialogue_line.IncomingCall.to_json()},
+                    {"CharacterName", sorted_dialogue_line.IncomingCall.to_json()},
+                    {"Flags", sorted_dialogue_line.Flags},
+
+                });
+            }
+
+            auto path = find_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
+            path += std::format("_{:08X}", instance.type_hash);
+            std::filesystem::path unk_file_export_path = app_state.export_path() / path;
+            std::filesystem::create_directories(unk_file_export_path.parent_path());
+
+            unk_file_export_path.replace_extension("json");
+            std::ofstream json_out(unk_file_export_path);
+            json_out << root.dump(2);
+            json_out.close();
+
         } else {
             // const auto instance_obj = adf.read_instance(instanceId);
             auto path = find_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
