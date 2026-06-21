@@ -434,8 +434,14 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
 
             std::vector<CellColors> cell_colors;
             for (const auto &attribute: xls_book->Attribute) {
-                u32 bg_color = xls_book->ColorData[attribute.BGColorIndex - 1];
-                u32 fg_color = xls_book->ColorData[attribute.FGColorIndex - 1];
+                u32 bg_color = 0xDEADBEEF;
+                u32 fg_color = 0xDEADBEEF;
+                if (attribute.BGColorIndex < xls_book->ColorData.size()) {
+                    bg_color = xls_book->ColorData[attribute.BGColorIndex - 1];
+                }
+                if (attribute.FGColorIndex < xls_book->ColorData.size()) {
+                    fg_color = xls_book->ColorData[attribute.FGColorIndex - 1];
+                }
                 cell_colors.emplace_back(bg_color, fg_color);
             }
 
@@ -460,11 +466,13 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
                     auto &cell_value = cell.value();
                     switch (cell_data.Type) {
                         case 0: {
-                            if (cell_data.DataIndex >= xls_book->BoolData.size()) {
-                                cell_value = "<BOOL INDEX OUT OF RANGE>";
-                                break;
-                            }
-                            cell_value = xls_book->BoolData[cell_data.DataIndex];
+                            // cell_value = "";
+                            //     if (cell_data.DataIndex >= xls_book->BoolData.size()) {
+                            //          cell_value = "<BOOL INDEX OUT OF RANGE>";
+                            //         break;
+                            //     }
+                            //     if (xls_book->BoolData[cell_data.DataIndex])
+                            //         cell_value = xls_book->BoolData[cell_data.DataIndex];
                             break;
                         }
                         case 1: {
@@ -483,19 +491,24 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
                             cell_value = xls_book->ValueData[cell_data.DataIndex];
                             break;
                         }
+                        case 5: {
+                            if (cell_data.DataIndex >= xls_book->ValueData.size()) {
+                                cell_value = "<VALUE INDEX OUT OF RANGE>";
+                                break;
+                            }
+                            cell_value = xls_book->ValueData[cell_data.DataIndex];
+                            break;
+                        }
                         default: {
                             cell_value = std::format("<UNKNOWN CELL TYPE {}>", cell_data.Type);
                             GLog_Error("Unknown cell type: {}", cell_data.Type);
                         }
                     }
-                    styles.apply(wks, 1, 1, cell_data.AttributeIndex); // x=1, y=1, style index 0
+                    styles.apply(wks, row + 1, col + 1, cell_data.AttributeIndex);
                 }
             }
 
             doc.save();
-
-
-            GLog_Error("A");
         } else if (instance.type_hash == std::to_underlying(ADFHashes::StringLookup)) {
             if (instances.size() != 1) {
                 throw std::runtime_error("ADF with StringLookup should have only one instance");

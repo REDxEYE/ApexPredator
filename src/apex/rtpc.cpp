@@ -180,7 +180,9 @@ RuntimeNode RuntimeNode::RootNode(const std::unique_ptr<IO::File> &file) {
 }
 
 json RuntimeNode::to_json() const {
-    json props;
+    json node;
+    auto& props = node["props"];
+    auto& children = node["children"];
     for (const auto &[hash, prop]: m_props) {
         const auto name = find_name(hash).value_or(std::to_string(hash));
         json value;
@@ -249,7 +251,12 @@ json RuntimeNode::to_json() const {
 
         props[name] = value;
     }
-    return props;
+
+    for (const auto &child: m_children) {
+        children.push_back(child.to_json());
+    }
+
+    return node;
 }
 
 bool RuntimeNode::has(const uint32 hash) const {
