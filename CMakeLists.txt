@@ -93,6 +93,8 @@ add_executable(ApexPredator
         src/tools/apex_predator/commands/extract_anim.cpp
         src/tools/apex_predator/commands/search.cpp
         src/tools/apex_predator/commands/export_everything.cpp
+        src/utils/xlsx_helper.cpp
+        include/utils/xlsx_helper.hpp
         #        src/tools/apex_predator/commands/convert.cpp
 
 )
@@ -142,7 +144,7 @@ endif ()
 SET(CommonLibs
         RedsCore
         SQLiteCpp
-
+        OpenXLSX::OpenXLSX
 )
 
 target_include_directories(AdfLib PUBLIC include)
@@ -160,8 +162,6 @@ target_link_libraries(AdfTypeGenerator PUBLIC ${CommonLibs})
 target_link_libraries(HavokTypeGenerator PUBLIC ${CommonLibs})
 target_link_libraries(AdfLib PUBLIC ${CommonLibs})
 target_link_libraries(HavokLib PUBLIC ${CommonLibs})
-
-link_libraries(Tracy::TracyClient)
 
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL TRACY_CALLSTACK=32)
 

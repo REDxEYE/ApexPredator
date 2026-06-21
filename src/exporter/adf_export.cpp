@@ -11,11 +11,13 @@
 #include "redscore/utils/simple_fileio.h"
 #include "utils/hash_helper.h"
 
+#include "OpenXLSX.hpp"
 #include "zstd.h"
 #include "redscore/gltf/tiny_gltf.h"
 #include "tracy/Tracy.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/glm.hpp"
+#include "utils/xlsx_helper.hpp"
 
 #pragma pack(push, 1)
 
@@ -411,6 +413,89 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             const auto mesh_buffers = adf.read_instance<AmfMeshBuffers>(instanceId);
 
             return export_amf_mesh(app_state, path_hash, mesh_header.get(), mesh_buffers.get());
+        } else if (instance.type_hash == std::to_underlying(ADFHashes::XLSBook)) {
+            if (instances.size() != 1) {
+                throw std::runtime_error("ADF with XLSBook should have only one instance");
+            }
+            const auto xls_book = adf.read_instance<XLSBook>(instanceId);
+
+            auto path = find_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
+            path += std::format("_{:08X}", instance.type_hash);
+            std::filesystem::path dump_path = app_state.export_path() / path;
+            std::filesystem::create_directories(dump_path.parent_path());
+
+            dump_path.replace_extension("xlsx");
+
+            OpenXLSX::XLDocument doc;
+            doc.create(dump_path.string(), OpenXLSX::XLForceOverwrite);
+            auto workbook = doc.workbook();
+
+            auto root_sheet = workbook.worksheet("Sheet1");
+
+            std::vector<CellColors> cell_colors;
+            for (const auto &attribute: xls_book->Attribute) {
+                u32 bg_color = xls_book->ColorData[attribute.BGColorIndex - 1];
+                u32 fg_color = xls_book->ColorData[attribute.FGColorIndex - 1];
+                cell_colors.emplace_back(bg_color, fg_color);
+            }
+
+            XlsxStyleCache styles(doc, cell_colors);
+
+
+            for (const auto &[i, sheet]: xls_book->Sheet | std::views::enumerate) {
+                auto safe_name = std::format("Sheet {:02}", i);
+                root_sheet.cell(i + 1, 1).value() = safe_name + " = ";
+                root_sheet.cell(i + 1, 2).value() = sheet.Name;
+
+                workbook.addWorksheet(safe_name);
+                auto wks = workbook.worksheet(safe_name);
+                const auto cols = sheet.Cols;
+                for (const auto &[cell_id, cell_index]: sheet.CellIndex | std::views::enumerate) {
+                    const auto row = cell_id / cols;
+                    const auto col = cell_id % cols;
+                    const auto &cell_data = xls_book->Cell[cell_index];
+
+                    auto cell = wks.cell(row + 1, col + 1);
+
+                    auto &cell_value = cell.value();
+                    switch (cell_data.Type) {
+                        case 0: {
+                            if (cell_data.DataIndex >= xls_book->BoolData.size()) {
+                                cell_value = "<BOOL INDEX OUT OF RANGE>";
+                                break;
+                            }
+                            cell_value = xls_book->BoolData[cell_data.DataIndex];
+                            break;
+                        }
+                        case 1: {
+                            if (cell_data.DataIndex >= xls_book->StringData.size()) {
+                                cell_value = "<STRING INDEX OUT OF RANGE>";
+                                break;
+                            }
+                            cell_value = xls_book->StringData[cell_data.DataIndex];
+                            break;
+                        }
+                        case 2: {
+                            if (cell_data.DataIndex >= xls_book->ValueData.size()) {
+                                cell_value = "<VALUE INDEX OUT OF RANGE>";
+                                break;
+                            }
+                            cell_value = xls_book->ValueData[cell_data.DataIndex];
+                            break;
+                        }
+                        default: {
+                            cell_value = std::format("<UNKNOWN CELL TYPE {}>", cell_data.Type);
+                            GLog_Error("Unknown cell type: {}", cell_data.Type);
+                        }
+                    }
+                    styles.apply(wks, 1, 1, cell_data.AttributeIndex); // x=1, y=1, style index 0
+                }
+            }
+
+            doc.save();
+
+
+            GLog_Error("A");
         } else if (instance.type_hash == std::to_underlying(ADFHashes::StringLookup)) {
             if (instances.size() != 1) {
                 throw std::runtime_error("ADF with StringLookup should have only one instance");
@@ -434,7 +519,7 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             auto &sorted_dialogue_lines = root["SortedDialogueLines"];
             for (const auto &sorted_dialogue_line: string_lookup->SortedDialogueLines) {
                 nlohmann::json subtitles;
-                for (const auto & subtitle : sorted_dialogue_line.Subtitles) {
+                for (const auto &subtitle: sorted_dialogue_line.Subtitles) {
                     std::string subtitle_line = "<!!LINE NOT FOUND!!>";
                     if (string_map.contains(subtitle.LineHash)) {
                         subtitle_line = string_map.at(subtitle.LineHash);
@@ -468,20 +553,23 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             std::ofstream json_out(unk_file_export_path);
             json_out << root.dump(2);
             json_out.close();
-
         } else {
             // const auto instance_obj = adf.read_instance(instanceId);
+            auto name = adf.get_string(instance.name_id);
+            auto data = adf.get_instance_data(instanceId);
+            auto &type_info = adf_type_info[instance.type_hash];
+            GLog_Info("Dumping instance \"{}\" of type \"{}\" as json", name, type_info->name);
+
             auto path = find_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
             path += std::format("_{:08X}", instance.type_hash);
             std::filesystem::path unk_file_export_path = app_state.export_path() / path;
             std::filesystem::create_directories(unk_file_export_path.parent_path());
-            auto data = adf.get_instance_data(instanceId);
             write_file(unk_file_export_path, data);
 
             unk_file_export_path.replace_extension("json");
             std::ofstream json_out(unk_file_export_path);
-            const auto json_data = adf.read_instance<ADF::BaseType>(instanceId);
-            json_out << json_data->to_json().dump(2);
+            const auto instance_obj = adf.read_instance<ADF::BaseType>(instanceId);
+            json_out << instance_obj->to_json().dump(2);
             json_out.close();
         }
     }
