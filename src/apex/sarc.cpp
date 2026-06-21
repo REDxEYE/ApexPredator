@@ -32,7 +32,7 @@ SArchive::SArchive(const uint64 m_hash, std::unique_ptr<IO::File> buffer) : m_ha
         for (uint32 i = 0; i < entry_count; ++i) {
             const auto name_offset = m_buffer->read_pod<uint32>();
 
-            SArcEntry entry{
+            const SArcEntry entry{
                 .name = std::string_view(&m_strings[name_offset]),
                 .offset = m_buffer->read_pod<uint32>(),
                 .size = m_buffer->read_pod<uint32>(),

@@ -346,11 +346,11 @@ GltfHelper::Handle<tinygltf::Node> export_stream_patch_file(ApexAppState &app_st
                 // } else if (block_data_instance->type_hash == STI_TYPE_HASH_InstanceDataPatch) {
                 //     const InstanceDataPatch *instance_data_patch = (InstanceDataPatch *) block_data;
                 //     export_terrain_instances(context, archive_manager, block_header, instance_data_patch, export_path);
-            // } else if (const auto *instance_patch = as<InstanceDataPatch>(block_data)) {
-            // } else if (const auto *world_audio_patch = as<WorldAudioPatchData>(block_data)) {
-            // } else if (const auto *world_audio_normal_patch = as<WorldAudioPatchNormalData>(block_data)) {
+                // } else if (const auto *instance_patch = as<InstanceDataPatch>(block_data)) {
+                // } else if (const auto *world_audio_patch = as<WorldAudioPatchData>(block_data)) {
+                // } else if (const auto *world_audio_normal_patch = as<WorldAudioPatchNormalData>(block_data)) {
             } else {
-                const auto &ti = typeid(*block_data);
+                const auto &ti = typeid(block_data.get());
                 GLog_Warning("Unsupported block type: {}", ti.name());
                 // throw std::runtime_error("Unsupported block type: " + std::string(ti.name()));
             }
@@ -425,7 +425,6 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             const auto json_data = adf.read_instance<ADF::BaseType>(instanceId);
             json_out << json_data->to_json().dump(2);
             json_out.close();
-
         }
     }
 

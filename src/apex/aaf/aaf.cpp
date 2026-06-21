@@ -24,7 +24,7 @@ AAFArchive::AAFArchive(std::unique_ptr<IO::File> buffer) : m_buffer(std::move(bu
     m_sections.reserve(m_header.section_count);
     uint64 total_size = 0;
     for (uint32 i = 0; i < m_header.section_count; ++i) {
-        auto start = m_buffer->get_position();
+        const auto start = m_buffer->get_position();
         auto &[header, section_buffer] = m_sections.emplace_back();
         header = m_buffer->read_pod<AAFSectionHeader>();
         if (memcmp(header.magic, "EWAM", 4) != 0) {
