@@ -24,7 +24,7 @@ bool operator&(AVATextureFlag lhs, AVATextureFlag rhs) {
     return (static_cast<uint32>(lhs) & static_cast<uint32>(rhs)) != 0;
 }
 
-std::unique_ptr<Texture> AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, const uint32 hash, ArchiveManager &manager) {
+std::unique_ptr<Texture> AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, const uint32 hash, ApexArchiveManager &manager) {
     ZoneScoped
     const auto header = buffer->read_pod<Header>();
     if (std::memcmp(header.ident, "AVTX", 4) != 0) {
@@ -59,7 +59,7 @@ std::unique_ptr<Texture> AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, c
 
         atx_path = *path;
         atx_path.replace_extension(std::format("atx{}", highest_mip_stream->source));
-        auto atx_buffer = manager.get_file(hash_string(atx_path));
+        auto atx_buffer = manager.get(hash_string(atx_path));
         if (!atx_buffer) {
             GLog_Error("Expected ATX file not found for streamed AVTX texture: {}", atx_path.string());
             goto BUILTIN_MIPS;

@@ -6,7 +6,7 @@
 
 #include "apex/adf/generated/adf_types.h"
 
-constexpr std::string_view to_string(ADFTypes::EquipmentGender v) noexcept{
+std::string_view to_string(const ADFTypes::EquipmentGender v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::EquipmentGender::MALE: return "MALE"sv;
@@ -20,7 +20,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::EquipmentGender value
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::CraftingOptionChance v) noexcept{
+std::string_view to_string(const ADFTypes::CraftingOptionChance v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::CraftingOptionChance::ECRAFT_CHANCE_ODDS: return "ECRAFT_CHANCE_ODDS"sv;
@@ -32,7 +32,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::CraftingOptionChance 
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::AmfUsage v) noexcept{
+std::string_view to_string(const ADFTypes::AmfUsage v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::AmfUsage::AmfUsage_Unspecified: return "AmfUsage_Unspecified"sv;
@@ -54,7 +54,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::AmfUsage value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::BoneLengthAdjustmentType v) noexcept{
+std::string_view to_string(const ADFTypes::BoneLengthAdjustmentType v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::BoneLengthAdjustmentType::NONE: return "NONE"sv;
@@ -68,7 +68,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::BoneLengthAdjustmentT
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::ControllerType v) noexcept{
+std::string_view to_string(const ADFTypes::ControllerType v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::ControllerType::DISABLE: return "DISABLE"sv;
@@ -83,7 +83,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::ControllerType value)
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::UnlockCondition v) noexcept{
+std::string_view to_string(const ADFTypes::UnlockCondition v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::UnlockCondition::EUNLOCK_CONDITION_NONE: return "EUNLOCK_CONDITION_NONE"sv;
@@ -100,7 +100,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::UnlockCondition value
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::StreamPatchMemoryType v) noexcept{
+std::string_view to_string(const ADFTypes::StreamPatchMemoryType v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::StreamPatchMemoryType::STREAM_PATCH_STATIC_POOL: return "STREAM_PATCH_STATIC_POOL"sv;
@@ -114,7 +114,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::StreamPatchMemoryType
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::StrategicResourceType v) noexcept{
+std::string_view to_string(const ADFTypes::StrategicResourceType v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::StrategicResourceType::CONSTRUCTION_MATERIALS: return "CONSTRUCTION_MATERIALS"sv;
@@ -130,7 +130,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::StrategicResourceType
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::EnvironmentBlendModes v) noexcept{
+std::string_view to_string(const ADFTypes::EnvironmentBlendModes v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::EnvironmentBlendModes::EP_BLEND_ALPHA: return "EP_BLEND_ALPHA"sv;
@@ -148,7 +148,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::EnvironmentBlendModes
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::UseMethod v) noexcept{
+std::string_view to_string(const ADFTypes::UseMethod v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::UseMethod::EUSE_METHOD_NONE: return "EUSE_METHOD_NONE"sv;
@@ -162,7 +162,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::UseMethod value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::LockMode v) noexcept{
+std::string_view to_string(const ADFTypes::LockMode v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::LockMode::LOCKED: return "LOCKED"sv;
@@ -179,7 +179,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::LockMode value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::EnvironmentCurveTypes v) noexcept{
+std::string_view to_string(const ADFTypes::EnvironmentCurveTypes v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::EnvironmentCurveTypes::EP_CURVE_LINEAR: return "EP_CURVE_LINEAR"sv;
@@ -194,7 +194,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::EnvironmentCurveTypes
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::EnvironmentOps v) noexcept{
+std::string_view to_string(const ADFTypes::EnvironmentOps v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::EnvironmentOps::EP_OP_VALUE: return "EP_OP_VALUE"sv;
@@ -211,7 +211,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::EnvironmentOps value)
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::AmfFormat v) noexcept{
+std::string_view to_string(const ADFTypes::AmfFormat v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::AmfFormat::AmfFormat_R32G32B32A32_FLOAT: return "AmfFormat_R32G32B32A32_FLOAT"sv;
@@ -273,7 +273,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::AmfFormat value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::VegetationPlacementFlags v) noexcept{
+std::string_view to_string(const ADFTypes::VegetationPlacementFlags v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::VegetationPlacementFlags::E_VEGETATIONPLACEMENTFLAGS_NONE: return "E_VEGETATIONPLACEMENTFLAGS_NONE"sv;
@@ -286,7 +286,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::VegetationPlacementFl
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::MemAllocator v) noexcept{
+std::string_view to_string(const ADFTypes::MemAllocator v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::MemAllocator::E_MEMALLOCATOR_CPU: return "E_MEMALLOCATOR_CPU"sv;
@@ -300,7 +300,7 @@ std::ostream& operator<<(std::ostream &os, const ADFTypes::MemAllocator value) {
     return os << to_string(value);
 }
 
-constexpr std::string_view to_string(ADFTypes::BlockCompressionType v) noexcept{
+std::string_view to_string(const ADFTypes::BlockCompressionType v) noexcept{
     using namespace std::literals;
     switch (v) {
         case ADFTypes::BlockCompressionType::E_BLOCKCOMPRESSIONTYPE_NONE: return "E_BLOCKCOMPRESSIONTYPE_NONE"sv;

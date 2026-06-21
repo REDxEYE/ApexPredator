@@ -2,14 +2,14 @@
 #pragma once
 #include "havok/generated/havok_types_fwd.h"
 
-
 template<typename STORAGE>
     requires std::is_base_of_v<Havok::BaseType, STORAGE>
 struct hkcdStaticTree_Tree : STORAGE {
     HavokTypes::hkAabb domain;
 
     void read(IO::File &buffer, Havok::Tag::TagFile &tag_file) override {
-        throw std::runtime_error("hkcdStaticTree_Tree is not supported yet");
+        this->nodes.read(buffer, tag_file);
+        domain.read(buffer, tag_file);
     }
 
     void print(std::ostream &out) const override {
@@ -17,7 +17,10 @@ struct hkcdStaticTree_Tree : STORAGE {
     }
 
     [[nodiscard]] nlohmann::json to_json() const override {
-        throw std::runtime_error("hkcdStaticTree_Tree is not supported yet");
+        nlohmann::json obj;
+        obj["nodes"] = this->nodes.to_json();
+        obj["domain"] = domain.to_json();
+        return obj;
     }
 };
 
@@ -42,12 +45,15 @@ struct hkcdDynamicTree_Tree : Havok::BaseType {
 };
 
 template<typename CODEC>
-struct hkcdStaticTree_DynamicStorage : Havok::BaseType {
+struct hkcdStaticTree: Havok::BaseType {
     hkArray<CODEC, std::monostate> nodes; // offset: 0, size: 16
-
     void read(IO::File &buffer, Havok::Tag::TagFile &tag_file) override {
-        throw std::runtime_error("hkcdStaticTree_DynamicStorage is not supported yet");
+        nodes.read(buffer, tag_file);
     }
+};
+
+template<typename CODEC>
+struct hkcdStaticTree_DynamicStorage : hkcdStaticTree<CODEC> {
 
     void print(std::ostream &os) const override {
         throw std::runtime_error("hkcdStaticTree_DynamicStorage is not supported yet");
@@ -59,12 +65,8 @@ struct hkcdStaticTree_DynamicStorage : Havok::BaseType {
 };
 
 template<typename CODEC>
-struct hkcdDynamicTree_DefaultDynamicStorage : Havok::BaseType {
+struct hkcdDynamicTree_DefaultDynamicStorage : hkcdStaticTree<CODEC> {
     hkArray<CODEC, std::monostate> nodes; // offset: 0, size: 16
-
-    void read(IO::File &buffer, Havok::Tag::TagFile &tag_file) override {
-        throw std::runtime_error("hkcdStaticTree_DynamicStorage is not supported yet");
-    }
 
     void print(std::ostream &os) const override {
         throw std::runtime_error("hkcdStaticTree_DynamicStorage is not supported yet");
@@ -100,7 +102,6 @@ struct hknpSparseCompactMap : Havok::BaseType {
         obj["sencondaryKeyBits"] = sencondaryKeyBits;
         obj["primaryKeyToIndex"] = primaryKeyToIndex.to_json();
         obj["valueAndSecondaryKeys"] = valueAndSecondaryKeys.to_json();
-
         return obj;
     }
 };
@@ -148,7 +149,8 @@ struct hkBitFieldStorage : Havok::BaseType {
     int numBits; // offset: 16, size: 4
 
     void read(IO::File &buffer, Havok::Tag::TagFile &tag_file) override {
-        throw std::runtime_error("hkBitFieldStorage is not supported yet");
+        words.read(buffer, tag_file);
+        numBits = buffer.read_pod<int>();
     }
 
     void print(std::ostream &os) const override {
@@ -156,7 +158,10 @@ struct hkBitFieldStorage : Havok::BaseType {
     }
 
     [[nodiscard]] nlohmann::json to_json() const override {
-        throw std::runtime_error("hkBitFieldStorage is not supported yet");
+        nlohmann::json obj;
+        obj["words"] = words.to_json();
+        obj["numBits"] = numBits;
+        return obj;
     }
 };
 

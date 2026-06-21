@@ -169,8 +169,7 @@ void export_amf_lod(GltfHelper &helper, const std::string_view mesh_name,
                                 break;
                             }
                             default: {
-                                GLog_Error("Unsupported position attribute format: {}",
-                                           to_string(amf_attribute.Format));
+                                GLog_Error("Unsupported position attribute format: {}", to_string(amf_attribute.Format));
                                 abort();
                             }
                         }
@@ -422,7 +421,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_mesh(ApexAppState &app_state, uint
         if (hi_res_path_full.contains("intermediate/")) {
             auto hi_res_path = hi_res_path_full.substr(strlen("intermediate/"));
 
-            if (auto hi_res_buffer = app_state.manager().get_file(hash_string(hi_res_path))) {
+            if (auto hi_res_buffer = app_state.manager().get(hash_string(hi_res_path))) {
                 ADF::ADFFile hi_res_adf = ADF::ADFFile::from_buffer(std::move(hi_res_buffer));
                 const auto hi_res_buffers = std::move(hi_res_adf.read_instance<ADFTypes::AmfMeshBuffers>(0));
                 if (!hi_res_buffers) {
@@ -588,7 +587,7 @@ GltfHelper::Handle<tinygltf::Node> export_amf_model(ApexAppState &app_state, con
     }
 
 
-    auto mb = app_state.manager().get_file(amf_model->Mesh);
+    auto mb = app_state.manager().get(amf_model->Mesh);
     if (!mb) {
         GLog_Error("File not found");
         return model_root_node;

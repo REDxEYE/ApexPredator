@@ -5,8 +5,8 @@
 #include <functional>
 #include <unordered_map>
 #include <memory>
+#include <nlohmann/json.hpp>
 
-#include "../../cmake-build-relwithdebinfo/_deps/tinygltf-src/json.hpp"
 #include "redscore/platform/file/file.h"
 
 

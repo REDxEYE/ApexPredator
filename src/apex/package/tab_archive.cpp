@@ -7,22 +7,22 @@
 #include "tracy/Tracy.hpp"
 #include "utils/hash_helper.h"
 
-bool TabArchive::has_file(std::string_view path) {
+bool TabArchive::has(std::string_view path) {
     const uint64 hash = hash_string(path);
     return m_entries.contains(hash);
 }
 
-bool TabArchive::has_file(const uint64 hash) {
+bool TabArchive::has(const uint64& hash) {
     return m_entries.contains(hash);
 }
 
-std::unique_ptr<IO::File> TabArchive::get_file(const std::string_view path) {
+std::unique_ptr<IO::File> TabArchive::get(const std::string_view path) {
     ZoneScoped
     const uint64 hash = hash_string(path);
-    return get_file(hash);
+    return get(hash);
 }
 
-std::unique_ptr<IO::File> TabArchive::get_file(const uint64 hash) {
+std::unique_ptr<IO::File> TabArchive::get(const uint64& hash) {
     ZoneScoped
     const auto it = m_entries.find(hash);
     if (it == m_entries.end()) {
@@ -35,24 +35,22 @@ std::unique_ptr<IO::File> TabArchive::get_file(const uint64 hash) {
     return std::move(std::make_unique<IO::MemoryFile>(std::move(buffer)));
 }
 
-void TabArchive::all_entries(std::vector<ArchiveEntry> &entries) const {
-    entries.reserve(entries.size() + m_entries.size());
-    for (const auto &[hash, tab_entry] : m_entries) {
-        entries.emplace_back(hash,tab_entry.size);
-    }
+// void TabArchive::all_entries(std::vector<ArchiveEntry> &entries) const {
+//     entries.reserve(entries.size() + m_entries.size());
+//     for (const auto &[hash, tab_entry] : m_entries) {
+//         entries.emplace_back(hash,tab_entry.size);
+//     }
+// }
+
+std::string_view TabArchive::name() const {
+    return m_name;
 }
 
-std::string TabArchive::get_name() const {
-    const auto base = m_tab_path.parent_path().parent_path();
-    const auto relative_path = std::filesystem::relative(m_tab_path, base);
-    return relative_path.string();
+const uint64& TabArchive::key() const {
+    return m_hash;
 }
 
-uint64 TabArchive::hash() {
-    return hash_string(get_name());
-}
-
-void TabArchive::mount_folder(ArchiveManager &manager, const std::filesystem::path &path) {
+void TabArchive::mount_folder(ArchiveManager<u64> &manager, const std::filesystem::path &path) {
     for (std::filesystem::directory_iterator iterator(path); const auto &entry: iterator) {
         if (entry.path().extension() == ".tab") {
             try {
@@ -64,6 +62,15 @@ void TabArchive::mount_folder(ArchiveManager &manager, const std::filesystem::pa
             }
         }
     }
+}
+
+bool TabArchive::foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) {
+    for (const auto &entry: m_entries | std::views::values) {
+        if (!callback({entry.hash, entry.size})) {
+            break;
+        }
+    }
+    return true;
 }
 
 void TabArchive::initialize() {

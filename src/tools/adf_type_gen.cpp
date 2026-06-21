@@ -37,7 +37,7 @@ void collect_types(ApexAppState &app_state, STI::TypeLibrary &lib) {
             GLog_Info("{}/{}",id, total_count);
         }
 
-        auto file = manager.get_file(entry.path_hash);
+        auto file = manager.get(entry.path_hash);
 
         if (!file) {
             GLog_Warning("Failed to read file {}", find_name(entry.path_hash).value_or("Unknown"));
@@ -66,7 +66,7 @@ void collect_types(ApexAppState &app_state, STI::TypeLibrary &lib) {
                 sarc.all_entries(sarc_entries);
 
                 for (auto &sarc_entry: sarc_entries) {
-                    auto sarc_buffer = sarc.get_file(sarc_entry.path_hash);
+                    auto sarc_buffer = sarc.get(sarc_entry.path_hash);
 
                     if (!sarc_buffer) {
                         GLog_Warning("Failed to read file {} from SARC {}",

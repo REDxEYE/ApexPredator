@@ -58,73 +58,8 @@ bool is_basic_type(const SharedType &type) {
 }
 
 static std::set<SharedType> g_processed_hashes{};
-// static std::set<SharedType> g_handled_by_fwd{};
 
 void emit_type(Context &ctx, const SharedType &type, std::ofstream &header_stream);
-
-// void emit_type_forward_declaration(Context &ctx, const SharedType &type, std::ofstream &header_stream) {
-//     if (g_processed_hashes.contains(type)) {
-//         return;
-//     }
-//
-//     if (is_trivial_type(type)) {
-//         // Emit full declaration if it's simple type
-//         emit_type(lib, type, header_stream);
-//         g_handled_by_fwd.emplace(type);
-//         return;
-//     }
-//
-//     g_processed_hashes.emplace(type);
-//
-//     if (type->type == MetaType::RECORD) {
-//         if (type->template_args.size() == 0) {
-//             header_stream << std::format("    struct {}; // size: {}\n\n", type->name(), type->size);
-//         }
-//     }
-//     else if (type->type == MetaType::PRIMITIVE) {
-//         if (type->parent() != nullptr) {
-//             emit_type_forward_declaration(lib, type->parent(), header_stream);
-//             if (type->parent()->template_args.empty()) {
-//                 header_stream << std::format("    typedef {} {}; // size: {}\n\n", type->parent()->name(),
-//                                              type->name(),
-//                                              type->size);
-//             }
-//             else {
-//                 header_stream << std::format("    typedef {}<", type->parent()->name());
-//                 for (size_t i = 0; i < type->parent()->template_args.size(); i++) {
-//                     const auto &arg = type->parent()->template_args[i];
-//                     if (std::holds_alternative<int64>(arg.value)) {
-//                         header_stream << std::get<int64>(arg.value);
-//                     }
-//                     else if (std::holds_alternative<WeakType>(arg.value)) {
-//                         const auto &inner_type = unwrap_weak(std::get<WeakType>(arg.value));
-//                         emit_type_forward_declaration(lib, inner_type, header_stream);
-//                         header_stream << inner_type->name();
-//                     }
-//                     if (i != type->parent()->template_args.size() - 1) {
-//                         header_stream << ", ";
-//                     }
-//                 }
-//                 header_stream << std::format("> {}; // size: {}\n\n", type->name(),
-//                                              type->size);
-//             }
-//         }
-//     }
-//     else if (type->type == MetaType::ENUM) {
-//         if (type->template_args.size() == 2) {
-//             const auto enum_templ = type->template_args[0];
-//             const auto underlying_templ = type->template_args[1];
-//             if (std::holds_alternative<WeakType>(enum_templ.value) && std::holds_alternative<WeakType>(
-//                     underlying_templ.value)) {
-//                 const auto &enum_type = unwrap_weak(std::get<WeakType>(enum_templ.value));
-//                 const auto &underlying_type = unwrap_weak(std::get<WeakType>(underlying_templ.value));
-//                 emit_type_forward_declaration(lib, underlying_type, header_stream);
-//                 header_stream << std::format("    enum class {} : {}{{}};\n\n", enum_type->name(),
-//                                              underlying_type->name());
-//             }
-//         }
-//     }
-// }
 
 void emit_fwd_type_decl(Context &ctx, const SharedType &type, std::ofstream &stream) {
     switch (type->type) {
@@ -454,17 +389,7 @@ void emit_struct_read_function_members(const SharedType &type,
         return;
     }
     for (const auto &member: type_members) {
-        if (member.offset != offset) {
-            if (member.offset < offset) {
-                throw std::runtime_error(std::format(
-                    "Member {} of struct {} has offset {}, which is less than current offset {}",
-                    member.name, type->name(), member.offset, offset));
-            }
-            uint32 pad_size = member.offset - offset;
-            impl_stream << std::format("    buffer.skip({});\n", pad_size);
-            offset += pad_size;
-        }
-
+        impl_stream << std::format("    buffer.set_position(_obj_start + {}, std::ios::beg);\n", member.offset);
         if (is_basic_type(member.type())) {
             impl_stream << std::format("    {} = buffer.read_pod<{}>();\n", member.name, member.type()->name());
         }
@@ -493,18 +418,11 @@ void emit_struct_read_function(Context &ctx, const SharedType &type,
                                std::ofstream &impl_stream) {
     impl_stream << std::format("void {}::read(IO::File& buffer, Tag::TagFile& tag_file) {{\n",
                                type->name());
+    impl_stream<< "    const u64 _obj_start = buffer.get_position();\n";
 
     int64 offset = 0;
     emit_struct_read_function_members(type, impl_stream, offset);
-    if (offset != type->size) {
-        if (offset > type->size) {
-            throw std::runtime_error(std::format(
-                "Struct {} is larger than expected, expected size {}, actual size {}",
-                type->name(), type->size, offset));
-        }
-        uint32 pad_size = type->size - offset;
-        impl_stream << std::format("    buffer.skip({});\n", pad_size);
-    }
+    impl_stream << std::format("    buffer.set_position(_obj_start+ {}, std::ios::beg);\n", type->size);
     impl_stream << "}\n\n";
 }
 
@@ -647,7 +565,6 @@ void Havok::CodeGen::generate_code(const TypeLibrary &lib,
     impl_stream << "#include <stdexcept>\n\n";
     impl_stream << "#include \"havok/havok_support_types.h\"\n";
     impl_stream << "#include \"havok/tag_file/havok_tag_file.h\"\n";
-    impl_stream << "#include \"platform/buffer/buffer.h\"\n\n";
     impl_stream << "using namespace Havok;\n";
     impl_stream << "using namespace HavokTypes;\n\n";
 

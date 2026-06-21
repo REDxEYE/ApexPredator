@@ -11,7 +11,7 @@
 
 std::unique_ptr<Texture> convert_ddsc(ApexAppState &app_state, const uint32 hash) {
     ZoneScoped
-    auto mb = app_state.manager().get_file(hash);
+    auto mb = app_state.manager().get(hash);
     if (!mb) {
         GLog_Error("File not found");
         return {};

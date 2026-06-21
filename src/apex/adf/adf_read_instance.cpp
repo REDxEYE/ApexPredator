@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "apex/adf/adf_support_types.h"
+#include "redscore/platform/logger.h"
 #include "redscore/platform/file/memory_file.h"
 
 extern ADF::TypeInfoMap adf_type_info;
@@ -35,7 +36,9 @@ std::unique_ptr<ADF::BaseType> Deferred::read(IO::File &buffer) {
     }
     const auto inner_type = adf_type_info.find(info.type_hash);
     if (inner_type == adf_type_info.end()) {
-        throw std::runtime_error(std::format("Failed to find type with hash 0x{:08X}", info.type_hash));
+        GLog_Error("Failed to find type with hash 0x{:08X} and size {}", info.type_hash, info.size);
+        return {};
+        // throw std::runtime_error(std::format("Failed to find type with hash 0x{:08X} and size {}", info.type_hash, info.size));
     }
 
     const std::streamoff original_offset = buffer.get_position();

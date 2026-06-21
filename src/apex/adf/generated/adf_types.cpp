@@ -156,9 +156,9 @@ void ADFTypes::EntityDisplayStat::read(IO::File& buffer) {
     DisplayName = buffer.read_pod<uint32>();
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         DisplayText = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -532,9 +532,9 @@ static std::unique_ptr<Vector<ADFTypes::AdfShape>> AdfShape_Array_new_instance()
 
 void ADFTypes::ProceduralSpawn::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         SpawnTag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -594,17 +594,17 @@ void ADFTypes::POIInfo::read(IO::File& buffer) {
     GlobalShowEvent.read(buffer);
     GlobalHideEvent.read(buffer);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         LabelKey = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         DescriptionKey = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -822,9 +822,9 @@ void ADFTypes::CraftingData::read(IO::File& buffer) {
     EquipmentCraftingCategory = buffer.read_pod<int32>();
     StorageStacking = buffer.read_pod<int32>();
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         ImageFileString = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -866,9 +866,9 @@ static std::unique_ptr<ADFTypes::CraftingData> CraftingData_new_instance() {
 
 void ADFTypes::Equipment::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         EquipmentName = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -880,9 +880,9 @@ void ADFTypes::Equipment::read(IO::File& buffer) {
     DisplayIconHash = buffer.read_pod<uint32>();
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         DisplayIconString = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -900,7 +900,7 @@ void ADFTypes::Equipment::read(IO::File& buffer) {
     UnlockTarget = buffer.read_pod<uint32>();
     EquipmentSubCatHash = buffer.read_pod<uint32>();
     for(int i = 0; i < 2; ++i) {
-        throw std::runtime_error("Unsupported inline array inner type");
+        ContentKeyHashes[i].read(buffer);
     }
     ReceivedAmountDLC = buffer.read_pod<uint32>();
     MagazineSize = buffer.read_pod<uint32>();
@@ -910,9 +910,9 @@ void ADFTypes::Equipment::read(IO::File& buffer) {
     XPWhenUsed = buffer.read_pod<uint32>();
     SubCategoryHash = buffer.read_pod<uint32>();
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         SoundEvent = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -935,49 +935,49 @@ void ADFTypes::Equipment::read(IO::File& buffer) {
     DetailColor = buffer.read_pod<uint32>();
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         FPModelMale = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         FPModelFemale = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         TPModelMale = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         TPModelFemale = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         DecalSlots = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         AttributeFile = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -1240,17 +1240,17 @@ void ADFTypes::ProceduralMissionInstance::read(IO::File& buffer) {
     buffer.skip(3);
     Position.read(buffer);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         MapIconLabel = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         MapIconDesc = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -2635,33 +2635,33 @@ void ADFTypes::VegetationEffect::read(IO::File& buffer) {
     }
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         BreakSound = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         CollideSound = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         PassThroughSound = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         FastThroughSound = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -2883,9 +2883,9 @@ static std::unique_ptr<Vector<ADFTypes::SplineAnimation>> SplineAnimation_Array_
 void ADFTypes::CollectibleInfo::read(IO::File& buffer) {
     ID = buffer.read_pod<uint64>();
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -3023,17 +3023,17 @@ void ADFTypes::HunterMissionAttachment::read(IO::File& buffer) {
     Enabled = buffer.read_pod<uint8>();
     buffer.skip(5);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Image = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Entity = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -3116,9 +3116,9 @@ void ADFTypes::FirstPersonVehicleCameraModifierParams::read(IO::File& buffer) {
     UseGameSettingsWorldFov = buffer.read_pod<uint8>();
     buffer.skip(7);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         ForegroundBBKey = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -3307,9 +3307,9 @@ static std::unique_ptr<ADFTypes::HunterMissionRule> HunterMissionRule_new_instan
 
 void ADFTypes::EnvironmentParameters::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -3641,17 +3641,17 @@ static std::unique_ptr<ADFTypes::WeaponModTuningSettings> WeaponModTuningSetting
 
 void ADFTypes::PlayerSettings::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         LocalPlayerExpentity = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         RemotePlayerExpentity = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -4058,9 +4058,9 @@ void ADFTypes::ProjectileEntitySpawn::read(IO::File& buffer) {
     requirement.read(buffer);
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         spawn_tag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -4240,9 +4240,9 @@ static std::unique_ptr<ADFTypes::SightTuning> SightTuning_new_instance() {
 
 void ADFTypes::ExtendedExposedVariable::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         expression = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -4475,9 +4475,9 @@ static std::unique_ptr<ADFTypes::PartBehavior> PartBehavior_new_instance() {
 
 void ADFTypes::PositionRotation::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Bone = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -6350,9 +6350,9 @@ void ADFTypes::VegetationForestLayer::read(IO::File& buffer) {
     NormalStrength = buffer.read_pod<float32>();
     GlobalTextureTiling = buffer.read_pod<uint32>();
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         NormalDisplacementMap = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -9262,9 +9262,9 @@ void ADFTypes::JointOffsetFramingParams::read(IO::File& buffer) {
     BypassModifier = buffer.read_pod<uint8>();
     buffer.skip(6);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         JointName = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -9939,9 +9939,9 @@ static std::unique_ptr<ADFTypes::EnvParam> EnvParam_new_instance() {
 
 void ADFTypes::PartPhysicsMapping::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -10217,9 +10217,9 @@ static std::unique_ptr<ADFTypes::ProceduralMissions> ProceduralMissions_new_inst
 
 void ADFTypes::DeformPoint::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -10227,9 +10227,9 @@ void ADFTypes::DeformPoint::read(IO::File& buffer) {
     name_hash = buffer.read_pod<uint32>();
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         from_part = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -10237,9 +10237,9 @@ void ADFTypes::DeformPoint::read(IO::File& buffer) {
     from_part_hash = buffer.read_pod<uint32>();
     from_part_index = buffer.read_pod<uint32>();
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         skinned_to_part = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -10495,25 +10495,25 @@ void ADFTypes::ForcePulseSettings::read(IO::File& buffer) {
     AIAwarenessEventRange = buffer.read_pod<float32>();
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         HitEntitySpawnTag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         PlayerHitEntitySpawnTag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         AIHitEntitySpawnTag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -10798,9 +10798,9 @@ static std::unique_ptr<ADFTypes::BoatGlobal> BoatGlobal_new_instance() {
 
 void ADFTypes::StuntArea::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -10808,9 +10808,9 @@ void ADFTypes::StuntArea::read(IO::File& buffer) {
     name_hash = buffer.read_pod<uint32>();
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         part_name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -11154,17 +11154,17 @@ void ADFTypes::GlobalFilter::read(IO::File& buffer) {
     MinRetriggerTime = buffer.read_pod<float32>();
     MaxRetriggerTime = buffer.read_pod<float32>();
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         EnableEvent = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         DisableEvent = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -12157,9 +12157,9 @@ static std::unique_ptr<ADFTypes::ProfileSaveData1> ProfileSaveData1_new_instance
 
 void ADFTypes::PfxBodyPropertiesEntry::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         body_name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -12197,9 +12197,9 @@ static std::unique_ptr<Vector<ADFTypes::PartBehavior>> PartBehavior_Array_new_in
 
 void ADFTypes::CollisionSubSystemByName::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         RigidBodyName = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -12775,17 +12775,17 @@ static std::unique_ptr<Vector<ADFTypes::EffectRTModifier>> EffectRTModifier_Arra
 
 void ADFTypes::WeaponSwayTuning::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         ik_joint = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         reference_joint = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -13379,9 +13379,9 @@ void ADFTypes::HunterMissionObjective::read(IO::File& buffer) {
     ShowInLog = buffer.read_pod<uint8>();
     buffer.skip(5);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         MarkerName = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -13934,17 +13934,17 @@ static std::unique_ptr<ADFTypes::PfxBodyMassProperties> PfxBodyMassProperties_ne
 
 void ADFTypes::PartTuning::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         part_name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         hello_world = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -14630,17 +14630,17 @@ void ADFTypes::ShakeAnimation::read(IO::File& buffer) {
     TranslationFrequencyScaleSpline.read(buffer);
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         MasterAmplitudeScaleBBKey = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         MasterFrequencyScaleBBKey = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -14705,33 +14705,33 @@ static std::unique_ptr<Vector<ADFTypes::LookoutList>> LookoutList_Array_new_inst
 
 void ADFTypes::PartNode::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         part_name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         world_collision_shape_name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         raycast_shape_name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         mesh_path = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -14777,9 +14777,9 @@ void ADFTypes::PfxSimplePartInstance::read(IO::File& buffer) {
         breakable_space_transform[i] = buffer.read_pod<float32>();
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         collision_path = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -15602,17 +15602,17 @@ void ADFTypes::PfxStaticInstance::read(IO::File& buffer) {
         location_space_transform[i] = buffer.read_pod<float32>();
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         collision_path = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         model_path = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -15768,9 +15768,9 @@ static std::unique_ptr<ADFTypes::BoatAI> BoatAI_new_instance() {
 
 void ADFTypes::HashString::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         string = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -16887,9 +16887,9 @@ void ADFTypes::PfxBreakablePartInstance::read(IO::File& buffer) {
         breakable_space_transform[i] = buffer.read_pod<float32>();
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         collision_path = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -17662,9 +17662,9 @@ static std::unique_ptr<Vector<ADFTypes::ControlPointSaveData6>> ControlPointSave
 
 void ADFTypes::VariableVec3::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -18042,9 +18042,9 @@ void ADFTypes::AmmunitionTuning::read(IO::File& buffer) {
     projectiles_per_shot = buffer.read_pod<uint8>();
     buffer.skip(7);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         projectile_model_path = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -18052,9 +18052,9 @@ void ADFTypes::AmmunitionTuning::read(IO::File& buffer) {
     hit_radius = buffer.read_pod<float32>();
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         hit_entity_spawn_tag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -18072,9 +18072,9 @@ void ADFTypes::AmmunitionTuning::read(IO::File& buffer) {
     spawn_both_bullet_and_projectile_entity = buffer.read_pod<uint8>();
     buffer.skip(6);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         projectile_entity_spawn_tag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -18380,25 +18380,25 @@ void ADFTypes::CameraAnimationControl::read(IO::File& buffer) {
     DrawDebug = buffer.read_pod<uint8>();
     buffer.skip(7);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         StartMessage = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         StopMessage = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         ParameterMessage = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -18525,9 +18525,9 @@ void ADFTypes::AdditivePivotModifierParams::read(IO::File& buffer) {
     BypassModifier = buffer.read_pod<uint8>();
     buffer.skip(6);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         JointName = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -19300,9 +19300,9 @@ void ADFTypes::FirstPersonCameraModifierParams::read(IO::File& buffer) {
     UseGameSettingsWorldFov = buffer.read_pod<uint8>();
     buffer.skip(7);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         ForegroundBBKey = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -19455,9 +19455,9 @@ void ADFTypes::JointPivotModifierParams::read(IO::File& buffer) {
     BypassModifier = buffer.read_pod<uint8>();
     buffer.skip(6);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         JointName = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -19651,9 +19651,9 @@ void ADFTypes::AdditiveOffsetModifierParams::read(IO::File& buffer) {
     BypassModifier = buffer.read_pod<uint8>();
     buffer.skip(6);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         JointName = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -20481,9 +20481,9 @@ static std::unique_ptr<ADFTypes::RigidObjectEffects> RigidObjectEffects_new_inst
 
 void ADFTypes::ActionToken::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         DebugName = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -20585,9 +20585,9 @@ void ADFTypes::HunterMissionVariable::read(IO::File& buffer) {
     Type.read(buffer);
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Default = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -20648,9 +20648,9 @@ static std::unique_ptr<ADFTypes::SchematicCurrencySettings> SchematicCurrencySet
 
 void ADFTypes::VariableInt::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -20731,9 +20731,9 @@ static std::unique_ptr<ADFTypes::FactionSaveData1> FactionSaveData1_new_instance
 
 void ADFTypes::HitEntity::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         spawn_tag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -20798,9 +20798,9 @@ static std::unique_ptr<ADFTypes::SetOffsetFramingParams> SetOffsetFramingParams_
 
 void ADFTypes::VariableBool::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -21071,9 +21071,9 @@ static std::unique_ptr<ADFTypes::PlayerCollisionModifierParams> PlayerCollisionM
 
 void ADFTypes::VariableFloat::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -21568,9 +21568,9 @@ void ADFTypes::StorageLevel::read(IO::File& buffer) {
     Capacity = buffer.read_pod<float32>();
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         UpgradeCost = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -21595,9 +21595,9 @@ static std::unique_ptr<ADFTypes::StorageLevel> StorageLevel_new_instance() {
 
 void ADFTypes::ClusterAmmunitionSettings::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         cluster_entity_spawn_tag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -22887,9 +22887,9 @@ static std::unique_ptr<ADFTypes::DynamicAttachedEffectBaseData> DynamicAttachedE
 
 void ADFTypes::RagdollSetting::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -23148,9 +23148,9 @@ void ADFTypes::Currency::read(IO::File& buffer) {
     DisplayShortName = buffer.read_pod<uint32>();
     EarnDescription = buffer.read_pod<uint32>();
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         DisplayIcon = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -23223,9 +23223,9 @@ void ADFTypes::DirectionalAct::read(IO::File& buffer) {
     AngleMin = buffer.read_pod<float32>();
     AngleMax = buffer.read_pod<float32>();
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Act = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -23850,9 +23850,9 @@ static std::unique_ptr<Vector<ADFTypes::ViewFrustum>> ViewFrustum_Array_new_inst
 
 void ADFTypes::Rudder::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -23956,9 +23956,9 @@ static std::unique_ptr<ADFTypes::SoundFalloff> SoundFalloff_new_instance() {
 
 void ADFTypes::GameZoneSetup::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -25306,9 +25306,9 @@ void ADFTypes::Value::read(IO::File& buffer) {
     DataInt = buffer.read_pod<int32>();
     DataFloat = buffer.read_pod<float32>();
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         DataString = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -25384,6 +25384,7 @@ static std::unique_ptr<Vector<ADFTypes::SkillData>> SkillData_Array_new_instance
 }
 
 void ADFTypes::HunterMission::read(IO::File& buffer) {
+    const auto _start = buffer.get_position();
     Id = buffer.read_pod<int32>();
     Enabled = buffer.read_pod<uint8>();
     Required = buffer.read_pod<uint8>();
@@ -25408,9 +25409,9 @@ void ADFTypes::HunterMission::read(IO::File& buffer) {
     WarboardSubType.read(buffer);
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Banner = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -26619,33 +26620,33 @@ void ADFTypes::TextureBlend::read(IO::File& buffer) {
     EquipmentHash.read(buffer);
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Albedo = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Normal = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Mask = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Mpm = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -26994,9 +26995,9 @@ static std::unique_ptr<ADFTypes::AutoPitchParams> AutoPitchParams_new_instance()
 void ADFTypes::GDCFileEntry::read(IO::File& buffer) {
     Data = std::move(Deferred::read(buffer));
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         FileName = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -27633,9 +27634,9 @@ static std::unique_ptr<Vector<ADFTypes::AmfLodGroup>> AmfLodGroup_Array_new_inst
 
 void ADFTypes::AlternativeHitEntitySpawning::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         hit_entity_spawn_tag = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -27885,9 +27886,9 @@ void ADFTypes::XLSSheet::read(IO::File& buffer) {
     Rows = buffer.read_pod<uint32>();
     CellIndex.read(buffer);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -28304,9 +28305,9 @@ static std::unique_ptr<Vector<ADFTypes::CurrencySaveData1>> CurrencySaveData1_Ar
 
 void ADFTypes::RoadGraph::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         RoadType = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -31989,9 +31990,9 @@ void ADFTypes::Shader::read(IO::File& buffer) {
     NameHash = buffer.read_pod<uint32>();
     buffer.skip(4);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -35373,17 +35374,17 @@ void ADFTypes::VegetationWorld::read(IO::File& buffer) {
     DefaultVegetationZone.read(buffer);
     VegetationIndex.read(buffer);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         BillboardAtlasDiffuse = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         BillboardAtlasNormal = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -38190,17 +38191,17 @@ static std::unique_ptr<Vector<ADFTypes::RivalMissionComplete>> RivalMissionCompl
 void ADFTypes::ExtendedEffectUsage::read(IO::File& buffer) {
     name.read(buffer);
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         activation_expression = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         deactivation_expression = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -39945,17 +39946,17 @@ static std::unique_ptr<ADFTypes::BaseConfigSaveData1> BaseConfigSaveData1_new_in
 
 void ADFTypes::ShaderLibrary::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         BuildTime = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
@@ -41465,25 +41466,25 @@ static std::unique_ptr<ADFTypes::TerrainSystem> TerrainSystem_new_instance() {
 
 void ADFTypes::WorldAudioZone::read(IO::File& buffer) {
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         Name = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         LoopGuid = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);
     }
     {
-        std::streamoff original_offset = buffer.get_position();
         uint32 string_offset = buffer.read_pod<uint32>();
         uint32 unk = buffer.read_pod<uint32>();
+        std::streamoff original_offset = buffer.get_position();
         buffer.set_position(string_offset, std::ios::beg);
         DetailGuid = buffer.read_cstring();
         buffer.set_position(original_offset, std::ios::beg);

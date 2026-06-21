@@ -5,13 +5,16 @@
 
 #include "havok/havok_support_types.h"
 #include "havok/tag_file/havok_tag_file.h"
-
 using namespace Havok;
 using namespace HavokTypes;
 
 void hkcdStaticMeshTreeBase_Connectivity_SectionHeader::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     baseLocal = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     baseGlobal = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkcdStaticMeshTreeBase_Connectivity_SectionHeader::print(std::ostream &os) const {
@@ -26,7 +29,10 @@ nlohmann::json hkcdStaticMeshTreeBase_Connectivity_SectionHeader::to_json() cons
 }
 
 void hknpCompressedMeshShapeTreeDataRunData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     data = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start+ 2, std::ios::beg);
 }
 
 void hknpCompressedMeshShapeTreeDataRunData::print(std::ostream &os) const {
@@ -40,20 +46,36 @@ nlohmann::json hknpCompressedMeshShapeTreeDataRunData::to_json() const {
 }
 
 void hkcdStaticMeshTreeBase_Section::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     nodes.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     domain.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     codecParms.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     firstPackedVertex = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 76, std::ios::beg);
     sharedVertices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     primitives.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 84, std::ios::beg);
     dataRuns.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     numPackedVertices = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 89, std::ios::beg);
     numSharedIndices = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 90, std::ios::beg);
     leafIndex = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 92, std::ios::beg);
     page = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 93, std::ios::beg);
     flags = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 94, std::ios::beg);
     layerData = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 95, std::ios::beg);
     unusedData = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start+ 96, std::ios::beg);
 }
 
 void hkcdStaticMeshTreeBase_Section::print(std::ostream &os) const {
@@ -81,9 +103,14 @@ nlohmann::json hkcdStaticMeshTreeBase_Section::to_json() const {
 }
 
 void hkcdStaticTree_Codec3Axis5::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     xyz.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     hiData = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     loData = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start+ 5, std::ios::beg);
 }
 
 void hkcdStaticTree_Codec3Axis5::print(std::ostream &os) const {
@@ -100,15 +127,20 @@ nlohmann::json hkcdStaticTree_Codec3Axis5::to_json() const {
 }
 
 void hknpCompressedMeshShapeData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     meshTree.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 192, std::ios::beg);
     simdTree.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 216, std::ios::beg);
     connectivity.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 272, std::ios::beg);
 }
 
 void hknpCompressedMeshShapeData::print(std::ostream &os) const {
@@ -128,15 +160,20 @@ nlohmann::json hknpCompressedMeshShapeData::to_json() const {
 }
 
 void hkpLimitedForceConstraintMotor::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     type.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     minForce = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     maxForce = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start+ 40, std::ios::beg);
 }
 
 void hkpLimitedForceConstraintMotor::print(std::ostream &os) const {
@@ -156,16 +193,24 @@ nlohmann::json hkpLimitedForceConstraintMotor::to_json() const {
 }
 
 void hkpTwistLimitConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     isEnabled = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     twistAxis = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     refAxis = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     minAngle = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     maxAngle = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     angularLimitsTauFactor = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 20, std::ios::beg);
     angularLimitsDampFactor = buffer.read_pod<hkReal>();
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkpTwistLimitConstraintAtom::print(std::ostream &os) const {
@@ -187,19 +232,24 @@ nlohmann::json hkpTwistLimitConstraintAtom::to_json() const {
 }
 
 void hkpRagdollConstraintData_Atoms::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     transforms.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 144, std::ios::beg);
     setupStabilization.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 160, std::ios::beg);
     ragdollMotors.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 256, std::ios::beg);
     angFriction.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 272, std::ios::beg);
     twistLimit.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 304, std::ios::beg);
     coneLimit.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 336, std::ios::beg);
     planesLimit.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 368, std::ios::beg);
     ballSocket.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 384, std::ios::beg);
 }
 
 void hkpRagdollConstraintData_Atoms::print(std::ostream &os) const {
@@ -220,10 +270,14 @@ nlohmann::json hkpRagdollConstraintData_Atoms::to_json() const {
 }
 
 void hkaSkeletonMapperData_SimpleMapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     boneA = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     boneB = buffer.read_pod<hkInt16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     aFromBTransform.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 64, std::ios::beg);
 }
 
 void hkaSkeletonMapperData_SimpleMapping::print(std::ostream &os) const {
@@ -239,13 +293,22 @@ nlohmann::json hkaSkeletonMapperData_SimpleMapping::to_json() const {
 }
 
 void hkcdSimdTree_Node::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     lx.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     hx.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     ly.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     hy.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     lz.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     hz.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     data.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 112, std::ios::beg);
 }
 
 void hkcdSimdTree_Node::print(std::ostream &os) const {
@@ -266,13 +329,20 @@ nlohmann::json hkcdSimdTree_Node::to_json() const {
 }
 
 void hkaSkeletonMapperData_ChainMapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     startBoneA = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     endBoneA = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     startBoneB = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 6, std::ios::beg);
     endBoneB = buffer.read_pod<hkInt16>();
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     startAFromBTransform.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     endAFromBTransform.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 112, std::ios::beg);
 }
 
 void hkaSkeletonMapperData_ChainMapping::print(std::ostream &os) const {
@@ -291,16 +361,22 @@ nlohmann::json hkaSkeletonMapperData_ChainMapping::to_json() const {
 }
 
 void hknpExternMeshShapeData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     aabbTree.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     simdTree.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     buildContext.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     hasBuildContext = buffer.read_pod<hkBool>();
-    buffer.skip(15);
+    buffer.set_position(_obj_start+ 128, std::ios::beg);
 }
 
 void hknpExternMeshShapeData::print(std::ostream &os) const {
@@ -321,7 +397,10 @@ nlohmann::json hknpExternMeshShapeData::to_json() const {
 }
 
 void hkcdStaticMeshTreeBase_Primitive::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     indices.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hkcdStaticMeshTreeBase_Primitive::print(std::ostream &os) const {
@@ -335,13 +414,16 @@ nlohmann::json hkcdStaticMeshTreeBase_Primitive::to_json() const {
 }
 
 void CPfxPartIndexProperty::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     partIndex = buffer.read_pod<int>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void CPfxPartIndexProperty::print(std::ostream &os) const {
@@ -359,16 +441,24 @@ nlohmann::json CPfxPartIndexProperty::to_json() const {
 }
 
 void hkpAngLimitConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     isEnabled = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     limitAxis = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     cosineAxis = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     minAngle = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     maxAngle = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     angularLimitsTauFactor = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 20, std::ios::beg);
     angularLimitsDampFactor = buffer.read_pod<hkReal>();
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkpAngLimitConstraintAtom::print(std::ostream &os) const {
@@ -390,13 +480,16 @@ nlohmann::json hkpAngLimitConstraintAtom::to_json() const {
 }
 
 void hkpConstraintMotor::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     type.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkpConstraintMotor::print(std::ostream &os) const {
@@ -414,13 +507,18 @@ nlohmann::json hkpConstraintMotor::to_json() const {
 }
 
 void hkpLimitedHingeConstraintData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     userData = buffer.read_pod<hkUlong>();
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     atoms.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 304, std::ios::beg);
 }
 
 void hkpLimitedHingeConstraintData::print(std::ostream &os) const {
@@ -439,13 +537,18 @@ nlohmann::json hkpLimitedHingeConstraintData::to_json() const {
 }
 
 void hkpRagdollConstraintData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     userData = buffer.read_pod<hkUlong>();
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     atoms.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 416, std::ios::beg);
 }
 
 void hkpRagdollConstraintData::print(std::ostream &os) const {
@@ -464,27 +567,38 @@ nlohmann::json hkpRagdollConstraintData::to_json() const {
 }
 
 void hknpExternMeshShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     edgeWeldingMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     shapeTagCodecInfo = buffer.read_pod<hkUint32>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     materialTable.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     geometry.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 136, std::ios::beg);
     boundingVolumeData.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 144, std::ios::beg);
 }
 
 void hknpExternMeshShape::print(std::ostream &os) const {
@@ -513,9 +627,14 @@ nlohmann::json hknpExternMeshShape::to_json() const {
 }
 
 void hkaiDirectedGraphExplicitCost_Edge::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     cost.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     target.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkaiDirectedGraphExplicitCost_Edge::print(std::ostream &os) const {
@@ -531,8 +650,12 @@ nlohmann::json hkaiDirectedGraphExplicitCost_Edge::to_json() const {
 }
 
 void hkaiDirectedGraphExplicitCost_Node::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     startEdgeIndex = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     numEdges = buffer.read_pod<int>();
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkaiDirectedGraphExplicitCost_Node::print(std::ostream &os) const {
@@ -547,8 +670,12 @@ nlohmann::json hkaiDirectedGraphExplicitCost_Node::to_json() const {
 }
 
 void hkcdStaticAabbTree_Impl::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     nodes.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     domain.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 48, std::ios::beg);
 }
 
 void hkcdStaticAabbTree_Impl::print(std::ostream &os) const {
@@ -564,9 +691,14 @@ nlohmann::json hkcdStaticAabbTree_Impl::to_json() const {
 }
 
 void hkcdStaticTree_Codec3Axis6::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     xyz.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     hiData = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     loData = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start+ 6, std::ios::beg);
 }
 
 void hkcdStaticTree_Codec3Axis6::print(std::ostream &os) const {
@@ -583,8 +715,12 @@ nlohmann::json hkcdStaticTree_Codec3Axis6::to_json() const {
 }
 
 void hkaiNavMeshClearanceCache_McpDataInteger::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     interpolant = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 1, std::ios::beg);
     clearance = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start+ 2, std::ios::beg);
 }
 
 void hkaiNavMeshClearanceCache_McpDataInteger::print(std::ostream &os) const {
@@ -599,23 +735,32 @@ nlohmann::json hkaiNavMeshClearanceCache_McpDataInteger::to_json() const {
 }
 
 void hkaiNavMeshClearanceCache::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     clearanceCeiling = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 28, std::ios::beg);
     clearanceIntToRealMultiplier = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     clearanceRealToIntMultiplier = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     faceOffsets.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     edgePairClearances.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     unusedEdgePairElements = buffer.read_pod<int>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     mcpData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     vertexClearances.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     uncalculatedFacesLowerBound = buffer.read_pod<int>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 120, std::ios::beg);
 }
 
 void hkaiNavMeshClearanceCache::print(std::ostream &os) const {
@@ -641,7 +786,10 @@ nlohmann::json hkaiNavMeshClearanceCache::to_json() const {
 }
 
 void hkcdStaticTree_Codec3Axis::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     xyz.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 3, std::ios::beg);
 }
 
 void hkcdStaticTree_Codec3Axis::print(std::ostream &os) const {
@@ -655,10 +803,16 @@ nlohmann::json hkcdStaticTree_Codec3Axis::to_json() const {
 }
 
 void hkaiNavMeshClearanceCacheSeeding_CacheData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     id = buffer.read_pod<hkUlong>();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     info = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     infoMask = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     initialCache.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkaiNavMeshClearanceCacheSeeding_CacheData::print(std::ostream &os) const {
@@ -675,12 +829,16 @@ nlohmann::json hkaiNavMeshClearanceCacheSeeding_CacheData::to_json() const {
 }
 
 void hkaiNavMeshClearanceCacheSeeding_CacheDataSet::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     cacheDatas.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 40, std::ios::beg);
 }
 
 void hkaiNavMeshClearanceCacheSeeding_CacheDataSet::print(std::ostream &os) const {
@@ -698,12 +856,20 @@ nlohmann::json hkaiNavMeshClearanceCacheSeeding_CacheDataSet::to_json() const {
 }
 
 void hkaiStreamingSet_GraphConnection::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     aNodeIndex = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     bNodeIndex = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     aEdgeData = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     bEdgeData = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     aEdgeCost.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     bEdgeCost.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 20, std::ios::beg);
 }
 
 void hkaiStreamingSet_GraphConnection::print(std::ostream &os) const {
@@ -722,8 +888,12 @@ nlohmann::json hkaiStreamingSet_GraphConnection::to_json() const {
 }
 
 void hkaiStreamingSet_NavMeshConnection::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     aFaceEdgeIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     bFaceEdgeIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkaiStreamingSet_NavMeshConnection::print(std::ostream &os) const {
@@ -738,16 +908,26 @@ nlohmann::json hkaiStreamingSet_NavMeshConnection::to_json() const {
 }
 
 void hkcdStaticMeshTreeBase::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     nodes.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     domain.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     numPrimitiveKeys = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 52, std::ios::beg);
     bitsPerKey = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     maxKeyValue = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 60, std::ios::beg);
     primitiveStoresIsFlatConvex = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     sections.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     primitives.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     sharedVerticesIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 112, std::ios::beg);
 }
 
 void hkcdStaticMeshTreeBase::print(std::ostream &os) const {
@@ -770,18 +950,28 @@ nlohmann::json hkcdStaticMeshTreeBase::to_json() const {
 }
 
 void hkaiStreamingSet::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     aSectionUid = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 28, std::ios::beg);
     bSectionUid = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     meshConnections.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     graphConnections.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     volumeConnections.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     aConnectionAabbs.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     bConnectionAabbs.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 112, std::ios::beg);
 }
 
 void hkaiStreamingSet::print(std::ostream &os) const {
@@ -805,9 +995,12 @@ nlohmann::json hkaiStreamingSet::to_json() const {
 }
 
 void hkaiAnnotatedStreamingSet::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     side.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     streamingSet.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkaiAnnotatedStreamingSet::print(std::ostream &os) const {
@@ -822,15 +1015,24 @@ nlohmann::json hkaiAnnotatedStreamingSet::to_json() const {
 }
 
 void hkpAngMotorConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     isEnabled = buffer.read_pod<hkBool>();
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     motorAxis = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     initializedOffset = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 6, std::ios::beg);
     previousTargetAngleOffset = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     motor.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     targetAngle = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 20, std::ios::beg);
     correspondingAngLimitSolverResultOffset = buffer.read_pod<hkInt16>();
-    buffer.skip(10);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkpAngMotorConstraintAtom::print(std::ostream &os) const {
@@ -852,13 +1054,18 @@ nlohmann::json hkpAngMotorConstraintAtom::to_json() const {
 }
 
 void hkpAngFrictionConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     isEnabled = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     firstFrictionAxis = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     numFrictionAxes = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     maxFrictionTorque = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkpAngFrictionConstraintAtom::print(std::ostream &os) const {
@@ -877,9 +1084,12 @@ nlohmann::json hkpAngFrictionConstraintAtom::to_json() const {
 }
 
 void hkp2dAngConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     freeRotationAxis = buffer.read_pod<hkUint8>();
-    buffer.skip(13);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkp2dAngConstraintAtom::print(std::ostream &os) const {
@@ -895,8 +1105,12 @@ nlohmann::json hkp2dAngConstraintAtom::to_json() const {
 }
 
 void hkaSkeletonMapperData_PartitionMappingRange::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     startMappingIndex = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     numMappings = buffer.read_pod<int>();
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkaSkeletonMapperData_PartitionMappingRange::print(std::ostream &os) const {
@@ -911,19 +1125,24 @@ nlohmann::json hkaSkeletonMapperData_PartitionMappingRange::to_json() const {
 }
 
 void hkaDefaultAnimatedReferenceFrame::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     frameType.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     up.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     forward.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     duration = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     referenceFrameSamples.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 96, std::ios::beg);
 }
 
 void hkaDefaultAnimatedReferenceFrame::print(std::ostream &os) const {
@@ -945,29 +1164,40 @@ nlohmann::json hkaDefaultAnimatedReferenceFrame::to_json() const {
 }
 
 void hknpBoxShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     vertices.read(buffer, tag_file);
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     planes.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 84, std::ios::beg);
     faces.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     indices.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     connectivity.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     obb.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 176, std::ios::beg);
 }
 
 void hknpBoxShape::print(std::ostream &os) const {
@@ -997,22 +1227,30 @@ nlohmann::json hknpBoxShape::to_json() const {
 }
 
 void hknpSphereShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     vertices.read(buffer, tag_file);
-    buffer.skip(12);
+    buffer.set_position(_obj_start+ 80, std::ios::beg);
 }
 
 void hknpSphereShape::print(std::ostream &os) const {
@@ -1037,32 +1275,52 @@ nlohmann::json hknpSphereShape::to_json() const {
 }
 
 void hkaSplineCompressedAnimation::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 28, std::ios::beg);
     duration = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     numberOfTransformTracks = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     numberOfFloatTracks = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     extractedMotion.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     annotationTracks.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     numFrames = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 68, std::ios::beg);
     numBlocks = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     maxFramesPerBlock = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 76, std::ios::beg);
     maskAndQuantizationSize = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     blockDuration = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 84, std::ios::beg);
     blockInverseDuration = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     frameDuration = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     blockOffsets.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     floatBlockOffsets.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     transformOffsets.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 144, std::ios::beg);
     floatOffsets.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 160, std::ios::beg);
     data.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 176, std::ios::beg);
     endian = buffer.read_pod<int>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 184, std::ios::beg);
 }
 
 void hkaSplineCompressedAnimation::print(std::ostream &os) const {
@@ -1098,7 +1356,10 @@ nlohmann::json hkaSplineCompressedAnimation::to_json() const {
 }
 
 void hkMeshBoneIndexMapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     mapping.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkMeshBoneIndexMapping::print(std::ostream &os) const {
@@ -1112,9 +1373,14 @@ nlohmann::json hkMeshBoneIndexMapping::to_json() const {
 }
 
 void hkxVertexAnimation_UsageMap::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     use.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     useIndexOrig = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     useIndexLocal = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hkxVertexAnimation_UsageMap::print(std::ostream &os) const {
@@ -1130,16 +1396,22 @@ nlohmann::json hkxVertexAnimation_UsageMap::to_json() const {
 }
 
 void hkxVertexAnimation::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     time = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     vertData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 176, std::ios::beg);
     vertexIndexMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 192, std::ios::beg);
     componentMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 208, std::ios::beg);
 }
 
 void hkxVertexAnimation::print(std::ostream &os) const {
@@ -1160,9 +1432,14 @@ nlohmann::json hkxVertexAnimation::to_json() const {
 }
 
 void hkcdStaticMeshTreeBase_Connectivity::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     headers.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     localLinks.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     globalLinks.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 48, std::ios::beg);
 }
 
 void hkcdStaticMeshTreeBase_Connectivity::print(std::ostream &os) const {
@@ -1178,8 +1455,10 @@ nlohmann::json hkcdStaticMeshTreeBase_Connectivity::to_json() const {
 }
 
 void hkBitField::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     storage.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkBitField::print(std::ostream &os) const {
@@ -1194,9 +1473,14 @@ nlohmann::json hkBitField::to_json() const {
 }
 
 void hkxMaterial_TextureStage::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     texture.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     usageHint.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     tcoordChannel = buffer.read_pod<hkInt32>();
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkxMaterial_TextureStage::print(std::ostream &os) const {
@@ -1212,31 +1496,50 @@ nlohmann::json hkxMaterial_TextureStage::to_json() const {
 }
 
 void hkxMaterial::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     attributeGroups.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     stages.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     diffuseColor.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     ambientColor.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     specularColor.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     emissiveColor.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     subMaterials.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 144, std::ios::beg);
     extraData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 152, std::ios::beg);
     uvMapScale.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 160, std::ios::beg);
     uvMapOffset.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 168, std::ios::beg);
     uvMapRotation = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 172, std::ios::beg);
     uvMapAlgorithm.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 176, std::ios::beg);
     specularMultiplier = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 180, std::ios::beg);
     specularExponent = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 184, std::ios::beg);
     transparency.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 192, std::ios::beg);
     userData = buffer.read_pod<hkUlong>();
+    buffer.set_position(_obj_start + 200, std::ios::beg);
     properties.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 224, std::ios::beg);
 }
 
 void hkxMaterial::print(std::ostream &os) const {
@@ -1271,8 +1574,12 @@ nlohmann::json hkxMaterial::to_json() const {
 }
 
 void hkxAttribute::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     value.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkxAttribute::print(std::ostream &os) const {
@@ -1287,8 +1594,12 @@ nlohmann::json hkxAttribute::to_json() const {
 }
 
 void hkxAttributeGroup::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     attributes.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkxAttributeGroup::print(std::ostream &os) const {
@@ -1303,12 +1614,16 @@ nlohmann::json hkxAttributeGroup::to_json() const {
 }
 
 void hkxAttributeHolder::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     attributeGroups.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 40, std::ios::beg);
 }
 
 void hkxAttributeHolder::print(std::ostream &os) const {
@@ -1326,13 +1641,16 @@ nlohmann::json hkxAttributeHolder::to_json() const {
 }
 
 void hkaSkeletonMapper::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     mapping.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 208, std::ios::beg);
 }
 
 void hkaSkeletonMapper::print(std::ostream &os) const {
@@ -1350,17 +1668,24 @@ nlohmann::json hkaSkeletonMapper::to_json() const {
 }
 
 void hkxIndexBuffer::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     indexType.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     indices16.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     indices32.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     vertexBaseOffset = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 68, std::ios::beg);
     length = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start+ 72, std::ios::beg);
 }
 
 void hkxIndexBuffer::print(std::ostream &os) const {
@@ -1382,15 +1707,20 @@ nlohmann::json hkxIndexBuffer::to_json() const {
 }
 
 void hkpRagdollMotorConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     isEnabled = buffer.read_pod<hkBool>();
-    buffer.skip(1);
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     initializedOffset = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 6, std::ios::beg);
     previousTargetAnglesOffset = buffer.read_pod<hkInt16>();
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     target_bRca.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     motors.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 96, std::ios::beg);
 }
 
 void hkpRagdollMotorConstraintAtom::print(std::ostream &os) const {
@@ -1410,13 +1740,20 @@ nlohmann::json hkpRagdollMotorConstraintAtom::to_json() const {
 }
 
 void hkxVertexDescription_ElementDecl::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     byteOffset = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 6, std::ios::beg);
     usage.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     byteStride = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     numElements = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     channelID.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkxVertexDescription_ElementDecl::print(std::ostream &os) const {
@@ -1435,8 +1772,12 @@ nlohmann::json hkxVertexDescription_ElementDecl::to_json() const {
 }
 
 void hkcdStaticTree_Codec3Axis4::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     xyz.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     data = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hkcdStaticTree_Codec3Axis4::print(std::ostream &os) const {
@@ -1452,7 +1793,10 @@ nlohmann::json hkcdStaticTree_Codec3Axis4::to_json() const {
 }
 
 void hkxVertexDescription::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     decls.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkxVertexDescription::print(std::ostream &os) const {
@@ -1466,11 +1810,14 @@ nlohmann::json hkxVertexDescription::to_json() const {
 }
 
 void hknpExternMeshShapeGeometry::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hknpExternMeshShapeGeometry::print(std::ostream &os) const {
@@ -1487,17 +1834,30 @@ nlohmann::json hknpExternMeshShapeGeometry::to_json() const {
 }
 
 void hkxVertexBuffer_VertexData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     vectorData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     floatData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     uint32Data.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     uint16Data.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     uint8Data.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     numVerts = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 84, std::ios::beg);
     vectorStride = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     floatStride = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 92, std::ios::beg);
     uint32Stride = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     uint16Stride = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 100, std::ios::beg);
     uint8Stride = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start+ 104, std::ios::beg);
 }
 
 void hkxVertexBuffer_VertexData::print(std::ostream &os) const {
@@ -1521,13 +1881,18 @@ nlohmann::json hkxVertexBuffer_VertexData::to_json() const {
 }
 
 void hkxVertexBuffer::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     data.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     desc.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 144, std::ios::beg);
 }
 
 void hkxVertexBuffer::print(std::ostream &os) const {
@@ -1546,13 +1911,16 @@ nlohmann::json hkxVertexBuffer::to_json() const {
 }
 
 void CPfxFloatShapeProperty::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     Value = buffer.read_pod<float>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void CPfxFloatShapeProperty::print(std::ostream &os) const {
@@ -1570,17 +1938,26 @@ nlohmann::json CPfxFloatShapeProperty::to_json() const {
 }
 
 void hkaMeshBinding::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     mesh.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     originalSkeletonName.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     skeleton.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     mappings.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     boneFromSkinMeshTransforms.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 88, std::ios::beg);
 }
 
 void hkaMeshBinding::print(std::ostream &os) const {
@@ -1603,10 +1980,16 @@ nlohmann::json hkaMeshBinding::to_json() const {
 }
 
 void hkMatrix4f::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     col0.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     col1.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     col2.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     col3.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 64, std::ios::beg);
 }
 
 void hkMatrix4f::print(std::ostream &os) const {
@@ -1623,18 +2006,26 @@ nlohmann::json hkMatrix4f::to_json() const {
 }
 
 void hkaAnimationBinding::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     originalSkeletonName.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     animation.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     transformTrackToBoneIndices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     floatTrackToFloatSlotIndices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     partitionIndices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     blendHint.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start+ 96, std::ios::beg);
 }
 
 void hkaAnimationBinding::print(std::ostream &os) const {
@@ -1657,17 +2048,26 @@ nlohmann::json hkaAnimationBinding::to_json() const {
 }
 
 void CPfxBreakableShapeCollection::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     rayCastShape.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     worldCollisionShape.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     simplifiedShape.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     partRayCastShapeInfo.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     partWorldCollisionShapeInfo.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     partSimplifiedShapeInfo.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 96, std::ios::beg);
 }
 
 void CPfxBreakableShapeCollection::print(std::ostream &os) const {
@@ -1690,16 +2090,22 @@ nlohmann::json CPfxBreakableShapeCollection::to_json() const {
 }
 
 void hknpMaterialLibrary::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     materialAddedSignal.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     materialModifiedSignal.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     materialRemovedSignal.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     entries.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 72, std::ios::beg);
 }
 
 void hknpMaterialLibrary::print(std::ostream &os) const {
@@ -1720,16 +2126,24 @@ nlohmann::json hknpMaterialLibrary::to_json() const {
 }
 
 void hkaAnimationContainer::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     skeletons.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     animations.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     bindings.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     attachments.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     skins.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 104, std::ios::beg);
 }
 
 void hkaAnimationContainer::print(std::ostream &os) const {
@@ -1751,12 +2165,16 @@ nlohmann::json hkaAnimationContainer::to_json() const {
 }
 
 void hkpConstraintData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     userData = buffer.read_pod<hkUlong>();
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkpConstraintData::print(std::ostream &os) const {
@@ -1774,19 +2192,30 @@ nlohmann::json hkpConstraintData::to_json() const {
 }
 
 void hkaSkeletonMapperData::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     skeletonA.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     skeletonB.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     partitionMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     simpleMappingPartitionRanges.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     chainMappingPartitionRanges.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     simpleMappings.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     chainMappings.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     unmappedBones.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     extractedMotionMapping.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 160, std::ios::beg);
     keepUnmappedLocal = buffer.read_pod<hkBool>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 164, std::ios::beg);
     mappingType.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 176, std::ios::beg);
 }
 
 void hkaSkeletonMapperData::print(std::ostream &os) const {
@@ -1810,7 +2239,10 @@ nlohmann::json hkaSkeletonMapperData::to_json() const {
 }
 
 void hkcdStaticMeshTreeBase_Section_Primitives::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     data = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hkcdStaticMeshTreeBase_Section_Primitives::print(std::ostream &os) const {
@@ -1824,11 +2256,14 @@ nlohmann::json hkcdStaticMeshTreeBase_Section_Primitives::to_json() const {
 }
 
 void hkLocalFrame::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkLocalFrame::print(std::ostream &os) const {
@@ -1845,12 +2280,20 @@ nlohmann::json hkLocalFrame::to_json() const {
 }
 
 void hkaiNavMesh_Face::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     startEdgeIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     startUserEdgeIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     numEdges = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 10, std::ios::beg);
     numUserEdges = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     clusterIndex = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 14, std::ios::beg);
     padding = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkaiNavMesh_Face::print(std::ostream &os) const {
@@ -1869,11 +2312,14 @@ nlohmann::json hkaiNavMesh_Face::to_json() const {
 }
 
 void hknpSurfaceVelocity::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hknpSurfaceVelocity::print(std::ostream &os) const {
@@ -1890,9 +2336,14 @@ nlohmann::json hknpSurfaceVelocity::to_json() const {
 }
 
 void hknpMassDistribution::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     centerOfMassAndVolume.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     majorAxisSpace.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     inertiaTensor.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 48, std::ios::beg);
 }
 
 void hknpMassDistribution::print(std::ostream &os) const {
@@ -1908,10 +2359,14 @@ nlohmann::json hknpMassDistribution::to_json() const {
 }
 
 void hkRefCountedProperties_Entry::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     object.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     key = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 10, std::ios::beg);
     flags = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkRefCountedProperties_Entry::print(std::ostream &os) const {
@@ -1927,32 +2382,48 @@ nlohmann::json hkRefCountedProperties_Entry::to_json() const {
 }
 
 void hknpBodyCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     shape.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     flags = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     collisionCntrl = buffer.read_pod<short>();
-    buffer.skip(2);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     collisionFilterInfo = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 20, std::ios::beg);
     materialId = buffer.read_pod<unsigned short>();
+    buffer.set_position(_obj_start + 22, std::ios::beg);
     qualityId = buffer.read_pod<unsigned char>();
-    buffer.skip(1);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     motionType = buffer.read_pod<unsigned char>();
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     position.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     orientation.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     linearVelocity.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     angularVelocity.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     mass = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 120, std::ios::beg);
     massDistribution.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     motionPropertiesId = buffer.read_pod<unsigned short>();
-    buffer.skip(2);
+    buffer.set_position(_obj_start + 132, std::ios::beg);
     reservedBodyId.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 136, std::ios::beg);
     reservedMotionId = buffer.read_pod<unsigned int>();
+    buffer.set_position(_obj_start + 140, std::ios::beg);
     collisionLookAheadDistance = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 144, std::ios::beg);
     localFrame.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 160, std::ios::beg);
 }
 
 void hknpBodyCinfo::print(std::ostream &os) const {
@@ -1985,12 +2456,18 @@ nlohmann::json hknpBodyCinfo::to_json() const {
 }
 
 void hkpSetupStabilizationAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     enabled = buffer.read_pod<hkBool>();
-    buffer.skip(1);
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     maxLinImpulse = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     maxAngImpulse = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     maxAngle = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkpSetupStabilizationAtom::print(std::ostream &os) const {
@@ -2009,8 +2486,12 @@ nlohmann::json hkpSetupStabilizationAtom::to_json() const {
 }
 
 void hkaAnnotationTrack::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     trackName.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     annotations.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkaAnnotationTrack::print(std::ostream &os) const {
@@ -2025,12 +2506,16 @@ nlohmann::json hkaAnnotationTrack::to_json() const {
 }
 
 void hkRefCountedProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     entries.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 40, std::ios::beg);
 }
 
 void hkRefCountedProperties::print(std::ostream &os) const {
@@ -2048,8 +2533,12 @@ nlohmann::json hkRefCountedProperties::to_json() const {
 }
 
 void hkTransformf::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     rotation.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     translation.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 64, std::ios::beg);
 }
 
 void hkTransformf::print(std::ostream &os) const {
@@ -2064,19 +2553,28 @@ nlohmann::json hkTransformf::to_json() const {
 }
 
 void hkpPositionConstraintMotor::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     type.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     minForce = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     maxForce = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     tau = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 44, std::ios::beg);
     damping = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     proportionalRecoveryVelocity = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 52, std::ios::beg);
     constantRecoveryVelocity = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start+ 56, std::ios::beg);
 }
 
 void hkpPositionConstraintMotor::print(std::ostream &os) const {
@@ -2100,16 +2598,22 @@ nlohmann::json hkpPositionConstraintMotor::to_json() const {
 }
 
 void hknpMotionPropertiesLibrary::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     entryAddedSignal.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     entryModifiedSignal.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     entryRemovedSignal.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     entries.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 72, std::ios::beg);
 }
 
 void hknpMotionPropertiesLibrary::print(std::ostream &os) const {
@@ -2130,22 +2634,30 @@ nlohmann::json hknpMotionPropertiesLibrary::to_json() const {
 }
 
 void hknpConvexShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     vertices.read(buffer, tag_file);
-    buffer.skip(12);
+    buffer.set_position(_obj_start+ 80, std::ios::beg);
 }
 
 void hknpConvexShape::print(std::ostream &os) const {
@@ -2170,8 +2682,10 @@ nlohmann::json hknpConvexShape::to_json() const {
 }
 
 void hkcdSimdTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     nodes.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkcdSimdTree::print(std::ostream &os) const {
@@ -2186,34 +2700,50 @@ nlohmann::json hkcdSimdTree::to_json() const {
 }
 
 void hknpPhysicsSystemData_bodyCinfoWithAttachment::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     shape.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     flags = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     collisionCntrl = buffer.read_pod<short>();
-    buffer.skip(2);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     collisionFilterInfo = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 20, std::ios::beg);
     materialId = buffer.read_pod<unsigned short>();
+    buffer.set_position(_obj_start + 22, std::ios::beg);
     qualityId = buffer.read_pod<unsigned char>();
-    buffer.skip(1);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     motionType = buffer.read_pod<unsigned char>();
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     position.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     orientation.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     linearVelocity.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     angularVelocity.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     mass = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 120, std::ios::beg);
     massDistribution.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     motionPropertiesId = buffer.read_pod<unsigned short>();
-    buffer.skip(2);
+    buffer.set_position(_obj_start + 132, std::ios::beg);
     reservedBodyId.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 136, std::ios::beg);
     reservedMotionId = buffer.read_pod<unsigned int>();
+    buffer.set_position(_obj_start + 140, std::ios::beg);
     collisionLookAheadDistance = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 144, std::ios::beg);
     localFrame.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 160, std::ios::beg);
     attachedBody = buffer.read_pod<int>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start+ 176, std::ios::beg);
 }
 
 void hknpPhysicsSystemData_bodyCinfoWithAttachment::print(std::ostream &os) const {
@@ -2248,15 +2778,24 @@ nlohmann::json hknpPhysicsSystemData_bodyCinfoWithAttachment::to_json() const {
 }
 
 void hknpLodManagerCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     registerDefaultConfig = buffer.read_pod<hkBool>();
+    buffer.set_position(_obj_start + 1, std::ios::beg);
     autoBuildLodOnDynamicBodyAdded = buffer.read_pod<hkBool>();
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     autoBuildLodOnMeshBodyAdded = buffer.read_pod<hkBool>();
-    buffer.skip(1);
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     lodAccuray = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     slowToFastThreshold = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     fastToSlowThreshold = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     bodyIsBigThreshold = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 20, std::ios::beg);
     avgVelocityGain = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hknpLodManagerCinfo::print(std::ostream &os) const {
@@ -2277,13 +2816,18 @@ nlohmann::json hknpLodManagerCinfo::to_json() const {
 }
 
 void hkGeometry::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     vertices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     triangles.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 56, std::ios::beg);
 }
 
 void hkGeometry::print(std::ostream &os) const {
@@ -2302,19 +2846,30 @@ nlohmann::json hkGeometry::to_json() const {
 }
 
 void hkaiDirectedGraphExplicitCost::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     positions.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     nodes.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     edges.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     nodeData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     edgeData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     nodeDataStriding = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 108, std::ios::beg);
     edgeDataStriding = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     streamingSets.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 128, std::ios::beg);
 }
 
 void hkaiDirectedGraphExplicitCost::print(std::ostream &os) const {
@@ -2339,12 +2894,16 @@ nlohmann::json hkaiDirectedGraphExplicitCost::to_json() const {
 }
 
 void hknpDynamicCompoundShapeData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     aabbTree.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 64, std::ios::beg);
 }
 
 void hknpDynamicCompoundShapeData::print(std::ostream &os) const {
@@ -2362,13 +2921,18 @@ nlohmann::json hknpDynamicCompoundShapeData::to_json() const {
 }
 
 void hknpPhysicsSceneData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     systemDatas.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     worldCinfo.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 48, std::ios::beg);
 }
 
 void hknpPhysicsSceneData::print(std::ostream &os) const {
@@ -2387,30 +2951,42 @@ nlohmann::json hknpPhysicsSceneData::to_json() const {
 }
 
 void hknpCompressedMeshShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     edgeWeldingMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     shapeTagCodecInfo = buffer.read_pod<hkUint32>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     materialTable.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     data.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 136, std::ios::beg);
     triangleIsInterior.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 160, std::ios::beg);
     numTriangles = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 164, std::ios::beg);
     numConvexShapes = buffer.read_pod<int>();
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 176, std::ios::beg);
 }
 
 void hknpCompressedMeshShape::print(std::ostream &os) const {
@@ -2441,14 +3017,22 @@ nlohmann::json hknpCompressedMeshShape::to_json() const {
 }
 
 void hkpBallSocketConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     solvingMethod.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     bodiesToNotify = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     velocityStabilizationFactor.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 5, std::ios::beg);
     enableLinearImpulseLimit = buffer.read_pod<hkBool>();
-    buffer.skip(2);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     breachImpulse = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     inertiaStabilizationFactor = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkpBallSocketConstraintAtom::print(std::ostream &os) const {
@@ -2469,10 +3053,14 @@ nlohmann::json hkpBallSocketConstraintAtom::to_json() const {
 }
 
 void hkPropertyDesc::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     flags.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkPropertyDesc::print(std::ostream &os) const {
@@ -2488,20 +3076,28 @@ nlohmann::json hkPropertyDesc::to_json() const {
 }
 
 void hknpShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 64, std::ios::beg);
 }
 
 void hknpShape::print(std::ostream &os) const {
@@ -2525,14 +3121,20 @@ nlohmann::json hknpShape::to_json() const {
 }
 
 void hkxMesh_UserChannelInfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     attributeGroups.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     className.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 56, std::ios::beg);
 }
 
 void hkxMesh_UserChannelInfo::print(std::ostream &os) const {
@@ -2552,13 +3154,16 @@ nlohmann::json hkxMesh_UserChannelInfo::to_json() const {
 }
 
 void hknpRefWorldCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     info.read(buffer, tag_file);
-    buffer.skip(6);
+    buffer.set_position(_obj_start+ 304, std::ios::beg);
 }
 
 void hknpRefWorldCinfo::print(std::ostream &os) const {
@@ -2576,8 +3181,12 @@ nlohmann::json hknpRefWorldCinfo::to_json() const {
 }
 
 void hkaiStreamingSet_VolumeConnection::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     aCellIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     bCellIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkaiStreamingSet_VolumeConnection::print(std::ostream &os) const {
@@ -2592,7 +3201,9 @@ nlohmann::json hkaiStreamingSet_VolumeConnection::to_json() const {
 }
 
 void hkContainerHeapAllocator::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
     buffer.skip(1);
+    buffer.set_position(_obj_start+ 1, std::ios::beg);
 }
 
 void hkContainerHeapAllocator::print(std::ostream &os) const {
@@ -2605,7 +3216,10 @@ nlohmann::json hkContainerHeapAllocator::to_json() const {
 }
 
 void hkPropertyId::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     desc.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkPropertyId::print(std::ostream &os) const {
@@ -2619,7 +3233,10 @@ nlohmann::json hkPropertyId::to_json() const {
 }
 
 void hkQuaternionf::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     vec.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkQuaternionf::print(std::ostream &os) const {
@@ -2633,7 +3250,10 @@ nlohmann::json hkQuaternionf::to_json() const {
 }
 
 void hkRootLevelContainer::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     namedVariants.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkRootLevelContainer::print(std::ostream &os) const {
@@ -2647,10 +3267,16 @@ nlohmann::json hkRootLevelContainer::to_json() const {
 }
 
 void hkGeometry_Triangle::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     a = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     b = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     c = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     material = buffer.read_pod<int>();
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkGeometry_Triangle::print(std::ostream &os) const {
@@ -2667,11 +3293,14 @@ nlohmann::json hkGeometry_Triangle::to_json() const {
 }
 
 void hkReferencedObject::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkReferencedObject::print(std::ostream &os) const {
@@ -2688,9 +3317,12 @@ nlohmann::json hkReferencedObject::to_json() const {
 }
 
 void hkaAnnotationTrack_Annotation::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     time = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     text.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkaAnnotationTrack_Annotation::print(std::ostream &os) const {
@@ -2705,7 +3337,10 @@ nlohmann::json hkaAnnotationTrack_Annotation::to_json() const {
 }
 
 void hknpBodyId::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     serialAndIndex = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hknpBodyId::print(std::ostream &os) const {
@@ -2719,8 +3354,12 @@ nlohmann::json hknpBodyId::to_json() const {
 }
 
 void hkAabb::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     min.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     max.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkAabb::print(std::ostream &os) const {
@@ -2735,8 +3374,12 @@ nlohmann::json hkAabb::to_json() const {
 }
 
 void hkDefaultPropertyBag::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     propertyMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     transientPropertyMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 64, std::ios::beg);
 }
 
 void hkDefaultPropertyBag::print(std::ostream &os) const {
@@ -2751,19 +3394,32 @@ nlohmann::json hkDefaultPropertyBag::to_json() const {
 }
 
 void hknpCompressedMeshShapeTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     nodes.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     domain.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     numPrimitiveKeys = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 52, std::ios::beg);
     bitsPerKey = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     maxKeyValue = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 60, std::ios::beg);
     primitiveStoresIsFlatConvex = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     sections.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     primitives.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     sharedVerticesIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     packedVertices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     sharedVertices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 144, std::ios::beg);
     primitiveDataRuns.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 160, std::ios::beg);
 }
 
 void hknpCompressedMeshShapeTree::print(std::ostream &os) const {
@@ -2789,8 +3445,12 @@ nlohmann::json hknpCompressedMeshShapeTree::to_json() const {
 }
 
 void hkaiFaceEdgeIndexPair::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     faceIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     edgeIndex.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkaiFaceEdgeIndexPair::print(std::ostream &os) const {
@@ -2805,17 +3465,24 @@ nlohmann::json hkaiFaceEdgeIndexPair::to_json() const {
 }
 
 void hkaBoneAttachment::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     originalSkeletonName.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     boneFromAttachment.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     attachment.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     boneIndex = buffer.read_pod<hkInt16>();
-    buffer.skip(14);
+    buffer.set_position(_obj_start+ 128, std::ios::beg);
 }
 
 void hkaBoneAttachment::print(std::ostream &os) const {
@@ -2837,13 +3504,18 @@ nlohmann::json hkaBoneAttachment::to_json() const {
 }
 
 void hknpBodyQualityLibrary::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     qualityModifiedSignal.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     qualities.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 1312, std::ios::beg);
 }
 
 void hknpBodyQualityLibrary::print(std::ostream &os) const {
@@ -2862,15 +3534,22 @@ nlohmann::json hknpBodyQualityLibrary::to_json() const {
 }
 
 void hknpBodyQuality::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     priority = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 28, std::ios::beg);
     supportedFlags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     requestedFlags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     contactCachingRelativeMovementThreshold = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start+ 40, std::ios::beg);
 }
 
 void hknpBodyQuality::print(std::ostream &os) const {
@@ -2891,7 +3570,10 @@ nlohmann::json hknpBodyQuality::to_json() const {
 }
 
 void hkStringPtr::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     stringAndFlag.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkStringPtr::print(std::ostream &os) const {
@@ -2905,7 +3587,10 @@ nlohmann::json hkStringPtr::to_json() const {
 }
 
 void hkcdStaticMeshTreeBase_Section_DataRuns::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     data = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hkcdStaticMeshTreeBase_Section_DataRuns::print(std::ostream &os) const {
@@ -2919,12 +3604,16 @@ nlohmann::json hkcdStaticMeshTreeBase_Section_DataRuns::to_json() const {
 }
 
 void hknpRefMassDistribution::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     massDistribution.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 80, std::ios::beg);
 }
 
 void hknpRefMassDistribution::print(std::ostream &os) const {
@@ -2942,17 +3631,28 @@ nlohmann::json hknpRefMassDistribution::to_json() const {
 }
 
 void hkpConeLimitConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     isEnabled = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     twistAxisInA = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     refAxisInB = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 5, std::ios::beg);
     angleMeasurementMode.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 6, std::ios::beg);
     memOffsetToAngleOffset = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     minAngle = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     maxAngle = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     angularLimitsTauFactor = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 20, std::ios::beg);
     angularLimitsDampFactor = buffer.read_pod<hkReal>();
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkpConeLimitConstraintAtom::print(std::ostream &os) const {
@@ -2976,19 +3676,30 @@ nlohmann::json hkpConeLimitConstraintAtom::to_json() const {
 }
 
 void hknpRagdollData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     materials.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     motionProperties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     bodyCinfos.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     constraintCinfos.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     referencedObjects.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     skeleton.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 120, std::ios::beg);
     boneToBodyMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 136, std::ios::beg);
 }
 
 void hknpRagdollData::print(std::ostream &os) const {
@@ -3013,8 +3724,10 @@ nlohmann::json hknpRagdollData::to_json() const {
 }
 
 void hkpConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
-    buffer.skip(14);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkpConstraintAtom::print(std::ostream &os) const {
@@ -3028,18 +3741,28 @@ nlohmann::json hkpConstraintAtom::to_json() const {
 }
 
 void hkxMeshSection::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     vertexBuffer.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     indexBuffers.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     material.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     userChannels.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     vertexAnimations.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     linearKeyFrameHints.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     boneMatrixMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 120, std::ios::beg);
 }
 
 void hkxMeshSection::print(std::ostream &os) const {
@@ -3063,13 +3786,18 @@ nlohmann::json hkxMeshSection::to_json() const {
 }
 
 void hkxMesh::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     sections.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     userChannelInfos.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 56, std::ios::beg);
 }
 
 void hkxMesh::print(std::ostream &os) const {
@@ -3088,9 +3816,12 @@ nlohmann::json hkxMesh::to_json() const {
 }
 
 void hkHashMapDetail_Index::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     entries.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     hashMod = buffer.read_pod<int>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkHashMapDetail_Index::print(std::ostream &os) const {
@@ -3105,11 +3836,18 @@ nlohmann::json hkHashMapDetail_Index::to_json() const {
 }
 
 void hkCompressedMassProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     centerOfMass.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     inertia.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     majorAxisSpace.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     mass = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 28, std::ios::beg);
     volume = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkCompressedMassProperties::print(std::ostream &os) const {
@@ -3127,8 +3865,12 @@ nlohmann::json hkCompressedMassProperties::to_json() const {
 }
 
 void hkxMaterial_Property::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     key = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     value = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkxMaterial_Property::print(std::ostream &os) const {
@@ -3143,53 +3885,82 @@ nlohmann::json hkxMaterial_Property::to_json() const {
 }
 
 void hknpWorldCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     bodyBufferCapacity = buffer.read_pod<hkInt32>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     userBodyBuffer.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     motionBufferCapacity = buffer.read_pod<hkInt32>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     userMotionBuffer.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     constraintBufferCapacity = buffer.read_pod<hkInt32>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     userConstraintBuffer.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     constraintGroupBufferCapacity = buffer.read_pod<hkInt32>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     userConstraintGroupBuffer.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     persistentStreamAllocator.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     materialLibrary.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     motionPropertiesLibrary.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     qualityLibrary.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     simulationType = buffer.read_pod<unsigned char>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 100, std::ios::beg);
     numSplitterCells = buffer.read_pod<hkInt32>();
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     gravity.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     enableContactCaching = buffer.read_pod<hkBool>();
+    buffer.set_position(_obj_start + 129, std::ios::beg);
     mergeEventsBeforeDispatch = buffer.read_pod<hkBool>();
+    buffer.set_position(_obj_start + 130, std::ios::beg);
     broadPhaseType = buffer.read_pod<unsigned char>();
-    buffer.skip(13);
+    buffer.set_position(_obj_start + 144, std::ios::beg);
     broadPhaseAabb.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 176, std::ios::beg);
     broadPhaseConfig.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 184, std::ios::beg);
     collisionFilter.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 192, std::ios::beg);
     shapeTagCodec.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 200, std::ios::beg);
     collisionTolerance = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 204, std::ios::beg);
     relativeCollisionAccuracy = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 208, std::ios::beg);
     aabbMargin = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 212, std::ios::beg);
     enableWeldingForDefaultObjects = buffer.read_pod<hkBool>();
+    buffer.set_position(_obj_start + 213, std::ios::beg);
     enableWeldingForCriticalObjects = buffer.read_pod<hkBool>();
-    buffer.skip(2);
+    buffer.set_position(_obj_start + 216, std::ios::beg);
     lodManagerCinfo.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 240, std::ios::beg);
     enableSdfEdgeCollisions = buffer.read_pod<hkBool>();
+    buffer.set_position(_obj_start + 241, std::ios::beg);
     enableCollideWorkStealing = buffer.read_pod<hkBool>();
-    buffer.skip(2);
+    buffer.set_position(_obj_start + 244, std::ios::beg);
     solverTau = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 248, std::ios::beg);
     solverDamp = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 252, std::ios::beg);
     solverIterations = buffer.read_pod<hkInt32>();
+    buffer.set_position(_obj_start + 256, std::ios::beg);
     solverMicrosteps = buffer.read_pod<hkInt32>();
+    buffer.set_position(_obj_start + 260, std::ios::beg);
     maxApproachSpeedForHighQualitySolver = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 264, std::ios::beg);
     enableDeactivation = buffer.read_pod<hkBool>();
+    buffer.set_position(_obj_start + 265, std::ios::beg);
     enablePenetrationRecovery = buffer.read_pod<hkBool>();
-    buffer.skip(6);
+    buffer.set_position(_obj_start+ 272, std::ios::beg);
 }
 
 void hknpWorldCinfo::print(std::ostream &os) const {
@@ -3239,10 +4010,14 @@ nlohmann::json hknpWorldCinfo::to_json() const {
 }
 
 void hkReflect_Any::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     status = buffer.read_pod<unsigned char>();
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     buf.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkReflect_Any::print(std::ostream &os) const {
@@ -3258,10 +4033,14 @@ nlohmann::json hkReflect_Any::to_json() const {
 }
 
 void hkaSkeleton_Partition::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     startBoneIndex = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 10, std::ios::beg);
     numBones = buffer.read_pod<hkInt16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkaSkeleton_Partition::print(std::ostream &os) const {
@@ -3277,7 +4056,10 @@ nlohmann::json hkaSkeleton_Partition::to_json() const {
 }
 
 void hkHalf16::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     value = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start+ 2, std::ios::beg);
 }
 
 void hkHalf16::print(std::ostream &os) const {
@@ -3291,10 +4073,14 @@ nlohmann::json hkHalf16::to_json() const {
 }
 
 void hkpSetLocalTransformsConstraintAtom::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     type.read(buffer, tag_file);
-    buffer.skip(14);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     transformA.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     transformB.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 144, std::ios::beg);
 }
 
 void hkpSetLocalTransformsConstraintAtom::print(std::ostream &os) const {
@@ -3311,7 +4097,10 @@ nlohmann::json hkpSetLocalTransformsConstraintAtom::to_json() const {
 }
 
 void hkPropertyBag::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     bag.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkPropertyBag::print(std::ostream &os) const {
@@ -3325,9 +4114,12 @@ nlohmann::json hkPropertyBag::to_json() const {
 }
 
 void hkaBone::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     lockTranslation = buffer.read_pod<hkBool>();
-    buffer.skip(7);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkaBone::print(std::ostream &os) const {
@@ -3342,11 +4134,16 @@ nlohmann::json hkaBone::to_json() const {
 }
 
 void hknpMorphExternMesh::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(24);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     pristineGeom.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     deformedGeom.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     morphedVertices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     morphAmount.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 72, std::ios::beg);
 }
 
 void hknpMorphExternMesh::print(std::ostream &os) const {
@@ -3364,13 +4161,16 @@ nlohmann::json hknpMorphExternMesh::to_json() const {
 }
 
 void hkaAnimatedReferenceFrame::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     frameType.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkaAnimatedReferenceFrame::print(std::ostream &os) const {
@@ -3388,17 +4188,26 @@ nlohmann::json hkaAnimatedReferenceFrame::to_json() const {
 }
 
 void hknpPhysicsSystemData::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     materials.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     motionProperties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     bodyCinfos.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     constraintCinfos.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     referencedObjects.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 112, std::ios::beg);
 }
 
 void hknpPhysicsSystemData::print(std::ostream &os) const {
@@ -3421,14 +4230,18 @@ nlohmann::json hknpPhysicsSystemData::to_json() const {
 }
 
 void hknpShapeTagCodec::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     hints.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 28, std::ios::beg);
     type.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hknpShapeTagCodec::print(std::ostream &os) const {
@@ -3447,13 +4260,16 @@ nlohmann::json hknpShapeTagCodec::to_json() const {
 }
 
 void hknpCollisionFilter::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     type.read(buffer, tag_file);
-    buffer.skip(7);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hknpCollisionFilter::print(std::ostream &os) const {
@@ -3471,13 +4287,22 @@ nlohmann::json hknpCollisionFilter::to_json() const {
 }
 
 void hkaiNavMesh_Edge::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     a.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     b.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     oppositeEdge.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     oppositeFace.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 17, std::ios::beg);
     paddingByte = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     userEdgeCost.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 20, std::ios::beg);
 }
 
 void hkaiNavMesh_Edge::print(std::ostream &os) const {
@@ -3497,35 +4322,46 @@ nlohmann::json hkaiNavMesh_Edge::to_json() const {
 }
 
 void hknpCompoundShapeBase::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     edgeWeldingMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     shapeTagCodecInfo = buffer.read_pod<hkUint32>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     materialTable.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     instances.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 152, std::ios::beg);
     instanceVelocities.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 176, std::ios::beg);
     aabb.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 208, std::ios::beg);
     isMutable = buffer.read_pod<hkBool>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 212, std::ios::beg);
     estimatedNumShapeKeys = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 216, std::ios::beg);
     mutationSignals.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 240, std::ios::beg);
 }
 
 void hknpCompoundShapeBase::print(std::ostream &os) const {
@@ -3558,28 +4394,38 @@ nlohmann::json hknpCompoundShapeBase::to_json() const {
 }
 
 void hknpConvexPolytopeShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     vertices.read(buffer, tag_file);
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     planes.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 84, std::ios::beg);
     faces.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     indices.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     connectivity.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 112, std::ios::beg);
 }
 
 void hknpConvexPolytopeShape::print(std::ostream &os) const {
@@ -3608,9 +4454,14 @@ nlohmann::json hknpConvexPolytopeShape::to_json() const {
 }
 
 void hkRootLevelContainer_NamedVariant::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     className.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     variant.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hkRootLevelContainer_NamedVariant::print(std::ostream &os) const {
@@ -3626,9 +4477,14 @@ nlohmann::json hkRootLevelContainer_NamedVariant::to_json() const {
 }
 
 void hknpCompressedMeshShapeTreeDataRun::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     value.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     index = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     count = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hknpCompressedMeshShapeTreeDataRun::print(std::ostream &os) const {
@@ -3645,27 +4501,48 @@ nlohmann::json hknpCompressedMeshShapeTreeDataRun::to_json() const {
 }
 
 void hknpMotionProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     isExclusive = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     flags = buffer.read_pod<unsigned int>();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     gravityFactor = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     timeFactor = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     maxLinearSpeed = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 20, std::ios::beg);
     maxAngularSpeed = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     linearDamping = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 28, std::ios::beg);
     angularDamping = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     solverStabilizationSpeedThreshold = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     solverStabilizationSpeedReduction = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     maxDistSqrd = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 44, std::ios::beg);
     maxRotSqrd = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     invBlockSize = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 52, std::ios::beg);
     pathingUpperThreshold = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 54, std::ios::beg);
     pathingLowerThreshold = buffer.read_pod<hkInt16>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     numDeactivationFrequencyPasses = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 57, std::ios::beg);
     deactivationVelocityScaleSquare = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 58, std::ios::beg);
     minimumPathingVelocityScaleSquare = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 59, std::ios::beg);
     spikingVelocityScaleThresholdSquared = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 60, std::ios::beg);
     minimumSpikingVelocityScaleSquared = buffer.read_pod<hkUint8>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start+ 64, std::ios::beg);
 }
 
 void hknpMotionProperties::print(std::ostream &os) const {
@@ -3698,13 +4575,18 @@ nlohmann::json hknpMotionProperties::to_json() const {
 }
 
 void hknpConvexPolytopeShape_Connectivity::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     vertexEdges.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     faceLinks.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 56, std::ios::beg);
 }
 
 void hknpConvexPolytopeShape_Connectivity::print(std::ostream &os) const {
@@ -3723,7 +4605,10 @@ nlohmann::json hknpConvexPolytopeShape_Connectivity::to_json() const {
 }
 
 void hkaMeshBinding_Mapping::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     mapping.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkaMeshBinding_Mapping::print(std::ostream &os) const {
@@ -3737,14 +4622,22 @@ nlohmann::json hkaMeshBinding_Mapping::to_json() const {
 }
 
 void hknpConstraintCinfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     constraintData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     bodyA.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     bodyB.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     flags.read(buffer, tag_file);
-    buffer.skip(6);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     desiredConstraintId.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     constraintGroupId.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 40, std::ios::beg);
 }
 
 void hknpConstraintCinfo::print(std::ostream &os) const {
@@ -3764,9 +4657,14 @@ nlohmann::json hknpConstraintCinfo::to_json() const {
 }
 
 void hknpConvexPolytopeShape_Connectivity_Edge::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     faceIndex = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     edgeIndex = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     padding.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hknpConvexPolytopeShape_Connectivity_Edge::print(std::ostream &os) const {
@@ -3782,12 +4680,16 @@ nlohmann::json hknpConvexPolytopeShape_Connectivity_Edge::to_json() const {
 }
 
 void hknpShapeMassProperties::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     compressedMassProperties.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 56, std::ios::beg);
 }
 
 void hknpShapeMassProperties::print(std::ostream &os) const {
@@ -3805,7 +4707,10 @@ nlohmann::json hknpShapeMassProperties::to_json() const {
 }
 
 void hkPackedVector3::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     values.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 8, std::ios::beg);
 }
 
 void hkPackedVector3::print(std::ostream &os) const {
@@ -3819,25 +4724,34 @@ nlohmann::json hkPackedVector3::to_json() const {
 }
 
 void hknpCompositeShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     edgeWeldingMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     shapeTagCodecInfo = buffer.read_pod<hkUint32>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     materialTable.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 128, std::ios::beg);
 }
 
 void hknpCompositeShape::print(std::ostream &os) const {
@@ -3864,13 +4778,20 @@ nlohmann::json hknpCompositeShape::to_json() const {
 }
 
 void hknpShapeInstance::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     transform.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     scale.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     shape.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     shapeTag = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 90, std::ios::beg);
     destructionTag = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 92, std::ios::beg);
     padding.read(buffer, tag_file);
-    buffer.skip(6);
+    buffer.set_position(_obj_start+ 128, std::ios::beg);
 }
 
 void hknpShapeInstance::print(std::ostream &os) const {
@@ -3889,17 +4810,22 @@ nlohmann::json hknpShapeInstance::to_json() const {
 }
 
 void hkpLimitedHingeConstraintData_Atoms::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     transforms.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 144, std::ios::beg);
     setupStabilization.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 160, std::ios::beg);
     angMotor.read(buffer, tag_file);
-    buffer.skip(10);
+    buffer.set_position(_obj_start + 192, std::ios::beg);
     angFriction.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 208, std::ios::beg);
     angLimit.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 240, std::ios::beg);
     _2dAng.read(buffer, tag_file);
-    buffer.skip(13);
+    buffer.set_position(_obj_start + 256, std::ios::beg);
     ballSocket.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 272, std::ios::beg);
 }
 
 void hkpLimitedHingeConstraintData_Atoms::print(std::ostream &os) const {
@@ -3919,7 +4845,9 @@ nlohmann::json hkpLimitedHingeConstraintData_Atoms::to_json() const {
 }
 
 void hkcdDynamicTree_AnisotropicMetric::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
     buffer.skip(1);
+    buffer.set_position(_obj_start+ 1, std::ios::beg);
 }
 
 void hkcdDynamicTree_AnisotropicMetric::print(std::ostream &os) const {
@@ -3932,27 +4860,40 @@ nlohmann::json hkcdDynamicTree_AnisotropicMetric::to_json() const {
 }
 
 void hkaiNavMesh::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     faces.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     edges.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     vertices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     streamingSets.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     faceData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     edgeData.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 120, std::ios::beg);
     faceDataStriding = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 124, std::ios::beg);
     edgeDataStriding = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     flags = buffer.read_pod<unsigned char>();
-    buffer.skip(15);
+    buffer.set_position(_obj_start + 144, std::ios::beg);
     aabb.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 176, std::ios::beg);
     erosionRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 184, std::ios::beg);
     userData = buffer.read_pod<hkUlong>();
+    buffer.set_position(_obj_start + 192, std::ios::beg);
     clearanceCacheSeedingDataSet.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 208, std::ios::beg);
 }
 
 void hkaiNavMesh::print(std::ostream &os) const {
@@ -3982,8 +4923,12 @@ nlohmann::json hkaiNavMesh::to_json() const {
 }
 
 void hknpCompoundShapeBase_VelocityInfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     linearVelocity.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     angularVelocity.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hknpCompoundShapeBase_VelocityInfo::print(std::ostream &os) const {
@@ -3998,8 +4943,12 @@ nlohmann::json hknpCompoundShapeBase_VelocityInfo::to_json() const {
 }
 
 void hknpShapeSignals::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     shapeMutated.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     shapeDestroyed.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hknpShapeSignals::print(std::ostream &os) const {
@@ -4014,7 +4963,10 @@ nlohmann::json hknpShapeSignals::to_json() const {
 }
 
 void hkUFloat8::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     value = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start+ 1, std::ios::beg);
 }
 
 void hkUFloat8::print(std::ostream &os) const {
@@ -4028,37 +4980,48 @@ nlohmann::json hkUFloat8::to_json() const {
 }
 
 void hknpCompoundShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     edgeWeldingMap.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     shapeTagCodecInfo = buffer.read_pod<hkUint32>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     materialTable.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     instances.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 152, std::ios::beg);
     instanceVelocities.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 176, std::ios::beg);
     aabb.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 208, std::ios::beg);
     isMutable = buffer.read_pod<hkBool>();
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 212, std::ios::beg);
     estimatedNumShapeKeys = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 216, std::ios::beg);
     mutationSignals.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 240, std::ios::beg);
     boundingVolumeData.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start+ 256, std::ios::beg);
 }
 
 void hknpCompoundShape::print(std::ostream &os) const {
@@ -4092,12 +5055,20 @@ nlohmann::json hknpCompoundShape::to_json() const {
 }
 
 void hkcdFourAabb::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     lx.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     hx.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     ly.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     hy.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     lz.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     hz.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 96, std::ios::beg);
 }
 
 void hkcdFourAabb::print(std::ostream &os) const {
@@ -4116,7 +5087,10 @@ nlohmann::json hkcdFourAabb::to_json() const {
 }
 
 void hkcdDynamicTree_Codec32::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     aabb.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 32, std::ios::beg);
 }
 
 void hkcdDynamicTree_Codec32::print(std::ostream &os) const {
@@ -4130,11 +5104,14 @@ nlohmann::json hkcdDynamicTree_Codec32::to_json() const {
 }
 
 void hknpDynamicCompoundShapeTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(24);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     numLeaves = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 28, std::ios::beg);
     path = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     root = buffer.read_pod<unsigned short>();
-    buffer.skip(6);
+    buffer.set_position(_obj_start+ 40, std::ios::beg);
 }
 
 void hknpDynamicCompoundShapeTree::print(std::ostream &os) const {
@@ -4151,30 +5128,42 @@ nlohmann::json hknpDynamicCompoundShapeTree::to_json() const {
 }
 
 void hknpCapsuleShape::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     flags.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 34, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 35, std::ios::beg);
     numShapeKeyBits = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     dispatchType.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     convexRadius = buffer.read_pod<hkReal>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     properties.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     vertices.read(buffer, tag_file);
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     planes.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 84, std::ios::beg);
     faces.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     indices.read(buffer, tag_file);
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     connectivity.read(buffer, tag_file);
-    buffer.skip(8);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     a.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     b.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 144, std::ios::beg);
 }
 
 void hknpCapsuleShape::print(std::ostream &os) const {
@@ -4205,19 +5194,30 @@ nlohmann::json hknpCapsuleShape::to_json() const {
 }
 
 void hkaSkeleton::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     parentIndices.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     bones.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     referencePose.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     referenceFloats.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     floatSlots.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 112, std::ios::beg);
     localFrames.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 128, std::ios::beg);
     partitions.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 144, std::ios::beg);
 }
 
 void hkaSkeleton::print(std::ostream &os) const {
@@ -4242,37 +5242,58 @@ nlohmann::json hkaSkeleton::to_json() const {
 }
 
 void hknpMaterial::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(12);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     name.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     isExclusive = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 44, std::ios::beg);
     flags = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     triggerType.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 49, std::ios::beg);
     triggerManifoldTolerance.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 50, std::ios::beg);
     dynamicFriction.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 52, std::ios::beg);
     staticFriction.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 54, std::ios::beg);
     restitution.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 56, std::ios::beg);
     frictionCombinePolicy.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 57, std::ios::beg);
     restitutionCombinePolicy.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 58, std::ios::beg);
     weldingTolerance.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 60, std::ios::beg);
     maxContactImpulse = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 64, std::ios::beg);
     fractionOfClippedImpulseToApply = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 68, std::ios::beg);
     massChangerCategory.read(buffer, tag_file);
-    buffer.skip(1);
+    buffer.set_position(_obj_start + 70, std::ios::beg);
     massChangerHeavyObjectFactor.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 72, std::ios::beg);
     softContactForceFactor.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 74, std::ios::beg);
     softContactDampFactor.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 76, std::ios::beg);
     softContactSeparationVelocity.read(buffer, tag_file);
-    buffer.skip(3);
+    buffer.set_position(_obj_start + 80, std::ios::beg);
     surfaceVelocity.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 88, std::ios::beg);
     disablingCollisionsBetweenCvxCvxDynamicObjectsDistance.read(buffer, tag_file);
-    buffer.skip(6);
+    buffer.set_position(_obj_start + 96, std::ios::beg);
     userData = buffer.read_pod<hkUint64>();
+    buffer.set_position(_obj_start + 104, std::ios::beg);
     isShared = buffer.read_pod<hkBool>();
-    buffer.skip(7);
+    buffer.set_position(_obj_start+ 112, std::ios::beg);
 }
 
 void hknpMaterial::print(std::ostream &os) const {
@@ -4311,11 +5332,14 @@ nlohmann::json hknpMaterial::to_json() const {
 }
 
 void hknpBroadPhaseConfig::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start+ 24, std::ios::beg);
 }
 
 void hknpBroadPhaseConfig::print(std::ostream &os) const {
@@ -4332,9 +5356,14 @@ nlohmann::json hknpBroadPhaseConfig::to_json() const {
 }
 
 void hkQsTransformf::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     translation.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     rotation.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     scale.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 48, std::ios::beg);
 }
 
 void hkQsTransformf::print(std::ostream &os) const {
@@ -4350,7 +5379,10 @@ nlohmann::json hkQsTransformf::to_json() const {
 }
 
 void hkcdStaticMeshTreeBase_Section_SharedVertices::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     data = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hkcdStaticMeshTreeBase_Section_SharedVertices::print(std::ostream &os) const {
@@ -4364,9 +5396,12 @@ nlohmann::json hkcdStaticMeshTreeBase_Section_SharedVertices::to_json() const {
 }
 
 void hkaSkeleton_LocalFrameOnBone::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     localFrame.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     boneIndex = buffer.read_pod<hkInt16>();
-    buffer.skip(6);
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void hkaSkeleton_LocalFrameOnBone::print(std::ostream &os) const {
@@ -4381,9 +5416,14 @@ nlohmann::json hkaSkeleton_LocalFrameOnBone::to_json() const {
 }
 
 void hknpConvexPolytopeShape_Face::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     firstIndex = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 2, std::ios::beg);
     numIndices = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start + 3, std::ios::beg);
     minHalfAngle = buffer.read_pod<hkUint8>();
+    buffer.set_position(_obj_start+ 4, std::ios::beg);
 }
 
 void hknpConvexPolytopeShape_Face::print(std::ostream &os) const {
@@ -4399,14 +5439,18 @@ nlohmann::json hknpConvexPolytopeShape_Face::to_json() const {
 }
 
 void hkcdStaticAabbTree::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     shouldDeleteTree = buffer.read_pod<hkBool>();
-    buffer.skip(7);
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     treePtr.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 40, std::ios::beg);
 }
 
 void hkcdStaticAabbTree::print(std::ostream &os) const {
@@ -4425,17 +5469,26 @@ nlohmann::json hkcdStaticAabbTree::to_json() const {
 }
 
 void hkaAnimation::read(IO::File& buffer, Tag::TagFile& tag_file) {
-    buffer.skip(8);
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     propertyBag.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 16, std::ios::beg);
     memSizeAndFlags = buffer.read_pod<hkUint16>();
+    buffer.set_position(_obj_start + 18, std::ios::beg);
     refCount = buffer.read_pod<hkUint16>();
-    buffer.skip(4);
+    buffer.set_position(_obj_start + 24, std::ios::beg);
     type.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 28, std::ios::beg);
     duration = buffer.read_pod<hkReal>();
+    buffer.set_position(_obj_start + 32, std::ios::beg);
     numberOfTransformTracks = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 36, std::ios::beg);
     numberOfFloatTracks = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 40, std::ios::beg);
     extractedMotion.read(buffer, tag_file);
+    buffer.set_position(_obj_start + 48, std::ios::beg);
     annotationTracks.read(buffer, tag_file);
+    buffer.set_position(_obj_start+ 64, std::ios::beg);
 }
 
 void hkaAnimation::print(std::ostream &os) const {
@@ -4458,10 +5511,16 @@ nlohmann::json hkaAnimation::to_json() const {
 }
 
 void SPartShapeInfo::read(IO::File& buffer, Tag::TagFile& tag_file) {
+    const u64 _obj_start = buffer.get_position();
+    buffer.set_position(_obj_start + 0, std::ios::beg);
     partIndex = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 4, std::ios::beg);
     parentPartIndex = buffer.read_pod<int>();
+    buffer.set_position(_obj_start + 8, std::ios::beg);
     shapeKey = buffer.read_pod<hkUint32>();
+    buffer.set_position(_obj_start + 12, std::ios::beg);
     size = buffer.read_pod<int>();
+    buffer.set_position(_obj_start+ 16, std::ios::beg);
 }
 
 void SPartShapeInfo::print(std::ostream &os) const {

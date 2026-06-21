@@ -10,25 +10,26 @@
 #include <ranges>
 #include <algorithm>
 
-bool ApexArchiveManager::has_file(const uint64 hash) {
+bool ApexArchiveManager::has(const uint64& hash) {
     ZoneScoped;
     ensure_parent_loaded(hash);
     for (const auto &archive: m_archives | std::views::values) {
-        if (archive->has_file(hash)) return true;
+        if (archive->has(hash)) return true;
     }
     return false;
 }
 
-bool ApexArchiveManager::has_file(const std::string_view name) {
-    return has_file(hash_string(name));
+bool ApexArchiveManager::has(const std::string_view name) {
+    return has(hash_string(name));
 }
 
-std::unique_ptr<IO::File> ApexArchiveManager::get_file(const uint64 hash) {
-    ZoneScoped
+
+std::unique_ptr<IO::File> ApexArchiveManager::get(const uint64& hash) {
+    // ZoneScoped
     ensure_parent_loaded(hash);
 
     for (const auto &archive: m_archives | std::views::values) {
-        if (auto file = archive->get_file(hash); file) {
+        if (auto file = archive->get(hash); file) {
             return std::move(file);
         }
     }
@@ -36,8 +37,17 @@ std::unique_ptr<IO::File> ApexArchiveManager::get_file(const uint64 hash) {
     return nullptr;
 }
 
-std::unique_ptr<IO::File> ApexArchiveManager::get_file(const std::string_view name) {
-    return get_file(hash_string(name));
+std::unique_ptr<IO::File> ApexArchiveManager::get(const std::string_view name) {
+    return get(hash_string(name));
+}
+
+bool ApexArchiveManager::foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) {
+    for (const auto &archive: m_archives | std::views::values) {
+        if (!archive->foreach_file(callback)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 std::pair<bool, uint64> ApexArchiveManager::ensure_parent_loaded(const uint64 hash){
@@ -46,7 +56,7 @@ std::pair<bool, uint64> ApexArchiveManager::ensure_parent_loaded(const uint64 ha
 
     const auto parent_hash = *parent_opt;
     const auto was_mounted = is_mounted(parent_hash);
-    const auto mounted = m_load_archive(*this, parent_hash);
+    const auto mounted = load_child_archive(parent_hash);
 
     if (mounted.first) {
         touch_dynamic_mount(mounted.second != 0 ? mounted.second : parent_hash);

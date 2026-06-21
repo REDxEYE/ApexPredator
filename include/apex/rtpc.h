@@ -15,7 +15,7 @@
 
 #define RTPC_MAGIC "RTPC"
 
-#include "json.hpp"
+#include "nlohmann/json.hpp"
 
 
 enum class PropType:uint8 {

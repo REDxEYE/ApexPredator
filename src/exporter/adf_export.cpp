@@ -12,7 +12,7 @@
 #include "utils/hash_helper.h"
 
 #include "zstd.h"
-#include "tiny_gltf.h"
+#include "redscore/gltf/tiny_gltf.h"
 #include "tracy/Tracy.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/glm.hpp"
@@ -116,7 +116,7 @@ std::unique_ptr<Texture> export_terrain_texture(const TerrainTexture &terrain_te
 
 GltfHelper::Handle<tinygltf::Node> export_adf_file(ApexAppState &app_state, const uint32 path_hash) {
     ZoneScoped
-    auto result = app_state.manager().get_file(path_hash);
+    auto result = app_state.manager().get(path_hash);
 
     if (!result) {
         GLog_Error("File not found\n");

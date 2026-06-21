@@ -11,7 +11,6 @@
 
 #include "int_def.h"
 
-void set_db_path(const std::filesystem::path &path);
 std::optional<std::string> find_name(uint64 key);
 bool check_hash_presence(uint64 key);
 void store_hash_name(uint64 key, const std::string_view& value);

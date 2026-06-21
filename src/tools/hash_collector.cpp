@@ -11,9 +11,10 @@
 #include "exporter/havok_export.h"
 #include "utils/hash_helper.h"
 #include "apex/asset_db.h"
+#include "redscore/utils/memory_tracker.h"
 
 typedef struct Context {
-    assetdb_t *db;
+    AssetDB &db;
 } Context;
 
 bool visit_adf_file(std::unique_ptr<IO::File> &&file) {
@@ -26,7 +27,7 @@ bool visit_ptpc_nodes(Context &ctx, const RuntimeNode &runtime_node) {
         const auto &value = prop.value();
         if (std::holds_alternative<std::string>(value)) {
             const auto &str = std::get<std::string>(value);
-            assetdb_kv_put_u32(ctx.db, hash_string(str.c_str()), str.c_str());
+            ctx.db.kv_put(hash_string(str.c_str()), str.c_str());
         }
     }
 
@@ -52,10 +53,10 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, uint32 s
         auto sarc = std::make_unique<SArchive>(self_hash, std::move(section_buffer));
 
         for (const auto &arc_entry: sarc->entries()) {
-            assetdb_files_put(ctx.db, arc_entry.hash, arc_entry.name.data(), arc_entry.size, self_hash);
-            assetdb_kv_put_u32(ctx.db, arc_entry.hash, arc_entry.name.data());
+            ctx.db.kv_put(arc_entry.hash, arc_entry.name.data());
+            ctx.db.files_put(arc_entry.hash, arc_entry.name.data(), arc_entry.size, self_hash);
 
-            if (auto arc_file = sarc->get_file(arc_entry.hash)) {
+            if (auto arc_file = sarc->get(arc_entry.hash)) {
                 visit_archive_file(ctx, std::move(arc_file), arc_entry.hash);
             }
         }
@@ -67,16 +68,16 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, uint32 s
     else if (std::memcmp(first_buffer.data(), HAVOK_MAGIC, 4) == 0) {
         Havok::Tag::TagFile tag_file(std::move(file));
         for (const auto & tf_type : tag_file.types()) {
-            assetdb_kv_put_u32(ctx.db, hash_string(tf_type->name), tf_type->name.c_str());
+            ctx.db.kv_put(hash_string(tf_type->name), tf_type->name.c_str());
             for (const auto & member : tf_type->members) {
-                assetdb_kv_put_u32(ctx.db, hash_string(member.name), member.name.c_str());
+                ctx.db.kv_put(hash_string(member.name), member.name.c_str());
             }
         }
     }
     return true;
 }
 
-void ingest_strings_file(assetdb_t *db, const std::filesystem::path &path) {
+void ingest_strings_file(AssetDB &db, const std::filesystem::path &path) {
     std::ifstream f(path);
     if (!f.is_open()) {
         GLog_Error("Failed to open file: {}", path.string());
@@ -85,12 +86,15 @@ void ingest_strings_file(assetdb_t *db, const std::filesystem::path &path) {
     std::string line;
     while (std::getline(f, line)) {
         const auto hash = hash_string(line);
-        assetdb_kv_put_u32(db, hash, line.c_str());
+        db.kv_put(hash, line.c_str());
     }
 }
 
 
 int main(int argc, const char *argv[]) {
+    AssetDB assetdb("./../hashes.db");
+    AssetDB::set_instance(&assetdb);
+
     mp_init();
     init_havok_type_info();
     init_adf_type_info();
@@ -99,40 +103,38 @@ int main(int argc, const char *argv[]) {
         printf("USAGE: %s <path_to_game_root>\n", argv[0]);
         return 0;
     }
-    set_db_path("./../hashes.db");
 
-    assetdb_t *db = get_assets_db();
-    ingest_strings_file(db, "./../gz_strings/strings_general.txt");
-    ingest_strings_file(db, "./../gz_strings/file_locations.txt");
-    ingest_strings_file(db, "./../gz_strings/filenames.txt");
-    ingest_strings_file(db, "./../gz_strings/cross_game.txt");
-    ingest_strings_file(db, "./../gz_strings/game_dump_clean.txt");
+    ingest_strings_file(assetdb, "./../gz_strings/strings_general.txt");
+    ingest_strings_file(assetdb, "./../gz_strings/file_locations.txt");
+    ingest_strings_file(assetdb, "./../gz_strings/filenames.txt");
+    ingest_strings_file(assetdb, "./../gz_strings/cross_game.txt");
+    ingest_strings_file(assetdb, "./../gz_strings/game_dump_clean.txt");
 
     ApexAppState app_state(argv[1]);
 
 
     Context context = {
-        .db = db,
+        .db = assetdb,
     };
 
 
-    app_state.manager().foreach_file([&](const ArchiveEntry &entry)-> bool {
-        const auto name = find_name(entry.path_hash).value_or(std::format("<{:08X}>", entry.path_hash));
+    app_state.manager().foreach_file([&](const Archive<u64>::ArchiveEntry &entry)-> bool {
+        const auto name = find_name(entry.key).value_or(std::format("<{:08X}>", entry.key));
 
+        
         // assetdb_files_put(ctx->db, entry->path_hash, StringView_cstr(asset_path), size, 0);
 
         GLog_Info("Processing file: {}", name);
-        auto file = app_state.manager().get_file(entry.path_hash);
+        auto file = app_state.manager().get(entry.key);
         if (!file) {
             GLog_Error("Failed to read file: {}", name);
             return true; // Just skip file
         }
-        visit_archive_file(context, std::move(file), entry.path_hash);
+        visit_archive_file(context, std::move(file), entry.key);
         return true;
     });
 
 
-    assetdb_close(db);
     mp_shutdown();
     return 0;
 }

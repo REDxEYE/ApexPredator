@@ -11,7 +11,7 @@
 #include "redscore/platform/logger.h"
 #include "redscore/utils/simple_fileio.h"
 
-#include "tiny_gltf.h"
+#include "redscore/gltf/tiny_gltf.h"
 #include "exporter/ddsc_export.h"
 #include "exporter/fmod_export.h"
 #include "exporter/havok_export.h"
@@ -23,10 +23,10 @@
 
 GltfHelper::Handle<tinygltf::Node> export_file(ApexAppState &app_state, const uint32 hash) {
     ZoneScoped
-    auto& manager = app_state.manager();
+    auto &manager = app_state.manager();
     auto path = find_name(hash).value_or(std::format("unnamed/unknown_{:08X}", hash));
     GLog_Info("Exporting file: {}", path);
-    auto buffer = manager.get_file(hash);
+    auto buffer = manager.get(hash);
     if (!buffer) {
         GLog_Error("File \"{}\" not found", path);
         return {};
@@ -62,17 +62,17 @@ GltfHelper::Handle<tinygltf::Node> export_file(ApexAppState &app_state, const ui
             GLog_Error("Failed to write MKV file \"{}\" to path: \"{}\". Error: {}", path, export_path.string(),
                        e.what());
         }
+        return {};
     }
-    else {
-        const std::filesystem::path &unk_file_export_path = get_export_path(app_state.export_path(), hash, ".bin");
-        std::filesystem::create_directories(unk_file_export_path.parent_path());
-        try {
-            write_file(unk_file_export_path, mb);
-            GLog_Info("Unknown file \"{}\" has been written to file: \"{}\"", path, unk_file_export_path.string());
-        } catch (const std::exception &e) {
-            GLog_Error("Failed to write unknown file \"{}\" to path: \"{}\". Error: {}", path,
-                       unk_file_export_path.string(), e.what());
-        }
+
+    const std::filesystem::path &unk_file_export_path = get_export_path(app_state.export_path(), hash, ".bin");
+    std::filesystem::create_directories(unk_file_export_path.parent_path());
+    try {
+        write_file(unk_file_export_path, mb);
+        GLog_Info("Unknown file \"{}\" has been written to file: \"{}\"", path, unk_file_export_path.string());
+    } catch (const std::exception &e) {
+        GLog_Error("Failed to write unknown file \"{}\" to path: \"{}\". Error: {}", path,
+                   unk_file_export_path.string(), e.what());
     }
     return {};
 }

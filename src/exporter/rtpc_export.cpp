@@ -2,7 +2,7 @@
 
 #include "exporter/rtpc_export.h"
 
-#include "tiny_gltf.h"
+#include "redscore/gltf/tiny_gltf.h"
 #include "glm/glm.hpp"
 #include "glm/gtx/quaternion.hpp"
 
@@ -129,10 +129,12 @@ void handle_CCharacter(ApexAppState &app_state,
     GltfHelper &helper = app_state.helper();
 
     if (!node.has(0xE8129FE6)) {
+        std::cout << node.to_json() << std::endl;
         GLog_Error("Failed to get model property for CCharacter");
         return;
     }
     if (!node.has(0x26FA86FE)) {
+        std::cout << node.to_json() << std::endl;
         GLog_Error("Failed to get skeleton property for CCharacter");
         return;
     }
@@ -160,7 +162,7 @@ void handle_CCharacter(ApexAppState &app_state,
         GLog_Error("Failed to get root bone for CCharacter");
         throw std::runtime_error("Failed to get root bone for CCharacter");
     }
-    helper.set_parent(root_bone, parent_gltf_node);
+    // helper.set_parent(parent_gltf_node, root_bone);
 
     const auto output_node = export_adf_file(app_state, hash_string(model_filename));
 
@@ -345,6 +347,7 @@ void handle_CBoneAttachment(ApexAppState &app_state, const RuntimeNode &node, co
     std::string node_name;
     if (node.has("name")) {
         node_name = node.get<std::string>("name");
+        node_name = "<Attachment> " + node_name;
     }
     else {
         node_name = find_name(node.name_hash()).value_or(std::format("node_{:08X}", node.name_hash()));
@@ -447,14 +450,7 @@ GltfHelper::Handle<Node> export_rtpc(ApexAppState &app_state, const std::unique_
 
     const RuntimeNode root_node = RuntimeNode::RootNode(buffer);
 
-    // RuntimeNode_print(root_node, stdout, 0);
-    // String epe_json = {};
-    // String_init(&epe_json, 8192);
-    // RuntimeNode_emit_json(root_node, &epe_json, 0);
-    // printf("%s\n", String_data(&epe_json));
-
     const auto path = find_name(path_hash).value_or(std::format("path_{:08X}", path_hash));
-
 
     const auto epe_root_node = helper.make<Node>();
     epe_root_node->name = "epe_root";

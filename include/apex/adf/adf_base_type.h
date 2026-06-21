@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 #include "redscore/platform/file/file.h"
-#include "json.hpp"
+#include "nlohmann/json.hpp"
 
 namespace ADF {
     struct BaseType {

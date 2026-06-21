@@ -53,7 +53,7 @@ namespace AVTX {
 
 #pragma pack(pop)
 
-    std::unique_ptr<Texture> from_buffer(std::unique_ptr<IO::File> &&buffer, uint32 hash, ArchiveManager& manager);
+    std::unique_ptr<Texture> from_buffer(std::unique_ptr<IO::File> &&buffer, uint32 hash, ApexArchiveManager& manager);
 
     // void AVTXTexture_from_png(const String* png_path, const String* output_texture_name, const String *output_dir);
 }

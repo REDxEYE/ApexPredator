@@ -39,14 +39,12 @@ void export_spline_compressed_animation(ApexAppState &app_state,
 
     std::vector<float32> timestamps = {};
 
-    const auto& extracted_motion = spline_animation->extractedMotion;
-    const auto& ref_frame = Havok::as<HavokTypes::hkaDefaultAnimatedReferenceFrame>(extracted_motion);
-    const hkArray<hkVector4f, HavokTypes::hkContainerHeapAllocator>* root_motion_frames = nullptr;
-    if (ref_frame!=nullptr) {
+    const auto &extracted_motion = spline_animation->extractedMotion;
+    const auto &ref_frame = Havok::as<HavokTypes::hkaDefaultAnimatedReferenceFrame>(extracted_motion);
+    const hkArray<hkVector4f, HavokTypes::hkContainerHeapAllocator> *root_motion_frames = nullptr;
+    if (ref_frame != nullptr) {
         root_motion_frames = &ref_frame->referenceFrameSamples;
     }
-
-
 
 
     timestamps.reserve(spline_animation->numFrames);
@@ -101,12 +99,12 @@ void export_spline_compressed_animation(ApexAppState &app_state,
             const TransformSplineBlock *block = &decompressor.blocks[block_id];
             auto [translation, rotation, scale] = block->GetValue(track_id, local_frame);
 
-            if (bone_id==0 && apply_root_motion && root_motion_frames) {
-                const auto& root_frame = root_motion_frames->at(frame_id);
-                translation+=root_frame;
+            if (bone_id == 0 && apply_root_motion && root_motion_frames) {
+                const auto &root_frame = root_motion_frames->at(frame_id);
+                translation += root_frame;
 
-                if (root_frame.value.x!=0.0f) {
-                    rotation = glm::rotate(rotation,root_frame.value.w, glm::vec3(ref_frame->up.value));
+                if (root_frame.value.x != 0.0f) {
+                    rotation = glm::rotate(rotation, root_frame.value.w, glm::vec3(ref_frame->up.value));
                 }
 
                 // translation.y +=root_frame.value.z;
@@ -205,6 +203,7 @@ GltfHelper::Handle<tinygltf::Node> export_havok_file(ApexAppState &app_state,
     Havok::Tag::TagFile tag_file(std::move(buffer));
 
     const auto item_obj = Havok::Tag::get_item(tag_file, 1);
+    GltfHelper::Handle<tinygltf::Node> skeleton_id = {};
 
     if (const auto root_container = Havok::as<HavokTypes::hkRootLevelContainer>(item_obj)) {
         if (root_container->namedVariants.empty()) {
@@ -213,22 +212,29 @@ GltfHelper::Handle<tinygltf::Node> export_havok_file(ApexAppState &app_state,
         // if (root_container->namedVariants.size() > 1) {
         //     throw std::runtime_error("Multiple named variants in root container");
         // }
-        const auto &named_variant = root_container->namedVariants.front();
-        if (named_variant.className == "hkaAnimationContainer") {
-            if (const auto animation_container = Havok::as<HavokTypes::hkaAnimationContainer>(named_variant.variant)) {
-                return export_animation_container(app_state, animation_container);
-            }
-            const auto &ti = typeid(*named_variant.variant);
-            throw std::runtime_error(std::format(
-                "Malformed hkaAnimationContainer, supposed to have hkaAnimationContainer, but had {}", ti.name()));
-        }else {
-            std::filesystem::path unk_file_export_path = app_state.export_path() / path;
-            unk_file_export_path.replace_extension("json");
+        for (const auto &[i, named_variant]: root_container->namedVariants|std::views::enumerate) {
+            if (named_variant.className == "hkaAnimationContainer") {
+                if (const auto animation_container = Havok::as<HavokTypes::hkaAnimationContainer>(named_variant.variant)) {
+                    skeleton_id = export_animation_container(app_state, animation_container);
+                }else {
+                    throw std::runtime_error(std::format(
+                        "Malformed hkaAnimationContainer, supposed to have hkaAnimationContainer, but had {}",
+                        static_cast<std::string_view>(named_variant.className.stringAndFlag)));
+                }
+            } else {
+                std::filesystem::path unk_file_export_path = app_state.export_path() / path;
+                unk_file_export_path.replace_extension(std::format(".{}.{}.json", i,
+                    static_cast<std::string_view>(named_variant.className.stringAndFlag)));
+                std::filesystem::create_directories(unk_file_export_path.parent_path());
 
-            std::ofstream json_out(unk_file_export_path);
-            json_out << root_container->to_json().dump(2);
-            json_out.close();
+                std::ofstream json_out(unk_file_export_path);
+                json_out << named_variant.to_json().dump(2);
+                json_out.close();
+            }
         }
+    }
+    if (skeleton_id.is_valid()) {
+        return skeleton_id;
     }
     return {};
 }
@@ -269,8 +275,7 @@ GltfHelper::Handle<tinygltf::Node> export_skeleton(ApexAppState &app_state,
         const int16 bone_parent_id = skeleton->parentIndices[bone_id];
         if (bone_parent_id >= 0) {
             bones[bone_parent_id]->children.push_back(bone_node.index());
-        }
-        else {
+        } else {
             skeleton_node->children.push_back(bone_node.index());
         }
         const HavokTypes::hkQsTransform &transform = skeleton->referencePose[bone_id];
@@ -291,10 +296,10 @@ GltfHelper::Handle<tinygltf::Node> export_skeleton(ApexAppState &app_state,
         inverse_matrices.push_back(inverse_matrix);
     }
     const auto accessor = helper.create_accessor_chain(reinterpret_cast<uint8 *>(inverse_matrices.data()),
-                                                         inverse_matrices.size() * 16 * sizeof(float32), 0,
-                                                         TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_MAT4,
-                                                         inverse_matrices.size(), false, 0, 0,
-                                                         "inverse_matrices"
+                                                       inverse_matrices.size() * 16 * sizeof(float32), 0,
+                                                       TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_MAT4,
+                                                       inverse_matrices.size(), false, 0, 0,
+                                                       "inverse_matrices"
     );
 
     skin->inverseBindMatrices = accessor.accessor.index();

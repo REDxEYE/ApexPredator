@@ -80,6 +80,11 @@ add_executable(HavokTypeGenerator
         ${CommonFiles}
 )
 
+add_executable(ReadTester
+        src/tools/read_tester.cpp
+        ${CommonFiles}
+)
+
 add_executable(HashCollector
         src/tools/hash_collector.cpp
         ${CommonFiles}
@@ -95,16 +100,19 @@ if (UNIX)
     target_link_libraries(AdfTypeGenerator PUBLIC m)
     target_link_libraries(HavokTypeGenerator PUBLIC m)
     target_link_libraries(HashCollector PUBLIC m)
-else ()
+    target_link_libraries(ReadTester PUBLIC m)
+elseif (MSVC)
     target_compile_options(AdfLib PRIVATE /bigobj)
     target_compile_options(HavokLib PRIVATE /bigobj)
     target_compile_options(ApexPredator PRIVATE /bigobj)
     target_compile_options(HashCollector PRIVATE /bigobj)
+    target_compile_options(ReadTester PRIVATE /bigobj)
 endif ()
 
 SET(CommonLibs
         RedsCore
         SQLiteCpp
+
 )
 
 target_include_directories(AdfLib PUBLIC include)
@@ -116,6 +124,7 @@ target_include_directories(HashCollector PUBLIC include)
 target_include_directories(StringHasher PUBLIC include)
 
 target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib Ogg::ogg vorbis vorbisenc ${CommonLibs})
+target_link_libraries(ReadTester PUBLIC HavokLib AdfLib ${CommonLibs})
 target_link_libraries(HashCollector PUBLIC HavokLib AdfLib ${CommonLibs})
 target_link_libraries(AdfTypeGenerator PUBLIC ${CommonLibs})
 target_link_libraries(HavokTypeGenerator PUBLIC ${CommonLibs})
@@ -128,7 +137,8 @@ add_compile_definitions(GLM_ENABLE_EXPERIMENTAL TRACY_CALLSTACK=32)
 
 target_link_libraries(ApexPredator PRIVATE CLI11::CLI11)
 target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_ON_DEMAND)
- target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_ON_DEMAND)
+target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_ON_DEMAND)
+target_compile_definitions(ReadTester PRIVATE TRACY_MEMORY TRACY_ON_DEMAND)
 
 if (WIN32)
 

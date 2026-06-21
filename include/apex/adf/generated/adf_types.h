@@ -4,7 +4,7 @@
 #include "apex/adf/adf_base_type.h"
 #include "apex/adf/adf_support_types.h"
 
-#include "json.hpp"
+#include "nlohmann/json.hpp"
 #include "apex/adf/generated/adf_types_fwd.h"
 
 namespace ADFTypes {

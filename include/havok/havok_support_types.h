@@ -258,18 +258,22 @@ public:
         }
         const auto info = tag_file.get_item_info(index);
         auto item_buffer = tag_file.get_item_buffer(index);
+        const auto item_info = tag_file.get_item_info(index);
         if (info.count > 0) {
             this->resize(info.count);
             if constexpr (std::is_base_of_v<BaseType, T>) {
                 for (uint32 i = 0; i < info.count; i++) {
+                    item_buffer.set_position(i * item_info.type()->size(), std::ios::beg);
                     this->operator[](i).read(item_buffer, tag_file);
                 }
             } else if constexpr (std::is_base_of_v<std::unique_ptr<BaseType>, T>) {
                 for (uint32 i = 0; i < info.count; i++) {
+                    item_buffer.set_position(i * item_info.type()->size(), std::ios::beg);
                     this->operator[](i)->read(item_buffer, tag_file);
                 }
             } else {
                 for (uint32 i = 0; i < info.count; i++) {
+                    item_buffer.set_position(i * item_info.type()->size(), std::ios::beg);
                     this->operator[](i) = item_buffer.read_pod<T>();
                 }
             }
@@ -309,18 +313,22 @@ struct hkRelArray : hkArray<T, std::monostate> {
         }
         const auto info = tag_file.get_item_info(index);
         auto item_buffer = tag_file.get_item_buffer(index);
+        const auto item_info = tag_file.get_item_info(index);
         if (info.count > 0) {
             this->resize(info.count);
             if constexpr (std::is_base_of_v<Havok::BaseType, T>) {
                 for (uint32 i = 0; i < info.count; i++) {
+                    item_buffer.set_position(i * item_info.type()->size(), std::ios::beg);
                     this->operator[](i).read(item_buffer, tag_file);
                 }
             } else if constexpr (std::is_base_of_v<std::unique_ptr<Havok::BaseType>, T>) {
                 for (uint32 i = 0; i < info.count; i++) {
+                    item_buffer.set_position(i * item_info.type()->size(), std::ios::beg);
                     this->operator[](i)->read(item_buffer, tag_file);
                 }
             } else {
                 for (uint32 i = 0; i < info.count; i++) {
+                    item_buffer.set_position(i * item_info.type()->size(), std::ios::beg);
                     this->operator[](i) = item_buffer.read_pod<T>();
                 }
             }
@@ -341,18 +349,22 @@ public:
         }
         const auto info = tag_file.get_item_info(index);
         auto item_buffer = tag_file.get_item_buffer(index);
+        const auto item_info = tag_file.get_item_info(index);
         if (info.count > 0) {
             this->resize(info.count);
             if constexpr (std::is_base_of_v<Havok::BaseType, T>) {
                 for (uint32 i = 0; i < info.count; i++) {
+                    item_buffer.set_position(i * item_info.type()->size(), std::ios::beg);
                     this->operator[](i).read(item_buffer, tag_file);
                 }
             } else if constexpr (std::is_base_of_v<std::unique_ptr<Havok::BaseType>, T>) {
                 for (uint32 i = 0; i < info.count; i++) {
+                    item_buffer.set_position(i * item_info.type()->size(), std::ios::beg);
                     this->operator[](i)->read(item_buffer, tag_file);
                 }
             } else {
                 for (uint32 i = 0; i < info.count; i++) {
+                    item_buffer.set_position(i * item_info.type()->size(), std::ios::beg);
                     this->operator[](i) = item_buffer.read_pod<T>();
                 }
             }
@@ -588,7 +600,6 @@ class hkHandle : public Havok::BaseType {
 public:
     void read(IO::File &buffer, Havok::Tag::TagFile &tag_file) override {
         value = buffer.read_pod<V>();
-        throw std::runtime_error("hkHandle is not supported yet");
     }
 
     void print(std::ostream &out) const override {
@@ -596,7 +607,7 @@ public:
     }
 
     [[nodiscard]] nlohmann::json to_json() const override {
-        throw std::runtime_error("hkHandle is not supported yet");
+        return value;
     }
 
 private:
@@ -614,11 +625,11 @@ public:
     }
 
     void print(std::ostream &out) const override {
-        throw std::runtime_error("hkaiIndex is not supported yet");
+        out << value;
     }
 
     [[nodiscard]] nlohmann::json to_json() const override {
-        throw std::runtime_error("hkaiIndex is not supported yet");
+        return value;
     }
 
 private:
@@ -651,7 +662,9 @@ public:
     }
 
     [[nodiscard]] nlohmann::json to_json() const override {
-        throw std::runtime_error("hkaiPackedKey_ is not supported yet");
+        nlohmann::json json;
+        json["key"] = key.to_json();
+        return json;
     }
 
 private:

@@ -450,7 +450,7 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
                 const Type &inner_type = get_type_or_throw(lib, std::get<TypeAndSize>(member_type.data).type_hash);
                 impl_stream << std::format("    for(int i = 0; i < {}; ++i) {{\n",
                                            std::get<TypeAndSize>(member_type.data).count);
-                if (inner_type.type == DataType::Structure || inner_type.type == DataType::Array) {
+                if (inner_type.type == DataType::Structure || inner_type.type == DataType::Array || inner_type.type == DataType::StringHash) {
                     impl_stream << std::format("        {}[i].read(buffer);\n", member.name);
                 } else if (inner_type.type == DataType::Primitive) {
                     impl_stream << std::format("        {}[i] = buffer.read_pod<{}>();\n",
@@ -466,9 +466,9 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
 
             case DataType::StringType:
                 impl_stream << "    {\n";
-                impl_stream << "        std::streamoff original_offset = buffer.get_position();\n";
                 impl_stream << "        uint32 string_offset = buffer.read_pod<uint32>();\n";
                 impl_stream << "        uint32 unk = buffer.read_pod<uint32>();\n";
+                impl_stream << "        std::streamoff original_offset = buffer.get_position();\n";
                 impl_stream << "        buffer.set_position(string_offset, std::ios::beg);\n";
                 impl_stream << std::format("        {} = buffer.read_cstring();\n", member.name);
                 impl_stream << "        buffer.set_position(original_offset, std::ios::beg);\n";

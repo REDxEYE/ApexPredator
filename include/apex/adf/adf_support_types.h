@@ -8,7 +8,7 @@
 #include "apex/hashes.h"
 #include "adf_base_type.h"
 #include "redscore/platform/file/file.h"
-#include "json.hpp"
+#include "nlohmann/json.hpp"
 
 using String = std::string;
 
@@ -28,7 +28,12 @@ struct StringHash : ADF::BaseType {
         if constexpr (width == 4) {
             storage = buffer.read_pod<uint32>();
             return;
-        } else if constexpr (width == 6 || width == 8) {
+        } else if constexpr (width == 6) {
+            u32 tmp = buffer.read_pod<uint32>();
+            u16 tmp2 = buffer.read_pod<uint16>();
+            storage = (static_cast<uint64>(tmp) << 32) | tmp2;
+            return;
+        } else if constexpr (width == 8) {
             storage = buffer.read_pod<uint64>();
             return;
         }
@@ -92,7 +97,12 @@ public:
         if constexpr (std::is_same_v<T, std::string>) {
             for (uint32 i = 0; i < count; ++i) {
                 std::string &str = this->operator[](i);
+                const auto string_offset = buffer.read_pod<uint32>();
+                buffer.skip(4);
+                const std::streamoff original_offset2 = buffer.get_position();
+                buffer.set_position(string_offset, std::ios::beg);
                 buffer.read_cstring(str);
+                buffer.set_position(original_offset2, std::ios::beg);
             }
         } else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType> >) {
             for (uint32 i = 0; i < count; ++i) {

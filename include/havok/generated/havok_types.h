@@ -7,7 +7,7 @@
 #include "havok/generated/havok_types_fwd.h"
 
 #include "havok/havok_base_type.h"
-#include "json.hpp"
+#include "nlohmann/json.hpp"
 namespace HavokTypes {
 
 /*
@@ -19,7 +19,7 @@ struct hkcdStaticMeshTreeBase_PrimitiveDataRunBase<hknpCompressedMeshShapeTreeDa
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -27,7 +27,7 @@ struct hknpCompressedMeshShapeTreeDataRun: hkcdStaticMeshTreeBase_PrimitiveDataR
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdStaticTree_Codec3Axis: Havok::BaseType { // size: 3, alignment: 1
@@ -35,7 +35,7 @@ struct hkcdStaticTree_Codec3Axis: Havok::BaseType { // size: 3, alignment: 1
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdStaticTree_Codec3Axis4: hkcdStaticTree_Codec3Axis { // size: 4, alignment: 1
@@ -43,7 +43,7 @@ struct hkcdStaticTree_Codec3Axis4: hkcdStaticTree_Codec3Axis { // size: 4, align
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -53,7 +53,7 @@ struct hkcdStaticTree_DynamicStorage<hkcdStaticTree_Codec3Axis4>: Havok::BaseTyp
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -64,7 +64,7 @@ struct hkcdStaticTree_Tree: hkcdStaticTree_DynamicStorage<hkcdStaticTree_Codec3A
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -84,7 +84,7 @@ struct hkcdStaticMeshTreeBase_Section: hkcdStaticTree_Tree<hkcdStaticTree_Dynami
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdStaticMeshTreeBase_Primitive: Havok::BaseType { // size: 4, alignment: 1
@@ -92,7 +92,7 @@ struct hkcdStaticMeshTreeBase_Primitive: Havok::BaseType { // size: 4, alignment
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdStaticTree_Codec3Axis5: hkcdStaticTree_Codec3Axis { // size: 5, alignment: 1
@@ -101,7 +101,7 @@ struct hkcdStaticTree_Codec3Axis5: hkcdStaticTree_Codec3Axis { // size: 5, align
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdStaticMeshTreeBase: hkcdStaticTree_Tree<hkcdStaticTree_DynamicStorage<hkcdStaticTree_Codec3Axis5>> { // size: 112, alignment: 16
@@ -115,7 +115,7 @@ struct hkcdStaticMeshTreeBase: hkcdStaticTree_Tree<hkcdStaticTree_DynamicStorage
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 template<typename, typename>
@@ -136,7 +136,7 @@ struct hknpCompressedMeshShapeTree: hkcdStaticMeshTree<hkcdStaticMeshTreeCommonC
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdSimdTree_Node: hkcdFourAabb { // size: 112, alignment: 16
@@ -144,7 +144,7 @@ struct hkcdSimdTree_Node: hkcdFourAabb { // size: 112, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdSimdTree: hkBaseObject { // size: 24, alignment: 8
@@ -152,7 +152,7 @@ struct hkcdSimdTree: hkBaseObject { // size: 24, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdStaticMeshTreeBase_Connectivity: Havok::BaseType { // size: 48, alignment: 8
@@ -162,7 +162,7 @@ struct hkcdStaticMeshTreeBase_Connectivity: Havok::BaseType { // size: 48, align
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkPropertyDesc: Havok::BaseType { // size: 24, alignment: 8
@@ -172,7 +172,7 @@ struct hkPropertyDesc: Havok::BaseType { // size: 24, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -182,7 +182,7 @@ struct hkPtrAndInt<hkPropertyDesc, unsigned int, 1>: Havok::BaseType { // size: 
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -191,7 +191,7 @@ struct hkPropertyId: Havok::BaseType { // size: 8, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkReflect_Any: Havok::BaseType { // size: 32, alignment: 16
@@ -201,7 +201,7 @@ struct hkReflect_Any: Havok::BaseType { // size: 32, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -212,7 +212,7 @@ struct hkTuple<hkPropertyId, hkReflect_Any, void, void, void, void, void, void>:
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -222,7 +222,7 @@ struct hkHashMapDetail_MapTuple: hkTuple<hkPropertyId, hkReflect_Any, void, void
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -232,7 +232,7 @@ struct hkHashMapDetail_Index: Havok::BaseType { // size: 16, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -243,7 +243,7 @@ struct hkHashBase<hkHashMapDetail_MapTuple<hkPropertyId, hkReflect_Any>>: Havok:
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -253,7 +253,7 @@ struct hkHashMap: hkHashBase<hkHashMapDetail_MapTuple<hkPropertyId, hkReflect_An
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -263,7 +263,7 @@ struct hkDefaultPropertyBag: Havok::BaseType { // size: 64, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkPropertyBag: Havok::BaseType { // size: 8, alignment: 8
@@ -271,7 +271,7 @@ struct hkPropertyBag: Havok::BaseType { // size: 8, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkReferencedObject: hkBaseObject { // size: 24, alignment: 8
@@ -281,7 +281,7 @@ struct hkReferencedObject: hkBaseObject { // size: 24, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpCompressedMeshShapeData: hkReferencedObject { // size: 272, alignment: 16
@@ -291,7 +291,7 @@ struct hknpCompressedMeshShapeData: hkReferencedObject { // size: 272, alignment
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkpConstraintMotor: hkReferencedObject { // size: 32, alignment: 8
@@ -299,7 +299,7 @@ struct hkpConstraintMotor: hkReferencedObject { // size: 32, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkpLimitedForceConstraintMotor: hkpConstraintMotor { // size: 40, alignment: 8
@@ -308,7 +308,7 @@ struct hkpLimitedForceConstraintMotor: hkpConstraintMotor { // size: 40, alignme
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 typedef hkRotationImpl<float> hkRotationf; // size: 48
@@ -319,7 +319,7 @@ struct hkTransformf: Havok::BaseType { // size: 64, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 typedef hkTransformf hkTransform; // size: 64
@@ -330,7 +330,7 @@ struct hkpSetLocalTransformsConstraintAtom: hkpConstraintAtom { // size: 144, al
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 typedef hkMatrix3Impl<float> hkMatrix3f; // size: 48
@@ -346,7 +346,7 @@ struct hkpRagdollMotorConstraintAtom: hkpConstraintAtom { // size: 96, alignment
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkpRagdollConstraintData_Atoms: Havok::BaseType { // size: 384, alignment: 16
@@ -361,7 +361,7 @@ struct hkpRagdollConstraintData_Atoms: Havok::BaseType { // size: 384, alignment
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -372,7 +372,7 @@ struct hkBitFieldStorage<hkArray<hkUint32, hkContainerHeapAllocator>>: Havok::Ba
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -382,7 +382,7 @@ struct hkcdStaticTree_Codec3Axis6: hkcdStaticTree_Codec3Axis { // size: 6, align
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpExternMeshShapeData: hkReferencedObject { // size: 128, alignment: 16
@@ -393,7 +393,7 @@ struct hknpExternMeshShapeData: hkReferencedObject { // size: 128, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkGeometry: hkReferencedObject { // size: 56, alignment: 8
@@ -402,7 +402,7 @@ struct hkGeometry: hkReferencedObject { // size: 56, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct CPfxPartIndexProperty: hkReferencedObject { // size: 32, alignment: 8
@@ -410,7 +410,7 @@ struct CPfxPartIndexProperty: hkReferencedObject { // size: 32, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkpAngMotorConstraintAtom: hkpConstraintAtom { // size: 32, alignment: 16
@@ -424,7 +424,7 @@ struct hkpAngMotorConstraintAtom: hkpConstraintAtom { // size: 32, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkpLimitedHingeConstraintData_Atoms: Havok::BaseType { // size: 272, alignment: 16
@@ -438,7 +438,7 @@ struct hkpLimitedHingeConstraintData_Atoms: Havok::BaseType { // size: 272, alig
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkpConstraintData: hkReferencedObject { // size: 32, alignment: 8
@@ -446,7 +446,7 @@ struct hkpConstraintData: hkReferencedObject { // size: 32, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkpLimitedHingeConstraintData: hkpConstraintData { // size: 304, alignment: 16
@@ -454,7 +454,7 @@ struct hkpLimitedHingeConstraintData: hkpConstraintData { // size: 304, alignmen
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkpRagdollConstraintData: hkpConstraintData { // size: 416, alignment: 16
@@ -462,14 +462,14 @@ struct hkpRagdollConstraintData: hkpConstraintData { // size: 416, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpExternMeshShapeGeometry: hkReferencedObject { // size: 24, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -482,7 +482,7 @@ struct hknpSparseCompactMap<hkUint16>: Havok::BaseType { // size: 40, alignment:
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -493,7 +493,7 @@ struct hkRefCountedProperties_Entry: Havok::BaseType { // size: 16, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkRefCountedProperties: hkReferencedObject { // size: 40, alignment: 8
@@ -501,7 +501,7 @@ struct hkRefCountedProperties: hkReferencedObject { // size: 40, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpShape: hkReferencedObject { // size: 64, alignment: 16
@@ -515,7 +515,7 @@ struct hknpShape: hkReferencedObject { // size: 64, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpCompositeShape: hknpShape { // size: 128, alignment: 16
@@ -525,7 +525,7 @@ struct hknpCompositeShape: hknpShape { // size: 128, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpExternMeshShape: hknpCompositeShape { // size: 144, alignment: 16
@@ -534,7 +534,7 @@ struct hknpExternMeshShape: hknpCompositeShape { // size: 144, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 // Basic type hkaiIndex<hkInt32>, size: 4
@@ -548,14 +548,14 @@ struct hkaiDirectedGraphExplicitCost_Edge: Havok::BaseType { // size: 8, alignme
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdStaticAabbTree_Impl: hkcdStaticTree_Tree<hkcdStaticTree_DynamicStorage<hkcdStaticTree_Codec3Axis6>> { // size: 48, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiNavMeshClearanceCache: hkReferencedObject { // size: 120, alignment: 8
@@ -571,7 +571,7 @@ struct hkaiNavMeshClearanceCache: hkReferencedObject { // size: 120, alignment: 
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiNavMeshClearanceCacheSeeding_CacheData: Havok::BaseType { // size: 24, alignment: 8
@@ -582,7 +582,7 @@ struct hkaiNavMeshClearanceCacheSeeding_CacheData: Havok::BaseType { // size: 24
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiNavMeshClearanceCacheSeeding_CacheDataSet: hkReferencedObject { // size: 40, alignment: 8
@@ -590,7 +590,7 @@ struct hkaiNavMeshClearanceCacheSeeding_CacheDataSet: hkReferencedObject { // si
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiStreamingSet_VolumeConnection: Havok::BaseType { // size: 8, alignment: 4
@@ -599,7 +599,7 @@ struct hkaiStreamingSet_VolumeConnection: Havok::BaseType { // size: 8, alignmen
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiFaceEdgeIndexPair: Havok::BaseType { // size: 8, alignment: 4
@@ -608,7 +608,7 @@ struct hkaiFaceEdgeIndexPair: Havok::BaseType { // size: 8, alignment: 4
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiStreamingSet_NavMeshConnection: Havok::BaseType { // size: 16, alignment: 4
@@ -617,7 +617,7 @@ struct hkaiStreamingSet_NavMeshConnection: Havok::BaseType { // size: 16, alignm
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiStreamingSet: hkReferencedObject { // size: 112, alignment: 8
@@ -631,7 +631,7 @@ struct hkaiStreamingSet: hkReferencedObject { // size: 112, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiAnnotatedStreamingSet: Havok::BaseType { // size: 16, alignment: 8
@@ -640,7 +640,7 @@ struct hkaiAnnotatedStreamingSet: Havok::BaseType { // size: 16, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiNavMesh_Edge: Havok::BaseType { // size: 20, alignment: 4
@@ -654,7 +654,7 @@ struct hkaiNavMesh_Edge: Havok::BaseType { // size: 20, alignment: 4
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaAnimatedReferenceFrame: hkReferencedObject { // size: 32, alignment: 8
@@ -662,7 +662,7 @@ struct hkaAnimatedReferenceFrame: hkReferencedObject { // size: 32, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaDefaultAnimatedReferenceFrame: hkaAnimatedReferenceFrame { // size: 96, alignment: 16
@@ -673,7 +673,7 @@ struct hkaDefaultAnimatedReferenceFrame: hkaAnimatedReferenceFrame { // size: 96
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -684,7 +684,7 @@ struct hkRelArray<hkVector4>: Havok::BaseType { // size: 4, alignment: 2
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -695,7 +695,7 @@ struct hknpConvexPolytopeShape_Connectivity_Edge: Havok::BaseType { // size: 4, 
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpConvexPolytopeShape_Connectivity: hkReferencedObject { // size: 56, alignment: 8
@@ -704,7 +704,7 @@ struct hknpConvexPolytopeShape_Connectivity: hkReferencedObject { // size: 56, a
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpConvexShape: hknpShape { // size: 80, alignment: 16
@@ -712,7 +712,7 @@ struct hknpConvexShape: hknpShape { // size: 80, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpConvexPolytopeShape: hknpConvexShape { // size: 112, alignment: 16
@@ -723,7 +723,7 @@ struct hknpConvexPolytopeShape: hknpConvexShape { // size: 112, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpBoxShape: hknpConvexPolytopeShape { // size: 176, alignment: 16
@@ -731,14 +731,14 @@ struct hknpBoxShape: hknpConvexPolytopeShape { // size: 176, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpSphereShape: hknpConvexShape { // size: 80, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaAnnotationTrack: Havok::BaseType { // size: 24, alignment: 8
@@ -747,7 +747,7 @@ struct hkaAnnotationTrack: Havok::BaseType { // size: 24, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaAnimation: hkReferencedObject { // size: 64, alignment: 8
@@ -760,7 +760,7 @@ struct hkaAnimation: hkReferencedObject { // size: 64, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaSplineCompressedAnimation: hkaAnimation { // size: 184, alignment: 8
@@ -780,7 +780,7 @@ struct hkaSplineCompressedAnimation: hkaAnimation { // size: 184, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxAttributeGroup: Havok::BaseType { // size: 24, alignment: 8
@@ -789,7 +789,7 @@ struct hkxAttributeGroup: Havok::BaseType { // size: 24, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxAttributeHolder: hkReferencedObject { // size: 40, alignment: 8
@@ -797,7 +797,7 @@ struct hkxAttributeHolder: hkReferencedObject { // size: 40, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxMaterial: hkxAttributeHolder { // size: 224, alignment: 16
@@ -821,7 +821,7 @@ struct hkxMaterial: hkxAttributeHolder { // size: 224, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxMesh_UserChannelInfo: hkxAttributeHolder { // size: 56, alignment: 8
@@ -830,7 +830,7 @@ struct hkxMesh_UserChannelInfo: hkxAttributeHolder { // size: 56, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxVertexBuffer_VertexData: Havok::BaseType { // size: 104, alignment: 8
@@ -848,7 +848,7 @@ struct hkxVertexBuffer_VertexData: Havok::BaseType { // size: 104, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxVertexDescription: Havok::BaseType { // size: 16, alignment: 8
@@ -856,7 +856,7 @@ struct hkxVertexDescription: Havok::BaseType { // size: 16, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxVertexBuffer: hkReferencedObject { // size: 144, alignment: 8
@@ -865,7 +865,7 @@ struct hkxVertexBuffer: hkReferencedObject { // size: 144, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxIndexBuffer: hkReferencedObject { // size: 72, alignment: 8
@@ -877,7 +877,7 @@ struct hkxIndexBuffer: hkReferencedObject { // size: 72, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxVertexAnimation: hkReferencedObject { // size: 208, alignment: 8
@@ -888,7 +888,7 @@ struct hkxVertexAnimation: hkReferencedObject { // size: 208, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkMeshBoneIndexMapping: Havok::BaseType { // size: 16, alignment: 8
@@ -896,7 +896,7 @@ struct hkMeshBoneIndexMapping: Havok::BaseType { // size: 16, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxMeshSection: hkReferencedObject { // size: 120, alignment: 8
@@ -910,7 +910,7 @@ struct hkxMeshSection: hkReferencedObject { // size: 120, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkxMesh: hkReferencedObject { // size: 56, alignment: 8
@@ -919,14 +919,14 @@ struct hkxMesh: hkReferencedObject { // size: 56, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkLocalFrame: hkReferencedObject { // size: 24, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaSkeleton_LocalFrameOnBone: Havok::BaseType { // size: 16, alignment: 8
@@ -935,7 +935,7 @@ struct hkaSkeleton_LocalFrameOnBone: Havok::BaseType { // size: 16, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaSkeleton: hkReferencedObject { // size: 144, alignment: 8
@@ -950,7 +950,7 @@ struct hkaSkeleton: hkReferencedObject { // size: 144, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaMeshBinding_Mapping: Havok::BaseType { // size: 16, alignment: 8
@@ -958,7 +958,7 @@ struct hkaMeshBinding_Mapping: Havok::BaseType { // size: 16, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaMeshBinding: hkReferencedObject { // size: 88, alignment: 8
@@ -971,7 +971,7 @@ struct hkaMeshBinding: hkReferencedObject { // size: 88, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaBoneAttachment: hkReferencedObject { // size: 128, alignment: 16
@@ -983,7 +983,7 @@ struct hkaBoneAttachment: hkReferencedObject { // size: 128, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaAnimationBinding: hkReferencedObject { // size: 96, alignment: 8
@@ -996,7 +996,7 @@ struct hkaAnimationBinding: hkReferencedObject { // size: 96, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -1006,7 +1006,7 @@ struct hkBitFieldBase<hkBitFieldStorage<hkArray<hkUint32, hkContainerHeapAllocat
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -1014,7 +1014,7 @@ struct hkBitField: hkBitFieldBase<hkBitFieldStorage<hkArray<hkUint32, hkContaine
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiNavMesh_Face: Havok::BaseType { // size: 16, alignment: 4
@@ -1027,7 +1027,7 @@ struct hkaiNavMesh_Face: Havok::BaseType { // size: 16, alignment: 4
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaSkeletonMapperData: Havok::BaseType { // size: 176, alignment: 16
@@ -1045,7 +1045,7 @@ struct hkaSkeletonMapperData: Havok::BaseType { // size: 176, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaSkeletonMapper: hkReferencedObject { // size: 208, alignment: 16
@@ -1053,7 +1053,7 @@ struct hkaSkeletonMapper: hkReferencedObject { // size: 208, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct CPfxFloatShapeProperty: hkReferencedObject { // size: 32, alignment: 8
@@ -1061,14 +1061,14 @@ struct CPfxFloatShapeProperty: hkReferencedObject { // size: 32, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpSurfaceVelocity: hkReferencedObject { // size: 24, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpMaterial: hkReferencedObject { // size: 112, alignment: 16
@@ -1097,7 +1097,7 @@ struct hknpMaterial: hkReferencedObject { // size: 112, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 // Basic type hkFreeListArrayElement<hknpMaterial>, size: 112
@@ -1112,7 +1112,7 @@ struct CPfxBreakableShapeCollection: hkReferencedObject { // size: 96, alignment
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -1123,7 +1123,7 @@ struct hkFreeListArray<hknpMaterial, 8>: Havok::BaseType { // size: 24, alignmen
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -1135,7 +1135,7 @@ struct hknpMaterialLibrary: hkReferencedObject { // size: 72, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 // Basic type hkFreeListArrayElement<hknpMotionProperties>, size: 64
@@ -1148,7 +1148,7 @@ struct hknpMotionPropertiesLibrary: hkReferencedObject { // size: 72, alignment:
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpBodyQuality: hkReferencedObject { // size: 40, alignment: 8
@@ -1159,7 +1159,7 @@ struct hknpBodyQuality: hkReferencedObject { // size: 40, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpBodyQualityLibrary: hkReferencedObject { // size: 1312, alignment: 16
@@ -1168,14 +1168,14 @@ struct hknpBodyQualityLibrary: hkReferencedObject { // size: 1312, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpBroadPhaseConfig: hkReferencedObject { // size: 24, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpCollisionFilter: hkReferencedObject { // size: 32, alignment: 8
@@ -1183,7 +1183,7 @@ struct hknpCollisionFilter: hkReferencedObject { // size: 32, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpShapeTagCodec: hkReferencedObject { // size: 32, alignment: 8
@@ -1192,7 +1192,7 @@ struct hknpShapeTagCodec: hkReferencedObject { // size: 32, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpWorldCinfo: Havok::BaseType { // size: 272, alignment: 16
@@ -1236,7 +1236,7 @@ struct hknpWorldCinfo: Havok::BaseType { // size: 272, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpRefWorldCinfo: hkReferencedObject { // size: 304, alignment: 16
@@ -1244,7 +1244,7 @@ struct hknpRefWorldCinfo: hkReferencedObject { // size: 304, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -1254,7 +1254,7 @@ struct hkHandle<hkUint32, 2147483647>: Havok::BaseType { // size: 4, alignment: 
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -1267,7 +1267,7 @@ struct hkaAnimationContainer: hkReferencedObject { // size: 104, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpShapeInstance: Havok::BaseType { // size: 128, alignment: 16
@@ -1280,7 +1280,7 @@ struct hknpShapeInstance: Havok::BaseType { // size: 128, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 // Basic type hkFreeListArrayElement<hknpShapeInstance>, size: 128
@@ -1290,7 +1290,7 @@ struct hknpRefMassDistribution: hkReferencedObject { // size: 80, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpBodyCinfo: Havok::BaseType { // size: 160, alignment: 16
@@ -1317,7 +1317,7 @@ struct hknpBodyCinfo: Havok::BaseType { // size: 160, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkpPositionConstraintMotor: hkpLimitedForceConstraintMotor { // size: 56, alignment: 8
@@ -1328,7 +1328,7 @@ struct hkpPositionConstraintMotor: hkpLimitedForceConstraintMotor { // size: 56,
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpPhysicsSystemData_bodyCinfoWithAttachment: hknpBodyCinfo { // size: 176, alignment: 16
@@ -1336,7 +1336,7 @@ struct hknpPhysicsSystemData_bodyCinfoWithAttachment: hknpBodyCinfo { // size: 1
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 typedef hkHandle<hkUint32, 2147483647> hknpConstraintId; // size: 4
@@ -1354,7 +1354,7 @@ struct hknpConstraintCinfo: Havok::BaseType { // size: 40, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpPhysicsSystemData: hkReferencedObject { // size: 112, alignment: 8
@@ -1367,7 +1367,7 @@ struct hknpPhysicsSystemData: hkReferencedObject { // size: 112, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiDirectedGraphExplicitCost: hkReferencedObject { // size: 128, alignment: 8
@@ -1382,7 +1382,7 @@ struct hkaiDirectedGraphExplicitCost: hkReferencedObject { // size: 128, alignme
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -1393,7 +1393,7 @@ struct hkcdDynamicTree_DynamicStorage: hkcdDynamicTree_AnisotropicMetric { // si
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -1403,7 +1403,7 @@ struct hkcdDynamicTree_DefaultDynamicStorage: hkcdDynamicTree_DynamicStorage<0, 
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -1416,7 +1416,7 @@ struct hkcdDynamicTree_Tree: hkcdDynamicTree_DefaultDynamicStorage<hkcdDynamicTr
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -1424,7 +1424,7 @@ struct hknpDynamicCompoundShapeTree: hkcdDynamicTree_Tree<hkcdDynamicTree_Defaul
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpDynamicCompoundShapeData: hkReferencedObject { // size: 64, alignment: 8
@@ -1432,7 +1432,7 @@ struct hknpDynamicCompoundShapeData: hkReferencedObject { // size: 64, alignment
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpPhysicsSceneData: hkReferencedObject { // size: 48, alignment: 8
@@ -1441,7 +1441,7 @@ struct hknpPhysicsSceneData: hkReferencedObject { // size: 48, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpCompressedMeshShape: hknpCompositeShape { // size: 176, alignment: 16
@@ -1452,7 +1452,7 @@ struct hknpCompressedMeshShape: hknpCompositeShape { // size: 176, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkRootLevelContainer: Havok::BaseType { // size: 16, alignment: 8
@@ -1460,7 +1460,7 @@ struct hkRootLevelContainer: Havok::BaseType { // size: 16, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpRagdollData: hknpPhysicsSystemData { // size: 136, alignment: 8
@@ -1469,7 +1469,7 @@ struct hknpRagdollData: hknpPhysicsSystemData { // size: 136, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 /*
@@ -1478,7 +1478,7 @@ struct hkcdStaticMeshTreeCommonConfig<hkUint32, hkUint64, 11, 21>: Havok::BaseTy
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 */
@@ -1487,7 +1487,7 @@ struct hkPackedVector3: Havok::BaseType { // size: 8, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkCompressedMassProperties: Havok::BaseType { // size: 32, alignment: 8
@@ -1499,7 +1499,7 @@ struct hkCompressedMassProperties: Havok::BaseType { // size: 32, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpMorphExternMesh: hknpExternMeshShapeGeometry { // size: 72, alignment: 8
@@ -1510,7 +1510,7 @@ struct hknpMorphExternMesh: hknpExternMeshShapeGeometry { // size: 72, alignment
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpShapeSignals: Havok::BaseType { // size: 16, alignment: 8
@@ -1519,7 +1519,7 @@ struct hknpShapeSignals: Havok::BaseType { // size: 16, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpCompoundShapeBase: hknpCompositeShape { // size: 240, alignment: 16
@@ -1532,7 +1532,7 @@ struct hknpCompoundShapeBase: hknpCompositeShape { // size: 240, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpShapeMassProperties: hkReferencedObject { // size: 56, alignment: 8
@@ -1540,7 +1540,7 @@ struct hknpShapeMassProperties: hkReferencedObject { // size: 56, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkaiNavMesh: hkReferencedObject { // size: 208, alignment: 16
@@ -1560,7 +1560,7 @@ struct hkaiNavMesh: hkReferencedObject { // size: 208, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpCompoundShape: hknpCompoundShapeBase { // size: 256, alignment: 16
@@ -1568,7 +1568,7 @@ struct hknpCompoundShape: hknpCompoundShapeBase { // size: 256, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hknpCapsuleShape: hknpConvexPolytopeShape { // size: 144, alignment: 16
@@ -1577,7 +1577,7 @@ struct hknpCapsuleShape: hknpConvexPolytopeShape { // size: 144, alignment: 16
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 struct hkcdStaticAabbTree: hkReferencedObject { // size: 40, alignment: 8
@@ -1586,7 +1586,7 @@ struct hkcdStaticAabbTree: hkReferencedObject { // size: 40, alignment: 8
 
     void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;
     void print(std::ostream &os) const override;
-    [[nodiscard]] nlohmann::json to_json() const override;
+    nlohmann::json to_json() const override;
 };
 
 };

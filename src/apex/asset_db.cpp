@@ -224,7 +224,7 @@ SQLite::Column AssetDB::exec_sql(const char *sql) {
 }
 
 AssetDB::AssetDB(const std::filesystem::path &path)
-    : m_db(path, SQLite::OPEN_READWRITE),
+    : m_db(path.string().c_str(), SQLite::OPEN_READWRITE),
       m_kv_put(m_db, "INSERT OR REPLACE INTO kv(k, v) VALUES(?, ?);"),
       m_kv_get(m_db, "SELECT v FROM kv WHERE k=?;"),
       m_kv_del(m_db, "DELETE FROM kv WHERE k=?;"),

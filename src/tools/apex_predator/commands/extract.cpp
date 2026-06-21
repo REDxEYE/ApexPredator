@@ -2,7 +2,7 @@
 
 #include "../commands.h"
 
-#include "tiny_gltf.h"
+#include "redscore/gltf/tiny_gltf.h"
 #include "apex/asset_db.h"
 #include "exporter/common_export.h"
 #include "platform/app_state.h"
@@ -22,7 +22,7 @@ void raw_export(ApexAppState &app_state, const uint32 asset_hash) {
     const std::filesystem::path save_path = app_state.export_path() / asset_path;
     std::filesystem::create_directories(save_path.parent_path());
 
-    const auto mb = app_state.manager().get_file(asset_hash);
+    const auto mb = app_state.manager().get(asset_hash);
     if (!mb) {
         GLog_Error("File not found: {}", asset_hash);
         return;

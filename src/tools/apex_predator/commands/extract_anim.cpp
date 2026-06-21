@@ -8,7 +8,7 @@
 #include "utils/hash_helper.h"
 #include "apex/asset_db.h"
 
-#include <json.hpp>
+#include "nlohmann/json.hpp"
 
 using namespace nlohmann;
 
@@ -74,12 +74,12 @@ json extract_root_motion_info(HavokTypes::hkaAnimatedReferenceFrame *extracted_m
 }
 
 void export_anim(ApexAppState &app_state, uint32 skeleton_hash, uint32 anim_hash, bool apply_root_motion) {
-    auto skeleton_file = app_state.manager().get_file(skeleton_hash);
+    auto skeleton_file = app_state.manager().get(skeleton_hash);
     if (!skeleton_file) {
         GLog_Error("Skeleton file not found: %08X", skeleton_hash);
         return;
     }
-    auto anim_file = app_state.manager().get_file(anim_hash);
+    auto anim_file = app_state.manager().get(anim_hash);
     if (!anim_file) {
         GLog_Error("Animation file not found: %08X", anim_hash);
         return;

@@ -27,7 +27,7 @@ void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
             // break;
         }
         const auto &entry = all_entries.at(i);
-        auto buffer = manager.get_file(entry.path_hash);
+        auto buffer = manager.get(entry.path_hash);
 
         std::vector<uint8> first_buffer(8);
         buffer->read_exact<uint8>(first_buffer);
@@ -47,7 +47,7 @@ void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
                 sarc.all_entries(sarc_entries);
 
                 for (auto &sarc_entry: sarc_entries) {
-                    auto sarc_buffer = sarc.get_file(sarc_entry.path_hash);
+                    auto sarc_buffer = sarc.get(sarc_entry.path_hash);
 
                     sarc_buffer->read_exact<uint8>(first_buffer);
                     sarc_buffer->set_position(0);
@@ -103,6 +103,13 @@ int main(int argc, const char *argv[]) {
     AssetDB db(argv[2]);
     AssetDB::set_instance(&db);
     Havok::CodeGen::TypeLibrary type_library;
+
+    // auto buffer = app_state.manager().get(1615997716);
+    // process_havok_file(type_library, std::move(buffer));
+    //
+    // Havok::CodeGen::generate_code(type_library,
+    //                               "../src/havok/generated",
+    //                               "../include/havok/generated");
 
     collect_types(app_state, type_library);
 

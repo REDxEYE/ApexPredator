@@ -3,6 +3,7 @@
 #ifndef APEXPREDATOR_SARC_H
 #define APEXPREDATOR_SARC_H
 #include <ranges>
+#include <unordered_map>
 
 #include "int_def.h"
 #include "redscore/platform/archive.h"
@@ -25,31 +26,34 @@ struct SArcEntry {
 };
 
 
-class SArchive : public Archive {
+class SArchive : public Archive<u64> {
 public:
     SArchive(uint64 m_hash, std::unique_ptr<IO::File> buffer);
 
-    [[nodiscard]] bool has_file(std::string_view path) override;
+    [[nodiscard]] bool has(std::string_view path);
 
-    [[nodiscard]] bool has_file(uint64 hash) override;
+    [[nodiscard]] bool has(const u64& hash) override;
 
-    std::unique_ptr<IO::File> get_file(std::string_view path) override;
+    std::unique_ptr<IO::File> get(std::string_view path);
 
-    std::unique_ptr<IO::File> get_file(uint64 hash) override;
+    std::unique_ptr<IO::File> get(const u64& hash) override;
 
-    void all_entries(std::vector<ArchiveEntry> &entries) const override;
+    // void all_entries(std::vector<ArchiveEntry> &entries) const override;
 
-    [[nodiscard]] std::string get_name() const override;
+    [[nodiscard]] std::string_view name() const override;
 
-    uint64 hash() override;
+    [[nodiscard]] const u64& key() const override;
 
     [[nodiscard]] auto entries() const {
         return m_entries|std::views::values;
     }
 
+    bool foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) override;
+
 private:
     SArcHeader m_header{};
     uint64 m_hash;
+    std::string m_name;
     std::vector<char> m_strings;
     std::unordered_map<uint64, SArcEntry> m_entries;
     std::unique_ptr<IO::File> m_buffer;

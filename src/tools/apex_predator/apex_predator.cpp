@@ -1,6 +1,7 @@
 #include "redscore/utils/memory_tracker.h"
 #include "commands.h"
 #include "apex/adf/generated/adf_types.h"
+#include "apex/adf/adf_custom_types.hpp"
 
 #include "CLI/CLI.hpp"
 #include "havok/generated/havok_types.h"
@@ -22,6 +23,7 @@ int main(int argc, const char *argv[]) {
     mp_init();
     init_havok_type_info();
     init_adf_type_info();
+    ADF::register_custom_types();
 
 
     CLI::App app{"ApexPredator asset tools"};
