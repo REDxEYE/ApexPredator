@@ -151,6 +151,10 @@ public:
                 arr.emplace_back(ptr);
             } else if constexpr (is_dataset_v<T>) {
                 arr.emplace_back(ptr.to_json());
+            } else if constexpr (std::is_same_v<T, u64>) {
+                arr.emplace_back(std::to_string(ptr));
+            } else if constexpr (std::is_integral_v<T>) {
+                arr.emplace_back(ptr);
             } else if constexpr (std::is_same_v<T, std::unique_ptr<BaseType> >) {
                 if (ptr) {
                     arr.emplace_back(ptr->to_json());
