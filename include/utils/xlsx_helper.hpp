@@ -4,6 +4,7 @@
 
 #pragma once
 #include "OpenXLSX.hpp"
+#include <span>
 
 struct CellColors {
     std::uint32_t bg;

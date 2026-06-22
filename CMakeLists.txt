@@ -94,7 +94,6 @@ add_executable(ApexPredator
         src/tools/apex_predator/commands/search.cpp
         src/tools/apex_predator/commands/export_everything.cpp
         src/utils/xlsx_helper.cpp
-        include/utils/xlsx_helper.hpp
         #        src/tools/apex_predator/commands/convert.cpp
 
 )
