@@ -42,7 +42,7 @@ public:
     }
 
 protected:
-    std::filesystem::path m_db_path;
+    std::filesystem::path m_db_path = "./hashes.db";
 };
 
 class GameCommand : public DatabaseDependantCommand {
