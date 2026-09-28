@@ -106,7 +106,14 @@ target_link_libraries(Rage2HavokLib PUBLIC ${CommonLibs} nlohmann_json::nlohmann
 if(UNIX AND NOT APPLE)
     target_link_options(Rage2Module PRIVATE "LINKER:--version-script=${CMAKE_CURRENT_SOURCE_DIR}/modules/rage2/exports.map")
     set_property(TARGET Rage2Module APPEND PROPERTY LINK_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/modules/rage2/exports.map")
-endif()
+elseif (MSVC)
+    target_compile_options(Rage2AdfLib PRIVATE /bigobj)
+    target_compile_options(Rage2HavokLib PRIVATE /bigobj)
+    target_compile_options(Rage2Module PRIVATE /bigobj)
+    target_compile_options(Rage2HashCollector PRIVATE /bigobj)
+    target_compile_options(Rage2AdfTypeGenerator PRIVATE /bigobj)
+    target_compile_options(Rage2HavokTypeGenerator PRIVATE /bigobj)
+endif ()
 
 
 add_executable(Rage2AdfTypeGenerator
