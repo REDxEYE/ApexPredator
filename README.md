@@ -57,22 +57,18 @@ ApexPredator search "%env/terrain%" -d hashes.db
 ```
 
 ## Helper tools (in `src/tools`)
-- `GenerationZeroHashCollector <game_root>` / `Rage2HashCollector <game_root>`: walk game archives and collect strings, including paths and extensions from GTOC/STOC indexes. GenZ reads `../gz_strings/*.txt` and writes `../hashes.db`; Rage 2 reads `../rage_strings/filelist.txt` and writes `../rage2_hashes.db`, relative to the working directory. See [asset_database.md](docs/asset_database.md) for hash policies and TOC support.
-- `AdfTypeGenerator <game_root>`: generates ADF type bindings. **Note:** output paths are hardcoded to `D:/projects/cpp/ApexPredator/include/...` and `src/...`; adjust before running.
+- `GenerationZeroHashCollector <game_root>` / `Rage2HashCollector <game_root>`: walk game archives and collect strings, including paths and extensions from GTOC/STOC indexes.
+  * GenZ reads `../gz_strings/*.txt` and writes `../hashes.db`
+  * Rage 2 reads `../rage_strings/filelist.txt` and writes `../rage2_hashes.db`, relative to the working directory.
+  * See [asset_database.md](docs/asset_database.md).
+- `AdfTypeGenerator <game_root>`: generates ADF type bindings. **Note:** output paths are hardcoded, adjust before running.
 - `HavokTypeGenerator <game_root>`: generates Havok type bindings; paths are likewise hardcoded to the repository root—update them for your environment.
 - `StringHasher`: read strings from stdin and prints their 32-bit hash.
 
 ## Tips
 - Normalize input paths to forward slashes; hashes are computed on the normalized form.
-- Keep `hashes.db` under version control’s ignore list; it is a generated helper database.
+- Keep `hashes.db` and `rage2_hashes.db` under version control’s ignore list; it is a generated helper database.
 - See `LICENSE` for licensing details.
-
-## Virtual model export
-
-AMF meshes/materials, ADF terrain, Havok skeletons/animations and RTPC scene nodes now build RedsCore virtual models (`redscore/platform/model/model.hpp`, namespace `VM`). The game module serializes the completed scene with `VM::save_gltf`; game exporters do not construct glTF accessors, buffers or skins. Format-specific unpacking and texture processing remain in ApexPredator. Each requested asset starts with a fresh scene.
-Both AMF exporters use `src/exporter/amf_attribute_decode.cpp` for packed vertex attributes; each module still resolves its own index/vertex buffer layout. Decoding selects a conversion by AMF usage **and format**, not component width. Unknown attribute usages are skipped. Unsupported formats for supported usages stop extraction with a diagnostic containing enum names (when known), raw IDs, and stream location; same-width float16 and UNORM variants are not misread as SNORM.
-
-This requires the updated C++ RedsCore model API. `cmake/dependencies.cmake` uses the local RedsCore checkout when present and pins the published API revision for other builds. See RedsCore's `docs/virtual_model.md` for ownership rules, the Rust-to-C++ mapping and supported features.
 
 Validation:
 
@@ -111,10 +107,6 @@ Rage 2 supports raw TAB 3.1 extraction (`extract ROOT ASSET -r -o OUTPUT`) by pa
 ApexPredator extract "/path/to/RAGE 2" models/props/cable/horizontal_03.modelc --module rage2 -d rage2_hashes.db -o exported/models
 ApexPredator extract "/path/to/RAGE 2" models/props/cable/horizontal_03.meshc --module rage2 -d rage2_hashes.db -o exported/meshes
 ```
-
-Model references are lookup3 hashes in GTOC resources; containing archives are addressed through their Murmur-hashed names in TAB. A populated Rage 2 asset database and its `sarc.0.gtoc` index are needed for embedded `.meshc`/`.hrmeshc` data. Export selects the highest available mesh LOD and maps the first three GeneralR2 texture slots to albedo, normal, and metallic/roughness. BC5 normals use two channels for X/Y; the glTF PNG expands them to RGB and reconstructs Z. Use separate output directories when exporting a `.modelc` and `.meshc` with the same basename; both otherwise produce the same `.gltf` path. Other asset conversions depend on their game-specific decoders.
-
-Meshes with `AmfUsage_WireRadius`/`AmfFormat_R16_SNORM` (including `models/props/cable/horizontal_03.modelc` and `models/weapons/ark_assault/assault_skin_snake.modelc`) export without wire radius data because that usage has no implemented glTF mapping.
 
 ## CI build artifacts
 
