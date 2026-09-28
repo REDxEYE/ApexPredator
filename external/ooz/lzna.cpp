@@ -2,7 +2,9 @@
 #include "ooz_private.h"
 
 #include <immintrin.h>
+#if !defined(_MSC_VER)
 #include <x86intrin.h>
+#endif
 #include <cassert>
 
 typedef uint16 LznaBitModel;

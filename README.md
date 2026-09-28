@@ -115,6 +115,7 @@ Meshes with `AmfUsage_WireRadius`/`AmfFormat_R16_SNORM` (including `models/props
 ## CI build artifacts
 
 The GitHub Actions build workflow produces Linux x64 and Windows x64 artifacts containing `ApexPredator`, `modules/generation_zero`, `modules/rage2`, `hashes.db`, and `rage2_hashes.db`. It builds the `ApexPredator` target (which builds both modules) without running or building the optional test targets.
+The Windows CI job uses Visual Studio 2022/MSVC; `winbuild.sh` uses Clang/MinGW and does not validate MSVC compatibility.
 
 CI unpacks the committed `hashes.db.tar.xz` and `rage2_hashes.db.tar.xz` archives into each artifact. After changing either local database, regenerate and commit both archives:
 
