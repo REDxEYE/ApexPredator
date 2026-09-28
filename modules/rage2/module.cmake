@@ -103,19 +103,6 @@ target_compile_definitions(Rage2HavokLib PRIVATE GAME=1)
 target_include_directories(Rage2HavokLib PUBLIC include modules/rage2/include)
 target_link_libraries(Rage2HavokLib PUBLIC ${CommonLibs} nlohmann_json::nlohmann_json)
 
-if(UNIX AND NOT APPLE)
-    target_link_options(Rage2Module PRIVATE "LINKER:--version-script=${CMAKE_CURRENT_SOURCE_DIR}/modules/rage2/exports.map")
-    set_property(TARGET Rage2Module APPEND PROPERTY LINK_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/modules/rage2/exports.map")
-elseif (MSVC)
-    target_compile_options(Rage2AdfLib PRIVATE /bigobj)
-    target_compile_options(Rage2HavokLib PRIVATE /bigobj)
-    target_compile_options(Rage2Module PRIVATE /bigobj)
-    target_compile_options(Rage2HashCollector PRIVATE /bigobj)
-    target_compile_options(Rage2AdfTypeGenerator PRIVATE /bigobj)
-    target_compile_options(Rage2HavokTypeGenerator PRIVATE /bigobj)
-endif ()
-
-
 add_executable(Rage2AdfTypeGenerator
         src/tools/adf_type_gen.cpp
         src/apex/adf/sti_codegen.cpp
@@ -129,3 +116,15 @@ target_compile_definitions(Rage2AdfTypeGenerator PRIVATE GAME=1)
 target_include_directories(Rage2AdfTypeGenerator PUBLIC include modules/rage2/include)
 target_link_libraries(Rage2AdfTypeGenerator PUBLIC ${CommonLibs} ApexOoz)
 target_compile_options(Rage2AdfTypeGenerator PRIVATE -march=native)
+
+if(UNIX AND NOT APPLE)
+    target_link_options(Rage2Module PRIVATE "LINKER:--version-script=${CMAKE_CURRENT_SOURCE_DIR}/modules/rage2/exports.map")
+    set_property(TARGET Rage2Module APPEND PROPERTY LINK_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/modules/rage2/exports.map")
+elseif (MSVC)
+    target_compile_options(Rage2AdfLib PRIVATE /bigobj)
+    target_compile_options(Rage2HavokLib PRIVATE /bigobj)
+    target_compile_options(Rage2Module PRIVATE /bigobj)
+    target_compile_options(Rage2HashCollector PRIVATE /bigobj)
+    target_compile_options(Rage2AdfTypeGenerator PRIVATE /bigobj)
+    target_compile_options(Rage2HavokTypeGenerator PRIVATE /bigobj)
+endif ()
