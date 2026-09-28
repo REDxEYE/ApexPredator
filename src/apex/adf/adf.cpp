@@ -77,7 +77,7 @@ ADF::ADFFile ADF::ADFFile::from_buffer(std::unique_ptr<IO::File> buffer) {
         if (check_hash_presence(string_hash)) {
             continue;
         }
-        store_hash_name(string_hash, hash_str);
+        store_hash_name(hash_str);
     }
 
     std::vector<std::string> strings;

@@ -2,7 +2,6 @@
 #include "apex/adf/sti.h"
 
 #include "redscore/platform/logger.h"
-#include "utils/hash_helper.h"
 
 std::string STI::Type::type_name() const {
     switch (type) {
@@ -14,7 +13,8 @@ std::string STI::Type::type_name() const {
             return name_;
         }
         case DataType::Pointer: {
-            return name_ + "*";
+            // Use the shared alias for void pointers in array element declarations.
+            return name_ == "void" ? "voidPtr" : "u64";
         }
         case DataType::Primitive:
         case DataType::Structure:
@@ -34,13 +34,6 @@ std::string STI::Type::type_name() const {
 }
 
 std::string STI::Type::name() const {
-    if (type == DataType::Array) {
-        const auto type_and_size = std::get<TypeAndSize>(data);
-        if (type_and_size.type_hash == STI_TYPE_HASH_DEFERRED) {
-            return std::format("Deferred_Array", type_and_size.count);
-        }
-        return name_;
-    }
     if (type==DataType::Pointer) {
         return name_ + "_Ptr";
     }
@@ -87,6 +80,34 @@ STI::TypeLibrary::TypeLibrary() {
     //Deferred = 0xDEFE88ED
     m_types.emplace(STI_TYPE_HASH_DEFERRED,
                     Type("Deferred", STI_TYPE_HASH_DEFERRED, 16, 8, DataType::DeferredType, {}));
+    // Generated types must not shadow the shared pointer alias.
+    m_registered_names.emplace("voidPtr", STI_TYPE_HASH_UINT64);
+    for (const auto &[hash, type] : m_types) {
+        m_registered_names.emplace(type.name(), hash);
+    }
+}
+
+// Keep the first spelling for compatibility; distinct hashes get distinct C++ symbols.
+std::string STI::TypeLibrary::register_name(const std::string &name, const uint32 hash,
+                                           const std::string &suffix) {
+    std::string candidate;
+    for (const char ch : name) {
+        if (ch == '*') {
+            candidate += "Ptr";
+        } else {
+            candidate += ch;
+        }
+    }
+    candidate += suffix;
+    for (;;) {
+        const auto [entry, inserted] = m_registered_names.emplace(candidate, hash);
+        if (inserted || entry->second == hash) {
+            return candidate;
+        }
+        // Also handle a source name that already contains the generated hash suffix.
+        candidate.resize(candidate.size() - suffix.size());
+        candidate += std::format("_{:08X}{}", hash, suffix);
+    }
 }
 
 STI::DataType remap_adf_type(const ADF::MetaType adf_meta_type) {
@@ -123,7 +144,6 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
     const uint32 type_hash = adf_type.def().hash;
     const ADF::TypeDef &type_def = adf_type.def();
     std::string type_name = std::string(adf.get_string(type_def.name_id));
-    uint32 name_hash = hash_string(type_name);
 
     // Check if type already registered and sizes match
     if (const auto it = m_types.find(type_hash); it != m_types.end()) {
@@ -134,24 +154,27 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
                 type_hash, existing_type.type_name(), existing_type.size, type_name, type_def.size);
             throw std::runtime_error("Type hash collision with different sizes");
         }
+        return existing_type;
     }
 
     switch (type_def.type) {
         case ADF::MetaType::Primitive: {
-            m_already_seen_name_hashes.emplace(name_hash, type_hash);
             Type new_type(type_name, type_hash, type_def.size, type_def.alignment,
                           remap_adf_type(type_def.type), {});
             const auto &[entry, _] = m_types.emplace(type_hash, new_type);
             return entry->second;
         }
         case ADF::MetaType::Structure: {
-            m_already_seen_name_hashes.emplace(name_hash, type_hash);
+            type_name = register_name(type_name, type_hash);
             const auto &adf_members = std::get<std::vector<ADF::StructMemberInfo> >(adf_type.type_data());
             std::vector<StructMember> members;
             members.reserve(adf_members.size());
             for (const auto &adf_member: adf_members) {
                 std::string member_name = std::string(adf.get_string(adf_member.name_id));
-                if (member_name == type_name) {
+                if (!member_name.empty() && member_name.front() >= '0' && member_name.front() <= '9') {
+                    member_name.insert(0, "_");
+                }
+                if (member_name == type_name || member_name == adf.get_string(type_def.name_id)) {
                     member_name += "_";
                 }
 
@@ -172,7 +195,6 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
         }
         case ADF::MetaType::Pointer: {
             type_name = type_name.substr(0, type_name.size()-1);
-            m_already_seen_name_hashes.emplace(hash_string(type_name), type_hash);
             const auto &[entry, _] = m_types.emplace(type_hash,
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,
@@ -182,18 +204,7 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
         }
         case ADF::MetaType::Array: {
             type_name = type_name.substr(2, type_name.size() - 3);
-            type_name += "_Array";
-            name_hash = hash_string(type_name);
-
-            const auto& existing_type_hash = m_already_seen_name_hashes.find(name_hash);
-            if (existing_type_hash != m_already_seen_name_hashes.end() && existing_type_hash->second != type_hash) {
-                GLog_Warning("Type name hash collision for type name '{}' with hash {:08X}", type_name, name_hash);
-                type_name = adf.get_string(type_def.name_id);
-                type_name = type_name.substr(2, type_name.size() - 3);
-                type_name = std::format("{}_{:08X}_Array", type_name, type_hash);
-                name_hash = hash_string(type_name);
-            }
-            m_already_seen_name_hashes.emplace(name_hash, type_hash);
+            type_name = register_name(type_name, type_hash, "_Array");
 
             auto [type,_] = m_types.emplace(type_hash,
                                                      Type(type_name, type_hash,
@@ -204,15 +215,7 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
         }
         case ADF::MetaType::InlineArray: {
             type_name = type_name.substr(3, type_name.size() - 4);
-            type_name += std::format("_InlineArray_{}", type_def.element_len);
-            name_hash = hash_string(type_name);
-
-            const auto& existing_type_hash = m_already_seen_name_hashes.find(name_hash);
-            if (existing_type_hash != m_already_seen_name_hashes.end() && existing_type_hash->second != type_hash) {
-                GLog_Warning("Type name hash collision for type name '{}' with hash {:08X}", type_name, name_hash);
-                type_name = std::format("{}_{:08X}_InlineArray_{}", adf.get_string(type_def.name_id), type_hash, type_def.element_len);
-            }
-            m_already_seen_name_hashes.emplace(name_hash, type_hash);
+            type_name = register_name(type_name, type_hash, std::format("_InlineArray_{}", type_def.element_len));
 
             TypeAndSize data(type_def.element_len, type_def.element_type_hash);
             const auto &[entry, _] = m_types.emplace(type_hash,
@@ -222,7 +225,6 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
             return entry->second;
         }
         case ADF::MetaType::StringType: {
-            m_already_seen_name_hashes.emplace(name_hash, type_hash);
             const auto &[entry, _] = m_types.emplace(type_hash,
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,
@@ -240,7 +242,6 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
                     type_name = type_name.substr(0, pos);
                 }
             }
-            m_already_seen_name_hashes.emplace(hash_string(type_name), type_hash);
             const auto &[entry, _] = m_types.emplace(type_hash,
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,
@@ -249,13 +250,13 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
             return entry->second;
         }
         case ADF::MetaType::Enumeration: {
+            type_name = register_name(type_name, type_hash);
             const auto &adf_members = std::get<std::vector<ADF::EnumMemberInfo> >(adf_type.type_data());
             std::vector<EnumMember> members;
             members.reserve(adf_members.size());
             for (const auto &[name_id, value]: adf_members) {
                 members.emplace_back(adf.get_string(name_id), value);
             }
-            m_already_seen_name_hashes.emplace(name_hash, type_hash);
             const auto &[entry, _] = m_types.emplace(type_hash,
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,
@@ -264,7 +265,7 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
             return entry->second;
         }
         case ADF::MetaType::StringHash: {
-            m_already_seen_name_hashes.emplace(name_hash, type_hash);
+            type_name = register_name(type_name, type_hash);
             const auto &[entry, _] = m_types.emplace(type_hash,
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,

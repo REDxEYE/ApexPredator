@@ -2,6 +2,7 @@
 
 #ifndef APEXPREDATOR_ADF_SUPPORT_TYPES_H
 #define APEXPREDATOR_ADF_SUPPORT_TYPES_H
+#include <cstdint>
 #include <format>
 #include <string>
 
@@ -11,6 +12,7 @@
 #include "nlohmann/json.hpp"
 
 using String = std::string;
+using voidPtr = void*;
 
 
 template<class E>
@@ -133,6 +135,10 @@ public:
                 } else {
                     out << "null";
                 }
+            } else if constexpr (std::is_enum_v<T>) {
+                out << std::to_string(static_cast<std::underlying_type_t<T>>(ptr));
+            } else if constexpr (std::is_same_v<T, voidPtr>) {
+                out << std::to_string(reinterpret_cast<std::uintptr_t>(ptr));
             } else {
                 out << std::to_string(ptr);
             }
@@ -161,6 +167,10 @@ public:
                 } else {
                     arr.emplace_back();
                 }
+            } else if constexpr (std::is_enum_v<T>) {
+                arr.emplace_back(std::to_string(static_cast<std::underlying_type_t<T>>(ptr)));
+            } else if constexpr (std::is_same_v<T, voidPtr>) {
+                arr.emplace_back(std::to_string(reinterpret_cast<std::uintptr_t>(ptr)));
             } else {
                 arr.emplace_back(std::to_string(ptr));
             }
@@ -206,6 +216,10 @@ public:
                 } else {
                     out << "null";
                 }
+            } else if constexpr (std::is_enum_v<T>) {
+                out << std::to_string(static_cast<std::underlying_type_t<T>>(ptr));
+            } else if constexpr (std::is_same_v<T, voidPtr>) {
+                out << std::to_string(reinterpret_cast<std::uintptr_t>(ptr));
             } else {
                 out << std::to_string(ptr);
             }
@@ -230,6 +244,10 @@ public:
                 } else {
                     arr.emplace_back();
                 }
+            } else if constexpr (std::is_enum_v<T>) {
+                arr.emplace_back(std::to_string(static_cast<std::underlying_type_t<T>>(ptr)));
+            } else if constexpr (std::is_same_v<T, voidPtr>) {
+                arr.emplace_back(std::to_string(reinterpret_cast<std::uintptr_t>(ptr)));
             } else {
                 arr.emplace_back(std::to_string(ptr));
             }

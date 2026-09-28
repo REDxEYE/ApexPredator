@@ -6,6 +6,7 @@
 #include <utility>
 #include <deque>
 
+#include "apex/gtoc.h"
 #include "apex/hashes.h"
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
@@ -32,11 +33,11 @@ protected:
         }
         auto buffer = get(hash);
         if (!buffer) {
-            const auto name = find_name(hash);
+            const auto name = find_asset_name(hash);
             if (name)
-                GLog_Error("Failed to load archive \"%s\"", name->data());
+                GLog_Error("Failed to load archive \"{}\"", name->data());
             else
-                GLog_Error("Failed to load archive with hash 0x%08X", hash);
+                GLog_Error("Failed to load archive with hash 0x{:08X}", hash);
             return {false, 0};
         }
 
@@ -46,7 +47,7 @@ protected:
 
 
         if (memcmp(first_bytes.data(), AAF_MAGIC, 4) == 0) {
-            const auto name = find_name(hash);
+            const auto name = find_asset_name(hash);
             if (name) {
                 GLog_Info("Mounting AAF archive \"{}\"", name->data());
             }
@@ -58,6 +59,11 @@ protected:
             std::unique_ptr<IO::File> section_buffer = aaf_archive.get_data();
 
             mount(std::make_unique<SArchive>(hash, std::move(section_buffer)));
+            return {true, hash};
+        }
+        if (memcmp(first_bytes.data(), GTOC_MAGIC, 4) == 0) {
+            auto gtoc_archive = std::make_unique<GTOCArchive>(*this, std::move(buffer), hash);
+            mount(std::move(gtoc_archive));
             return {true, hash};
         }
         return {false, 0};

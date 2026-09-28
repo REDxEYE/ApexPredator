@@ -10,6 +10,8 @@
 #include "havok/tag_file/havok_tag_file.h"
 #include "tag_file/havok_tag_file_get_item.h"
 
+#include "nlohmann/json.hpp"
+
 template<typename T>
 std::unique_ptr<Havok::BaseType> new_instance() {
     return std::make_unique<T>();
@@ -463,11 +465,12 @@ public:
 };
 
 template<typename T>
-    requires std::is_base_of_v<Havok::BaseType, T>
 struct hkRefPtr : Havok::BaseType {
     hkRefPtr() = default;
+    ~hkRefPtr() noexcept override;
 
     void read(IO::File &buffer, Havok::Tag::TagFile &tag_file) override {
+        static_assert(std::is_base_of_v<Havok::BaseType, T>, "hkRefPtr<T> requires T : BaseType");
         const auto index = buffer.read_pod<uint64>();
         if (index == 0) {
             ptr.reset(nullptr);
@@ -475,7 +478,7 @@ struct hkRefPtr : Havok::BaseType {
         }
         const auto info = tag_file.get_item_info(index);
         auto item = Havok::Tag::get_item(tag_file, index);
-        ptr = std::move(item);
+        ptr = unique_ptr_downcast<T>(std::move(item));
     }
 
     void print(std::ostream &out) const override {
@@ -523,6 +526,9 @@ protected:
     std::unique_ptr<T> ptr;
 };
 
+template<typename T>
+hkRefPtr<T>::~hkRefPtr() noexcept {}
+
 struct hkRefVariant : hkRefPtr<Havok::BaseType> {
 };
 
@@ -530,6 +536,8 @@ struct hkRefVariant : hkRefPtr<Havok::BaseType> {
 template<typename T>
 struct hkPtr : Havok::BaseType {
     hkPtr() = default;
+    // Define the destructor out of class so pointer targets can be forward-declared.
+    ~hkPtr() noexcept override;
 
     void read(IO::File &buffer, Havok::Tag::TagFile &tag_file) override {
         static_assert(std::is_base_of_v<BaseType, T>, "hkPtr<T> requires T : BaseType");
@@ -594,6 +602,9 @@ struct hkPtr : Havok::BaseType {
 private:
     std::unique_ptr<T> ptr;
 };
+
+template<typename T>
+hkPtr<T>::~hkPtr() noexcept {}
 
 template<typename V, uint32 HASH>
 class hkHandle : public Havok::BaseType {

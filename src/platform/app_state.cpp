@@ -1,15 +1,12 @@
-// Created by RED on 01.02.2026.
-
 #include "platform/app_state.h"
+#include "apex/package/tab_archive.h"
 
-ApexArchiveManager &ApexAppState::manager() {
-    return m_archive_manager;
-}
-
-const std::filesystem::path & ApexAppState::export_path() const {
-    return m_export_path;
-}
-
-void ApexAppState::export_path(const std::filesystem::path &path) {
-    m_export_path = path;
+void ApexAppState::mount_archives() {
+    auto manager = std::make_shared<ApexArchiveManager>();
+    auto root = m_game_root;
+    if (std::filesystem::is_directory(root / "archives_win64")) root /= "archives_win64";
+    TabArchive::mount_folder_optional(*manager, root / "supplemental");
+    TabArchive::mount_folder_optional(*manager, root / "optional");
+    TabArchive::mount_folder(*manager, root / "initial");
+    m_archive_manager = std::move(manager);
 }

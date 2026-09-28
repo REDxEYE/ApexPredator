@@ -53,7 +53,7 @@ ApexPredator search "%env/terrain%" -d hashes.db
 ```
 
 ## Helper tools (in `src/tools`)
-- `HashCollector <game_root>`: walks archives, ingests strings from `gz_strings/*.txt`, and populates `hashes.db` in the working directory.
+- `GenerationZeroHashCollector <game_root>` / `Rage2HashCollector <game_root>`: walk game archives and collect strings, including paths and extensions from GTOC/STOC indexes. GenZ reads `../gz_strings/*.txt` and writes `../hashes.db`; Rage 2 reads `../rage_strings/filelist.txt` and writes `../rage2_hashes.db`, relative to the working directory. See [asset_database.md](docs/asset_database.md) for hash policies and TOC support.
 - `AdfTypeGenerator <game_root>`: generates ADF type bindings. **Note:** output paths are hardcoded to `D:/projects/cpp/ApexPredator/include/...` and `src/...`; adjust before running.
 - `HavokTypeGenerator <game_root>`: generates Havok type bindings; paths are likewise hardcoded to the repository root—update them for your environment.
 - `StringHasher`: read strings from stdin and prints their 32-bit hash.
@@ -62,3 +62,67 @@ ApexPredator search "%env/terrain%" -d hashes.db
 - Normalize input paths to forward slashes; hashes are computed on the normalized form.
 - Keep `hashes.db` under version control’s ignore list; it is a generated helper database.
 - See `LICENSE` for licensing details.
+
+## Virtual model export
+
+AMF meshes/materials, ADF terrain, Havok skeletons/animations and RTPC scene nodes now build RedsCore virtual models (`redscore/platform/model/model.hpp`, namespace `VM`). The game module serializes the completed scene with `VM::save_gltf`; game exporters do not construct glTF accessors, buffers or skins. Format-specific unpacking and texture processing remain in ApexPredator. Each requested asset starts with a fresh scene.
+Both AMF exporters use `src/exporter/amf_attribute_decode.cpp` for packed vertex attributes; each module still resolves its own index/vertex buffer layout. Decoding selects a conversion by AMF usage **and format**, not component width. Unknown attribute usages are skipped. Unsupported formats for supported usages stop extraction with a diagnostic containing enum names (when known), raw IDs, and stream location; same-width float16 and UNORM variants are not misread as SNORM.
+
+This requires the updated C++ RedsCore model API. `cmake/dependencies.cmake` uses the local RedsCore checkout when present and pins the published API revision for other builds. See RedsCore's `docs/virtual_model.md` for ownership rules, the Rust-to-C++ mapping and supported features.
+
+Validation:
+
+```sh
+cmake -S . -B cmake-build-debug -DREDSCORE_BUILD_MODEL_TESTS=ON
+cmake --build cmake-build-debug --target ApexPredator RedsCoreModelTests
+ctest --test-dir cmake-build-debug/_deps/RedsCore-build -R '^RedsCore.VirtualModel$' --output-on-failure
+python tests/test_virtual_model_cli.py cmake-build-debug/ApexPredator
+python tests/test_rage2_amf_cli.py cmake-build-debug/ApexPredator
+```
+
+The CLI fixtures exercise Generation Zero scene isolation and Rage 2 lookup3-to-TAB model references, merged-buffer streams, submesh offsets, 16/32-bit indices, skipped unknown attribute usages, and diagnostics for unsupported formats of known usages. Add `--skeleton path/to/file.bsk` (repeatable) to the Generation Zero test to exercise local Havok files too.
+
+## Loadable game modules
+
+The CLI now loads game support from DLL/SO modules. Build `ApexPredator` and keep its `modules/` directory beside the executable; the build produces the Generation Zero and Rage 2 modules automatically. The host does not link the game readers or generated types. Modules are built with the app and share C++ interfaces and `ApexAppState`; only the loader entry symbol uses `extern "C"`.
+
+```sh
+ApexPredator modules /path/to/GenerationZero/archives_win64
+ApexPredator extract /path/to/GenerationZero/archives_win64 asset.modelc --module generation-zero -d hashes.db -o exported
+```
+
+Omit `--module` to auto-detect the game, pass a module file path to select a specific library, or add `--module-dir` for another discovery directory. Each module exposes a read-only game-root probe. Generation Zero accepts installation/archive roots with its executable or Steam app ID marker and supported TAB 2.1 archives.
+
+See [game_modules.md](docs/game_modules.md) for the ABI, root detection rules, tests and adding another game by duplicating its private readers/exporters.
+
+Rage 2 is registered as `rage2` and recognizes its installation/archive root using `RAGE2.exe` (or Steam app ID `548570`) and TAB 3.1 archives:
+
+```sh
+ApexPredator modules "/mnt/games/SteamLibrary/steamapps/common/RAGE 2/" --module rage2
+```
+
+Rage 2 supports raw TAB 3.1 extraction (`extract ROOT ASSET -r -o OUTPUT`) by path or hash, including zlib and Oodle payloads. To export an AMF model or mesh to glTF, omit `-r`, select `--module rage2`, and supply `-d rage2_hashes.db` so lookup3 mesh/material references resolve to resource names:
+
+```sh
+ApexPredator extract "/path/to/RAGE 2" models/props/cable/horizontal_03.modelc --module rage2 -d rage2_hashes.db -o exported/models
+ApexPredator extract "/path/to/RAGE 2" models/props/cable/horizontal_03.meshc --module rage2 -d rage2_hashes.db -o exported/meshes
+```
+
+Model references are lookup3 hashes in GTOC resources; containing archives are addressed through their Murmur-hashed names in TAB. A populated Rage 2 asset database and its `sarc.0.gtoc` index are needed for embedded `.meshc`/`.hrmeshc` data. Export selects the highest available mesh LOD and maps the first three GeneralR2 texture slots to albedo, normal, and metallic/roughness. BC5 normals use two channels for X/Y; the glTF PNG expands them to RGB and reconstructs Z. Use separate output directories when exporting a `.modelc` and `.meshc` with the same basename; both otherwise produce the same `.gltf` path. Other asset conversions depend on their game-specific decoders.
+
+Meshes with `AmfUsage_WireRadius`/`AmfFormat_R16_SNORM` (including `models/props/cable/horizontal_03.modelc` and `models/weapons/ark_assault/assault_skin_snake.modelc`) export without wire radius data because that usage has no implemented glTF mapping.
+
+## CI build artifacts
+
+The GitHub Actions build workflow produces Linux x64 and Windows x64 artifacts containing `ApexPredator`, `modules/generation_zero`, `modules/rage2`, `hashes.db`, and `rage2_hashes.db`. It builds the `ApexPredator` target (which builds both modules) without running or building the optional test targets.
+
+CI unpacks the committed `hashes.db.tar.xz` and `rage2_hashes.db.tar.xz` archives into each artifact. After changing either local database, regenerate and commit both archives:
+
+```sh
+cmake -S . -B build
+cmake --build build --target CompressDatabases
+git add hashes.db.tar.xz rage2_hashes.db.tar.xz
+git commit -m "Update compressed game hash databases" -- hashes.db.tar.xz rage2_hashes.db.tar.xz
+```
+
+`CompressDatabases` uses SQLite's backup API, so committed changes in an active `-wal` file are included without changing the live databases. The archives contain only the database files, not the WAL or SHM files.

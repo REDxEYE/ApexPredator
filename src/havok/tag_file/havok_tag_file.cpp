@@ -195,6 +195,28 @@ void TagFile::read_DATA_tag(std::unique_ptr<IO::File> &buffer) {
     m_data = std::make_unique<IO::MemoryFile>(std::move(data));
 }
 
+static void read_type_identities_v2(std::unique_ptr<IO::File> &buffer,
+                                    const std::vector<std::string> &names,
+                                    std::vector<SharedType> &types) {
+    const auto type_count64 = read_compressed_int(buffer);
+    if (type_count64 <= 0) throw std::runtime_error("Type count is zero");
+    const size_t type_count = static_cast<size_t>(type_count64);
+
+    types.clear();
+    types.reserve(type_count);
+    types.emplace_back(std::make_shared<Type>()); // id 0 sentinel
+
+    for (size_t i = 1; i < type_count; ++i) {
+        types.emplace_back(std::make_shared<Type>(buffer, names));
+    }
+
+    buffer->align(4);
+    if (buffer->remaining() != 0) {
+        GLog_Error("TNA1 did not read entire buffer, size={} remaining={}", buffer->get_size(), buffer->remaining());
+        throw std::runtime_error("TNA1 did not read entire buffer");
+    }
+}
+
 static void read_type_identities(std::unique_ptr<IO::File> &buffer,
                                  const std::vector<std::string> &names,
                                  std::vector<SharedType> &types) {
@@ -225,6 +247,80 @@ const T &check_id_range(const uint64 id, const std::vector<T> &array) {
     return array[id];
 }
 
+
+void read_type_bodies_v2(std::unique_ptr<IO::File> &buffer, std::vector<std::shared_ptr<Type> > &types,
+                         const std::vector<std::string> &member_names) {
+    while (buffer->remaining()) {
+        const auto type_id = read_compressed_int(buffer);
+        if (type_id == 0) {
+            break;
+        }
+        const auto &type = check_id_range(type_id, types);
+        if (const auto parent_id = read_compressed_int(buffer); parent_id != 0) {
+            type->parent = check_id_range(parent_id, types);
+        }
+
+        const auto flags = static_cast<TypeFlags>(read_compressed_int(buffer));
+        if (flags & TypeFlags::Format) {
+            const auto format = read_compressed_int(buffer);
+            type->format = format >> 4;
+            type->data_type = static_cast<DataType>(format & 0xF);
+        }
+        if (flags & TypeFlags::SubType) {
+            // if (type->format==0) {
+            //     throw std::runtime_error("Invalid type with Subtype but not Format");
+            // }
+
+            int64 sub_id = read_compressed_int(buffer);
+            auto& sub_type = check_id_range(sub_id, types);
+            type->sub_type = sub_id;
+        }
+        if (flags & TypeFlags::Version) {
+            type->version = read_compressed_int(buffer);
+        }
+        if (flags & TypeFlags::SizeAlign) {
+            type->size(read_compressed_int(buffer));
+            type->align(read_compressed_int(buffer) & 0xFF);
+        }
+        if (flags & TypeFlags::Flags) {
+            type->flags = read_compressed_int(buffer);
+        }
+        if (flags & TypeFlags::Fields) {
+            const auto encoded = read_compressed_int(buffer);
+            const auto field_count = encoded & 0xffff;
+            const auto prop_count = encoded >> 16;
+            if (prop_count > 0) {
+                GLog_Warning("Unsupported properties in type body, prop count: {}", prop_count);
+            }
+
+            type->members.reserve(field_count);
+            auto &members = type->members;
+            for (uint32 i = 0; i < field_count; i++) {
+                const auto member_name_id = read_compressed_int(buffer);
+                const auto member_flags = read_compressed_int(buffer);
+                const auto member_offset = read_compressed_int(buffer);
+                const auto member_type_id = read_compressed_int(buffer);
+                members.emplace_back(check_id_range(member_name_id, member_names),
+                                     member_flags, member_offset,
+                                     check_id_range(member_type_id, types));
+            }
+        }
+        if (flags & TypeFlags::Interfaces) {
+            const auto iface_count = read_compressed_int(buffer);
+            type->interfaces.reserve(iface_count);
+            auto &interfaces = type->interfaces;
+            for (uint32 i = 0; i < iface_count; i++) {
+                const auto iface_type_id = read_compressed_int(buffer);
+                const auto offset = read_compressed_int(buffer);
+                interfaces.emplace_back(iface_type_id, offset);
+            }
+        }
+        if (flags & TypeFlags::Attribute) {
+            GLog_Error("Unsupported Attribute flag in type body");
+            throw std::runtime_error("Unsupported Attribute flag in type body");
+        }
+    }
+}
 
 void read_type_bodies(std::unique_ptr<IO::File> &buffer, std::vector<std::shared_ptr<Type> > &types,
                       const std::vector<std::string> &member_names) {
@@ -322,14 +418,27 @@ void TagFile::read_TYPE_tag(std::unique_ptr<IO::File> &buffer) {
     auto strings_buffer = slice_tag(expect_tag(buffer, "TSTR"), buffer);
     const std::vector<std::string> class_names = read_strings(strings_buffer);
 
-    auto type_identity_buffer = slice_tag(expect_tag(buffer, "TNAM"), buffer);
-    read_type_identities(type_identity_buffer, class_names, m_types);
-
+    if (version() == SDKVersion::SDK2016) {
+        auto type_identity_buffer = slice_tag(expect_tag(buffer, "TNAM"), buffer);
+        read_type_identities(type_identity_buffer, class_names, m_types);
+    } else if (version() == SDKVersion::SDK2017) {
+        auto type_identity_buffer = slice_tag(expect_tag(buffer, "TNA1"), buffer);
+        read_type_identities_v2(type_identity_buffer, class_names, m_types);
+    } else {
+        throw std::runtime_error("Unsupported SDK version");
+    }
     auto member_names_buffer = slice_tag(expect_tag(buffer, "FSTR"), buffer);
     const std::vector<std::string> member_names = read_strings(member_names_buffer);
 
-    auto type_body_buffer = slice_tag(expect_tag(buffer, "TBOD"), buffer);
-    read_type_bodies(type_body_buffer, m_types, member_names);
+    if (version() == SDKVersion::SDK2016) {
+        auto type_body_buffer = slice_tag(expect_tag(buffer, "TBOD"), buffer);
+        read_type_bodies(type_body_buffer, m_types, member_names);
+    } else if (version() == SDKVersion::SDK2017) {
+        auto type_body_buffer = slice_tag(expect_tag(buffer, "TBDY"), buffer);
+        read_type_bodies_v2(type_body_buffer, m_types, member_names);
+    } else {
+        throw std::runtime_error("Unsupported SDK version");
+    }
 
     auto type_hashes_buffer = slice_tag(expect_tag(buffer, "THSH"), buffer);
     read_type_hashes(type_hashes_buffer, m_types);

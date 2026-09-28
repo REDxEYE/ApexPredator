@@ -1,0 +1,6 @@
+add_library(ApexOoz STATIC kraken.cpp bitknit.cpp lzna.cpp)
+target_include_directories(ApexOoz PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+set_target_properties(ApexOoz PROPERTIES CXX_VISIBILITY_PRESET hidden)
+if(NOT MSVC)
+    target_compile_options(ApexOoz PRIVATE -msse4.1 -fno-strict-aliasing)
+endif()

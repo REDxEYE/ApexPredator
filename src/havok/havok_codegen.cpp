@@ -1,13 +1,49 @@
 // Created by RED on 12.10.2025.
-
 #include "havok/havok_codegen.h"
 
+#include <algorithm>
+#include <fstream>
+#include <functional>
+#include <map>
 #include <ranges>
-
-#include "redscore/platform/logger.h"
-#include "utils/hash_helper.h"
+#include <set>
+#include <unordered_set>
 
 using namespace Havok::CodeGen;
+
+// These definitions live in the support headers, not in the tag-file schema.
+static bool supplied_type(const SharedType &type) {
+    static const std::set<std::string> names{
+        "hkBool", "hkBaseObject", "hkVector4f", "hkRotationImpl", "hkMatrix3Impl",
+        "hkReflect_Type", "hkReflect_Detail_Opaque", "hkReflect_QualifiedType",
+        "hkString", "hkFixedArray", "hkArray", "hkRelArray", "hkFreeListArray",
+        "hkEnum", "hkFlags", "hkPtrAndInt", "hkHashMap", "hkRefPtr", "hkRefVariant",
+        "hkPtr", "hkHandle", "hkaiIndex", "hkaiPackedKey_", "hkFreeListArrayElement",
+        "hkcdStaticTree_Tree", "hkcdDynamicTree_Tree", "hkcdStaticTree",
+        "hkcdStaticTree_DynamicStorage", "hkcdDynamicTree_DefaultDynamicStorage",
+        "hknpSparseCompactMap", "hkcdStaticMeshTreeBase_PrimitiveDataRunBase",
+        "hkBitFieldBase", "hkBitFieldStorage", "hkcdStaticMeshTreeCommonConfig"
+    };
+    return names.contains(type->name());
+}
+
+static bool native_type(const SharedType &type) {
+    static const std::set<std::string> names{
+        "void", "bool", "char", "signed char", "unsigned char", "short", "unsigned short",
+        "int", "unsigned int", "long", "unsigned long", "long long", "unsigned long long",
+        "float", "double", "int8", "uint8", "int16", "uint16", "int32", "uint32", "int64", "uint64",
+        "float32", "float64"
+    };
+    return names.contains(type->name());
+}
+
+bool is_basic_type(const SharedType &type) {
+    if (!type) throw std::runtime_error("Missing Havok member type");
+    if (supplied_type(type)) return type->name() == "hkBool";
+    if (!type->scalar_type.empty()) return true;
+    if (native_type(type)) return type->name() != "void";
+    return type->type == MetaType::PRIMITIVE && type->parent() && is_basic_type(type->parent());
+}
 
 struct Context {
     const TypeLibrary &lib;
@@ -15,336 +51,170 @@ struct Context {
     std::ofstream &header_stream;
     std::ofstream &impl_stream;
     std::ofstream &formatting_impl_stream;
-
-    bool fwd_mode;
+    std::vector<SharedType> ordered;
+    std::map<const Type *, SharedType> enum_storage;
+    std::map<const Type *, std::vector<SharedType>> dependencies;
 };
 
-bool is_trivial_type(const SharedType &type) {
-    if (!type->template_args.empty() && type->type!=MetaType::ENUM) {
-        return false;
-    }
-    bool is_trivial = true;
-    if (type->parent() != nullptr) {
-        is_trivial &= is_trivial_type(type->parent());
-    }
-
-    if (type->type == MetaType::BASIC ||
-        type->type == MetaType::PRIMITIVE ||
-        type->type == MetaType::ENUM ||
-        type->type == MetaType::STRING
-    ) {
-        return is_trivial;
-    }
-    if (type->type == MetaType::POINTER) {
-        return true;
-    }
-
-    if (type->type == MetaType::RECORD) {
-        if (std::holds_alternative<std::vector<Member> >(type->data)) {
-            const auto &members = std::get<std::vector<Member> >(type->data);
-            for (const auto &member: members) {
-                is_trivial &= is_trivial_type(member.type());
-            }
-        }
-        return is_trivial;
-    }
-
-    return is_trivial;
+static SharedType type_arg(const SharedType &type, size_t index) {
+    if (index >= type->template_args.size() || !std::holds_alternative<WeakType>(type->template_args[index].value))
+        throw std::runtime_error("Missing type argument in " + type->name());
+    auto result = unwrap_weak(std::get<WeakType>(type->template_args[index].value));
+    if (!result) throw std::runtime_error("Expired type argument in " + type->name());
+    return result;
 }
 
-bool is_basic_type(const SharedType &type) {
-    return type->type == MetaType::BASIC ||
-           (type->type == MetaType::PRIMITIVE && type->parent() != nullptr && is_basic_type(type->parent()));
+static bool indirect_type(const SharedType &type) {
+    return type->type == MetaType::POINTER || type->type == MetaType::ARRAY ||
+           type->name() == "hkRefPtr" || type->name() == "hkRelArray";
 }
 
-static std::set<SharedType> g_processed_hashes{};
-
-void emit_type(Context &ctx, const SharedType &type, std::ofstream &header_stream);
-
-void emit_fwd_type_decl(Context &ctx, const SharedType &type, std::ofstream &stream) {
-    switch (type->type) {
-        case MetaType::RECORD: {
-            if (type->template_args.size() == 0) {
-                stream << std::format("struct {}; // size: {}\n\n", type->name(), type->size);
-            }
-            else {
-                stream << std::format("/*\nstruct {}; // size: {}\n*/\n\n", type->name(), type->size);
-            }
-            break;
-        }
-        case MetaType::PRIMITIVE:
-        case MetaType::OPAQUE:
-        case MetaType::STRING:
-        case MetaType::BASIC:
-        case MetaType::POINTER:
-        case MetaType::FIXED_ARRAY:
-        case MetaType::ARRAY:
-        case MetaType::ENUM:
-        case MetaType::SPECIAL:
-        case MetaType::TYPE_COUNT: {
-            throw std::runtime_error(std::format("emit_fwd_type_decl is not implemented for type {} of meta type {}",
-                                                 type->name(), type->type));
-            break;
+static void plan_types(Context &ctx) {
+    std::vector<SharedType> roots;
+    for (const auto &[hash, type] : ctx.lib.types()) roots.push_back(type);
+    std::ranges::sort(roots, [](const auto &a, const auto &b) {
+        return std::pair(a->type_name(), a->hash) < std::pair(b->type_name(), b->hash);
+    });
+    // Enum wrappers refer to an enum identity that may otherwise appear as BASIC/OPAQUE.
+    // Its storage belongs to the wrapper; emit the identity once, not once per wrapper.
+    for (const auto &type : roots) {
+        if (type->type == MetaType::ENUM) {
+            auto identity = type_arg(type, 0), storage = type_arg(type, 1);
+            ctx.enum_storage.try_emplace(identity.get(), storage);
         }
     }
-}
-
-bool should_skip_type_info(const MetaType type) {
-    return type == MetaType::BASIC || type == MetaType::OPAQUE;
-}
-
-
-std::set<std::string> g_generated_templates;
-
-void emit_struct(Context &ctx, const SharedType &type, std::ofstream &header_stream) {
-    if (std::holds_alternative<std::vector<Member> >(type->data)) {
-        const auto &members = std::get<std::vector<Member> >(type->data);
-
-        for (const auto &member: members) {
-            emit_type(ctx, member.type(), header_stream);
+    for (const auto &type : roots) {
+        auto &deps = ctx.dependencies[type.get()];
+        auto add = [&](const SharedType &dep) {
+            if (!dep) throw std::runtime_error("Missing dependency of " + type->type_name());
+            if (std::ranges::find(deps, dep) == deps.end()) deps.push_back(dep);
+        };
+        if (auto it = ctx.enum_storage.find(type.get()); it != ctx.enum_storage.end()) {
+            add(it->second);
+            continue;
         }
-
-        if (type->parent() != nullptr) {
-            emit_type(ctx, type->parent(), header_stream);
+        if (type->parent() && !supplied_type(type)) add(type->parent());
+        if (!supplied_type(type) && type->type == MetaType::RECORD) {
+            if (const auto *members = std::get_if<std::vector<Member>>(&type->data))
+                for (const auto &member : *members) add(member.type());
         }
-
-        if (!type->template_args.empty()) {
-            if (g_generated_templates.contains(type->name())) {
-                return;
-            }
-            g_generated_templates.insert(type->name());
-            header_stream << "/*\ntemplate<";
-            for (size_t i = 0; i < type->template_args.size(); i++) {
-                const auto &arg = type->template_args[i];
-                if (std::holds_alternative<WeakType>(arg.value)) {
-                    header_stream << "typename " << arg.name;
-                }
-                else if (std::holds_alternative<int64>(arg.value)) {
-                    header_stream << "int64 " << arg.name;
-                }
-
-                if (i != type->template_args.size() - 1) {
-                    header_stream << ", ";
-                }
-            }
-            header_stream << ">\n";
-        }
-
-        if (type->parent() == nullptr) {
-            header_stream << std::format("struct {}: Havok::BaseType {{ // size: {}, alignment: {}\n", type->type_name(), type->size, type->align);
-        }
-        else {
-            header_stream << std::format("struct {}: {} {{ // size: {}, alignment: {}\n", type->name(), type->parent()->type_name(), type->size, type->align);
-        }
-        for (const auto &member: members) {
-            header_stream << std::format("    {} {}; // offset: {}, size: {}\n",
-                                         member.type()->type_name(), member.name, member.offset,
-                                         member.type()->size);
-        }
-        header_stream << "\n";
-        header_stream << "    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;\n";
-        header_stream << "    void print(std::ostream &os) const override;\n";
-        header_stream << "    nlohmann::json to_json() const override;\n";
-
-        header_stream << "};\n\n";
-        if (type->template_args.size() != 0) {
-            header_stream << "*/\n";
-        }
-    }
-    else {
-        if (type->template_args.size() == 0) {
-            header_stream << std::format("struct {} {{}};\n\n", type->name());
-        }
-        else {
-            header_stream << std::format("/*\nstruct {} {{}};\n*/\n\n", type->name());
-        }
-    }
-}
-
-void emit_array(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
-    if (std::holds_alternative<std::vector<Member> >(type->data)) {
-        const auto &members = std::get<std::vector<Member> >(type->data);
-        for (const auto &member: members) {
-            emit_type(ctx, member.type(), ofstream);
-        }
-    }
-}
-
-void emit_primitive(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
-    if (type->parent() != nullptr) {
-        emit_type(ctx, type->parent(), ofstream);
-    }
-
-    if (type->parent() != nullptr) {
-        emit_type(ctx, type->parent(), ofstream);
-        if (type->parent()->template_args.empty()) {
-            ofstream << std::format("typedef {} {}; // size: {}\n\n", type->parent()->name(),
-                                    type->name(),
-                                    type->size);
-        }
-        else {
-            ofstream << std::format("typedef {}<", type->parent()->name());
-            for (size_t i = 0; i < type->parent()->template_args.size(); i++) {
-                const auto &arg = type->parent()->template_args[i];
-                if (std::holds_alternative<int64>(arg.value)) {
-                    ofstream << std::get<int64>(arg.value);
-                }
-                else if (std::holds_alternative<WeakType>(arg.value)) {
-                    const auto &inner_type = unwrap_weak(std::get<WeakType>(arg.value));
-                    emit_type(ctx, inner_type, ofstream);
-                    ofstream << inner_type->name();
-                }
-                if (i != type->parent()->template_args.size() - 1) {
-                    ofstream << ", ";
-                }
-            }
-            ofstream << std::format("> {}; // size: {}\n\n", type->name(),
-                                    type->size);
-        }
-    }
-}
-
-void emit_pointer(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
-    if (!type->template_args.empty()) {
-        const auto &inner_arg = type->template_args[0];
-        if (!std::holds_alternative<WeakType>(inner_arg.value)) {
-            throw std::runtime_error(std::format("Pointer type {} has non-type template argument", type->name()));
-        }
-        const auto &inner_type = unwrap_weak(std::get<WeakType>(inner_arg.value));
-        if (is_trivial_type(inner_type) && ctx.fwd_mode) {
-            emit_type(ctx, inner_type, ctx.fwd_header_stream);
-        }
-        else if (is_trivial_type(inner_type) && !ctx.fwd_mode) {
-            emit_type(ctx, inner_type, ctx.header_stream);
-        }
-        else if (!is_trivial_type(inner_type) && ctx.fwd_mode) {
-            ctx.fwd_mode = false;
-            emit_fwd_type_decl(ctx, inner_type, ctx.fwd_header_stream);
-            emit_type(ctx, inner_type, ctx.header_stream);
-            ctx.fwd_mode = true;
-        }
-        else {
-            emit_type(ctx, inner_type, ctx.header_stream);
-        }
-    }
-}
-
-void emit_basic(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
-    if (!type->template_args.empty()) {
-        for (const auto & template_arg : type->template_args) {
-            if (std::holds_alternative<WeakType>(template_arg.value)) {
-                const auto &inner_type = unwrap_weak(std::get<WeakType>(template_arg.value));
-                emit_type(ctx, inner_type, ofstream);
+        for (const auto &arg : type->template_args) {
+            if (const auto *weak = std::get_if<WeakType>(&arg.value)) {
+                auto inner = unwrap_weak(*weak);
+                if (!inner) throw std::runtime_error("Expired template argument in " + type->name());
+                // Pointers/vectors need a declared class, not its completed definition.
+                // Aliases and enums still must be defined before they can be named.
+                if (indirect_type(type) && inner->type == MetaType::RECORD && !supplied_type(inner)) continue;
+                add(inner);
             }
         }
     }
-    ofstream << std::format("// Basic type {}, size: {}\n\n", type->type_name(), type->size);
+    enum class State { Visiting, Done };
+    std::map<const Type *, State> state;
+    std::vector<SharedType> path;
+    std::function<void(const SharedType &)> visit = [&](const SharedType &type) {
+        if (const auto it = state.find(type.get()); it != state.end()) {
+            if (it->second == State::Done) return;
+            std::string message = "Havok by-value/inheritance dependency cycle: ";
+            for (const auto &entry : path) message += entry->type_name() + " -> ";
+            throw std::runtime_error(message + type->type_name());
+        }
+        state[type.get()] = State::Visiting;
+        path.push_back(type);
+        for (const auto &dep : ctx.dependencies.at(type.get())) visit(dep);
+        path.pop_back();
+        state[type.get()] = State::Done;
+        ctx.ordered.push_back(type);
+    };
+    for (const auto &type : roots) visit(type);
 }
 
-void emit_fixed_array(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
-    if (type->template_args.empty()) {
-        throw std::runtime_error(std::format("Fixed array type {} has no template arguments", type->name()));
-    }
-    const auto &inner_arg = type->template_args[0];
-    if (!std::holds_alternative<WeakType>(inner_arg.value)) {
-        throw std::runtime_error(std::format("Fixed array type {} has non-type inner template argument", type->name()));
-    }
-    const auto &inner_type = unwrap_weak(std::get<WeakType>(inner_arg.value));
-    emit_type(ctx, inner_type, ofstream);
+static bool generated_record(const SharedType &type) {
+    return type->type == MetaType::RECORD && !supplied_type(type);
 }
 
-void emit_enum(Context &ctx, const SharedType &type, std::ofstream &ofstream) {
-    if (type->template_args.size() == 2) {
-        const auto enum_templ = type->template_args[0];
-        const auto underlying_templ = type->template_args[1];
-        if (std::holds_alternative<WeakType>(enum_templ.value) &&
-            std::holds_alternative<WeakType>(underlying_templ.value)
-        ) {
-            const auto &enum_type = unwrap_weak(std::get<WeakType>(enum_templ.value));
-            g_processed_hashes.emplace(enum_type);
-            const auto &underlying_type = unwrap_weak(std::get<WeakType>(underlying_templ.value));
-            emit_type(ctx, underlying_type, ofstream);
-            ofstream << std::format("enum class {} : {}{{}};\n\n", enum_type->name(),
-                                    underlying_type->name());
-        }
+static void emit_template_declaration(const SharedType &type, std::ostream &out) {
+    out << "template<";
+    for (size_t i = 0; i < type->template_args.size(); ++i) {
+        if (i) out << ", ";
+        out << (std::holds_alternative<WeakType>(type->template_args[i].value) ? "typename" : "int64");
     }
+    out << "> struct " << type->name() << ";\n";
 }
 
-void emit_type(Context &ctx, const SharedType &type, std::ofstream &header_stream) {
-    if (g_processed_hashes.contains(type)) {
-        return;
+static void emit_struct(const SharedType &type, std::ostream &out) {
+    if (!type->template_args.empty()) out << "template<>\n";
+    out << std::format("struct {} : {} {{ // size: {}, alignment: {}\n", type->type_name(),
+        type->parent() ? type->parent()->type_name() : "Havok::BaseType", type->size, type->align);
+    if (const auto *members = std::get_if<std::vector<Member>>(&type->data)) {
+        for (const auto &member : *members) {
+            out << std::format("    {} {}; // offset: {}, size: {}\n", member.type()->type_name(), member.name,
+                               member.offset, member.type()->size);
+        }
     }
-    g_processed_hashes.emplace(type);
+    out << "    void read(IO::File& buffer, Havok::Tag::TagFile& tag_file) override;\n"
+           "    void print(std::ostream& os) const override;\n"
+           "    nlohmann::json to_json() const override;\n};\n\n";
+}
 
-    auto& stream = is_trivial_type(type)? ctx.fwd_header_stream : ctx.header_stream;
-
-    switch (type->type) {
-        case MetaType::RECORD: {
-            emit_struct(ctx, type, stream);
-            break;
-        }
-        case MetaType::ARRAY: {
-            emit_array(ctx, type, stream);
-            break;
-        }
-        case MetaType::PRIMITIVE: {
-            emit_primitive(ctx, type, stream);
-            break;
-        }
-        case MetaType::POINTER: {
-            emit_pointer(ctx, type, stream);
-            break;
-        }
-        case MetaType::OPAQUE:
-        case MetaType::SPECIAL:
-        case MetaType::BASIC: {
-            emit_basic(ctx, type, stream);
-            break;
-        }
-        case MetaType::FIXED_ARRAY: {
-            emit_fixed_array(ctx, type, stream);
-            break;
-        }
-        case MetaType::STRING: {
-            break;
-        }
-        case MetaType::ENUM: {
-            emit_enum(ctx, type, stream);
-            break;
-        }
-        case MetaType::TYPE_COUNT: {
-            GLog_Warning("Unhandled {}", type->name());
-            break;
-        }
+static void emit_definition(Context &ctx, const SharedType &type, std::ostream &out) {
+    if (type->name() == "<<INVALID_TYPE>>") return; // Tag index zero is a sentinel.
+    if (auto it = ctx.enum_storage.find(type.get()); it != ctx.enum_storage.end()) {
+        // Prefer the identity's scalar width/sign when present; wrappers can use different storage.
+        const auto underlying = type->scalar_type.empty() ? it->second->type_name() : type->scalar_type;
+        out << std::format("enum class {} : {} {{}};\n\n", type->name(), underlying);
+    } else if (native_type(type) || supplied_type(type)) {
+        out << "// Provided type " << type->type_name() << "\n";
+    } else if (generated_record(type) && !ctx.enum_storage.contains(type.get())) {
+        emit_struct(type, out);
+    } else if (type->type == MetaType::PRIMITIVE && type->parent()) {
+        out << std::format("using {} = {};\n\n", type->name(), type->parent()->type_name());
+    } else if (!type->scalar_type.empty()) {
+        out << std::format("using {} = {};\n\n", type->name(), type->scalar_type);
+    } else if (type->type == MetaType::BASIC || type->type == MetaType::OPAQUE || type->type == MetaType::SPECIAL ||
+               type->type == MetaType::PRIMITIVE) {
+        if (!type->template_args.empty())
+            throw std::runtime_error("No Havok support definition for " + type->type_name());
+        // Unknown opaque data has no scalar semantics. Preserve its bytes, never guess an integer.
+        out << std::format("struct {} : Havok::BaseType {{\n    std::array<uint8, {}> bytes{{}};\n", type->name(), type->size);
+        out << "    void read(IO::File& buffer, Havok::Tag::TagFile&) override { buffer.read_exact<uint8>(bytes); }\n"
+               "    void print(std::ostream& os) const override { os << to_json(); }\n"
+               "    nlohmann::json to_json() const override { return bytes; }\n};\n\n";
     }
 }
 
-void emit_types(Context &ctx) {
+static void emit_types(Context &ctx) {
     ctx.fwd_header_stream << "namespace HavokTypes {\n\n";
-    ctx.header_stream << "namespace HavokTypes {\n\n";
-
-    g_processed_hashes.clear();
-    for (const auto &type: ctx.lib.types() | std::views::values) {
-        if (is_trivial_type(type)) {
-            ctx.fwd_mode = true;
-            emit_type(ctx, type, ctx.fwd_header_stream);
-        }
-        else {
-            ctx.fwd_mode = false;
-            emit_type(ctx, type, ctx.header_stream);
-        }
+    std::set<std::string> templates;
+    for (const auto &type : ctx.ordered) {
+        if (!generated_record(type) || ctx.enum_storage.contains(type.get())) continue;
+        if (type->template_args.empty()) ctx.fwd_header_stream << "struct " << type->name() << ";\n";
+        else if (templates.insert(type->name()).second) emit_template_declaration(type, ctx.fwd_header_stream);
     }
-    ctx.fwd_header_stream << "};\n";
-    ctx.header_stream << "};\n";
+    // extra_support_types.h embeds these generated types. Put their complete dependency
+    // closure in the forward header, in the same topological order as the main header.
+    std::unordered_set<const Type *> early;
+    std::function<void(const SharedType &)> include = [&](const SharedType &type) {
+        if (!early.insert(type.get()).second) return;
+        for (const auto &dep : ctx.dependencies.at(type.get())) include(dep);
+    };
+    for (const auto &type : ctx.ordered) {
+        if (type->name() == "hkAabb" || type->name() == "hkUint32" || type->name() == "hkStringPtr") include(type);
+    }
+    ctx.header_stream << "namespace HavokTypes {\n\n";
+    for (const auto &type : ctx.ordered)
+        emit_definition(ctx, type, early.contains(type.get()) ? ctx.fwd_header_stream : ctx.header_stream);
+    ctx.fwd_header_stream << "}\n";
+    ctx.header_stream << "}\n";
 }
 
-void emit_struct_to_json_function_members(const SharedType &type, std::ofstream &impl_stream) {
+void emit_struct_to_json_function_members(Context &ctx, const SharedType &type, std::ofstream &impl_stream) {
     const auto &type_members = std::get<std::vector<Member> >(type->data);
     if (type->parent()!=nullptr) {
         if (std::holds_alternative<std::vector<Member> >(type->parent()->data)) {
             const auto &parent_members = std::get<std::vector<Member> >(type->parent()->data);
             if (!parent_members.empty()) {
-                emit_struct_to_json_function_members(type->parent(), impl_stream);
+                emit_struct_to_json_function_members(ctx, type->parent(), impl_stream);
             }
         }else {
             throw std::runtime_error(std::format("Parent type {} of struct {} has non-member data",
@@ -352,7 +222,7 @@ void emit_struct_to_json_function_members(const SharedType &type, std::ofstream 
         }
     }
     for (const auto &member: type_members) {
-        if (is_basic_type(member.type())) {
+        if (is_basic_type(member.type()) || ctx.enum_storage.contains(member.type().get())) {
             impl_stream << std::format("    obj_[\"{}\"] = {};\n", member.name, member.name);
         }
         else{
@@ -361,22 +231,22 @@ void emit_struct_to_json_function_members(const SharedType &type, std::ofstream 
     }
 }
 
-void emit_struct_to_json_function(const SharedType &type, std::ofstream &impl_stream) {
-    impl_stream << std::format("nlohmann::json {}::to_json() const {{\n", type->name());
+void emit_struct_to_json_function(Context &ctx, const SharedType &type, std::ofstream &impl_stream) {
+    impl_stream << std::format("nlohmann::json {}::to_json() const {{\n", type->type_name());
     impl_stream << "    nlohmann::json obj_;\n";
-    emit_struct_to_json_function_members(type, impl_stream);
+    emit_struct_to_json_function_members(ctx, type, impl_stream);
     impl_stream << "    return obj_;\n";
     impl_stream << "}\n\n";
 }
 
-void emit_struct_read_function_members(const SharedType &type,
+void emit_struct_read_function_members(Context &ctx, const SharedType &type,
                                        std::ofstream &impl_stream, int64 &offset) {
     const auto &type_members = std::get<std::vector<Member> >(type->data);
     if (type->parent()!=nullptr) {
         if (std::holds_alternative<std::vector<Member> >(type->parent()->data)) {
             const auto &parent_members = std::get<std::vector<Member> >(type->parent()->data);
             if (!parent_members.empty()) {
-                emit_struct_read_function_members(type->parent(), impl_stream, offset);
+                emit_struct_read_function_members(ctx, type->parent(), impl_stream, offset);
             }
         }else {
             throw std::runtime_error(std::format("Parent type {} of struct {} has non-member data",
@@ -390,8 +260,8 @@ void emit_struct_read_function_members(const SharedType &type,
     }
     for (const auto &member: type_members) {
         impl_stream << std::format("    buffer.set_position(_obj_start + {}, std::ios::beg);\n", member.offset);
-        if (is_basic_type(member.type())) {
-            impl_stream << std::format("    {} = buffer.read_pod<{}>();\n", member.name, member.type()->name());
+        if (is_basic_type(member.type()) || ctx.enum_storage.contains(member.type().get())) {
+            impl_stream << std::format("    {} = buffer.read_pod<{}>();\n", member.name, member.type()->type_name());
         }
         else if (member.type()->type == MetaType::FIXED_ARRAY) {
             impl_stream << std::format("    {}.read(buffer, tag_file);\n", member.name);
@@ -417,11 +287,11 @@ void emit_struct_read_function(Context &ctx, const SharedType &type,
                                const std::vector<Member> &members,
                                std::ofstream &impl_stream) {
     impl_stream << std::format("void {}::read(IO::File& buffer, Tag::TagFile& tag_file) {{\n",
-                               type->name());
+                               type->type_name());
     impl_stream<< "    const u64 _obj_start = buffer.get_position();\n";
 
     int64 offset = 0;
-    emit_struct_read_function_members(type, impl_stream, offset);
+    emit_struct_read_function_members(ctx, type, impl_stream, offset);
     impl_stream << std::format("    buffer.set_position(_obj_start+ {}, std::ios::beg);\n", type->size);
     impl_stream << "}\n\n";
 }
@@ -429,71 +299,33 @@ void emit_struct_read_function(Context &ctx, const SharedType &type,
 void emit_struct_print_function(Context &ctx, const SharedType &type,
                                 const std::vector<Member> &members,
                                 std::ofstream &impl_stream) {
-    impl_stream << std::format("void {}::print(std::ostream &os) const {{\n", type->name());
+    impl_stream << std::format("void {}::print(std::ostream &os) const {{\n", type->type_name());
     if (type->parent() != nullptr) {
-        impl_stream << std::format("    {}::print(os);\n", type->parent()->name());
+        impl_stream << std::format("    {}::print(os);\n", type->parent()->type_name());
     }
     impl_stream << "    throw std::runtime_error(\"Not implemented\");\n";
     impl_stream << "}\n\n";
 }
 
-void emit_enum_formatter(const SharedType &type, std::ofstream &fwd_decl_stream, std::ofstream &impl_stream) {
-    const auto &enum_type = type->template_args[0];
-    if (!std::holds_alternative<WeakType>(enum_type.value)) {
-        return;
-    }
-    const auto &enum_shared_type = unwrap_weak(std::get<WeakType>(enum_type.value));
-    // Havok enums don't have members, so just get underlying int type and print it
-    fwd_decl_stream << std::format("std::ostream& operator<<(std::ostream &os, const HavokTypes::{} &value);\n",
-                                   enum_shared_type->name());
-
-    impl_stream << std::format("std::ostream& operator<<(std::ostream &os, const HavokTypes::{} &value) {{\n",
-                               enum_shared_type->name());
-    impl_stream << std::format("    return os << std::to_underlying(value);\n");
-    impl_stream << "}\n\n";
-}
-
-// void emit_new_instance_function(const SharedType &type, std::ofstream &impl_stream) {
-//     std::string full_type_name = type->full_name();
-//     if (type->type == MetaType::POINTER) {
-//         full_type_name += "_Ptr";
-//         impl_stream << std::format("static std::unique_ptr<{}> {}_new_instance() {{\n", type->type_name(),
-//                                    full_type_name);
-//         impl_stream << std::format("    return std::make_unique<{}>();\n", type->type_name());
-//         impl_stream << "}\n\n";
-//     }
-//     else {
-//         impl_stream << std::format("static std::unique_ptr<{}> {}_new_instance() {{\n", type->type_name(),
-//                                    full_type_name);
-//         impl_stream << std::format("    return std::make_unique<{}>();\n", type->type_name());
-//         impl_stream << "}\n\n";
-//     }
-// }
-
 void emit_functions(Context &ctx) {
-    for (const auto &type: ctx.lib.types() | std::views::values) {
-        if (type->type == MetaType::RECORD && type->template_args.size() == 0) {
+    for (const auto &type: ctx.ordered) {
+        if (generated_record(type) && !ctx.enum_storage.contains(type.get())) {
             if (std::holds_alternative<std::vector<Member> >(type->data)) {
                 const auto &members = std::get<std::vector<Member> >(type->data);
 
                 // Generate read, print, and to_json functions
                 emit_struct_read_function(ctx, type, members, ctx.impl_stream);
                 emit_struct_print_function(ctx, type, members, ctx.impl_stream);
-                emit_struct_to_json_function(type, ctx.impl_stream);
+                emit_struct_to_json_function(ctx, type, ctx.impl_stream);
             }
         }
-        else if (type->type == MetaType::ENUM) {
-            emit_enum_formatter(type, ctx.fwd_header_stream, ctx.formatting_impl_stream);
-        }
-        // if (type->hash != 0) {
-        //     emit_new_instance_function(type, ctx.impl_stream);
-        // }
+
     }
 }
 
 
 void emit_type_infos(const Context &ctx) {
-    for (const auto &type: ctx.lib.types() | std::views::values) {
+    for (const auto &type: ctx.ordered) {
         if (type->hash == 0) {
             continue;
         }
@@ -524,7 +356,7 @@ void emit_type_info_table(Context &ctx) {
     ctx.impl_stream << "void init_havok_type_info() {\n";
     ctx.impl_stream << std::format("    havok_type_info.reserve({});\n", ctx.lib.types().size());
 
-    for (const auto &type: ctx.lib.types() | std::views::values) {
+    for (const auto &type: ctx.ordered) {
         if (type->hash != 0) {
             ctx.impl_stream << std::format("    havok_type_info.emplace(0x{:08X}, &TI_{:08X});\n", type->hash,
                                            type->hash);
@@ -546,19 +378,25 @@ void Havok::CodeGen::generate_code(const TypeLibrary &lib,
     auto impl_output = sources_path / "havok_types.cpp";
     auto formatters_output = sources_path / "havok_types_formatters.cpp";
 
-    std::ofstream header_stream(header_output);
-    std::ofstream fwd_decl_stream(fwd_decl_output);
-    std::ofstream impl_stream(impl_output);
-    std::ofstream formatter_stream(formatters_output);
+    std::ofstream header_stream, fwd_decl_stream, impl_stream, formatter_stream;
+    Context ctx{lib, fwd_decl_stream, header_stream, impl_stream, formatter_stream};
+    plan_types(ctx); // Validate cycles before truncating an existing generated file.
+    header_stream.open(header_output);
+    fwd_decl_stream.open(fwd_decl_output);
+    impl_stream.open(impl_output);
+    formatter_stream.open(formatters_output);
+    if (!header_stream || !fwd_decl_stream || !impl_stream || !formatter_stream)
+        throw std::runtime_error("Failed to open Havok code generation outputs");
 
     header_stream << "// This file is autogenerated\n";
     header_stream << "#pragma once\n";
     header_stream << "#include <array>\n";
     header_stream << "#include \"havok/havok_support_types.h\"\n";
-    header_stream << "#include \"havok/extra_support_types.h\"\n\n";
+    if (lib.is_type("hkAabb") && lib.is_type("hkStringPtr") && lib.is_type("hkUint32"))
+        header_stream << "#include \"havok/extra_support_types.h\"\n\n";
     header_stream << "#include \"havok/generated/havok_types_fwd.h\"\n\n";
     header_stream << "#include \"havok/havok_base_type.h\"\n";
-    header_stream << "#include \"json.hpp\"\n";
+    header_stream << "#include \"nlohmann/json.hpp\"\n";
 
     impl_stream << "// This file is autogenerated\n";
     impl_stream << "#include \"havok/generated/havok_types.h\"\n\n";
@@ -582,8 +420,6 @@ void Havok::CodeGen::generate_code(const TypeLibrary &lib,
     fwd_decl_stream << "#include <iostream>\n";
     fwd_decl_stream << "#include <format>\n";
     fwd_decl_stream << "#include <string_view>\n\n";
-
-    Context ctx(lib, fwd_decl_stream, header_stream, impl_stream, formatter_stream, false);
 
     emit_types(ctx);
     emit_functions(ctx);

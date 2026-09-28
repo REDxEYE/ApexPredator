@@ -1,5 +1,6 @@
 #include <cstdio>
 
+#include "games.hpp"
 #include "apex/asset_db.h"
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
@@ -16,18 +17,20 @@ void process_havok_file(Havok::CodeGen::TypeLibrary &lib, std::unique_ptr<IO::Fi
 }
 
 void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
-    std::vector<ArchiveEntry> all_entries;
-    auto& manager = app_state.manager();
-    manager.all_entries(all_entries);
+    auto &manager = app_state.manager();
+    static auto visited_files = std::unordered_set<u64>();
 
-    for (uint32 i = 0; i < all_entries.size(); ++i) {
-        if (i > 0 && i % 100 == 0) {
-            std::cout<< std::format("Processing file {}/{}\r", i, all_entries.size());
-            std::flush(std::cout);
-            // break;
+    app_state.manager().foreach_file([&manager, &lib](const Archive<u64>::ArchiveEntry &archive_entry) {
+        if (visited_files.contains(archive_entry.key)) {
+            return true;
         }
-        const auto &entry = all_entries.at(i);
-        auto buffer = manager.get(entry.path_hash);
+        visited_files.insert(archive_entry.key);
+
+        auto buffer = manager.get(archive_entry.key);
+        if (!buffer) {
+            GLog_Warning("Failed to read file {}", find_name(archive_entry.key).value_or("Unknown"));
+            return true;
+        }
 
         std::vector<uint8> first_buffer(8);
         buffer->read_exact<uint8>(first_buffer);
@@ -42,38 +45,46 @@ void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
             aaf_buffer->set_position(0);
 
             if (std::memcmp(first_buffer.data() + 4, "SARC", 4) == 0) {
-                SArchive sarc(entry.path_hash, std::move(aaf_buffer));
-                std::vector<ArchiveEntry> sarc_entries;
-                sarc.all_entries(sarc_entries);
+                SArchive sarc(archive_entry.key, std::move(aaf_buffer));
+                sarc.foreach_file(
+                    [&archive_entry, &sarc, &first_buffer, &lib](const Archive<u64>::ArchiveEntry &sarc_entry) {
+                        auto sarc_buffer = sarc.get(sarc_entry.key);
 
-                for (auto &sarc_entry: sarc_entries) {
-                    auto sarc_buffer = sarc.get(sarc_entry.path_hash);
+                        sarc_buffer->read_exact<uint8>(first_buffer);
+                        sarc_buffer->set_position(0);
 
-                    sarc_buffer->read_exact<uint8>(first_buffer);
-                    sarc_buffer->set_position(0);
+                        if (!sarc_buffer) {
+                            GLog_Warning("Failed to read file {} from SARC {}",
+                                         find_name(sarc_entry.key).value_or("Unknown"),
+                                         find_name(archive_entry.key).value_or("Unknown")
+                            );
+                            return true;
+                        }
 
-                    if (!sarc_buffer) {
-                        GLog_Warning("Failed to read file {} from SARC {}",
-                                     find_name(sarc_entry.path_hash).value_or("Unknown"),
-                                     find_name(entry.path_hash).value_or("Unknown"));
-                        continue;
-                    }
-
-                    if (memcmp(first_buffer.data() + 4, "TAG0", 4) == 0) {
-                        process_havok_file(lib, std::move(sarc_buffer));
-                    }
-                }
+                        if (memcmp(first_buffer.data() + 4, "TAG0", 4) == 0) {
+                            process_havok_file(lib, std::move(sarc_buffer));
+                        }
+                        return true;
+                    });
             }
-        }
-        else if (memcmp(first_buffer.data() + 4, "TAG0", 4) == 0) {
+        } else if (memcmp(first_buffer.data() + 4, "TAG0", 4) == 0) {
             process_havok_file(lib, std::move(buffer));
         }
-    }
+        return true;
+    });
     printf("\n");
 
     Havok::CodeGen::generate_code(lib,
-                                  "../src/havok/generated",
-                                  "../include/havok/generated");
+#if GAME==GAME_GENERATION_ZERO
+                                  "../modules/generation_zero/src/havok/generated",
+                                  "../modules/generation_zero/include/havok/generated"
+#elif GAME==GAME_RAGE2
+                                  "../modules/rage2/src/havok/generated",
+                                  "../modules/rage2/include/havok/generated"
+#else
+#error "Unsupported game"
+#endif
+                                  );
 }
 
 
@@ -100,16 +111,30 @@ int main(int argc, const char *argv[]) {
         return 0;
     }
     ApexAppState app_state(argv[1]);
+    app_state.mount_archives();
     AssetDB db(argv[2]);
     AssetDB::set_instance(&db);
     Havok::CodeGen::TypeLibrary type_library;
+
+
+    auto mount_gtoc = [&app_state](const std::string_view name) {
+        auto buffer = app_state.manager().get(name);
+        if (!buffer) {
+            return;
+        }
+        auto gtoc_archive = std::make_unique<
+            GTOCArchive>(app_state.manager(), std::move(buffer), asset_path_hash(name));
+        app_state.manager().mount(std::move(gtoc_archive));
+    };
+    mount_gtoc("sarc.0.gtoc");
+    mount_gtoc("resourcesets/expentities.gtoc");
 
     // auto buffer = app_state.manager().get(1615997716);
     // process_havok_file(type_library, std::move(buffer));
     //
     // Havok::CodeGen::generate_code(type_library,
-    //                               "../src/havok/generated",
-    //                               "../include/havok/generated");
+    //                               "../modules/generation_zero/src/havok/generated",
+    //                               "../modules/generation_zero/include/havok/generated");
 
     collect_types(app_state, type_library);
 

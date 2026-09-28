@@ -9,6 +9,8 @@
 #include "havok/generated/havok_generated.h"
 #include "redscore/platform/logger.h"
 #include "utils/hash_helper.h"
+#include <cstdlib>
+#include "tracy/Tracy.hpp"
 
 static void hkVector4f_read(hkVector4f *obj, const TagFile *tf, const uint8 *src) {
     memcpy(obj, src, sizeof(hkVector4f));
@@ -216,7 +218,7 @@ static void NamedVariant_print(const void *obj, JsonContext *ctx) {
     const uint32 hash = hash_cstring(variant->className);
     // const HAVOK_ObjectMethods *methods = DM_get(&lib->object_functions, hash);
     // if (methods == NULL) {
-    //     GLog_Error("No methods for NamedVariant with name: %s (hash 0x%08X)", variant->name, hash);
+    //     GLog_Error("No methods for NamedVariant with name: %s (hash 0x{:08X})", variant->name, hash);
     //     exit(1);
     // }
     // jsonName(ctx, "ptr");
@@ -236,16 +238,17 @@ static void ptr_read(void **dst, const TagFile *tf, const uint8 *src, uint32_t *
     const uint32 type_hash = HKTagType_hash(tag_type);
     const HavokTypeInfo **type_info_p = static_cast<const HavokTypeInfo **>(DM_get(&HAVOK_TYPES_type_info, type_hash));
     if (type_info_p == NULL) {
-        GLog_Error("No type info for type hash 0x%08X", type_hash);
+        GLog_Error("No type info for type hash 0x{:08X}", type_hash);
         abort();
     }
     const HavokTypeInfo *type_info = *type_info_p;
 
     if (type_info->read == NULL) {
-        GLog_Error("No read method for type hash 0x%08X", type_hash);
+        GLog_Error("No read method for type hash 0x{:08X}", type_hash);
         exit(1);
     }
-    char *out = static_cast<char *>(mp_malloc(type_info->size*item->count));
+    char *out = static_cast<char *>(std::malloc(type_info->size*item->count));
+    if (out) TracyAlloc(out, type_info->size * item->count);
     *dst = out;
     for (int i = 0; i < item->count; ++i) {
         if (type_info->init != NULL) {
@@ -265,7 +268,8 @@ static void ptr_free(void *obj) {
     if (ptr->type_info_->free!=NULL) {
         ptr->type_info_->free(obj);
     }
-    mp_free(obj);
+    TracyFree(obj);
+    std::free(obj);
 }
 
 static void hkArray_read(void *dst, const TagFile *tf, const uint8 *src) {
@@ -306,7 +310,8 @@ static void hkArray_free(void *obj) {
                 array->inner_type_info->free(array->m_data + i * array->inner_type_info->size);
             }
         }
-        mp_free(array->m_data);
+        TracyFree(array->m_data);
+        std::free(array->m_data);
         array->m_data = NULL;
     }
     array->m_size = 0;
@@ -329,7 +334,8 @@ static void hkStringPtr_print(const hkStringPtr *obj, JsonContext *ctx) {
 
 static void hkStringPtr_free(hkStringPtr *obj) {
     if (obj->m_data != NULL) {
-        mp_free((void*)obj->m_data);
+        TracyFree(obj->m_data);
+        std::free((void*)obj->m_data);
         obj->m_data = NULL;
     }
 }

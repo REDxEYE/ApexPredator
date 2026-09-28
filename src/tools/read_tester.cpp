@@ -12,7 +12,6 @@
 #include "havok/tag_file/havok_tag_file_get_item.h"
 #include "platform/app_state.h"
 #include "redscore/platform/logger.h"
-#include "redscore/utils/memory_tracker.h"
 #include "tracy/Tracy.hpp"
 
 void test_havok(std::unique_ptr<IO::File> &&buffer, u64 hash) {
@@ -117,11 +116,11 @@ int main(int argc, const char *argv[]) {
     //     }
     //     printf("\n");
 
-    // mp_init();
     init_havok_type_info();
     init_adf_type_info();
 
     ApexAppState app_state(argv[1]);
+    app_state.mount_archives();
     AssetDB db(argv[2]);
     AssetDB::set_instance(&db);
 

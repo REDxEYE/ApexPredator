@@ -39,21 +39,22 @@ SArchive::SArchive(const uint64 m_hash, std::unique_ptr<IO::File> buffer) : m_ha
                 .hash = m_buffer->read_pod<uint32>(),
                 .ext_hash = m_buffer->read_pod<uint32>(),
             };
-            if (hash_string(entry.name) != entry.hash) {
+            if (asset_path_hash(entry.name) != entry.hash) {
                 throw std::runtime_error("SARC entry hash mismatch for file " + std::string(entry.name));
             }
             m_entries[entry.hash] = entry;
         }
     }
 
-    if (const auto name = find_name(m_hash)) {
+    if (const auto name = find_asset_name(m_hash)) {
         m_name = name.value();
+    } else {
+        m_name = std::format("SARC 0x{:08X}", m_hash);
     }
-    m_name = std::format("SARC 0x%08X", m_hash);
 }
 
 bool SArchive::has(const std::string_view path) {
-    const uint64 hash = hash_string(path);
+    const uint64 hash = asset_path_hash(path);
     return m_entries.contains(hash);
 }
 
@@ -62,7 +63,7 @@ bool SArchive::has(const u64 &hash) {
 }
 
 std::unique_ptr<IO::File> SArchive::get(const std::string_view path) {
-    return get(hash_string(path));
+    return get(asset_path_hash(path));
 }
 
 std::unique_ptr<IO::File> SArchive::get(const u64 &hash) {

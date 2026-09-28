@@ -102,6 +102,21 @@ namespace Havok::CodeGen {
     }
 
     std::string Type::type_name() const {
+        static const std::set<std::string> native_scalars{
+            "bool", "char", "signed char", "unsigned char", "short", "unsigned short",
+            "int", "unsigned int", "long", "unsigned long", "long long", "unsigned long long", "float", "double"
+        };
+        if (!scalar_type.empty() && native_scalars.contains(m_name)) return scalar_type;
+        if (m_name == "hkRotationImpl" || m_name == "hkMatrix3Impl") {
+            if (template_args.size() == 1) {
+                const auto element = lock_or_null(require_type_arg(m_name, template_args[0]));
+                if (!element) throw std::runtime_error("Missing matrix element type for " + m_name);
+                return m_name + "<" + element->type_name() + ">";
+            }
+            if (size == 48) return m_name + "<float32>";
+            if (size == 96) return m_name + "<float64>";
+            throw std::runtime_error("Unsupported matrix storage size for " + m_name);
+        }
         if (type == MetaType::POINTER) {
             if (template_args.size() == 1) {
                 const auto &inner = lock_or_null(require_type_arg(m_name, template_args[0]));
@@ -273,8 +288,10 @@ namespace Havok::CodeGen {
     }
 
     std::shared_ptr<Type> TypeLibrary::register_type(const Tag::TagFile &tag_file, const Tag::SharedType &tag_type) {
-        (void) tag_file;
+        return register_type(tag_type);
+    }
 
+    SharedType TypeLibrary::register_type(const Tag::SharedType &tag_type) {
         const auto unique_id = tag_type->unique_id();
         const uint32 key = hash_string(unique_id);
 
@@ -285,7 +302,12 @@ namespace Havok::CodeGen {
             return it->second;
         }
 
-        const SharedType parent_type = tag_type->parent ? register_type(tag_file, tag_type->parent) : nullptr;
+        // Parent recursion must be rejected before querying inherited size/alignment.
+        std::set<const Tag::Type *> ancestry;
+        for (auto parent = tag_type; parent; parent = parent->parent) {
+            if (!ancestry.insert(parent.get()).second)
+                throw std::runtime_error("Havok inheritance dependency cycle at " + tag_type->name);
+        }
 
         auto new_type = std::make_shared<Type>(
             tag_type->name,
@@ -293,20 +315,34 @@ namespace Havok::CodeGen {
             tag_type->hash,
             tag_type->size(),
             tag_type->align(),
-            parent_type
+            nullptr
         );
 
         m_types.emplace(key, new_type);
+        // Publish the shell before following parent/member references back to this type.
+        if (tag_type->parent) new_type->parent_ = register_type(tag_type->parent);
+        // The parser removes the low meta-type nibble from the format word.
+        // Integer signedness is original bit 0x200, hence bit 0x20 here.
+        if (tag_type->data_type == Tag::DataType::BASIC &&
+            (new_type->size == 1 || new_type->size == 2 || new_type->size == 4 || new_type->size == 8)) {
+            new_type->scalar_type = std::format("{}int{}", (tag_type->format & 0x20) ? "" : "u", new_type->size * 8);
+        } else if (tag_type->data_type == Tag::DataType::FLOAT && (new_type->size == 4 || new_type->size == 8)) {
+            new_type->scalar_type = std::format("float{}", new_type->size * 8);
+        } else if (tag_type->data_type == Tag::DataType::BOOL && new_type->size == 1) {
+            new_type->scalar_type = "bool";
+        }
+
 
         // Members -> make it a RECORD unless it's a pointer wrapper.
         if (!tag_type->members.empty() && tag_type->data_type != Tag::DataType::POINTER) {
             std::vector<Member> members;
             members.reserve(tag_type->members.size());
             for (auto &m: tag_type->members) {
-                members.emplace_back(m.name, m.flags, m.offset, register_type(tag_file, m.type()));
+                members.emplace_back(m.name, m.flags, m.offset, register_type(m.type()));
             }
             new_type->data = std::move(members);
             new_type->type = MetaType::RECORD;
+            new_type->scalar_type.clear();
         }
 
         // Template args
@@ -319,7 +355,7 @@ namespace Havok::CodeGen {
                 }
                 if (const auto *pw = std::get_if<Tag::WeakType>(&v_value)) {
                     auto inner_tag = pw->lock();
-                    auto inner_type = inner_tag ? register_type(tag_file, inner_tag) : SharedType{};
+                    auto inner_type = inner_tag ? register_type(inner_tag) : SharedType{};
                     new_type->template_args.push_back({t_name, inner_type});
                     continue;
                 }
@@ -351,13 +387,15 @@ namespace Havok::CodeGen {
         if (new_type->name() == "hkString") {
             new_type->type = MetaType::STRING;
         }
-        if (new_type->type == MetaType::PRIMITIVE) {
+        {
             const auto tn = new_type->type_name();
             if (tn.starts_with("hkFlags<") || tn.starts_with("hkEnum<")) {
                 new_type->type = MetaType::ENUM;
             }
         }
 
+        if (new_type->name() == "hkBool") new_type->scalar_type = "bool";
+        if (new_type->name() == "hkBaseObject") new_type->scalar_type.clear();
         return new_type;
     }
 

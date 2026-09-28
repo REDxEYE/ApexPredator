@@ -6,6 +6,6 @@
 #include "platform/app_state.h"
 #include "platform/archive_manager.h"
 
-GltfHelper::Handle<tinygltf::Node> export_file(ApexAppState& app_state, uint32 hash);
+VM::NodePtr export_file(ApexAppState& app_state, uint64 hash);
 
 #endif //APEXPREDATOR_COMMON_EXPORT_H

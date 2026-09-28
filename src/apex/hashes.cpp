@@ -8,32 +8,48 @@
 #include "apex/asset_db.h"
 
 std::optional<std::string> find_name(const uint64 key) {
-    static auto db = AssetDB::get_instance();
-    return db->kv_get(key);
+    auto *db = AssetDB::get_instance();
+    auto asset_name = db->kv_get(key, AssetDB::HashType::Lookup3);
+    if (asset_name.has_value()) {
+        return asset_name;
+    }
+    return db->kv_get(key, AssetDB::HashType::Murmur);
+}
+std::optional<std::string> find_asset_name(const uint64 key) {
+    auto *db = AssetDB::get_instance();
+    auto asset_name = db->kv_get(key, AssetDB::HashType::Murmur);
+    if (asset_name.has_value()) {
+        return asset_name;
+    }
+    return db->kv_get(key, AssetDB::HashType::Lookup3);
+}
+
+std::optional<std::string> find_lookup3_name(uint32 key) {
+    return AssetDB::get_instance()->kv_get(key, AssetDB::HashType::Lookup3);
 }
 
 bool check_hash_presence(const uint64 key) {
-    static auto db = AssetDB::get_instance();
+    const auto *db = AssetDB::get_instance();
     return db->kv_has(key);
 }
 
-void store_hash_name(const uint64 key, const std::string_view &value) {
-    static auto db = AssetDB::get_instance();
-    db->kv_put(key, value.data());
+void store_hash_name(std::string_view value) {
+    const auto *db = AssetDB::get_instance();
+    db->kv_put(string_hashes(value), value);
 }
 
 void search_file_table(const std::string_view pattern, std::vector<std::string> &result) {
-    static auto db = AssetDB::get_instance();
+    const auto *db = AssetDB::get_instance();
     db->files_search(pattern, result);
 }
 
-std::optional<uint32> get_file_parent(const uint64 key) {
-    static auto db = AssetDB::get_instance();
+std::optional<uint64> get_file_parent(const uint64 key) {
+    const auto *db = AssetDB::get_instance();
     return db->get_file_parent(key);
 }
 
 std::optional<std::string> get_file_parent(const uint64 key, uint64& out_parent) {
-    static auto db = AssetDB::get_instance();
+    auto *db = AssetDB::get_instance();
     if (const auto file = db->get_file(key)) {
         out_parent = file->parent_hash;
         return file->name;
@@ -41,8 +57,8 @@ std::optional<std::string> get_file_parent(const uint64 key, uint64& out_parent)
     return std::nullopt;
 }
 
-std::filesystem::path get_export_path(const std::filesystem::path &base_export_path, const uint32 hash, const std::string_view ext) {
-    static auto db = AssetDB::get_instance();
+std::filesystem::path get_export_path(const std::filesystem::path &base_export_path, const uint64 hash, const std::string_view ext) {
+    auto *db = AssetDB::get_instance();
     std::filesystem::path result = base_export_path;
     if (const auto file_name = db->get_file_name(hash)) {
         result /= file_name.value();

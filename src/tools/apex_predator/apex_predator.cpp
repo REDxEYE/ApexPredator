@@ -1,73 +1,18 @@
-#include "redscore/utils/memory_tracker.h"
 #include "commands.h"
-#include "apex/adf/generated/adf_types.h"
-#include "apex/adf/adf_custom_types.hpp"
-
-#include "CLI/CLI.hpp"
-#include "havok/generated/havok_types.h"
-#include "tracy/Tracy.hpp"
-
 
 int main(int argc, const char *argv[]) {
-    //     while (!TracyIsConnected) {
-    // #ifdef _WIN32
-    //         Sleep(100); /* Windows */
-    // #else
-    //         usleep(10000);
-    // #endif
-    //         printf("\rWaiting for tracy;");
-    //     }
-    //     printf("\n");
-
-
-    mp_init();
-    init_havok_type_info();
-    init_adf_type_info();
-    ADF::register_custom_types();
-
-
-    CLI::App app{"ApexPredator asset tools"};
+    CLI::App app{"ApexPredator modular asset tools"};
     app.require_subcommand(1);
-
-    ExtractCommand export_command("extract", "Extract assets.");
-    export_command.register_(app);
-
-    /* ---------------- extract-anims ---------------- */
-
-    ExtractAnimationCommand extract_anims_command("extract-anims",
-                                                  "Extract animations from a Havok animation container.");
-    extract_anims_command.register_(app);
-
-    /* ---------------- search ---------------- */
-
-    SearchCommand search_command("search", "Search for assets by hash or path pattern.");
-    search_command.register_(app);
-
-    /* ---------------- convert ---------------- */
-
-    ConvertCommand convert_command("convert", "Convert png->ddsc");
-    convert_command.register_(app);
-
-    /* ---------------- extract-all ---------------- */
-
-    ExtractEverythingCommand extract_all_command("extract-all", "Extract all assets from a game.");
-    extract_all_command.register_(app);
-
-
-    try {
-        app.parse(argc, argv);
-    } catch (const CLI::ParseError &e) {
-        return app.exit(e);
-        // }
-    }
-#if NDEBUG
-    catch (const std::exception &e) {
-        std::cerr << "ApexPredator crashed!" << std::endl;
-        std::cerr << "Cause: " << e.what() << std::endl;
-        return 1;
-    }
-#endif
-
-    mp_shutdown();
+    ExtractCommand extract("extract", "Extract assets using a game module.");
+    ExtractAnimationCommand animations("extract-anims", "Export animations using a game module.");
+    SearchCommand search("search", "Search an asset database using a game module.");
+    ModulesCommand modules("modules", "List game modules and optionally probe a game root.");
+    ConvertCommand convert("convert", "Convert textures (not implemented).");
+    ExtractEverythingCommand everything("extract-all", "Extract all assets (not implemented).");
+    extract.register_(app); animations.register_(app); search.register_(app); modules.register_(app);
+    convert.register_(app); everything.register_(app);
+    try { app.parse(argc, argv); }
+    catch (const CLI::ParseError &e) { return app.exit(e); }
+    catch (const std::exception &e) { std::cerr << "Error: " << e.what() << '\n'; return 1; }
     return 0;
 }

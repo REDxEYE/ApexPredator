@@ -3,7 +3,8 @@
 
 #include "havok/generated/havok_generated.h"
 #include "redscore/platform/logger.h"
-#include "utils/memory_profiling.h"
+#include <cstdlib>
+#include "tracy/Tracy.hpp"
 #include "utils/hash_helper.h"
 
 TypedPtr * TagFile_get_item(const TagFile *tf, const uint32 index) {
@@ -11,7 +12,8 @@ TypedPtr * TagFile_get_item(const TagFile *tf, const uint32 index) {
     HKTagType *hk_tag_type = &tf->types.items[item->type];
     const uint32 type_hash = hash_string(HKTagType_stable_name(hk_tag_type));
     const HavokTypeInfo *type_info = *(HavokTypeInfo **) DM_get(&HAVOK_TYPES_type_info, type_hash);
-    TypedPtr *item_obj = (TypedPtr*)mp_malloc(type_info->size);
+    TypedPtr *item_obj = (TypedPtr*)std::malloc(type_info->size);
+    if (item_obj) TracyAlloc(item_obj, type_info->size);
     type_info->init(item_obj);
     type_info->read(item_obj, tf, &tf->data.items[item->offset]);
 
@@ -20,7 +22,8 @@ TypedPtr * TagFile_get_item(const TagFile *tf, const uint32 index) {
 
 void TagFile_free_item(TypedPtr *item) {
     item->type_info_->free(item);
-    mp_free(item);
+    if (item) TracyFree(item);
+    std::free(item);
 }
 
 

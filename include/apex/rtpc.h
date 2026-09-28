@@ -10,11 +10,14 @@
 #include <glm/glm.hpp>
 
 #include "int_def.h"
-#include "utils/hash_helper.h"
+#include "utils/lookup3.h"
+#include <optional>
+#include <string_view>
 #include "redscore/platform/file/file.h"
 
 #define RTPC_MAGIC "RTPC"
 
+#include "hashes.h"
 #include "nlohmann/json.hpp"
 
 
@@ -60,6 +63,10 @@ using PropValue = std::variant<
     std::vector<RuntimeEvent>
 >;
 
+inline uint32 rtpc_name_hash(std::string_view name) {
+    return hashlittle(name.data(), name.size(), 0);
+}
+
 class RuntimeProp {
 public:
     explicit RuntimeProp(IO::File &buffer);
@@ -74,7 +81,7 @@ private:
 
 class RuntimeNode {
 public:
-    explicit RuntimeNode(IO::File &buffer);
+    explicit RuntimeNode(IO::File &buffer, uint32 version = 1);
 
     template<typename T>
     const T &get(const uint32 hash) const {
@@ -91,13 +98,31 @@ public:
 
     template<typename T>
     const T &get(const std::string_view name) const {
-        return get<T>(hash_string(name));
+        return get<T>(rtpc_name_hash(name));
+    }
+
+    std::optional<std::string> get_string(const std::string_view name) const {
+        return get_string(rtpc_name_hash(name));
+    }
+
+    std::optional<std::string> get_string(const uint32 hash) const {
+        if (is<std::string>(hash)) {
+            return std::get<std::string>(m_props.at(hash).value());
+        }
+        if (is<uint32>(hash)) {
+            return find_lookup3_name(std::get<uint32>(m_props.at(hash).value()));
+        }
+        return std::nullopt;
     }
 
     template<typename T>
     bool is(const std::string_view name) const {
-        const auto name_hash = hash_string(name);
-        const auto& prop = m_props.at(name_hash);
+        return is<T>(rtpc_name_hash(name));
+    }
+
+    template<typename T>
+    bool is(const uint32 hash) const {
+        const auto& prop = m_props.at(hash);
         return std::holds_alternative<T>(prop.value());
     }
 
@@ -110,11 +135,18 @@ public:
 
     [[nodiscard]] uint32 name_hash() const { return m_name_hash; }
 
+    [[nodiscard]] uint32 version() const { return m_version; }
+    // Meaning is unknown; preserve the per-node word present in version 3.
+    [[nodiscard]] std::optional<uint32> v3_metadata() const { return m_v3_metadata; }
+
     static RuntimeNode RootNode(const std::unique_ptr<IO::File> &file);
 
     nlohmann::json to_json() const;
 
 private:
+    RuntimeNode(IO::File &buffer, uint32 version, size_t depth);
+    uint32 m_version;
+    std::optional<uint32> m_v3_metadata;
     uint32 m_name_hash;
 
     std::unordered_map<uint32, RuntimeProp> m_props;

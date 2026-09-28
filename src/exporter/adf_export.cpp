@@ -13,7 +13,6 @@
 
 #include "OpenXLSX.hpp"
 #include "zstd.h"
-#include "redscore/gltf/tiny_gltf.h"
 #include "tracy/Tracy.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/glm.hpp"
@@ -110,13 +109,16 @@ std::unique_ptr<Texture> export_terrain_texture(const TerrainTexture &terrain_te
             }
             break;
         }
+        default:
+            GLog_Error("Unsupported terrain texture compression type");
+            return nullptr;
     }
 
     return std::move(std::make_unique<Texture>(
         Texture::from_dxgi(fmt, decompressed_data->as_span(), terrain_texture.Width, terrain_texture.Height, 1)));
 }
 
-GltfHelper::Handle<tinygltf::Node> export_adf_file(ApexAppState &app_state, const uint32 path_hash) {
+VM::NodePtr export_adf_file(ApexAppState &app_state, const uint64 path_hash) {
     ZoneScoped
     auto result = app_state.manager().get(path_hash);
 
@@ -128,8 +130,8 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file(ApexAppState &app_state, cons
     return export_adf_file_from_buffer(app_state, path_hash, std::move(result));
 }
 
-GltfHelper::Handle<tinygltf::Node> export_terrain_patch(ApexAppState &app_state, const StreamPatchBlockHeader *header,
-                                                        const TerrainPatch *terrain_patch) {
+VM::NodePtr export_terrain_patch(ApexAppState &app_state, const StreamPatchBlockHeader *header,
+                                 const TerrainPatch *terrain_patch) {
     ZoneScoped
     const uint32 patch_x_pos = header->PatchPositionX;
     const uint32 patch_z_pos = header->PatchPositionZ;
@@ -204,67 +206,42 @@ GltfHelper::Handle<tinygltf::Node> export_terrain_patch(ApexAppState &app_state,
 
     std::copy_n(reinterpret_cast<const uint16 *>(indices_buffer->data()), indices_buffer->size() / 2, indices.data());
 
-    auto &gltf_helper = app_state.helper();
-    auto mesh = gltf_helper.make<tinygltf::Mesh>();
-    mesh->name = patch_name;
-
-    auto &primitive = mesh->primitives.emplace_back();
-
-    gltf_helper.set_primitive_attribute(primitive, "POSITIONS",
-                                        reinterpret_cast<const uint8 *>(positions.data()),
-                                        positions.size() * sizeof(glm::vec3),
-                                        TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, vertex_count, false,
-                                        sizeof(glm::vec3), 0, "POSITIONS"
-    );
-
-
-    gltf_helper.set_primitive_attribute(primitive, "NORMAL",
-                                        reinterpret_cast<const uint8 *>(normals.data()),
-                                        normals.size() * sizeof(glm::vec3),
-                                        TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, vertex_count, false,
-                                        sizeof(glm::vec3), 0, "NORMALS");
-
-    gltf_helper.set_primitive_attribute(primitive, "TEXCOORD_0",
-                                        reinterpret_cast<const uint8 *>(uv.data()),
-                                        uv.size() * sizeof(glm::vec2),
-                                        TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC2, vertex_count, false,
-                                        sizeof(glm::vec2), 24, "TEXCOORD_0");
-
-    gltf_helper.set_primitive_indices(primitive, reinterpret_cast<const uint8 *>(indices.data()),
-                                      indices.size() * sizeof(uint32), TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT,
-                                      indices.size(), sizeof(uint32), 0, "INDICES");
-
-    auto patch_mesh_node = gltf_helper.make<tinygltf::Node>();
-    patch_mesh_node->name = patch_name;
-    patch_mesh_node->mesh = mesh.index();
-
-    patch_mesh_node->translation = {patch_x_pos * 200.f, 0.0f, patch_z_pos * 200.f};
-
-    auto material = gltf_helper.make<tinygltf::Material>();
-    primitive.material = material.index();
-
-
-    material->pbrMetallicRoughness.metallicFactor = 0.f;
-    material->pbrMetallicRoughness.roughnessFactor = 1.f;
-
+    auto &builder = app_state.models();
+    auto patch_mesh_node = builder.create_node(patch_name);
+    patch_mesh_node->model = std::make_shared<VM::Model>();
+    auto &sub = patch_mesh_node->model->submodels.emplace_back();
+    auto &mesh = sub.meshes.emplace_back();
+    mesh.name = patch_name;
+    auto &primitive = mesh.primitives.emplace_back();
+    primitive.set_attribute(VM::ElementUsage::Position, 0, positions.data(), positions.size() * sizeof(glm::vec3),
+                            VM::ElementFormat::F32, VM::ElementType::Vec3, vertex_count);
+    primitive.set_attribute(VM::ElementUsage::Normal, 0, normals.data(), normals.size() * sizeof(glm::vec3),
+                            VM::ElementFormat::F32, VM::ElementType::Vec3, vertex_count);
+    primitive.set_attribute(VM::ElementUsage::TexCoord, 0, uv.data(), uv.size() * sizeof(glm::vec2),
+                            VM::ElementFormat::F32, VM::ElementType::Vec2, vertex_count);
+    primitive.set_indices(indices.data(), indices.size() * sizeof(uint32), VM::IndexType::U32, indices.size());
+    patch_mesh_node->transform.translation = {patch_x_pos * 200.f, 0.f, patch_z_pos * 200.f};
+    auto material = std::make_shared<VM::Material>();
+    primitive.material = material;
+    material->metallic_factor = 0.f;
 
     if (auto displacement_texture = export_terrain_texture(terrain_patch->TerrainDisplacementTexture, 1)) {
         std::string patch_texture_name = std::format("{}_disp", patch_name);
 
         if (displacement_texture->bpc() == 1) {
-            gltf_helper.add_extra_save_data(patch_texture_name,
-                                            displacement_texture->save_to_memory(MemoryFormat::PNG));
+            builder.scene.extra_files.push_back({
+                patch_texture_name + ".png", displacement_texture->save_to_memory(MemoryFormat::PNG)
+            });
         } else {
-            gltf_helper.add_extra_save_data(patch_texture_name,
-                                            displacement_texture->save_to_memory(MemoryFormat::DDS));
+            builder.scene.extra_files.push_back({
+                patch_texture_name + ".dds", displacement_texture->save_to_memory(MemoryFormat::DDS)
+            });
         }
     }
 
     if (auto color_texture = export_terrain_texture(terrain_patch->TerrainColorTexture, 4)) {
         std::string patch_texture_name = std::format("{}_color", patch_name);
-        auto texture = gltf_helper.create_image_png_data(color_texture->save_to_memory(MemoryFormat::PNG),
-                                                         patch_texture_name);
-        material->pbrMetallicRoughness.baseColorTexture.index = texture.index();
+        material->albedo = VM::png_texture(patch_texture_name, color_texture->save_to_memory(MemoryFormat::PNG));
     }
 
     // Texture *normal_texture = export_terrain_texture(&terrain_patch->TerrainNormalTexture, 4, NULL);
@@ -292,7 +269,7 @@ GltfHelper::Handle<tinygltf::Node> export_terrain_patch(ApexAppState &app_state,
     //     String_copy_from(&patch_texture_name, &patch_name);
     //     String_append_cstr(&patch_texture_name, "_duplex");
     //     std::string *texture_save_path = GLTFContext_data_path(context);
-    //     const uint32 hash = hash_string(&patch_texture_name);
+    //     const uint64 hash = hash_string(&patch_texture_name);
     //     String_append_format(texture_save_path, "/%s_%08X", String_data(&patch_texture_name), hash);
     //     String_free(&patch_texture_name);
     //     Texture_save(duplex_texture, texture_save_path);
@@ -317,13 +294,13 @@ void export_terrain_instances(ApexAppState &app_state,
     const uint32 patch_size = 1 << header.PatchLod;
 
     for (const auto &instance_layer: instance_data_patch.InstanceDataLayers) {
-        const auto layer_name = find_name(instance_layer.Name).value_or(
+        const auto layer_name = find_asset_name(instance_layer.Name).value_or(
             std::format("layer_0x{:08X}", instance_layer.Name.storage));
         for (int j = 0; j < instance_layer.Instances.size(); ++j) {
             const VegetationSystemInstance &veg_instance = instance_layer.Instances[j];
             std::string instance_name = std::format("instance_{}_{}", layer_name, j);
-            const auto instance_node = app_state.helper().make<tinygltf::Node>();
-            instance_node->translation = {
+            const auto instance_node = app_state.models().create_node(instance_name);
+            instance_node->transform.translation = {
                 patch_x_pos * 50 + static_cast<float32>(veg_instance.X) / patch_size * 0.93f / 8.f,
                 (veg_instance.Y / patch_size * 0.93f / 32.f),
                 patch_z_pos * 50 + static_cast<float32>(veg_instance.Z) / patch_size * 0.93f / 8.f
@@ -332,7 +309,7 @@ void export_terrain_instances(ApexAppState &app_state,
     }
 }
 
-GltfHelper::Handle<tinygltf::Node> export_stream_patch_file(ApexAppState &app_state, ADF::ADFFile &adf) {
+VM::NodePtr export_stream_patch_file(ApexAppState &app_state, ADF::ADFFile &adf) {
     ZoneScoped
     const auto patch_file_header = convert<StreamPatchFileHeader>(adf.read_instance(0));
     for (int i = 1; i < adf.instances().size(); ++i) {
@@ -342,8 +319,8 @@ GltfHelper::Handle<tinygltf::Node> export_stream_patch_file(ApexAppState &app_st
             const auto block_data = adf.read_instance(i + 1);
             if (const auto *terrain_patch = as<TerrainPatch>(block_data)) {
                 const auto node = export_terrain_patch(app_state, block_header, terrain_patch);
-                if (node.is_valid()) {
-                    app_state.helper().add_to_scene(node);
+                if (bool(node)) {
+                    app_state.models().add_to_scene(node);
                 }
                 // } else if (block_data_instance->type_hash == STI_TYPE_HASH_InstanceDataPatch) {
                 //     const InstanceDataPatch *instance_data_patch = (InstanceDataPatch *) block_data;
@@ -362,8 +339,8 @@ GltfHelper::Handle<tinygltf::Node> export_stream_patch_file(ApexAppState &app_st
     return {};
 }
 
-GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app_state, const uint32 path_hash,
-                                                               std::unique_ptr<IO::File> mb) {
+VM::NodePtr export_adf_file_from_buffer(ApexAppState &app_state, const uint64 path_hash,
+                                        std::unique_ptr<IO::File> mb) {
     ZoneScoped
     ADF::ADFFile adf = ADF::ADFFile::from_buffer(std::move(mb));
 
@@ -383,7 +360,7 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
                     GLog_Info("Exporting tile %02ix%02i at LOD %i", x, y, base_lod);
                     std::string chunk_patch_path = std::format(
                         "terrain/hp/patches/patch_{:02}_{:02}_{:02}.streampatch", base_lod, x, y);
-                    export_adf_file(app_state, hash_string(chunk_patch_path));
+                    export_adf_file(app_state, asset_path_hash(chunk_patch_path));
                     // break;
                 }
                 // break;
@@ -404,6 +381,14 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             }
             const auto model = adf.read_instance<AmfModel>(instanceId);
             return export_amf_model(app_state, model.get(), path_hash);
+#if GAME==GAME_RAGE2
+        } else if (instance.type_hash == std::to_underlying(ADFHashes::AmfModelVariant)) {
+            if (instances.size() != 1) {
+                throw std::runtime_error("ADF with AmfModelVariant should have only one instance");
+            }
+            const auto variant = adf.read_instance<AmfModelVariant>(instanceId);
+            return export_amf_model(app_state, &variant->Data, path_hash);
+#endif
         } else if (instance.type_hash == std::to_underlying(ADFHashes::AmfMeshHeader)) {
             if (instances.size() != 2) {
                 throw std::runtime_error("ADF with AmfMeshHeader should have only two instances");
@@ -413,13 +398,15 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             const auto mesh_buffers = adf.read_instance<AmfMeshBuffers>(instanceId);
 
             return export_amf_mesh(app_state, path_hash, mesh_header.get(), mesh_buffers.get());
-        } else if (instance.type_hash == std::to_underlying(ADFHashes::XLSBook)) {
+        }
+#if GAME==GAME_GENERATION_ZERO
+        else if (instance.type_hash == std::to_underlying(ADFHashes::XLSBook)) {
             if (instances.size() != 1) {
                 throw std::runtime_error("ADF with XLSBook should have only one instance");
             }
             const auto xls_book = adf.read_instance<XLSBook>(instanceId);
 
-            auto path = find_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
+            auto path = find_asset_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
             path += std::format("_{:08X}", instance.type_hash);
             std::filesystem::path dump_path = app_state.export_path() / path;
             std::filesystem::create_directories(dump_path.parent_path());
@@ -509,7 +496,9 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             }
 
             doc.save();
-        } else if (instance.type_hash == std::to_underlying(ADFHashes::StringLookup)) {
+        }
+#endif
+        else if (instance.type_hash == std::to_underlying(ADFHashes::StringLookup)) {
             if (instances.size() != 1) {
                 throw std::runtime_error("ADF with StringLookup should have only one instance");
             }
@@ -557,7 +546,7 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
                 });
             }
 
-            auto path = find_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
+            auto path = find_asset_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
             path += std::format("_{:08X}", instance.type_hash);
             std::filesystem::path unk_file_export_path = app_state.export_path() / path;
             std::filesystem::create_directories(unk_file_export_path.parent_path());
@@ -573,7 +562,7 @@ GltfHelper::Handle<tinygltf::Node> export_adf_file_from_buffer(ApexAppState &app
             auto &type_info = adf_type_info[instance.type_hash];
             GLog_Info("Dumping instance \"{}\" of type \"{}\" as json", name, type_info->name);
 
-            auto path = find_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
+            auto path = find_asset_name(path_hash).value_or(std::format("unknown_{:08X}", path_hash));
             path += std::format("_{:08X}", instance.type_hash);
             std::filesystem::path unk_file_export_path = app_state.export_path() / path;
             std::filesystem::create_directories(unk_file_export_path.parent_path());

@@ -34,8 +34,35 @@ struct RuntimePropHeader {
 };
 #pragma pack(pop)
 
+namespace {
+void require_range(IO::File &buffer, uint64 offset, uint64 size) {
+    const auto length = buffer.get_size();
+    if (offset > length || size > length - offset)
+        throw std::runtime_error("RTPC data exceeds file bounds");
+}
+
+void validate_version(uint32 version) {
+    if (version < 1 || version > 3)
+        throw std::runtime_error("Unsupported RTPC version: " + std::to_string(version));
+}
+
+template<typename T>
+void read_array(IO::File &buffer, std::vector<T> &value, uint32 count) {
+    require_range(buffer, buffer.get_position(), uint64(count) * sizeof(T));
+    value.resize(count);
+    buffer.read_exact(value);
+}
+}
+
+static_assert(sizeof(RTPCHeader) == 8);
+static_assert(sizeof(RuntimeNodeHeader) == 12);
+static_assert(sizeof(RuntimePropHeader) == 9);
+
 RuntimeProp::RuntimeProp(IO::File &buffer) {
+    require_range(buffer, buffer.get_position(), sizeof(RuntimePropHeader));
     const auto header = buffer.read_pod<RuntimePropHeader>();
+    if (header.prop_type >= PropType::STR)
+        require_range(buffer, header.data_raw.uint_value, 1);
     m_name_hash = header.name_hash;
     auto orig_offset = buffer.get_position();
     switch (header.prop_type) {
@@ -54,7 +81,11 @@ RuntimeProp::RuntimeProp(IO::File &buffer) {
         case PropType::STR: {
             buffer.set_position(header.data_raw.uint_value, std::ios::beg);
             auto &v = m_value.emplace<std::string>();
-            buffer.read_cstring(v);
+            while (true) {
+                const auto c = buffer.read_pod<char>();
+                if (!c) break;
+                v.push_back(c);
+            }
             break;
         }
         case PropType::VEC2: {
@@ -91,29 +122,21 @@ RuntimeProp::RuntimeProp(IO::File &buffer) {
             buffer.set_position(header.data_raw.uint_value, std::ios::beg);
             auto array_size = buffer.read_pod<uint32>();
             auto &v = m_value.emplace<std::vector<uint32> >();
-            v.reserve(array_size);
-            if (array_size > 0) {
-                buffer.read_exact(v);
-            }
+            read_array(buffer, v, array_size);
             break;
         }
         case PropType::ARRAY_F32: {
             buffer.set_position(header.data_raw.uint_value, std::ios::beg);
             auto array_size = buffer.read_pod<uint32>();
             auto &v = m_value.emplace<std::vector<float32> >();
-            v.reserve(array_size);
-            if (array_size > 0) {
-                buffer.read_exact(v);
-            }
+            read_array(buffer, v, array_size);
             break;
         }
         case PropType::ARRAY_U8: {
             buffer.set_position(header.data_raw.uint_value, std::ios::beg);
             auto array_size = buffer.read_pod<uint32>();
             auto &v = m_value.emplace<std::vector<uint8> >();
-            if (array_size > 0) {
-                buffer.read_exact(v);
-            }
+            read_array(buffer, v, array_size);
             break;
         }
         case PropType::OBJID: {
@@ -126,6 +149,7 @@ RuntimeProp::RuntimeProp(IO::File &buffer) {
             buffer.set_position(header.data_raw.uint_value, std::ios::beg);
             auto array_size = buffer.read_pod<uint32>();
             auto &v = m_value.emplace<std::vector<RuntimeEvent> >();
+            require_range(buffer, buffer.get_position(), uint64(array_size) * 8);
             v.reserve(array_size);
             for (uint32 i = 0; i < array_size; ++i) {
                 auto a = buffer.read_pod<uint32>();
@@ -135,16 +159,23 @@ RuntimeProp::RuntimeProp(IO::File &buffer) {
             break;
         }
         default: {
-            printf("[ERROR]: Unknown RTPC property type in RuntimeProp constructor: %d\n", header.prop_type);
-            abort();
+            throw std::runtime_error("Unsupported RTPC property type: " +
+                                     std::to_string(static_cast<uint8>(header.prop_type)));
         }
     }
     buffer.set_position(orig_offset, std::ios::beg);
 }
 
-RuntimeNode::RuntimeNode(IO::File &buffer) {
+RuntimeNode::RuntimeNode(IO::File &buffer, uint32 version) : RuntimeNode(buffer, version, 0) {}
+
+RuntimeNode::RuntimeNode(IO::File &buffer, uint32 version, size_t depth) : m_version(version) {
+    validate_version(version);
+    if (depth >= 8192) throw std::runtime_error("RTPC node nesting exceeds limit");
+    require_range(buffer, buffer.get_position(), sizeof(RuntimeNodeHeader));
     const auto [name_hash, data_offset, prop_count, child_count] = buffer.read_pod<RuntimeNodeHeader>();
 
+    const uint64 children_offset = (uint64(data_offset) + uint64(prop_count) * 9 + 3) & ~uint64(3);
+    require_range(buffer, data_offset, children_offset - data_offset + uint64(child_count) * 12 + (version == 3 ? 4 : 0));
     m_name_hash = name_hash;
     m_children.reserve(child_count);
     m_props.reserve(prop_count);
@@ -155,19 +186,20 @@ RuntimeNode::RuntimeNode(IO::File &buffer) {
     for (int i = 0; i < prop_count; ++i) {
         RuntimeProp prop(buffer);
         uint32 hash = prop.hash();
-        m_props.emplace(hash, prop);
+        m_props.emplace(hash, std::move(prop));
     }
     // Align buffer position to 4
     buffer.align(4);
 
     for (int i = 0; i < child_count; ++i) {
-        m_children.emplace_back(buffer);
+        m_children.push_back(RuntimeNode(buffer, version, depth + 1));
     }
+    if (version == 3) m_v3_metadata = buffer.read_pod<uint32>();
     buffer.set_position(orig_pos, std::ios::beg);
 }
 
 bool RuntimeNode::has(const std::string_view name) const {
-    return has(hash_string(name));
+    return has(rtpc_name_hash(name));
 }
 
 
@@ -176,15 +208,17 @@ RuntimeNode RuntimeNode::RootNode(const std::unique_ptr<IO::File> &file) {
     if (std::memcmp(header.ident, "RTPC", 4) != 0) {
         throw std::runtime_error("Invalid RTPC header");
     }
-    return RuntimeNode(*file);
+    validate_version(header.version);
+    return RuntimeNode(*file, header.version);
 }
 
 json RuntimeNode::to_json() const {
     json node;
+    if (m_v3_metadata) node["v3_metadata"] = *m_v3_metadata;
     auto& props = node["props"];
     auto& children = node["children"];
     for (const auto &[hash, prop]: m_props) {
-        const auto name = find_name(hash).value_or(std::to_string(hash));
+        const auto name = find_lookup3_name(hash).value_or(std::to_string(hash));
         json value;
         auto &prop_value = prop.value();
         if (const auto str = std::get_if<std::string>(&prop_value)) {

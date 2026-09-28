@@ -28,12 +28,11 @@ if(EXISTS "${REDSCORE_LOCAL_DIR}/CMakeLists.txt")
             "${CMAKE_BINARY_DIR}/_deps/RedsCore-build"
     )
 else()
+    # Pin the RedsCore model API used by both game modules.
     FetchContent_Declare(
             RedsCore
             GIT_REPOSITORY https://github.com/REDxEYE/RedsCore.git
-            GIT_TAG origin/master
-            GIT_SHALLOW TRUE
-            GIT_REMOTE_UPDATE_STRATEGY CHECKOUT
+            GIT_TAG 1bdeac452cf0cb48075fbf84da35eb58eb311a51
             GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(RedsCore)
@@ -58,6 +57,15 @@ FetchContent_Declare(
         GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(vorbis)
+
+#FetchContent_Declare(
+#        nlohmann_json
+#        QUIET
+#        GIT_REPOSITORY "https://github.com/nlohmann/json.git"
+#        GIT_TAG v3.12.0
+#        GIT_SHALLOW TRUE
+#)
+#FetchContent_MakeAvailable(nlohmann_json)
 
 FetchContent_Declare(
         SQLiteCpp

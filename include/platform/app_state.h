@@ -1,31 +1,33 @@
-// Created by RED on 01.02.2026.
+#pragma once
 
-#ifndef APEXPREDATOR_APP_STATE_H
-#define APEXPREDATOR_APP_STATE_H
-#include "apex/package/tab_archive.h"
 #include "platform/archive_manager.h"
+#include "redscore/platform/model/model.hpp"
 
-#include "redscore/platform/app_state.h"
-
-
-class ApexAppState: public AppState {
+// Shared application state. Modules initialize their own archive backends.
+class ApexAppState {
 public:
-    explicit ApexAppState(const std::filesystem::path &game_root) : AppState(game_root)  {
-        TabArchive::mount_folder(m_archive_manager, m_game_root / "initial");
-        TabArchive::mount_folder(m_archive_manager, m_game_root / "optional");
-        TabArchive::mount_folder(m_archive_manager, m_game_root / "supplemental");
+    explicit ApexAppState(std::filesystem::path game_root) : m_game_root(std::move(game_root)) {}
+
+    const std::filesystem::path &game_root() const { return m_game_root; }
+    const std::filesystem::path &export_path() const { return m_export_path; }
+    void export_path(const std::filesystem::path &path) { m_export_path = path; }
+
+    ApexArchiveManager &manager() {
+        if (!m_archive_manager) throw std::runtime_error("Archive manager has not been initialized");
+        return *m_archive_manager;
     }
+    // Used by the Generation Zero module and its standalone tools.
+    void mount_archives();
+    VM::SceneBuilder &models() { return m_models; }
 
-    ApexArchiveManager &manager();
-
-    [[nodiscard]] const std::filesystem::path &export_path() const;
-
-    void export_path(const std::filesystem::path &path);
-
-    bool skip_textures{false};
+    std::filesystem::path database_path;
+    bool skip_textures = false;
+    bool extract_raw = false;
+    bool root_motion = false;
 
 private:
-    ApexArchiveManager m_archive_manager;
+    std::filesystem::path m_game_root;
+    std::filesystem::path m_export_path = "extracted";
+    std::shared_ptr<ApexArchiveManager> m_archive_manager;
+    VM::SceneBuilder m_models;
 };
-
-#endif //APEXPREDATOR_APP_STATE_H

@@ -3,7 +3,8 @@
 
 #include "CLI/CLI.hpp"
 
-#include "platform/app_state.h"
+#include "modules/module_loader.h"
+#include <iostream>
 
 class Command {
 public:
@@ -29,15 +30,48 @@ private:
     std::string m_description;
 };
 
-class DatabaseDependantCommand : public Command {
+class ModuleCommand : public Command {
+public:
+    using Command::Command;
+protected:
+    void customize(CLI::App &app) override {
+        app.add_option("--module", m_module, "Game module id or explicit DLL/SO path (auto-detected by default).");
+        app.add_option("--module-dir", m_module_directories, "Additional directory containing game modules.");
+    }
+    std::shared_ptr<Modules::Library> select_module(const std::filesystem::path &root = {}) const {
+        Modules::Registry registry(m_module_directories);
+        for (const auto &diagnostic : registry.diagnostics()) std::cerr << "Module warning: " << diagnostic << '\n';
+        auto library = registry.select(m_module, root);
+        std::cout << "Using game module: " << library->api().id() << '\n';
+        return library;
+    }
+    std::string m_module;
+    std::vector<std::filesystem::path> m_module_directories;
+};
+
+class ModulesCommand : public ModuleCommand {
+public:
+    using ModuleCommand::ModuleCommand;
+protected:
+    void customize(CLI::App &app) override {
+        ModuleCommand::customize(app);
+        app.add_option("game_root", m_root, "Optional installation or archive root to probe.");
+    }
+    void handle() override;
+private:
+    std::filesystem::path m_root;
+};
+
+class DatabaseDependantCommand : public ModuleCommand {
 public:
     DatabaseDependantCommand(const std::string_view &name, const std::string_view &description)
-        : Command(name, description) {
+        : ModuleCommand(name, description) {
     }
 
     ~DatabaseDependantCommand() override = default;
 
     void customize(CLI::App &app) override {
+        ModuleCommand::customize(app);
         app.add_option("-d,--db_path", m_db_path, "Path to hashes.db for resolving asset paths from hashes.");
     }
 
@@ -57,12 +91,12 @@ protected:
     void customize(CLI::App &app) override {
         DatabaseDependantCommand::customize(app);
         app.add_option("game_root", m_game_root,
-                       "Path to the root directory of the game assets (generationZero\\archives_win64).")->required();
+                       "Game installation or archive root to detect and open.")->required();
         app.add_option("-o,--out_dir", m_export_path, "Output directory for extracted assets.");
     }
 
     std::filesystem::path m_game_root;
-    std::filesystem::path m_export_path;
+    std::filesystem::path m_export_path = "./extracted";
 };
 
 class ExtractCommand : public GameCommand {
@@ -103,10 +137,10 @@ protected:
         app.add_flag("-r,--root-motion", m_apply_root_motion,
                        "Apply root motion.")->default_val(false);
         app.add_option("skeleton-path", m_skeleton_path,
-                       "Path or hash to the Havok container containing the skeleton.")
+                       "Path or hash to the skeleton asset.")
                 ->required();
 
-        app.add_option("animations", m_animations, "Paths or hashes to animation containers.")
+        app.add_option("animations", m_animations, "Paths or hashes to animation assets.")
                 ->required();
     }
 
@@ -114,7 +148,7 @@ protected:
 
 private:
     std::string m_skeleton_path;
-    bool m_apply_root_motion;
+    bool m_apply_root_motion{};
     std::vector<std::string> m_animations;
 };
 
@@ -156,6 +190,7 @@ protected:
     }
 
     void handle() override {
+        throw std::runtime_error("Texture conversion is not implemented by the game module API");
     }
 
 private:

@@ -118,7 +118,9 @@ namespace STI {
 
     private:
         std::unordered_map<uint32, Type> m_types{};
-        std::unordered_map<uint32, uint32> m_already_seen_name_hashes{};
+        std::unordered_map<std::string, uint32> m_registered_names{};
+
+        std::string register_name(const std::string &name, uint32 hash, const std::string &suffix = {});
         std::vector<uint32> m_exported_hashes{};
     };
 

@@ -28,14 +28,16 @@ void export_spline_compressed_animation(ApexAppState &app_state,
                                         const HavokTypes::hkaSkeleton *skeleton,
                                         const std::string_view animation_name,
                                         const bool apply_root_motion) {
-    GltfHelper &gltf_helper = app_state.helper();
+    auto &builder = app_state.models();
+    const auto skin = builder.current_skin();
+    if (!skin) throw std::runtime_error("Animation requires a skeleton");
 
     hkaSplineDecompressor decompressor{};
     decompressor.Assign(spline_animation);
     const float32 frame_duration = spline_animation->frameDuration;
 
-    const auto animation = gltf_helper.make<tinygltf::Animation>();
-    animation->name = animation_name;
+    auto &animation = skin->animations.emplace_back();
+    animation.name = animation_name;
 
     std::vector<float32> timestamps = {};
 
@@ -53,20 +55,6 @@ void export_spline_compressed_animation(ApexAppState &app_state,
         timestamps.push_back(frame_id * frame_duration);
     }
 
-    const auto timestamps_accessor = gltf_helper.create_accessor_chain(
-        reinterpret_cast<const uint8 *>(timestamps.data()), timestamps.size() * sizeof(float32), 0,
-        TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_SCALAR, timestamps.size(), false, 0, 0,
-        "spline_animation_timestamps");
-
-    timestamps_accessor.accessor->minValues = {0};
-    timestamps_accessor.accessor->maxValues = {spline_animation->duration};
-
-    // if (skeleton->bones.size() != binding->transformTrackToBoneIndices.size()) {
-    //     GLog_Warning(
-    //         "Number of transform tracks in the animation binding does not match the number of bones in the skeleton. Some tracks will be skipped. {} in binding vs {} in animation",
-    //         binding->transformTrackToBoneIndices.size(), skeleton->bones.size());
-    // }
-
     for (int track_id = 0; track_id < binding->transformTrackToBoneIndices.size(); ++track_id) {
         std::vector<glm::vec3> positions = {};
         std::vector<glm::quat> rotations = {};
@@ -78,9 +66,9 @@ void export_spline_compressed_animation(ApexAppState &app_state,
         }
         const HavokTypes::hkaBone &bone = skeleton->bones[bone_id];
 
-        auto bone_node = gltf_helper.find<tinygltf::Node>(bone.name.stringAndFlag);
+        auto bone_node = builder.find_node_in_skin(skin, bone.name.stringAndFlag);
 
-        if (!bone_node.is_valid()) {
+        if (!bone_node) {
             continue;
         }
 
@@ -118,54 +106,18 @@ void export_spline_compressed_animation(ApexAppState &app_state,
         }
 
 
-        const auto position_accessor = gltf_helper.create_accessor_chain(
-            reinterpret_cast<uint8 *>(positions.data()), positions.size() * 3 * sizeof(float32), 0,
-            TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, positions.size(), false,
-            0, 0, "spline_animation_positions"
-        );
-
-        const auto rotation_accessor = gltf_helper.create_accessor_chain(
-            reinterpret_cast<uint8 *>(rotations.data()), rotations.size() * 4 * sizeof(float32), 0,
-            TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC4, rotations.size(), false,
-            0, 0, "spline_animation_rotations"
-        );
-
-        const auto scale_accessor = gltf_helper.create_accessor_chain(
-            reinterpret_cast<uint8 *>(scales.data()), scales.size() * 3 * sizeof(float32), 0,
-            TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_VEC3, scales.size(), false,
-            0, 0, "spline_animation_scales"
-        );
-
-
-        auto &position_sampler = animation->samplers.emplace_back();
-        position_sampler.input = timestamps_accessor.accessor.index();
-        position_sampler.interpolation = "LINEAR";
-        position_sampler.output = position_accessor.accessor.index();
-
-        auto &position_channel = animation->channels.emplace_back();
-        position_channel.sampler = animation->samplers.size() - 1;
-        position_channel.target_node = bone_node.index();
-        position_channel.target_path = "translation";
-
-        auto &rotation_sampler = animation->samplers.emplace_back();
-        rotation_sampler.input = timestamps_accessor.accessor.index();
-        rotation_sampler.interpolation = "LINEAR";
-        rotation_sampler.output = rotation_accessor.accessor.index();
-
-        auto &rotation_channel = animation->channels.emplace_back();
-        rotation_channel.sampler = animation->samplers.size() - 1;
-        rotation_channel.target_node = bone_node.index();
-        rotation_channel.target_path = "rotation";
-
-        auto &scale_sampler = animation->samplers.emplace_back();
-        scale_sampler.input = timestamps_accessor.accessor.index();
-        scale_sampler.interpolation = "LINEAR";
-        scale_sampler.output = scale_accessor.accessor.index();
-
-        auto &scale_channel = animation->channels.emplace_back();
-        scale_channel.sampler = animation->samplers.size() - 1;
-        scale_channel.target_node = bone_node.index();
-        scale_channel.target_path = "scale";
+        VM::Channel position_channel, rotation_channel, scale_channel;
+        position_channel.bone = rotation_channel.bone = scale_channel.bone = bone.name.stringAndFlag;
+        position_channel.path = VM::AnimationPath::Translation;
+        rotation_channel.path = VM::AnimationPath::Rotation;
+        scale_channel.path = VM::AnimationPath::Scale;
+        position_channel.times = rotation_channel.times = scale_channel.times = timestamps;
+        for (const auto &v : positions) position_channel.values.insert(position_channel.values.end(), {v.x,v.y,v.z});
+        for (const auto &v : rotations) rotation_channel.values.insert(rotation_channel.values.end(), {v.x,v.y,v.z,v.w});
+        for (const auto &v : scales) scale_channel.values.insert(scale_channel.values.end(), {v.x,v.y,v.z});
+        animation.channels.push_back(std::move(position_channel));
+        animation.channels.push_back(std::move(rotation_channel));
+        animation.channels.push_back(std::move(scale_channel));
     }
 }
 
@@ -182,10 +134,9 @@ void export_animation(ApexAppState &app_state, const HavokTypes::hkaAnimationBin
     }
 }
 
-GltfHelper::Handle<tinygltf::Node> export_animation_container(ApexAppState &app_state,
+VM::NodePtr export_animation_container(ApexAppState &app_state,
                                                               const HavokTypes::hkaAnimationContainer *
                                                               animation_container) {
-    GltfHelper::Handle<tinygltf::Skin> skeleton_id = {};
     for (int i = 0; i < animation_container->skeletons.size(); ++i) {
         const auto &skeleton = animation_container->skeletons[i];
         return export_skeleton(app_state, skeleton.get());
@@ -197,13 +148,13 @@ GltfHelper::Handle<tinygltf::Node> export_animation_container(ApexAppState &app_
     return {};
 }
 
-GltfHelper::Handle<tinygltf::Node> export_havok_file(ApexAppState &app_state,
+VM::NodePtr export_havok_file(ApexAppState &app_state,
                                                      std::unique_ptr<IO::File> &&buffer,
                                                      const std::string_view path) {
     Havok::Tag::TagFile tag_file(std::move(buffer));
 
     const auto item_obj = Havok::Tag::get_item(tag_file, 1);
-    GltfHelper::Handle<tinygltf::Node> skeleton_id = {};
+    VM::NodePtr skeleton_id = {};
 
     if (const auto root_container = Havok::as<HavokTypes::hkRootLevelContainer>(item_obj)) {
         if (root_container->namedVariants.empty()) {
@@ -233,7 +184,7 @@ GltfHelper::Handle<tinygltf::Node> export_havok_file(ApexAppState &app_state,
             }
         }
     }
-    if (skeleton_id.is_valid()) {
+    if (skeleton_id) {
         return skeleton_id;
     }
     return {};
@@ -247,62 +198,21 @@ glm::mat4 build_matrix(const HavokTypes::hkQsTransform &transform) {
     return out;
 }
 
-GltfHelper::Handle<tinygltf::Node> export_skeleton(ApexAppState &app_state,
-                                                   const HavokTypes::hkaSkeleton *skeleton) {
-    GltfHelper &helper = app_state.helper();
-
-    const auto skeleton_node = helper.make<tinygltf::Node>();
-    skeleton_node->name = skeleton->name.stringAndFlag;
-    skeleton_node->name += "_Skeleton";
-    const auto skin = helper.make<tinygltf::Skin>();
-    skin->name = skeleton->name.stringAndFlag;
-    helper.add_to_scene(skeleton_node);
-    skin->skeleton = skeleton_node.index();
-
-    std::vector<GltfHelper::Handle<tinygltf::Node> > bones = {};
-    std::vector<glm::mat4> inverse_matrices = {};
-    std::vector<glm::mat4> global_matrices = {};
-    bones.reserve(skeleton->bones.size());
-    inverse_matrices.reserve(skeleton->bones.size());
-    global_matrices.reserve(skeleton->bones.size());
-
-    for (const auto [bone_id, bone]: skeleton->bones | std::views::enumerate) {
-        const auto bone_node = helper.make<tinygltf::Node>();
-        bone_node->name = bone.name.stringAndFlag;
-        bones.emplace_back(bone_node);
-        skin->joints.emplace_back(bone_node.index());
-
-        const int16 bone_parent_id = skeleton->parentIndices[bone_id];
-        if (bone_parent_id >= 0) {
-            bones[bone_parent_id]->children.push_back(bone_node.index());
-        } else {
-            skeleton_node->children.push_back(bone_node.index());
-        }
-        const HavokTypes::hkQsTransform &transform = skeleton->referencePose[bone_id];
-        glm::mat4 bone_matrix = build_matrix(transform);
-        global_matrices.emplace_back(bone_matrix);
-
-        if (bone_parent_id >= 0) {
-            global_matrices[bone_id] = global_matrices[bone_parent_id] * bone_matrix;
-        }
-
-        if (bone_matrix != glm::identity<glm::mat4>()) {
-            GltfHelper::set_node_transform(bone_node, transform.translation, transform.scale,
-                                           glm::quat(transform.rotation.vec));
-        }
+VM::NodePtr export_skeleton(ApexAppState &app_state, const HavokTypes::hkaSkeleton *skeleton) {
+    if (!skeleton || skeleton->bones.size() != skeleton->parentIndices.size() ||
+        skeleton->bones.size() != skeleton->referencePose.size())
+        throw std::runtime_error("Invalid Havok skeleton arrays");
+    auto model_skeleton = std::make_shared<VM::Skeleton>();
+    model_skeleton->name = skeleton->name.stringAndFlag;
+    for (size_t i = 0; i < skeleton->bones.size(); ++i) {
+        const auto &pose = skeleton->referencePose[i];
+        VM::Bone bone;
+        bone.name = skeleton->bones[i].name.stringAndFlag;
+        bone.parent = skeleton->parentIndices[i];
+        bone.transform.translation = glm::vec3(pose.translation);
+        bone.transform.rotation = glm::quat(pose.rotation.vec);
+        bone.transform.scale = glm::vec3(pose.scale);
+        model_skeleton->bones.push_back(std::move(bone));
     }
-    for (int i = 0; i < skeleton->bones.size(); ++i) {
-        glm::mat4 inverse_matrix = glm::inverse(global_matrices[i]);
-        inverse_matrices.push_back(inverse_matrix);
-    }
-    const auto accessor = helper.create_accessor_chain(reinterpret_cast<uint8 *>(inverse_matrices.data()),
-                                                       inverse_matrices.size() * 16 * sizeof(float32), 0,
-                                                       TINYGLTF_COMPONENT_TYPE_FLOAT, TINYGLTF_TYPE_MAT4,
-                                                       inverse_matrices.size(), false, 0, 0,
-                                                       "inverse_matrices"
-    );
-
-    skin->inverseBindMatrices = accessor.accessor.index();
-    helper.push_skin(skin);
-    return skeleton_node;
+    return app_state.models().add_skeleton(std::move(model_skeleton))->root;
 }

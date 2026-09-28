@@ -11,7 +11,7 @@
 #include "redscore/platform/logger.h"
 #include "redscore/utils/simple_fileio.h"
 
-#include "redscore/gltf/tiny_gltf.h"
+
 #include "exporter/ddsc_export.h"
 #include "exporter/fmod_export.h"
 #include "exporter/havok_export.h"
@@ -21,10 +21,10 @@
 #define MVK_MAGIC "\x1A\x45\xDF\xA3"
 
 
-GltfHelper::Handle<tinygltf::Node> export_file(ApexAppState &app_state, const uint32 hash) {
+VM::NodePtr export_file(ApexAppState &app_state, const uint64 hash) {
     ZoneScoped
     auto &manager = app_state.manager();
-    auto path = find_name(hash).value_or(std::format("unnamed/unknown_{:08X}", hash));
+    auto path = find_asset_name(hash).value_or(std::format("unnamed/unknown_{:08X}", hash));
     GLog_Info("Exporting file: {}", path);
     auto buffer = manager.get(hash);
     if (!buffer) {

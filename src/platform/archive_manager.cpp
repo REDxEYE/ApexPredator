@@ -20,7 +20,7 @@ bool ApexArchiveManager::has(const uint64& hash) {
 }
 
 bool ApexArchiveManager::has(const std::string_view name) {
-    return has(hash_string(name));
+    return has(asset_path_hash(name));
 }
 
 
@@ -38,16 +38,11 @@ std::unique_ptr<IO::File> ApexArchiveManager::get(const uint64& hash) {
 }
 
 std::unique_ptr<IO::File> ApexArchiveManager::get(const std::string_view name) {
-    return get(hash_string(name));
+    return get(asset_path_hash(name));
 }
 
 bool ApexArchiveManager::foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) {
-    for (const auto &archive: m_archives | std::views::values) {
-        if (!archive->foreach_file(callback)) {
-            return false;
-        }
-    }
-    return true;
+    return ArchiveManager<u64>::foreach_file(callback);
 }
 
 std::pair<bool, uint64> ApexArchiveManager::ensure_parent_loaded(const uint64 hash){

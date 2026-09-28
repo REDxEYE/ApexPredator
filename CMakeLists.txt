@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 project(ApexPredator CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
@@ -33,93 +34,30 @@ if(UNIX AND NOT APPLE)
 
 endif()
 
+# Static dependencies linked into game modules must be position-independent.
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 include(cmake/dependencies.cmake)
+add_subdirectory(external/ooz)
+find_package(Threads REQUIRED)
+set(GAME_MODULE_OUTPUT_DIR "${CMAKE_BINARY_DIR}/modules")
+if(CMAKE_CONFIGURATION_TYPES)
+    set(GAME_MODULE_OUTPUT_DIR "${CMAKE_BINARY_DIR}/$<CONFIG>/modules")
+endif()
+include(modules/generation_zero/module.cmake)
+include(modules/rage2/module.cmake)
 
-add_library(AdfLib STATIC
-        src/apex/adf/generated/adf_types.cpp
-        src/apex/adf/generated/adf_types_formatters.cpp
-        src/apex/adf/adf_read_instance.cpp
-)
-
-add_library(HavokLib STATIC
-        src/havok/generated/havok_types.cpp
-        src/havok/generated/havok_types_formatters.cpp
-        src/havok/havok_codegen.cpp
-        src/havok/havok_types.cpp
-        src/havok/tag_file/havok_tag_file.cpp
-        src/havok/tag_file/havok_tag_types.cpp
-        src/havok/tag_file/havok_tag_file_get_item.cpp
-        src/havok/animations/spline.cpp
-        #        src/havok/havok_helpers.cpp
-)
-
-SET(CommonFiles
-        src/apex/aaf/aaf.cpp
-        src/apex/adf/adf.cpp
-        src/apex/adf/sti.cpp
-        src/apex/adf/sti_shared.cpp
-        src/apex/avtx.cpp
-        src/apex/hashes.cpp
-        src/apex/package/tab_archive.cpp
-        src/apex/rtpc.cpp
-        src/apex/sarc.cpp
-        src/havok/havok_types.cpp
-        src/havok/tag_file/havok_tag_file.cpp
-        src/havok/tag_file/havok_tag_types.cpp
-        src/platform/app_state.cpp
-        src/platform/archive_manager.cpp
-        src/utils/hash_helper.cpp
-        src/utils/json.cpp
-        src/utils/lookup3.cpp
-        src/apex/asset_db.cpp
-        src/utils/stb.cpp
-        src/utils/zlib_wrapper.cpp
-)
-
+# The host contains only CLI and module-loading code. Game code is private to the module.
 add_executable(ApexPredator
         src/tools/apex_predator/apex_predator.cpp
-        src/exporter/adf_export.cpp
-        src/exporter/amf_export.cpp
-        src/exporter/common_export.cpp
-        src/exporter/ddsc_export.cpp
-        src/exporter/rtpc_export.cpp
-        src/exporter/havok_export.cpp
-        src/exporter/fmod_export.cpp
-
-        src/havok/animations/spline.cpp
-
-        ${CommonFiles}
+        src/modules/module_loader.cpp
         src/tools/apex_predator/commands/extract.cpp
         src/tools/apex_predator/commands/extract_anim.cpp
         src/tools/apex_predator/commands/search.cpp
+        src/tools/apex_predator/commands/modules.cpp
         src/tools/apex_predator/commands/export_everything.cpp
-        src/utils/xlsx_helper.cpp
-        #        src/tools/apex_predator/commands/convert.cpp
-
 )
 
-add_executable(AdfTypeGenerator
-        src/tools/adf_type_gen.cpp
-        src/apex/adf/sti_codegen.cpp
-        src/apex/adf/adf_read_instance_stub.cpp
-        ${CommonFiles}
-)
-
-add_executable(HavokTypeGenerator
-        src/tools/havok_type_gen.cpp
-        src/havok/havok_codegen.cpp
-        ${CommonFiles}
-)
-
-add_executable(ReadTester
-        src/tools/read_tester.cpp
-        ${CommonFiles}
-)
-
-add_executable(HashCollector
-        src/tools/hash_collector.cpp
-        ${CommonFiles}
-)
+add_dependencies(ApexPredator GenerationZeroModule Rage2Module)
 
 add_executable(StringHasher
         src/tools/string_hasher.cpp
@@ -128,16 +66,9 @@ add_executable(StringHasher
 
 if (UNIX)
     target_link_libraries(ApexPredator PUBLIC m)
-    target_link_libraries(AdfTypeGenerator PUBLIC m)
-    target_link_libraries(HavokTypeGenerator PUBLIC m)
-    target_link_libraries(HashCollector PUBLIC m)
-    target_link_libraries(ReadTester PUBLIC m)
 elseif (MSVC)
-    target_compile_options(AdfLib PRIVATE /bigobj)
-    target_compile_options(HavokLib PRIVATE /bigobj)
     target_compile_options(ApexPredator PRIVATE /bigobj)
-    target_compile_options(HashCollector PRIVATE /bigobj)
-    target_compile_options(ReadTester PRIVATE /bigobj)
+
 endif ()
 
 SET(CommonLibs
@@ -146,28 +77,17 @@ SET(CommonLibs
         OpenXLSX::OpenXLSX
 )
 
-target_include_directories(AdfLib PUBLIC include)
-target_include_directories(HavokLib PUBLIC include)
+
 target_include_directories(ApexPredator PUBLIC include)
-target_include_directories(AdfTypeGenerator PUBLIC include)
-target_include_directories(HavokTypeGenerator PUBLIC include)
-target_include_directories(HashCollector PUBLIC include)
 target_include_directories(StringHasher PUBLIC include)
 
-target_link_libraries(ApexPredator PUBLIC HavokLib AdfLib Ogg::ogg vorbis vorbisenc ${CommonLibs})
-target_link_libraries(ReadTester PUBLIC HavokLib AdfLib ${CommonLibs})
-target_link_libraries(HashCollector PUBLIC HavokLib AdfLib ${CommonLibs})
-target_link_libraries(AdfTypeGenerator PUBLIC ${CommonLibs})
-target_link_libraries(HavokTypeGenerator PUBLIC ${CommonLibs})
-target_link_libraries(AdfLib PUBLIC ${CommonLibs})
-target_link_libraries(HavokLib PUBLIC ${CommonLibs})
+target_link_libraries(ApexPredator PRIVATE ${CMAKE_DL_LIBS})
 
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL TRACY_CALLSTACK=32)
 
-target_link_libraries(ApexPredator PRIVATE CLI11::CLI11)
-target_compile_definitions(ApexPredator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_ON_DEMAND)
-target_compile_definitions(AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_ON_DEMAND)
-target_compile_definitions(ReadTester PRIVATE TRACY_MEMORY TRACY_ON_DEMAND)
+find_package(Threads REQUIRED)
+target_link_libraries(ApexPredator PRIVATE CLI11::CLI11 Threads::Threads RedsCore)
+
 
 if (WIN32)
 
@@ -196,3 +116,47 @@ if (WIN32)
             "\"${GAME_PATH}\\winhttp.dll\""
     )
 endif ()
+
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+add_custom_target(CompressDatabases
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_databases.py"
+                "${CMAKE_COMMAND}" "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMENT "Snapshot and compress hashes.db and rage2_hashes.db"
+        VERBATIM
+)
+
+option(APEX_BUILD_MODULE_TESTS "Build fixture modules and module integration tests" OFF)
+if(APEX_BUILD_MODULE_TESTS)
+    enable_testing()
+    include(tests/rtpc.cmake)
+    include(tests/gtoc.cmake)
+    include(tests/adf_typegen.cmake)
+    include(tests/havok_typegen.cmake)
+    add_executable(ApexArchiveManagerTests tests/archive_manager.cpp)
+    target_link_libraries(ApexArchiveManagerTests PRIVATE RedsCore)
+    add_test(NAME Apex.ArchiveManager COMMAND ApexArchiveManagerTests)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    add_test(NAME Apex.ArchiveEviction COMMAND ${Python3_EXECUTABLE}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_archive_eviction.py" $<TARGET_FILE:GenerationZeroHashCollector>)
+    include(tests/asset_db.cmake)
+    foreach(fixture IN ITEMS one two bad)
+        add_library(MockGame_${fixture} MODULE tests/mock_game_module.cpp)
+        target_include_directories(MockGame_${fixture} PRIVATE include)
+        target_link_libraries(MockGame_${fixture} PRIVATE RedsCore)
+        target_compile_definitions(MockGame_${fixture} PRIVATE APEX_BUILD_GAME_MODULE FIXTURE_ID="fixture-${fixture}")
+        set_target_properties(MockGame_${fixture} PROPERTIES PREFIX "" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test-modules" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test-modules")
+    endforeach()
+    target_compile_definitions(MockGame_bad PRIVATE FIXTURE_BAD_ABI)
+    add_executable(ApexModuleSessionTests tests/module_sessions.cpp src/modules/module_loader.cpp)
+    target_include_directories(ApexModuleSessionTests PRIVATE include)
+    target_link_libraries(ApexModuleSessionTests PRIVATE ${CMAKE_DL_LIBS} Threads::Threads RedsCore)
+    add_custom_target(ApexModuleFixtures DEPENDS MockGame_one MockGame_two MockGame_bad ApexModuleSessionTests)
+    add_test(NAME Apex.GameModules COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_game_modules.py"
+            $<TARGET_FILE:ApexPredator> $<TARGET_FILE:MockGame_one> $<TARGET_FILE:MockGame_two> $<TARGET_FILE:MockGame_bad>)
+    add_test(NAME Apex.TabV31 COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_tab_v31.py" $<TARGET_FILE:ApexPredator>)
+    add_test(NAME Apex.Rage2Module COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_rage2_module.py"
+            $<TARGET_FILE:ApexPredator> $<TARGET_FILE:Rage2Module>)
+    add_test(NAME Apex.Rage2AMF COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_rage2_amf_cli.py"
+            $<TARGET_FILE:ApexPredator>)
+    add_test(NAME Apex.VirtualModelCLI COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_virtual_model_cli.py" $<TARGET_FILE:ApexPredator> --module-library $<TARGET_FILE:GenerationZeroModule> --session-runner $<TARGET_FILE:ApexModuleSessionTests>)
+endif()

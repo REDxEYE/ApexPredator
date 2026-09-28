@@ -61,14 +61,13 @@ namespace Havok::CodeGen {
         "Primitive",
         "OPAQUE",
         "String",
-        "Basic"
+        "Basic",
         "Pointer",
         "Record",
         "FixedArray",
         "Array",
         "Enum",
         "Special",
-        "TYPE_COUNT",
     };
 
     inline std::ostream &operator<<(std::ostream &os, const MetaType &value) {
@@ -102,6 +101,8 @@ namespace Havok::CodeGen {
         uint32 hash{0};
         uint32 size{0};
         uint32 align{0};
+        // Canonical scalar storage from tag metadata; empty for records/support wrappers.
+        std::string scalar_type;
         WeakType parent_{};
         std::vector<TemplateArgument> template_args{};
         TypeData data{};
@@ -133,6 +134,7 @@ namespace Havok::CodeGen {
         void register_types(const Tag::TagFile &tag_file);
 
         SharedType register_type(const Tag::TagFile &tag_file, const Tag::SharedType &tag_type);
+        SharedType register_type(const Tag::SharedType &tag_type);
 
         [[nodiscard]] const std::unordered_map<uint32, SharedType> &types() const;
 

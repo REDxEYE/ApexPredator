@@ -1,0 +1,59 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux-x64:
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - name: Install build tools
+        run: dnf install -y clang cmake gcc-c++ git ninja-build python3
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: CC=clang CXX=clang++ cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DAPEX_BUILD_MODULE_TESTS=OFF
+      - name: Build app and game modules
+        run: cmake --build build --target ApexPredator --parallel 2
+      - name: Stage artifact
+        run: |
+          mkdir -p dist/modules
+          cp build/ApexPredator dist/
+          cp build/modules/generation_zero.so build/modules/rage2.so dist/modules/
+          (cd dist && cmake -E tar xJf "$GITHUB_WORKSPACE/hashes.db.tar.xz" && cmake -E tar xJf "$GITHUB_WORKSPACE/rage2_hashes.db.tar.xz")
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ApexPredator-linux-x64
+          path: dist/
+          if-no-files-found: error
+
+  windows-x64:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Configure
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DAPEX_BUILD_MODULE_TESTS=OFF
+      - name: Build app and game modules
+        run: cmake --build build --config Release --target ApexPredator --parallel 2
+      - name: Stage artifact
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist/modules | Out-Null
+          Copy-Item build/Release/ApexPredator.exe dist/
+          Copy-Item -Path build/Release/modules/generation_zero.dll,build/Release/modules/rage2.dll -Destination dist/modules/
+          Push-Location dist
+          cmake -E tar xJf "$env:GITHUB_WORKSPACE\hashes.db.tar.xz"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to unpack hashes.db' }
+          cmake -E tar xJf "$env:GITHUB_WORKSPACE\rage2_hashes.db.tar.xz"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to unpack rage2_hashes.db' }
+          Pop-Location
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ApexPredator-windows-x64
+          path: dist/
+          if-no-files-found: error
