@@ -2,6 +2,10 @@
 
 Asset extraction and conversion utilities for Avalanche’s Apex/Generation Zero data. The main CLI (`ApexPredator`) mounts game archives, resolves hashed paths, and exports models/animations/textures to glTF or raw binary. Helper tools live in `src/tools` for type generation, hash collection, and quick hashing.
 
+## Downloads
+Latest CI: 
+- Linux x64 https://nightly.link/REDxEYE/ApexPredator/workflows/build/cpp_conversion/ApexPredator-linux-x64.zip
+- Windows x64 https://nightly.link/REDxEYE/ApexPredator/workflows/build/cpp_conversion/ApexPredator-windows-x64.zip
 
 ## Prerequisites
 - CMake 3.20+ and a C17/C++17 toolchain (MSVC 2022 or recent clang/gcc). Ninja or Visual Studio generators both work.
