@@ -16,6 +16,8 @@ MODEL_LOOKUP3, MODEL_MURMUR = 0x0016D077, 0x4BC448C04962B97E
 MESH_LOOKUP3, MESH_MURMUR = 0x93324A6B, 0x09190F49E8D1D96C
 WIDE_MESH = 'models/props/cable/horizontal_03.hrmeshc'
 WIDE_LOOKUP3, WIDE_MURMUR = 0x090E388F, 0x0F088655A51E4282
+EIGHT_MESH = 'models/props/cable/eight_influences.meshc'
+EIGHT_LOOKUP3, EIGHT_MURMUR = 0xA011B011, 0x12345678
 
 
 def array(blob, at, payload, count):
@@ -38,7 +40,7 @@ def adf(*instances):
     return bytes(data)
 
 
-def mesh_adf(index_width, position_format=3, uv_format=30, with_tangent_space=False):
+def mesh_adf(index_width, position_format=3, uv_format=30, with_tangent_space=False, with_skin=False):
     # Rage2: header -> LOD -> mesh; IndexOffsets count indices while
     # VertexOffsets and mesh stream offsets count bytes in MergedBuffer.
     header = bytearray(56 + 24 + 128)
@@ -46,10 +48,13 @@ def mesh_adf(index_width, position_format=3, uv_format=30, with_tangent_space=Fa
     struct.pack_into('<4I', header, 56 + 8, 80, 0, 1, 0)
     mesh = 80
     struct.pack_into('<IBB2xII', header, mesh, 0, index_width, 0, 6 if index_width == 4 else 3, 3)
-    array(header, mesh + 16, bytes([12, 4] + ([4] if with_tangent_space else [])),
-          3 if with_tangent_space else 2)
-    array(header, mesh + 32, struct.pack('<III', 0, 36, 48) if with_tangent_space
-          else struct.pack('<II', 0, 36), 3 if with_tangent_space else 2)
+    extra_stride = [16] if with_skin else [4] if with_tangent_space else []
+    array(header, mesh + 16, bytes([12, 4] + extra_stride), 2 + len(extra_stride))
+    stream_offsets = [0, 36] + ([48] if extra_stride else [])
+    array(header, mesh + 32, struct.pack('<' + 'I' * len(stream_offsets), *stream_offsets),
+          len(stream_offsets))
+    if with_skin:
+        array(header, mesh + 80, struct.pack('<8h', *range(8)), 8)
     submesh = struct.pack('<II6f', 0, 3, 0, 0, 0, 1, 1, 1)
     array(header, mesh + 96, submesh * (2 if index_width == 4 else 1),
           2 if index_width == 4 else 1)
@@ -59,7 +64,10 @@ def mesh_adf(index_width, position_format=3, uv_format=30, with_tangent_space=Fa
     attributes += struct.pack('<IIBBB8sB', 0xDEADBEEF, 0xDEADBEEF, 0, 0, 0, bytes(8), 0)
     if with_tangent_space:
         attributes += struct.pack('<IIBBB8sB', 6, 50, 2, 0, 4, bytes(8), 0)
-    array(header, mesh + 112, attributes, 5 if with_tangent_space else 4)
+    if with_skin:
+        for usage, offset, fmt in ((7, 0, 24), (8, 4, 22), (7, 8, 24), (8, 12, 22)):
+            attributes += struct.pack('<IIBBB8sB', usage, fmt, 2, offset, 16, bytes(8), 0)
+    array(header, mesh + 112, attributes, 4 + bool(with_tangent_space) + 4 * bool(with_skin))
 
     buffers = bytearray(64)
     indices = struct.pack('<3H' if index_width == 2 else '<3I', 0, 1, 2)
@@ -71,7 +79,13 @@ def mesh_adf(index_width, position_format=3, uv_format=30, with_tangent_space=Fa
     array(buffers, 24, struct.pack('<I', len(indices)), 1)
     # Positive, negative, and coincident tangent/bitangent frames.
     frames = bytes((128, 191, 191, 191, 128, 191, 64, 64, 128, 191, 128, 191))
-    merged = indices + positions + uvs + (frames if with_tangent_space else b'')
+    skin = b''.join(
+        bytes((0, 1, 2, 3)) + primary + bytes((4, 5, 6, 7)) + secondary
+        for primary, secondary in ((bytes((128, 0, 0, 0)), bytes((64, 0, 0, 0))),
+                                   (bytes(4), bytes((255, 0, 0, 0))),
+                                   (bytes((64, 64, 0, 0)), bytes((64, 64, 0, 0))))
+    ) if with_skin else b''
+    merged = indices + positions + uvs + (frames if with_tangent_space else b'') + skin
     array(buffers, 40, merged, len(merged))
     return adf((0x7A2C9B73, header), (0x0E1C0800, buffers))
 
@@ -101,6 +115,7 @@ def main():
         (install / 'RAGE2.exe').write_bytes(b'MZ')
         assets = [(MODEL, MODEL_LOOKUP3, MODEL_MURMUR, model_adf()),
                   (MESH, MESH_LOOKUP3, MESH_MURMUR, mesh_adf(2, with_tangent_space=True)),
+                  (EIGHT_MESH, EIGHT_LOOKUP3, EIGHT_MURMUR, mesh_adf(2, with_skin=True)),
                   (WIDE_MESH, WIDE_LOOKUP3, WIDE_MURMUR, mesh_adf(4))]
         tab = bytearray(struct.pack('<4sHH6I', b'TAB\0', 3, 1, 4096, len(assets), 0, 0, 0, 0))
         arc = bytearray()
@@ -149,6 +164,22 @@ def main():
             if index_width == 4:
                 other = gltf['meshes'][0]['primitives'][1]
                 assert accessor_values(gltf, other['indices'], '<3I') == (2, 1, 0)
+        output = root / 'out-eight'
+        subprocess.run([str(args.binary.resolve()), 'extract', str(install), str(EIGHT_MURMUR),
+                        '--module', 'rage2', '-n', '-d', str(db_path), '-o', str(output)],
+                       check=True, capture_output=True, text=True)
+        skinned = json.loads((output / EIGHT_MESH).with_suffix('.gltf').read_text())
+        attrs = skinned['meshes'][0]['primitives'][0]['attributes']
+        assert set(attrs) == {'POSITION', 'TEXCOORD_0', 'JOINTS_0', 'WEIGHTS_0', 'JOINTS_1', 'WEIGHTS_1'}
+        assert accessor_values(skinned, attrs['JOINTS_0'], '<12H')[:4] == (0, 1, 2, 3)
+        assert accessor_values(skinned, attrs['JOINTS_1'], '<12H')[:4] == (4, 5, 6, 7)
+        first = accessor_values(skinned, attrs['WEIGHTS_0'], '<12f')
+        second = accessor_values(skinned, attrs['WEIGHTS_1'], '<12f')
+        for vertex in range(3):
+            assert abs(sum(first[vertex * 4:vertex * 4 + 4]) +
+                       sum(second[vertex * 4:vertex * 4 + 4]) - 1) < 1e-6
+        assert abs(first[0] - 2 / 3) < 1e-6 and abs(second[0] - 1 / 3) < 1e-6
+        assert first[4:8] == (0, 0, 0, 0) and second[4:8] == (1, 0, 0, 0)
         # Replacing the last asset preserves TAB offsets and tests unsupported
         # formats of equal width for supported usages.
         wide_size = len(mesh_adf(4))

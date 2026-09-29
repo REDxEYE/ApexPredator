@@ -164,13 +164,25 @@ void handle_CSecondaryMotionAttachment(ApexAppState &app_state,
         GLog_Error("Failed to get skeleton property for CSecondaryMotionAttachment");
         return;
     }
-    const auto &model_filename = node.get<std::string>("model");
-    const auto &skeleton_filename = node.get<std::string>("skeleton");
-    std::filesystem::path skeleton_bsk_name = skeleton_filename;
+
+#if GAME==GAME_GENERATION_ZERO
+    const auto &skeleton_path = node.get<std::string>("skeleton");
+    std::filesystem::path skeleton_bsk_name = skeleton_path;
     skeleton_bsk_name.replace_extension(".bsk");
-    const auto skeleton_node = export_file(app_state, hash_string(skeleton_bsk_name));
+    const auto skeleton_name = skeleton_bsk_name.generic_string();
+    const uint32 skeleton_hash = hash_string(skeleton_bsk_name);
+    const auto &model_filename = node.get<std::string>("model");
+    const uint32 model_hash = hash_string(model_filename);
+#elif GAME==GAME_RAGE2
+    const uint32 skeleton_hash = node.get<uint32>("skeleton");
+    const auto skeleton_name = find_lookup3_name(skeleton_hash).value_or("<missing skeleton name>");
+    const uint32 model_hash = node.get<uint32>("model");
+#else
+#error "Unsupported game"
+#endif
+    const auto skeleton_node = export_file(app_state, skeleton_hash);
     if (!skeleton_node) {
-        GLog_Error("Failed to export skeleton for CSecondaryMotionAttachment: {}", skeleton_bsk_name.string());
+        GLog_Error("Failed to export skeleton for CSecondaryMotionAttachment: {}", skeleton_name);
         throw std::runtime_error("Failed to export skeleton for CSecondaryMotionAttachment");
     }
     const auto skin = helper.current_skin();
@@ -178,7 +190,7 @@ void handle_CSecondaryMotionAttachment(ApexAppState &app_state,
         GLog_Error("Failed to get current skin for CSecondaryMotionAttachment");
     }
 
-    const auto output_node = export_adf_file(app_state, hash_string(model_filename));
+    const auto output_node = export_adf_file(app_state, model_hash);
     set_world_matrix(output_node, node);
     add_extras(node, output_node);
     if (parent_node)
@@ -272,14 +284,21 @@ void handle_CSkeletalAnimatedObject(ApexAppState &app_state, const RuntimeNode &
         GLog_Error("Failed to get skeleton property for CSkeletalAnimatedObject");
         return;
     }
-
+#if GAME==GAME_GENERATION_ZERO
     const auto &model_filename = node.get<std::string>(0x0f94740b);
     const auto &skeleton_filename = node.get<std::string>(0x26fa86fe);
-
     std::filesystem::path skeleton_bsk_name = skeleton_filename;
     skeleton_bsk_name.replace_extension(".bsk");
 
-    const auto skeleton_node = export_file(app_state, hash_string(skeleton_bsk_name));
+    const auto &model_hash = hash_string(model_filename);
+    const auto &skeleton_hash = hash_string(skeleton_bsk_name);
+#elif GAME==GAME_RAGE2
+    const auto &model_hash = node.get<uint32>(0x0f94740b);
+    const auto &skeleton_hash = node.get<uint32>(0x26fa86fe);
+#else
+#error "Unsupported game"
+#endif
+    const auto skeleton_node = export_file(app_state, skeleton_hash);
     const auto skin = helper.current_skin();
 
     if (!skin) {
@@ -291,7 +310,7 @@ void handle_CSkeletalAnimatedObject(ApexAppState &app_state, const RuntimeNode &
     //     helper.set_parent(parent_node, root_bone);
     // }
 
-    const auto output_node = export_adf_file(app_state, hash_string(model_filename));
+    const auto output_node = export_adf_file(app_state, model_hash);
 
     add_extras(node, output_node);
     set_world_matrix(output_node, node);
@@ -375,7 +394,7 @@ void handle_CDynamicLightObject(ApexAppState &app_state, const RuntimeNode &node
                 const float inner = node.has("spot_inner_angle") ? node.get<float>("spot_inner_angle") : 0.0f;
                 if (std::isfinite(outer) && std::isfinite(inner) &&
                     outer > 0 && outer <= 180 && inner >= 0 && inner <= outer) {
-                    constexpr float degrees_to_half_radians = std::numbers::pi_v<float> / 360.0f;
+                    constexpr double degrees_to_half_radians = std::numbers::pi_v<double> / 360.0;
                     light.outer_cone_angle = outer * degrees_to_half_radians;
                     light.inner_cone_angle = inner * degrees_to_half_radians;
                     output_node->light = std::move(light);
@@ -454,11 +473,9 @@ void process_rtpc_node(ApexAppState &app_state, const RuntimeNode &node, const u
         handle_CSkeletalAnimatedObject(app_state, node, path_hash, parent_node);
     } else if (class_hash == RTPCClass::CBoneAttachment) {
         handle_CBoneAttachment(app_state, node, path_hash, parent_node);
-    }
-    else if (class_hash == RTPCClass::CDynamicLightObject) {
+    } else if (class_hash == RTPCClass::CDynamicLightObject) {
         handle_CDynamicLightObject(app_state, node, path_hash, parent_node);
-    }
-    else {
+    } else {
         handle_default(app_state, node, path_hash, parent_node);
     }
 }
@@ -487,4 +504,3 @@ VM::NodePtr export_rtpc(ApexAppState &app_state, const std::unique_ptr<IO::File>
 
     return epe_root_node;
 }
-

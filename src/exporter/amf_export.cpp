@@ -24,6 +24,33 @@
 #include "tracy/Tracy.hpp"
 #include "utils/hash_helper.h"
 
+namespace {
+    // A vertex's influences span every WEIGHTS_n stream, not each group of four independently.
+    void normalize_weight_sets(std::vector<VM::VertexAttribute> &attributes) {
+        std::vector<VM::VertexAttribute *> weights;
+        for (auto &attribute: attributes)
+            if (attribute.usage == VM::ElementUsage::Weights) weights.push_back(&attribute);
+        if (weights.empty()) return;
+
+        for (size_t vertex = 0; vertex < weights.front()->count; ++vertex) {
+            float total = 0.f;
+            for (const auto *attribute: weights) {
+                float values[4];
+                std::memcpy(values, attribute->data.data() + vertex * sizeof(values), sizeof(values));
+                for (float value: values) total += value;
+            }
+            if (total <= 0.f) continue;
+            for (auto *attribute: weights) {
+                float values[4];
+                auto *data = attribute->data.data() + vertex * sizeof(values);
+                std::memcpy(values, data, sizeof(values));
+                for (float &value: values) value /= total;
+                std::memcpy(data, values, sizeof(values));
+            }
+        }
+    }
+}
+
 #if GAME==GAME_GENERATION_ZERO
 void export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
                     const VM::NodePtr &mesh_root_node, const ADFTypes::AmfLodGroup &lod_group,
@@ -88,6 +115,7 @@ void export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
                                   sub_mesh.IndexCount);
 
             uint32 uv_count = 0;
+            uint32 joint_set = 0, weight_set = 0;
             for (const auto &amf_attribute: amf_attributes) {
                 const size_t stream = amf_attribute.StreamIndex;
                 if (stream >= vertex_buffer_indices.size() || stream >= vertex_buffer_strides.size() ||
@@ -111,8 +139,11 @@ void export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
                 auto decoded = AMF::decode_attribute(input);
                 if (!decoded) continue;
                 if (decoded->usage == VM::ElementUsage::TexCoord) ++uv_count;
+                if (decoded->usage == VM::ElementUsage::Joints) decoded->set = joint_set++;
+                if (decoded->usage == VM::ElementUsage::Weights) decoded->set = weight_set++;
                 primitive.attributes.emplace_back(std::move(*decoded));
             }
+            normalize_weight_sets(primitive.attributes);
         }
         if (const auto constants = ADF::as<ADFTypes::GeneralMeshConstants>(mesh.MeshProperties)) {
             if (constants->IsSkinnedMesh) {
@@ -304,6 +335,7 @@ bool export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
         std::vector<VM::VertexAttribute> attributes;
         std::optional<size_t> degenerate_normal_index;
         uint32 uv_set = 0;
+        uint32 joint_set = 0, weight_set = 0;
         bool has_position = false;
         for (const auto &attr: mesh.StreamAttributes) {
             const size_t stream = attr.StreamIndex;
@@ -326,8 +358,11 @@ bool export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
             if (!decoded) continue;
             if (decoded->usage == VM::ElementUsage::TexCoord) ++uv_set;
             if (decoded->usage == VM::ElementUsage::Position) has_position = true;
+            if (decoded->usage == VM::ElementUsage::Joints) decoded->set = joint_set++;
+            if (decoded->usage == VM::ElementUsage::Weights) decoded->set = weight_set++;
             attributes.emplace_back(std::move(*decoded));
         }
+        normalize_weight_sets(attributes);
         if (!has_position) {
             GLog_Warning("Skipping LOD {} mesh {} without supported positions", lod_id, mesh_id);
             continue;

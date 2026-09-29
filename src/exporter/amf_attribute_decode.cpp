@@ -191,10 +191,6 @@ namespace AMF {
                     if (attribute.Format == AmfFormat::AmfFormat_R8G8B8A8_UNORM) {
                         for (size_t j = 0; j < 4; ++j) values[j] = src[j] / 255.f;
                     } else std::memcpy(values, src, 16);
-                    {
-                        const float sum = values[0] + values[1] + values[2] + values[3];
-                        if (sum > 0.f) for (float &value: values) value /= sum;
-                    }
                     std::memcpy(dst, values, 16);
                     break;
                 default:
