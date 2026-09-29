@@ -213,12 +213,24 @@ VM::NodePtr export_terrain_patch(ApexAppState &app_state, const StreamPatchBlock
     auto &mesh = sub.meshes.emplace_back();
     mesh.name = patch_name;
     auto &primitive = mesh.primitives.emplace_back();
-    primitive.set_attribute(VM::ElementUsage::Position, 0, positions.data(), positions.size() * sizeof(glm::vec3),
-                            VM::ElementFormat::F32, VM::ElementType::Vec3, vertex_count);
-    primitive.set_attribute(VM::ElementUsage::Normal, 0, normals.data(), normals.size() * sizeof(glm::vec3),
-                            VM::ElementFormat::F32, VM::ElementType::Vec3, vertex_count);
-    primitive.set_attribute(VM::ElementUsage::TexCoord, 0, uv.data(), uv.size() * sizeof(glm::vec2),
-                            VM::ElementFormat::F32, VM::ElementType::Vec2, vertex_count);
+
+    auto to_u8_vec = []<typename T>(std::vector<T> &vec) {
+        const uint8 *data = (uint8 *) vec.data();
+        return VM::DataBuffer{data, data + vec.size() * sizeof(T)};
+    };
+
+    primitive.set_attribute({
+        VM::ElementUsage::Position, 0, "", VM::ElementFormat::F32, VM::ElementType::Vec3, false, vertex_count,
+        to_u8_vec(positions)
+    });
+    primitive.set_attribute({
+        VM::ElementUsage::Normal, 0, "", VM::ElementFormat::F32, VM::ElementType::Vec3, false, vertex_count,
+        to_u8_vec(normals)
+    });
+    primitive.set_attribute({
+        VM::ElementUsage::TexCoord, 0, "", VM::ElementFormat::F32, VM::ElementType::Vec2, false, vertex_count,
+        to_u8_vec(uv)
+    });
     primitive.set_indices(indices.data(), indices.size() * sizeof(uint32), VM::IndexType::U32, indices.size());
     patch_mesh_node->transform.translation = {patch_x_pos * 200.f, 0.f, patch_z_pos * 200.f};
     auto material = std::make_shared<VM::Material>();

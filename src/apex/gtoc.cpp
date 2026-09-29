@@ -160,6 +160,7 @@ bool GTOCArchive::foreach_file(const std::function<bool(const ArchiveEntry &)> &
     for (const auto &file: m_file.files()) {
         entry.size = file.size;
         entry.key = asset_path_hash(file.name);
+        entry.parent = this->key();
         if (!callback(entry)) {
             return false;
         }

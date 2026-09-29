@@ -107,7 +107,7 @@ const u64 &SArchive::key() const {
 
 bool SArchive::foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) {
     for (const auto &entry: m_entries | std::views::values) {
-        if (!callback({entry.hash, entry.size})) {
+        if (!callback({entry.hash, key(), entry.size})) {
             break;
         }
     }

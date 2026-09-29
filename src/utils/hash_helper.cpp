@@ -9,18 +9,16 @@
 
 
 #if GAME==GAME_GENERATION_ZERO
-uint64 asset_path_hash(const char *str, uint32 len) {
+uint64 asset_path_hash(const char *str, const uint32 len) {
     return hashlittle(str, len, 0);
 }
 #elif GAME==GAME_RAGE2
-uint64 asset_path_hash(const char *str, uint32 len) {
-    int64 hash[2] = {0, 0};
-    MurmurHash3_x64_128(str, len, 0, hash);
-    return hash[0];
+uint64 asset_path_hash(const char *str, const uint32 len) {
+    return MurmurHash3_x64_128(str, len, 0);
 }
 #endif
 
-uint64 asset_path_hash(std::string_view sv) {
+uint64 asset_path_hash(const std::string_view sv) {
     return asset_path_hash(sv.data(), sv.size());
 }
 
@@ -30,7 +28,7 @@ uint64 hash_string(const std::string &str) {
 
 uint64 hash_string(const std::filesystem::path &str) {
     std::string tmp = str.string();
-    if constexpr (std::filesystem::path::preferred_separator == '\\') {
+    if constexpr  (std::filesystem::path::preferred_separator == '\\') {
         for (char &c: tmp) {
             if (c == '\\') c = '/';
         }
@@ -49,9 +47,7 @@ uint64 hash_string(const std::string_view sv) {
 StringHashes string_hashes(std::string_view value) {
     StringHashes result{hashlittle(value.data(), value.size(), 0), 0};
 #if GAME==GAME_RAGE2
-    uint64 hash[2]{};
-    MurmurHash3_x64_128(value.data(), value.size(), 0, hash);
-    result.murmur = hash[0];
+    result.murmur = MurmurHash3_x64_128(value.data(), value.size(), 0);
 #endif
     return result;
 }

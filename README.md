@@ -80,8 +80,6 @@ python tests/test_virtual_model_cli.py cmake-build-debug/ApexPredator
 python tests/test_rage2_amf_cli.py cmake-build-debug/ApexPredator
 ```
 
-The CLI fixtures exercise Generation Zero scene isolation and Rage 2 lookup3-to-TAB model references, merged-buffer streams, submesh offsets, 16/32-bit indices, skipped unknown attribute usages, and diagnostics for unsupported formats of known usages. Add `--skeleton path/to/file.bsk` (repeatable) to the Generation Zero test to exercise local Havok files too.
-
 ## Loadable game modules
 
 The CLI now loads game support from DLL/SO modules. Build `ApexPredator` and keep its `modules/` directory beside the executable; the build produces the Generation Zero and Rage 2 modules automatically. The host does not link the game readers or generated types. Modules are built with the app and share C++ interfaces and `ApexAppState`; only the loader entry symbol uses `extern "C"`.

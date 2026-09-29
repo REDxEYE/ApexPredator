@@ -5,8 +5,10 @@
 #include "games.hpp"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstring>
+#include <optional>
 #include <span>
 #include <ranges>
 
@@ -95,10 +97,18 @@ void export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
                 if (buffer_index >= all_vertex_buffer.size())
                     throw std::runtime_error("Invalid AMF vertex buffer index");
                 const size_t offset = size_t(vertex_buffer_offsets[stream]) + amf_attribute.StreamOffset;
-                auto decoded = AMF::decode_attribute({
+                const AMF::AttributeInput input{
                     amf_attribute, all_vertex_buffer[buffer_index].Data, offset, vertex_buffer_strides[stream],
                     vertex_count, bone_lookup, uv_count, true
-                });
+                };
+                if (amf_attribute.Usage == ADFTypes::AmfUsage::AmfUsage_TangentSpace) {
+                    if (auto frame = AMF::decode_tangent_space(input)) {
+                        primitive.attributes.emplace_back(std::move(frame->normal));
+                        primitive.attributes.emplace_back(std::move(frame->tangent));
+                    }
+                    continue;
+                }
+                auto decoded = AMF::decode_attribute(input);
                 if (!decoded) continue;
                 if (decoded->usage == VM::ElementUsage::TexCoord) ++uv_count;
                 primitive.attributes.emplace_back(std::move(*decoded));
@@ -163,6 +173,100 @@ namespace {
         }
         return texture;
     }
+
+    // A few game vertices encode the same direction for tangent and bitangent.
+    // Their cross product is zero; recover the normal from a referenced face.
+    void repair_degenerate_frame_normals(VM::VertexAttribute &normal,
+                                         const VM::VertexAttribute &position,
+                                         VM::VertexAttribute &tangent,
+                                         const ADFTypes::AmfMesh &mesh,
+                                         const uint8 *indices_start) {
+        const auto vector_at = [](const VM::VertexAttribute &attribute, size_t vertex) {
+            std::array<float, 3> value;
+            std::memcpy(value.data(), attribute.data.data() + vertex * 3 * sizeof(float),
+                        3 * sizeof(float));
+            return value;
+        };
+        const auto missing = [&normal, &vector_at](size_t vertex) {
+            return vector_at(normal, vertex) == std::array<float, 3>{0.f, 0.f, 0.f};
+        };
+        const auto index_at = [&mesh](const uint8 *data, size_t i) {
+            uint32 index;
+            if (mesh.IndexBufferStride == 2) {
+                uint16 value;
+                std::memcpy(&value, data + i * 2, 2);
+                index = value;
+            } else {
+                std::memcpy(&index, data + i * 4, 4);
+            }
+            return index;
+        };
+        size_t cursor = 0;
+        for (const auto &sub_mesh: mesh.SubMeshes) {
+            const size_t count = sub_mesh.IndexCount;
+            if (cursor > mesh.IndexCount || count > mesh.IndexCount - cursor) break;
+            const uint8 *indices = indices_start + cursor * mesh.IndexBufferStride;
+            cursor += count;
+            for (size_t triangle = 0; triangle < count / 3; ++triangle) {
+                const uint32 a = index_at(indices, triangle * 3);
+                const uint32 b = index_at(indices, triangle * 3 + 1);
+                const uint32 c = index_at(indices, triangle * 3 + 2);
+                if (a >= normal.count || b >= normal.count || c >= normal.count ||
+                    !(missing(a) || missing(b) || missing(c))) continue;
+                const auto p0 = vector_at(position, a);
+                const auto p1 = vector_at(position, b);
+                const auto p2 = vector_at(position, c);
+                const std::array<float, 3> u{p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]};
+                const std::array<float, 3> v{p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2]};
+                std::array<float, 3> face{
+                    u[1] * v[2] - u[2] * v[1],
+                    u[2] * v[0] - u[0] * v[2],
+                    u[0] * v[1] - u[1] * v[0],
+                };
+                const float length = std::sqrt(face[0] * face[0] + face[1] * face[1] +
+                                               face[2] * face[2]);
+                if (length <= 1e-6f) continue;
+                for (float &component: face) component /= length;
+                for (const uint32 vertex: {a, b, c}) {
+                    if (!missing(vertex)) continue;
+                    std::array<float, 3> t;
+                    std::memcpy(t.data(), tangent.data.data() + vertex * 4 * sizeof(float),
+                                3 * sizeof(float));
+                    const float along_normal = t[0] * face[0] + t[1] * face[1] +
+                                               t[2] * face[2];
+                    for (size_t component = 0; component < 3; ++component)
+                        t[component] -= along_normal * face[component];
+                    float tangent_length = std::sqrt(t[0] * t[0] + t[1] * t[1] + t[2] * t[2]);
+                    if (tangent_length <= 1e-6f) {
+                        t = std::abs(face[2]) < 0.9f
+                                ? std::array<float, 3>{face[1], -face[0], 0.f}
+                                : std::array<float, 3>{0.f, face[2], -face[1]};
+                        tangent_length = std::sqrt(t[0] * t[0] + t[1] * t[1] + t[2] * t[2]);
+                    }
+                    for (float &component: t) component /= tangent_length;
+                    std::memcpy(tangent.data.data() + vertex * 4 * sizeof(float),
+                                t.data(), 3 * sizeof(float));
+                    std::memcpy(normal.data.data() + vertex * 3 * sizeof(float),
+                                face.data(), 3 * sizeof(float));
+                }
+            }
+        }
+        // Unreferenced vertices (or degenerate triangles) still need a unit normal.
+        for (size_t vertex = 0; vertex < normal.count; ++vertex) {
+            if (!missing(vertex)) continue;
+            std::array<float, 3> t;
+            std::memcpy(t.data(), tangent.data.data() + vertex * 4 * sizeof(float),
+                        3 * sizeof(float));
+            std::array<float, 3> fallback = std::abs(t[2]) < 0.9f
+                                                ? std::array<float, 3>{t[1], -t[0], 0.f}
+                                                : std::array<float, 3>{0.f, t[2], -t[1]};
+            const float length = std::sqrt(fallback[0] * fallback[0] +
+                                           fallback[1] * fallback[1] + fallback[2] * fallback[2]);
+            for (float &component: fallback) component /= length;
+            std::memcpy(normal.data.data() + vertex * 3 * sizeof(float),
+                        fallback.data(), 3 * sizeof(float));
+        }
+    }
 }
 
 bool export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
@@ -173,9 +277,11 @@ bool export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
     bool emitted = false;
     for (const auto [mesh_id, mesh]: lod_group.Meshes | std::views::enumerate) {
         const size_t merged_index = mesh.MergedBufferIndex;
-        const Rage2BufferSlice slice = merged_index < all_buffers.size()
-                                           ? all_buffers[merged_index]
-                                           : Rage2BufferSlice{nullptr, 0};
+        if (merged_index >= all_buffers.size()) {
+            GLog_Error("Skipping LOD {} mesh {}: merged buffer index out of bounds", lod_id, mesh_id);
+            continue;
+        }
+        const Rage2BufferSlice& slice = all_buffers[merged_index];
         const ADFTypes::AmfMeshBuffers *buffers = slice.buffers;
         // MergedBufferIndex numbers the pairs across both files; IndexOffsets
         // count indices, whereas VertexOffsets and stream offsets count bytes.
@@ -187,26 +293,36 @@ bool export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
             continue;
         }
         const auto &bytes = buffers->MergedBuffer.Data;
-        const size_t index_start = size_t(buffers->IndexOffsets[slice.index]) * mesh.IndexBufferStride;
+        const size_t index_start = static_cast<size_t>(buffers->IndexOffsets[slice.index]) * mesh.IndexBufferStride;
         const size_t vertex_start = buffers->VertexOffsets[slice.index];
-        const size_t index_size = size_t(mesh.IndexCount) * mesh.IndexBufferStride;
+        const size_t index_size = static_cast<size_t>(mesh.IndexCount) * mesh.IndexBufferStride;
         if (!rage2_range(index_start, index_size, bytes.size()) || vertex_start > bytes.size()) {
             GLog_Warning("Skipping LOD {} mesh {}: merged buffer exceeds bounds", lod_id, mesh_id);
             continue;
         }
 
         std::vector<VM::VertexAttribute> attributes;
+        std::optional<size_t> degenerate_normal_index;
         uint32 uv_set = 0;
         bool has_position = false;
         for (const auto &attr: mesh.StreamAttributes) {
             const size_t stream = attr.StreamIndex;
             if (stream >= mesh.VertexStreamStrides.size() || stream >= mesh.VertexStreamOffsets.size())
                 continue;
-            const size_t offset = vertex_start + size_t(mesh.VertexStreamOffsets[stream]) + attr.StreamOffset;
-            auto decoded = AMF::decode_attribute({
+            const size_t offset = vertex_start + static_cast<size_t>(mesh.VertexStreamOffsets[stream]) + attr.StreamOffset;
+            const AMF::AttributeInput input{
                 attr, bytes, offset, mesh.VertexStreamStrides[stream], mesh.VertexCount,
                 mesh.BoneIndexLookup, uv_set
-            });
+            };
+            if (attr.Usage == ADFTypes::AmfUsage::AmfUsage_TangentSpace) {
+                if (auto frame = AMF::decode_tangent_space(input)) {
+                    if (frame->has_degenerate_normal) degenerate_normal_index = attributes.size();
+                    attributes.emplace_back(std::move(frame->normal));
+                    attributes.emplace_back(std::move(frame->tangent));
+                }
+                continue;
+            }
+            auto decoded = AMF::decode_attribute(input);
             if (!decoded) continue;
             if (decoded->usage == VM::ElementUsage::TexCoord) ++uv_set;
             if (decoded->usage == VM::ElementUsage::Position) has_position = true;
@@ -215,6 +331,15 @@ bool export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
         if (!has_position) {
             GLog_Warning("Skipping LOD {} mesh {} without supported positions", lod_id, mesh_id);
             continue;
+        }
+        if (degenerate_normal_index) {
+            const auto position = std::find_if(attributes.begin(), attributes.end(),
+                                               [](const VM::VertexAttribute &attribute) {
+                                                   return attribute.usage == VM::ElementUsage::Position;
+                                               });
+            repair_degenerate_frame_normals(attributes[*degenerate_normal_index], *position,
+                                            attributes[*degenerate_normal_index + 1], mesh,
+                                            bytes.data() + index_start);
         }
 
         auto node = helper.create_node();
@@ -258,14 +383,19 @@ bool export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
                                   mesh.IndexBufferStride == 2 ? VM::IndexType::U16 : VM::IndexType::U32,
                                   index_count);
             for (const auto &attribute: attributes)
-                primitive.set_attribute(attribute.usage, attribute.set, attribute.data.data(),
-                                        attribute.data.size(), attribute.format, attribute.type,
-                                        mesh.VertexCount, attribute.normalized);
+                primitive.set_attribute(attribute);
         }
         if (model_mesh.primitives.empty()) continue;
-        if (const auto constants = ADF::as<ADFTypes::GeneralMeshConstants>(mesh.MeshProperties);
-            constants && constants->IsSkinnedMesh)
-            node->skin = helper.current_skin();
+        // Some character meshes have no MeshProperties despite carrying skinning streams.
+        const auto skin = helper.current_skin();
+        if (skin &&
+            std::ranges::any_of(attributes, [](const auto &attribute) {
+                return attribute.usage == VM::ElementUsage::Joints;
+            }) &&
+            std::ranges::any_of(attributes, [](const auto &attribute) {
+                return attribute.usage == VM::ElementUsage::Weights;
+            }))
+            node->skin = skin;
         helper.set_parent(mesh_root_node, node);
         emitted = true;
     }

@@ -10,7 +10,29 @@
 #include "exporter/adf_export.h"
 #include "exporter/common_export.h"
 #include "redscore/platform/logger.h"
+#include <algorithm>
+#include <cmath>
+#include <numbers>
 #include "tracy/Tracy.hpp"
+
+enum class RTPCClass:uint32_t {
+    CCharacter = const_hash_string("CCharacter"),
+    SCharacterPart = const_hash_string("SCharacterPart"),
+    CSecondaryMotionAttachment = const_hash_string("CSecondaryMotionAttachment"),
+    CRigidObject = const_hash_string("CRigidObject"),
+    CDamageableCharacterPart = const_hash_string("CDamageableCharacterPart"),
+    CSkeletalAnimatedObject = const_hash_string("CSkeletalAnimatedObject"),
+    CBoneAttachment = const_hash_string("CBoneAttachment"),
+    CDynamicLightObject = const_hash_string("CDynamicLightObject"),
+};
+
+static bool operator==(RTPCClass lhs, RTPCClass rhs) {
+    return static_cast<uint32_t>(lhs) == static_cast<uint32_t>(rhs);
+}
+
+static bool operator==(const RTPCClass lhs, const uint32 rhs) {
+    return std::to_underlying(lhs) == rhs;
+}
 
 void add_extras(const RuntimeNode &node, const VM::NodePtr &output_node) {
     if (output_node) output_node->extras = node.to_json();
@@ -64,7 +86,6 @@ void handle_CCharacter(ApexAppState &app_state,
         GLog_Error("Failed to export skeleton for CCharacter: {}", skeleton_name);
         throw std::runtime_error("Failed to export skeleton for CCharacter");
     }
-
     const auto skin = helper.current_skin();
     if (!skin) {
         GLog_Error("Failed to get current skin for CCharacter");
@@ -322,6 +343,56 @@ void handle_CBoneAttachment(ApexAppState &app_state, const RuntimeNode &node, co
     process_children(app_state, node, path_hash, output_node);
 }
 
+void handle_CDynamicLightObject(ApexAppState &app_state, const RuntimeNode &node,
+                                const uint64 path_hash, const VM::NodePtr &parent_node) {
+    auto &helper = app_state.models();
+    std::string name = find_lookup3_name(node.name_hash()).value_or(
+        std::format("node_{:08X}", node.name_hash()));
+    if (node.has("name")) name = node.get_string("name").value_or(name);
+    auto output_node = helper.create_node(std::move(name));
+    add_extras(node, output_node);
+    set_world_matrix(output_node, node);
+
+    if (!node.has("enabled") || node.get<uint32>("enabled") != 0) {
+        const float intensity = node.has("multiplier") ? node.get<float>("multiplier") : 1.0f;
+        const bool spot = node.has("is_spot_light") && node.get<uint32>("is_spot_light") != 0;
+        if (std::isfinite(intensity) && intensity >= 0) {
+            const glm::vec3 color = node.has("diffuse")
+                                        ? node.get<glm::vec3>("diffuse")
+                                        : glm::vec3(1.f);
+            const auto channel = [](const float value) {
+                return std::isfinite(value) ? std::clamp(value, 0.0f, 1.0f) : 1.0f;
+            };
+            VM::Light light;
+            light.name = output_node->name;
+            light.type = spot ? VM::LightType::Spot : VM::LightType::Point;
+            light.color = {channel(color.r), channel(color.g), channel(color.b)};
+            light.intensity = intensity;
+            const float radius = node.has("radius") ? node.get<float>("radius") : 0.0f;
+            if (std::isfinite(radius) && radius > 0) light.range = radius;
+            if (spot) {
+                const float outer = node.has("spot_angle") ? node.get<float>("spot_angle") : 90.0f;
+                const float inner = node.has("spot_inner_angle") ? node.get<float>("spot_inner_angle") : 0.0f;
+                if (std::isfinite(outer) && std::isfinite(inner) &&
+                    outer > 0 && outer <= 180 && inner >= 0 && inner <= outer) {
+                    constexpr float degrees_to_half_radians = std::numbers::pi_v<float> / 360.0f;
+                    light.outer_cone_angle = outer * degrees_to_half_radians;
+                    light.inner_cone_angle = inner * degrees_to_half_radians;
+                    output_node->light = std::move(light);
+                }
+            } else {
+                output_node->light = std::move(light);
+            }
+        }
+    }
+
+    if (parent_node)
+        helper.set_parent(parent_node, output_node);
+    else
+        GLog_Warning("Invalid parent setup: 0x{:08X}", node.name_hash());
+    process_children(app_state, node, path_hash, output_node);
+}
+
 void handle_default(ApexAppState &app_state, const RuntimeNode &node, const uint64 path_hash,
                     const VM::NodePtr &parent_node) {
     auto &helper = app_state.models();
@@ -355,38 +426,39 @@ void handle_default(ApexAppState &app_state, const RuntimeNode &node, const uint
 void process_rtpc_node(ApexAppState &app_state, const RuntimeNode &node, const uint64 path_hash,
                        const VM::NodePtr &parent_node) {
     ZoneScoped
+
     if (!(node.has("_class") || node.has("_class_hash"))) {
         return;
     }
-    std::string class_name;
+    uint32 class_hash;
     if (node.has("_class")) {
-        class_name = node.get<std::string>("_class");
+        class_hash = hash_string(node.get<std::string>("_class"));
     } else if (node.has("_class_hash")) {
-        auto opt_name = find_lookup3_name(node.get<uint32>("_class_hash"));
-        if (!opt_name) {
-            return;
-        }
-        class_name = opt_name.value();
+        class_hash = node.get<uint32>("_class_hash");
     } else {
         return;
     }
 
 
-    if (class_name == "CCharacter") {
+    if (class_hash == RTPCClass::CCharacter) {
         handle_CCharacter(app_state, node, path_hash, parent_node);
-    } else if (class_name == "SCharacterPart") {
+    } else if (class_hash == RTPCClass::SCharacterPart) {
         handle_SCharacterPart(app_state, node, path_hash, parent_node);
-    } else if (class_name == "CSecondaryMotionAttachment") {
+    } else if (class_hash == RTPCClass::CSecondaryMotionAttachment) {
         handle_CSecondaryMotionAttachment(app_state, node, path_hash, parent_node);
-    } else if (class_name == "CRigidObject") {
+    } else if (class_hash == RTPCClass::CRigidObject) {
         handle_CRigidObject(app_state, node, path_hash, parent_node);
-    } else if (class_name == "CDamageableCharacterPart") {
+    } else if (class_hash == RTPCClass::CDamageableCharacterPart) {
         handle_CDamageableCharacterPart(app_state, node, path_hash, parent_node);
-    } else if (class_name == "CSkeletalAnimatedObject") {
+    } else if (class_hash == RTPCClass::CSkeletalAnimatedObject) {
         handle_CSkeletalAnimatedObject(app_state, node, path_hash, parent_node);
-    } else if (class_name == "CBoneAttachment") {
+    } else if (class_hash == RTPCClass::CBoneAttachment) {
         handle_CBoneAttachment(app_state, node, path_hash, parent_node);
-    } else {
+    }
+    else if (class_hash == RTPCClass::CDynamicLightObject) {
+        handle_CDynamicLightObject(app_state, node, path_hash, parent_node);
+    }
+    else {
         handle_default(app_state, node, path_hash, parent_node);
     }
 }
@@ -415,3 +487,4 @@ VM::NodePtr export_rtpc(ApexAppState &app_state, const std::unique_ptr<IO::File>
 
     return epe_root_node;
 }
+

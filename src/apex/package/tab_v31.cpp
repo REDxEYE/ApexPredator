@@ -109,7 +109,7 @@ namespace TabV31 {
 
     bool TabV31::foreach_file(const std::function<bool(const Archive<u64>::ArchiveEntry &)> &callback) {
         for (const auto &[hash, entry] : m_entries)
-            if (!callback({hash, entry.uncompressed_size})) return false;
+            if (!callback({hash, 0, entry.uncompressed_size})) return false;
         return true;
     }
 }

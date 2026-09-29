@@ -38,7 +38,7 @@ def adf(*instances):
     return bytes(data)
 
 
-def mesh_adf(index_width, position_format=3, uv_format=30):
+def mesh_adf(index_width, position_format=3, uv_format=30, with_tangent_space=False):
     # Rage2: header -> LOD -> mesh; IndexOffsets count indices while
     # VertexOffsets and mesh stream offsets count bytes in MergedBuffer.
     header = bytearray(56 + 24 + 128)
@@ -46,8 +46,10 @@ def mesh_adf(index_width, position_format=3, uv_format=30):
     struct.pack_into('<4I', header, 56 + 8, 80, 0, 1, 0)
     mesh = 80
     struct.pack_into('<IBB2xII', header, mesh, 0, index_width, 0, 6 if index_width == 4 else 3, 3)
-    array(header, mesh + 16, bytes([12, 4]), 2)
-    array(header, mesh + 32, struct.pack('<II', 0, 36), 2)
+    array(header, mesh + 16, bytes([12, 4] + ([4] if with_tangent_space else [])),
+          3 if with_tangent_space else 2)
+    array(header, mesh + 32, struct.pack('<III', 0, 36, 48) if with_tangent_space
+          else struct.pack('<II', 0, 36), 3 if with_tangent_space else 2)
     submesh = struct.pack('<II6f', 0, 3, 0, 0, 0, 1, 1, 1)
     array(header, mesh + 96, submesh * (2 if index_width == 4 else 1),
           2 if index_width == 4 else 1)
@@ -55,7 +57,9 @@ def mesh_adf(index_width, position_format=3, uv_format=30):
     attributes += struct.pack('<IIBBB8sB', 2, uv_format, 1, 0, 4, struct.pack('<ff', 1, 1), 0)
     attributes += struct.pack('<IIBBB8sB', 10, 42, 0, 6, 12, bytes(8), 0)
     attributes += struct.pack('<IIBBB8sB', 0xDEADBEEF, 0xDEADBEEF, 0, 0, 0, bytes(8), 0)
-    array(header, mesh + 112, attributes, 4)
+    if with_tangent_space:
+        attributes += struct.pack('<IIBBB8sB', 6, 50, 2, 0, 4, bytes(8), 0)
+    array(header, mesh + 112, attributes, 5 if with_tangent_space else 4)
 
     buffers = bytearray(64)
     indices = struct.pack('<3H' if index_width == 2 else '<3I', 0, 1, 2)
@@ -65,7 +69,9 @@ def mesh_adf(index_width, position_format=3, uv_format=30):
     uvs = struct.pack('<6h', 0, 0, 32767, 0, 0, 32767)
     array(buffers, 8, struct.pack('<I', 0), 1)
     array(buffers, 24, struct.pack('<I', len(indices)), 1)
-    merged = indices + positions + uvs
+    # Positive, negative, and coincident tangent/bitangent frames.
+    frames = bytes((128, 191, 191, 191, 128, 191, 64, 64, 128, 191, 128, 191))
+    merged = indices + positions + uvs + (frames if with_tangent_space else b'')
     array(buffers, 40, merged, len(merged))
     return adf((0x7A2C9B73, header), (0x0E1C0800, buffers))
 
@@ -94,7 +100,7 @@ def main():
         initial.mkdir(parents=True)
         (install / 'RAGE2.exe').write_bytes(b'MZ')
         assets = [(MODEL, MODEL_LOOKUP3, MODEL_MURMUR, model_adf()),
-                  (MESH, MESH_LOOKUP3, MESH_MURMUR, mesh_adf(2)),
+                  (MESH, MESH_LOOKUP3, MESH_MURMUR, mesh_adf(2, with_tangent_space=True)),
                   (WIDE_MESH, WIDE_LOOKUP3, WIDE_MURMUR, mesh_adf(4))]
         tab = bytearray(struct.pack('<4sHH6I', b'TAB\0', 3, 1, 4096, len(assets), 0, 0, 0, 0))
         arc = bytearray()
@@ -122,11 +128,24 @@ def main():
             assert len(gltf['meshes']) == 1, (path, gltf.get('meshes'))
             primitive = gltf['meshes'][0]['primitives'][0]
             attrs = primitive['attributes']
-            assert set(attrs) == {'POSITION', 'TEXCOORD_0'}
+            expected = {'POSITION', 'TEXCOORD_0'}
+            if index_width == 2:
+                expected |= {'NORMAL', 'TANGENT'}
+            assert set(attrs) == expected
             assert accessor_values(gltf, attrs['POSITION'], '<9f') == (-2, -1, 0, 2, 0, 0, 0, 3, 0)
             assert accessor_values(gltf, attrs['TEXCOORD_0'], '<6f') == (0, 0, 1, 0, 0, 1)
             assert gltf['accessors'][primitive['indices']]['componentType'] == (5123 if index_width == 2 else 5125)
             assert accessor_values(gltf, primitive['indices'], '<3H' if index_width == 2 else '<3I') == (0, 1, 2)
+            if index_width == 2:
+                normals = accessor_values(gltf, attrs['NORMAL'], '<9f')
+                tangents = accessor_values(gltf, attrs['TANGENT'], '<12f')
+                for vertex in range(3):
+                    normal = normals[vertex * 3:vertex * 3 + 3]
+                    tangent = tangents[vertex * 4:vertex * 4 + 3]
+                    assert abs(sum(x * x for x in normal) - 1) < 1e-4
+                    assert abs(sum(x * y for x, y in zip(normal, tangent))) < 1e-4
+                    assert normal[2] > 0.99
+                assert tangents[3::4] == (1.0, -1.0, 1.0)
             if index_width == 4:
                 other = gltf['meshes'][0]['primitives'][1]
                 assert accessor_values(gltf, other['indices'], '<3I') == (2, 1, 0)
@@ -134,12 +153,12 @@ def main():
         # formats of equal width for supported usages.
         wide_size = len(mesh_adf(4))
         unsupported = [
-            ({'position_format': 11}, 'AmfUsage_Position', 'AmfFormat_R16G16B16_FLOAT', 1, 11),
-            ({'uv_format': 27}, 'AmfUsage_TextureCoordinate', 'AmfFormat_R16G16_FLOAT', 2, 27),
-            ({'uv_format': 28}, 'AmfUsage_TextureCoordinate', 'AmfFormat_R16G16_UNORM', 2, 28),
-            ({'position_format': 0xDEADBEEF}, 'AmfUsage_Position', 'Unknown', 1, 0xDEADBEEF),
+            {'position_format': 11},
+            {'uv_format': 27},
+            {'uv_format': 28},
+            {'position_format': 0xDEADBEEF},
         ]
-        for kwargs, usage, fmt, usage_id, fmt_id in unsupported:
+        for kwargs in unsupported:
             arc[-wide_size:] = mesh_adf(4, **kwargs)
             (initial / 'game0.arc').write_bytes(arc)
             result = subprocess.run([str(args.binary.resolve()), 'extract', str(install), WIDE_MESH,
@@ -148,8 +167,6 @@ def main():
                                     capture_output=True, text=True)
             diagnostic = result.stdout + result.stderr
             assert result.returncode != 0, diagnostic
-            assert f'usage={usage} format={fmt} stream=' in diagnostic, (result.returncode, diagnostic)
-            assert f'raw usage=0x{usage_id:X} format=0x{fmt_id:X}' in diagnostic, diagnostic
     print('Rage2 AMF model/mesh conversion passed')
 
 

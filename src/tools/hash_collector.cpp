@@ -72,15 +72,15 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, uint64 s
             }
         }
 
-        file->set_position(0);
-        GTOCArchive archive(ctx.archives, std::move(file), self_hash);
-        archive.foreach_file([&archive, &ctx, self_hash](const Archive<unsigned long>::ArchiveEntry &archive_entry) {
-            auto inner_file = archive.get(archive_entry.key);
-            if (!inner_file) {
-                return true;
-            }
-            return visit_archive_file(ctx, std::move(inner_file), archive_entry.key, self_hash);
-        });
+        // file->set_position(0);
+        // GTOCArchive archive(ctx.archives, std::move(file), self_hash);
+        // archive.foreach_file([&archive, &ctx, self_hash](const Archive<unsigned long>::ArchiveEntry &archive_entry) {
+        //     auto inner_file = archive.get(archive_entry.key);
+        //     if (!inner_file) {
+        //         return true;
+        //     }
+        //     return visit_archive_file(ctx, std::move(inner_file), archive_entry.key, self_hash);
+        // });
 
     } else if (std::memcmp(first_buffer.data(), AAF_MAGIC, 4) == 0) {
         GLog_Info("Found AAF: {}", self_hash);
@@ -195,8 +195,8 @@ int main(int argc, const char *argv[]) {
             GTOCArchive>(app_state.manager(), std::move(buffer), asset_path_hash(name));
         app_state.manager().mount(std::move(gtoc_archive));
     };
-    // mount_gtoc("sarc.0.gtoc");
-    // mount_gtoc("resourcesets/expentities.gtoc");
+    mount_gtoc("sarc.0.gtoc");
+    mount_gtoc("resourcesets/expentities.gtoc");
 
     Context context = {
         .db = *AssetDB::get_instance(),
@@ -219,7 +219,7 @@ int main(int argc, const char *argv[]) {
             GLog_Error("Failed to read file: {} - {}", entry.key, name);
             return true; // Just skip file
         }
-        visit_archive_file(context, std::move(file), entry.key);
+        visit_archive_file(context, std::move(file), entry.key, entry.parent);
         return true;
     });
 

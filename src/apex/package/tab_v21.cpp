@@ -39,6 +39,6 @@ const u64 & TabV21::TabV21::key() const {
 
 bool TabV21::TabV21::foreach_file(const std::function<bool(const Archive<u64>::ArchiveEntry &)> &callback) {
     for (const auto &[hash, entry] : m_entries)
-        if (!callback({hash, entry.size})) return false;
+        if (!callback({hash, 0, entry.size})) return false;
     return true;
 }

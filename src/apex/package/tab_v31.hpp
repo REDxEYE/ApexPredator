@@ -50,9 +50,7 @@ namespace TabV31 {
     static_assert(sizeof(TabEntry) == 24);
 
     inline uint64_t asset_hash(std::string_view name) {
-        uint64_t hash[2];
-        MurmurHash3_x64_128(name.data(), static_cast<int>(name.size()), 0, hash);
-        return hash[0];
+        return MurmurHash3_x64_128(name.data(), static_cast<int>(name.size()), 0);
     }
 
     class TabV31 : public Tab {

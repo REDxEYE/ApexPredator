@@ -7,6 +7,7 @@
 #include <filesystem>
 
 #include "int_def.h"
+#include "lookup3.h"
 
 
 struct StringHashes {
@@ -25,6 +26,16 @@ uint64 hash_string(const std::string &str);
 uint64 hash_string(const std::filesystem::path &str);
 
 uint64 hash_string(const char *str);
+
+
+consteval uint64 const_hash_string(std::string_view str) noexcept {
+    return const_hashlittle(str.data(), str.size(), 0);
+}
+
+template<std::size_t N>
+consteval uint64 const_hash_string(const char (&str)[N]) noexcept {
+    return const_hashlittle(str, N - 1, 0);
+}
 
 uint64 hash_string(std::string_view sv);
 

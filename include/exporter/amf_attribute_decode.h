@@ -23,4 +23,13 @@ namespace AMF {
 
     // Skips unknown usages or invalid buffer data; throws for unsupported formats of known usages.
     std::optional<VM::VertexAttribute> decode_attribute(const AttributeInput &input);
+
+    struct TangentFrame {
+        VM::VertexAttribute normal;
+        VM::VertexAttribute tangent;
+        bool has_degenerate_normal{false};
+    };
+
+    // Unpacks the four-byte tangent frame into glTF NORMAL and TANGENT.
+    std::optional<TangentFrame> decode_tangent_space(const AttributeInput &input);
 }

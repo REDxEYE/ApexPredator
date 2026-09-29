@@ -1,6 +1,7 @@
 #include "platform/app_state.h"
 #include "exporter/common_export.h"
 #include "exporter/havok_export.h"
+#include "exporter/rtpc_export.h"
 #include "apex/asset_db.h"
 #include "redscore/platform/logger.h"
 #include "redscore/utils/simple_fileio.h"
@@ -9,6 +10,7 @@
 #include "tracy/Tracy.hpp"
 #include <fstream>
 using nlohmann::json;
+
 
 void raw_export(ApexAppState &app_state, const uint64 asset_hash) {
     ZoneScoped
@@ -49,7 +51,7 @@ void normal_export(ApexAppState &app_state, const uint64 asset_hash) {
         std::filesystem::create_directories(save_path.parent_path());
         if (VM::save_gltf(builder.scene, save_path)) {
             GLog_Info("Written GLTF file: {}", save_path.string());
-        }else {
+        } else {
             throw std::runtime_error("Failed to write GLTF file: " + save_path.string());
         }
 
