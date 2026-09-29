@@ -35,7 +35,7 @@ static bool operator==(const RTPCClass lhs, const uint32 rhs) {
 }
 
 void add_extras(const RuntimeNode &node, const VM::NodePtr &output_node) {
-    if (output_node) output_node->extras = node.to_json();
+    if (output_node) output_node->extras = node.to_json()["props"];
 }
 
 glm::mat4 calculate_global_node_matrix(VM::SceneBuilder &, const VM::NodePtr &target) {
