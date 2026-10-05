@@ -10,7 +10,7 @@ Latest CI:
 ## Prerequisites
 - CMake 3.20+ and a C17/C++17 toolchain (MSVC 2022 or recent clang/gcc). Ninja or Visual Studio generators both work.
 - Git (required for `FetchContent` dependencies) and Internet access on first configure.
-- Windows (tested) or WSL; Tracy client headers are fetched automatically and can stay disabled at runtime.
+- Windows (tested) or WSL; Tracy headers are fetched automatically. Windows Debug builds enable profiling; Windows Release, RelWithDebInfo, and MinSizeRel builds compile it out so game DLLs can unload safely.
 - Game data: the `archives_win64` directory from Generation Zero (or another Apex-based title) plus an asset path database (`hashes.db`). You can generate the DB with `HashCollector` if you have the string lists.
 
 ## Configure & build

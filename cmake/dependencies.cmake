@@ -20,6 +20,11 @@ if(TARGET pugixml::pugixml OR TARGET pugixml)
     endmacro()
 endif()
 
+if(WIN32)
+    # Tracy's cache option applies to every configuration in a Visual Studio build.
+    set(TRACY_ENABLE OFF CACHE BOOL "Enable profiling" FORCE)
+endif()
+
 
 set(REDSCORE_LOCAL_DIR "/home/red_eye/CLionProjects/RedsCore")
 if(EXISTS "${REDSCORE_LOCAL_DIR}/CMakeLists.txt")
@@ -37,6 +42,11 @@ else()
     )
     FetchContent_MakeAvailable(RedsCore)
 endif()
+if(WIN32)
+    # Keep profiling in Debug, but do not start Tracy workers in unloadable Release DLLs.
+    target_compile_definitions(TracyClient PUBLIC "$<$<CONFIG:Debug>:TRACY_ENABLE>")
+endif()
+
 
 FetchContent_Declare(
         ogg
