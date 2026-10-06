@@ -34,7 +34,7 @@ protected:
             return {false, 0};
         }
 
-        auto info = AssetDB::get_instance()->get_file(hash, AssetDB::HashType::Murmur);
+        auto info = AssetDB::get_instance()->get_file(hash, AssetDB::HashType::Game);
 
         auto buffer = get(hash);
         if (!buffer) {
