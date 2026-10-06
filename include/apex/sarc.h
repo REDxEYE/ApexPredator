@@ -38,6 +38,8 @@ public:
 
     std::unique_ptr<IO::File> get(const u64& hash) override;
 
+    [[nodiscard]] const u64 & get_parent_key() override;
+
     // void all_entries(std::vector<ArchiveEntry> &entries) const override;
 
     [[nodiscard]] std::string_view name() const override;

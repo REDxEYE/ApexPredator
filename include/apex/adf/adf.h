@@ -10,7 +10,8 @@
 #include "redscore/platform/buffer/buffer.h"
 #include "redscore/platform/file/file.h"
 
-#define ADF_MAGIC " FDA"
+constexpr uint8 ADF_MAGIC[] = " FDA";
+constexpr uint8 ADF_SMALL_MAGIC[] = "\0FDA";
 
 namespace ADF {
 
@@ -69,6 +70,11 @@ namespace ADF {
     };
 
 #pragma pack(push, 1)
+    struct SmallHeader {
+        char ident[4];
+        uint32 type_hash;
+    };
+
     struct Header {
         char ident[4];
         uint32 version;
@@ -171,9 +177,9 @@ namespace ADF {
 
         IO::Buffer get_instance_data(uint32 instance_id) const;
 
-        static ADFFile from_buffer(std::unique_ptr<IO::File> buffer);
+        static ADFFile from_buffer(std::unique_ptr<IO::File> buffer, uint32 small_instance_alignment = 0);
 
-        static ADFFile from_buffer(const uint8 *data, uint32 size);
+        static ADFFile from_buffer(const uint8 *data, uint32 size, uint32 small_instance_alignment = 0);
 
 
         [[nodiscard]] std::string_view get_string(const uint32 index) const {

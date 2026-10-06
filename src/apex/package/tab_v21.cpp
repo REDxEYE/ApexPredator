@@ -9,7 +9,7 @@ bool TabV21::TabV21::has(std::string_view path) {
     return m_entries.contains(hash);
 }
 
-bool TabV21::TabV21::has(const uint64& hash) {
+bool TabV21::TabV21::has(const uint64 &hash) {
     return m_entries.contains(hash);
 }
 
@@ -19,7 +19,7 @@ std::unique_ptr<IO::File> TabV21::TabV21::get(const std::string_view path) {
     return get(hash);
 }
 
-std::unique_ptr<IO::File> TabV21::TabV21::get(const uint64& hash) {
+std::unique_ptr<IO::File> TabV21::TabV21::get(const uint64 &hash) {
     ZoneScoped
     const auto it = m_entries.find(hash);
     if (it == m_entries.end()) {
@@ -33,12 +33,13 @@ std::unique_ptr<IO::File> TabV21::TabV21::get(const uint64& hash) {
 }
 
 
-const u64 & TabV21::TabV21::key() const {
+const u64 &TabV21::TabV21::key() const {
     return m_hash;
 }
 
 bool TabV21::TabV21::foreach_file(const std::function<bool(const Archive<u64>::ArchiveEntry &)> &callback) {
-    for (const auto &[hash, entry] : m_entries)
-        if (!callback({hash, 0, entry.size})) return false;
+    auto total = m_entries.size();
+    for (const auto &[i, item]: m_entries | std::views::enumerate)
+        if (!callback({item.first, 0, item.second.size, total, static_cast<uint64>(i)})) return false;
     return true;
 }

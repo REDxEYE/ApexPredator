@@ -155,7 +155,7 @@ void export_amf_lod(VM::SceneBuilder &helper, const std::string_view mesh_name,
         }
     }
 }
-#elif GAME==GAME_RAGE2
+#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
 namespace {
     struct Rage2BufferSlice {
         const ADFTypes::AmfMeshBuffers *buffers;
@@ -445,7 +445,7 @@ VM::NodePtr export_amf_mesh(ApexAppState &app_state, uint64 path_hash,
     ZoneScoped
     auto &helper = app_state.models();
 
-#if GAME==GAME_RAGE2
+#if GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
     std::string mesh_name = find_asset_name(path_hash).value_or(std::format("mesh_{:08X}", path_hash));
 #else
     std::string mesh_name = find_lookup3_name(path_hash).value_or(std::format("mesh_{:08X}", path_hash));
@@ -493,7 +493,7 @@ VM::NodePtr export_amf_mesh(ApexAppState &app_state, uint64 path_hash,
     }
 
     export_amf_lod(helper, mesh_name, mesh_root_node, header->LodGroups.back(), 0, all_index_buffer, all_vertex_buffer);
-#elif GAME==GAME_RAGE2
+#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
     std::unique_ptr<ADFTypes::AmfMeshBuffers> hi_res_buffers;
     if (const auto hi_res_name = find_lookup3_name(header->HighLodPath.storage)) {
         std::string_view path = *hi_res_name;
@@ -672,11 +672,11 @@ VM::NodePtr export_amf_model(ApexAppState &app_state, const ADFTypes::AmfModel *
                 continue;
             }
 
-#elif GAME==GAME_RAGE2
+#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
             // GeneralR2 and Character share diffuse, normal and MPM in their
             // first three slots. The remaining Character slots are shader-specific.
-            // RAGE2 has no generated material constants for these render blocks,
-            // so do not interpret their deferred attributes.
+            // Do not interpret deferred attributes without matching
+            // game-generated material constants for these render blocks.
             if ((render_block_id == "GeneralR2" || render_block_id == "Character") && !app_state.skip_textures) {
                 const auto load_slot = [&](size_t slot) -> VM::TexturePtr {
                     if (slot >= amf_material.Textures.size()) return {};
@@ -736,7 +736,7 @@ VM::NodePtr export_amf_model(ApexAppState &app_state, const ADFTypes::AmfModel *
 #endif
     }
 
-#if GAME==GAME_RAGE2
+#if GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
     const auto mesh_name = find_lookup3_name(amf_model->Mesh.storage);
     const uint64 mesh_hash = mesh_name ? asset_path_hash(*mesh_name) : amf_model->Mesh.storage;
     auto mb = app_state.manager().get(mesh_hash);

@@ -42,7 +42,6 @@ public:
         std::string name;
         uint64_t size;
         uint64_t parent_hash;
-        uint64_t parent_murmur_hash;
     };
 
 private:

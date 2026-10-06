@@ -224,6 +224,9 @@ void emit_type_infos(const std::unordered_map<uint32, Type> &types, std::ostream
             stream << "    .new_instance = nullptr,\n";
         }
         stream << std::format("    .hash = 0x{:08X},\n", type.hash);
+        if (type.alignment > 8) {
+            stream << std::format("    .alignment = {},\n", type.alignment);
+        }
         stream << std::format("    .name = \"{}\"\n", type.name());
         stream << "};\n\n";
     }

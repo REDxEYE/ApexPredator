@@ -110,24 +110,35 @@ GTOCFile::GTOCFile(IO::File &buffer) {
 
 bool GTOCArchive::has(const uint64 &key) {
     const auto &it = m_hash_remap.find(key);
-    return it != m_hash_remap.end();
+    auto search_hash = key;
+    if (it != m_hash_remap.end()) {
+        search_hash = it->second;
+    }
+    for (const auto &archive: m_file.archives()) {
+        for (const auto &[file_index, offset]: archive.members) {
+            if (const auto &file = m_file.files()[file_index]; file.hash == search_hash) {
+                if (offset != 0) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 std::unique_ptr<IO::File> GTOCArchive::get(const uint64 &key) {
-    auto db = AssetDB::get_instance();
+    const auto db = AssetDB::get_instance();
     const auto &it = m_hash_remap.find(key);
     auto search_hash = key;
     if (it != m_hash_remap.end()) {
         search_hash = it->second;
     }
     for (const auto &archive: m_file.archives()) {
-        for (const auto &member: archive.members) {
-            const auto &file = m_file.files()[member.file_index];
-            if (file.hash == search_hash) {
-                if (member.offset == 0) {
+        for (const auto &[file_index, offset]: archive.members) {
+            if (const auto &file = m_file.files()[file_index]; file.hash == search_hash) {
+                if (offset == 0) {
                     return nullptr;
                 }
-
 
                 const auto file_info = db->get_file(archive.hash, AssetDB::HashType::Lookup3);
                 if (!file_info.has_value()) {
@@ -137,7 +148,7 @@ std::unique_ptr<IO::File> GTOCArchive::get(const uint64 &key) {
                 if (!sarc) {
                     return nullptr;
                 }
-                sarc->set_position(member.offset);
+                sarc->set_position(offset);
                 auto mem_file = std::make_unique<IO::MemoryFile>(file.size);
                 sarc->read(mem_file->buffer().data(), file.size);
                 return std::move(mem_file);
@@ -155,14 +166,23 @@ const uint64 &GTOCArchive::key() const {
     return m_hash;
 }
 
+const u64 &GTOCArchive::get_parent_key() {
+    return m_hash;
+}
+
 bool GTOCArchive::foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) {
-    ArchiveEntry entry{};
-    for (const auto &file: m_file.files()) {
-        entry.size = file.size;
-        entry.key = asset_path_hash(file.name);
-        entry.parent = this->key();
-        if (!callback(entry)) {
-            return false;
+    GLog_Info("Walking {}", m_name);
+    const auto total = m_file.files().size();
+    uint64 i = 0;
+    const uint64 parent_key = key();
+    for (const auto &archive: m_file.archives()) {
+        for (const auto &[file_index, offset]: archive.members) {
+            i++;
+            if (offset == 0) continue;
+            const auto &file = m_file.files().at(file_index);
+            if (!callback({asset_path_hash(file.name), parent_key, file.size, total, i})) {
+                return false;
+            }
         }
     }
     return true;

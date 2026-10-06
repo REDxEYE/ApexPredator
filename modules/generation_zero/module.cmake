@@ -39,7 +39,7 @@ add_library(GenerationZeroAdfLib STATIC
         modules/generation_zero/src/apex/adf/generated/adf_types_formatters.cpp
         src/apex/adf/adf_read_instance.cpp
 )
-target_compile_definitions(GenerationZeroAdfLib PRIVATE GAME=0)
+target_compile_definitions(GenerationZeroAdfLib PUBLIC GAME=0)
 target_include_directories(GenerationZeroAdfLib PUBLIC include modules/generation_zero/include)
 target_link_libraries(GenerationZeroAdfLib PUBLIC ${CommonLibs})
 target_link_libraries(GenerationZeroAdfLib PRIVATE ${CommonLibs} nlohmann_json::nlohmann_json)
@@ -56,7 +56,7 @@ add_library(GenerationZeroHavokLib STATIC
         src/havok/animations/spline.cpp
         #        src/havok/havok_helpers.cpp
 )
-target_compile_definitions(GenerationZeroHavokLib PRIVATE GAME=0)
+target_compile_definitions(GenerationZeroHavokLib PUBLIC GAME=0)
 target_include_directories(GenerationZeroHavokLib PUBLIC include modules/generation_zero/include)
 target_link_libraries(GenerationZeroHavokLib PUBLIC ${CommonLibs})
 
@@ -77,7 +77,7 @@ add_library(GenerationZeroModule MODULE
         src/modules/shared.cpp
         ${CommonFiles}
 )
-target_compile_definitions(GenerationZeroModule PRIVATE GAME=0)
+target_compile_definitions(GenerationZeroModule PUBLIC GAME=0)
 set_target_properties(GenerationZeroModule PROPERTIES
         PREFIX "" OUTPUT_NAME "generation_zero"
         LIBRARY_OUTPUT_DIRECTORY "${GAME_MODULE_OUTPUT_DIR}"
@@ -93,7 +93,7 @@ add_executable(GenerationZeroReadTester
         src/tools/read_tester.cpp
         ${CommonFiles}
 )
-target_compile_definitions(GenerationZeroReadTester PRIVATE GAME=0)
+target_compile_definitions(GenerationZeroReadTester PUBLIC GAME=0)
 target_compile_definitions(GenerationZeroReadTester PRIVATE TRACY_MEMORY TRACY_ON_DEMAND)
 target_link_libraries(GenerationZeroReadTester PUBLIC GenerationZeroHavokLib GenerationZeroAdfLib ${CommonLibs})
 
@@ -102,7 +102,7 @@ add_executable(GenerationZeroHashCollector
         src/tools/hash_collector.cpp
         ${CommonFiles}
 )
-target_compile_definitions(GenerationZeroHashCollector PRIVATE GAME=0)
+target_compile_definitions(GenerationZeroHashCollector PUBLIC GAME=0)
 target_include_directories(GenerationZeroHashCollector PUBLIC include)
 target_link_libraries(GenerationZeroHashCollector PUBLIC GenerationZeroHavokLib GenerationZeroAdfLib ${CommonLibs})
 
@@ -115,7 +115,7 @@ add_executable(GenerationZeroAdfTypeGenerator
         src/apex/package/tab_v21.cpp
         src/apex/package/tab_v31.cpp
 )
-target_compile_definitions(GenerationZeroAdfTypeGenerator PRIVATE GAME=0)
+target_compile_definitions(GenerationZeroAdfTypeGenerator PUBLIC GAME=0)
 #target_compile_definitions(GenerationZeroAdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_ON_DEMAND)
 target_include_directories(GenerationZeroAdfTypeGenerator PUBLIC include modules/generation_zero/include)
 target_link_libraries(GenerationZeroAdfTypeGenerator PUBLIC ${CommonLibs} ApexOoz)
@@ -126,7 +126,7 @@ add_executable(GenerationZeroHavokTypeGenerator
         src/havok/havok_codegen.cpp
         ${CommonFiles}
 )
-target_compile_definitions(GenerationZeroHavokTypeGenerator PRIVATE GAME=0)
+target_compile_definitions(GenerationZeroHavokTypeGenerator PUBLIC GAME=0)
 target_include_directories(GenerationZeroHavokTypeGenerator PUBLIC include modules/generation_zero/include)
 target_link_libraries(GenerationZeroHavokTypeGenerator PUBLIC ${CommonLibs} ApexOoz)
 

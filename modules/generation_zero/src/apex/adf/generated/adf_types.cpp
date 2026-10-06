@@ -42878,6 +42878,7 @@ ADF::TypeInfo ADFTypes::LandEngine_TI = {
 ADF::TypeInfo ADFTypes::PfxBreakableInstance_TI = {
     .new_instance = PfxBreakableInstance_new_instance,
     .hash = 0x5CCC0EDC,
+    .alignment = 32,
     .name = "PfxBreakableInstance"
 };
 
@@ -43634,6 +43635,7 @@ ADF::TypeInfo ADFTypes::AirAudio_TI = {
 ADF::TypeInfo ADFTypes::EffectRTTimeline_TI = {
     .new_instance = EffectRTTimeline_new_instance,
     .hash = 0x326A2784,
+    .alignment = 16,
     .name = "EffectRTTimeline"
 };
 
@@ -43646,6 +43648,7 @@ ADF::TypeInfo ADFTypes::HingedPart_Array_TI = {
 ADF::TypeInfo ADFTypes::GSDataSet_TI = {
     .new_instance = GSDataSet_new_instance,
     .hash = 0x76B4E4DF,
+    .alignment = 16,
     .name = "GSDataSet"
 };
 
@@ -44546,6 +44549,7 @@ ADF::TypeInfo ADFTypes::PartNode_TI = {
 ADF::TypeInfo ADFTypes::PfxSimplePartInstance_TI = {
     .new_instance = PfxSimplePartInstance_new_instance,
     .hash = 0x2CFF4FE0,
+    .alignment = 32,
     .name = "PfxSimplePartInstance"
 };
 
@@ -44720,6 +44724,7 @@ ADF::TypeInfo ADFTypes::StringLookupDialogueLine_Array_TI = {
 ADF::TypeInfo ADFTypes::PfxStaticInstance_TI = {
     .new_instance = PfxStaticInstance_new_instance,
     .hash = 0xD39A7AA5,
+    .alignment = 32,
     .name = "PfxStaticInstance"
 };
 
@@ -45008,6 +45013,7 @@ ADF::TypeInfo ADFTypes::TerrainColor_Array_TI = {
 ADF::TypeInfo ADFTypes::PfxBreakablePartInstance_TI = {
     .new_instance = PfxBreakablePartInstance_new_instance,
     .hash = 0x1C8E89D6,
+    .alignment = 32,
     .name = "PfxBreakablePartInstance"
 };
 
@@ -45392,6 +45398,7 @@ ADF::TypeInfo ADFTypes::BoneData_Array_TI = {
 ADF::TypeInfo ADFTypes::PfxStaticCompound_TI = {
     .new_instance = PfxStaticCompound_new_instance,
     .hash = 0x8FD3E3C4,
+    .alignment = 32,
     .name = "PfxStaticCompound"
 };
 
@@ -46634,6 +46641,7 @@ ADF::TypeInfo ADFTypes::HunterAttackSettings_TI = {
 ADF::TypeInfo ADFTypes::WorldAudioVector4_TI = {
     .new_instance = WorldAudioVector4_new_instance,
     .hash = 0x21A16FA4,
+    .alignment = 16,
     .name = "WorldAudioVector4"
 };
 
@@ -46730,6 +46738,7 @@ ADF::TypeInfo ADFTypes::OccluderBoxCollection_TI = {
 ADF::TypeInfo ADFTypes::GSData_TI = {
     .new_instance = GSData_new_instance,
     .hash = 0xCEBF6839,
+    .alignment = 16,
     .name = "GSData"
 };
 
@@ -46748,12 +46757,14 @@ ADF::TypeInfo ADFTypes::GSDataSet_Array_TI = {
 ADF::TypeInfo ADFTypes::GSNode_TI = {
     .new_instance = GSNode_new_instance,
     .hash = 0x57FECC61,
+    .alignment = 16,
     .name = "GSNode"
 };
 
 ADF::TypeInfo ADFTypes::GSGraph_TI = {
     .new_instance = GSGraph_new_instance,
     .hash = 0x69B6DFA4,
+    .alignment = 16,
     .name = "GSGraph"
 };
 
@@ -47360,6 +47371,7 @@ ADF::TypeInfo ADFTypes::ControlPointSaveData3_Array_TI = {
 ADF::TypeInfo ADFTypes::PfxBreakableCompound_TI = {
     .new_instance = PfxBreakableCompound_new_instance,
     .hash = 0x3425B69F,
+    .alignment = 32,
     .name = "PfxBreakableCompound"
 };
 

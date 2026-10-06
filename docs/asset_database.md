@@ -45,9 +45,10 @@ migration. Use the matching game's build when opening a legacy database; its
 old schema does not identify the hash algorithm. Existing user databases are
 not rewritten by the build itself; migration runs when an application opens one.
 
-Collectors use `../hashes.db` for GenZ and `../rage2_hashes.db` for Rage 2,
-relative to their working directory. All collector string/file insertion paths
-supply both hashes. GenZ archive enumeration now visits TAB 2.1 entries.
+Collectors use `../hashes.db` for GenZ, `../rage2_hashes.db` for Rage 2, and
+`../second_extinction_hashes.db` for Second Extinction, relative to their
+working directory. All collector string/file insertion paths supply both hashes.
+GenZ archive enumeration now visits TAB 2.1 entries.
 
 ## GTOC/STOC ingestion
 
@@ -70,21 +71,14 @@ referenced metadata records. It owns the bytes backing name views, supports move
 but not copies, and rejects invalid counts, references, and unterminated names.
 Views remain valid while their owning reader is alive.
 
-Collection inserts each referenced path, including external resources, and its
-dot-prefixed extension into `kv`. Extension strings are deduplicated per TOC.
-Hashes are computed through `string_hashes`: lookup3 for GenZ, lookup3 and Murmur
-for Rage 2. Stored TOC hashes are lookup3 in either game; they are not Murmur keys.
-GTOC archive enumeration returns game-specific asset-path hashes (Murmur for Rage 2),
-not the stored lookup3 hashes, so its keys can be passed to the archive manager.
-
-TOC member paths also create or update `files` rows with their game-specific hash
-pair and recorded byte size, including external resources. Existing parent
-values are preserved; new rows use parent `0` because an archive's lookup3 key
-alone cannot recover a Rage 2 Murmur parent key. The TOC's own hash is not used as
-the payload parent. Extension-only strings remain in `kv`, not `files`.
-The TOC file itself retains normal archive-file registration when its path is
-known. This adds TOC metadata collection, not mounting or extracting RAGE 2's
-externally indexed small-archive payloads.
+Collection inserts TOC member paths into `kv` with their game-specific
+`string_hashes`. External members (offset zero) also receive `files` rows
+with their recorded size and parent `0`. Embedded members remain catalog
+names until the containing archive is available; their data is read through
+the GTOC at its recorded offset. Stored TOC member and archive IDs are
+lookup3 hashes, not TAB Murmur keys. Member enumeration uses the game's
+asset-path hash; reading an embedded member requires a `files` mapping from
+the container's lookup3 ID to its TAB Murmur key.
 
 Tests cover both game configurations, legacy migration/reopening, hash
 collisions, unsigned 64-bit keys/parents, zero Murmur handling, malformed TOC
@@ -96,7 +90,50 @@ cmake --build cmake-build-debug --target GenerationZeroHashCollector Rage2HashCo
 ctest --test-dir cmake-build-debug -R '^Apex\.(Gtoc|HashCollectors)$' --output-on-failure
 ```
 
-The real `sarc.0.gtoc` sample was also ingested through isolated TAB fixtures by
-both collectors: all 69,251 member paths were registered in both `kv` and `files`
-with matching hashes and sizes, and 54 extensions were collected in `kv`,
-without modifying the project's databases.
+## Second Extinction location containers
+
+`SecondExtinctionHashCollector` reads the RTPC `locations/world.bin` from the
+mounted TABs before traversing GTOCs. Each location's `file` property is an
+archive path stem. Location types 1 and 2 use `.bl`; type 0 uses `.nl` and/or
+`.fl` according to its extension-list property (lookup3 `0xA64E1E84`).
+Only paths present in mounted TABs are inserted into `kv` and `files`, with
+both the lookup3 archive ID and Murmur TAB key, plus the TAB entry's size and
+parent.
+
+The collector parses `sarc.0.gtoc` to retain archive tag-to-lookup3 mappings
+but defers its member traversal until after visiting TAB entries. A matching
+container header tag registers its lookup3-to-Murmur mapping even when the
+container has no `world.bin` name. The collector mounts the GTOC for ordinary
+resource lookups, but walks its saved metadata directly: it resolves and
+decompresses each available parent container once, then visits its embedded
+(positive-offset) members as borrowed buffer views. External (offset-zero)
+members are not read from that container. Routing every member through
+`ArchiveManager::get()` instead would rescan the GTOC and decompress the same
+parent for every child. Parent mappings must therefore be registered by the
+TAB pass before either GTOC traversal or on-demand `GTOCArchive::get()` calls.
+Tag-only registration leaves `files.name` empty unless a separately verified
+path matches its TAB key: the tag supplies the lookup3-to-Murmur mapping, not
+the container path.
+
+The GTOC stores container hashes, tags, and member names, but not container
+names. For Second Extinction, a positive-offset `.epe_adf` or `.epe` member
+can identify an `.ee` container: replace the member extension with `.ee` and
+accept the result only if its lookup3 equals the enclosing archive's ID.
+Validated names go into `kv` even when their containers are not installed;
+`files` receives a name only when the candidate's Murmur key occurs in a
+mounted TAB. An offset-zero member is external and cannot establish its
+container's name. A missing physical container remains reported with its
+catalog path when one was recovered.
+
+For an AVTX texture with a known name, the collector probes `.atx0` through
+`.atx9` stream slices and records each mounted slice's parent. A TAB-owned
+slice has parent `0`; an archive-owned slice uses that archive's key.
+`ArchiveManager::get_parent_key_for()` returns a reference, so the TAB root
+parent must be stored in stable storage rather than returned as a temporary.
+The Second Extinction collector fixture checks a TAB-owned `.atx2` on two
+successive scans in both Debug and Release.
+
+`Apex.SecondExtinctionLocations` covers declared `.bl`, `.nl`, and `.fl`
+containers, inferred `.ee` names with and without physical TAB entries,
+unmatched/external member boundaries, tag-only mappings, auto-mounted GTOCs,
+multiple embedded members at distinct offsets, and nested member reads.

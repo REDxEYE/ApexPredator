@@ -39,6 +39,20 @@ static std::string read_file(const std::filesystem::path &path) {
 
 int main(int argc, char **argv) {
     try {
+        for (uint32 alignment : {8u, 16u, 32u}) {
+            std::vector<uint8> bytes(alignment + 4, 0);
+            std::memcpy(bytes.data(), ADF_SMALL_MAGIC, 4);
+            const uint32 type_hash = 0x6F12D9D4;
+            std::memcpy(bytes.data() + 4, &type_hash, 4);
+            const uint8 payload[] = {0x12, 0x34, 0x56, 0x78};
+            std::memcpy(bytes.data() + alignment, payload, sizeof(payload));
+            auto small_adf = ADF::ADFFile::from_buffer(bytes.data(), bytes.size(), alignment);
+            check(small_adf.instances().size() == 1);
+            check(small_adf.instances()[0].type_hash == type_hash);
+            auto data = small_adf.get_instance_data(0);
+            check(data.size() == sizeof(payload));
+            check(std::memcmp(data.data(), payload, sizeof(payload)) == 0);
+        }
         check(argc == 2);
         // Scoped enums do not implicitly convert to the numeric std::to_string overloads.
         enum class SignedEnum : int32 { Negative = -1, Positive = 2 };
@@ -70,10 +84,11 @@ int main(int argc, char **argv) {
                                   "180RightPlantMinAngle", "180RightPlantMaxAngle", "180LeftPlantMinAngle", "180LeftPlantMaxAngle"});
         STI::TypeLibrary lib;
         auto add = [&](ADF::MetaType kind, uint32 hash, uint64 name, uint32 size,
-                       ADF::TypeData data, uint32 element = 0, uint32 count = 0) -> const STI::Type & {
+                       ADF::TypeData data, uint32 element = 0, uint32 count = 0,
+                       uint32 alignment = 4) -> const STI::Type & {
             ADF::TypeDef def{};
             def.type = kind; def.hash = hash; def.name_id = name;
-            def.size = size; def.alignment = 4;
+            def.size = size; def.alignment = alignment;
             def.element_type_hash = element; def.element_len = count;
             return lib.register_type(ADF::Type(def, std::move(data)), adf);
         };
@@ -129,7 +144,7 @@ int main(int argc, char **argv) {
         for (uint32 i = 0; i < 8; ++i) {
             angle_members.push_back(member(25 + i, STI_TYPE_HASH_FLOAT32, 4, i * 4));
         }
-        add(M::Structure, 0xA00, 24, 32, angle_members);
+        add(M::Structure, 0xA00, 24, 32, angle_members, 0, 0, 32);
 
         std::set<std::string> names;
         for (const auto &[hash, type] : lib.types()) {
@@ -157,6 +172,7 @@ int main(int argc, char **argv) {
         check(implementation.contains("std::make_unique<Vector<voidPtr>>()"));
         check(!implementation.contains("void*"));
         check(implementation.contains("adf_type_info.emplace(0x00000101, &ADFTypes::Item_00000101_TI)"));
+        check(implementation.contains(".hash = 0x00000A00,\n    .alignment = 32,\n    .name = \"PlantAngles\""));
         STI::generate_code(lib, root, headers);
         check(read_file(headers / "adf_types.h") == header);
         check(read_file(root / "adf_types.cpp") == implementation);

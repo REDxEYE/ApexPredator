@@ -90,12 +90,29 @@ TAB 3.1 supports stored data, zlib, and Oodle streams through the vendored GPL d
 
 With both shipped modules installed, use `--module generation-zero` or `--module rage2` for commands that lack a game root. In particular, existing Generation Zero database searches now need `--module generation-zero`.
 
+## Second Extinction preparation
+
+`SecondExtinctionModule` uses ID `second-extinction` and the Rage 2 engine's TAB 3.1 layout. Its root probe identifies `SecondExtinction_F.exe` or Steam app ID `1024380`; the installed archives include Zstd codec 3 entries. The 1,314 built-in ADF v4 records extracted from the executable are in `modules/second_extinction/include/apex/adf/second_extinction_builtin_adf.hpp`. Build `SecondExtinctionAdfTypeGenerator` and `SecondExtinctionHavokTypeGenerator` to produce game-specific bindings; the module and its own `second_extinction_hashes.db` collector become available after the generated ADF/Havok sources are supplied in `modules/second_extinction/`. Rage 2 generated bindings and hashes are not substitutes.
+
+Second Extinction DDSC textures retain `AVTX` version 1 but use eight 20-byte
+stream records (192-byte header), rather than the eight 12-byte records
+(128-byte header) in Generation Zero and Rage 2. The shared AVTX loader uses
+the first stream's payload offset (`0xC0` versus `0x80`) to select the layout;
+version and tag do not distinguish Rage 2 from Second Extinction.
+
+ADF files also occur with a small eight-byte header: `\0FDA` followed by a
+little-endian root type hash. Unlike full ` FDA` files, these have no embedded
+type or name tables. The root instance starts at `max(8, type alignment)` and
+occupies the rest of the file; extraction uses the selected game's generated
+ADF type registry to resolve the hash and alignment. A root type absent from
+that registry cannot be decoded.
+
 ## Adding another game
 
 1. Add a separate `MODULE` target and private include/source directories. Copy/adapt its readers, generated types and exporters as needed.
 2. Implement the C++ interfaces with a unique ID and a game-specific root probe. Keep registries, globals and sessions private to that library.
 3. Define `APEX_BUILD_GAME_MODULE` for the entry-point export on Windows. Export only `apex_game_module_v2`; use the existing ELF version script or macOS export list as a template. This prevents identically named generated types/globals from colliding across games.
-4. Build static dependencies with position-independent code and the same runtime as the host. Allocations use the standard runtime; profiling uses Tracy without a custom memory tracker or allocator overrides.
+4. Build static dependencies with position-independent code and the same runtime as the host. Allocations use the standard runtime; Windows Debug builds include Tracy, while release configurations disable it to avoid joining profiler threads during DLL unload.
 5. Place the result in `modules/` or pass its path/directory. No host code changes are needed for the existing operations.
 
 Existing type-generation/hash utilities still link the Generation Zero implementation directly. Migrating those developer tools to an extended module API is separate from runtime module loading.

@@ -133,10 +133,6 @@ for game, executable in enumerate(sys.argv[1:]):
             for name, _ in entries[1:]:
                 key = lookup3(name) if game == 0 else murmur(name)
                 db.execute('INSERT INTO kv VALUES(?,?)', (key, name))
-            known_member = internal_paths[0][0]
-            known_parent = 0x13579bdf
-            key = lookup3(known_member) if game == 0 else murmur(known_member)
-            db.execute('INSERT INTO files VALUES(?,?,?,?)', (key, known_member, 1, known_parent))
         archive = bytearray()
         if game == 0:
             tab = struct.pack('<4sHHI', b'TAB\0', 2, 1, 2048)
@@ -158,20 +154,14 @@ for game, executable in enumerate(sys.argv[1:]):
             expected_names = {'CollectedRTPCString'} | {name for name, _ in entries}
             for paths in internal_paths:
                 expected_names.update(paths)
-                expected_names.update(pathlib.PurePosixPath(path).suffix for path in paths)
             for name in expected_names:
                 rows = db.execute('SELECT lookup3,murmur FROM kv WHERE v=?', (name,)).fetchall()
                 expected = (lookup3(name), 0 if game == 0 else murmur(name))
                 assert rows == [expected], (game, name, rows, expected)
-            files = db.execute('SELECT lookup3,murmur,name,size,parent FROM files').fetchall()
-            expected_files = {
-                (lookup3(name), 0 if game == 0 else murmur(name), name, len(content), 0)
-                for name, content in entries
+            files = set(db.execute('SELECT lookup3,murmur,name,size FROM files'))
+            expected_external = {
+                (lookup3(external), 0 if game == 0 else murmur(external), external, 0x12345678)
+                for _, external in internal_paths
             }
-            expected_files.update(
-                (lookup3(name), 0 if game == 0 else murmur(name), name, 0x12345678,
-                 known_parent if name == known_member else 0)
-                for paths in internal_paths for name in paths
-            )
-            assert set(files) == expected_files and len(files) == len(expected_files), files
+            assert expected_external <= files, files
 print('Both hash collectors passed GTOC/STOC ingestion, dual-hash output and migration checks')

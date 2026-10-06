@@ -45,6 +45,7 @@ if(CMAKE_CONFIGURATION_TYPES)
 endif()
 include(modules/generation_zero/module.cmake)
 include(modules/rage2/module.cmake)
+include(modules/second_extinction/module.cmake)
 
 # The host contains only CLI and module-loading code. Game code is private to the module.
 add_executable(ApexPredator
@@ -58,6 +59,9 @@ add_executable(ApexPredator
 )
 
 add_dependencies(ApexPredator GenerationZeroModule Rage2Module)
+if(TARGET SecondExtinctionModule)
+    add_dependencies(ApexPredator SecondExtinctionModule)
+endif()
 
 add_executable(StringHasher
         src/tools/string_hasher.cpp
@@ -81,7 +85,7 @@ SET(CommonLibs
 target_include_directories(ApexPredator PUBLIC include)
 target_include_directories(StringHasher PUBLIC include)
 
-target_link_libraries(ApexPredator PRIVATE ${CMAKE_DL_LIBS})
+target_link_libraries(ApexPredator PRIVATE ${CMAKE_DL_LIBS} ${CommonLibs})
 
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL TRACY_CALLSTACK=32)
 

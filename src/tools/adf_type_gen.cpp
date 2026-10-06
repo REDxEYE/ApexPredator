@@ -13,6 +13,8 @@
 #include "apex/adf/generation_zero_builtin_adf.hpp"
 #elif GAME==GAME_RAGE2
 #include "apex/adf/rage2_builtin_adf.hpp"
+#elif GAME==GAME_SECOND_EXTINCTION
+#include "apex/adf/second_extinction_builtin_adf.hpp"
 #else
 #error "Unsupported game"
 #endif
@@ -40,6 +42,9 @@ void collect_types(ApexAppState &app_state, STI::TypeLibrary &lib) {
     static auto visited_files = std::unordered_set<u64>();
 
     app_state.manager().foreach_file([&manager, &lib](const Archive<u64>::ArchiveEntry &archive_entry) {
+        if (archive_entry.size<=8) {
+            return true;
+        }
         if (visited_files.contains(archive_entry.key)) {
             return true;
         }
@@ -142,6 +147,9 @@ int main(int argc, const char *argv[]) {
 #elif GAME==GAME_RAGE2
                        "../modules/rage2/src/apex/adf/generated",
                        "../modules/rage2/include/apex/adf/generated"
+#elif GAME==GAME_SECOND_EXTINCTION
+                       "../modules/second_extinction/src/apex/adf/generated",
+                       "../modules/second_extinction/include/apex/adf/generated"
 #else
 #error "Unsupported game"
 #endif

@@ -39,6 +39,8 @@ public:
 
     [[nodiscard]] std::string_view name() const override;
 
+    [[nodiscard]] const u64 & get_parent_key() override;
+
     [[nodiscard]] const u64 &key() const override;
 
     static void mount_folder(ArchiveManager<u64> &manager, const std::filesystem::path &path);

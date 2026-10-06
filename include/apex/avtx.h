@@ -19,6 +19,20 @@ namespace AVTX {
         uint8 source;
     } TextureStream;
 
+    // Second Extinction keeps AVTX version 1 but uses 20-byte stream entries.
+    struct SecondExtinctionTextureStream {
+        uint32 offset;
+        uint32 destination_offset;
+        uint32 size;
+        uint32 alignment;
+        uint8 tile_mode;
+        uint8 source;
+        uint16 reserved;
+    };
+
+    static_assert(sizeof(SecondExtinctionTextureStream) == 20);
+    static_assert(sizeof(TextureStream) == 12);
+
     enum class AVATextureFlag: uint16 {
         STREAMED = 0x1,
         PLACEMENT = 0x2,
@@ -50,6 +64,8 @@ namespace AVTX {
         TextureStream streams[8];
 
     } Header;
+    static_assert(sizeof(Header) == 128);
+
 
 #pragma pack(pop)
 

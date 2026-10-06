@@ -24,9 +24,9 @@ namespace TabV31 {
 
     enum class CompressionType : uint8_t {
         Raw = 0, // file data written verbatim inside .arc
-        Zlib = 1, // zlib stream (rare in RAGE 2, used for a handful of small files)
-        Oodle = 4, // Oodle v7 (Kraken by default), the vast majority of assets
-        // 2 and 3 reserved / unused in TAB 3.1
+        Zlib = 1, // zlib stream
+        Zstd = 3, // Zstandard frame
+        Oodle = 4, // Oodle v7 (Kraken by default)
     };
 
     struct TabBlockEntry {
@@ -40,7 +40,7 @@ namespace TabV31 {
         uint32_t compressed_size; // 0x0C csize of this file
         uint32_t uncompressed_size; // 0x10 usize of this file
         uint16_t block_index; // 0x14 first block; 0 = sizes are stored directly in the file entry
-        CompressionType compression_type; // 0x16  0 = raw, 1 = zlib, 4 = Oodle v7
+        CompressionType compression_type; // 0x16  0 = raw, 1 = zlib, 3 = Zstd, 4 = Oodle
         uint8_t compression_flags; // 0x17 observed as 0 or 1; preserved, not used to select compression
     };
 

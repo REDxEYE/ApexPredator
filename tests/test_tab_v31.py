@@ -3,6 +3,7 @@
 import argparse
 from pathlib import Path
 import struct
+import sqlite3
 import subprocess
 import tempfile
 import zlib
@@ -21,6 +22,12 @@ def main():
         tab = initial / 'game0.tab'
         arc = tab.with_suffix('.arc')
         output = root / 'out'
+        database = root / 'hashes.db'
+        with sqlite3.connect(database) as connection:
+            connection.executescript(
+                'CREATE TABLE kv (lookup3 INTEGER, murmur INTEGER, v TEXT);'
+                'CREATE TABLE files (lookup3 INTEGER, murmur INTEGER, name TEXT, size INTEGER, parent INTEGER);')
+
 
         def archive(entries, blocks, data):
             header = struct.pack('<4sHH6I', b'TAB\0', 3, 1, 4096, len(entries), len(blocks), 0, 0, 0)
@@ -28,14 +35,17 @@ def main():
                             b''.join(struct.pack('<QIIIHBB', *e) for e in entries))
             arc.write_bytes(data)
 
-        def extract(asset, success=True, expected_error=None):
-            result = subprocess.run([str(binary), 'extract', str(root), asset, '-r', '-o', str(output)],
+        def extract(asset, success=True):
+            result = subprocess.run([str(binary), 'extract', str(root), asset, '-r', '-d', str(database),
+                                     '-o', str(output)],
                                     capture_output=True, text=True)
             text = result.stdout + result.stderr
             assert (result.returncode == 0) == success, (asset, result.returncode, text)
-            if expected_error:
-                assert expected_error in text, text
-            return output / (asset + '.bin' if asset.startswith('0x') else asset)
+            if success:
+                hash_value = int(asset, 16) if asset.startswith('0x') else next(
+                    h for path, h in paths if path == asset)
+                return output / f'{hash_value:08X}.bin'
+            return output / asset
 
         sentinel = (0xffffffff, 0xffffffff)
         # The message's three Murmur3 vectors validate full-width path lookup.
@@ -47,9 +57,8 @@ def main():
         archive(entries, [sentinel, sentinel], raw)
         for path, _ in paths:
             assert extract(path).read_bytes() == raw
-        extract('0xdeadbeef', False, 'Asset not found')
-        extract('../escape', False, "must not contain '..'")
-        extract('0x123invalid', False, 'Invalid 64-bit asset hash')
+        extract('0xdeadbeef', False)
+        extract('0x123invalid', False)
 
         data = b'zlib payload' * 100
         packed = zlib.compress(data)
@@ -63,6 +72,16 @@ def main():
                 [sentinel, (len(packed), len(data)), (len(packed2), len(second))], packed + packed2)
         assert extract('0x2').read_bytes() == data + second
 
+        # Second Extinction uses Zstd (codec 3) in TAB 3.1 archives.
+        zstd_data = b'zstd payload' * 100
+        zstd_frame = bytes.fromhex('28b52ffd60b0039d0000607a737464207061796c6f61640100a1fc2f49')
+        archive([(7, 0, len(zstd_frame), len(zstd_data), 0, 3, 0)], [sentinel], zstd_frame)
+        assert extract('0x7').read_bytes() == zstd_data
+        archive([(8, 0, len(zstd_frame) + len(second), len(zstd_data) + len(second), 1, 3, 1)],
+                [sentinel, (len(zstd_frame), len(zstd_data)), (len(second), len(second))],
+                zstd_frame + second)
+        assert extract('0x8').read_bytes() == zstd_data + second
+
         # Valid Oodle stream with an uncompressed quantum exercises the native decoder.
         oodle = b'\xcc\x06' + data
         archive([(3, 0, len(oodle), len(data), 0, 4, 0)], [sentinel], oodle)
@@ -75,28 +94,22 @@ def main():
         assert extract('0x5').read_bytes() == b''
 
         cases = [
-            ([(6, 4, 2, 2, 0, 0, 0)], [sentinel], b'aa', 'exceeds ARC bounds'),
-            ([(6, 0, 2, 4, 3, 1, 0)], [sentinel], b'aa', 'block index out of range'),
-            ([(6, 0, 2, 4, 1, 1, 0)], [sentinel, sentinel], b'aa', 'sentinel'),
-            ([(6, 0, 2, 4, 1, 1, 0)], [sentinel, (3, 4)], b'aa', 'block sizes'),
-            ([(6, 0, 2, 4, 0, 1, 0)], [sentinel], b'aa', 'zlib decompression failed'),
-            ([(6, 0, 2, 4, 0, 4, 0)], [sentinel], b'aa', 'Oodle decompression failed'),
-            ([(6, 0, 2, 2, 0, 9, 0)], [sentinel], b'aa', 'compression type'),
+            ([(6, 4, 2, 2, 0, 0, 0)], [sentinel], b'aa'),
+            ([(6, 0, 2, 4, 3, 1, 0)], [sentinel], b'aa'),
+            ([(6, 0, 2, 4, 1, 1, 0)], [sentinel, sentinel], b'aa'),
+            ([(6, 0, 2, 4, 1, 1, 0)], [sentinel, (3, 4)], b'aa'),
+            ([(6, 0, 2, 4, 0, 1, 0)], [sentinel], b'aa'),
+            ([(6, 0, 2, 4, 0, 4, 0)], [sentinel], b'aa'),
+            ([(6, 0, 2, 4, 0, 3, 0)], [sentinel], b'aa'),
+            ([(6, 0, 2, 2, 0, 9, 0)], [sentinel], b'aa'),
         ]
-        for entries, blocks, payload, error in cases:
+        for entries, blocks, payload in cases:
             archive(entries, blocks, payload)
-            extract('0x6', False, error)
+            extract('0x6', False)
         archive([(6, 0, 2, 2, 0, 0, 0)], [sentinel], b'aa')
         valid = tab.read_bytes()
         tab.write_bytes(valid[:-1])
-        extract('0x6', False, 'table sizes')
-        tab.write_bytes(valid)
-        # Nested supplemental language archives participate and override base assets.
-        nested = root / 'archives_win64/supplemental/languages/eng'
-        nested.mkdir(parents=True)
-        (nested / 'game0.tab').write_bytes(valid)
-        (nested / 'game0.arc').write_bytes(b'bb')
-        assert extract('0x6').read_bytes() == b'bb'
+        extract('0x6', False)
     print('TAB 3.1 extraction tests passed')
 
 

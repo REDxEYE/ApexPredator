@@ -10,6 +10,7 @@
 #include "redscore/platform/texture/texture.h"
 #include "redscore/utils/simple_fileio.h"
 #include "utils/hash_helper.h"
+#include "games.hpp"
 
 #include "OpenXLSX.hpp"
 #include "zstd.h"
@@ -18,6 +19,7 @@
 #include "glm/glm.hpp"
 #include "utils/xlsx_helper.hpp"
 
+#include <cstring>
 #pragma pack(push, 1)
 
 struct VertexID_UV {
@@ -354,7 +356,20 @@ VM::NodePtr export_stream_patch_file(ApexAppState &app_state, ADF::ADFFile &adf)
 VM::NodePtr export_adf_file_from_buffer(ApexAppState &app_state, const uint64 path_hash,
                                         std::unique_ptr<IO::File> mb) {
     ZoneScoped
-    ADF::ADFFile adf = ADF::ADFFile::from_buffer(std::move(mb));
+    uint32 small_type_alignment = 0;
+    const auto &bytes = mb->cbuffer();
+    if (bytes.size() >= sizeof(ADF::SmallHeader) &&
+        std::memcmp(bytes.data(), ADF_SMALL_MAGIC, 4) == 0) {
+        uint32 type_hash;
+        std::memcpy(&type_hash, bytes.data() + 4, sizeof(type_hash));
+        const auto type = adf_type_info.find(type_hash);
+        if (type == adf_type_info.end() || !type->second->new_instance) {
+            GLog_Error("Cannot decode small ADF: type 0x{:08X} has no generated binding", type_hash);
+            return {};
+        }
+        small_type_alignment = type->second->alignment;
+    }
+    ADF::ADFFile adf = ADF::ADFFile::from_buffer(std::move(mb), small_type_alignment);
 
     const auto instances = adf.instances();
 
@@ -393,7 +408,7 @@ VM::NodePtr export_adf_file_from_buffer(ApexAppState &app_state, const uint64 pa
             }
             const auto model = adf.read_instance<AmfModel>(instanceId);
             return export_amf_model(app_state, model.get(), path_hash);
-#if GAME==GAME_RAGE2
+#if GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
         } else if (instance.type_hash == std::to_underlying(ADFHashes::AmfModelVariant)) {
             if (instances.size() != 1) {
                 throw std::runtime_error("ADF with AmfModelVariant should have only one instance");
@@ -545,16 +560,16 @@ VM::NodePtr export_adf_file_from_buffer(ApexAppState &app_state, const uint64 pa
                         {"Duration", subtitle.Duration},
                     });
                 }
-
                 sorted_dialogue_lines.emplace_back(nlohmann::json{
                     {"Hash", sorted_dialogue_line.Hash},
                     {"Name", std::string_view(string_data + sorted_dialogue_line.NameOffset)},
                     {"Subtitles", subtitles},
                     {"FMODEvent", sorted_dialogue_line.FMODEvent},
+#if GAME!=GAME_SECOND_EXTINCTION
                     {"IncomingCall", sorted_dialogue_line.IncomingCall.to_json()},
                     {"CharacterName", sorted_dialogue_line.IncomingCall.to_json()},
+#endif
                     {"Flags", sorted_dialogue_line.Flags},
-
                 });
             }
 

@@ -24,6 +24,7 @@ namespace ADF {
     struct TypeInfo final {
         NewFn new_instance;
         uint32 hash = 0;
+        uint32 alignment = 8;
         std::string_view name;
     };
 

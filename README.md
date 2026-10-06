@@ -3,7 +3,9 @@
 Asset extraction and conversion utilities for Avalanche’s Apex/Generation Zero data. The main CLI (`ApexPredator`) mounts game archives, resolves hashed paths, and exports models/animations/textures to glTF or raw binary. Helper tools live in `src/tools` for type generation, hash collection, and quick hashing.
 
 ## Downloads
-Latest CI: 
+Successful pushes to `cpp_conversion` publish a [GitHub pre-release](https://github.com/REDxEYE/ApexPredator/releases) with Linux x64 (`.tar.gz`) and Windows x64 (`.zip`) builds. Choose the newest `Preview build` entry; each is tagged to its source commit.
+
+CI artifacts (also available for other branches and pull requests):
 - Linux x64 https://nightly.link/REDxEYE/ApexPredator/workflows/build/cpp_conversion/ApexPredator-linux-x64.zip
 - Windows x64 https://nightly.link/REDxEYE/ApexPredator/workflows/build/cpp_conversion/ApexPredator-windows-x64.zip
 
@@ -25,6 +27,9 @@ cmake --build cmake-build-relwithdebinfo --config RelWithDebInfo
 ```
 
 Visual Studio generators need the `--config` switch on build; single-config generators (Ninja, Unix Makefiles) ignore it. The resulting binaries (e.g., `ApexPredator.exe`, `HashCollector.exe`) live in the chosen `cmake-build-*` directory.
+
+Debug builds compile the fetched zstd subtree with Release optimization flags to avoid slow compression/decompression; the application and other dependencies remain Debug. On MSVC, zstd retains the Debug CRT to match the rest of the build.
+
 
 ## Runtime inputs
 - `game_root` points at `.../archives_win64`.
@@ -110,6 +115,7 @@ ApexPredator extract "/path/to/RAGE 2" models/props/cable/horizontal_03.meshc --
 
 The GitHub Actions build workflow produces Linux x64 and Windows x64 artifacts containing `ApexPredator`, `modules/generation_zero`, `modules/rage2`, `hashes.db`, and `rage2_hashes.db`. It builds the `ApexPredator` target (which builds both modules) without running or building the optional test targets.
 The Windows CI job uses Visual Studio 2022/MSVC; `winbuild.sh` uses Clang/MinGW and does not validate MSVC compatibility.
+The pre-release job runs only after both platform builds succeed on a `cpp_conversion` push. It packages the staged artifacts (restoring the Linux executable bit after artifact download) and uploads both archives to a `preview-<run number>` pre-release. Re-running a workflow updates the same release; pull requests and manual runs do not publish.
 
 CI unpacks the committed `hashes.db.tar.xz` and `rage2_hashes.db.tar.xz` archives into each artifact. After changing either local database, regenerate and commit both archives:
 

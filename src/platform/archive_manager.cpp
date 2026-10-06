@@ -49,6 +49,8 @@ std::pair<bool, uint64> ApexArchiveManager::ensure_parent_loaded(const uint64 ha
     auto parent_opt = get_file_parent(hash);
     if (!parent_opt || *parent_opt == 0) return {false, 0};
 
+    const auto info = AssetDB::get_instance()->get_file(hash, AssetDB::HashType::Game);
+
     const auto parent_hash = *parent_opt;
     const auto was_mounted = is_mounted(parent_hash);
     const auto mounted = load_child_archive(parent_hash);

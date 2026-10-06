@@ -87,15 +87,10 @@ std::unique_ptr<IO::File> SArchive::get(const u64 &hash) {
     return std::make_unique<IO::MemoryFile>(std::move(buffer));
 }
 
-// void SArchive::all_entries(std::vector<ArchiveEntry> &entries) const {
-//     entries.reserve(entries.size() + m_entries.size());
-//     for (const auto &entry: m_entries | std::views::values) {
-//         if (entry.offset == 0) {
-//             continue;
-//         }
-//         entries.emplace_back(entry.hash, entry.size);
-//     }
-// }
+const u64 &SArchive::get_parent_key() {
+    return m_hash;
+}
+
 
 std::string_view SArchive::name() const {
     return m_name;
@@ -106,8 +101,9 @@ const u64 &SArchive::key() const {
 }
 
 bool SArchive::foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) {
-    for (const auto &entry: m_entries | std::views::values) {
-        if (!callback({entry.hash, key(), entry.size})) {
+    auto total = m_entries.size();
+    for (const auto &[i, entry]: m_entries | std::views::values | std::views::enumerate) {
+        if (!callback({entry.hash, key(), entry.size, total, static_cast<uint64>(i)})) {
             break;
         }
     }

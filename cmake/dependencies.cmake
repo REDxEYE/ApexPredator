@@ -26,6 +26,10 @@ if(WIN32)
 endif()
 
 
+# RedsCore fetches zstd; project() runs this hook in zstd's own directory scope.
+# Keep its Debug objects optimized without changing the application's Debug flags.
+set(CMAKE_PROJECT_zstd_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/zstd_release.cmake")
+
 set(REDSCORE_LOCAL_DIR "/home/red_eye/CLionProjects/RedsCore")
 if(EXISTS "${REDSCORE_LOCAL_DIR}/CMakeLists.txt")
     add_subdirectory(

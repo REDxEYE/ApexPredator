@@ -3,9 +3,11 @@
 #ifndef APEXPREDATOR_ARCHIVE_MANAGER_H
 #define APEXPREDATOR_ARCHIVE_MANAGER_H
 
+#include <cstring>
 #include <utility>
 #include <deque>
 
+#include "apex/asset_db.h"
 #include "apex/gtoc.h"
 #include "apex/hashes.h"
 #include "apex/sarc.h"
@@ -31,6 +33,9 @@ protected:
         if (is_mounted(hash)) {
             return {false, 0};
         }
+
+        auto info = AssetDB::get_instance()->get_file(hash, AssetDB::HashType::Murmur);
+
         auto buffer = get(hash);
         if (!buffer) {
             const auto name = find_asset_name(hash);
@@ -46,7 +51,7 @@ protected:
         buffer->set_position(0);
 
 
-        if (memcmp(first_bytes.data(), AAF_MAGIC, 4) == 0) {
+        if (std::memcmp(first_bytes.data(), AAF_MAGIC, 4) == 0) {
             const auto name = find_asset_name(hash);
             if (name) {
                 GLog_Info("Mounting AAF archive \"{}\"", name->data());
@@ -61,7 +66,7 @@ protected:
             mount(std::make_unique<SArchive>(hash, std::move(section_buffer)));
             return {true, hash};
         }
-        if (memcmp(first_bytes.data(), GTOC_MAGIC, 4) == 0) {
+        if (std::memcmp(first_bytes.data(), GTOC_MAGIC, 4) == 0) {
             auto gtoc_archive = std::make_unique<GTOCArchive>(*this, std::move(buffer), hash);
             mount(std::move(gtoc_archive));
             return {true, hash};

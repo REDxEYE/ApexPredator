@@ -43,7 +43,7 @@ add_library(Rage2Module MODULE
         ${CommonFiles}
 )
 target_link_libraries(Rage2Module PRIVATE RedsCore ApexOoz Threads::Threads Rage2AdfLib Rage2HavokLib Ogg::ogg vorbis vorbisenc)
-target_compile_definitions(Rage2Module PRIVATE GAME=1)
+target_compile_definitions(Rage2Module PUBLIC GAME=1)
 target_include_directories(Rage2Module PRIVATE include module/rage2/include)
 target_compile_definitions(Rage2Module PRIVATE APEX_BUILD_GAME_MODULE)
 set_target_properties(Rage2Module PROPERTIES
@@ -64,7 +64,7 @@ add_executable(Rage2HashCollector
         src/tools/hash_collector.cpp
         ${CommonFiles}
 )
-target_compile_definitions(Rage2HashCollector PRIVATE GAME=1)
+target_compile_definitions(Rage2HashCollector PUBLIC GAME=1)
 target_link_libraries(Rage2HashCollector PUBLIC Rage2HavokLib Rage2HavokLib Rage2AdfLib ${CommonLibs})
 target_compile_options(Rage2HashCollector PRIVATE -march=native)
 
@@ -73,7 +73,7 @@ add_library(Rage2AdfLib STATIC
         modules/rage2/src/apex/adf/generated/adf_types_formatters.cpp
         src/apex/adf/adf_read_instance.cpp
 )
-target_compile_definitions(Rage2AdfLib PRIVATE GAME=1)
+target_compile_definitions(Rage2AdfLib PUBLIC GAME=1)
 target_include_directories(Rage2AdfLib PUBLIC include modules/rage2/include)
 target_link_libraries(Rage2AdfLib PUBLIC ${CommonLibs})
 target_link_libraries(Rage2AdfLib PRIVATE ${CommonLibs} nlohmann_json::nlohmann_json)
@@ -83,7 +83,7 @@ add_executable(Rage2HavokTypeGenerator
         src/havok/havok_codegen.cpp
         ${CommonFiles}
 )
-target_compile_definitions(Rage2HavokTypeGenerator PRIVATE GAME=1)
+target_compile_definitions(Rage2HavokTypeGenerator PUBLIC GAME=1)
 target_include_directories(Rage2HavokTypeGenerator PUBLIC include modules/rage2/include)
 target_link_libraries(Rage2HavokTypeGenerator PUBLIC ${CommonLibs} ApexOoz)
 target_compile_options(Rage2HavokTypeGenerator PRIVATE -march=native)
@@ -99,7 +99,7 @@ add_library(Rage2HavokLib STATIC
         src/havok/animations/spline.cpp
         #        src/havok/havok_helpers.cpp
 )
-target_compile_definitions(Rage2HavokLib PRIVATE GAME=1)
+target_compile_definitions(Rage2HavokLib PUBLIC GAME=1)
 target_include_directories(Rage2HavokLib PUBLIC include modules/rage2/include)
 target_link_libraries(Rage2HavokLib PUBLIC ${CommonLibs} nlohmann_json::nlohmann_json)
 
@@ -111,7 +111,7 @@ add_executable(Rage2AdfTypeGenerator
         src/apex/package/tab_v21.cpp
         src/apex/package/tab_v31.cpp
 )
-target_compile_definitions(Rage2AdfTypeGenerator PRIVATE GAME=1)
+target_compile_definitions(Rage2AdfTypeGenerator PUBLIC GAME=1)
 #target_compile_definitions(Rage2AdfTypeGenerator PRIVATE TRACY_ENABLE TRACY_MEMORY TRACY_ON_DEMAND)
 target_include_directories(Rage2AdfTypeGenerator PUBLIC include modules/rage2/include)
 target_link_libraries(Rage2AdfTypeGenerator PUBLIC ${CommonLibs} ApexOoz)

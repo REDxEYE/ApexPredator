@@ -3,7 +3,7 @@ add_executable(ApexHavokTypegenTests tests/havok_typegen.cpp
     src/havok/tag_file/havok_tag_types.cpp src/havok/tag_file/havok_tag_file.cpp
     src/utils/hash_helper.cpp src/utils/lookup3.cpp)
 target_include_directories(ApexHavokTypegenTests PRIVATE include)
-target_compile_definitions(ApexHavokTypegenTests PRIVATE GAME=0)
+target_compile_definitions(ApexHavokTypegenTests PUBLIC GAME=0)
 target_link_libraries(ApexHavokTypegenTests PRIVATE RedsCore nlohmann_json::nlohmann_json)
 add_test(NAME Apex.HavokTypegen COMMAND ApexHavokTypegenTests "${CMAKE_CURRENT_BINARY_DIR}/havok-typegen-test")
 set(havok_fixture_dir "${CMAKE_CURRENT_BINARY_DIR}/havok-typegen-fixture")

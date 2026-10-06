@@ -4,6 +4,7 @@
 #include <string_view>
 #include <vector>
 
+#include "hashes.h"
 #include "redscore/int_def.h"
 #include "redscore/platform/archive.h"
 #include "redscore/platform/archive_manager.h"
@@ -52,33 +53,38 @@ private:
     std::vector<GTOCArchiveEntry> m_archives;
 };
 
-class GTOCArchive : public Archive<uint64> {
+class GTOCArchive : public Archive<u64> {
 public:
-    GTOCArchive(ArchiveManager<uint64> &m_manager, std::unique_ptr<IO::File> buffer, uint64 hash)
+    GTOCArchive(ArchiveManager<u64> &m_manager, std::unique_ptr<IO::File> buffer, u64 hash)
         : m_manager(m_manager),
           m_file(*buffer) {
         for (const auto &file: m_file.files()) {
-            uint64 asset_hash = asset_path_hash(file.name);
+            u64 asset_hash = asset_path_hash(file.name);
             m_hash_remap.emplace(asset_hash, file.hash);
         }
         m_hash = hash;
-        m_name = std::format("GTOC{:016X}", hash);
+        auto known_name = find_asset_name(hash).value_or(std::format("GTOC{:016X}", hash));
+        m_name = known_name;
     }
 
-    [[nodiscard]] bool has(const uint64 &key) override;
+    [[nodiscard]] bool has(const u64 &key) override;
 
-    std::unique_ptr<IO::File> get(const uint64 &key) override;
+    std::unique_ptr<IO::File> get(const u64 &key) override;
 
     [[nodiscard]] std::string_view name() const override;
 
-    [[nodiscard]] const uint64 &key() const override;
+    [[nodiscard]] const u64 &key() const override;
+
+    [[nodiscard]] const u64 &get_parent_key() override;
 
     bool foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) override;
 
+    const GTOCFile &toc() const { return m_file; }
+
 private:
-    ArchiveManager<uint64> &m_manager;
-    std::unordered_map<uint64, uint32> m_hash_remap;
+    ArchiveManager<u64> &m_manager;
+    std::unordered_map<u64, uint32> m_hash_remap;
     GTOCFile m_file;
-    uint64 m_hash;
+    u64 m_hash;
     std::string m_name;
 };

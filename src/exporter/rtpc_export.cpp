@@ -73,7 +73,7 @@ void handle_CCharacter(ApexAppState &app_state,
     skeleton_bsk_name.replace_extension(".bsk");
     const std::string skeleton_name = skeleton_bsk_name.generic_string();
     const uint32 skeleton_path_hash = hash_string(skeleton_bsk_name);
-#elif GAME==GAME_RAGE2
+#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
     const uint32 skeleton_path_hash = node.get<uint32>("skeleton");
     const std::string skeleton_name = node.get_string("skeleton").value_or("<no path>");
 #else
@@ -173,7 +173,7 @@ void handle_CSecondaryMotionAttachment(ApexAppState &app_state,
     const uint32 skeleton_hash = hash_string(skeleton_bsk_name);
     const auto &model_filename = node.get<std::string>("model");
     const uint32 model_hash = hash_string(model_filename);
-#elif GAME==GAME_RAGE2
+#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
     const uint32 skeleton_hash = node.get<uint32>("skeleton");
     const auto skeleton_name = find_lookup3_name(skeleton_hash).value_or("<missing skeleton name>");
     const uint32 model_hash = node.get<uint32>("model");
@@ -292,7 +292,7 @@ void handle_CSkeletalAnimatedObject(ApexAppState &app_state, const RuntimeNode &
 
     const auto &model_hash = hash_string(model_filename);
     const auto &skeleton_hash = hash_string(skeleton_bsk_name);
-#elif GAME==GAME_RAGE2
+#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
     const auto &model_hash = node.get<uint32>(0x0f94740b);
     const auto &skeleton_hash = node.get<uint32>(0x26fa86fe);
 #else

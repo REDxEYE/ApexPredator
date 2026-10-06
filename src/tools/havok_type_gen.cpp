@@ -21,6 +21,9 @@ void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
     static auto visited_files = std::unordered_set<u64>();
 
     app_state.manager().foreach_file([&manager, &lib](const Archive<u64>::ArchiveEntry &archive_entry) {
+        if (archive_entry.size <= 8) {
+            return true;
+        }
         if (visited_files.contains(archive_entry.key)) {
             return true;
         }
@@ -80,11 +83,14 @@ void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
                                   "../modules/generation_zero/include/havok/generated"
 #elif GAME==GAME_RAGE2
                                   "../modules/rage2/src/havok/generated",
-                                  "../modules/rage2/include/havok/generated"
+                                          "../modules/rage2/include/havok/generated"
+#elif GAME==GAME_SECOND_EXTINCTION
+                                  "../modules/second_extinction/src/havok/generated",
+                                          "../modules/second_extinction/include/havok/generated"
 #else
 #error "Unsupported game"
 #endif
-                                  );
+    );
 }
 
 

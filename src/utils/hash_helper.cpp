@@ -12,7 +12,7 @@
 uint64 asset_path_hash(const char *str, const uint32 len) {
     return hashlittle(str, len, 0);
 }
-#elif GAME==GAME_RAGE2
+#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
 uint64 asset_path_hash(const char *str, const uint32 len) {
     return MurmurHash3_x64_128(str, len, 0);
 }
@@ -46,7 +46,7 @@ uint64 hash_string(const std::string_view sv) {
 
 StringHashes string_hashes(std::string_view value) {
     StringHashes result{hashlittle(value.data(), value.size(), 0), 0};
-#if GAME==GAME_RAGE2
+#if GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
     result.murmur = MurmurHash3_x64_128(value.data(), value.size(), 0);
 #endif
     return result;

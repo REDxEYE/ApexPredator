@@ -45,6 +45,11 @@ std::string_view TabArchive::name() const {
     return m_name;
 }
 
+const u64 & TabArchive::get_parent_key() {
+    static constexpr u64 root_parent = 0;
+    return root_parent;
+}
+
 const uint64 &TabArchive::key() const {
     if (!_impl) {
         static uint64 no_value = 0u;
@@ -76,6 +81,7 @@ bool TabArchive::foreach_file(const std::function<bool(const ArchiveEntry &)> &c
     if (!_impl) {
         return false;
     }
+    GLog_Info("Walking {}", m_tab_path.string());
     return _impl->foreach_file(callback);
 }
 

@@ -6,6 +6,10 @@
 #include "redscore/platform/logger.h"
 #include "redscore/platform/file/memory_file.h"
 
+#include <algorithm>
+#include <cstring>
+#include <limits>
+#include <stdexcept>
 
 ADF::Type ADF::Type::from_buffer(IO::File &buffer) {
     switch (auto def = buffer.read_pod<TypeDef>(); def.type) {
@@ -66,7 +70,24 @@ IO::Buffer ADF::ADFFile::get_instance_data(const uint32 instance_id) const {
 }
 
 
-ADF::ADFFile ADF::ADFFile::from_buffer(std::unique_ptr<IO::File> buffer) {
+ADF::ADFFile ADF::ADFFile::from_buffer(std::unique_ptr<IO::File> buffer, const uint32 small_instance_alignment) {
+    const auto small_header = buffer->read_pod<SmallHeader>();
+    if (std::memcmp(small_header.ident, ADF_SMALL_MAGIC, 4) == 0) {
+        if (small_instance_alignment == 0) {
+            throw std::invalid_argument("Small ADF requires the root type's alignment");
+        }
+        const uint32 offset = std::max<uint32>(sizeof(SmallHeader), small_instance_alignment);
+        const auto file_size = buffer->get_size();
+        if (file_size < offset || file_size - offset > std::numeric_limits<uint32>::max()) {
+            throw std::runtime_error("Invalid small ADF instance size");
+        }
+        Header header{};
+        std::memcpy(header.ident, small_header.ident, sizeof(header.ident));
+        std::vector<Instance> instances{{0, small_header.type_hash, offset,
+                                         static_cast<uint32>(file_size - offset), 0}};
+        return {header, {}, {"unnamed"}, instances, {}, std::move(buffer)};
+    }
+    buffer->set_position(0);
     const auto header = buffer->read_pod<Header>();
     const std::string comment = buffer->read_cstring();
 
@@ -103,9 +124,10 @@ ADF::ADFFile ADF::ADFFile::from_buffer(std::unique_ptr<IO::File> buffer) {
     return {header, comment, strings, instances, types, std::move(buffer)};
 }
 
-ADF::ADFFile ADF::ADFFile::from_buffer(const uint8 *data, const uint32 size) {
+ADF::ADFFile ADF::ADFFile::from_buffer(const uint8 *data, const uint32 size,
+                                      const uint32 small_instance_alignment) {
     auto buffer = std::vector<uint8>(size);
     std::copy_n(data, size, buffer.data());
-    return from_buffer(std::move(std::make_unique<IO::MemoryFile>(std::move(buffer))));
+    return from_buffer(std::make_unique<IO::MemoryFile>(std::move(buffer)), small_instance_alignment);
 }
 

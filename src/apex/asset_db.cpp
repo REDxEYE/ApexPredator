@@ -2,26 +2,12 @@
 #include "games.hpp"
 #include <bit>
 
+#include "redscore/platform/logger.h"
+
 namespace {
     AssetDB *instance = nullptr;
     int64 sql_hash(const uint64 hash) { return std::bit_cast<int64>(hash); }
 
-    const char *column(AssetDB::HashType type) {
-        if (type == AssetDB::HashType::Game) {
-#if GAME==GAME_GENERATION_ZERO
-            type = AssetDB::HashType::Lookup3;
-#else
-            type = AssetDB::HashType::Murmur;
-#endif
-        }
-        return type == AssetDB::HashType::Lookup3 ? "lookup3" : "murmur";
-    }
-
-    std::string predicate(const AssetDB::HashType type) {
-        const std::string name = column(type);
-        // Zero Murmur hashes mean unused, not a searchable key.
-        return name + "=?" + (name == "murmur" ? " AND murmur<>0" : "");
-    }
 
     constexpr auto schema =
             "CREATE TABLE kv (lookup3 INTEGER NOT NULL, murmur INTEGER NOT NULL DEFAULT 0,"
@@ -85,7 +71,7 @@ void AssetDB::migrate() {
         while (rows.executeStep()) {
             auto hashes = hashes_for(static_cast<uint64>(rows.getColumn(0).getInt64()),
                                      rows.getColumn(1).isNull() ? "" : rows.getColumn(1).getString());
-#if GAME==GAME_RAGE2
+#if GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
             if (rows.getColumn(1).isNull()) hashes.lookup3 = 0;
 #endif
             insert.reset();
@@ -112,7 +98,7 @@ void AssetDB::kv_put(const StringHashes hashes, const std::string_view value) co
 }
 
 std::optional<std::string> AssetDB::kv_get(const uint64 key, const HashType type) const {
-    SQLite::Statement s(m_db, "SELECT v FROM kv WHERE " + predicate(type) + " ORDER BY lookup3,murmur LIMIT 1");
+    SQLite::Statement s(m_db, "SELECT v FROM kv WHERE lookup3=?1 OR (murmur=?1 AND murmur<>0) ORDER BY lookup3,murmur LIMIT 1");
     s.bind(1, sql_hash(key));
     if (s.executeStep()) return s.getColumn(0).getString();
     return std::nullopt;
@@ -121,26 +107,72 @@ std::optional<std::string> AssetDB::kv_get(const uint64 key, const HashType type
 bool AssetDB::kv_has(const uint64 key, const HashType type) const { return kv_get(key, type).has_value(); }
 
 void AssetDB::kv_del(const uint64 key, const HashType type) const {
-    SQLite::Statement s(m_db, "DELETE FROM kv WHERE " + predicate(type));
+    SQLite::Statement s(m_db, "DELETE FROM kv WHERE lookup3=?1 OR (murmur=?1 AND murmur<>0)");
     s.bind(1, sql_hash(key));
     s.exec();
 }
 
-void AssetDB::files_put(const StringHashes hashes, const std::string_view name, const uint64 size, const uint64 parent) const {
+void AssetDB::files_put(StringHashes hashes, std::string_view name, const uint64 size,
+                        const uint64 parent_hash) const {
+    if (parent_hash==0x00526478 || parent_hash==5400504) {
+        GLog_Info("A");
+    }
+    auto existing = get_file(hashes.murmur != 0 ? hashes.murmur : hashes.lookup3,
+                             hashes.murmur != 0 ? HashType::Murmur : HashType::Lookup3);
+    if (!existing.has_value() && hashes.murmur != 0 && hashes.lookup3 != 0) {
+        existing = get_file(hashes.lookup3, HashType::Lookup3);
+    }
+
+    if (existing.has_value()) {
+        if (existing->murmur != 0 && hashes.murmur != 0 && existing->murmur != hashes.murmur) {
+            GLog_Error("File with different murmur hash already exists");
+            throw std::runtime_error("File with different murmur hash already exists");
+        }
+        if (existing->lookup3 != 0 && hashes.lookup3 != 0 && existing->lookup3 != hashes.lookup3) {
+            GLog_Error("File with different lookup3 hash already exists");
+            throw std::runtime_error("File with different lookup3 hash already exists");
+        }
+        if (!existing->name.empty() && !name.empty() && existing->name != name) {
+            GLog_Error("File with different name already exists");
+            throw std::runtime_error("File with different name already exists");
+        }
+
+        // if (existing->parent_hash != parent_hash) {
+        //     auto cur_parent_path = get_file_name(existing->parent_hash).value_or(existing->parent_hash!=0?
+        //         std::format("{}", existing->parent_hash):"<root archives>");
+        //     auto new_parent_path = parent_hash != 0
+        //                                ? get_file_name(parent_hash).value_or(std::format("{}", parent_hash))
+        //                                : "<root archives>";
+        //
+        //     GLog_Error("File with different parent hash already exists \"{}\": {} -> {}",
+        //                existing->name.empty()?name:existing->name, cur_parent_path, new_parent_path);
+        //     // throw std::runtime_error("File with different parent hash already exists");
+        // }
+
+        if (!existing->name.empty() && name.empty()) {
+            name = existing->name;
+        }
+        if (hashes.lookup3 == 0 && existing->lookup3 != 0) {
+            hashes.lookup3 = existing->lookup3;
+        }
+        if (hashes.murmur == 0 && existing->murmur != 0) {
+            hashes.murmur = existing->murmur;
+        }
+    }
+
     auto &s = *m_files_put;
     s.reset();
     s.bind(1, static_cast<int64>(hashes.lookup3));
     s.bind(2, sql_hash(hashes.murmur));
     s.bind(3, std::string(name));
     s.bind(4, sql_hash(size));
-    s.bind(5, sql_hash(parent));
+    s.bind(5, sql_hash(parent_hash));
     s.exec();
 }
 
 std::optional<AssetDB::File> AssetDB::get_file(const uint64 hash, const HashType type) const {
     SQLite::Statement s(
-        m_db, "SELECT lookup3,murmur,name,size,parent FROM files WHERE " + predicate(type) +
-              " ORDER BY lookup3,murmur LIMIT 1");
+        m_db, "SELECT lookup3,murmur,name,size,parent FROM files WHERE lookup3=?1 OR (murmur=?1 AND murmur<>0) ORDER BY lookup3,murmur LIMIT 1");
     s.bind(1, sql_hash(hash));
     if (!s.executeStep()) return std::nullopt;
     return File{
@@ -151,9 +183,13 @@ std::optional<AssetDB::File> AssetDB::get_file(const uint64 hash, const HashType
 }
 
 std::optional<std::string> AssetDB::get_file_name(const uint64 hash, const HashType type) const {
-    SQLite::Statement s(m_db, "SELECT name FROM files WHERE " + predicate(type) + " ORDER BY lookup3,murmur LIMIT 1");
+    SQLite::Statement s(m_db, "SELECT name FROM files WHERE lookup3=?1 OR (murmur=?1 AND murmur<>0) ORDER BY lookup3,murmur LIMIT 1");
     s.bind(1, sql_hash(hash));
-    if (s.executeStep() && !s.getColumn(0).isNull()) return s.getColumn(0).getString();
+    if (s.executeStep() && !s.getColumn(0).isNull()) {
+        auto name = s.getColumn(0).getString();
+        if (name.empty()) return std::nullopt;
+        return name;
+    }
     return std::nullopt;
 }
 
@@ -168,7 +204,7 @@ std::optional<uint64> AssetDB::get_file_parent(const uint64 hash, const HashType
 }
 
 void AssetDB::files_del(const uint64 hash, const HashType type) const {
-    SQLite::Statement s(m_db, "DELETE FROM files WHERE " + predicate(type));
+    SQLite::Statement s(m_db, "DELETE FROM files WHERE lookup3=?1 OR (murmur=?1 AND murmur<>0)");
     s.bind(1, sql_hash(hash));
     s.exec();
 }

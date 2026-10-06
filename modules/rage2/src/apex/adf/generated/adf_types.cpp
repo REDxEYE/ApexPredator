@@ -93382,12 +93382,14 @@ ADF::TypeInfo ADFTypes::BreakableEffectType_TI = {
 ADF::TypeInfo ADFTypes::BreakableEffectInstance_TI = {
     .new_instance = BreakableEffectInstance_new_instance,
     .hash = 0x08B24D94,
+    .alignment = 32,
     .name = "BreakableEffectInstance"
 };
 
 ADF::TypeInfo ADFTypes::BreakableDebris_TI = {
     .new_instance = BreakableDebris_new_instance,
     .hash = 0xC1A0C55A,
+    .alignment = 32,
     .name = "BreakableDebris"
 };
 
@@ -96616,6 +96618,7 @@ ADF::TypeInfo ADFTypes::UserPropertiesBlackboardVariableFloat_Array_TI = {
 ADF::TypeInfo ADFTypes::PfxBreakableInstance_TI = {
     .new_instance = PfxBreakableInstance_new_instance,
     .hash = 0x5CCC0EDC,
+    .alignment = 32,
     .name = "PfxBreakableInstance"
 };
 
@@ -97516,6 +97519,7 @@ ADF::TypeInfo ADFTypes::CameraTransitionParams_TI = {
 ADF::TypeInfo ADFTypes::WorldAudioVector4_TI = {
     .new_instance = WorldAudioVector4_new_instance,
     .hash = 0x21A16FA4,
+    .alignment = 16,
     .name = "WorldAudioVector4"
 };
 
@@ -98074,6 +98078,7 @@ ADF::TypeInfo ADFTypes::ImpostorVertex_TI = {
 ADF::TypeInfo ADFTypes::PfxBreakableCompound_TI = {
     .new_instance = PfxBreakableCompound_new_instance,
     .hash = 0x3425B69F,
+    .alignment = 32,
     .name = "PfxBreakableCompound"
 };
 
@@ -98878,6 +98883,7 @@ ADF::TypeInfo ADFTypes::WorldAudioZone_TI = {
 ADF::TypeInfo ADFTypes::NavMeshCutterProperties_TI = {
     .new_instance = NavMeshCutterProperties_new_instance,
     .hash = 0x21CBE433,
+    .alignment = 32,
     .name = "NavMeshCutterProperties"
 };
 
@@ -99238,6 +99244,7 @@ ADF::TypeInfo ADFTypes::EffectRTInstantiator_TI = {
 ADF::TypeInfo ADFTypes::PfxStaticCompound_TI = {
     .new_instance = PfxStaticCompound_new_instance,
     .hash = 0x8FD3E3C4,
+    .alignment = 32,
     .name = "PfxStaticCompound"
 };
 
@@ -99256,6 +99263,7 @@ ADF::TypeInfo ADFTypes::SAttachedSoundModuleFunctionArgumentData_TI = {
 ADF::TypeInfo ADFTypes::PfxSimplePartInstance_TI = {
     .new_instance = PfxSimplePartInstance_new_instance,
     .hash = 0x2CFF4FE0,
+    .alignment = 32,
     .name = "PfxSimplePartInstance"
 };
 
@@ -99868,6 +99876,7 @@ ADF::TypeInfo ADFTypes::CUpgradeVortexWeakenData_TI = {
 ADF::TypeInfo ADFTypes::EffectRTTimeline_TI = {
     .new_instance = EffectRTTimeline_new_instance,
     .hash = 0x326A2784,
+    .alignment = 16,
     .name = "EffectRTTimeline"
 };
 
@@ -100252,6 +100261,7 @@ ADF::TypeInfo ADFTypes::SSoundModuleFunctionArgumentEnvelopeData_TI = {
 ADF::TypeInfo ADFTypes::PfxStaticInstance_TI = {
     .new_instance = PfxStaticInstance_new_instance,
     .hash = 0xD39A7AA5,
+    .alignment = 32,
     .name = "PfxStaticInstance"
 };
 
@@ -102484,6 +102494,7 @@ ADF::TypeInfo ADFTypes::SDynamicAttachedEffectTableData_TI = {
 ADF::TypeInfo ADFTypes::BreakableModelInstance_TI = {
     .new_instance = BreakableModelInstance_new_instance,
     .hash = 0xF613E6C7,
+    .alignment = 32,
     .name = "BreakableModelInstance"
 };
 
@@ -103618,6 +103629,7 @@ ADF::TypeInfo ADFTypes::SSoundModulePreloadDataData_TI = {
 ADF::TypeInfo ADFTypes::PfxBreakablePartInstance_TI = {
     .new_instance = PfxBreakablePartInstance_new_instance,
     .hash = 0x1C8E89D6,
+    .alignment = 32,
     .name = "PfxBreakablePartInstance"
 };
 
