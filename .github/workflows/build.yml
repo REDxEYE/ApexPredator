@@ -24,8 +24,7 @@ jobs:
         run: |
           mkdir -p dist/modules
           cp build/ApexPredator dist/
-          cp build/modules/generation_zero.so build/modules/rage2.so dist/modules/
-          if test -f build/modules/second_extinction.so; then cp build/modules/second_extinction.so dist/modules/; fi
+          cp build/modules/generation_zero.so build/modules/rage2.so build/modules/second_extinction.so dist/modules/
           (cd dist && cmake -E tar xJf "$GITHUB_WORKSPACE/hashes.db.tar.xz" && cmake -E tar xJf "$GITHUB_WORKSPACE/rage2_hashes.db.tar.xz")
       - uses: actions/upload-artifact@v4
         with:
@@ -49,8 +48,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force dist/modules | Out-Null
           Copy-Item build/Release/ApexPredator.exe dist/
-          Copy-Item -Path build/Release/modules/generation_zero.dll,build/Release/modules/rage2.dll -Destination dist/modules/
-          if (Test-Path build/Release/modules/second_extinction.dll) { Copy-Item build/Release/modules/second_extinction.dll dist/modules/ }
+          Copy-Item -Path build/Release/modules/generation_zero.dll,build/Release/modules/rage2.dll,build/Release/modules/second_extinction.dll -Destination dist/modules/
           Push-Location dist
           cmake -E tar xJf "$env:GITHUB_WORKSPACE\hashes.db.tar.xz"
           if ($LASTEXITCODE -ne 0) { throw 'Failed to unpack hashes.db' }
