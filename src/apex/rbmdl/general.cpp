@@ -10,7 +10,7 @@
 
 
 Apex::RBMdl::GeneralMaterial Apex::RBMdl::GeneralMaterial::read_v2(IO::File &file) {
-    auto material = (GeneralMaterial){
+    GeneralMaterial material{
         .channel_texture_mask = {file.read_f32(), file.read_f32(), file.read_f32(), file.read_f32()},
         .channel_ao_mask = {file.read_f32(), file.read_f32(), file.read_f32()},
         .channel_ao_grayscale = file.read_f32(),
