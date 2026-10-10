@@ -50,6 +50,8 @@ bool visit_ptpc_nodes(Context &ctx, const RuntimeNode &runtime_node) {
 static std::vector<std::unique_ptr<GTOCArchive> > pending_gtocs;
 #endif
 
+static uint64 total_files = 0;
+static uint64 total_named = 0;
 
 static std::unordered_map<uint32, uint32> container_tags;
 // An embedded entity definition names its .ee container only when its stem
@@ -127,7 +129,7 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, const Ar
 
     if (std::memcmp(first_buffer.data(), ADF_MAGIC, 4) == 0) {
         // GLog_Info("Found ADF: {}", entry.key);
-        visit_adf_file(std::move(file));
+        // visit_adf_file(std::move(file));
     } else if (std::memcmp(first_buffer.data(), GTOC_MAGIC, 4) == 0) {
         GTOCFile toc(*file);
         for (const auto &archive: toc.archives()) {
@@ -138,6 +140,8 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, const Ar
                 if (hashes.lookup3 != l_entry.hash) {
                     GLog_Error("Hash mismatch for file: {}", l_entry.name);
                 }
+                total_files++;
+                total_named++;
                 ctx.db.kv_put(hashes, l_entry.name);
                 if (file_offset == 0) {
                     ctx.db.files_put(hashes, l_entry.name, l_entry.size, 0);
@@ -154,7 +158,11 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, const Ar
         // collector_gtocs.try_emplace(entry.key, std::move(toc));
 #endif
         auto gtoc_archive = std::make_unique<GTOCArchive>(ctx.archives, std::move(file), entry.key);
+#if GAME==GAME_SECOND_EXTINCTION
         pending_gtocs.emplace_back(std::move(gtoc_archive));
+#else
+        ctx.archives.mount(std::move(gtoc_archive));
+#endif
     } else if (std::memcmp(first_buffer.data(), AAF_MAGIC, 4) == 0) {
         // GLog_Info("Found AAF: {}", entry.key);
         AAFArchive aaf_archive(std::move(file));
@@ -164,6 +172,24 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, const Ar
         auto sarc = std::make_unique<SArchive>(entry.key, std::move(section_buffer));
 
         u64 total = sarc->entries().size();
+        total_files += total;
+        total_named += total;
+        for (const auto &[i, arc_entry]: sarc->entries() | std::views::enumerate) {
+            ctx.db.kv_put(string_hashes(arc_entry.name), arc_entry.name);
+            ctx.db.files_put(string_hashes(arc_entry.name), arc_entry.name, arc_entry.size, entry.key);
+
+            if (auto arc_file = sarc->get(arc_entry.hash)) {
+                visit_archive_file(ctx, std::move(arc_file), {
+                                       arc_entry.hash, entry.key, arc_entry.size, total, static_cast<u64>(i)
+                                   });
+            }
+        }
+    } else if (std::memcmp(first_buffer.data() + 4, SARC_MAGIC, 4) == 0) {
+        auto sarc = std::make_unique<SArchive>(entry.key, std::move(file));
+        GLog_Info("Found bare SARC: {}", entry.key);
+        u64 total = sarc->entries().size();
+        total_files += total;
+        total_named += total;
         for (const auto &[i, arc_entry]: sarc->entries() | std::views::enumerate) {
             ctx.db.kv_put(string_hashes(arc_entry.name), arc_entry.name);
             ctx.db.files_put(string_hashes(arc_entry.name), arc_entry.name, arc_entry.size, entry.key);
@@ -281,6 +307,8 @@ int main(int argc, const char *argv[]) {
     const auto db_path = std::filesystem::path("./../rage2_hashes.db");
 #elif GAME==GAME_SECOND_EXTINCTION
     const auto db_path = std::filesystem::path("./../second_extinction_hashes.db");
+#elif GAME==GAME_JUST_CAUSE_2
+    const auto db_path = std::filesystem::path("./../jc2_hashes.db");
 #else
 #error "Unsupported game"
 #endif
@@ -303,20 +331,21 @@ int main(int argc, const char *argv[]) {
     }
 
 #if GAME==GAME_GENERATION_ZERO
-    // ingest_strings_file(assetdb, "./../gz_strings/strings_general.txt");
-    ingest_strings_file(assetdb, "./../gz_strings/file_locations.txt");
-    ingest_strings_file(assetdb, "./../gz_strings/filenames.txt");
-    ingest_strings_file(assetdb, "./../gz_strings/cross_game.txt");
-    ingest_strings_file(assetdb, "./../gz_strings/game_dump_clean.txt");
+    ingest_strings_file(assetdb, "./../strings/generation_zero/file_locations.txt");
+    ingest_strings_file(assetdb, "./../strings/generation_zero/filenames.txt");
+    ingest_strings_file(assetdb, "./../strings/generation_zero/cross_game.txt");
+    ingest_strings_file(assetdb, "./../strings/generation_zero/game_dump_clean.txt");
 #elif GAME==GAME_RAGE2
-    ingest_strings_file(assetdb, "./../gz_strings/file_locations.txt");
-    ingest_strings_file(assetdb, "./../gz_strings/filenames.txt");
-    ingest_strings_file(assetdb, "./../gz_strings/cross_game.txt");
-    ingest_strings_file(assetdb, "./../gz_strings/game_dump_clean.txt");
-    ingest_strings_file(assetdb, "./../rage_strings/filelist.txt");
-    ingest_strings_file(assetdb, "./../rage_strings/rage2_exe_strings.txt");
+    ingest_strings_file(assetdb, "./../strings/generation_zero/file_locations.txt");
+    ingest_strings_file(assetdb, "./../strings/generation_zero/filenames.txt");
+    ingest_strings_file(assetdb, "./../strings/generation_zero/cross_game.txt");
+    ingest_strings_file(assetdb, "./../strings/generation_zero/game_dump_clean.txt");
+    ingest_strings_file(assetdb, "./../strings/rage2/filelist.txt");
+    ingest_strings_file(assetdb, "./../strings/rage2/rage2_exe_strings.txt");
 #elif GAME==GAME_SECOND_EXTINCTION
-    ingest_strings_file(assetdb, "./../second_extinction_strings/filelist.txt");
+    ingest_strings_file(assetdb, "./../strings/second_extinction/filelist.txt");
+#elif GAME==GAME_JUST_CAUSE_2
+    ingest_strings_file(assetdb, "./../strings/just_cause_2/just_cause_2_exe_strings.txt");
 #endif
     ApexAppState app_state(argv[1]);
     app_state.mount_archives();
@@ -392,8 +421,7 @@ int main(int argc, const char *argv[]) {
         // }
         return true;
     };
-    static uint64 total_files = 0;
-    static uint64 total_named = 0;
+
     app_state.manager().foreach_file([&](const Archive<u64>::ArchiveEntry &entry) {
         total_files += 1;
         const auto name_opt = context.db.get_file_name(entry.key, AssetDB::HashType::Murmur);

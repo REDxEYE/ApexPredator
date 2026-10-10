@@ -8,7 +8,7 @@
 #include "int_def.h"
 #include "redscore/platform/file/file.h"
 
-#define AAF_MAGIC "AAF\0"
+constexpr uint8 AAF_MAGIC[] = "AAF\0";
 
 struct AAFHeader {
     char ident[4];
@@ -34,9 +34,10 @@ struct AAFSection {
 
 class AAFArchive {
 public:
-    explicit AAFArchive(std::unique_ptr<IO::File>buffer);
+    explicit AAFArchive(std::unique_ptr<IO::File> buffer);
 
     std::unique_ptr<IO::File> get_data();
+
 private:
     AAFHeader m_header{};
     std::unique_ptr<IO::File> m_buffer;

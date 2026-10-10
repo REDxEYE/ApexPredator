@@ -12,6 +12,7 @@
 #include "redscore/platform/logger.h"
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 #include <numbers>
 #include "tracy/Tracy.hpp"
 

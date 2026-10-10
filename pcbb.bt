@@ -1,0 +1,140 @@
+//------------------------------------------------
+//--- 010 Editor v16.0.4 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+enum <uint32>PropertyForm{
+    Group=1,
+    Leaf=2
+};
+
+enum <uint32>PropertyType{
+    I32 = 1,
+    F32 = 2,
+    STRING = 3,
+    VEC2 = 4,
+    VEC3 = 5,
+    VEC4 = 6,
+    MAT4x4 = 8,
+    BLOB = 10,
+};
+
+
+// Property offsets use the chunk body as their base at every nesting depth.
+typedef uint32 root_rel_ptr;
+
+void root_rel_seek(const root_rel_ptr& val, int64 body_start){
+    FSeek(body_start + val);
+}
+struct Prop;
+struct Prop (int64 body_start){
+    uint32 property_hash;
+    PropertyForm form;
+    root_rel_ptr data_ptr;
+    root_rel_ptr next_prop;
+    
+    if(form==1){
+        root_rel_ptr first_child;
+        ubyte pad[12]<hidden=true>;
+        root_rel_seek(first_child, body_start);
+        while(true){
+            Prop c_prop(body_start);
+            if(c_prop.next_prop==0xFFFFFFFF)break;
+            root_rel_seek(c_prop.next_prop, body_start);
+        }
+        FSeek(startof(pad)+sizeof(pad));
+    }else if(form==2){
+        PropertyType type;
+        switch(type){
+            case (I32):{
+                uint value;
+                ubyte pad[8]<hidden=true>;
+                break;   
+            }
+            case(F32):{
+                float value;
+                ubyte pad[8]<hidden=true>;
+                break; 
+            }
+            case(STRING):{
+                root_rel_ptr value_ptr;
+                ubyte pad[8]<hidden=true>;
+                root_rel_seek(value_ptr, body_start);
+                string value;
+                FSeek(startof(pad)+sizeof(pad));
+                break;
+            }
+            case(VEC2):{
+                root_rel_ptr value_ptr;
+                ubyte pad[8]<hidden=true>;
+                root_rel_seek(value_ptr, body_start);
+                float value[2];
+                FSeek(startof(pad)+sizeof(pad));
+                break;     
+            }
+            case(VEC3):{
+                root_rel_ptr value_ptr;
+                ubyte pad[8]<hidden=true>;
+                root_rel_seek(value_ptr, body_start);
+                float value[3];
+                FSeek(startof(pad)+sizeof(pad));
+                break;     
+            }
+            case(VEC4):{
+                root_rel_ptr value_ptr;
+                ubyte pad[8]<hidden=true>;
+                root_rel_seek(value_ptr, body_start);
+                float value[4];
+                FSeek(startof(pad)+sizeof(pad));
+                break;     
+            }
+            case(MAT4x4):{
+                root_rel_ptr value_ptr;
+                ubyte pad[8]<hidden=true>;
+                root_rel_seek(value_ptr, body_start);
+                float value[16];
+                FSeek(startof(pad)+sizeof(pad));
+                break;
+            }
+            case(BLOB):{
+                root_rel_ptr value_ptr;
+                ubyte pad[8]<hidden=true>;
+                root_rel_seek(value_ptr, body_start);
+                uint blob_size<hidden=true>;
+                ubyte value[blob_size];
+                FSeek(startof(pad)+sizeof(pad));
+                break;
+            }
+            default:{
+                Assert(false, "Unknown type");
+                break;
+            }
+                       
+        }
+    }else{Assert(false, "Unknown form");}
+};
+
+struct PCBBChunk{
+    char ident[4];Assert(ident=="PCBB");  
+    uint size;
+    local int64 body_start = FTell();
+    struct{
+        while(true){
+            Prop prop(body_start);
+            if(prop.next_prop==0xFFFFFFFF)break;
+            root_rel_seek(prop.next_prop, body_start);
+        }
+    }props;
+    FSeek(body_start + size);
+};
+while(!FEof()){
+    PCBBChunk chunk;
+}

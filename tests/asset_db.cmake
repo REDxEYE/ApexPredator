@@ -13,3 +13,5 @@ add_test(NAME Apex.HashCollectors COMMAND ${Python3_EXECUTABLE}
 add_test(NAME Apex.SecondExtinctionLocations COMMAND ${Python3_EXECUTABLE}
     "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_second_extinction_locations.py"
     $<TARGET_FILE:SecondExtinctionHashCollector>)
+add_test(NAME Apex.ExecutableStrings COMMAND ${Python3_EXECUTABLE}
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_exe_strings.py")

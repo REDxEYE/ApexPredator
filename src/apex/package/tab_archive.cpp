@@ -1,6 +1,7 @@
 // Created by RED on 18.09.2025.
 
 #include "apex/package/tab_archive.h"
+#include "apex/package/tab_jc2.hpp"
 
 #include "tab_v21.hpp"
 #include "tab_v31.hpp"
@@ -93,6 +94,13 @@ void TabArchive::initialize() {
     if (!tab_buffer.stream().is_open()) {
         throw std::runtime_error("Failed to open tab archive file: " + m_tab_path.string());
     }
+    if (tab_buffer.get_size() < 4) throw std::runtime_error("Truncated TAB archive header");
+    if (tab_buffer.read_u32() == 2048) {
+        tab_buffer.set_position(0, std::ios::beg);
+        _impl = std::make_unique<TabJC2::TabJC2>(tab_buffer, m_tab_path);
+        return;
+    }
+    tab_buffer.set_position(0, std::ios::beg);
     const auto header = tab_buffer.read_pod<TabV21::TabHeader>();
 
     if (memcmp(header.dwMagic, "TAB\0", 4) != 0) {

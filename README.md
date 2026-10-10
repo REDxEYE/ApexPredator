@@ -61,11 +61,13 @@ ApexPredator extract-anims D:\Games\GenerationZero\archives_win64 characters/ske
 ApexPredator search "%env/terrain%" -d hashes.db
 ```
 
-## Helper tools (in `src/tools`)
+## Helper tools
 - `GenerationZeroHashCollector <game_root>` / `Rage2HashCollector <game_root>`: walk game archives and collect strings, including paths and extensions from GTOC/STOC indexes.
-  * GenZ reads `../gz_strings/*.txt` and writes `../hashes.db`
-  * Rage 2 reads `../rage_strings/filelist.txt` and writes `../rage2_hashes.db`, relative to the working directory.
-  * See [asset_database.md](docs/asset_database.md).
+  * GenZ reads `../strings/generation_zero/{file_locations,filenames,cross_game,game_dump_clean}.txt` and writes `../hashes.db`.
+  * Rage 2 also reads the GenZ lists, plus `../strings/rage2/{filelist,rage2_exe_strings}.txt`, and writes `../rage2_hashes.db`.
+  * Second Extinction reads `../strings/second_extinction/filelist.txt` when supplied; its standalone executable dump is `strings/second_extinction/second_extinction_exe_strings.txt`.
+  * Paths above are relative to the collectors' working directory. See [asset_database.md](docs/asset_database.md).
+- `scripts/extract_exe_strings.py <executable> [output]`: extract sorted, unique NUL-terminated ASCII/UTF-16LE strings of at least four characters. Reject embedded newlines and leading punctuation while retaining relative/rooted paths. For JC2, the default output is `strings/just_cause_2/just_cause_2_exe_strings.txt`.
 - `AdfTypeGenerator <game_root>`: generates ADF type bindings. **Note:** output paths are hardcoded, adjust before running.
 - `HavokTypeGenerator <game_root>`: generates Havok type bindings; paths are likewise hardcoded to the repository root—update them for your environment.
 - `StringHasher`: read strings from stdin and prints their 32-bit hash.

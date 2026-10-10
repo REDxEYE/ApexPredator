@@ -66,6 +66,10 @@ protected:
             mount(std::make_unique<SArchive>(hash, std::move(section_buffer)));
             return {true, hash};
         }
+        if (std::memcmp(first_bytes.data()+4, SARC_MAGIC, 4)==0) {
+            mount(std::make_unique<SArchive>(hash, std::move(buffer)));
+            return {true, hash};
+        }
         if (std::memcmp(first_bytes.data(), GTOC_MAGIC, 4) == 0) {
             auto gtoc_archive = std::make_unique<GTOCArchive>(*this, std::move(buffer), hash);
             mount(std::move(gtoc_archive));

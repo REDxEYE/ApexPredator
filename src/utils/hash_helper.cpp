@@ -8,7 +8,7 @@
 #include "utils/murmur3.h"
 
 
-#if GAME==GAME_GENERATION_ZERO
+#if GAME==GAME_GENERATION_ZERO || GAME==GAME_JUST_CAUSE_2
 uint64 asset_path_hash(const char *str, const uint32 len) {
     return hashlittle(str, len, 0);
 }

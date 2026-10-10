@@ -2,23 +2,31 @@
 
 #include "exporter/common_export.h"
 
+#include "games.hpp"
+#include "apex/pcbb/pcbb.hpp"
+
+#if GAME==GAME_JUST_CAUSE_2
+#include "apex/rbmdl/rbmdl_file.hpp"
+#include "exporter/pcbb_export.h"
+#else
 #include "apex/avtx.h"
 #include "apex/hashes.h"
 #include "apex/rtpc.h"
 #include "apex/adf/adf.h"
 #include "exporter/adf_export.h"
-
-#include "redscore/platform/logger.h"
-#include "redscore/utils/simple_fileio.h"
-
-
 #include "exporter/ddsc_export.h"
 #include "exporter/fmod_export.h"
 #include "exporter/havok_export.h"
 #include "exporter/rtpc_export.h"
+#endif
+#include "redscore/platform/logger.h"
+#include "redscore/utils/simple_fileio.h"
+
+
+
 #include "tracy/Tracy.hpp"
 
-#define MVK_MAGIC "\x1A\x45\xDF\xA3"
+#define MKV_MAGIC "\x1A\x45\xDF\xA3"
 
 
 VM::NodePtr export_file(ApexAppState &app_state, const uint64 hash) {
@@ -32,6 +40,15 @@ VM::NodePtr export_file(ApexAppState &app_state, const uint64 hash) {
         return {};
     }
     const auto &mb = buffer->cbuffer();
+
+#if GAME==GAME_JUST_CAUSE_2
+    if (std::memcmp(mb.data() + 4, RBMDL_MAGIC, 4) == 0) {
+        return Apex::export_rbmdl(app_state, hash, std::move(buffer));
+    }
+    if (std::memcmp(mb.data(), PCBB_MAGIC, 4) == 0) {
+        return Apex::export_pcbb(app_state, hash, std::move(buffer));
+    }
+#else
     if (std::memcmp(mb.data(), ADF_MAGIC, 4) == 0 || std::memcmp(mb.data(), ADF_SMALL_MAGIC, 4) == 0) {
         GLog_Info("Detected ADF file");
         return export_adf_file_from_buffer(app_state, hash, std::move(buffer));
@@ -54,7 +71,7 @@ VM::NodePtr export_file(ApexAppState &app_state, const uint64 hash) {
         GLog_Info("Detected Havok file");
         return export_havok_file(app_state, std::move(buffer), path);
     }
-    if (std::memcmp(mb.data(), MVK_MAGIC, 4) == 0) {
+    if (std::memcmp(mb.data(), MKV_MAGIC, 4) == 0) {
         GLog_Info("Detected MKV file");
         const std::filesystem::path export_path = get_export_path(app_state.export_path(), hash, ".mkv");
 
@@ -64,12 +81,12 @@ VM::NodePtr export_file(ApexAppState &app_state, const uint64 hash) {
             write_file(export_path, mb);
             GLog_Info("MKV file \"{}\" been written to file: \"{}\"", path, export_path.string());
         } catch (const std::exception &e) {
-            // format exception to log
             GLog_Error("Failed to write MKV file \"{}\" to path: \"{}\". Error: {}", path, export_path.string(),
                        e.what());
         }
         return {};
     }
+#endif
 
     const std::filesystem::path &unk_file_export_path = get_export_path(app_state.export_path(), hash, ".bin");
     std::filesystem::create_directories(unk_file_export_path.parent_path());

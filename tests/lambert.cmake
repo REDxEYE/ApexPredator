@@ -1,0 +1,4 @@
+add_executable(ApexLambertMaterialTests tests/lambert_material.cpp src/apex/rbmdl/lambert.cpp)
+target_include_directories(ApexLambertMaterialTests PRIVATE include)
+target_link_libraries(ApexLambertMaterialTests PRIVATE RedsCore SQLiteCpp)
+add_test(NAME Apex.LambertMaterial COMMAND ApexLambertMaterialTests)

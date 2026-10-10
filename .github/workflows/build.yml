@@ -52,10 +52,16 @@ jobs:
           Push-Location dist
           cmake -E tar xJf "$env:GITHUB_WORKSPACE\hashes.db.tar.xz"
           if ($LASTEXITCODE -ne 0) { throw 'Failed to unpack hashes.db' }
+          
           cmake -E tar xJf "$env:GITHUB_WORKSPACE\rage2_hashes.db.tar.xz"
           if ($LASTEXITCODE -ne 0) { throw 'Failed to unpack rage2_hashes.db' }
+          
           cmake -E tar xJf "$env:GITHUB_WORKSPACE\second_extinction_hashes.db.tar.xz"
           if ($LASTEXITCODE -ne 0) { throw 'Failed to unpack second_extinction_hashes.db' }
+          
+          cmake -E tar xJf "$env:GITHUB_WORKSPACE\jc2_hashes.db.tar.xz"
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to unpack jc2_hashes.db' }
+          
           Pop-Location
       - uses: actions/upload-artifact@v4
         with:

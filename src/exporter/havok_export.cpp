@@ -2,6 +2,7 @@
 
 #include "exporter/havok_export.h"
 
+#include <fstream>
 #include <string_view>
 #include <ranges>
 

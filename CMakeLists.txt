@@ -46,6 +46,7 @@ endif()
 include(modules/generation_zero/module.cmake)
 include(modules/rage2/module.cmake)
 include(modules/second_extinction/module.cmake)
+include(modules/just_cause_2/module.cmake)
 
 # The host contains only CLI and module-loading code. Game code is private to the module.
 add_executable(ApexPredator
@@ -62,6 +63,7 @@ add_dependencies(ApexPredator GenerationZeroModule Rage2Module)
 if(TARGET SecondExtinctionModule)
     add_dependencies(ApexPredator SecondExtinctionModule)
 endif()
+add_dependencies(ApexPredator JustCause2Module)
 
 add_executable(StringHasher
         src/tools/string_hasher.cpp
@@ -133,6 +135,8 @@ option(APEX_BUILD_MODULE_TESTS "Build fixture modules and module integration tes
 if(APEX_BUILD_MODULE_TESTS)
     enable_testing()
     include(tests/rtpc.cmake)
+    include(tests/pcbb.cmake)
+    include(tests/lambert.cmake)
     include(tests/gtoc.cmake)
     include(tests/adf_typegen.cmake)
     include(tests/havok_typegen.cmake)
@@ -160,6 +164,16 @@ if(APEX_BUILD_MODULE_TESTS)
     add_test(NAME Apex.TabV31 COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_tab_v31.py" $<TARGET_FILE:ApexPredator>)
     add_test(NAME Apex.Rage2Module COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_rage2_module.py"
             $<TARGET_FILE:ApexPredator> $<TARGET_FILE:Rage2Module>)
+    add_test(NAME Apex.JustCause2Module COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_just_cause_2_module.py"
+            $<TARGET_FILE:ApexPredator>)
+    add_test(NAME Apex.JustCause2Facade COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_jc2_facade.py"
+            $<TARGET_FILE:ApexPredator>)
+    add_test(NAME Apex.JustCause2GeneralChannels COMMAND ${Python3_EXECUTABLE}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_jc2_general_channels.py" $<TARGET_FILE:ApexPredator>)
+    add_test(NAME Apex.JustCause2DepthOffset COMMAND ${Python3_EXECUTABLE}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_jc2_depth_offset.py" $<TARGET_FILE:ApexPredator>)
+    add_test(NAME Apex.JustCause2HashCollector COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_just_cause_2_hash_collector.py"
+            $<TARGET_FILE:JustCause2HashCollector>)
     add_test(NAME Apex.Rage2AMF COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_rage2_amf_cli.py"
             $<TARGET_FILE:ApexPredator>)
     add_test(NAME Apex.VirtualModelCLI COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_virtual_model_cli.py" $<TARGET_FILE:ApexPredator> --module-library $<TARGET_FILE:GenerationZeroModule> --session-runner $<TARGET_FILE:ApexModuleSessionTests>)

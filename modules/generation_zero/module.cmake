@@ -22,9 +22,9 @@ SET(CommonFiles
         src/utils/zlib_wrapper.cpp
         src/apex/package/tab_v21.cpp
         src/apex/package/tab_v31.cpp
+        src/apex/package/tab_jc2.cpp
         src/utils/murmur3.cpp
 )
-
 
 SET(CommonLibs
         RedsCore

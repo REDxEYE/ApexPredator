@@ -15,7 +15,7 @@ const char *load_adf_func_pattern = "40 55 56 57 41 56 41 57 48 81 EC ? ? ? ? 48
 const char *hash_little_func_pattern = "48 89 5C 24 ? 48 89 7C 24 ? 41 81 C0 ? ? ? ? 48 8B FA 44";
 
 const char *adf_output_file = "D:\\projects\\cpp\\ApexPredator\\include\\apex\\adf\\builtin_adf.h";
-const char *hashes_output = "D:\\projects\\cpp\\ApexPredator\\gz_strings\\game_dump.txt";
+const char *hashes_output = "D:\\projects\\cpp\\ApexPredator\\strings\\generation_zero\\game_dump.txt";
 
 FILE *g_hashes_file = NULL;
 FILE *g_dump_file = NULL;

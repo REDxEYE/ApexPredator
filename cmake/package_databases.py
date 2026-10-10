@@ -12,9 +12,9 @@ def main() -> None:
     cmake = sys.argv[1]
     source_dir = Path(sys.argv[2])
     with TemporaryDirectory(prefix="apex-databases-") as temporary:
-        for name in ("hashes.db", "rage2_hashes.db", "second_extinction_hashes.db"):
-            source = source_dir / name
-            snapshot = Path(temporary) / name
+        for name in source_dir.glob("*.db"):
+            source = name
+            snapshot = Path(temporary) / name.name
             # SQLite's backup API includes committed WAL pages without modifying the source.
             with closing(sqlite3.connect(f"{source.resolve().as_uri()}?mode=ro", uri=True)) as database:
                 with closing(sqlite3.connect(snapshot)) as copy:

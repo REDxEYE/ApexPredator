@@ -6,7 +6,6 @@
 #include <cstring>
 #include <filesystem>
 #include <fstream>
-#include <ranges>
 #include <stdexcept>
 #include <string>
 #include <string_view>

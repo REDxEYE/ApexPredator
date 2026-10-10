@@ -2,9 +2,9 @@
 
 Both `kv` and `files` store `lookup3` (32-bit lookup3/hashlittle, seed zero) and
 `murmur` (the first 64-bit output of MurmurHash3_x64_128, seed zero). Generation
-Zero writes zero to `murmur`; Rage 2 computes both. `string_hashes(string_view)`
-is the shared game-specific implementation used by the collectors and ADF string
-storage.
+Zero and Just Cause 2 use 32-bit lookup3 game hashes and write zero to `murmur`;
+Rage 2 computes both. `string_hashes(string_view)` is the shared game-specific
+implementation used by the collectors and ADF string storage.
 
 ```sql
 CREATE TABLE kv (
@@ -33,8 +33,8 @@ external SQL tools. Parent remains the containing archive's game-specific hash.
 
 `kv_put(StringHashes, value)` and `files_put(StringHashes, name, size, parent)`
 require both hash fields. Read/delete APIs accept `AssetDB::HashType::Lookup3`,
-`Murmur`, or the default `Game` (lookup3 for GenZ, Murmur for Rage 2). RTPC name
-resolution explicitly uses lookup3 through `find_lookup3_name`.
+`Murmur`, or the default `Game` (lookup3 for GenZ and JC2, Murmur for Rage 2).
+RTPC name resolution explicitly uses lookup3 through `find_lookup3_name`.
 
 Opening an old `kv(k,v)` / `files(hash,name,size,parent)` database migrates both
 tables in one transaction. Existing game keys, names, sizes, and parents are

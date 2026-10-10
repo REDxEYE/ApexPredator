@@ -15,11 +15,13 @@
 #include "OpenXLSX.hpp"
 #include "zstd.h"
 #include "tracy/Tracy.hpp"
-#include "glm/ext/matrix_transform.hpp"
 #include "glm/glm.hpp"
-#include "utils/xlsx_helper.hpp"
 
+#if GAME==GAME_GENERATION_ZERO
+#include "utils/xlsx_helper.hpp"
+#endif
 #include <cstring>
+#include <fstream>
 #pragma pack(push, 1)
 
 struct VertexID_UV {
@@ -410,11 +412,11 @@ VM::NodePtr export_adf_file_from_buffer(ApexAppState &app_state, const uint64 pa
             return export_amf_model(app_state, model.get(), path_hash);
 #if GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
         } else if (instance.type_hash == std::to_underlying(ADFHashes::AmfModelVariant)) {
-            if (instances.size() != 1) {
-                throw std::runtime_error("ADF with AmfModelVariant should have only one instance");
-            }
-            const auto variant = adf.read_instance<AmfModelVariant>(instanceId);
-            return export_amf_model(app_state, &variant->Data, path_hash);
+                if (instances.size() != 1) {
+                    throw std::runtime_error("ADF with AmfModelVariant should have only one instance");
+                }
+                const auto variant = adf.read_instance<AmfModelVariant>(instanceId);
+                return export_amf_model(app_state, &variant->Data, path_hash);
 #endif
         } else if (instance.type_hash == std::to_underlying(ADFHashes::AmfMeshHeader)) {
             if (instances.size() != 2) {

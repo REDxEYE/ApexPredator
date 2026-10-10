@@ -10,6 +10,8 @@
 #include "redscore/platform/file/file.h"
 #include "utils/hash_helper.h"
 
+constexpr uint8 SARC_MAGIC[] = "SARC";
+
 struct SArcHeader {
     uint32 version;
     char ident[4];
@@ -32,22 +34,22 @@ public:
 
     [[nodiscard]] bool has(std::string_view path);
 
-    [[nodiscard]] bool has(const u64& hash) override;
+    [[nodiscard]] bool has(const u64 &hash) override;
 
     std::unique_ptr<IO::File> get(std::string_view path);
 
-    std::unique_ptr<IO::File> get(const u64& hash) override;
+    std::unique_ptr<IO::File> get(const u64 &hash) override;
 
-    [[nodiscard]] const u64 & get_parent_key() override;
+    [[nodiscard]] const u64 &get_parent_key() override;
 
     // void all_entries(std::vector<ArchiveEntry> &entries) const override;
 
     [[nodiscard]] std::string_view name() const override;
 
-    [[nodiscard]] const u64& key() const override;
+    [[nodiscard]] const u64 &key() const override;
 
     [[nodiscard]] auto entries() const {
-        return m_entries|std::views::values;
+        return m_entries | std::views::values;
     }
 
     bool foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) override;

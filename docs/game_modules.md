@@ -6,7 +6,7 @@ For the next game, duplicate or adapt the game-specific sources in a new module.
 
 ## Loading and selection
 
-Building `ApexPredator` also builds `modules/generation_zero.so` and `modules/rage2.so` on Linux, or the corresponding `.dll` files on Windows. Keep the `modules` directory beside the executable. Discovery uses the executable's location, independent of the working directory. Multi-configuration generators place the module beneath the corresponding configuration's executable directory.
+Building `ApexPredator` also builds `modules/generation_zero`, `modules/rage2`, and `modules/just_cause_2`, and `modules/second_extinction` on Linux or Windows. Keep the `modules` directory beside the executable. Discovery uses the executable's location, independent of the working directory. Multi-configuration generators place the module beneath the corresponding configuration's executable directory.
 
 ```sh
 ApexPredator modules

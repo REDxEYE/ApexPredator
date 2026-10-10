@@ -107,10 +107,15 @@ for game, executable in enumerate(sys.argv[1:]):
         work.mkdir()
         initial = root / 'game/archives_win64/initial'
         initial.mkdir(parents=True)
-        strings = root / 'gz_strings'
-        strings.mkdir()
-        for name in ['strings_general', 'file_locations', 'filenames', 'cross_game', 'game_dump_clean']:
-            (strings / (name + '.txt')).write_text('')
+        strings = root / 'strings' / 'generation_zero'
+        strings.mkdir(parents=True)
+        for name in ['file_locations', 'filenames', 'cross_game', 'game_dump_clean']:
+            (strings / (name + '.txt')).write_text('SharedCollectorPath\n' if name == 'cross_game' else '')
+        if game == 1:
+            rage_strings = root / 'strings' / 'rage2'
+            rage_strings.mkdir()
+            (rage_strings / 'filelist.txt').write_text('Rage2FileListEntry\n')
+            (rage_strings / 'rage2_exe_strings.txt').write_text('Rage2ExecutableEntry\n')
         asset = 'AnimationSet' if game == 0 else 'text/master_eng.stringlookup'
         asset_hash = 2035976115 if game == 0 else 0x8453EE3581F31F39
         signed = asset_hash if asset_hash < 2**63 else asset_hash - 2**64
@@ -151,7 +156,9 @@ for game, executable in enumerate(sys.argv[1:]):
             result = subprocess.run([executable, str(root / 'game')], cwd=work, capture_output=True, text=True)
             assert result.returncode == 0, result.stdout + result.stderr
         with sqlite3.connect(db_path) as db:
-            expected_names = {'CollectedRTPCString'} | {name for name, _ in entries}
+            expected_names = {'CollectedRTPCString', 'SharedCollectorPath'} | {name for name, _ in entries}
+            if game == 1:
+                expected_names.update({'Rage2FileListEntry', 'Rage2ExecutableEntry'})
             for paths in internal_paths:
                 expected_names.update(paths)
             for name in expected_names:

@@ -20,30 +20,50 @@ SArchive::SArchive(const uint64 m_hash, std::unique_ptr<IO::File> buffer) : m_ha
         throw std::runtime_error("Invalid SARC magic");
     }
     if (m_header.version2 == 2) {
-        throw std::runtime_error("SARC version 2 is not supported");
-    }
-    if (m_header.version2 == 3) {
-        const auto strings_size = m_buffer->read_pod<uint32>();
+        const auto entries_end = sizeof(SArcHeader) + m_header.dir_block_len - 12/*minimal entry size*/;
+        m_strings.reserve(m_header.dir_block_len);
+        while (m_buffer->get_position() < entries_end) {
+            const auto name_len = m_buffer->read_u32();
+            std::string name;
+            m_buffer->read_string(name_len, name);
+            const auto it = m_strings.insert(m_strings.end(), name.cbegin(), name.cend());
+            const auto index = static_cast<std::size_t>(std::distance(m_strings.begin(), it));
+            m_strings.emplace_back('\0');
+            const auto offset = m_buffer->read_u32();
+            const auto size = m_buffer->read_u32();
+            const SArcEntry entry{
+                .name = std::string_view(&m_strings[index]),
+                .offset = offset,
+                .size = size,
+                .hash = static_cast<uint32>(hash_string(name)),
+                .ext_hash = 0
+            };
+            m_entries[entry.hash] = entry;
+        }
+    } else if (m_header.version2 == 3) {
+        const auto strings_size = m_buffer->read_u32();
         m_strings.resize(strings_size);
         m_buffer->read_exact(m_strings);
         const uint32 entry_count = (m_header.dir_block_len - 4/* strings_size int */ - strings_size) / 20;
 
         m_entries.reserve(entry_count);
         for (uint32 i = 0; i < entry_count; ++i) {
-            const auto name_offset = m_buffer->read_pod<uint32>();
+            const auto name_offset = m_buffer->read_u32();
 
             const SArcEntry entry{
                 .name = std::string_view(&m_strings[name_offset]),
-                .offset = m_buffer->read_pod<uint32>(),
-                .size = m_buffer->read_pod<uint32>(),
-                .hash = m_buffer->read_pod<uint32>(),
-                .ext_hash = m_buffer->read_pod<uint32>(),
+                .offset = m_buffer->read_u32(),
+                .size = m_buffer->read_u32(),
+                .hash = m_buffer->read_u32(),
+                .ext_hash = m_buffer->read_u32(),
             };
             if (asset_path_hash(entry.name) != entry.hash) {
                 throw std::runtime_error("SARC entry hash mismatch for file " + std::string(entry.name));
             }
             m_entries[entry.hash] = entry;
         }
+    } else {
+        throw std::runtime_error(std::format("SARC version {} is not supported", m_header.version2));
     }
 
     if (const auto name = find_asset_name(m_hash)) {

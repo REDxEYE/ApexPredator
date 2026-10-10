@@ -7,6 +7,7 @@ SET(CommonFiles
         src/apex/gtoc.cpp
         src/apex/hashes.cpp
         src/apex/package/tab_archive.cpp
+        src/apex/package/tab_jc2.cpp
         src/apex/rtpc.cpp
         src/apex/sarc.cpp
         src/havok/havok_types.cpp
