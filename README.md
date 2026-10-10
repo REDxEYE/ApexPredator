@@ -89,7 +89,7 @@ python tests/test_rage2_amf_cli.py cmake-build-debug/ApexPredator
 
 ## Loadable game modules
 
-The CLI now loads game support from DLL/SO modules. Build `ApexPredator` and keep its `modules/` directory beside the executable; the build produces the Generation Zero and Rage 2 modules automatically. The host does not link the game readers or generated types. Modules are built with the app and share C++ interfaces and `ApexAppState`; only the loader entry symbol uses `extern "C"`.
+The CLI loads game support from DLL/SO modules. Build `ApexPredator` and keep its `modules/` directory beside the executable; the build produces Generation Zero, Rage 2, Second Extinction, and Just Cause 2 modules automatically. The host does not link the game readers or generated types. Modules are built with the app and share C++ interfaces and `ApexAppState`; only the loader entry symbol uses `extern "C"`.
 
 ```sh
 ApexPredator modules /path/to/GenerationZero/archives_win64
@@ -115,17 +115,17 @@ ApexPredator extract "/path/to/RAGE 2" models/props/cable/horizontal_03.meshc --
 
 ## CI build artifacts
 
-The GitHub Actions build workflow produces Linux x64 and Windows x64 artifacts containing `ApexPredator`, `modules/generation_zero`, `modules/rage2`, `hashes.db`, and `rage2_hashes.db`. It builds the `ApexPredator` target (which builds both modules) without running or building the optional test targets.
+The GitHub Actions build workflow produces Linux x64 and Windows x64 artifacts containing `ApexPredator`, every built game module under `modules/`, and the four game hash databases (`hashes.db`, `rage2_hashes.db`, `second_extinction_hashes.db`, and `jc2_hashes.db`). It builds the `ApexPredator` target (which builds the modules) without running or building the optional test targets.
 The Windows CI job uses Visual Studio 2022/MSVC; `winbuild.sh` uses Clang/MinGW and does not validate MSVC compatibility.
 The pre-release job runs only after both platform builds succeed on a `cpp_conversion` push. It packages the staged artifacts (restoring the Linux executable bit after artifact download) and uploads both archives to a `preview-<run number>` pre-release. Re-running a workflow updates the same release; pull requests and manual runs do not publish.
 
-CI unpacks the committed `hashes.db.tar.xz` and `rage2_hashes.db.tar.xz` archives into each artifact. After changing either local database, regenerate and commit both archives:
+CI unpacks the four committed `*.db.tar.xz` archives into each artifact. After changing any local database, regenerate and commit the archives:
 
 ```sh
 cmake -S . -B build
 cmake --build build --target CompressDatabases
-git add hashes.db.tar.xz rage2_hashes.db.tar.xz
-git commit -m "Update compressed game hash databases" -- hashes.db.tar.xz rage2_hashes.db.tar.xz
+git add hashes.db.tar.xz rage2_hashes.db.tar.xz second_extinction_hashes.db.tar.xz jc2_hashes.db.tar.xz
+git commit -m "Update compressed game hash databases" -- hashes.db.tar.xz rage2_hashes.db.tar.xz second_extinction_hashes.db.tar.xz jc2_hashes.db.tar.xz
 ```
 
-`CompressDatabases` uses SQLite's backup API, so committed changes in an active `-wal` file are included without changing the live databases. The archives contain only the database files, not the WAL or SHM files.
+`CompressDatabases` snapshots every root-level `*.db` with SQLite's backup API, so committed changes in an active `-wal` file are included without changing the live databases. Each portable archive contains only its database basename, not a source-directory path, WAL, or SHM file.

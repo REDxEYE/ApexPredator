@@ -126,8 +126,8 @@ endif ()
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 add_custom_target(CompressDatabases
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_databases.py"
-                "${CMAKE_COMMAND}" "${CMAKE_CURRENT_SOURCE_DIR}"
-        COMMENT "Snapshot and compress hashes.db and rage2_hashes.db"
+                "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMENT "Snapshot and compress game hash databases"
         VERBATIM
 )
 
@@ -143,6 +143,8 @@ if(APEX_BUILD_MODULE_TESTS)
     add_executable(ApexArchiveManagerTests tests/archive_manager.cpp)
     target_link_libraries(ApexArchiveManagerTests PRIVATE RedsCore)
     add_test(NAME Apex.ArchiveManager COMMAND ApexArchiveManagerTests)
+    add_test(NAME Apex.PackageDatabases COMMAND ${Python3_EXECUTABLE}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_package_databases.py" "${CMAKE_COMMAND}")
     find_package(Python3 REQUIRED COMPONENTS Interpreter)
     add_test(NAME Apex.ArchiveEviction COMMAND ${Python3_EXECUTABLE}
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_archive_eviction.py" $<TARGET_FILE:GenerationZeroHashCollector>)
