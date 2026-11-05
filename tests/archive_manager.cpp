@@ -22,9 +22,13 @@ public:
     }
     std::string_view name() const override { return "test"; }
     const u64 &key() const override { return m_key; }
+    const u64 &get_parent_key() override {
+        static constexpr u64 root_parent = 0;
+        return root_parent;
+    }
     bool foreach_file(const std::function<bool(const ArchiveEntry &)> &callback) override {
         const auto alive = m_alive;
-        const bool result = callback({m_key, 1});
+        const bool result = callback({m_key, 0, 1, 1, 0});
         require(*alive, "archive destroyed during its callback");
         return result;
     }

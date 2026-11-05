@@ -1,0 +1,29 @@
+# Sources compiled into each game module and its standalone tools.
+# Game-selected archive mounts and hash policies belong in each module.cmake.
+set(ApexCommonFiles
+        src/apex/aaf/aaf.cpp
+        src/apex/adf/adf.cpp
+        src/apex/adf/sti.cpp
+        src/apex/adf/sti_shared.cpp
+        src/apex/avtx.cpp
+        src/apex/gtoc.cpp
+        src/apex/hashes.cpp
+        src/apex/package/tab_archive.cpp
+        src/apex/package/tab_jc2.cpp
+        src/apex/rtpc.cpp
+        src/apex/sarc.cpp
+        src/havok/havok_types.cpp
+        src/havok/tag_file/havok_tag_file.cpp
+        src/havok/tag_file/havok_tag_types.cpp
+        src/platform/archive_manager.cpp
+        src/utils/hash_helper.cpp
+        src/utils/json.cpp
+        src/utils/lookup3.cpp
+        src/apex/asset_db.cpp
+        src/utils/stb.cpp
+        src/utils/zlib_wrapper.cpp
+        src/apex/package/tab_v21.cpp
+        src/apex/package/tab_v1.cpp
+        src/apex/package/tab_v31.cpp
+        src/utils/murmur3.cpp
+)

@@ -2,9 +2,9 @@
 
 #include "apex/package/tab_archive.h"
 #include "apex/package/tab_jc2.hpp"
-
-#include "tab_v21.hpp"
-#include "tab_v31.hpp"
+#include "apex/package/tab_v1.hpp"
+#include "apex/package/tab_v21.hpp"
+#include "apex/package/tab_v31.hpp"
 #include "redscore/platform/file/native_file.h"
 #include "redscore/platform/logger.h"
 
@@ -96,8 +96,16 @@ void TabArchive::initialize() {
     }
     if (tab_buffer.get_size() < 4) throw std::runtime_error("Truncated TAB archive header");
     if (tab_buffer.read_u32() == 2048) {
+        std::unique_ptr<Tab> v1, jc2;
         tab_buffer.set_position(0, std::ios::beg);
-        _impl = std::make_unique<TabJC2::TabJC2>(tab_buffer, m_tab_path);
+        try { v1 = std::make_unique<TabV1::TabV1>(tab_buffer, m_tab_path); }
+        catch (const std::exception &) { /* Not a valid compressed TAB v1. */ }
+        tab_buffer.set_position(0, std::ios::beg);
+        try { jc2 = std::make_unique<TabJC2::TabJC2>(tab_buffer, m_tab_path); }
+        catch (const std::exception &) { /* Not a valid Just Cause 2 TAB. */ }
+        if (v1 && jc2) throw std::runtime_error("Ambiguous 2048-aligned TAB layout");
+        if (!v1 && !jc2) throw std::runtime_error("Unsupported 2048-aligned TAB layout");
+        _impl = v1 ? std::move(v1) : std::move(jc2);
         return;
     }
     tab_buffer.set_position(0, std::ios::beg);

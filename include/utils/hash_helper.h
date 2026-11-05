@@ -15,6 +15,10 @@ struct StringHashes {
     uint64 murmur;
 };
 
+enum class LegacyHashDomain { Lookup3, Murmur };
+LegacyHashDomain legacy_hash_domain() noexcept;
+std::string_view game_files_table() noexcept;
+
 uint64 asset_path_hash(const char *str, uint32 len);
 
 uint64 asset_path_hash(std::string_view sv);

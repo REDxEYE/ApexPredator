@@ -1,19 +1,21 @@
 // Created by RED on 12.01.2026.
 
 #include "exporter/rtpc_export.h"
-#include "games.hpp"
 #include "glm/glm.hpp"
 #include "glm/gtx/quaternion.hpp"
 
 #include "apex/hashes.h"
-#include "exporter/havok_export.h"
 #include "exporter/adf_export.h"
 #include "exporter/common_export.h"
 #include "redscore/platform/logger.h"
 #include <algorithm>
 #include <cmath>
+#include <filesystem>
 #include <fstream>
+#include <format>
+#include <iostream>
 #include <numbers>
+#include <utility>
 #include "tracy/Tracy.hpp"
 
 enum class RTPCClass:uint32_t {
@@ -68,23 +70,12 @@ void handle_CCharacter(ApexAppState &app_state,
         GLog_Error("Failed to get skeleton property for CCharacter");
         return;
     }
-#if GAME==GAME_GENERATION_ZERO
-    const auto &skeleton_filename = node.get<std::string>("skeleton");
-    std::filesystem::path skeleton_bsk_name = skeleton_filename;
-    skeleton_bsk_name.replace_extension(".bsk");
-    const std::string skeleton_name = skeleton_bsk_name.generic_string();
-    const uint32 skeleton_path_hash = hash_string(skeleton_bsk_name);
-#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
-    const uint32 skeleton_path_hash = node.get<uint32>("skeleton");
-    const std::string skeleton_name = node.get_string("skeleton").value_or("<no path>");
-#else
-#error "Unsupported game"
-#endif
+    const auto skeleton = RTPC::skeleton_reference(node, rtpc_name_hash("skeleton"), "<no path>");
 
-    const auto skeleton_node = export_file(app_state, skeleton_path_hash);
+    const auto skeleton_node = export_file(app_state, skeleton.hash);
 
     if (!skeleton_node) {
-        GLog_Error("Failed to export skeleton for CCharacter: {}", skeleton_name);
+        GLog_Error("Failed to export skeleton for CCharacter: {}", skeleton.name);
         throw std::runtime_error("Failed to export skeleton for CCharacter");
     }
     const auto skin = helper.current_skin();
@@ -99,33 +90,12 @@ void handle_CCharacter(ApexAppState &app_state,
         throw std::runtime_error("Failed to get root bone for CCharacter");
     }
 
-#if GAME==GAME_GENERATION_ZERO
-
-    if (!node.has(0xE8129FE6)) {
-        std::cout << node.to_json() << std::endl;
-        GLog_Error("Failed to get model property for CCharacter");
+    const auto character_node = RTPC::create_character_node(app_state, node, parent_node);
+    if (!character_node) {
+        helper.pop_skin();
         return;
     }
-
-    const auto &model_filename = node.get<std::string>(0xE8129FE6);
-
-    // helper.set_parent(parent_node, root_bone);
-
-    const auto output_node = export_adf_file(app_state, hash_string(model_filename));
-
-    add_extras(node, output_node);
-    set_world_matrix(output_node, node);
-    if (parent_node)
-        helper.set_parent(parent_node, output_node);
-    else {
-        GLog_Warning("Invalid parent setup: 0x{:08X}", node.name_hash());
-    }
-#else
-    const auto output_node = helper.create_node();
-    if (node.has("name"))
-        output_node->name = node.get<std::string>("name");
-    helper.set_parent(parent_node, output_node);
-#endif
+    const auto &output_node = *character_node;
 
     process_children(app_state, node, path_hash, output_node);
     if (skin) {
@@ -166,24 +136,11 @@ void handle_CSecondaryMotionAttachment(ApexAppState &app_state,
         return;
     }
 
-#if GAME==GAME_GENERATION_ZERO
-    const auto &skeleton_path = node.get<std::string>("skeleton");
-    std::filesystem::path skeleton_bsk_name = skeleton_path;
-    skeleton_bsk_name.replace_extension(".bsk");
-    const auto skeleton_name = skeleton_bsk_name.generic_string();
-    const uint32 skeleton_hash = hash_string(skeleton_bsk_name);
-    const auto &model_filename = node.get<std::string>("model");
-    const uint32 model_hash = hash_string(model_filename);
-#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
-    const uint32 skeleton_hash = node.get<uint32>("skeleton");
-    const auto skeleton_name = find_lookup3_name(skeleton_hash).value_or("<missing skeleton name>");
-    const uint32 model_hash = node.get<uint32>("model");
-#else
-#error "Unsupported game"
-#endif
-    const auto skeleton_node = export_file(app_state, skeleton_hash);
+    const auto skeleton = RTPC::skeleton_reference(node, rtpc_name_hash("skeleton"), "<missing skeleton name>");
+    const uint32 model_hash = RTPC::model_reference(node, rtpc_name_hash("model"));
+    const auto skeleton_node = export_file(app_state, skeleton.hash);
     if (!skeleton_node) {
-        GLog_Error("Failed to export skeleton for CSecondaryMotionAttachment: {}", skeleton_name);
+        GLog_Error("Failed to export skeleton for CSecondaryMotionAttachment: {}", skeleton.name);
         throw std::runtime_error("Failed to export skeleton for CSecondaryMotionAttachment");
     }
     const auto skin = helper.current_skin();
@@ -285,21 +242,9 @@ void handle_CSkeletalAnimatedObject(ApexAppState &app_state, const RuntimeNode &
         GLog_Error("Failed to get skeleton property for CSkeletalAnimatedObject");
         return;
     }
-#if GAME==GAME_GENERATION_ZERO
-    const auto &model_filename = node.get<std::string>(0x0f94740b);
-    const auto &skeleton_filename = node.get<std::string>(0x26fa86fe);
-    std::filesystem::path skeleton_bsk_name = skeleton_filename;
-    skeleton_bsk_name.replace_extension(".bsk");
-
-    const auto &model_hash = hash_string(model_filename);
-    const auto &skeleton_hash = hash_string(skeleton_bsk_name);
-#elif GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
-    const auto &model_hash = node.get<uint32>(0x0f94740b);
-    const auto &skeleton_hash = node.get<uint32>(0x26fa86fe);
-#else
-#error "Unsupported game"
-#endif
-    const auto skeleton_node = export_file(app_state, skeleton_hash);
+    const uint32 model_hash = RTPC::model_reference(node, 0x0f94740b);
+    const auto skeleton = RTPC::skeleton_reference(node, 0x26fa86fe, "");
+    const auto skeleton_node = export_file(app_state, skeleton.hash);
     const auto skin = helper.current_skin();
 
     if (!skin) {
@@ -490,12 +435,13 @@ VM::NodePtr export_rtpc(ApexAppState &app_state, const std::unique_ptr<IO::File>
 
     const auto path = find_name(path_hash).value_or(std::format("path_{:08X}", path_hash));
 
-    auto export_path = app_state.export_path();
-    auto file_export_path = export_path / (path + ".json");
-    auto json_data = root_node.to_json();
+    const auto file_export_path = app_state.export_path() / (path + ".json");
+    std::filesystem::create_directories(file_export_path.parent_path());
     std::ofstream file(file_export_path);
-    file << json_data.dump(2);
+    if (!file) throw std::runtime_error("Failed to open RTPC JSON output: " + file_export_path.string());
+    file << root_node.to_json().dump(2);
     file.close();
+    if (!file) throw std::runtime_error("Failed to write RTPC JSON output: " + file_export_path.string());
 
 
     const auto epe_root_node = helper.create_node();

@@ -41,10 +41,10 @@ VM::DataBuffer dds_to_png(ArchiveManager<u64> &manager, const std::string &name)
     if (!file) {
         return {};
     }
-    return DDS::read_texture(file).save_to_memory(MemoryFormat::PNG);
+    return DDS::read_texture(file)->save_to_memory(MemoryFormat::PNG);
 }
 
-std::shared_ptr<Texture> load_dds(ArchiveManager<u64> &manager, const std::string &name) {
+Texture::Ptr load_dds(ArchiveManager<u64> &manager, const std::string &name) {
     if (name.empty()) {
         return {};
     }
@@ -52,7 +52,7 @@ std::shared_ptr<Texture> load_dds(ArchiveManager<u64> &manager, const std::strin
     if (!file) {
         return {};
     }
-    return std::make_shared<Texture>(std::move(DDS::read_texture(file)));
+    return DDS::read_texture(file);
 }
 
 void apply_channel_texture_mask(Texture &texture, const glm::vec4 &weights) {

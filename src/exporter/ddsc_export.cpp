@@ -9,7 +9,7 @@
 
 #include "tracy/Tracy.hpp"
 
-std::unique_ptr<Texture> convert_ddsc(ApexAppState &app_state, const uint64 hash) {
+Texture::Ptr convert_ddsc(ApexAppState &app_state, const uint64 hash) {
     ZoneScoped
     auto mb = app_state.manager().get(hash);
     if (!mb) {

@@ -1,56 +1,13 @@
 #include "platform/app_state.h"
-#include "exporter/common_export.h"
-#include "exporter/havok_export.h"
-#include "apex/asset_db.h"
+#include "apex/hashes.h"
+#include "exporter/apex/havok_animation_export.h"
 #include "redscore/platform/logger.h"
-#include "redscore/utils/simple_fileio.h"
 #include "redscore/utils/common.h"
-#include "utils/hash_helper.h"
-#include "tracy/Tracy.hpp"
+#include <format>
 #include <fstream>
 using nlohmann::json;
 
-void raw_export(ApexAppState &app_state, const uint64 asset_hash) {
-    ZoneScoped
-    const auto asset_path = find_asset_name(asset_hash)
-            .or_else([&] { return std::optional{std::format("{:08X}.bin", asset_hash)}; })
-            .value();
 
-    const std::filesystem::path save_path = app_state.export_path() / asset_path;
-    std::filesystem::create_directories(save_path.parent_path());
-
-    const auto mb = app_state.manager().get(asset_hash);
-    if (!mb) {
-        GLog_Error("File not found: {}", asset_hash);
-        throw std::runtime_error("Asset not found");
-    }
-
-    write_file(save_path, mb->cbuffer());
-    GLog_Info("File \"{}\" extracted to \"{}\"", asset_hash, save_path.string());
-}
-
-void normal_export(ApexAppState &app_state, const uint64 asset_hash) {
-    ZoneScoped
-    const auto asset_path = find_asset_name(asset_hash)
-            .or_else([&] { return std::optional{std::format("{:08X}.bin", asset_hash)}; })
-            .value();
-
-    std::filesystem::path save_path = app_state.export_path() / asset_path;
-    save_path.replace_extension("gltf");
-
-    auto &builder = app_state.models();
-    builder.reset();
-    const auto node = export_file(app_state, asset_hash);
-    if (node) builder.add_to_scene(node);
-    if (!builder.scene.roots.empty()) {
-        std::filesystem::create_directories(save_path.parent_path());
-        if (VM::save_gltf(builder.scene, save_path)) {
-            GLog_Info("Written GLTF file: {}", save_path.string());
-        } else {
-            throw std::runtime_error("Failed to write GLTF file: " + save_path.string());
-        }
-    }
-}
 
 json extract_root_motion_info(HavokTypes::hkaAnimatedReferenceFrame *extracted_motion_base) {
     auto *extracted_motion = Havok::as<HavokTypes::hkaDefaultAnimatedReferenceFrame>(extracted_motion_base);

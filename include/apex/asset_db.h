@@ -51,11 +51,16 @@ private:
 
 
     SQLite::Database m_db;
-    static std::filesystem::path db_path;
+    std::string m_files_table;
 
     std::unique_ptr<SQLite::Statement> m_kv_put;
+    std::unique_ptr<SQLite::Statement> m_kv_pair;
+    std::unique_ptr<SQLite::Statement> m_files_pair;
     std::unique_ptr<SQLite::Statement> m_files_search;
     std::unique_ptr<SQLite::Statement> m_files_put;
+    std::unique_ptr<SQLite::Statement> m_files_get;
+    std::unique_ptr<SQLite::Statement> m_files_name;
+    std::unique_ptr<SQLite::Statement> m_files_del;
 };
 
 #endif //APEXPREDATOR_SQLITE_WRAPPER_H

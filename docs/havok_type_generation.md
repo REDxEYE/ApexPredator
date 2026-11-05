@@ -30,3 +30,9 @@ Build `ApexHavokTypegenFixture` to compile generated regression schemas, and run
 CTest `Apex.HavokTypegen` to check ordering, recursion, aliases, enum identity,
 repeatability, and cycle diagnostics. Existing support methods that throw
 “not implemented” remain outside the generator's scope.
+
+Generated C++ identifiers append `_` when a tag type or member has a C++ keyword
+name (such as `class` or `static`). Suffixes disambiguate collisions with
+existing names in a record. Type metadata and `to_json()` keys retain the tag
+file's original spelling. `Apex.GeneratorKeywords` exercises both the Havok and
+ADF generated classes and their serialized names.

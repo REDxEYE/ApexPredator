@@ -75,6 +75,15 @@ namespace Modules {
             return path.extension() == ".so";
 #endif
         }
+
+        // Module exception objects use the module's vtable/typeinfo; unloading the module
+        // before the host inspects them (FreeLibrary really unmaps on Windows) crashes.
+        // Call only from a catch block while the module is still loaded.
+        [[noreturn]] void rethrow_as_host_error() {
+            try { throw; }
+            catch (const std::exception &error) { throw std::runtime_error(error.what()); }
+            catch (...) { throw std::runtime_error("Unknown game module error"); }
+        }
     }
 
     Library::Library(const std::filesystem::path &path) : path_(std::filesystem::absolute(path)) {
@@ -97,9 +106,11 @@ namespace Modules {
             if (api_->id().empty() || api_->name().empty())
                 throw std::runtime_error("Incomplete game module API: " + utf8(path_));
         } catch (...) {
-            unload(handle_);
-            handle_ = nullptr;
-            throw;
+            try { rethrow_as_host_error(); } catch (...) {
+                unload(handle_);
+                handle_ = nullptr;
+                throw;
+            }
         }
     }
 
@@ -116,6 +127,10 @@ namespace Modules {
             reason = error.what();
             return -1;
         }
+    }
+
+    std::vector<std::string> Library::search(const std::filesystem::path &database, std::string_view query) const {
+        try { return api_->search(database, query); } catch (...) { rethrow_as_host_error(); }
     }
 
     Registry::Registry(const std::vector<std::filesystem::path> &directories) {
@@ -197,7 +212,7 @@ namespace Modules {
         state_.database_path = normalize_path(database);
         if (!output.empty()) state_.export_path(normalize_path(output));
         state_.skip_textures = skip_textures;
-        session_ = library_->api().open(state_);
+        try { session_ = library_->api().open(state_); } catch (...) { rethrow_as_host_error(); }
         if (!session_) throw std::runtime_error("Could not open game session");
     }
 
@@ -205,11 +220,11 @@ namespace Modules {
 
     void Session::extract(const std::string &asset, bool raw) {
         state_.extract_raw = raw;
-        session_->extract(state_, asset);
+        try { session_->extract(state_, asset); } catch (...) { rethrow_as_host_error(); }
     }
 
     void Session::animation(const std::string &skeleton, const std::string &asset, bool root_motion) {
         state_.root_motion = root_motion;
-        session_->animation(state_, skeleton, asset);
+        try { session_->animation(state_, skeleton, asset); } catch (...) { rethrow_as_host_error(); }
     }
 }

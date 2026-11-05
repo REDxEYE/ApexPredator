@@ -41,7 +41,7 @@ else()
     FetchContent_Declare(
             RedsCore
             GIT_REPOSITORY https://github.com/REDxEYE/RedsCore.git
-            GIT_TAG f70fbf44
+            GIT_TAG d0ba3565
             GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(RedsCore)

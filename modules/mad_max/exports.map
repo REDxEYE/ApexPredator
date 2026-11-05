@@ -1,0 +1,4 @@
+{
+    global: apex_game_module_v2;
+    local: *;
+};

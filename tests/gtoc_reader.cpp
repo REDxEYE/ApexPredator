@@ -3,8 +3,12 @@
 #include "redscore/platform/file/memory_file.h"
 #include <cstring>
 #include <iostream>
+#include <set>
 #include <stdexcept>
 #include <utility>
+
+// GTOC parsing does not require a process-wide asset database.
+std::optional<std::string> find_asset_name(uint64) { return std::nullopt; }
 
 void check(bool ok) { if (!ok) throw std::runtime_error("GTOC regression failed"); }
 void put(std::vector<uint8> &b, size_t p, uint32 v) {
@@ -55,13 +59,13 @@ void verify_enumerated_keys() {
         std::pair<bool, uint64> load_child_archive(const uint64 &) override { return {false, 0}; }
     } manager;
     GTOCArchive archive(manager, std::make_unique<IO::MemoryFile>(fixture()), 1);
-    std::vector<uint64> keys;
+    std::set<uint64> keys;
     archive.foreach_file([&](const Archive<uint64>::ArchiveEntry &entry) {
         check(archive.has(entry.key));
-        keys.push_back(entry.key);
+        keys.insert(entry.key);
         return true;
     });
-    check(keys == std::vector<uint64>{asset_path_hash("a.bin"), asset_path_hash("end")});
+    check(keys == std::set<uint64>{asset_path_hash("a.bin"), asset_path_hash("end")});
 }
 int main() {
     try {

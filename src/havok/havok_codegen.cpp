@@ -1,5 +1,6 @@
 // Created by RED on 12.10.2025.
 #include "havok/havok_codegen.h"
+#include "utils/cpp_identifier.h"
 
 #include <algorithm>
 #include <fstream>
@@ -139,7 +140,7 @@ static void emit_template_declaration(const SharedType &type, std::ostream &out)
         if (i) out << ", ";
         out << (std::holds_alternative<WeakType>(type->template_args[i].value) ? "typename" : "int64");
     }
-    out << "> struct " << type->name() << ";\n";
+    out << "> struct " << Utils::cpp_identifier(type->name()) << ";\n";
 }
 
 static void emit_struct(const SharedType &type, std::ostream &out) {
@@ -148,7 +149,7 @@ static void emit_struct(const SharedType &type, std::ostream &out) {
         type->parent() ? type->parent()->type_name() : "Havok::BaseType", type->size, type->align);
     if (const auto *members = std::get_if<std::vector<Member>>(&type->data)) {
         for (const auto &member : *members) {
-            out << std::format("    {} {}; // offset: {}, size: {}\n", member.type()->type_name(), member.name,
+            out << std::format("    {} {}; // offset: {}, size: {}\n", member.type()->type_name(), member.cpp_name,
                                member.offset, member.type()->size);
         }
     }
@@ -162,21 +163,21 @@ static void emit_definition(Context &ctx, const SharedType &type, std::ostream &
     if (auto it = ctx.enum_storage.find(type.get()); it != ctx.enum_storage.end()) {
         // Prefer the identity's scalar width/sign when present; wrappers can use different storage.
         const auto underlying = type->scalar_type.empty() ? it->second->type_name() : type->scalar_type;
-        out << std::format("enum class {} : {} {{}};\n\n", type->name(), underlying);
+        out << std::format("enum class {} : {} {{}};\n\n", type->type_name(), underlying);
     } else if (native_type(type) || supplied_type(type)) {
         out << "// Provided type " << type->type_name() << "\n";
     } else if (generated_record(type) && !ctx.enum_storage.contains(type.get())) {
         emit_struct(type, out);
     } else if (type->type == MetaType::PRIMITIVE && type->parent()) {
-        out << std::format("using {} = {};\n\n", type->name(), type->parent()->type_name());
+        out << std::format("using {} = {};\n\n", type->type_name(), type->parent()->type_name());
     } else if (!type->scalar_type.empty()) {
-        out << std::format("using {} = {};\n\n", type->name(), type->scalar_type);
+        out << std::format("using {} = {};\n\n", type->type_name(), type->scalar_type);
     } else if (type->type == MetaType::BASIC || type->type == MetaType::OPAQUE || type->type == MetaType::SPECIAL ||
                type->type == MetaType::PRIMITIVE) {
         if (!type->template_args.empty())
             throw std::runtime_error("No Havok support definition for " + type->type_name());
         // Unknown opaque data has no scalar semantics. Preserve its bytes, never guess an integer.
-        out << std::format("struct {} : Havok::BaseType {{\n    std::array<uint8, {}> bytes{{}};\n", type->name(), type->size);
+        out << std::format("struct {} : Havok::BaseType {{\n    std::array<uint8, {}> bytes{{}};\n", type->type_name(), type->size);
         out << "    void read(IO::File& buffer, Havok::Tag::TagFile&) override { buffer.read_exact<uint8>(bytes); }\n"
                "    void print(std::ostream& os) const override { os << to_json(); }\n"
                "    nlohmann::json to_json() const override { return bytes; }\n};\n\n";
@@ -188,7 +189,7 @@ static void emit_types(Context &ctx) {
     std::set<std::string> templates;
     for (const auto &type : ctx.ordered) {
         if (!generated_record(type) || ctx.enum_storage.contains(type.get())) continue;
-        if (type->template_args.empty()) ctx.fwd_header_stream << "struct " << type->name() << ";\n";
+        if (type->template_args.empty()) ctx.fwd_header_stream << "struct " << type->type_name() << ";\n";
         else if (templates.insert(type->name()).second) emit_template_declaration(type, ctx.fwd_header_stream);
     }
     // extra_support_types.h embeds these generated types. Put their complete dependency
@@ -223,10 +224,10 @@ void emit_struct_to_json_function_members(Context &ctx, const SharedType &type, 
     }
     for (const auto &member: type_members) {
         if (is_basic_type(member.type()) || ctx.enum_storage.contains(member.type().get())) {
-            impl_stream << std::format("    obj_[\"{}\"] = {};\n", member.name, member.name);
+            impl_stream << std::format("    obj_[\"{}\"] = {}::{};\n", member.name, type->type_name(), member.cpp_name);
         }
         else{
-            impl_stream << std::format("    obj_[\"{}\"] = {}.to_json();\n", member.name, member.name);
+            impl_stream << std::format("    obj_[\"{}\"] = {}::{}.to_json();\n", member.name, type->type_name(), member.cpp_name);
         }
     }
 }
@@ -261,10 +262,10 @@ void emit_struct_read_function_members(Context &ctx, const SharedType &type,
     for (const auto &member: type_members) {
         impl_stream << std::format("    buffer.set_position(_obj_start + {}, std::ios::beg);\n", member.offset);
         if (is_basic_type(member.type()) || ctx.enum_storage.contains(member.type().get())) {
-            impl_stream << std::format("    {} = buffer.read_pod<{}>();\n", member.name, member.type()->type_name());
+            impl_stream << std::format("    {}::{} = buffer.read_pod<{}>();\n", type->type_name(), member.cpp_name, member.type()->type_name());
         }
         else if (member.type()->type == MetaType::FIXED_ARRAY) {
-            impl_stream << std::format("    {}.read(buffer, tag_file);\n", member.name);
+            impl_stream << std::format("    {}::{}.read(buffer, tag_file);\n", type->type_name(), member.cpp_name);
             // auto inner_type = unwrap_weak(std::get<WeakType>(member.type()->template_args[0].value));
             // auto count = std::get<int64>(member.type()->template_args[1].value);
             // impl_stream << std::format("    for (size_t i = 0; i < {}; ++i) {{\n", count);
@@ -277,7 +278,7 @@ void emit_struct_read_function_members(Context &ctx, const SharedType &type,
             // impl_stream << "    }\n";
         }
         else {
-            impl_stream << std::format("    {}.read(buffer, tag_file);\n", member.name);
+            impl_stream << std::format("    {}::{}.read(buffer, tag_file);\n", type->type_name(), member.cpp_name);
         }
         offset += member.type()->size_without_padding();
     }
@@ -300,10 +301,7 @@ void emit_struct_print_function(Context &ctx, const SharedType &type,
                                 const std::vector<Member> &members,
                                 std::ofstream &impl_stream) {
     impl_stream << std::format("void {}::print(std::ostream &os) const {{\n", type->type_name());
-    if (type->parent() != nullptr) {
-        impl_stream << std::format("    {}::print(os);\n", type->parent()->type_name());
-    }
-    impl_stream << "    throw std::runtime_error(\"Not implemented\");\n";
+    impl_stream << "    os << to_json();\n";
     impl_stream << "}\n\n";
 }
 
@@ -343,7 +341,7 @@ void emit_type_infos(const Context &ctx) {
         }
         stream << std::format("    .hash = 0x{:08X},\n", type->hash);
         stream << std::format("    .type = CodeGen::MetaType({}),\n", std::to_underlying(type->type));
-        stream << std::format("    .name = \"{}\",\n", type->type_name());
+        stream << std::format("    .name = \"{}\",\n", type->schema_type_name());
         stream << "};\n\n";
     }
 }

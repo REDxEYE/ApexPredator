@@ -1,5 +1,8 @@
 // Created by RED on 19.09.2025.
 #include "apex/adf/sti.h"
+#include <unordered_set>
+
+#include "utils/cpp_identifier.h"
 
 #include "redscore/platform/logger.h"
 
@@ -98,6 +101,7 @@ std::string STI::TypeLibrary::register_name(const std::string &name, const uint3
             candidate += ch;
         }
     }
+    candidate = Utils::cpp_identifier(candidate);
     candidate += suffix;
     for (;;) {
         const auto [entry, inserted] = m_registered_names.emplace(candidate, hash);
@@ -108,6 +112,23 @@ std::string STI::TypeLibrary::register_name(const std::string &name, const uint3
         candidate.resize(candidate.size() - suffix.size());
         candidate += std::format("_{:08X}{}", hash, suffix);
     }
+}
+
+static std::string member_identifier(const std::string_view source_name,
+                                     const std::string_view enclosing_type,
+                                     std::unordered_set<std::string> &used_names) {
+    std::string candidate = Utils::cpp_identifier(source_name);
+    if (!candidate.empty() && candidate.front() >= '0' && candidate.front() <= '9') {
+        candidate.insert(0, "_");
+    }
+    if (candidate == enclosing_type) {
+        candidate += '_';
+    }
+    const std::string base = candidate;
+    for (uint32 n = 1; !used_names.insert(candidate).second; ++n) {
+        candidate = std::format("{}_{}", base, n);
+    }
+    return candidate;
 }
 
 STI::DataType remap_adf_type(const ADF::MetaType adf_meta_type) {
@@ -144,6 +165,7 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
     const uint32 type_hash = adf_type.def().hash;
     const ADF::TypeDef &type_def = adf_type.def();
     std::string type_name = std::string(adf.get_string(type_def.name_id));
+    const std::string source_name = type_name;
 
     // Check if type already registered and sizes match
     if (const auto it = m_types.find(type_hash); it != m_types.end()) {
@@ -169,16 +191,11 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
             const auto &adf_members = std::get<std::vector<ADF::StructMemberInfo> >(adf_type.type_data());
             std::vector<StructMember> members;
             members.reserve(adf_members.size());
+            std::unordered_set<std::string> used_names;
             for (const auto &adf_member: adf_members) {
-                std::string member_name = std::string(adf.get_string(adf_member.name_id));
-                if (!member_name.empty() && member_name.front() >= '0' && member_name.front() <= '9') {
-                    member_name.insert(0, "_");
-                }
-                if (member_name == type_name || member_name == adf.get_string(type_def.name_id)) {
-                    member_name += "_";
-                }
-
-                members.emplace_back(member_name,
+                const auto member_name = adf.get_string(adf_member.name_id);
+                const auto cpp_name = member_identifier(member_name, type_name, used_names);
+                members.emplace_back(member_name, cpp_name,
                                      adf_member.type_hash,
                                      adf_member.size,
                                      adf_member.offset,
@@ -190,7 +207,7 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,
                                                           remap_adf_type(type_def.type),
-                                                          members));
+                                                          members, source_name));
             return entry->second;
         }
         case ADF::MetaType::Pointer: {
@@ -210,7 +227,7 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,
                                                           remap_adf_type(type_def.type),
-                                                          TypeAndSize(0, type_def.element_type_hash)));
+                                                          TypeAndSize(0, type_def.element_type_hash), source_name));
             return type->second;
         }
         case ADF::MetaType::InlineArray: {
@@ -221,7 +238,7 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
             const auto &[entry, _] = m_types.emplace(type_hash,
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,
-                                                          remap_adf_type(type_def.type), data));
+                                                          remap_adf_type(type_def.type), data, source_name));
             return entry->second;
         }
         case ADF::MetaType::StringType: {
@@ -254,14 +271,16 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
             const auto &adf_members = std::get<std::vector<ADF::EnumMemberInfo> >(adf_type.type_data());
             std::vector<EnumMember> members;
             members.reserve(adf_members.size());
+            std::unordered_set<std::string> used_names;
             for (const auto &[name_id, value]: adf_members) {
-                members.emplace_back(adf.get_string(name_id), value);
+                const auto member_name = adf.get_string(name_id);
+                members.emplace_back(member_name, member_identifier(member_name, {}, used_names), value);
             }
             const auto &[entry, _] = m_types.emplace(type_hash,
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,
                                                           remap_adf_type(type_def.type),
-                                                          members));
+                                                          members, source_name));
             return entry->second;
         }
         case ADF::MetaType::StringHash: {
@@ -270,7 +289,7 @@ const STI::Type &STI::TypeLibrary::register_type(const ADF::Type &adf_type, cons
                                                      Type(type_name, type_hash,
                                                           type_def.size, type_def.alignment,
                                                           remap_adf_type(type_def.type),
-                                                          type_def.element_type_hash));
+                                                          type_def.element_type_hash, source_name));
             return entry->second;
         }
         case ADF::MetaType::DeferredType: {

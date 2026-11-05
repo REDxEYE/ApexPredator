@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "games.hpp"
+#include "tools/collector_policy.h"
 
 #include "apex/hashes.h"
 #include "apex/gtoc.h"
@@ -21,11 +21,14 @@
 #include "apex/asset_db.h"
 #include "apex/avtx.h"
 #include "platform/app_state.h"
+#include "modules/archive_mount.h"
 
-typedef struct Context {
+struct Context {
     AssetDB &db;
     ArchiveManager<u64> &archives;
-} Context;
+    const CollectorPolicy &policy;
+    std::vector<std::unique_ptr<GTOCArchive>> &pending_gtocs;
+};
 
 bool visit_adf_file(std::unique_ptr<IO::File> &&file) {
     ADF::ADFFile adf = ADF::ADFFile::from_buffer(std::move(file));
@@ -46,12 +49,10 @@ bool visit_ptpc_nodes(Context &ctx, const RuntimeNode &runtime_node) {
     }
     return true;
 }
-#if GAME==GAME_SECOND_EXTINCTION
-static std::vector<std::unique_ptr<GTOCArchive> > pending_gtocs;
-#endif
 
 static uint64 total_files = 0;
 static uint64 total_named = 0;
+
 
 static std::unordered_map<uint32, uint32> container_tags;
 // An embedded entity definition names its .ee container only when its stem
@@ -142,7 +143,7 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, const Ar
                 }
                 total_files++;
                 total_named++;
-                ctx.db.kv_put(hashes, l_entry.name);
+                ctx.db.kv_put(string_hashes(l_entry.name), l_entry.name);
                 if (file_offset == 0) {
                     ctx.db.files_put(hashes, l_entry.name, l_entry.size, 0);
                 } else {
@@ -152,17 +153,13 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, const Ar
         }
 
         file->set_position(0);
-#if GAME==GAME_SECOND_EXTINCTION
-        ingest_entity_archives(ctx.db, ctx.archives, toc);
-        // if (collector_gtocs.contains(entry.key)) return true;
-        // collector_gtocs.try_emplace(entry.key, std::move(toc));
-#endif
+        if (ctx.policy.ingest_discovered_entities)
+            ingest_entity_archives(ctx.db, ctx.archives, toc);
         auto gtoc_archive = std::make_unique<GTOCArchive>(ctx.archives, std::move(file), entry.key);
-#if GAME==GAME_SECOND_EXTINCTION
-        pending_gtocs.emplace_back(std::move(gtoc_archive));
-#else
-        ctx.archives.mount(std::move(gtoc_archive));
-#endif
+        if (ctx.policy.defer_gtocs)
+            ctx.pending_gtocs.emplace_back(std::move(gtoc_archive));
+        else
+            ctx.archives.mount(std::move(gtoc_archive));
     } else if (std::memcmp(first_buffer.data(), AAF_MAGIC, 4) == 0) {
         // GLog_Info("Found AAF: {}", entry.key);
         AAFArchive aaf_archive(std::move(file));
@@ -190,6 +187,7 @@ bool visit_archive_file(Context &ctx, std::unique_ptr<IO::File> &&file, const Ar
         u64 total = sarc->entries().size();
         total_files += total;
         total_named += total;
+        ctx.db.files_put(StringHashes(entry.key, 0), "", entry.size, 0);
         for (const auto &[i, arc_entry]: sarc->entries() | std::views::enumerate) {
             ctx.db.kv_put(string_hashes(arc_entry.name), arc_entry.name);
             ctx.db.files_put(string_hashes(arc_entry.name), arc_entry.name, arc_entry.size, entry.key);
@@ -246,72 +244,10 @@ void ingest_strings_file(AssetDB &db, const std::filesystem::path &path) {
 }
 
 
-#if GAME==GAME_SECOND_EXTINCTION
-void ingest_location_archives(AssetDB &db, ArchiveManager<u64> &archives) {
-    auto world = archives.get(asset_path_hash("locations/world.bin"));
-    if (!world) return;
-
-    const auto root = RuntimeNode::RootNode(world);
-    constexpr uint32 file_hash = const_hash_string("file");
-    constexpr uint32 location_type_hash = const_hash_string("location_type");
-    constexpr uint32 extension_list_hash = 0xA64E1E84; // RTPC extension list for near/far locations
-
-    struct LocationArchiveName {
-        uint32 lookup3;
-        std::string path;
-    };
-    std::unordered_map<uint64, LocationArchiveName> names;
-
-    for (const auto &location: root.children()) {
-        if (!location.has(file_hash) || !location.is<std::string>(file_hash)) continue;
-        const auto &stem = location.get<std::string>(file_hash);
-        if (stem.empty()) continue;
-
-        const auto add_name = [&](const std::string_view extension) {
-            std::string path;
-            path.reserve(stem.size() + extension.size());
-            path.append(stem);
-            path.append(extension);
-            const auto hashes = string_hashes(path);
-            names.try_emplace(hashes.murmur, LocationArchiveName{hashes.lookup3, std::move(path)});
-        };
-
-        add_name(".bl");
-        if (location.has(extension_list_hash) &&
-            location.is<std::string>(extension_list_hash)) {
-            const auto &extensions = location.get<std::string>(extension_list_hash);
-            auto ext_stream = std::stringstream{extensions};
-            while (ext_stream.good()) {
-                std::string extension;
-                ext_stream >> extension;
-                add_name(extension);
-            }
-        }
-    }
-    // Register real TAB entries before GTOC traversal needs lookup3 -> Murmur.
-    archives.foreach_file([&](const Archive<u64>::ArchiveEntry &entry) {
-        if (const auto it = names.find(entry.key); it != names.end()) {
-            const StringHashes hashes{it->second.lookup3, entry.key};
-            db.kv_put(hashes, it->second.path);
-            db.files_put(hashes, it->second.path, entry.size, entry.parent);
-        }
-        return true;
-    });
-}
-#endif
 
 int main(int argc, const char *argv[]) {
-#if GAME==GAME_GENERATION_ZERO
-    const auto db_path = std::filesystem::path("./../hashes.db");
-#elif GAME==GAME_RAGE2
-    const auto db_path = std::filesystem::path("./../rage2_hashes.db");
-#elif GAME==GAME_SECOND_EXTINCTION
-    const auto db_path = std::filesystem::path("./../second_extinction_hashes.db");
-#elif GAME==GAME_JUST_CAUSE_2
-    const auto db_path = std::filesystem::path("./../jc2_hashes.db");
-#else
-#error "Unsupported game"
-#endif
+    const auto policy = collector_policy();
+    const auto &db_path = policy.database_path;
     if (std::filesystem::exists(db_path)) {
         static AssetDB assetdb(db_path);
         AssetDB::set_instance(&assetdb);
@@ -330,32 +266,19 @@ int main(int argc, const char *argv[]) {
         return 0;
     }
 
-#if GAME==GAME_GENERATION_ZERO
-    ingest_strings_file(assetdb, "./../strings/generation_zero/file_locations.txt");
-    ingest_strings_file(assetdb, "./../strings/generation_zero/filenames.txt");
-    ingest_strings_file(assetdb, "./../strings/generation_zero/cross_game.txt");
-    ingest_strings_file(assetdb, "./../strings/generation_zero/game_dump_clean.txt");
-#elif GAME==GAME_RAGE2
-    ingest_strings_file(assetdb, "./../strings/generation_zero/file_locations.txt");
-    ingest_strings_file(assetdb, "./../strings/generation_zero/filenames.txt");
-    ingest_strings_file(assetdb, "./../strings/generation_zero/cross_game.txt");
-    ingest_strings_file(assetdb, "./../strings/generation_zero/game_dump_clean.txt");
-    ingest_strings_file(assetdb, "./../strings/rage2/filelist.txt");
-    ingest_strings_file(assetdb, "./../strings/rage2/rage2_exe_strings.txt");
-#elif GAME==GAME_SECOND_EXTINCTION
-    ingest_strings_file(assetdb, "./../strings/second_extinction/filelist.txt");
-#elif GAME==GAME_JUST_CAUSE_2
-    ingest_strings_file(assetdb, "./../strings/just_cause_2/just_cause_2_exe_strings.txt");
-#endif
+    for (const auto name: policy.string_files)
+        ingest_strings_file(assetdb, name);
     ApexAppState app_state(argv[1]);
-    app_state.mount_archives();
-#if GAME==GAME_SECOND_EXTINCTION
-    ingest_location_archives(assetdb, app_state.manager());
-#endif
+    mount_game_archives(app_state);
+    if (policy.ingest_locations)
+        policy.ingest_locations(assetdb, app_state.manager());
 
+    std::vector<std::unique_ptr<GTOCArchive>> pending_gtocs;
     Context context = {
         .db = *AssetDB::get_instance(),
-        .archives = app_state.manager()
+        .archives = app_state.manager(),
+        .policy = policy,
+        .pending_gtocs = pending_gtocs
     };
 
     auto mount_gtoc = [&](const std::string_view name) {
@@ -380,16 +303,13 @@ int main(int argc, const char *argv[]) {
         }
         buffer->set_position(0);
         auto gtoc_archive = std::make_unique<GTOCArchive>(manager, std::move(buffer), asset_path_hash(name));
-#if GAME==GAME_SECOND_EXTINCTION
-        pending_gtocs.emplace_back(std::move(gtoc_archive));
-#else
-        manager.mount(std::move(gtoc_archive));
-#endif
+        if (policy.defer_gtocs)
+            pending_gtocs.emplace_back(std::move(gtoc_archive));
+        else
+            manager.mount(std::move(gtoc_archive));
     };
-    mount_gtoc("sarc.0.gtoc");
-#if GAME==GAME_RAGE2 || GAME==GAME_SECOND_EXTINCTION
-    mount_gtoc("resourcesets/expentities.gtoc");
-#endif
+    for (const auto name: policy.initial_gtocs)
+        mount_gtoc(name);
 
 
     if (container_tags.empty()) {
@@ -412,13 +332,6 @@ int main(int argc, const char *argv[]) {
             return true; // Just skip file
         }
         visit_archive_file(context, std::move(file), entry);
-        // if (!assetdb.get_file(entry.key).has_value()) {
-        // #if GAME==GAME_GENERATION_ZERO
-        //             assetdb.files_put({static_cast<uint32>(entry.key), 0}, "", entry.size, entry.parent);
-        // #else
-        //             assetdb.files_put({0, entry.key}, "", entry.size, entry.parent);
-        // #endif
-        // }
         return true;
     };
 
@@ -430,8 +343,8 @@ int main(int argc, const char *argv[]) {
         }
         return visit_entry(entry, app_state.manager().get(entry.key));
     });
-#if GAME==GAME_SECOND_EXTINCTION
-    GLog_Info("Processing pending GTOCs");
+    if (policy.defer_gtocs)
+        GLog_Info("Processing pending GTOCs");
     for (auto &pending: pending_gtocs) {
         if (!pending) continue;
         auto *mounted = pending.get();
@@ -473,7 +386,6 @@ int main(int argc, const char *argv[]) {
             }
         }
     }
-#endif
 
 
     GLog_Info("Total files: {}", total_files);

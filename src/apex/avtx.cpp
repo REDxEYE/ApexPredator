@@ -26,7 +26,7 @@ bool operator&(AVATextureFlag lhs, AVATextureFlag rhs) {
     return (static_cast<uint32>(lhs) & static_cast<uint32>(rhs)) != 0;
 }
 
-std::unique_ptr<Texture> AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, const uint64 hash, ApexArchiveManager &manager) {
+Texture::Ptr AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, const uint64 hash, ApexArchiveManager &manager) {
     ZoneScoped
     const auto header = buffer->read_pod<Header>();
     if (std::memcmp(header.ident, "AVTX", 4) != 0) {
@@ -38,7 +38,7 @@ std::unique_ptr<Texture> AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, c
         return nullptr;
     }
 
-    const auto load_streams = [&](const auto &streams) -> std::unique_ptr<Texture> {
+    const auto load_streams = [&](const auto &streams) -> Texture::Ptr {
         std::vector<uint8> compressed_data;
         if (header.flags & AVATextureFlag::STREAMED) {
             std::filesystem::path atx_path = {};
@@ -97,8 +97,7 @@ std::unique_ptr<Texture> AVTX::from_buffer(std::unique_ptr<IO::File> &&buffer, c
             buffer->read_exact(compressed_data);
         }
 
-        return std::make_unique<Texture>(Texture::from_dxgi(header.format, compressed_data, header.width,
-                                                            header.height, header.depth));
+        return Texture::from_dxgi(header.format, compressed_data, header.width, header.height, header.depth);
     };
 
     // Both layouts use version 1. The first resident payload begins immediately

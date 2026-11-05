@@ -78,7 +78,7 @@ def model():
 def verify(scene):
     primitives = scene['meshes'][0]['primitives']
     assert len(primitives) == 5
-    cases = [(0.00001, 2, (1, 2, 3)), (-0.00002, 3, (3 * 16384 / 32767, 0, -3)),
+    cases = [(0.00001, 2, (1, 2, 3)), (-0.00002, 3, (3 * 16384 / 32767, 0, -3 * 32768 / 32767)),
              (0.00001, 1, (1, 2, 3)), (0, 1, (1, 2, 3)),
              (0.00001, 2, (2 * 16384 / 32767, 0, -2))]
     for primitive, (depth, scale, base) in zip(primitives, cases):

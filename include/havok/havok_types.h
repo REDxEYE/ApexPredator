@@ -26,6 +26,8 @@ namespace Havok::CodeGen {
 
     struct Member {
         std::string name;
+        // C++ declaration spelling; name retains the original schema/JSON key.
+        std::string cpp_name;
         uint64 flags;
         uint64 offset;
 
@@ -33,6 +35,7 @@ namespace Havok::CodeGen {
 
         Member(std::string name, const uint64 flags, const uint64 offset, const SharedType &type)
             : name(std::move(name)),
+              cpp_name(this->name),
               flags(flags),
               offset(offset),
               type_(type) {
@@ -108,6 +111,7 @@ namespace Havok::CodeGen {
         TypeData data{};
 
         [[nodiscard]] std::string name() const;
+        [[nodiscard]] std::string schema_type_name() const;
 
         [[nodiscard]] std::string type_name() const;
 
@@ -125,6 +129,7 @@ namespace Havok::CodeGen {
 
     private:
         std::string m_name;
+        std::string m_schema_name;
     };
 
     class TypeLibrary {

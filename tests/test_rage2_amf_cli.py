@@ -124,16 +124,17 @@ def main():
             arc.extend(payload)
         (initial / 'game0.tab').write_bytes(tab)
         (initial / 'game0.arc').write_bytes(arc)
-        db_path = root / 'rage2_hashes.db'
+        db_path = root / 'hashes.db'
         with sqlite3.connect(db_path) as db:
             db.executescript('CREATE TABLE kv(lookup3 INTEGER NOT NULL,murmur INTEGER NOT NULL DEFAULT 0,'
                              'v TEXT NOT NULL,PRIMARY KEY(lookup3,murmur)) WITHOUT ROWID;'
-                             'CREATE TABLE files(lookup3 INTEGER NOT NULL,murmur INTEGER NOT NULL DEFAULT 0,'
+                             'CREATE TABLE files_rage2(lookup3 INTEGER NOT NULL,murmur INTEGER NOT NULL DEFAULT 0,'
                              'name TEXT,size INTEGER NOT NULL,parent INTEGER NOT NULL DEFAULT 0,'
-                             'PRIMARY KEY(lookup3,murmur)) WITHOUT ROWID;')
+                             'PRIMARY KEY(lookup3,murmur)) WITHOUT ROWID;'
+                             'PRAGMA user_version=2;')
             for name, lookup3, murmur, payload in assets:
                 db.execute('INSERT INTO kv VALUES(?,?,?)', (lookup3, murmur, name))
-                db.execute('INSERT INTO files VALUES(?,?,?,?,0)', (lookup3, murmur, name, len(payload)))
+                db.execute('INSERT INTO files_rage2 VALUES(?,?,?,?,0)', (lookup3, murmur, name, len(payload)))
         for path, index_width in [(MODEL, 2), (MESH, 2), (WIDE_MESH, 4)]:
             output = root / f'out-{index_width}-{Path(path).suffix}'
             subprocess.run([str(args.binary.resolve()), 'extract', str(install), path,

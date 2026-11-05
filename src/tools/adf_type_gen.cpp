@@ -1,5 +1,6 @@
 #include <ranges>
 #include <unordered_set>
+#include <utility>
 
 #include "apex/asset_db.h"
 #include "apex/sarc.h"
@@ -8,18 +9,9 @@
 #include "platform/archive_manager.h"
 #include "apex/package/tab_archive.h"
 
-#include "games.hpp"
-#if GAME==GAME_GENERATION_ZERO
-#include "apex/adf/generation_zero_builtin_adf.hpp"
-#elif GAME==GAME_RAGE2
-#include "apex/adf/rage2_builtin_adf.hpp"
-#elif GAME==GAME_SECOND_EXTINCTION
-#include "apex/adf/second_extinction_builtin_adf.hpp"
-#else
-#error "Unsupported game"
-#endif
 #include "apex/adf/sti.h"
 #include "platform/app_state.h"
+#include "modules/archive_mount.h"
 #include "redscore/platform/logger.h"
 #include "tracy/Tracy.hpp"
 
@@ -30,12 +22,13 @@
 #include <unistd.h>
 #endif
 
+// Each generator target links its game's configuration implementation.
+void register_builtin_adf_types(STI::TypeLibrary &lib);
+std::pair<const char *, const char *> adf_generator_output_paths();
+
 
 void collect_types(ApexAppState &app_state, STI::TypeLibrary &lib) {
-    for (auto [data, size]: builtin_adfs) {
-        auto adf = ADF::ADFFile::from_buffer(data, size);
-        STI::register_types_from_adf(lib, adf);
-    }
+    register_builtin_adf_types(lib);
 
     auto &manager = app_state.manager();
 
@@ -119,7 +112,7 @@ int main(int argc, const char *argv[]) {
     //     printf("\n");
 
     ApexAppState app_state(argv[1]);
-    app_state.mount_archives();
+    mount_game_archives(app_state);
 
     AssetDB db(argv[2]);
     AssetDB::set_instance(&db);
@@ -140,19 +133,7 @@ int main(int argc, const char *argv[]) {
 
     collect_types(app_state, type_library);
 
-    STI::generate_code(type_library,
-#if GAME==GAME_GENERATION_ZERO
-                       "../modules/generation_zero/src/apex/adf/generated",
-                       "../modules/generation_zero/include/apex/adf/generated"
-#elif GAME==GAME_RAGE2
-                       "../modules/rage2/src/apex/adf/generated",
-                       "../modules/rage2/include/apex/adf/generated"
-#elif GAME==GAME_SECOND_EXTINCTION
-                       "../modules/second_extinction/src/apex/adf/generated",
-                       "../modules/second_extinction/include/apex/adf/generated"
-#else
-#error "Unsupported game"
-#endif
-    );
+    const auto [source_path, include_path] = adf_generator_output_paths();
+    STI::generate_code(type_library, source_path, include_path);
     return 0;
 }

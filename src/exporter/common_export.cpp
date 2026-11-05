@@ -2,92 +2,33 @@
 
 #include "exporter/common_export.h"
 
-#include "games.hpp"
-#include "apex/pcbb/pcbb.hpp"
-
-#if GAME==GAME_JUST_CAUSE_2
-#include "apex/rbmdl/rbmdl_file.hpp"
-#include "exporter/pcbb_export.h"
-#else
-#include "apex/avtx.h"
 #include "apex/hashes.h"
-#include "apex/rtpc.h"
-#include "apex/adf/adf.h"
-#include "exporter/adf_export.h"
-#include "exporter/ddsc_export.h"
-#include "exporter/fmod_export.h"
-#include "exporter/havok_export.h"
-#include "exporter/rtpc_export.h"
-#endif
+#include "exporter/format_dispatch.h"
 #include "redscore/platform/logger.h"
 #include "redscore/utils/simple_fileio.h"
-
-
-
 #include "tracy/Tracy.hpp"
 
-#define MKV_MAGIC "\x1A\x45\xDF\xA3"
-
+#include <exception>
+#include <filesystem>
+#include <format>
+#include <utility>
 
 VM::NodePtr export_file(ApexAppState &app_state, const uint64 hash) {
+    const auto path = find_asset_name(hash).value_or(std::format("unnamed/unknown_{:08X}", hash));
+    return export_file(app_state, hash, app_state.manager().get(hash), path);
+}
+
+VM::NodePtr export_file(ApexAppState &app_state, const uint64 hash, std::unique_ptr<IO::File>&& buffer,
+                        const std::string_view path) {
     ZoneScoped
-    auto &manager = app_state.manager();
-    auto path = find_asset_name(hash).value_or(std::format("unnamed/unknown_{:08X}", hash));
     GLog_Info("Exporting file: {}", path);
-    auto buffer = manager.get(hash);
     if (!buffer) {
         GLog_Error("File \"{}\" not found", path);
         return {};
     }
     const auto &mb = buffer->cbuffer();
 
-#if GAME==GAME_JUST_CAUSE_2
-    if (std::memcmp(mb.data() + 4, RBMDL_MAGIC, 4) == 0) {
-        return Apex::export_rbmdl(app_state, hash, std::move(buffer));
-    }
-    if (std::memcmp(mb.data(), PCBB_MAGIC, 4) == 0) {
-        return Apex::export_pcbb(app_state, hash, std::move(buffer));
-    }
-#else
-    if (std::memcmp(mb.data(), ADF_MAGIC, 4) == 0 || std::memcmp(mb.data(), ADF_SMALL_MAGIC, 4) == 0) {
-        GLog_Info("Detected ADF file");
-        return export_adf_file_from_buffer(app_state, hash, std::move(buffer));
-    }
-    if (std::memcmp(mb.data(), AVTX_MAGIC, 4) == 0) {
-        GLog_Info("Detected AVTX file");
-        export_ddsc(app_state, hash, std::move(buffer));
-        return {};
-    }
-    if (std::memcmp(mb.data(), RIFF_MAGIC, 4) == 0) {
-        GLog_Info("Detected FMOD bank/RIFF file");
-        export_fmod_bank(app_state, hash, std::move(buffer));
-        return {};
-    }
-    if (std::memcmp(mb.data(), RTPC_MAGIC, 4) == 0) {
-        GLog_Info("Detected RTPC file");
-        return export_rtpc(app_state, std::move(buffer), hash);
-    }
-    if (std::memcmp(mb.data() + 4, HAVOK_MAGIC, 4) == 0) {
-        GLog_Info("Detected Havok file");
-        return export_havok_file(app_state, std::move(buffer), path);
-    }
-    if (std::memcmp(mb.data(), MKV_MAGIC, 4) == 0) {
-        GLog_Info("Detected MKV file");
-        const std::filesystem::path export_path = get_export_path(app_state.export_path(), hash, ".mkv");
-
-        std::filesystem::create_directories(export_path.parent_path());
-
-        try {
-            write_file(export_path, mb);
-            GLog_Info("MKV file \"{}\" been written to file: \"{}\"", path, export_path.string());
-        } catch (const std::exception &e) {
-            GLog_Error("Failed to write MKV file \"{}\" to path: \"{}\". Error: {}", path, export_path.string(),
-                       e.what());
-        }
-        return {};
-    }
-#endif
-
+    if (auto result = dispatch_file(app_state, hash, buffer, path)) return std::move(*result);
     const std::filesystem::path &unk_file_export_path = get_export_path(app_state.export_path(), hash, ".bin");
     std::filesystem::create_directories(unk_file_export_path.parent_path());
     try {

@@ -1,0 +1,378 @@
+// Created by RED on 12.01.2026.
+
+#include "apex/adf/adf.h"
+#include "apex/adf/generated/adf_types.h"
+#include "apex/adf/sti_shared.h"
+#include "apex/hashes.h"
+#include "exporter/adf_export.h"
+#include "exporter/amf_export.h"
+#include "redscore/platform/logger.h"
+#include "redscore/platform/texture/texture.h"
+#include "utils/hash_helper.h"
+
+#include "zstd.h"
+#include "tracy/Tracy.hpp"
+#include "glm/glm.hpp"
+
+#include <optional>
+#pragma pack(push, 1)
+
+struct VertexID_UV {
+    uint32 vertex_id;
+    int16 UV[2];
+};
+
+
+static_assert(sizeof(VertexID_UV) == 8, "VertexID_UV size mismatch");
+
+struct VertexPosNorm {
+    uint16 pos[4];
+    int8 norm[3];
+    uint8 mask_d;
+};
+
+static_assert(sizeof(VertexPosNorm) == 12, "VertexPosNorm size mismatch");
+#pragma pack(pop)
+
+using namespace ADFTypes;
+
+std::optional<IO::Buffer> decompress_data(const CompressedData &data) {
+    ZoneScoped
+    IO::Buffer decompressed_data(data.UncompressedSize);
+
+    const auto compressed_header = reinterpret_cast<const CompressedHeader *>(data.Data.data());
+    const uint8 *compressed_data = data.Data.data() + sizeof(CompressedHeader);
+
+    switch (compressed_header->comp_type) {
+        case CompType::zstd: {
+            const size_t zstd_res = ZSTD_decompress(decompressed_data.data(), decompressed_data.size(),
+                                                    compressed_data, data.Data.size() - sizeof(CompressedHeader));
+            const auto error = static_cast<ZSTD_ErrorCode>(ZSTD_isError(zstd_res));
+            if (error != ZSTD_error_no_error) {
+                GLog_Error("ZSTD decompression error: {}", ZSTD_getErrorName(error));
+                return {};
+            }
+            assert(zstd_res == compressed_header->decomp_size && "ZSTD decompression size mismatch");
+        }
+        break;
+        default:
+            GLog_Error("Unsupported compression type: {}", compressed_header->comp_type);
+            return {};
+    }
+
+    return std::move(decompressed_data);
+}
+
+Texture::Ptr export_terrain_texture(const TerrainTexture &terrain_texture, uint32 expected_channels) {
+    ZoneScoped
+    if (terrain_texture.Width == 0 || terrain_texture.Height == 0 || terrain_texture.Data.UncompressedSize == 0) {
+        return nullptr;
+    }
+
+    const float32 pixel_size = static_cast<float32>(terrain_texture.Data.UncompressedSize) /
+                               (static_cast<float32>(terrain_texture.Width) * terrain_texture.Height);
+
+
+    const auto decompressed_data = decompress_data(terrain_texture.Data);
+    if (!decompressed_data) {
+        GLog_Error("Failed to decompress terrain texture");
+        return nullptr;
+    }
+
+    auto fmt = DDSDXGIFormat::DXGI_FORMAT_B8G8R8A8_UNORM;
+
+    switch (terrain_texture.BlockCompressionType) {
+        case BlockCompressionType::E_BLOCKCOMPRESSIONTYPE_BC7:
+            fmt = DDSDXGIFormat::DXGI_FORMAT_BC7_UNORM;
+            break;
+        case BlockCompressionType::E_BLOCKCOMPRESSIONTYPE_BC3:
+            fmt = DDSDXGIFormat::DXGI_FORMAT_BC3_UNORM;
+            break;
+        case BlockCompressionType::E_BLOCKCOMPRESSIONTYPE_NONE: {
+            if (expected_channels == 1 && pixel_size == 1) {
+                fmt = DDSDXGIFormat::DXGI_FORMAT_R8_UNORM;
+            } else if (expected_channels == 1 && pixel_size == 2) {
+                fmt = DDSDXGIFormat::DXGI_FORMAT_R16_UNORM;
+            } else if (expected_channels == 2 && pixel_size == 4) {
+                fmt = DDSDXGIFormat::DXGI_FORMAT_R16G16_UNORM;
+            } else if (expected_channels == 3 && pixel_size == 3) {
+                fmt = DDSDXGIFormat::DXGI_FORMAT_CUSTOM_R8G8B8_UNORM;
+            } else if (expected_channels == 4 && pixel_size == 4) {
+                fmt = DDSDXGIFormat::DXGI_FORMAT_R8G8B8A8_UNORM;
+            } else {
+                GLog_Error("Unsupported terrain texture format with %i channels and pixel size %f", expected_channels,
+                           pixel_size);
+                return nullptr;
+            }
+            break;
+        }
+        default:
+            GLog_Error("Unsupported terrain texture compression type");
+            return nullptr;
+    }
+
+    return Texture::from_dxgi(fmt, decompressed_data->as_span(), terrain_texture.Width, terrain_texture.Height, 1);
+}
+
+
+VM::NodePtr export_terrain_patch(ApexAppState &app_state, const StreamPatchBlockHeader *header,
+                                 const TerrainPatch *terrain_patch) {
+    ZoneScoped
+    const uint32 patch_x_pos = header->PatchPositionX;
+    const uint32 patch_z_pos = header->PatchPositionZ;
+    const TerrainMesh *terrain_mesh = &terrain_patch->TerrainMesh;
+
+    auto vertices1_buffer = decompress_data(terrain_mesh->Vertices);
+    if (!vertices1_buffer) {
+        GLog_Error("Failed to decompress terrain texture");
+        return {};
+    }
+    auto vertices2_buffer = decompress_data(terrain_mesh->Vertices2);
+    if (!vertices2_buffer) {
+        GLog_Error("Failed to decompress terrain texture");
+        return {};
+    }
+
+    auto indices_buffer = decompress_data(terrain_mesh->Indices);
+    if (!indices_buffer) {
+        GLog_Error("Failed to decompress terrain texture");
+        return {};
+    }
+
+    std::string patch_name = std::format("terrain_patch_{}_{}_lod_{}", patch_x_pos, patch_z_pos, header->PatchLod);
+
+
+    assert(vertices1_buffer->size()%8==0);
+    assert(vertices2_buffer->size()%12==0);
+    assert(indices_buffer->size()%6==0);
+    const uint32 vertex_count = vertices1_buffer->size() / sizeof(VertexID_UV);
+
+    std::vector<glm::vec3> positions(vertex_count);
+    std::vector<glm::vec3> normals(vertex_count);
+    std::vector<glm::vec2> uv(vertex_count);
+    std::vector<uint32> indices(indices_buffer->size() / 2);
+
+    // vec3 bbox_min = {};
+    // vec3 bbox_max = {};
+
+    int16 uv_dims[2] = {};
+    uv_dims[0] = (int16) terrain_patch->TerrainDisplacementTexture.Width;
+    uv_dims[1] = (int16) terrain_patch->TerrainDisplacementTexture.Height;
+    if (terrain_patch->DisplacementDownsampled) {
+        uv_dims[0] *= 2;
+        uv_dims[1] *= 2;
+    }
+
+    auto id_uv = (vertices1_buffer->readonly_view_as<VertexID_UV>());
+    auto pos_norm = (vertices2_buffer->readonly_view_as<VertexPosNorm>());
+
+    for (int i = 0; i < vertex_count; ++i) {
+        uint32 vert_id = id_uv[i].vertex_id;
+        const uint16 *pos = pos_norm[vert_id].pos;
+        const int8 *norm = pos_norm[vert_id].norm;
+
+        float32 x = ((float32) (pos[0] - 8192) / 32768.f);
+        float32 y = ((float32) (pos[1] - 8192) / 32768.f) * 10.f;
+        float32 z = ((float32) (pos[2] - 8192) / 32768.f);
+        positions[i] = {x * 200.f, y * 200.f, z * 200.f};
+        float32 nx = ((float32) (norm[0]) / 127.f);
+        float32 ny = ((float32) (norm[1]) / 127.f);
+        float32 nz = ((float32) (norm[2]) / 127.f);
+        normals[i] = {nx, ny, nz};
+
+        const float32 half_pixel_x = 1.0f / (float32) uv_dims[0];
+        const float32 half_pixel_y = 1.0f / (float32) uv_dims[1];
+
+        uv.emplace_back(
+            (float32) id_uv[i].UV[0] / (float32) uv_dims[0] + half_pixel_x,
+            (float32) id_uv[i].UV[1] / (float32) uv_dims[1] + half_pixel_y
+        );
+    }
+
+    std::copy_n(reinterpret_cast<const uint16 *>(indices_buffer->data()), indices_buffer->size() / 2, indices.data());
+
+    auto &builder = app_state.models();
+    auto patch_mesh_node = builder.create_node(patch_name);
+    patch_mesh_node->model = std::make_shared<VM::Model>();
+    auto &sub = patch_mesh_node->model->submodels.emplace_back();
+    auto &mesh = sub.meshes.emplace_back();
+    mesh.name = patch_name;
+    auto &primitive = mesh.primitives.emplace_back();
+
+    auto to_u8_vec = []<typename T>(std::vector<T> &vec) {
+        const uint8 *data = (uint8 *) vec.data();
+        return VM::DataBuffer{data, data + vec.size() * sizeof(T)};
+    };
+
+    primitive.set_attribute({
+        VM::ElementUsage::Position, 0, "", VM::ElementFormat::F32, VM::ElementType::Vec3, false, vertex_count,
+        to_u8_vec(positions)
+    });
+    primitive.set_attribute({
+        VM::ElementUsage::Normal, 0, "", VM::ElementFormat::F32, VM::ElementType::Vec3, false, vertex_count,
+        to_u8_vec(normals)
+    });
+    primitive.set_attribute({
+        VM::ElementUsage::TexCoord, 0, "", VM::ElementFormat::F32, VM::ElementType::Vec2, false, vertex_count,
+        to_u8_vec(uv)
+    });
+    primitive.set_indices(indices.data(), indices.size() * sizeof(uint32), VM::IndexType::U32, indices.size());
+    patch_mesh_node->transform.translation = {patch_x_pos * 200.f, 0.f, patch_z_pos * 200.f};
+    auto material = std::make_shared<VM::Material>();
+    primitive.material = material;
+    material->metallic_factor = 0.f;
+
+    if (auto displacement_texture = export_terrain_texture(terrain_patch->TerrainDisplacementTexture, 1)) {
+        std::string patch_texture_name = std::format("{}_disp", patch_name);
+
+        if (displacement_texture->bpc() == 1) {
+            builder.scene.extra_files.push_back({
+                patch_texture_name + ".png", displacement_texture->save_to_memory(MemoryFormat::PNG)
+            });
+        } else {
+            builder.scene.extra_files.push_back({
+                patch_texture_name + ".dds", displacement_texture->save_to_memory(MemoryFormat::DDS)
+            });
+        }
+    }
+
+    if (auto color_texture = export_terrain_texture(terrain_patch->TerrainColorTexture, 4)) {
+        std::string patch_texture_name = std::format("{}_color", patch_name);
+        material->albedo = VM::png_texture(patch_texture_name, color_texture->save_to_memory(MemoryFormat::PNG));
+    }
+
+    // Texture *normal_texture = export_terrain_texture(&terrain_patch->TerrainNormalTexture, 4, NULL);
+    // if (normal_texture != NULL) {
+    //     std::string patch_texture_name = {};
+    //     String_copy_from(&patch_texture_name, &patch_name);
+    //     String_append_cstr(&patch_texture_name, "_normal");
+    //     GLTFContext_material_set_normal_from_data(context, &patch_texture_name, material_id, normal_texture);
+    //     Texture_free(normal_texture);
+    //     String_free(&patch_texture_name);
+    // }
+    // std::string tmp_name = {}; {
+    //     std::string *texture_save_path = GLTFContext_data_path(context);
+    //     String_copy_from(&tmp_name, texture_save_path);
+    //     Path_join(&tmp_name, &patch_name);
+    //     String_append_cstr(&tmp_name, "_duplex");
+    //     String_free(texture_save_path);
+    //     Path_normalize_native(&tmp_name);
+    // }
+
+    // Texture *duplex_texture = export_terrain_texture(&terrain_patch->TerrainMaterialDuplexTexture, 2, &tmp_name);
+    // String_free(&tmp_name);
+    // if (duplex_texture != NULL) {
+    //     std::string patch_texture_name = {};
+    //     String_copy_from(&patch_texture_name, &patch_name);
+    //     String_append_cstr(&patch_texture_name, "_duplex");
+    //     std::string *texture_save_path = GLTFContext_data_path(context);
+    //     const uint64 hash = hash_string(&patch_texture_name);
+    //     String_append_format(texture_save_path, "/%s_%08X", String_data(&patch_texture_name), hash);
+    //     String_free(&patch_texture_name);
+    //     Texture_save(duplex_texture, texture_save_path);
+    //     String_free(texture_save_path);
+    //     Texture_free(duplex_texture);
+    //     // std::string patch_texture_name = {};
+    //     // String_copy_from(&patch_texture_name, &patch_name);
+    //     // String_append_cstr(&patch_texture_name, "_duplex");
+    //     // GLTFContext_material_set_roughness_metallic_from_data(context, &patch_texture_name, material_id,
+    //     //                                                       duplex_texture);
+    // }
+    return patch_mesh_node;
+}
+
+void export_terrain_instances(ApexAppState &app_state,
+                              const StreamPatchBlockHeader &header,
+                              const InstanceDataPatch &instance_data_patch
+) {
+    ZoneScoped
+    const uint32 patch_x_pos = header.PatchPositionX;
+    const uint32 patch_z_pos = header.PatchPositionZ;
+    const uint32 patch_size = 1 << header.PatchLod;
+
+    for (const auto &instance_layer: instance_data_patch.InstanceDataLayers) {
+        const auto layer_name = find_asset_name(instance_layer.Name).value_or(
+            std::format("layer_0x{:08X}", instance_layer.Name.storage));
+        for (int j = 0; j < instance_layer.Instances.size(); ++j) {
+            const VegetationSystemInstance &veg_instance = instance_layer.Instances[j];
+            std::string instance_name = std::format("instance_{}_{}", layer_name, j);
+            const auto instance_node = app_state.models().create_node(instance_name);
+            instance_node->transform.translation = {
+                patch_x_pos * 50 + static_cast<float32>(veg_instance.X) / patch_size * 0.93f / 8.f,
+                (veg_instance.Y / patch_size * 0.93f / 32.f),
+                patch_z_pos * 50 + static_cast<float32>(veg_instance.Z) / patch_size * 0.93f / 8.f
+            };
+        }
+    }
+}
+
+VM::NodePtr export_stream_patch_file(ApexAppState &app_state, ADF::ADFFile &adf) {
+    ZoneScoped
+    const auto patch_file_header = convert<StreamPatchFileHeader>(adf.read_instance(0));
+    for (int i = 1; i < adf.instances().size(); ++i) {
+        const auto patch_instance = adf.read_instance(i);
+
+        if (const StreamPatchBlockHeader *block_header = as<StreamPatchBlockHeader>(patch_instance)) {
+            const auto block_data = adf.read_instance(i + 1);
+            if (const auto *terrain_patch = as<TerrainPatch>(block_data)) {
+                const auto node = export_terrain_patch(app_state, block_header, terrain_patch);
+                if (bool(node)) {
+                    app_state.models().add_to_scene(node);
+                }
+                // } else if (block_data_instance->type_hash == STI_TYPE_HASH_InstanceDataPatch) {
+                //     const InstanceDataPatch *instance_data_patch = (InstanceDataPatch *) block_data;
+                //     export_terrain_instances(context, archive_manager, block_header, instance_data_patch, export_path);
+                // } else if (const auto *instance_patch = as<InstanceDataPatch>(block_data)) {
+                // } else if (const auto *world_audio_patch = as<WorldAudioPatchData>(block_data)) {
+                // } else if (const auto *world_audio_normal_patch = as<WorldAudioPatchNormalData>(block_data)) {
+            } else {
+                const auto &ti = typeid(block_data.get());
+                GLog_Warning("Unsupported block type: {}", ti.name());
+                // throw std::runtime_error("Unsupported block type: " + std::string(ti.name()));
+            }
+            i++;
+        }
+    }
+    return {};
+}
+
+std::optional<AdfAction> export_apex_adf_instance(ApexAppState &app_state, ADF::ADFFile &adf,
+                                                   int &instance_id, const uint64 path_hash) {
+    const auto &instances = adf.instances();
+    const auto type_hash = instances[instance_id].type_hash;
+    if (type_hash == std::to_underlying(ADFHashes::WorldSettings)) {
+        const auto world_settings = adf.read_instance<WorldSettings>(instance_id);
+        const uint32 base_lod = world_settings->PatchBaseLod;
+        const uint32 lod_size = 1 << base_lod;
+        const uint32 world_x_size_in_chunks = world_settings->WorldSize[0] / lod_size;
+        const uint32 world_y_size_in_chunks = world_settings->WorldSize[2] / lod_size;
+        for (int x = 0; x < world_x_size_in_chunks; ++x) {
+            for (int y = 0; y < world_y_size_in_chunks; ++y) {
+                GLog_Info("Exporting tile %02ix%02i at LOD %i", x, y, base_lod);
+                const std::string chunk_patch_path = std::format(
+                    "terrain/hp/patches/patch_{:02}_{:02}_{:02}.streampatch", base_lod, x, y);
+                export_adf_file(app_state, asset_path_hash(chunk_patch_path));
+            }
+        }
+        return AdfAction{};
+    }
+    if (type_hash == std::to_underlying(ADFHashes::StreamPatchFileHeader)) {
+        return AdfAction{true, export_stream_patch_file(app_state, adf)};
+    }
+    if (type_hash == std::to_underlying(ADFHashes::AmfModel)) {
+        if (instances.size() != 1) {
+            throw std::runtime_error("ADF with AmfModel should have only one instance");
+        }
+        const auto model = adf.read_instance<AmfModel>(instance_id);
+        return AdfAction{true, export_amf_model(app_state, model.get(), path_hash)};
+    }
+    if (type_hash == std::to_underlying(ADFHashes::AmfMeshHeader)) {
+        if (instances.size() != 2) {
+            throw std::runtime_error("ADF with AmfMeshHeader should have only two instances");
+        }
+        const auto mesh_header = adf.read_instance<AmfMeshHeader>(instance_id);
+        const auto mesh_buffers = adf.read_instance<AmfMeshBuffers>(++instance_id);
+        return AdfAction{true, export_amf_mesh(app_state, path_hash, mesh_header.get(), mesh_buffers.get())};
+    }
+    return std::nullopt;
+}

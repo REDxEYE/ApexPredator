@@ -42,6 +42,8 @@ static bool is_simple_type(DataType type) {
            type == DataType::DeferredType;
 }
 
+std::string get_qualified_type_name(const Type &type, const Type &inner_type);
+
 void emit_type_forward_declaration(const Type &type, std::ofstream &header_stream) {
     if (type.type == DataType::Structure) {
         header_stream << std::format("struct {}; // size: {}\n", type.type_name(), type.size);
@@ -71,21 +73,26 @@ void emit_struct(const TypeLibrary &lib, const Type &type, std::ofstream &header
             case DataType::Bitfield:
             case DataType::StringType:
             case DataType::StringHash:
+                header_stream << std::format("    {} {}; // offset: {}, size: {}\n",
+                                             member_type.type_name(), member.cpp_name, member.offset, member.size);
+                break;
             case DataType::Enumeration:
             case DataType::Structure:
                 header_stream << std::format("    {} {}; // offset: {}, size: {}\n",
-                                             member_type.type_name(), member.name, member.offset, member.size);
+                                             get_qualified_type_name(type, member_type), member.cpp_name,
+                                             member.offset, member.size);
                 break;
 
             case DataType::Pointer:
-                header_stream << std::format("    u64 {}; // offset: {}, size: {}\n", member.name, member.offset, member.size);
+                header_stream << std::format("    u64 {}; // offset: {}, size: {}\n", member.cpp_name, member.offset, member.size);
                 break;
 
             case DataType::Array: {
                 const auto &type_info = std::get<TypeAndSize>(member_type.data);
                 const Type &inner_type = get_type_or_throw(lib, type_info.type_hash);
                 header_stream << std::format("    Vector<{}> {}; // offset: {}, size: {}\n",
-                                             inner_type.type_name(), member.name, member.offset, member.size);
+                                             get_qualified_type_name(type, inner_type), member.cpp_name,
+                                             member.offset, member.size);
                 break;
             }
 
@@ -93,14 +100,14 @@ void emit_struct(const TypeLibrary &lib, const Type &type, std::ofstream &header
                 const auto &type_info = std::get<TypeAndSize>(member_type.data);
                 const Type &inner_type = get_type_or_throw(lib, type_info.type_hash);
                 header_stream << std::format("    Array<{}, {}> {}; // offset: {}, size: {}\n",
-                                             inner_type.type_name(), type_info.count, member.name, member.offset,
-                                             member.size);
+                                             get_qualified_type_name(type, inner_type), type_info.count,
+                                             member.cpp_name, member.offset, member.size);
                 break;
             }
 
             case DataType::DeferredType:
                 header_stream << std::format("    std::unique_ptr<ADF::BaseType> {}; // offset: {}, size: {}\n",
-                                             member.name, member.offset, member.size);
+                                             member.cpp_name, member.offset, member.size);
                 break;
 
             case DataType::Recursive:
@@ -138,7 +145,7 @@ void emit_enum(const Type &type, std::ofstream &header_stream) {
     const auto &members = std::get<std::vector<EnumMember> >(type.data);
     header_stream << std::format("enum class {}: uint{} {{\n", type.type_name(), type.size * 8);
     for (const auto &member: members) {
-        header_stream << std::format("    {} = {},\n", member.name, member.value);
+        header_stream << std::format("    {} = {},\n", member.cpp_name, member.value);
     }
     header_stream << "};\n\n";
     header_stream << "extern ADF::TypeInfo " << type.type_name() << "_TI;\n\n";
@@ -227,7 +234,7 @@ void emit_type_infos(const std::unordered_map<uint32, Type> &types, std::ostream
         if (type.alignment > 8) {
             stream << std::format("    .alignment = {},\n", type.alignment);
         }
-        stream << std::format("    .name = \"{}\"\n", type.name());
+        stream << std::format("    .name = \"{}\"\n", type.source_name());
         stream << "};\n\n";
     }
 }
@@ -253,10 +260,9 @@ void emit_type_info_table(const std::unordered_map<uint32, Type> &types,
 }
 
 // Function generation helpers
-void emit_array_print_helper(const TypeLibrary &lib, const Type &member_type,
-                             const std::string &member_name, std::ofstream &impl_stream) {
-    impl_stream << std::format("    out << \"{}: \\n\";\n", member_name);
-    impl_stream << std::format("    {}.print(out);\n", member_name);
+void emit_array_print_helper(const StructMember &member, std::ofstream &impl_stream) {
+    impl_stream << std::format("    out << \"{}: \\n\";\n", member.name);
+    impl_stream << std::format("    {}.print(out);\n", member.cpp_name);
     impl_stream << "    out << \"\\n\";\n";
 }
 
@@ -273,37 +279,37 @@ void emit_struct_print_function(const TypeLibrary &lib, const Type &type,
             case DataType::Primitive:
             case DataType::Bitfield:
             case DataType::StringType:
-                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n", member.name, member.name);
+                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n", member.name, member.cpp_name);
                 break;
 
             case DataType::Structure:
-                impl_stream << std::format("    {}.print(out);\n", member.name);
+                impl_stream << std::format("    {}.print(out);\n", member.cpp_name);
                 break;
 
             case DataType::Pointer:
-                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n", member.name, member.name);
+                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n", member.name, member.cpp_name);
                 // impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
                 break;
 
             case DataType::Array:
             case DataType::InlineArray:
-                emit_array_print_helper(lib, member_type, member.name, impl_stream);
+                emit_array_print_helper(member, impl_stream);
                 break;
 
             case DataType::Enumeration:
-                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n", member.name, member.name);
+                impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n", member.name, member.cpp_name);
                 break;
 
             case DataType::StringHash:
                 impl_stream << std::format("    out << \"{}: \";\n", member.name);
-                impl_stream << std::format("    {}.print(out);\n", member.name);
+                impl_stream << std::format("    {}.print(out);\n", member.cpp_name);
                 impl_stream << "    out << \"\\n\";\n";
                 break;
 
             case DataType::DeferredType:
                 impl_stream << std::format("    out << \"{}: \" << \"\\n\";\n", member.name);
-                impl_stream << std::format("    if ({}) {{\n", member.name);
-                impl_stream << std::format("        {}->print(out);\n", member.name);
+                impl_stream << std::format("    if ({}) {{\n", member.cpp_name);
+                impl_stream << std::format("        {}->print(out);\n", member.cpp_name);
                 impl_stream << "    }\n";
                 break;
 
@@ -327,31 +333,31 @@ void emit_struct_to_json_function(const TypeLibrary &lib, const Type &type,
             case DataType::Primitive:
             case DataType::Bitfield:
             case DataType::StringType:
-                impl_stream << std::format("    _res[\"{}\"] = {};\n", member.name, member.name);
+                impl_stream << std::format("    _res[\"{}\"] = {};\n", member.name, member.cpp_name);
                 break;
 
             case DataType::Structure:
             case DataType::Array:
             case DataType::StringHash:
             case DataType::InlineArray:
-                impl_stream << std::format("    _res[\"{}\"] = {}.to_json();\n", member.name, member.name);
+                impl_stream << std::format("    _res[\"{}\"] = {}.to_json();\n", member.name, member.cpp_name);
                 break;
 
             case DataType::Pointer:
-                impl_stream << std::format("    _res[\"{}\"] = {};\n", member.name, member.name);
+                impl_stream << std::format("    _res[\"{}\"] = {};\n", member.name, member.cpp_name);
                 // impl_stream << std::format("    _res[\"{}\"] = {}.to_json();\n", member.name, member.name);
                 // impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
                 break;
 
             case DataType::Enumeration:
-                impl_stream << std::format("    _res[\"{}\"] = {};\n", member.name, member.name);
+                impl_stream << std::format("    _res[\"{}\"] = {};\n", member.name, member.cpp_name);
                 // impl_stream << std::format("    out << \"{}: \" << {} << \"\\n\";\n",
                 //                            member.name, member.name);
                 break;
 
             case DataType::DeferredType:
-                impl_stream << std::format("    if ({}) {{\n", member.name);
-                impl_stream << std::format("        _res[\"{}\"] = {}->to_json();\n", member.name, member.name);
+                impl_stream << std::format("    if ({}) {{\n", member.cpp_name);
+                impl_stream << std::format("        _res[\"{}\"] = {}->to_json();\n", member.name, member.cpp_name);
                 impl_stream << "    }\n";
                 break;
 
@@ -375,7 +381,7 @@ void emit_enum_formatter(const Type &type, const std::string &type_name, std::of
     impl_stream << "    using namespace std::literals;\n";
     impl_stream << "    switch (v) {\n";
     for (const auto &member: members) {
-        impl_stream << std::format("        case {}::{}: return \"{}\"sv;\n", type_name, member.name, member.name);
+        impl_stream << std::format("        case {}::{}: return \"{}\"sv;\n", type_name, member.cpp_name, member.name);
     }
     impl_stream << "        default: return \"Unknown\";\n";
     impl_stream << "    }\n";
@@ -436,17 +442,17 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
         switch (member_type.type) {
             case DataType::Primitive:
                 impl_stream << std::format("    {} = buffer.read_pod<{}>();\n",
-                                           member.name, member_type.type_name());
+                                           member.cpp_name, member_type.type_name());
                 break;
 
             case DataType::Array:
             case DataType::Structure:
             case DataType::StringHash:
-                impl_stream << std::format("    {}.read(buffer);\n", member.name);
+                impl_stream << std::format("    {}.read(buffer);\n", member.cpp_name);
                 break;
 
             case DataType::Pointer:
-                impl_stream << std::format("    {} = buffer.read_pod<u64>();\n",member.name);
+                impl_stream << std::format("    {} = buffer.read_pod<u64>();\n", member.cpp_name);
                 // impl_stream << "    throw std::runtime_error(\"Pointer types are not supported yet\");\n";
                 break;
 
@@ -455,12 +461,12 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
                 impl_stream << std::format("    for(int i = 0; i < {}; ++i) {{\n",
                                            std::get<TypeAndSize>(member_type.data).count);
                 if (inner_type.type == DataType::Structure || inner_type.type == DataType::Array || inner_type.type == DataType::StringHash) {
-                    impl_stream << std::format("        {}[i].read(buffer);\n", member.name);
+                    impl_stream << std::format("        {}[i].read(buffer);\n", member.cpp_name);
                 } else if (inner_type.type == DataType::Primitive || inner_type.type == DataType::Pointer) {
                     impl_stream << std::format("        {}[i] = buffer.read_pod<{}>();\n",
-                                               member.name, inner_type.type_name());
+                                               member.cpp_name, inner_type.type_name());
                 } else if (inner_type.type == DataType::StringType) {
-                    impl_stream << std::format("        {}[i] = buffer.read_cstring();\n", member.name);
+                    impl_stream << std::format("        {}[i] = buffer.read_cstring();\n", member.cpp_name);
                 } else {
                     impl_stream << "        throw std::runtime_error(\"Unsupported inline array inner type\");\n";
                 }
@@ -474,13 +480,13 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
                 impl_stream << "        uint32 unk = buffer.read_pod<uint32>();\n";
                 impl_stream << "        std::streamoff original_offset = buffer.get_position();\n";
                 impl_stream << "        buffer.set_position(string_offset, std::ios::beg);\n";
-                impl_stream << std::format("        {} = buffer.read_cstring();\n", member.name);
+                impl_stream << std::format("        {} = buffer.read_cstring();\n", member.cpp_name);
                 impl_stream << "        buffer.set_position(original_offset, std::ios::beg);\n";
                 impl_stream << "    }\n";
                 break;
 
             case DataType::DeferredType:
-                impl_stream << std::format("    {} = std::move(Deferred::read(buffer));\n", member.name);
+                impl_stream << std::format("    {} = std::move(Deferred::read(buffer));\n", member.cpp_name);
                 break;
 
             case DataType::Bitfield: {
@@ -507,7 +513,7 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
                     }
                     uint32 bit_width = std::get<uint32>(bitfield_member_type.data);
                     impl_stream << std::format("        {} = (bitfield_value >> {}) & ((1ULL << {}) - 1);\n",
-                                               bitfield_member.name, bit_offset, bit_width);
+                                               bitfield_member.cpp_name, bit_offset, bit_width);
                     bit_offset += bit_width;
                 }
                 impl_stream << "    }\n";
@@ -524,7 +530,7 @@ void emit_struct_read_function(const TypeLibrary &lib, const Type &type,
                 else if (member_type.size != 1) throw std::runtime_error("Unsupported enum size");
 
                 impl_stream << std::format("    {} = static_cast<ADFTypes::{}>(buffer.read_pod<{}>());\n",
-                                           member.name, member_type.type_name(), uint_types[size_index]);
+                                           member.cpp_name, member_type.type_name(), uint_types[size_index]);
                 break;
             }
 

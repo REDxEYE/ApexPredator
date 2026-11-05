@@ -52,8 +52,8 @@ void HaloRenderBlock::to_primitive(ApexArchiveManager &manager, VM::SceneBuilder
     if (!m_textures[2].empty()) {
         material->metallic_roughness = VM::lazy_png_texture(m_textures[2], [&manager, texture_name=m_textures[2]] {
             const auto &texture = load_dds(manager, texture_name);
-            TextureOps::swap_channels(texture.get(), 1, 2);
-            TextureOps::fill_channel(texture.get(), 1, 0.7f);
+            TextureOps::swap_channels(texture, 1, 2);
+            TextureOps::fill_channel(texture, 1, 0.7f);
             return texture->save_to_memory(MemoryFormat::PNG);
         });
     }

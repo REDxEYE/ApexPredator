@@ -11,6 +11,7 @@
 #include "havok/generated/havok_types.h"
 #include "havok/tag_file/havok_tag_file_get_item.h"
 #include "platform/app_state.h"
+#include "modules/archive_mount.h"
 #include "redscore/platform/logger.h"
 #include "tracy/Tracy.hpp"
 
@@ -47,12 +48,12 @@ void test_adf(std::unique_ptr<IO::File> &&buffer, u64 hash) {
 }
 
 void collect_types(ApexAppState &app_state) {
-    std::vector<ArchiveEntry> all_entries;
     auto &manager = app_state.manager();
-    manager.all_entries(all_entries);
-
-    for (const auto&[path_hash, size] : all_entries) {
+    manager.foreach_file([&](const Archive<u64>::ArchiveEntry &entry) {
+        const auto path_hash = entry.key;
+        if (entry.size < 8) return true;
         auto buffer = manager.get(path_hash);
+        if (!buffer) return true;
 
         std::vector<uint8> first_buffer(8);
         buffer->read_exact<uint8>(first_buffer);
@@ -60,48 +61,42 @@ void collect_types(ApexAppState &app_state) {
 
         if (std::memcmp(first_buffer.data(), AAF_MAGIC, 4) == 0) {
             AAFArchive aaf_archive(std::move(buffer));
-
             auto aaf_buffer = aaf_archive.get_data();
-
+            if (!aaf_buffer || aaf_buffer->get_size() < 8) return true;
             aaf_buffer->read_exact<uint8>(first_buffer);
             aaf_buffer->set_position(0);
 
             if (std::memcmp(first_buffer.data() + 4, "SARC", 4) == 0) {
                 SArchive sarc(path_hash, std::move(aaf_buffer));
-                std::vector<ArchiveEntry> sarc_entries;
-                sarc.all_entries(sarc_entries);
-
-                for (auto &sarc_entry: sarc_entries) {
-                    auto sarc_buffer = sarc.get(sarc_entry.path_hash);
-
+                sarc.foreach_file([&](const Archive<u64>::ArchiveEntry &sarc_entry) {
+                    auto sarc_buffer = sarc.get(sarc_entry.key);
+                    if (!sarc_buffer || sarc_buffer->get_size() < 8) {
+                        GLog_Warning("Failed to read file {} from SARC {}",
+                                     find_name(sarc_entry.key).value_or("Unknown"),
+                                     find_name(path_hash).value_or("Unknown"));
+                        return true;
+                    }
                     sarc_buffer->read_exact<uint8>(first_buffer);
                     sarc_buffer->set_position(0);
-
-                    if (!sarc_buffer) {
-                        GLog_Warning("Failed to read file {} from SARC {}",
-                                     find_name(sarc_entry.path_hash).value_or("Unknown"),
-                                     find_name(path_hash).value_or("Unknown"));
-                        continue;
-                    }
-
-                    if (memcmp(first_buffer.data() + 4, "TAG0", 4) == 0) {
-                        test_havok(std::move(sarc_buffer), sarc_entry.path_hash);
-                    } else if (std::memcmp(first_buffer.data(), ADF_MAGIC, 4) == 0) {
-                        test_adf(std::move(sarc_buffer), sarc_entry.path_hash);
-                    }
-                }
+                    if (std::memcmp(first_buffer.data() + 4, "TAG0", 4) == 0)
+                        test_havok(std::move(sarc_buffer), sarc_entry.key);
+                    else if (std::memcmp(first_buffer.data(), ADF_MAGIC, 4) == 0)
+                        test_adf(std::move(sarc_buffer), sarc_entry.key);
+                    return true;
+                });
             }
-        } else if (memcmp(first_buffer.data() + 4, "TAG0", 4) == 0) {
+        } else if (std::memcmp(first_buffer.data() + 4, "TAG0", 4) == 0) {
             test_havok(std::move(buffer), path_hash);
         } else if (std::memcmp(first_buffer.data(), ADF_MAGIC, 4) == 0) {
             test_adf(std::move(buffer), path_hash);
         }
-    }
+        return true;
+    });
     printf("\n");
 }
 
 int main(int argc, const char *argv[]) {
-    if (argc < 2) {
+    if (argc < 3) {
         printf("USAGE: %s <path_to_game_root> <db_path>\n", argv[0]);
         return 0;
     }
@@ -120,7 +115,7 @@ int main(int argc, const char *argv[]) {
     init_adf_type_info();
 
     ApexAppState app_state(argv[1]);
-    app_state.mount_archives();
+    mount_game_archives(app_state);
     AssetDB db(argv[2]);
     AssetDB::set_instance(&db);
 

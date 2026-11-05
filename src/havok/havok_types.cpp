@@ -4,6 +4,7 @@
 
 #include "havok/tag_file/havok_tag_file.h"
 #include "utils/hash_helper.h"
+#include "utils/cpp_identifier.h"
 
 #include <ranges>
 #include <format>
@@ -106,15 +107,15 @@ namespace Havok::CodeGen {
             "bool", "char", "signed char", "unsigned char", "short", "unsigned short",
             "int", "unsigned int", "long", "unsigned long", "long long", "unsigned long long", "float", "double"
         };
-        if (!scalar_type.empty() && native_scalars.contains(m_name)) return scalar_type;
+        if (native_scalars.contains(m_name)) return scalar_type.empty() ? m_name : scalar_type;
         if (m_name == "hkRotationImpl" || m_name == "hkMatrix3Impl") {
             if (template_args.size() == 1) {
                 const auto element = lock_or_null(require_type_arg(m_name, template_args[0]));
                 if (!element) throw std::runtime_error("Missing matrix element type for " + m_name);
-                return m_name + "<" + element->type_name() + ">";
+                return Utils::cpp_identifier(m_name) + "<" + element->type_name() + ">";
             }
-            if (size == 48) return m_name + "<float32>";
-            if (size == 96) return m_name + "<float64>";
+            if (size == 48) return Utils::cpp_identifier(m_name) + "<float32>";
+            if (size == 96) return Utils::cpp_identifier(m_name) + "<float64>";
             throw std::runtime_error("Unsupported matrix storage size for " + m_name);
         }
         if (type == MetaType::POINTER) {
@@ -144,7 +145,7 @@ namespace Havok::CodeGen {
                 const auto alloc_name = alloc ? alloc->type_name() : std::string{"void"};
                 return std::format("hkArray<{}, {}>", inner_name, alloc_name);
             }
-            return m_name;
+            return Utils::cpp_identifier(m_name);
         }
 
         if (type == MetaType::STRING) {
@@ -154,7 +155,7 @@ namespace Havok::CodeGen {
         if (!template_args.empty()) {
             std::string out;
             out.reserve(m_name.size() + 2 + template_args.size() * 8);
-            out.append(m_name).append("<");
+            out.append(Utils::cpp_identifier(m_name)).append("<");
             for (size_t i = 0; i < template_args.size(); ++i) {
                 const auto &arg = template_args[i];
                 std::visit([&](const auto &v) {
@@ -174,7 +175,25 @@ namespace Havok::CodeGen {
             return out;
         }
 
-        return m_name;
+        return Utils::cpp_identifier(m_name);
+    }
+
+    std::string Type::schema_type_name() const {
+        if (template_args.empty()) return m_schema_name;
+        std::string out = m_schema_name + "<";
+        for (size_t i = 0; i < template_args.size(); ++i) {
+            if (i) out += ", ";
+            std::visit([&](const auto &value) {
+                using V = std::decay_t<decltype(value)>;
+                if constexpr (std::is_same_v<V, int64>) {
+                    out += std::to_string(value);
+                } else {
+                    const auto inner = lock_or_null(value);
+                    out += inner ? inner->schema_type_name() : "void";
+                }
+            }, template_args[i].value);
+        }
+        return out + ">";
     }
 
     std::string Type::full_name() const {
@@ -266,7 +285,8 @@ namespace Havok::CodeGen {
           , size(size_)
           , align(align_)
           , parent_(parent)
-          , m_name(name) {
+          , m_name(name)
+          , m_schema_name(name) {
         if (name == "T[N]") {
             type = MetaType::FIXED_ARRAY;
         }
@@ -337,8 +357,18 @@ namespace Havok::CodeGen {
         if (!tag_type->members.empty() && tag_type->data_type != Tag::DataType::POINTER) {
             std::vector<Member> members;
             members.reserve(tag_type->members.size());
-            for (auto &m: tag_type->members) {
+            // Reserve all literal names first so escaping a keyword cannot steal
+            // an existing schema member's C++ identifier.
+            std::set<std::string> used;
+            for (const auto &m : tag_type->members) used.insert(m.name);
+            for (const auto &m : tag_type->members) {
                 members.emplace_back(m.name, m.flags, m.offset, register_type(m.type()));
+                auto &member = members.back();
+                member.cpp_name = Utils::cpp_identifier(member.name);
+                if (member.cpp_name != member.name) {
+                    while (used.contains(member.cpp_name)) member.cpp_name += '_';
+                    used.insert(member.cpp_name);
+                }
             }
             new_type->data = std::move(members);
             new_type->type = MetaType::RECORD;

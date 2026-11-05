@@ -43,10 +43,12 @@ set(GAME_MODULE_OUTPUT_DIR "${CMAKE_BINARY_DIR}/modules")
 if(CMAKE_CONFIGURATION_TYPES)
     set(GAME_MODULE_OUTPUT_DIR "${CMAKE_BINARY_DIR}/$<CONFIG>/modules")
 endif()
+include(cmake/apex_common_sources.cmake)
 include(modules/generation_zero/module.cmake)
 include(modules/rage2/module.cmake)
 include(modules/second_extinction/module.cmake)
 include(modules/just_cause_2/module.cmake)
+include(modules/mad_max/module.cmake)
 
 # The host contains only CLI and module-loading code. Game code is private to the module.
 add_executable(ApexPredator
@@ -64,6 +66,7 @@ if(TARGET SecondExtinctionModule)
     add_dependencies(ApexPredator SecondExtinctionModule)
 endif()
 add_dependencies(ApexPredator JustCause2Module)
+add_dependencies(ApexPredator MadMaxModule)
 
 add_executable(StringHasher
         src/tools/string_hasher.cpp
@@ -152,20 +155,30 @@ if(APEX_BUILD_MODULE_TESTS)
     foreach(fixture IN ITEMS one two bad)
         add_library(MockGame_${fixture} MODULE tests/mock_game_module.cpp)
         target_include_directories(MockGame_${fixture} PRIVATE include)
-        target_link_libraries(MockGame_${fixture} PRIVATE RedsCore)
+        target_link_libraries(MockGame_${fixture} PRIVATE RedsCore SQLiteCpp)
         target_compile_definitions(MockGame_${fixture} PRIVATE APEX_BUILD_GAME_MODULE FIXTURE_ID="fixture-${fixture}")
         set_target_properties(MockGame_${fixture} PROPERTIES PREFIX "" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test-modules" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test-modules")
     endforeach()
     target_compile_definitions(MockGame_bad PRIVATE FIXTURE_BAD_ABI)
     add_executable(ApexModuleSessionTests tests/module_sessions.cpp src/modules/module_loader.cpp)
     target_include_directories(ApexModuleSessionTests PRIVATE include)
-    target_link_libraries(ApexModuleSessionTests PRIVATE ${CMAKE_DL_LIBS} Threads::Threads RedsCore)
+    target_link_libraries(ApexModuleSessionTests PRIVATE ${CMAKE_DL_LIBS} Threads::Threads RedsCore SQLiteCpp)
     add_custom_target(ApexModuleFixtures DEPENDS MockGame_one MockGame_two MockGame_bad ApexModuleSessionTests)
     add_test(NAME Apex.GameModules COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_game_modules.py"
             $<TARGET_FILE:ApexPredator> $<TARGET_FILE:MockGame_one> $<TARGET_FILE:MockGame_two> $<TARGET_FILE:MockGame_bad>)
     add_test(NAME Apex.TabV31 COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_tab_v31.py" $<TARGET_FILE:ApexPredator>)
     add_test(NAME Apex.Rage2Module COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_rage2_module.py"
             $<TARGET_FILE:ApexPredator> $<TARGET_FILE:Rage2Module>)
+    add_test(NAME Apex.MadMaxModule COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_mad_max_module.py"
+            $<TARGET_FILE:ApexPredator> $<TARGET_FILE:MadMaxModule>)
+    add_test(NAME Apex.MadMaxAdfModule COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_mad_max_adf_module.py"
+            $<TARGET_FILE:ApexPredator> $<TARGET_FILE:MadMaxModule>)
+    add_test(NAME Apex.MadMaxSarcV2 COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_mad_max_sarc_v2.py"
+            $<TARGET_FILE:ApexPredator> $<TARGET_FILE:MadMaxModule>)
+    add_test(NAME Apex.MadMaxSkeletonModule COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_mad_max_skeleton_module.py"
+            $<TARGET_FILE:ApexPredator> $<TARGET_FILE:MadMaxModule>)
+    add_test(NAME Apex.TabV1Dispatch COMMAND ${Python3_EXECUTABLE}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_tab_v1_dispatch.py" $<TARGET_FILE:ApexPredator>)
     add_test(NAME Apex.JustCause2Module COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_just_cause_2_module.py"
             $<TARGET_FILE:ApexPredator>)
     add_test(NAME Apex.JustCause2Facade COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_jc2_facade.py"
@@ -179,4 +192,6 @@ if(APEX_BUILD_MODULE_TESTS)
     add_test(NAME Apex.Rage2AMF COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_rage2_amf_cli.py"
             $<TARGET_FILE:ApexPredator>)
     add_test(NAME Apex.VirtualModelCLI COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_virtual_model_cli.py" $<TARGET_FILE:ApexPredator> --module-library $<TARGET_FILE:GenerationZeroModule> --session-runner $<TARGET_FILE:ApexModuleSessionTests>)
+    add_test(NAME Apex.RtpcJsonOutput COMMAND ${Python3_EXECUTABLE}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_rtpc_json_output.py" $<TARGET_FILE:ApexPredator>)
 endif()

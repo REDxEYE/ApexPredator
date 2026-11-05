@@ -187,17 +187,17 @@ with tempfile.TemporaryDirectory(prefix='apex-second-extinction-locations-') as 
 
     result = subprocess.run([executable, str(root / 'game')], cwd=work, capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + result.stderr
-    with sqlite3.connect(root / 'second_extinction_hashes.db') as db:
+    with sqlite3.connect(root / 'hashes.db') as db:
         named = {name: (size, parent) for name, size, parent in db.execute(
-            'SELECT name,size,parent FROM files WHERE name IS NOT NULL')}
+            'SELECT name,size,parent FROM files_second_extinction WHERE name IS NOT NULL')}
         for name, content in entries:
             if name == unknown_archive or name == 'worlds/arctic/locations/near_only.fl':
                 assert name not in named
             elif name.endswith(('.bl', '.nl', '.fl')):
                 assert named[name] == (len(content), 0), (name, named.get(name))
-        archive_row = db.execute('SELECT murmur FROM files WHERE lookup3=?', (0x37B28D6A,)).fetchone()
+        archive_row = db.execute('SELECT murmur FROM files_second_extinction WHERE lookup3=?', (0x37B28D6A,)).fetchone()
         assert archive_row == (murmur(archive_name) - 2**64,), archive_row
-        unknown_row = db.execute('SELECT murmur FROM files WHERE lookup3=?',
+        unknown_row = db.execute('SELECT murmur FROM files_second_extinction WHERE lookup3=?',
                                  (lookup3(unknown_archive),)).fetchone()
         expected_unknown = murmur(unknown_archive)
         expected_unknown = expected_unknown if expected_unknown < 2**63 else expected_unknown - 2**64
@@ -205,9 +205,9 @@ with tempfile.TemporaryDirectory(prefix='apex-second-extinction-locations-') as 
         for name in (missing_entity, installed_entity):
             assert db.execute('SELECT v FROM kv WHERE lookup3=? AND v=?',
                               (lookup3(name), name)).fetchone() == (name,)
-        assert db.execute('SELECT name FROM files WHERE lookup3=?',
+        assert db.execute('SELECT name FROM files_second_extinction WHERE lookup3=?',
                           (lookup3(missing_entity),)).fetchone() is None
-        assert db.execute('SELECT name,size,parent FROM files WHERE lookup3=?',
+        assert db.execute('SELECT name,size,parent FROM files_second_extinction WHERE lookup3=?',
                           (lookup3(installed_entity),)).fetchone() == (
                               installed_entity, 4 + len(entity_payload), 0)
         for name in (external_entity, 'editor/entities/test/wrong.ee'):
@@ -231,12 +231,12 @@ with tempfile.TemporaryDirectory(prefix='apex-second-extinction-locations-') as 
     write_tab(initial, entries)
     result = subprocess.run([executable, str(root / 'game')], cwd=work, capture_output=True, text=True)
     assert result.returncode == 0, (result.returncode, result.stdout, result.stderr)
-    with sqlite3.connect(root / 'second_extinction_hashes.db') as db:
+    with sqlite3.connect(root / 'hashes.db') as db:
         assert db.execute('SELECT v FROM kv WHERE v=?', ('TagOnlyReturn',)).fetchone() == ('TagOnlyReturn',)
         assert db.execute('SELECT v FROM kv WHERE v=?',
                           ('TagOnlySecondMember',)).fetchone() == ('TagOnlySecondMember',)
-        assert db.execute('SELECT murmur FROM files WHERE lookup3=?',
+        assert db.execute('SELECT murmur FROM files_second_extinction WHERE lookup3=?',
                           (lookup3(unknown_archive),)).fetchone() == (expected_unknown,)
-        assert db.execute('SELECT parent FROM files WHERE name=?', (texture_slice,)).fetchone() == (0,)
+        assert db.execute('SELECT parent FROM files_second_extinction WHERE name=?', (texture_slice,)).fetchone() == (0,)
         assert f'File with different parent hash already exists "{texture_slice}"' not in result.stdout + result.stderr
 print('Second Extinction location archives and nested GTOC member resolved')

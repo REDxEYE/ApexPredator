@@ -28,6 +28,8 @@ namespace Modules {
 
         int probe(const std::filesystem::path &root, std::string &reason) const;
 
+        [[nodiscard]] std::vector<std::string> search(const std::filesystem::path &database, std::string_view query) const;
+
     private:
         void *handle_{};
         const GameModule *api_{};

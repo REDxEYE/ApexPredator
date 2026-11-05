@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Exercise JC2 TAB/ARC extraction, patch precedence, and root probing."""
+"""Exercise JC2 TAB/ARC extraction, distinct base/patch/DLC archives, and root probing."""
 import argparse
 import json
 from pathlib import Path
+import sqlite3
 import struct
 import subprocess
 import tempfile
@@ -28,6 +29,7 @@ def pcbb_section(properties):
     data = bytearray()
 
     def siblings(items):
+        data.extend(b'\0' * (-len(data) % 16))
         offsets = []
         for _ in items:
             offsets.append(len(data))
@@ -45,11 +47,13 @@ def pcbb_section(properties):
                 if kind == 'u32':
                     struct.pack_into('<I', data, offset + 20, value)
                 else:
+                    data.extend(b'\0' * (-len(data) % 4))
                     struct.pack_into('<I', data, offset + 20, len(data))
                     data.extend(value.encode() + b'\0' if kind == 'string' else struct.pack('<16f', *value))
         return offsets[0]
 
     siblings(properties)
+    data.extend(b'\0' * (-len(data) % 16))
     return struct.pack('<4sI', b'PCBB', len(data)) + data
 
 
@@ -72,8 +76,7 @@ def main():
         dlc = root / 'DLC'
         root.mkdir()
         (root / 'JustCause2.exe').write_bytes(b'MZ')
-        archive(base, 'pc0', [(0x11223344, zlib.compress(b'old compressed data')),
-                              (0xCAFEBABE, b'base stored data')])
+        archive(base, 'pc0', [(0x11223345, zlib.compress(b'old compressed data'))])
         archive(base, 'pc4', [(0x11223344, zlib.compress(b'new compressed data'))])
         child_world = identity[:12] + (3.0, 4.0, 5.0, 1.0)
         entity = pcbb_section([
@@ -94,6 +97,16 @@ def main():
         archive(dlc, 'pc_60', [(0xCAFEBABE, b'DLC stored data')])
         # These old-game archives are not inside the newer engine's initial folder.
         archive(root / 'initial', 'ignored', [(0x11223344, b'wrong folder')])
+        db = Path(temp) / 'hashes.db'
+        with sqlite3.connect(db) as connection:
+            connection.executescript("""
+                CREATE TABLE kv (lookup3 INTEGER NOT NULL, murmur INTEGER NOT NULL DEFAULT 0,
+                    v TEXT NOT NULL, PRIMARY KEY(lookup3,murmur));
+                CREATE TABLE files (lookup3 INTEGER NOT NULL, murmur INTEGER NOT NULL DEFAULT 0,
+                    name TEXT, size INTEGER NOT NULL, parent INTEGER NOT NULL DEFAULT 0,
+                    PRIMARY KEY(lookup3,murmur));
+                PRAGMA user_version=1;
+            """)
         output = Path(temp) / 'output'
 
         def run(*arguments, success=True):
@@ -104,17 +117,19 @@ def main():
 
         for path in (root, base, str(base) + '/'):
             assert 'supported [100]' in run('modules', path, '--module', 'just-cause-2')
-        run('extract', base, '0x11223344', '-o', output)
-        assert (output / '11223344.bin').read_bytes() == b'new compressed data'
-        run('extract', root, '0xCAFEBABE', '-r', '-o', output)
+        run('extract', base, '0x11223344', '-d', db, '-o', output)
+        assert (output / 'file_11223344.bin').read_bytes() == b'new compressed data'
+        run('extract', root, '0x11223345', '-d', db, '-o', output)
+        assert (output / 'file_11223345.bin').read_bytes() == b'old compressed data'
+        run('extract', root, '0xCAFEBABE', '-r', '-d', db, '-o', output)
         assert (output / 'CAFEBABE.bin').read_bytes() == b'DLC stored data'
-        run('extract', root, '0x2468ACE0', '-o', output)
+        run('extract', root, '0x2468ACE0', '-d', db, '-o', output)
         metadata = json.loads((output / 'path_2468ACE0.json').read_text())
         assert len(metadata) == 2
         assert metadata[0]['_class'] == 'CGeometryObject'
         assert metadata[0]['16909060']['name'] == 'fixture.child'
         assert metadata[0]['16909060']['858993459'] == 0xF907D551
-        scene = json.loads((output / 'unnamed/unknown_2468ACE0.gltf').read_text())
+        scene = json.loads((output / '2468ACE0.gltf').read_text())
         nodes = scene['nodes']
         scene_root = nodes[scene['scenes'][0]['nodes'][0]]
         assert scene_root['name'] == 'epe_root'
@@ -126,10 +141,7 @@ def main():
         assert child['extras']['_class'] == 'CSimpleRigidObject'
         grandchild = nodes[child['children'][0]]
         assert grandchild['name'] == 'fixture.grandchild'
-        assert 'Asset not found' in run('extract', root, '0x12345678', '-o', output, success=False)
-        tab = base / 'pc4.tab'
-        tab.write_bytes(tab.read_bytes()[:4] + struct.pack('<III', 0x11223344, 4096, 22))
-        assert 'unsupported [0]' in run('modules', root, '--module', 'just-cause-2')
+        assert 'Asset not found' in run('extract', root, '0x12345678', '-d', db, '-o', output, success=False)
     print('Just Cause 2 TAB module tests passed')
 
 

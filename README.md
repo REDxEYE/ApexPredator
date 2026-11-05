@@ -70,6 +70,7 @@ ApexPredator search "%env/terrain%" -d hashes.db
 - `scripts/extract_exe_strings.py <executable> [output]`: extract sorted, unique NUL-terminated ASCII/UTF-16LE strings of at least four characters. Reject embedded newlines and leading punctuation while retaining relative/rooted paths. For JC2, the default output is `strings/just_cause_2/just_cause_2_exe_strings.txt`.
 - `AdfTypeGenerator <game_root>`: generates ADF type bindings. **Note:** output paths are hardcoded, adjust before running.
 - `HavokTypeGenerator <game_root>`: generates Havok type bindings; paths are likewise hardcoded to the repository root—update them for your environment.
+  * Both generators escape C++ keywords in generated type/member names (for example, `default` becomes `default_`). Original schema spellings remain in JSON keys and type metadata; colliding generated identifiers receive distinct suffixes.
 - `StringHasher`: read strings from stdin and prints their 32-bit hash.
 
 ## Tips
@@ -89,7 +90,7 @@ python tests/test_rage2_amf_cli.py cmake-build-debug/ApexPredator
 
 ## Loadable game modules
 
-The CLI loads game support from DLL/SO modules. Build `ApexPredator` and keep its `modules/` directory beside the executable; the build produces Generation Zero, Rage 2, Second Extinction, and Just Cause 2 modules automatically. The host does not link the game readers or generated types. Modules are built with the app and share C++ interfaces and `ApexAppState`; only the loader entry symbol uses `extern "C"`.
+The CLI loads game support from DLL/SO modules. Build `ApexPredator` and keep its `modules/` directory beside the executable; the build produces Generation Zero, Rage 2, Second Extinction, Just Cause 2, and Mad Max modules automatically. The host does not link the game readers or generated types. Modules are built with the app and share C++ interfaces and `ApexAppState`; only the loader entry symbol uses `extern "C"`.
 
 ```sh
 ApexPredator modules /path/to/GenerationZero/archives_win64
@@ -112,6 +113,14 @@ Rage 2 supports raw TAB 3.1 extraction (`extract ROOT ASSET -r -o OUTPUT`) by pa
 ApexPredator extract "/path/to/RAGE 2" models/props/cable/horizontal_03.modelc --module rage2 -d rage2_hashes.db -o exported/models
 ApexPredator extract "/path/to/RAGE 2" models/props/cable/horizontal_03.meshc --module rage2 -d rage2_hashes.db -o exported/meshes
 ```
+
+Mad Max's native Linux and Windows builds are registered as `mad-max`. The Linux port stores archives under `share/data`; Windows stores them directly under the game root. The module accepts either installation root or its `archives_win64` folder (and Linux `share/data`) and extracts decoded TAB/ARC contents only (`--raw` is required). Names hash using Lookup3 over the basename; a `0x`-prefixed 32-bit hash works without names or a database. Output uses `HASH.bin` because the archive does not store filenames:
+
+```sh
+ApexPredator extract "/path/to/Mad Max" 0xB444264E --module mad-max --raw -o dumps
+```
+
+The module reads base, patch, DLC, and (where present) Feral override archives. It handles stored and raw-DEFLATE blocks, including multi-block entries. No Mad Max model/animation conversion or hash database is included. See [game_modules.md](docs/game_modules.md) for archive precedence and format details.
 
 ## CI build artifacts
 

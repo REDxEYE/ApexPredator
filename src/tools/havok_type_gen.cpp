@@ -1,6 +1,6 @@
 #include <cstdio>
+#include <utility>
 
-#include "games.hpp"
 #include "apex/asset_db.h"
 #include "apex/sarc.h"
 #include "apex/aaf/aaf.h"
@@ -9,14 +9,18 @@
 #include "apex/package/tab_archive.h"
 #include "havok/havok_codegen.h"
 #include "platform/app_state.h"
+#include "modules/archive_mount.h"
 #include "redscore/platform/logger.h"
+
+// Each generator target links its game's output-path configuration.
+std::pair<const char *, const char *> havok_generator_output_paths();
 
 void process_havok_file(Havok::CodeGen::TypeLibrary &lib, std::unique_ptr<IO::File> &&buffer) {
     const Havok::Tag::TagFile tag_file(std::move(buffer));
     lib.register_types(tag_file);
 }
 
-void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
+bool collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
     auto &manager = app_state.manager();
     static auto visited_files = std::unordered_set<u64>();
 
@@ -76,21 +80,12 @@ void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
         return true;
     });
     printf("\n");
+    // No matching tag files: do not replace valid generated bindings with an empty registry.
+    if (lib.types().empty()) return false;
 
-    Havok::CodeGen::generate_code(lib,
-#if GAME==GAME_GENERATION_ZERO
-                                  "../modules/generation_zero/src/havok/generated",
-                                  "../modules/generation_zero/include/havok/generated"
-#elif GAME==GAME_RAGE2
-                                  "../modules/rage2/src/havok/generated",
-                                          "../modules/rage2/include/havok/generated"
-#elif GAME==GAME_SECOND_EXTINCTION
-                                  "../modules/second_extinction/src/havok/generated",
-                                          "../modules/second_extinction/include/havok/generated"
-#else
-#error "Unsupported game"
-#endif
-    );
+    const auto [source_path, include_path] = havok_generator_output_paths();
+    Havok::CodeGen::generate_code(lib, source_path, include_path);
+    return true;
 }
 
 
@@ -112,12 +107,12 @@ void collect_types(ApexAppState &app_state, Havok::CodeGen::TypeLibrary &lib) {
 */
 
 int main(int argc, const char *argv[]) {
-    if (argc < 2) {
+    if (argc < 3) {
         printf("USAGE: %s <path_to_game_root> <db_path>\n", argv[0]);
         return 0;
     }
     ApexAppState app_state(argv[1]);
-    app_state.mount_archives();
+    mount_game_archives(app_state);
     AssetDB db(argv[2]);
     AssetDB::set_instance(&db);
     Havok::CodeGen::TypeLibrary type_library;
@@ -142,7 +137,10 @@ int main(int argc, const char *argv[]) {
     //                               "../modules/generation_zero/src/havok/generated",
     //                               "../modules/generation_zero/include/havok/generated");
 
-    collect_types(app_state, type_library);
+    if (!collect_types(app_state, type_library)) {
+        fprintf(stderr, "No Havok TAG0 types found in mounted archives; bindings were not written\n");
+        return 1;
+    }
 
     return 0;
 }

@@ -29,6 +29,7 @@ namespace STI {
 
     struct StructMember {
         std::string name;
+        std::string cpp_name;
         uint32 type_hash;
         uint32 size;
         uint32 offset: 24;
@@ -36,10 +37,11 @@ namespace STI {
         uint32 default_type;
         uint64 default_value;
 
-        StructMember(const std::string_view name, const uint32 type_hash, const uint32 size, const uint32 offset,
-                     const uint32 bit_offset,
-                     const uint32 default_type, const uint64 default_value)
+        StructMember(const std::string_view name, const std::string_view cpp_name,
+                     const uint32 type_hash, const uint32 size, const uint32 offset,
+                     const uint32 bit_offset, const uint32 default_type, const uint64 default_value)
             : name(name),
+              cpp_name(cpp_name),
               type_hash(type_hash),
               size(size),
               offset(offset),
@@ -51,11 +53,11 @@ namespace STI {
 
     struct EnumMember {
         std::string name;
+        std::string cpp_name;
         uint32 value;
 
-        EnumMember(const std::string_view name, const uint32 value)
-            : name(name),
-              value(value) {
+        EnumMember(const std::string_view name, const std::string_view cpp_name, const uint32 value)
+            : name(name), cpp_name(cpp_name), value(value) {
         }
     };
 
@@ -88,22 +90,22 @@ namespace STI {
 
 
         Type(const std::string_view name, const uint32 hash, const uint32 size, const uint32 alignment,
-             const DataType type, TypeData data) : hash(hash),
-                                                   size(size),
-                                                   alignment(alignment),
-                                                   type(type),
-                                                   name_(name),
-                                                   data(std::move(data)) {
+             const DataType type, TypeData data, const std::string_view source_name = {})
+            : hash(hash), size(size), alignment(alignment), type(type),
+              data(std::move(data)), name_(name),
+              source_name_(source_name.empty() ? name : source_name) {
         }
 
         [[nodiscard]] std::string type_name() const;
 
         [[nodiscard]] std::string name() const;
+        [[nodiscard]] const std::string &source_name() const { return source_name_; }
 
     private:
         Type() = default;
 
         std::string name_;
+        std::string source_name_;
     };
 
     class TypeLibrary {

@@ -1,10 +1,10 @@
 # Asset database hashes
 
 Both `kv` and `files` store `lookup3` (32-bit lookup3/hashlittle, seed zero) and
-`murmur` (the first 64-bit output of MurmurHash3_x64_128, seed zero). Generation
-Zero and Just Cause 2 use 32-bit lookup3 game hashes and write zero to `murmur`;
-Rage 2 computes both. `string_hashes(string_view)` is the shared game-specific
-implementation used by the collectors and ADF string storage.
+`murmur` (the first 64-bit output of MurmurHash3_x64_128, seed zero).
+`string_hashes(string_view)` computes both for known strings in every game,
+including Generation Zero, Just Cause 2, and Mad Max. A zero Murmur value is
+reserved for rows without a source string.
 
 ```sql
 CREATE TABLE kv (
@@ -24,31 +24,36 @@ CREATE TABLE files (
 ```
 
 The primary keys index lookup3; partial indexes index nonzero Murmur values.
-The files parent index is retained. Distinct hash pairs are retained even when
-lookup3 collides. Lookup by a single colliding hash returns the first pair in
-numeric SQLite order; deletion by a hash removes all matching pairs. Zero Murmur
-means unused and is excluded from queries/deletes. SQLite stores 64-bit hashes
-as signed INTEGER bit patterns; convert negative results to unsigned when using
-external SQL tools. Parent remains the containing archive's game-specific hash.
+The files parent index is retained. Distinct `(lookup3, murmur)` pairs survive
+Lookup3 collisions; a conflicting nonempty name for the same pair is rejected
+instead of overwriting it. A single-hash read returns no result if multiple
+pairs match, while existence checks still succeed. Deletion by a hash removes
+all matching pairs. Zero Murmur is excluded from Murmur-only matching, but an
+unnamed `(lookup3, 0)` row remains addressable by Lookup3. SQLite stores
+64-bit hashes as signed INTEGER bit patterns; convert negative results to
+unsigned when using external SQL tools. Parent remains the containing
+archive's game-specific hash.
 
 `kv_put(StringHashes, value)` and `files_put(StringHashes, name, size, parent)`
 require both hash fields. Read/delete APIs accept `AssetDB::HashType::Lookup3`,
-`Murmur`, or the default `Game` (lookup3 for GenZ and JC2, Murmur for Rage 2).
+`Murmur`, or the default `Game`, but match the supplied value against either
+nonzero Murmur or Lookup3; the selector does not disambiguate collisions.
 RTPC name resolution explicitly uses lookup3 through `find_lookup3_name`.
 
 Opening an old `kv(k,v)` / `files(hash,name,size,parent)` database migrates both
-tables in one transaction. Existing game keys, names, sizes, and parents are
-preserved; Rage 2 lookup3 hashes are computed from stored strings, while GenZ
-Murmur values remain zero. For unnamed Rage 2
-files, lookup3 is zero because no string is available. A failure rolls back the
+tables in one transaction, retaining game keys, names, sizes, and parents.
+Named rows gain the MMH3 of their stored string; unnamed rows retain zero.
+Opening an existing dual-hash database at schema version zero also backfills
+named zero-Murmur rows and marks it version one. A failure rolls back the
 migration. Use the matching game's build when opening a legacy database; its
 old schema does not identify the hash algorithm. Existing user databases are
 not rewritten by the build itself; migration runs when an application opens one.
 
-Collectors use `../hashes.db` for GenZ, `../rage2_hashes.db` for Rage 2, and
-`../second_extinction_hashes.db` for Second Extinction, relative to their
-working directory. All collector string/file insertion paths supply both hashes.
-GenZ archive enumeration now visits TAB 2.1 entries.
+Collectors use `../hashes.db` for GenZ, `../rage2_hashes.db` for Rage 2,
+`../second_extinction_hashes.db` for Second Extinction, `../jc2_hashes.db` for
+Just Cause 2, and `../mad_max_hashes.db` for Mad Max, relative to their
+working directory. All collector string/file insertion paths supply both
+hashes for known names. GenZ archive enumeration visits TAB 2.1 entries.
 
 ## GTOC/STOC ingestion
 

@@ -1,4 +1,7 @@
 #include "modules/game_module_api.h"
+#include "modules/archive_mount.h"
+#include "exporter/raw_export.h"
+#include "exporter/gltf_export.h"
 #include "platform/app_state.h"
 
 #include <filesystem>
@@ -9,9 +12,7 @@
 #include "apex/asset_db.h"
 #include "modules/shared.hpp"
 
-void raw_export(ApexAppState &, uint64_t);
 
-void normal_export(ApexAppState &, uint64_t);
 
 // void export_anim(ApexAppState &, uint64_t, uint64_t, bool);
 
@@ -63,7 +64,7 @@ namespace {
         AssetDB db;
 
         explicit Session(ApexAppState &app) : db(app.database_path) {
-            app.mount_archives();
+            mount_game_archives(app);
         }
         void extract(ApexAppState &app, std::string_view asset) override;
         void animation(ApexAppState &app, std::string_view skeleton, std::string_view asset) override;

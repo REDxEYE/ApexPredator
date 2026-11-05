@@ -31,11 +31,12 @@ SArchive::SArchive(const uint64 m_hash, std::unique_ptr<IO::File> buffer) : m_ha
             m_strings.emplace_back('\0');
             const auto offset = m_buffer->read_u32();
             const auto size = m_buffer->read_u32();
+            const std::string_view entry_name(&m_strings[index]);
             const SArcEntry entry{
-                .name = std::string_view(&m_strings[index]),
+                .name = entry_name,
                 .offset = offset,
                 .size = size,
-                .hash = static_cast<uint32>(hash_string(name)),
+                .hash = static_cast<uint32>(hash_string(entry_name)),
                 .ext_hash = 0
             };
             m_entries[entry.hash] = entry;

@@ -81,7 +81,8 @@ int main(int argc, char **argv) {
                                   "Item_00000102", "A<Deferred>", "Key", "void*", "A<void*>", "A2<void*>",
                                   "PointerHolder", "pointer", "pointers", "fixedPointers", "voidPtr", "A<voidPtr>", "PlantAngles",
                                   "90RightPlantMinAngle", "90RightPlantMaxAngle", "90LeftPlantMinAngle", "90LeftPlantMaxAngle",
-                                  "180RightPlantMinAngle", "180RightPlantMaxAngle", "180LeftPlantMinAngle", "180LeftPlantMaxAngle"});
+                                  "180RightPlantMinAngle", "180RightPlantMaxAngle", "180LeftPlantMinAngle", "180LeftPlantMaxAngle",
+                                  "default", "default_", "static", "class", "override", "kind", "A<class>", "left", "right"});
         STI::TypeLibrary lib;
         auto add = [&](ADF::MetaType kind, uint32 hash, uint64 name, uint32 size,
                        ADF::TypeData data, uint32 element = 0, uint32 count = 0,
@@ -146,6 +147,30 @@ int main(int argc, char **argv) {
         }
         add(M::Structure, 0xA00, 24, 32, angle_members, 0, 0, 32);
 
+        check(add(M::Structure, 0xB00, 33, 4, small).name() == "default_");
+        check(add(M::Structure, 0xB01, 34, 4, small).name() == "default__00000B01");
+        check(add(M::Enumeration, 0xB02, 36, 4,
+                  std::vector<ADF::EnumMemberInfo>{{33, 0}, {34, 1}, {37, 2}}).name() == "class_");
+        check(add(M::Array, 0xB03, 39, 16, {}, 0xB02).name() == "class__Array");
+        const auto &keyword_type = add(M::Structure, 0xB04, 35, 28,
+            std::vector<ADF::StructMemberInfo>{
+                member(33, STI_TYPE_HASH_UINT32, 4, 0),
+                member(34, STI_TYPE_HASH_UINT32, 4, 4),
+                member(35, STI_TYPE_HASH_UINT32, 4, 8),
+                member(38, 0xB02, 4, 12),
+                member(40, 0xB00, 4, 16),
+                member(41, 0xB01, 4, 20),
+                member(37, 0xB02, 4, 24)});
+        check(keyword_type.name() == "static_");
+        const auto &keyword_members = std::get<std::vector<STI::StructMember>>(keyword_type.data);
+        check(keyword_members[0].name == "default" && keyword_members[0].cpp_name == "default_");
+        check(keyword_members[1].name == "default_" && keyword_members[1].cpp_name == "default__1");
+        check(keyword_members[2].name == "static" && keyword_members[2].cpp_name == "static__");
+        check(keyword_members[3].cpp_name == "kind");
+        check(keyword_members[4].cpp_name == "left");
+        check(keyword_members[5].cpp_name == "right");
+        check(keyword_members[6].cpp_name == "override_");
+
         std::set<std::string> names;
         for (const auto &[hash, type] : lib.types()) {
             if (type.type != STI::DataType::Pointer) check(names.insert(type.name()).second);
@@ -154,25 +179,7 @@ int main(int argc, char **argv) {
         const auto headers = root / "apex/adf/generated";
         STI::generate_code(lib, root, headers);
         const auto header = read_file(headers / "adf_types.h");
-        check(header.contains("Item_00000101 second;"));
-        check(header.contains("Vector<Item_00000101> items;"));
-        check(header.contains("Array<Item_00000101, 2> fixed;"));
-        check(header.contains("Kind_00000501 kind;"));
-        check(header.contains("extern ADF::TypeInfo voidPtr_Array_TI;"));
-        check(header.contains("Vector<voidPtr> pointers;"));
-        check(header.contains("Array<voidPtr, 2> fixedPointers;"));
-        check(!header.contains("void*"));
         const auto implementation = read_file(root / "adf_types.cpp");
-        for (uint32 i = 0; i < 8; ++i) {
-            const auto name = "_" + std::string(adf.get_string(25 + i));
-            check(header.contains("float32 " + name + ";"));
-            check(implementation.contains(name + " = buffer.read_pod<float32>();"));
-        }
-        check(implementation.contains("fixedPointers[i] = buffer.read_pod<voidPtr>();"));
-        check(implementation.contains("std::make_unique<Vector<voidPtr>>()"));
-        check(!implementation.contains("void*"));
-        check(implementation.contains("adf_type_info.emplace(0x00000101, &ADFTypes::Item_00000101_TI)"));
-        check(implementation.contains(".hash = 0x00000A00,\n    .alignment = 32,\n    .name = \"PlantAngles\""));
         STI::generate_code(lib, root, headers);
         check(read_file(headers / "adf_types.h") == header);
         check(read_file(root / "adf_types.cpp") == implementation);

@@ -1,10 +1,10 @@
 // Created by RED on 12.01.2026.
 
-#include "exporter/havok_export.h"
+#include "exporter/apex/havok_animation_export.h"
 
 #include <fstream>
-#include <string_view>
 #include <ranges>
+#include <string_view>
 
 #include "glm/glm.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -12,17 +12,6 @@
 
 #include "havok/animations/spline.h"
 #include "redscore/utils/simple_fileio.h"
-
-
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-
-using namespace std::string_view_literals;
-
-auto IDENTITY_MAT = glm::identity<glm::mat4>();
-
-
 void export_spline_compressed_animation(ApexAppState &app_state,
                                         const HavokTypes::hkaSplineCompressedAnimation *spline_animation,
                                         const HavokTypes::hkaAnimationBinding *binding,
@@ -113,9 +102,10 @@ void export_spline_compressed_animation(ApexAppState &app_state,
         rotation_channel.path = VM::AnimationPath::Rotation;
         scale_channel.path = VM::AnimationPath::Scale;
         position_channel.times = rotation_channel.times = scale_channel.times = timestamps;
-        for (const auto &v : positions) position_channel.values.insert(position_channel.values.end(), {v.x,v.y,v.z});
-        for (const auto &v : rotations) rotation_channel.values.insert(rotation_channel.values.end(), {v.x,v.y,v.z,v.w});
-        for (const auto &v : scales) scale_channel.values.insert(scale_channel.values.end(), {v.x,v.y,v.z});
+        for (const auto &v: positions) position_channel.values.insert(position_channel.values.end(), {v.x, v.y, v.z});
+        for (const auto &v: rotations) rotation_channel.values.insert(rotation_channel.values.end(),
+                                                                      {v.x, v.y, v.z, v.w});
+        for (const auto &v: scales) scale_channel.values.insert(scale_channel.values.end(), {v.x, v.y, v.z});
         animation.channels.push_back(std::move(position_channel));
         animation.channels.push_back(std::move(rotation_channel));
         animation.channels.push_back(std::move(scale_channel));
@@ -136,8 +126,8 @@ void export_animation(ApexAppState &app_state, const HavokTypes::hkaAnimationBin
 }
 
 VM::NodePtr export_animation_container(ApexAppState &app_state,
-                                                              const HavokTypes::hkaAnimationContainer *
-                                                              animation_container) {
+                                       const HavokTypes::hkaAnimationContainer *
+                                       animation_container) {
     for (int i = 0; i < animation_container->skeletons.size(); ++i) {
         const auto &skeleton = animation_container->skeletons[i];
         return export_skeleton(app_state, skeleton.get());
@@ -150,8 +140,8 @@ VM::NodePtr export_animation_container(ApexAppState &app_state,
 }
 
 VM::NodePtr export_havok_file(ApexAppState &app_state,
-                                                     std::unique_ptr<IO::File> &&buffer,
-                                                     const std::string_view path) {
+                              std::unique_ptr<IO::File> &&buffer,
+                              const std::string_view path) {
     Havok::Tag::TagFile tag_file(std::move(buffer));
 
     const auto item_obj = Havok::Tag::get_item(tag_file, 1);
@@ -164,11 +154,12 @@ VM::NodePtr export_havok_file(ApexAppState &app_state,
         // if (root_container->namedVariants.size() > 1) {
         //     throw std::runtime_error("Multiple named variants in root container");
         // }
-        for (const auto &[i, named_variant]: root_container->namedVariants|std::views::enumerate) {
+        for (const auto &[i, named_variant]: root_container->namedVariants | std::views::enumerate) {
             if (named_variant.className == "hkaAnimationContainer") {
-                if (const auto animation_container = Havok::as<HavokTypes::hkaAnimationContainer>(named_variant.variant)) {
+                if (const auto animation_container = Havok::as<
+                    HavokTypes::hkaAnimationContainer>(named_variant.variant)) {
                     skeleton_id = export_animation_container(app_state, animation_container);
-                }else {
+                } else {
                     throw std::runtime_error(std::format(
                         "Malformed hkaAnimationContainer, supposed to have hkaAnimationContainer, but had {}",
                         static_cast<std::string_view>(named_variant.className.stringAndFlag)));
@@ -176,7 +167,8 @@ VM::NodePtr export_havok_file(ApexAppState &app_state,
             } else {
                 std::filesystem::path unk_file_export_path = app_state.export_path() / path;
                 unk_file_export_path.replace_extension(std::format(".{}.{}.json", i,
-                    static_cast<std::string_view>(named_variant.className.stringAndFlag)));
+                                                                   static_cast<std::string_view>(named_variant.className
+                                                                       .stringAndFlag)));
                 std::filesystem::create_directories(unk_file_export_path.parent_path());
 
                 std::ofstream json_out(unk_file_export_path);
@@ -190,6 +182,7 @@ VM::NodePtr export_havok_file(ApexAppState &app_state,
     }
     return {};
 }
+
 
 glm::mat4 build_matrix(const HavokTypes::hkQsTransform &transform) {
     auto out = glm::identity<glm::mat4>();
@@ -205,6 +198,7 @@ VM::NodePtr export_skeleton(ApexAppState &app_state, const HavokTypes::hkaSkelet
         throw std::runtime_error("Invalid Havok skeleton arrays");
     auto model_skeleton = std::make_shared<VM::Skeleton>();
     model_skeleton->name = skeleton->name.stringAndFlag;
+    model_skeleton->bones.reserve(skeleton->bones.size());
     for (size_t i = 0; i < skeleton->bones.size(); ++i) {
         const auto &pose = skeleton->referencePose[i];
         VM::Bone bone;

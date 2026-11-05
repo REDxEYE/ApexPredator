@@ -119,7 +119,7 @@ for game, executable in enumerate(sys.argv[1:]):
         asset = 'AnimationSet' if game == 0 else 'text/master_eng.stringlookup'
         asset_hash = 2035976115 if game == 0 else 0x8453EE3581F31F39
         signed = asset_hash if asset_hash < 2**63 else asset_hash - 2**64
-        db_path = root / ('hashes.db' if game == 0 else 'rage2_hashes.db')
+        db_path = root / 'hashes.db'
         with sqlite3.connect(db_path) as db:
             db.executescript('CREATE TABLE kv(k INTEGER PRIMARY KEY,v TEXT NOT NULL) WITHOUT ROWID;'
                              'CREATE TABLE files(hash INTEGER PRIMARY KEY,name TEXT,size INTEGER NOT NULL,parent INTEGER NOT NULL DEFAULT 0) WITHOUT ROWID;')
@@ -163,11 +163,12 @@ for game, executable in enumerate(sys.argv[1:]):
                 expected_names.update(paths)
             for name in expected_names:
                 rows = db.execute('SELECT lookup3,murmur FROM kv WHERE v=?', (name,)).fetchall()
-                expected = (lookup3(name), 0 if game == 0 else murmur(name))
+                expected = (lookup3(name), murmur(name))
                 assert rows == [expected], (game, name, rows, expected)
-            files = set(db.execute('SELECT lookup3,murmur,name,size FROM files'))
+            table = 'files_generation_zero' if game == 0 else 'files_rage2'
+            files = set(db.execute(f'SELECT lookup3,murmur,name,size FROM {table}'))
             expected_external = {
-                (lookup3(external), 0 if game == 0 else murmur(external), external, 0x12345678)
+                (lookup3(external), murmur(external), external, 0x12345678)
                 for _, external in internal_paths
             }
             assert expected_external <= files, files

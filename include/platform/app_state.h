@@ -16,8 +16,9 @@ public:
         if (!m_archive_manager) throw std::runtime_error("Archive manager has not been initialized");
         return *m_archive_manager;
     }
-    // Used by the Generation Zero module and its standalone tools.
-    void mount_archives();
+    void set_archive_manager(std::shared_ptr<ApexArchiveManager> manager) {
+        m_archive_manager = std::move(manager);
+    }
     VM::SceneBuilder &models() { return m_models; }
 
     std::filesystem::path database_path;
