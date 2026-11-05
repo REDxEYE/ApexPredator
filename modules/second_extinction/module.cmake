@@ -116,13 +116,9 @@ endif()
 
 if(MSVC)
     target_compile_options(SecondExtinctionHavokTypeGenerator PRIVATE /bigobj)
-    if(TARGET SecondExtinctionAdfTypeGenerator)
-        target_compile_options(SecondExtinctionAdfTypeGenerator PRIVATE /bigobj)
-    endif()
-    if(SecondExtinctionBindingsReady)
-        foreach(target IN ITEMS SecondExtinctionAdfLib SecondExtinctionHavokLib
-                SecondExtinctionModule SecondExtinctionHashCollector)
-            target_compile_options(${target} PRIVATE /bigobj)
-        endforeach()
-    endif()
+    target_compile_options(SecondExtinctionAdfTypeGenerator PRIVATE /bigobj)
+    foreach(target IN ITEMS SecondExtinctionAdfLib SecondExtinctionHavokLib
+            SecondExtinctionModule SecondExtinctionHashCollector)
+        target_compile_options(${target} PRIVATE /bigobj)
+    endforeach()
 endif()
