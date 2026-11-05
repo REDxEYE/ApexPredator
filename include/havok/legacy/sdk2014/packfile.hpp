@@ -11,6 +11,8 @@
 #include <optional>
 #include <unordered_map>
 #include <vector>
+#include <cstdint>
+#include <bit>
 
 namespace Havok2014 {
     enum class ClassKind;
